@@ -38,7 +38,7 @@ dependencies {
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-    runtimeOnly 'com.mysql:mysql-connector-j'
+    runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc'
 
     implementation group: 'log4j', name: 'log4j', version: '1.2.17'
 
