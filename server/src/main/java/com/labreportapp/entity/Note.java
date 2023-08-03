@@ -34,4 +34,7 @@ public class Note extends PrimaryEntity {
 
     @Column(length = EntityProperties.LENGTH_ID)
     private String meetingId;
+
+    @Column(length = EntityProperties.LENGTH_ID)
+    private String teamId;
 }

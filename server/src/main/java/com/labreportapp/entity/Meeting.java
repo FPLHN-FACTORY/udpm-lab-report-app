@@ -41,5 +41,5 @@ public class Meeting extends PrimaryEntity {
 
     @Column(length = EntityProperties.LENGTH_ID)
     @Index(name = "index_meeting_team_id")
-    private String teamId;
+    private String classId;
 }

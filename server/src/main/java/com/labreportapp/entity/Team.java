@@ -31,6 +31,10 @@ public class Team extends PrimaryEntity {
     @Nationalized
     private String name;
 
+    @Column(length = EntityProperties.LENGTH_NAME)
+    @Nationalized
+    private String subjectName;
+
     @Column(length = EntityProperties.LENGTH_ID)
     private String classId;
 }

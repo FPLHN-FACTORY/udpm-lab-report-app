@@ -2,6 +2,7 @@ package com.labreportapp.entity;
 
 import com.labreportapp.entity.base.PrimaryEntity;
 import com.labreportapp.infrastructure.constant.EntityProperties;
+import com.labreportapp.infrastructure.constant.Level;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -34,6 +35,9 @@ public class Activity extends PrimaryEntity {
     @Column
     private Long endTime;
 
+    @Column(nullable = false)
+    private Level level;
+
     @Column(length = EntityProperties.LENGTH_ID)
-    private Long semesterId;
+    private String semesterId;
 }
