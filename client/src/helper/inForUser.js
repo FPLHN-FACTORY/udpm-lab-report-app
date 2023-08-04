@@ -1,10 +1,13 @@
-export const userCurrent = {
-  code: "PH26123",
+export const sinhVienCurrent = {
+  id: "874bffc6-38ce-467e-9458-47868e1e2f52",
   name: "Nguyễn Công Thắng",
   username: "thangncph26123",
-  role: 1,
   email: "thangncph26123@fpt.edu.vn",
-  image:
-    "https://raw.githubusercontent.com/nguyencongthang2509/ptpm-portal-projects/develop/front_end/assets/img/anh1.jpg",
-  id: "c5cf1e20-bdd4-11ed-afa1-0242ac120002",
+};
+
+export const giangVienCurrent = {
+  id: "6f0e60a6-a3a8-45d3-b6e6-d7632eb64c1a",
+  name: "Vũ Văn Nguyên",
+  username: "nguyenvvph2582",
+  email: "nguyenvvph2582@fpt.edu.vn",
 };
