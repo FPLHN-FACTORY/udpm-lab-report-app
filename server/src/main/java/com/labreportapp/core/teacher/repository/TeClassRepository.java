@@ -33,9 +33,14 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
             FROM activity a
             JOIN class c ON c.activity_id = a.id
             JOIN semester s ON s.id = a.semester_id
-             where c.teacher_id = :#{#req.idTeacher}
+            where c.teacher_id = :#{#req.idTeacher}
             and (:#{#req.idSemester} IS NULL OR :#{#req.idSemester} LIKE '' OR :#{#req.idSemester} LIKE s.id)
             and (:#{#req.idActivity} IS NULL OR :#{#req.idActivity} LIKE '' OR :#{#req.idActivity} LIKE a.id)
+            and (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR c.code LIKE %:#{#req.code}%)
+            and (:#{#req.name} IS NULL OR :#{#req.name} LIKE '' OR c.name LIKE %:#{#req.name}%)
+            and (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR  c.class_period = :#{#req.classPeriod})
+            and (:#{#req.level} IS NULL OR :#{#req.level} LIKE '' OR a.level = :#{#req.level})
+            ORDER BY c.last_modified_date DESC
                      """,countQuery = """
             SELECT COUNT(c.id) 
              FROM activity a
@@ -44,7 +49,11 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
              WHERE c.teacher_id = :#{#req.idTeacher}
             and (:#{#req.idSemester} IS NULL OR :#{#req.idSemester} LIKE '' OR :#{#req.idSemester} LIKE s.id)
             and (:#{#req.idActivity} IS NULL OR :#{#req.idActivity} LIKE '' OR :#{#req.idActivity} LIKE a.id)
-           
+            and (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR c.code LIKE %:#{#req.code}%)
+            and (:#{#req.name} IS NULL OR :#{#req.name} LIKE '' OR c.name LIKE %:#{#req.name}%)
+            and (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR  c.class_period = :#{#req.classPeriod})
+            and (:#{#req.level} IS NULL OR :#{#req.level} LIKE '' OR a.level = :#{#req.level})
+            ORDER BY c.last_modified_date DESC
             """ ,nativeQuery = true)
     Page<TeClassResponse> findClassBySemesterAndActivity(@Param("req") TeFindClass req, Pageable pageable);
 

@@ -1,29 +1,19 @@
-import "./style-teacher-my-class.css";
+import "./styleTeacherMyClass.css";
 import { giangVienCurrent } from "../../../helper/inForUser";
 import LoadingIndicator from "../../../helper/loading";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   ControlOutlined,
   QuestionCircleFilled,
   ProjectOutlined,
 } from "@ant-design/icons";
 import { Row, Col, Select, Input, Button, Table, Pagination } from "antd";
-import {
-  faFilter,
-  faEye,
-  faPenToSquare,
-  faPlus,
-} from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../app/hook";
 import { TeacherMyClassAPI } from "../../../api/teacher/my-class/TeacherMyClass.api";
 import { TeacherSemesterAPI } from "../../../api/teacher/semester/TeacherSemester.api";
 import { TeacherActivityAPI } from "../../../api/teacher/activity/TeacherActivity.api";
-import {
-  GetTeacherSemester,
-  SetTeacherSemester,
-} from "../../../app/teacher/semester/teacherSemesterSlice.reduce";
+import { SetTeacherSemester } from "../../../app/teacher/semester/teacherSemesterSlice.reduce";
 import {
   GetTeacherMyClass,
   SetTeacherMyClass,
@@ -36,13 +26,30 @@ const TeacherMyClass = () => {
   const [listSemester, setListSemester] = useState([]);
   const [listActivity, setListActivity] = useState([]);
   const [listMyClass, setListMyClass] = useState([]);
+
   const [idSemesterSeach, setIdSemesterSeach] = useState("");
   const [idActivitiSearch, setIdActivitiSearch] = useState("");
+  const [codeSearch, setCodeSearch] = useState("");
+  const [nameSearch, setNameSearch] = useState("");
+  const [classPeriodSearch, setClassPeriodSearch] = useState("");
+  const [levelSearch, setLevelSearch] = useState("");
+
+  const [clear, setClear] = useState(false);
+  const listClassPeriod = [];
+  for (let i = 1; i <= 10; i++) {
+    listClassPeriod.push("" + i);
+  }
   const [current, setCurrent] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     document.title = "Bảng điều khiển";
+    setIdSemesterSeach("");
+    setIdActivitiSearch("");
+    setCodeSearch("");
+    setNameSearch("");
+    setClassPeriodSearch("");
+    setLevelSearch("");
     dispatch(SetTeacherMyClass([]));
     featchDataSemester();
     featchAllMyClass(giangVienCurrent);
@@ -54,12 +61,13 @@ const TeacherMyClass = () => {
   }, [idSemesterSeach]);
 
   useEffect(() => {
-    featchDataActivity(idSemesterSeach);
-  }, [idActivitiSearch]);
+    featchAllMyClass(giangVienCurrent);
+  }, [current]);
 
   useEffect(() => {
     featchAllMyClass(giangVienCurrent);
-  }, [idSemesterSeach, idActivitiSearch, current]);
+    setClear(false);
+  }, [clear]);
 
   const featchAllMyClass = async (giangVienCurrent) => {
     setLoading(false);
@@ -67,6 +75,10 @@ const TeacherMyClass = () => {
       idTeacher: giangVienCurrent.id,
       idActivity: idActivitiSearch,
       idSemester: idSemesterSeach,
+      code: codeSearch,
+      name: nameSearch,
+      classPeriod: classPeriodSearch,
+      level: levelSearch,
       page: current,
       size: 10,
     };
@@ -75,6 +87,7 @@ const TeacherMyClass = () => {
         dispatch(SetTeacherMyClass(respone.data.data));
         setTotalPages(parseInt(respone.data.data.totalPages));
         setListMyClass(respone.data.data.data);
+        console.log(respone.data.data.data);
         setLoading(true);
       });
     } catch (error) {
@@ -96,7 +109,6 @@ const TeacherMyClass = () => {
 
   const featchDataActivity = async (idSemesterSeach) => {
     try {
-      setLoading(false);
       await TeacherActivityAPI.getAllActivityByIdSemester(idSemesterSeach).then(
         (respone) => {
           setListActivity(respone.data.data);
@@ -108,6 +120,18 @@ const TeacherMyClass = () => {
     }
   };
 
+  const handleSearch = () => {
+    featchAllMyClass(giangVienCurrent);
+  };
+  const handleClear = () => {
+    setIdSemesterSeach("");
+    setIdActivitiSearch("");
+    setCodeSearch("");
+    setNameSearch("");
+    setClassPeriodSearch("");
+    setLevelSearch("");
+    setClear(true);
+  };
   const data = useAppSelector(GetTeacherMyClass);
   const columns = [
     {
@@ -135,6 +159,7 @@ const TeacherMyClass = () => {
       title: "Thời gian",
       dataIndex: "startTime",
       key: "startTime",
+      sorter: (a, b) => a.startTime - b.startTime,
       render: (text, record) => {
         const startTime = new Date(record.startTime);
         const formattedStartTime = `${startTime.getDate()}/${
@@ -179,11 +204,10 @@ const TeacherMyClass = () => {
           </Link>
           <hr />
         </div>
-
         <div className="menu-teacher-search">
           <Row gutter={16} style={{ marginBottom: "15px", paddingTop: "20px" }}>
-            <Col span={8}>
-              <span>Chọn học kỳ</span>
+            <Col span={6}>
+              <span>Học kỳ</span>
               <QuestionCircleFilled
                 style={{ paddingLeft: "12px", fontSize: "15px" }}
               />
@@ -194,9 +218,10 @@ const TeacherMyClass = () => {
                   setIdSemesterSeach(value);
                 }}
                 style={{
-                  width: "auto",
-                  minWidth: "130px",
-                  margin: "10px 0 10px 0",
+                  width: "263px",
+                  minWidth: "120px",
+                  maxWidth: "263px",
+                  margin: "6px 0 10px 0",
                 }}
               >
                 <Option value="">Tất cả</Option>
@@ -213,8 +238,8 @@ const TeacherMyClass = () => {
                 })}
               </Select>
             </Col>
-            <Col span={8}>
-              <span>Chọn hoạt động:</span>
+            <Col span={14}>
+              <span>Hoạt động</span>
               <QuestionCircleFilled
                 style={{ paddingLeft: "12px", fontSize: "15px" }}
               />{" "}
@@ -225,10 +250,8 @@ const TeacherMyClass = () => {
                   setIdActivitiSearch(value);
                 }}
                 style={{
-                  width: "auto",
-                  minWidth: "100px",
-                  maxWidth: "200%",
-                  margin: "10px 0 10px 0",
+                  width: "868px",
+                  margin: "6px 0 10px 0",
                 }}
               >
                 <Option value="">Tất cả</Option>
@@ -242,6 +265,90 @@ const TeacherMyClass = () => {
               </Select>
             </Col>
           </Row>
+          <Row gutter={16} style={{ marginBottom: "15px", paddingTop: "20px" }}>
+            <Col span={6}>
+              <span>Mã lớp</span>{" "}
+              <QuestionCircleFilled
+                style={{ paddingLeft: "12px", fontSize: "15px" }}
+              />{" "}
+              <br />
+              <Input
+                style={{ width: "92%", marginTop: "6px" }}
+                type="text"
+                placeholder="Nhập mã lớp"
+                value={codeSearch}
+                onChange={(e) => {
+                  setCodeSearch(e.target.value);
+                }}
+              />
+            </Col>
+            <Col span={6}>
+              <span>Tên lớp</span>{" "}
+              <QuestionCircleFilled
+                style={{ paddingLeft: "12px", fontSize: "15px" }}
+              />
+              {""} <br />
+              <Input
+                style={{ width: "92%", marginTop: "6px" }}
+                placeholder="Nhập tên lớp"
+                type="text"
+                value={nameSearch}
+                onChange={(e) => {
+                  setNameSearch(e.target.value);
+                }}
+              />
+            </Col>
+            <Col span={6}>
+              <span>Ca học</span>
+              <QuestionCircleFilled
+                style={{ paddingLeft: "12px", fontSize: "15px" }}
+              />{" "}
+              <br />
+              <Select
+                value={classPeriodSearch}
+                onChange={(value) => {
+                  setClassPeriodSearch(value);
+                }}
+                style={{ width: "92%", marginTop: "6px" }}
+              >
+                <Option value="">Tất cả</Option>
+                {listClassPeriod.map((value) => {
+                  return (
+                    <Option value={value} key={value}>
+                      {value}
+                    </Option>
+                  );
+                })}
+              </Select>
+            </Col>
+            <Col span={6}>
+              <span>Level</span>{" "}
+              <QuestionCircleFilled
+                style={{ paddingLeft: "12px", fontSize: "15px" }}
+              />{" "}
+              <br />
+              <Select
+                value={levelSearch}
+                onChange={(value) => {
+                  setLevelSearch(value);
+                }}
+                style={{ width: "92%", marginTop: "6px" }}
+              >
+                <Option value="">Tất cả</Option>
+                <Option value="1">1</Option>
+                <Option value="2">2</Option>
+                <Option value="3">3</Option>
+              </Select>
+            </Col>
+          </Row>
+          <div className="box_btn_filter">
+            <Button className="btn_filter" onClick={handleSearch}>
+              Tìm kiếm
+            </Button>
+            <Button className="btn_clear" onClick={handleClear}>
+              Làm mới
+            </Button>
+          </div>
         </div>
       </div>
       <div className="table-teacher-my-class">
@@ -251,7 +358,7 @@ const TeacherMyClass = () => {
             <span style={{ fontSize: "18px", fontWeight: "500" }}>
               {" "}
               <ProjectOutlined
-                style={{ marginRight: "7px", fontSize: "26px" }}
+                style={{ marginRight: "10px", fontSize: "26px" }}
               />
               Danh sách lớp học
             </span>

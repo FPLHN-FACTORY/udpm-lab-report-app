@@ -14,6 +14,14 @@ export class TeacherMyClassAPI {
         filter.idSemester +
         `&idActivity=` +
         filter.idActivity +
+        `&code=` +
+        filter.code +
+        `&name=` +
+        filter.name +
+        `&classPeriod=` +
+        filter.classPeriod +
+        `&level=` +
+        filter.level +
         `&page=` +
         filter.page +
         `&size=` +

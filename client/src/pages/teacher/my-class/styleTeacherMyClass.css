@@ -55,6 +55,41 @@
 .menu-teacher-search {
   padding-left: 20px;
 }
+
+.box_btn_filter {
+  text-align: center;
+  padding: 20px 0px 20px 0px;
+}
+
+.btn_filter {
+  background-color: #e1af4a;
+  color: white;
+  margin-right: 5px;
+}
+
+.btn_filter:hover {
+  background-color: #d9a43a;
+  color: white !important;
+  margin-right: 5px;
+}
+
+.btn_clear {
+  background-color: rgb(19, 139, 213);
+  color: white;
+  margin-right: 5px;
+}
+
+.btn_clear:hover {
+  background-color: rgb(9, 117, 185);
+  color: white !important;
+  margin-right: 5px;
+}
+.btn_filter:hover {
+  border-color: transparent !important;
+  outline: #e2ac3f !important;
+  box-shadow: none !important;
+}
+
 /* 
 
 
