@@ -13,6 +13,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author hieundph25894
  */
@@ -23,8 +26,8 @@ public class TeClassServiceImpl implements TeClassService {
     private TeClassRepository teClassRepository;
 
     @Override
-    //@CacheEvict(value = {"classById"}, allEntries = true)
-    public PageableObject<TeClassResponse> searchTeacherClass(TeFindClass teFindClass) {
+    @CacheEvict(value = {"teacherClass"}, allEntries = true)
+    public PageableObject<TeClassResponse> searchTeacherClass(final TeFindClass teFindClass) {
         Pageable pageable = PageRequest.of(teFindClass.getPage() - 1, teFindClass.getSize());
         Page<TeClassResponse> pageList = teClassRepository.findClassBySemesterAndActivity(teFindClass, pageable);
         return new PageableObject<>(pageList);

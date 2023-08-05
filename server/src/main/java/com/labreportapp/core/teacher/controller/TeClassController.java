@@ -27,4 +27,5 @@ public class TeClassController {
         PageableObject<TeClassResponse> pageList = teClassService.searchTeacherClass(teFindClass);
         return new ResponseObject(pageList);
     }
+
 }

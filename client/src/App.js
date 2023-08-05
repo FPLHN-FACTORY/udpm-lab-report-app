@@ -28,7 +28,7 @@ function App() {
 
             <Route
               path="/"
-              element={<Navigate replace to="/admin/semester-management" />}
+              element={<Navigate replace to="/teacher/my-class" />}
             />
             <Route
               path="/admin/semester-management"

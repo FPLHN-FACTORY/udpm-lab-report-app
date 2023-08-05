@@ -46,4 +46,7 @@ public interface TeClassResponse {
     @Value("#{target.descriptions}")
     String getDescriptions();
 
+    @Value("#{target.level}")
+    Integer getLevel();
+
 }

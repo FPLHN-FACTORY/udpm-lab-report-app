@@ -4,6 +4,7 @@ import com.labreportapp.core.teacher.model.response.TeSemesterRespone;
 import com.labreportapp.core.teacher.repository.TeSemesterRepository;
 import com.labreportapp.core.teacher.service.TeSemesterService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class TeSemesterSeviceImpl implements TeSemesterService {
     private TeSemesterRepository teSemesterRepository;
 
     @Override
+    @CacheEvict(value = {"getAllSemester"}, allEntries = true)
     public List<TeSemesterRespone> getAllSemester() {
         return teSemesterRepository.getAllSemesters();
     }

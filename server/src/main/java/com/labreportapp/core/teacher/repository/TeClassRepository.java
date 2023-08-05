@@ -28,14 +28,24 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
             c.teacher_id as teacher_id,
             c.activity_id as activity_id,
             c.created_date as created_date,
-            c.descriptions as descriptions
-            FROM activity a 
+            c.descriptions as descriptions,
+            a.level as level
+            FROM activity a
             JOIN class c ON c.activity_id = a.id
             JOIN semester s ON s.id = a.semester_id
              where c.teacher_id = :#{#req.idTeacher}
             and (:#{#req.idSemester} IS NULL OR :#{#req.idSemester} LIKE '' OR :#{#req.idSemester} LIKE s.id)
             and (:#{#req.idActivity} IS NULL OR :#{#req.idActivity} LIKE '' OR :#{#req.idActivity} LIKE a.id)
-                     """, nativeQuery = true)
+                     """,countQuery = """
+            SELECT COUNT(c.id) 
+             FROM activity a
+            JOIN class c ON c.activity_id = a.id
+            JOIN semester s ON s.id = a.semester_id
+             WHERE c.teacher_id = :#{#req.idTeacher}
+            and (:#{#req.idSemester} IS NULL OR :#{#req.idSemester} LIKE '' OR :#{#req.idSemester} LIKE s.id)
+            and (:#{#req.idActivity} IS NULL OR :#{#req.idActivity} LIKE '' OR :#{#req.idActivity} LIKE a.id)
+           
+            """ ,nativeQuery = true)
     Page<TeClassResponse> findClassBySemesterAndActivity(@Param("req") TeFindClass req, Pageable pageable);
 
 }
