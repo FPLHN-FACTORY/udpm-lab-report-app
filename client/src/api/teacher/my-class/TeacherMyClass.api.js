@@ -28,4 +28,10 @@ export class TeacherMyClassAPI {
         filter.size,
     });
   }
+  static detailMyClass(idClass) {
+    return request({
+      method: "GET",
+      url: url + `/` + idClass,
+    });
+  }
 }

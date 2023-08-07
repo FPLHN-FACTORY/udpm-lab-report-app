@@ -16,6 +16,7 @@ public interface TeSemesterRepository extends JpaRepository<Semester, String> {
 
     @Query(value = """
             SELECT s.id as id, s.name as name FROM semester s
+            ORDER BY s.end_time DESC
             """, nativeQuery = true)
     List<TeSemesterRespone> getAllSemesters();
 

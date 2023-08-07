@@ -4,8 +4,11 @@ import com.labreportapp.core.common.base.PageableObject;
 import com.labreportapp.core.common.base.PageableRequest;
 import com.labreportapp.core.teacher.model.request.TeFindClass;
 import com.labreportapp.core.teacher.model.response.TeClassResponse;
+import com.labreportapp.core.teacher.model.response.TeDetailClassRespone;
 import com.labreportapp.core.teacher.repository.TeClassRepository;
 import com.labreportapp.core.teacher.service.TeClassService;
+import com.labreportapp.infrastructure.constant.Message;
+import com.labreportapp.infrastructure.exception.rest.RestApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author hieundph25894
@@ -31,5 +35,14 @@ public class TeClassServiceImpl implements TeClassService {
         Pageable pageable = PageRequest.of(teFindClass.getPage() - 1, teFindClass.getSize());
         Page<TeClassResponse> pageList = teClassRepository.findClassBySemesterAndActivity(teFindClass, pageable);
         return new PageableObject<>(pageList);
+    }
+
+    @Override
+    public TeDetailClassRespone findClassById(final String id) {
+        Optional<TeDetailClassRespone> classCheck = teClassRepository.findClassById(id);
+        if (!classCheck.isPresent()) {
+            throw new RestApiException(Message.CLASS_NOT_EXISTS);
+        }
+        return classCheck.get();
     }
 }

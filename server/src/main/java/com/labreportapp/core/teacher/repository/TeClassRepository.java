@@ -2,6 +2,7 @@ package com.labreportapp.core.teacher.repository;
 
 import com.labreportapp.core.teacher.model.request.TeFindClass;
 import com.labreportapp.core.teacher.model.response.TeClassResponse;
+import com.labreportapp.core.teacher.model.response.TeDetailClassRespone;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,6 +10,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import com.labreportapp.entity.Class;
+
+import java.util.Optional;
 
 /**
  * @author hieundph25894
@@ -56,5 +59,26 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
             ORDER BY c.last_modified_date DESC
             """ ,nativeQuery = true)
     Page<TeClassResponse> findClassBySemesterAndActivity(@Param("req") TeFindClass req, Pageable pageable);
+
+    @Query(value = """
+            SELECT c.id as id,
+            c.code as code,
+            c.name as name,
+            c.start_time as start_time,
+            c.password as password,
+            c.class_period as class_period,
+            c.class_size as class_size,
+            a.name as activityName,
+            c.descriptions as descriptions,
+            a.level as activityLevel,
+            s.name as semesterName
+            FROM activity a
+            JOIN class c ON c.activity_id = a.id
+            JOIN semester s ON s.id = a.semester_id
+            where c.id = :#{#id}
+             """,nativeQuery = true)
+    Optional<TeDetailClassRespone> findClassById(@Param("id") String id);
+
+
 
 }

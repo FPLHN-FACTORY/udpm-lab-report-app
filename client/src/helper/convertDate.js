@@ -25,6 +25,6 @@ export const formatDateToString = (timeString) => {
 
 export const convertDateToStringTodo = (timestamp) => {
   const date = moment(timestamp);
-  const formattedTime = date.format('MMM DD');
+  const formattedTime = date.format("MMM DD");
   return formattedTime;
 };

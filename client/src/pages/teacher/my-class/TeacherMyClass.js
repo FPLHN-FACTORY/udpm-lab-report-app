@@ -1,4 +1,7 @@
 import "./styleTeacherMyClass.css";
+import { toast } from "react-toastify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye } from "@fortawesome/free-solid-svg-icons";
 import { giangVienCurrent } from "../../../helper/inForUser";
 import LoadingIndicator from "../../../helper/loading";
 import {
@@ -6,7 +9,16 @@ import {
   QuestionCircleFilled,
   ProjectOutlined,
 } from "@ant-design/icons";
-import { Row, Col, Select, Input, Button, Table, Pagination } from "antd";
+import {
+  Row,
+  Col,
+  Select,
+  Input,
+  Button,
+  Table,
+  Pagination,
+  Tooltip,
+} from "antd";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../app/hook";
@@ -18,7 +30,7 @@ import {
   GetTeacherMyClass,
   SetTeacherMyClass,
 } from "../../../app/teacher/my-class/teacherMyClassSlice.reduce";
-
+import ModalTeacherDetailMyClass from "../my-class/modal-detail/ModalTeacherDetailMyClass";
 const { Option } = Select;
 
 const TeacherMyClass = () => {
@@ -27,15 +39,18 @@ const TeacherMyClass = () => {
   const [listActivity, setListActivity] = useState([]);
   const [listMyClass, setListMyClass] = useState([]);
 
-  const [idSemesterSeach, setIdSemesterSeach] = useState("");
+  const [idSemesterSeach, setIdSemesterSearch] = useState("");
   const [idActivitiSearch, setIdActivitiSearch] = useState("");
   const [codeSearch, setCodeSearch] = useState("");
   const [nameSearch, setNameSearch] = useState("");
   const [classPeriodSearch, setClassPeriodSearch] = useState("");
   const [levelSearch, setLevelSearch] = useState("");
 
+  const [idDetail, setIdDetail] = useState("");
   const [clear, setClear] = useState(false);
   const listClassPeriod = [];
+
+  const [showDetailModal, setShowDetailModal] = useState(false);
   for (let i = 1; i <= 10; i++) {
     listClassPeriod.push("" + i);
   }
@@ -44,7 +59,7 @@ const TeacherMyClass = () => {
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     document.title = "Bảng điều khiển";
-    setIdSemesterSeach("");
+    setIdSemesterSearch("");
     setIdActivitiSearch("");
     setCodeSearch("");
     setNameSearch("");
@@ -82,12 +97,24 @@ const TeacherMyClass = () => {
       page: current,
       size: 10,
     };
+
     try {
       await TeacherMyClassAPI.getAllMyClass(filter).then((respone) => {
         dispatch(SetTeacherMyClass(respone.data.data));
         setTotalPages(parseInt(respone.data.data.totalPages));
         setListMyClass(respone.data.data.data);
+        console.log("new ");
         console.log(respone.data.data.data);
+        // const timestamp = 1682874000000;
+        // const date = new Date(timestamp);
+        // console.log("dadads");
+        // console.log(date);
+        // console.log("new ");
+        // const datee = new Date("2023/05/1"); // Lấy ngày tháng hiện tại
+        // const timestampe = datee.getTime(); // Chuyển đổi thành số nguyên Long
+
+        // console.log(timestampe);
+
         setLoading(true);
       });
     } catch (error) {
@@ -99,6 +126,11 @@ const TeacherMyClass = () => {
       setLoading(false);
       await TeacherSemesterAPI.getAllSemesters().then((respone) => {
         dispatch(SetTeacherSemester(respone.data.data));
+        if (respone.data.data.length > 0) {
+          setIdSemesterSearch(respone.data.data[0].id);
+        } else {
+          setIdSemesterSearch("null");
+        }
         setListSemester(respone.data.data);
         setLoading(true);
       });
@@ -120,16 +152,36 @@ const TeacherMyClass = () => {
     }
   };
 
-  const handleSearch = () => {
-    featchAllMyClass(giangVienCurrent);
+  const handleDetailIdMyClass = (id) => {
+    document.querySelector("body").style.overflowX = "hidden";
+    setShowDetailModal(true);
+    setIdDetail(id);
+    console.log("idddđ");
+    console.log(id + " " + showDetailModal);
+  };
+
+  const handleModalDetailCancel = () => {
+    document.querySelector("body").style.overflowX = "hidden";
+    setShowDetailModal(false);
+    setIdDetail("");
+  };
+
+  const handleSearch = async () => {
+    await featchAllMyClass(giangVienCurrent);
+    toast.success("Tìm kiếm thành công !");
   };
   const handleClear = () => {
-    setIdSemesterSeach("");
+    if (listSemester.length > 0) {
+      setIdSemesterSearch(listSemester[0].id);
+    } else {
+      setIdSemesterSearch("null");
+    }
     setIdActivitiSearch("");
     setCodeSearch("");
     setNameSearch("");
     setClassPeriodSearch("");
     setLevelSearch("");
+    toast.success("Hủy bộ lọc thành công !");
     setClear(true);
   };
   const data = useAppSelector(GetTeacherMyClass);
@@ -183,6 +235,27 @@ const TeacherMyClass = () => {
       sorter: (a, b) => a.level - b.level,
       width: "7%",
     },
+    {
+      title: "Hành động",
+      dataIndex: "actions",
+      key: "actions",
+      render: (text, record) => (
+        <>
+          <div className="box_icon">
+            <Tooltip title="Xem chi tiết lớp học">
+              <FontAwesomeIcon
+                icon={faEye}
+                className="icon"
+                onClick={() => {
+                  handleDetailIdMyClass(record.id);
+                }}
+              />
+            </Tooltip>
+          </div>
+        </>
+      ),
+      width: "105px",
+    },
   ];
 
   return (
@@ -215,7 +288,7 @@ const TeacherMyClass = () => {
               <Select
                 value={idSemesterSeach}
                 onChange={(value) => {
-                  setIdSemesterSeach(value);
+                  setIdSemesterSearch(value);
                 }}
                 style={{
                   width: "263px",
@@ -224,7 +297,6 @@ const TeacherMyClass = () => {
                   margin: "6px 0 10px 0",
                 }}
               >
-                <Option value="">Tất cả</Option>
                 {listSemester.map((item) => {
                   return (
                     <Option
@@ -385,6 +457,11 @@ const TeacherMyClass = () => {
                   total={totalPages * 10}
                 />{" "}
               </div>
+              <ModalTeacherDetailMyClass
+                visible={showDetailModal}
+                onCancel={handleModalDetailCancel}
+                idDetail={idDetail}
+              />
             </>
           ) : (
             <>

@@ -3,6 +3,7 @@ import NotAuthorized from "./pages/403";
 import AuthGuard from "./guard/AuthGuard";
 import "./App.css";
 import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { AppConfig } from "./AppConfig";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Suspense } from "react";
