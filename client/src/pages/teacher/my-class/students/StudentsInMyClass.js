@@ -15,6 +15,7 @@ const { TextArea } = Input;
 
 const StudentsInMyClass = () => {
   const [classDetail, setClassDetail] = useState({});
+
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
   useEffect(() => {
@@ -33,15 +34,56 @@ const StudentsInMyClass = () => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
+  // const data = useAppSelector(GetTeacherMyClass);
+  const columns = [
+    {
+      title: "STT",
+      dataIndex: "stt",
+      key: "stt",
+      sorter: (a, b) => a.stt - b.stt,
+      width: "3%",
+    },
+    {
+      title: "Họ và tên",
+      dataIndex: "name",
+      key: "name",
+      sorter: (a, b) => a.name.localeCompare(b.name),
+    },
+
+    {
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
+      sorter: (a, b) => a.descriptions.localeCompare(b.descriptions),
+      width: "9%",
+    },
+    {
+      title: "Mã nhóm",
+      dataIndex: "level",
+      key: "level",
+      sorter: (a, b) => a.level - b.level,
+      width: "7%",
+    },
+    {
+      title: "Trạng thái",
+      dataIndex: "status",
+      key: "status",
+      sorter: (a, b) => a.status.localeCompare(b.status),
+      width: "7%",
+    },
+  ];
   return (
     <>
       {!loading && <LoadingIndicator />}
       <div className="title-teacher-my-class">
-        <span style={{ fontSize: "18px", paddingLeft: "20px" }}>
+        <span style={{ paddingLeft: "20px" }}>
           <ControlOutlined style={{ fontSize: "22px" }} />
-          <span style={{ marginLeft: "10px", fontWeight: "500" }}>
+          <span
+            style={{ fontSize: "18px", marginLeft: "10px", fontWeight: "500" }}
+          >
             Bảng điều khiển
           </span>
+          <span style={{ color: "gray" }}> - lớp của tôi</span>
         </span>
       </div>
       <div className="box-students-in-class">
@@ -50,110 +92,108 @@ const StudentsInMyClass = () => {
             className="box-center"
             style={{
               height: "30px",
-              width: "110px",
+              width: "180px",
               backgroundColor: "#007bff",
               color: "white",
-              marginBottom: "4px",
-              marginLeft: "10px",
+              margin: "0px 0px 4px 10px",
             }}
           >
             {" "}
-            <span>{classDetail.classSize} thành viên</span>
+            <span>
+              {classDetail.classSize} thành viên | Level:{" "}
+              {classDetail.activityLevel}
+            </span>
           </div>
-          <Link
-            to={`/teacher/my-class/students-in-class/${id}`}
-            className="link-change"
-            style={{
-              fontSize: "16px",
-              marginLeft: "10px",
-            }}
-          >
-            THÀNH VIÊN TRONG LỚP
-          </Link>
-          <Link
-            to={`/teacher/my-class/students-in-class/${id}`}
-            className="link-change"
-            style={{ fontSize: "16px", marginLeft: "20px" }}
-          >
-            ĐIỂM DANH
-          </Link>
-          <Link
-            to={`/teacher/my-class/students-in-class/${id}`}
-            className="link-change"
-            style={{ fontSize: "16px", marginLeft: "20px" }}
-          >
-            QUẢN LÝ NHÓM
-          </Link>
-          <hr />
+          <div>
+            <Link
+              to={`/teacher/my-class/students-in-class/${id}`}
+              id="menu-checked"
+              style={{
+                fontSize: "16px",
+                paddingLeft: "10px",
+              }}
+            >
+              THÀNH VIÊN TRONG LỚP &nbsp;
+            </Link>
+            <Link
+              to={`/teacher/my-class/students-in-class/${id}`}
+              className="custom-link"
+              style={{ fontSize: "16px", paddingLeft: "10px" }}
+            >
+              ĐIỂM DANH &nbsp;
+            </Link>
+            <Link
+              to={`/teacher/my-class/students-in-class/${id}`}
+              className="custom-link"
+              style={{ fontSize: "16px", paddingLeft: "10px" }}
+            >
+              QUẢN LÝ NHÓM &nbsp;
+            </Link>
+            <hr />
+          </div>
         </div>
-        <div>
-          <p>Tên lớp: {classDetail.name}</p>
-          <p>Mã lớp: {classDetail.code}</p>
-          <p>Mật khẩu:{classDetail.passWord}</p>
+        <div className="content">
+          <Row gutter={16} style={{ marginBottom: "15px", marginTop: "15px" }}>
+            <Col span={8}>
+              <span>Hoạt động: &nbsp; {classDetail.activityName}</span>
+            </Col>
+            <Col span={8}>
+              <span>
+                Thời gian bắt đầu:&nbsp;
+                {moment(classDetail.startTime).format("DD-MM-YYYY")}
+              </span>{" "}
+            </Col>
+            <Col span={8}>
+              <span>Ca học: &nbsp;{classDetail.classPeriod}</span>
+            </Col>
+          </Row>
+          <Row gutter={16} style={{ marginBottom: "15px" }}>
+            <Col span={8}>
+              <span>Mã lớp: &nbsp;{classDetail.code}</span>
+            </Col>
+            <Col span={8}>
+              <span>Tên lớp: &nbsp;{classDetail.name}</span>
+            </Col>
+            <Col span={8}>
+              <span>Mật khẩu: &nbsp;{classDetail.passWord}</span>
+            </Col>
+          </Row>
+          <Row gutter={16} style={{ marginBottom: "15px" }}>
+            <Col span={24}>Mô tả: &nbsp;{classDetail.descriptions}</Col>
+          </Row>
+          <br />
         </div>
-
-        <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
-          <span style={{ fontSize: "18px" }}>Chi tiết lớp học</span>
-        </div>
-        <div style={{ marginTop: "15px" }}>
-          <Row gutter={16} style={{ marginBottom: "15px" }}>
-            <Col span={8}>
-              <span>Học kỳ:</span> <br />
-              <Input value={classDetail.semesterName} type="text" readOnly />
-            </Col>
-            <Col span={8}>
-              <span>Level:</span> <br />
-              <Input value={classDetail.activityLevel} type="text" readOnly />
-            </Col>
-            <Col span={8}>
-              <span>Sĩ số:</span> <br />
-              <Input value={classDetail.classSize} type="text" readOnly />
-            </Col>
-          </Row>
-          <Row gutter={16} style={{ marginBottom: "15px" }}>
-            <Col span={24}>
-              <span>Hoạt động:</span> <br />
-              <Input value={classDetail.activityName} type="text" readOnly />
-            </Col>
-          </Row>
-          <Row gutter={16} style={{ marginBottom: "15px" }}>
-            <Col span={12}>
-              <span>Mã lớp:</span> <br />
-              <Input value={classDetail.code} type="text" readOnly />
-            </Col>
-            <Col span={12}>
-              <span>Tên lớp:</span> <br />
-              <Input type="text" value={classDetail.name} readOnly />
-            </Col>
-          </Row>
-          <Row gutter={16} style={{ marginBottom: "15px" }}>
-            <Col span={8}>
-              <span>Thời gian bắt đầu:</span> <br />
-              <Input
-                value={moment(classDetail.startTime).format("YYYY-MM-DD")}
-                type="date"
-                readOnly
-              />
-            </Col>
-            <Col span={8}>
-              <span>Ca học:</span> <br />
-              <Input value={classDetail.classPeriod} type="text" readOnly />
-            </Col>
-            <Col span={8}>
-              <span>Mật khẩu lớp:</span> <br />
-              <Input value={classDetail.passWord} type="text" readOnly />
-            </Col>
-          </Row>
-          <Row gutter={16} style={{ marginBottom: "15px" }}>
-            <Col span={24}>
-              <span>Mô tả:</span> <br />
-              <TextArea rows={2} value={classDetail.descriptions} readOnly />
-            </Col>
-          </Row>
-        </div>
+        {/* <div>
+          {listMyClass.length > 0 ? (
+            <>
+              <div className="table">
+                <Table
+                  dataSource={data}
+                  rowKey="id"
+                  columns={columns}
+                  pagination={false}
+                />
+              </div>
+              <div className="pagination_box">
+                <Pagination
+                  simple
+                  current={current}
+                  onChange={(value) => {
+                    setCurrent(value);
+                  }}
+                  total={totalPages * 10}
+                />
+              </div>
+            </>
+          ) : (
+            <>
+              <p style={{ textAlign: "center", marginTop: "100px" }}>
+                Không có lớp học
+              </p>
+            </>
+          )}
+        </div> */}
       </div>
-
-      {/* </Modal> */}
     </>
   );
 };

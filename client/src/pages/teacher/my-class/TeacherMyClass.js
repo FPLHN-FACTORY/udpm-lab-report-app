@@ -261,10 +261,17 @@ const TeacherMyClass = () => {
       </div>
       <div className="filter-teacher-my-class">
         <div className="button-menu-teacher">
-          <Button style={{ fontSize: "16px" }}>Lịch dạy hôm nay</Button>
-          <Link to="/" className="buttonChange" style={{ fontSize: "16px" }}>
-            Lớp của tôi
+          <Link style={{ fontSize: "17px" }} className="custom-link">
+            Lịch dạy hôm nay &nbsp;
           </Link>
+          <Link
+            to="/"
+            id="menu-checked"
+            style={{ fontSize: "17px", paddingLeft: "10px" }}
+          >
+            Lớp của tôi &nbsp;
+          </Link>
+
           <hr />
         </div>
         <div className="menu-teacher-search">
