@@ -1,4 +1,5 @@
 import "./styleTeacherMyClass.css";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
@@ -30,10 +31,12 @@ import {
   GetTeacherMyClass,
   SetTeacherMyClass,
 } from "../../../app/teacher/my-class/teacherMyClassSlice.reduce";
-import ModalTeacherDetailMyClass from "../my-class/modal-detail/ModalTeacherDetailMyClass";
+import StudentsInMyClass from "./students/StudentsInMyClass";
+
 const { Option } = Select;
 
 const TeacherMyClass = () => {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [listSemester, setListSemester] = useState([]);
   const [listActivity, setListActivity] = useState([]);
@@ -46,11 +49,9 @@ const TeacherMyClass = () => {
   const [classPeriodSearch, setClassPeriodSearch] = useState("");
   const [levelSearch, setLevelSearch] = useState("");
 
-  const [idDetail, setIdDetail] = useState("");
   const [clear, setClear] = useState(false);
   const listClassPeriod = [];
 
-  const [showDetailModal, setShowDetailModal] = useState(false);
   for (let i = 1; i <= 10; i++) {
     listClassPeriod.push("" + i);
   }
@@ -105,16 +106,6 @@ const TeacherMyClass = () => {
         setListMyClass(respone.data.data.data);
         console.log("new ");
         console.log(respone.data.data.data);
-        // const timestamp = 1682874000000;
-        // const date = new Date(timestamp);
-        // console.log("dadads");
-        // console.log(date);
-        // console.log("new ");
-        // const datee = new Date("2023/05/1"); // Lấy ngày tháng hiện tại
-        // const timestampe = datee.getTime(); // Chuyển đổi thành số nguyên Long
-
-        // console.log(timestampe);
-
         setLoading(true);
       });
     } catch (error) {
@@ -152,19 +143,19 @@ const TeacherMyClass = () => {
     }
   };
 
-  const handleDetailIdMyClass = (id) => {
-    document.querySelector("body").style.overflowX = "hidden";
-    setShowDetailModal(true);
-    setIdDetail(id);
-    console.log("idddđ");
-    console.log(id + " " + showDetailModal);
-  };
+  // const handleDetailIdMyClass = (id) => {
+  //   document.querySelector("body").style.overflowX = "hidden";
+  //   setShowDetailModal(true);
+  //   setIdDetail(id);
+  //   console.log("idddđ");
+  //   console.log(id + " " + showDetailModal);
+  // };
 
-  const handleModalDetailCancel = () => {
-    document.querySelector("body").style.overflowX = "hidden";
-    setShowDetailModal(false);
-    setIdDetail("");
-  };
+  // const handleModalDetailCancel = () => {
+  //   document.querySelector("body").style.overflowX = "hidden";
+  //   setShowDetailModal(false);
+  //   setIdDetail("");
+  // };
 
   const handleSearch = async () => {
     await featchAllMyClass(giangVienCurrent);
@@ -242,15 +233,14 @@ const TeacherMyClass = () => {
       render: (text, record) => (
         <>
           <div className="box_icon">
-            <Tooltip title="Xem chi tiết lớp học">
-              <FontAwesomeIcon
-                icon={faEye}
-                className="icon"
-                onClick={() => {
-                  handleDetailIdMyClass(record.id);
-                }}
-              />
-            </Tooltip>
+            <Link
+              to={`/teacher/my-class/students-in-class/${record.id}`}
+              className="btn btn-success ml-4"
+            >
+              <Tooltip title="Xem chi tiết lớp học">
+                <FontAwesomeIcon icon={faEye} className="icon" />
+              </Tooltip>
+            </Link>
           </div>
         </>
       ),
@@ -455,13 +445,8 @@ const TeacherMyClass = () => {
                     setCurrent(value);
                   }}
                   total={totalPages * 10}
-                />{" "}
+                />
               </div>
-              <ModalTeacherDetailMyClass
-                visible={showDetailModal}
-                onCancel={handleModalDetailCancel}
-                idDetail={idDetail}
-              />
             </>
           ) : (
             <>

@@ -1,5 +1,20 @@
-.modal_project_show_detail {
-  top: 0;
+.box-center {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.box-students-in-class {
+  margin: 15px 10px 15px 13px;
+  background-color: rgb(255, 255, 255);
+  width: 98%;
+  height: auto;
+  border-radius: 5px;
+  padding: 20px;
+}
+.link-change {
+  color: rgb(25, 24, 24);
+  font-weight: 500;
 }
 .avatarMember {
   border-radius: 50%;

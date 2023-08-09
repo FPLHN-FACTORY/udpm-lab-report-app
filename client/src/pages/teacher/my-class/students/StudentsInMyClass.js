@@ -1,19 +1,26 @@
-import { Modal, Row, Col, Input, Table, Image, Pagination } from "antd";
+import { useParams } from "react-router-dom";
+import "./styleStudentsInMyClass.css";
+import { Modal, Row, Col, Input, Table, Image, Pagination, Button } from "antd";
+import { Link } from "react-router-dom";
+import {
+  ControlOutlined,
+  QuestionCircleFilled,
+  ProjectOutlined,
+} from "@ant-design/icons";
 import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
 import { useEffect, useState } from "react";
 import LoadingIndicator from "../../../../helper/loading";
 import moment from "moment";
 const { TextArea } = Input;
 
-const ModalTeacherDetailMyClass = ({ visible, onCancel, idDetail }) => {
+const StudentsInMyClass = () => {
   const [classDetail, setClassDetail] = useState({});
   const [loading, setLoading] = useState(false);
-
+  const { id } = useParams();
   useEffect(() => {
-    if (idDetail !== null && idDetail !== "" && visible === true) {
-      featchClass(idDetail);
-    }
-  }, [visible, idDetail, onCancel]);
+    window.scrollTo(0, 0);
+    featchClass(id);
+  }, []);
 
   const featchClass = async (id) => {
     setLoading(false);
@@ -28,15 +35,63 @@ const ModalTeacherDetailMyClass = ({ visible, onCancel, idDetail }) => {
   };
   return (
     <>
-      {" "}
       {!loading && <LoadingIndicator />}
-      <Modal
-        onCancel={onCancel}
-        visible={visible}
-        width={750}
-        footer={null}
-        className="modal_project_show_detail"
-      >
+      <div className="title-teacher-my-class">
+        <span style={{ fontSize: "18px", paddingLeft: "20px" }}>
+          <ControlOutlined style={{ fontSize: "22px" }} />
+          <span style={{ marginLeft: "10px", fontWeight: "500" }}>
+            Bảng điều khiển
+          </span>
+        </span>
+      </div>
+      <div className="box-students-in-class">
+        <div className="button-menu-teacher">
+          <div
+            className="box-center"
+            style={{
+              height: "30px",
+              width: "110px",
+              backgroundColor: "#007bff",
+              color: "white",
+              marginBottom: "4px",
+              marginLeft: "10px",
+            }}
+          >
+            {" "}
+            <span>{classDetail.classSize} thành viên</span>
+          </div>
+          <Link
+            to={`/teacher/my-class/students-in-class/${id}`}
+            className="link-change"
+            style={{
+              fontSize: "16px",
+              marginLeft: "10px",
+            }}
+          >
+            THÀNH VIÊN TRONG LỚP
+          </Link>
+          <Link
+            to={`/teacher/my-class/students-in-class/${id}`}
+            className="link-change"
+            style={{ fontSize: "16px", marginLeft: "20px" }}
+          >
+            ĐIỂM DANH
+          </Link>
+          <Link
+            to={`/teacher/my-class/students-in-class/${id}`}
+            className="link-change"
+            style={{ fontSize: "16px", marginLeft: "20px" }}
+          >
+            QUẢN LÝ NHÓM
+          </Link>
+          <hr />
+        </div>
+        <div>
+          <p>Tên lớp: {classDetail.name}</p>
+          <p>Mã lớp: {classDetail.code}</p>
+          <p>Mật khẩu:{classDetail.passWord}</p>
+        </div>
+
         <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
           <span style={{ fontSize: "18px" }}>Chi tiết lớp học</span>
         </div>
@@ -96,9 +151,11 @@ const ModalTeacherDetailMyClass = ({ visible, onCancel, idDetail }) => {
             </Col>
           </Row>
         </div>
-      </Modal>
+      </div>
+
+      {/* </Modal> */}
     </>
   );
 };
 
-export default ModalTeacherDetailMyClass;
+export default StudentsInMyClass;

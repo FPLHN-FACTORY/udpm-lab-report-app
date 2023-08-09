@@ -15,6 +15,8 @@ import ActivityManagement from "./pages/admin/activity-management/ActivityManage
 import ClassManagement from "./pages/admin/class-management/ClassManagement";
 import AdminDashboard from "./pages/admin/admin-dashboard/AdminDashboard";
 import TeacherMyClass from "./pages/teacher/my-class/TeacherMyClass";
+import StudentsInMyClass from "./pages/teacher/my-class/students/StudentsInMyClass";
+
 import StudentMyClass from "./pages/student/StudentMyClass";
 
 function App() {
@@ -71,12 +73,24 @@ function App() {
                 </AuthGuard>
               }
             />
+            {/* router của Hiệu */}
             <Route
               path="/teacher/my-class"
               element={
                 <AuthGuard>
                   <DashBoardTeacher>
                     <TeacherMyClass />
+                  </DashBoardTeacher>
+                </AuthGuard>
+              }
+            />
+            {/* router của Hiệu */}
+            <Route
+              path="/teacher/my-class/students-in-class/:id"
+              element={
+                <AuthGuard>
+                  <DashBoardTeacher>
+                    <StudentsInMyClass />
                   </DashBoardTeacher>
                 </AuthGuard>
               }
