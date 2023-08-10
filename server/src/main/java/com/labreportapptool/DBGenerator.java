@@ -3,8 +3,12 @@ package com.labreportapptool;
 import com.labreportapp.entity.Activity;
 import com.labreportapp.entity.Class;
 import com.labreportapp.entity.Semester;
+import com.labreportapp.entity.StudentClasses;
+import com.labreportapp.entity.Team;
 import com.labreportapp.infrastructure.constant.ClassPeriod;
 import com.labreportapp.infrastructure.constant.Level;
+import com.labreportapp.infrastructure.constant.RoleTeam;
+import com.labreportapp.infrastructure.constant.StatusTeam;
 import com.labreportapp.repository.ActivityRepository;
 import com.labreportapp.repository.AttendanceRepository;
 import com.labreportapp.repository.ClassRepository;
@@ -109,6 +113,74 @@ public class DBGenerator implements CommandLineRunner {
         class2.setTeacherId("99b84d22-2edb-4ede-a5c4-ec78f4791fee");
         class2.setDescriptions("Lớp làm trước dự án 1 bán hàng");
         class2.setId(classRepository.save(class2).getId());
+
+//Team - class 1
+        Team team1 = new Team();
+        team1.setCode("TC1_1");
+        team1.setName("Bees Shoess");
+        team1.setSubjectName("Website bán giày Bee Shoes");
+        team1.setClassId(class1.getId());
+        team1.setId(teamRepository.save(team1).getId());
+
+        Team team2 = new Team();
+        team2.setCode("TC1_2");
+        team2.setName("Bee Fly");
+        team2.setSubjectName("Website camera fly");
+        team2.setClassId(class1.getId());
+        team2.setId(teamRepository.save(team2).getId());
+
+        Team team3 = new Team();
+        team3.setCode("TC1_3");
+        team3.setName("Top one poly");
+        team3.setSubjectName("Website bán quần áo Bee Poly");
+        team3.setClassId(class1.getId());
+        team3.setId(teamRepository.save(team3).getId());
+
+        Team team4 = new Team();
+        team4.setCode("TC1_4");
+        team4.setName("Base Poly");
+        team4.setSubjectName("Website bán nước hoa Base Poly");
+        team3.setClassId(class1.getId());
+        team3.setId(teamRepository.save(team3).getId());team4.setId(teamRepository.save(team4).getId());
+
+        //Team - class 2
+        Team team5 = new Team();
+        team5.setCode("TC2_1");
+        team5.setName("Hello Poly");
+        team5.setSubjectName("Website bán giày Bee Shoes");
+        team5.setClassId(class2.getId());
+        team5.setId(teamRepository.save(team5).getId());
+
+        Team team6 = new Team();
+        team6.setCode("TC2_2");
+        team6.setName("Hi Poly");
+        team6.setSubjectName("Website camera HIPOLY");
+        team6.setClassId(class2.getId());
+        team6.setId(teamRepository.save(team6).getId());
+
+        Team team7 = new Team();
+        team7.setCode("TC2_3");
+        team7.setName("ONE SHOES");
+        team7.setSubjectName("Website bán áo ONESH Poly");
+        team7.setClassId(class1.getId());
+        team7.setId(teamRepository.save(team7).getId());
+
+        Team team8 = new Team();
+        team8.setCode("TC2_4");
+        team8.setName("Case Happy Poly");
+        team8.setSubjectName("Website bán quần hoa CHPPoly");
+        team8.setClassId(class2.getId());
+        team8.setId(teamRepository.save(team8).getId());
+
+// student_ class
+        StudentClasses studentClasses1 = new StudentClasses();
+        studentClasses1.setStudentId("cdc1629a-d9bd-4a5f-be12-8737ec26df8f");
+        studentClasses1.setClassId(class1.getId());
+        studentClasses1.setTeamId(team2.getId());
+        studentClasses1.setEmail("hieundph25894@fpt.edu.vn");
+        studentClasses1.setRole(RoleTeam.LEADER);
+        studentClasses1.setStatus(StatusTeam.ACTIVE);
+
     }
 
     public static void main(String[] args) {
