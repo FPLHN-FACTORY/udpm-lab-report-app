@@ -104,8 +104,6 @@ const TeacherMyClass = () => {
         dispatch(SetTeacherMyClass(respone.data.data));
         setTotalPages(parseInt(respone.data.data.totalPages));
         setListMyClass(respone.data.data.data);
-        console.log("new ");
-        console.log(respone.data.data.data);
         setLoading(true);
       });
     } catch (error) {
@@ -143,24 +141,11 @@ const TeacherMyClass = () => {
     }
   };
 
-  // const handleDetailIdMyClass = (id) => {
-  //   document.querySelector("body").style.overflowX = "hidden";
-  //   setShowDetailModal(true);
-  //   setIdDetail(id);
-  //   console.log("idddđ");
-  //   console.log(id + " " + showDetailModal);
-  // };
-
-  // const handleModalDetailCancel = () => {
-  //   document.querySelector("body").style.overflowX = "hidden";
-  //   setShowDetailModal(false);
-  //   setIdDetail("");
-  // };
-
   const handleSearch = async () => {
     await featchAllMyClass(giangVienCurrent);
     toast.success("Tìm kiếm thành công !");
   };
+
   const handleClear = () => {
     if (listSemester.length > 0) {
       setIdSemesterSearch(listSemester[0].id);

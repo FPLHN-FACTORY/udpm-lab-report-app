@@ -56,7 +56,6 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
             and (:#{#req.name} IS NULL OR :#{#req.name} LIKE '' OR c.name LIKE %:#{#req.name}%)
             and (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR  c.class_period = :#{#req.classPeriod})
             and (:#{#req.level} IS NULL OR :#{#req.level} LIKE '' OR a.level = :#{#req.level})
-            ORDER BY c.last_modified_date DESC
             """ ,nativeQuery = true)
     Page<TeClassResponse> findClassBySemesterAndActivity(@Param("req") TeFindClass req, Pageable pageable);
 

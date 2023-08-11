@@ -28,6 +28,7 @@ public class TeClassController {
         PageableObject<TeClassResponse> pageList = teClassService.searchTeacherClass(teFindClass);
         return new ResponseObject(pageList);
     }
+
     @GetMapping("/{id}")
     public ResponseObject detailClass(@PathVariable("id") String id) {
         return new ResponseObject(teClassService.findClassById(id));

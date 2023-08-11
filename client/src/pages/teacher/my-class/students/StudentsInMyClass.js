@@ -8,6 +8,7 @@ import {
   ProjectOutlined,
 } from "@ant-design/icons";
 import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
+import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/TeacherStudentClasses.api";
 import { useEffect, useState } from "react";
 import LoadingIndicator from "../../../../helper/loading";
 import moment from "moment";
@@ -15,12 +16,14 @@ const { TextArea } = Input;
 
 const StudentsInMyClass = () => {
   const [classDetail, setClassDetail] = useState({});
-
+  const [listStudentClass, setListStudentClass] = useState([]);
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
   useEffect(() => {
     window.scrollTo(0, 0);
+    featInforStudent();
     featchClass(id);
+    featchStudentClass(id);
   }, []);
 
   const featchClass = async (id) => {
@@ -31,7 +34,51 @@ const StudentsInMyClass = () => {
         setClassDetail(responese.data.data);
       });
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      alert("Lỗi hệ thống, vui lòng F5 lại trang aaaaaaaaaa!");
+    }
+  };
+
+  const featInforStudent = async () => {
+    setLoading(false);
+
+    // let list = [];
+    // list = listStudentClass;
+    try {
+      console.log("Danh sachs infor");
+      featchStudentClass(id);
+      if (listStudentClass.length >= 1) {
+        let request = `?id=`;
+        if (listStudentClass.length >= 1) {
+          for (let i = 1; i <= listStudentClass.length; i++) {
+            if (i === listStudentClass.length) {
+              request += listStudentClass[i].id + `|`;
+            } else {
+              request += listStudentClass[i].id;
+            }
+          }
+        }
+        console.log("requesnt");
+        console.log(request);
+
+        // const re = await TeacherStudentClassesAPI.getAllInforStudent();
+      }
+      // truy xuất nhiều bằng cách https://63ddb6cff1af41051b085b6d.mockapi.io/sinh-vien?id= jdajjsajdsaj | ádadad
+    } catch (error) {
+      alert("Lỗi hệ thống, vui lòng F5 lại trang do api sinh vien!");
+    }
+  };
+
+  const featchStudentClass = async (id) => {
+    setLoading(false);
+    try {
+      await TeacherStudentClassesAPI.getStudentInClasses(id).then(
+        (responese) => {
+          setListStudentClass(responese.data.data);
+          setLoading(true);
+        }
+      );
+    } catch (error) {
+      alert("Lỗi hệ thống, vui lòng F5 lại trang aaaaaaaa!");
     }
   };
   // const data = useAppSelector(GetTeacherMyClass);

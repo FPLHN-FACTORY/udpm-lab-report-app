@@ -1,5 +1,4 @@
 import { request } from "../../../helper/request.helper";
-
 const url = `/teacher`;
 
 export class TeacherMyClassAPI {
