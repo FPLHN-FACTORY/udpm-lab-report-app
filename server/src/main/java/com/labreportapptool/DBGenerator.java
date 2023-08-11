@@ -74,6 +74,12 @@ public class DBGenerator implements CommandLineRunner {
         semester.setEndTime(new Date().getTime() + 2678400000L);
         semester.setId(semesterRepository.save(semester).getId());
 
+        Semester semester2 = new Semester();
+        semester2.setName("SPRING 2023");
+        semester2.setStartTime(1682874000000L);
+        semester2.setEndTime(1682874000000L + 2678400000L);
+        semester2.setId(semesterRepository.save(semester2).getId());
+
         Activity activity1 = new Activity();
         activity1.setName("Xây dựng cho sinh viên quy trình làm việc với dự án, thực hành làm việc với website");
         activity1.setStartTime(new Date().getTime() + 10000);
@@ -141,7 +147,8 @@ public class DBGenerator implements CommandLineRunner {
         team4.setName("Base Poly");
         team4.setSubjectName("Website bán nước hoa Base Poly");
         team3.setClassId(class1.getId());
-        team3.setId(teamRepository.save(team3).getId());team4.setId(teamRepository.save(team4).getId());
+        team3.setId(teamRepository.save(team3).getId());
+        team4.setId(teamRepository.save(team4).getId());
 
         //Team - class 2
         Team team5 = new Team();
@@ -173,6 +180,53 @@ public class DBGenerator implements CommandLineRunner {
         team8.setId(teamRepository.save(team8).getId());
 
 // student_ class
+        //class 1 - team 1 ( 6-10)
+        StudentClasses studentClasses6 = new StudentClasses();
+        studentClasses6.setStudentId("ad51426d-7545-4f31-896d-cad398cac2c5");
+        studentClasses6.setClassId(class1.getId());
+        studentClasses6.setTeamId(team1.getId());
+        studentClasses6.setEmail("bndph24003@fpt.edu.vn");
+        studentClasses6.setRole(RoleTeam.LEADER);
+        studentClasses6.setStatus(StatusTeam.ACTIVE);
+        studentClasses6.setId(studentClassesRepository.save(studentClasses6).getId());
+
+        StudentClasses studentClasses7 = new StudentClasses();
+        studentClasses7.setStudentId("698b1fba-dffe-4a0d-884a-984b14d8dca7");
+        studentClasses7.setClassId(class1.getId());
+        studentClasses7.setTeamId(team1.getId());
+        studentClasses7.setEmail("cndph24002@fpt.edu.vn");
+        studentClasses7.setRole(RoleTeam.MEMBER);
+        studentClasses7.setStatus(StatusTeam.ACTIVE);
+        studentClasses7.setId(studentClassesRepository.save(studentClasses7).getId());
+
+        StudentClasses studentClasses8 = new StudentClasses();
+        studentClasses8.setStudentId("e015e9dc-b01a-4516-b9a9-70a09e0b5408");
+        studentClasses8.setClassId(class1.getId());
+        studentClasses8.setTeamId(team1.getId());
+        studentClasses8.setEmail("dndph24001@fpt.edu.vn");
+        studentClasses8.setRole(RoleTeam.MEMBER);
+        studentClasses8.setStatus(StatusTeam.ACTIVE);
+        studentClasses8.setId(studentClassesRepository.save(studentClasses8).getId());
+
+        StudentClasses studentClasses9 = new StudentClasses();
+        studentClasses9.setStudentId("732e7e24-6c0a-420f-96fc-31046410b057");
+        studentClasses9.setClassId(class1.getId());
+        studentClasses9.setTeamId(team1.getId());
+        studentClasses9.setEmail("endph24004@fpt.edu.vn");
+        studentClasses9.setRole(RoleTeam.MEMBER);
+        studentClasses9.setStatus(StatusTeam.ACTIVE);
+        studentClasses9.setId(studentClassesRepository.save(studentClasses9).getId());
+
+        StudentClasses studentClasses10 = new StudentClasses();
+        studentClasses10.setStudentId("69308521-e690-4b5f-8756-52bedb630951");
+        studentClasses10.setClassId(class1.getId());
+        studentClasses10.setTeamId(team1.getId());
+        studentClasses10.setEmail("fndph24005@fpt.edu.vn");
+        studentClasses10.setRole(RoleTeam.LEADER);
+        studentClasses10.setStatus(StatusTeam.ACTIVE);
+        studentClasses10.setId(studentClassesRepository.save(studentClasses10).getId());
+
+        // class 1- team 2 (1-5)
         StudentClasses studentClasses1 = new StudentClasses();
         studentClasses1.setStudentId("cdc1629a-d9bd-4a5f-be12-8737ec26df8f");
         studentClasses1.setClassId(class1.getId());
@@ -180,6 +234,89 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses1.setEmail("hieundph25894@fpt.edu.vn");
         studentClasses1.setRole(RoleTeam.LEADER);
         studentClasses1.setStatus(StatusTeam.ACTIVE);
+        studentClasses1.setId(studentClassesRepository.save(studentClasses1).getId());
+
+        StudentClasses studentClasses2 = new StudentClasses();
+        studentClasses2.setStudentId("874bffc6-38ce-467e-9458-47868e1e2f52");
+        studentClasses2.setClassId(class1.getId());
+        studentClasses2.setTeamId(team2.getId());
+        studentClasses2.setEmail("thangncph26123@fpt.edu.vn");
+        studentClasses2.setRole(RoleTeam.MEMBER);
+        studentClasses2.setStatus(StatusTeam.ACTIVE);
+        studentClasses2.setId(studentClassesRepository.save(studentClasses2).getId());
+
+        StudentClasses studentClasses3 = new StudentClasses();
+        studentClasses3.setStudentId("f5d1e3ab-e544-4d77-8bd3-830c904f0e93");
+        studentClasses3.setClassId(class1.getId());
+        studentClasses3.setTeamId(team2.getId());
+        studentClasses3.setEmail("vanntph26001@fpt.edu.vn");
+        studentClasses3.setRole(RoleTeam.MEMBER);
+        studentClasses3.setStatus(StatusTeam.ACTIVE);
+        studentClasses3.setId(studentClassesRepository.save(studentClasses3).getId());
+
+        StudentClasses studentClasses4 = new StudentClasses();
+        studentClasses4.setStudentId("aa47cd2b-ac99-4277-905b-ac2bb59886e9");
+        studentClasses4.setClassId(class1.getId());
+        studentClasses4.setTeamId(team2.getId());
+        studentClasses4.setEmail("quynhncph26002@fpt.edu.vn");
+        studentClasses4.setRole(RoleTeam.MEMBER);
+        studentClasses4.setStatus(StatusTeam.ACTIVE);
+        studentClasses4.setId(studentClassesRepository.save(studentClasses4).getId());
+
+        StudentClasses studentClasses5 = new StudentClasses();
+        studentClasses5.setStudentId("8559e6b3-8465-48e8-92a4-0f6147dc568d");
+        studentClasses5.setClassId(class1.getId());
+        studentClasses5.setTeamId(team2.getId());
+        studentClasses5.setEmail("hanhlt27000@fpt.edu.vn");
+        studentClasses5.setRole(RoleTeam.MEMBER);
+        studentClasses5.setStatus(StatusTeam.ACTIVE);
+        studentClasses5.setId(studentClassesRepository.save(studentClasses5).getId());
+
+        // class 1- team 3 (11-15)
+        StudentClasses studentClasses11 = new StudentClasses();
+        studentClasses11.setStudentId("01fefe14-dbf8-4275-99b3-04b4bd96a5bc");
+        studentClasses11.setClassId(class1.getId());
+        studentClasses11.setTeamId(team3.getId());
+        studentClasses11.setEmail("gndph24006@fpt.edu.vn");
+        studentClasses11.setRole(RoleTeam.LEADER);
+        studentClasses11.setStatus(StatusTeam.ACTIVE);
+        studentClasses11.setId(studentClassesRepository.save(studentClasses11).getId());
+
+        StudentClasses studentClasses12 = new StudentClasses();
+        studentClasses12.setStudentId("0af2514a-ef53-48c5-945a-65248c890c7f");
+        studentClasses12.setClassId(class1.getId());
+        studentClasses12.setTeamId(team3.getId());
+        studentClasses12.setEmail("hndph24007@fpt.edu.vn");
+        studentClasses12.setRole(RoleTeam.MEMBER);
+        studentClasses12.setStatus(StatusTeam.ACTIVE);
+        studentClasses12.setId(studentClassesRepository.save(studentClasses12).getId());
+
+        StudentClasses studentClasses13 = new StudentClasses();
+        studentClasses13.setStudentId("941359a8-c58f-4355-ac0d-673cc78f0b32");
+        studentClasses13.setClassId(class1.getId());
+        studentClasses13.setTeamId(team3.getId());
+        studentClasses13.setEmail("kndph24008@fpt.edu.vn");
+        studentClasses13.setRole(RoleTeam.MEMBER);
+        studentClasses13.setStatus(StatusTeam.ACTIVE);
+        studentClasses13.setId(studentClassesRepository.save(studentClasses13).getId());
+
+        StudentClasses studentClasses14 = new StudentClasses();
+        studentClasses14.setStudentId("195d63ae-9de2-447d-9f62-54488070dd48");
+        studentClasses14.setClassId(class1.getId());
+        studentClasses14.setTeamId(team3.getId());
+        studentClasses14.setEmail("jndph24009@fpt.edu.vn");
+        studentClasses14.setRole(RoleTeam.MEMBER);
+        studentClasses14.setStatus(StatusTeam.ACTIVE);
+        studentClasses14.setId(studentClassesRepository.save(studentClasses14).getId());
+
+        StudentClasses studentClasses15 = new StudentClasses();
+        studentClasses15.setStudentId("7749a5e9-b674-4aca-9e2d-cd36535de3fa");
+        studentClasses15.setClassId(class1.getId());
+        studentClasses15.setTeamId(team3.getId());
+        studentClasses15.setEmail("lndph24010@fpt.edu.vn");
+        studentClasses15.setRole(RoleTeam.MEMBER);
+        studentClasses15.setStatus(StatusTeam.ACTIVE);
+        studentClasses15.setId(studentClassesRepository.save(studentClasses15).getId());
 
     }
 
