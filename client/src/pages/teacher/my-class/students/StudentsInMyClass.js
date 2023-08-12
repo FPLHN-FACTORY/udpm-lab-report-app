@@ -263,8 +263,14 @@ const StudentsInMyClass = () => {
             </>
           ) : (
             <>
-              <p style={{ textAlign: "center", marginTop: "100px" }}>
-                Không có lớp học
+              <p
+                style={{
+                  textAlign: "center",
+                  marginTop: "100px",
+                  fontSize: "15px",
+                }}
+              >
+                Không có thành viên
               </p>
             </>
           )}

@@ -442,7 +442,13 @@ const TeacherMyClass = () => {
             </>
           ) : (
             <>
-              <p style={{ textAlign: "center", marginTop: "100px" }}>
+              <p
+                style={{
+                  textAlign: "center",
+                  marginTop: "100px",
+                  fontSize: "15px",
+                }}
+              >
                 Không có lớp học
               </p>
             </>

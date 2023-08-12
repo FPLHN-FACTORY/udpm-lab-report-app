@@ -8,6 +8,7 @@
   margin: 15px 10px 15px 13px;
   background-color: rgb(255, 255, 255);
   width: 98%;
+  min-height: 575px;
   height: auto;
   border-radius: 5px;
   padding: 20px;
