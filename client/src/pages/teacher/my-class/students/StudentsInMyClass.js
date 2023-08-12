@@ -2,69 +2,75 @@ import { useParams } from "react-router-dom";
 import "./styleStudentsInMyClass.css";
 import { Modal, Row, Col, Input, Table, Image, Pagination, Button } from "antd";
 import { Link } from "react-router-dom";
-import {
-  ControlOutlined,
-  QuestionCircleFilled,
-  ProjectOutlined,
-} from "@ant-design/icons";
+import { ControlOutlined } from "@ant-design/icons";
 import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
 import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/TeacherStudentClasses.api";
 import { useEffect, useState } from "react";
 import LoadingIndicator from "../../../../helper/loading";
 import moment from "moment";
-const { TextArea } = Input;
+import { color } from "framer-motion";
 
 const StudentsInMyClass = () => {
   const [classDetail, setClassDetail] = useState({});
   const [listStudentClass, setListStudentClass] = useState([]);
+  const [dataTable, setDataTable] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [loadingStudentClass, setLoadingStudentClass] = useState(false);
   const { id } = useParams();
+
   useEffect(() => {
     window.scrollTo(0, 0);
-    featInforStudent();
+    document.title = "Bảng điều khiển";
     featchClass(id);
     featchStudentClass(id);
   }, []);
+
+  useEffect(() => {
+    if (loadingStudentClass === true) {
+      fetchData();
+    }
+  }, [loadingStudentClass]);
+
+  const fetchData = async () => {
+    await featchStudentClass(id);
+    featInforStudent();
+  };
 
   const featchClass = async (id) => {
     setLoading(false);
     try {
       await TeacherMyClassAPI.detailMyClass(id).then((responese) => {
-        setLoading(true);
         setClassDetail(responese.data.data);
       });
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang aaaaaaaaaa!");
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
 
   const featInforStudent = async () => {
     setLoading(false);
-
-    // let list = [];
-    // list = listStudentClass;
     try {
-      console.log("Danh sachs infor");
-      featchStudentClass(id);
-      if (listStudentClass.length >= 1) {
-        let request = `?id=`;
-        if (listStudentClass.length >= 1) {
-          for (let i = 1; i <= listStudentClass.length; i++) {
-            if (i === listStudentClass.length) {
-              request += listStudentClass[i].id + `|`;
-            } else {
-              request += listStudentClass[i].id;
-            }
-          }
-        }
-        console.log("requesnt");
-        console.log(request);
-
-        // const re = await TeacherStudentClassesAPI.getAllInforStudent();
-      }
-      // truy xuất nhiều bằng cách https://63ddb6cff1af41051b085b6d.mockapi.io/sinh-vien?id= jdajjsajdsaj | ádadad
+      let request = listStudentClass.map((item) => item.idStudent).join("|");
+      const listStudentAPI = await TeacherStudentClassesAPI.getAllInforStudent(
+        `?id=` + request
+      );
+      const listShowTable = listStudentAPI.data
+        .filter((item1) =>
+          listStudentClass.some((item2) => item1.id === item2.idStudent)
+        )
+        .map((item1) => {
+          const matchedObject = listStudentClass.find(
+            (item2) => item2.idStudent === item1.id
+          );
+          return {
+            ...item1,
+            ...matchedObject,
+          };
+        });
+      setDataTable(listShowTable);
+      setLoading(true);
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang do api sinh vien!");
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
 
@@ -74,21 +80,45 @@ const StudentsInMyClass = () => {
       await TeacherStudentClassesAPI.getStudentInClasses(id).then(
         (responese) => {
           setListStudentClass(responese.data.data);
-          setLoading(true);
+          setLoadingStudentClass(true);
         }
       );
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang aaaaaaaa!");
     }
   };
-  // const data = useAppSelector(GetTeacherMyClass);
+  const data = dataTable;
   const columns = [
     {
-      title: "STT",
+      title: "#",
       dataIndex: "stt",
       key: "stt",
-      sorter: (a, b) => a.stt - b.stt,
-      width: "3%",
+      render: (text, record, index) => index + 1,
+      width: "12px",
+    },
+    {
+      title: "Mã sinh viên",
+      dataIndex: "code",
+      key: "code",
+      render: (text, record, index) => {
+        const countSpace = (record.name.match(/ /g) || []).length;
+        const lastSpaceIndex = record.name.lastIndexOf(" ");
+        const wordCount =
+          lastSpaceIndex >= 0
+            ? record.name.substring(lastSpaceIndex + 1).length
+            : 0;
+        const nameIndexCut = countSpace + wordCount;
+        const codeShow = record.username.substring(nameIndexCut).toUpperCase();
+        return <span style={{ color: "#007bff" }}>{codeShow}</span>;
+      },
+      width: "130px",
+    },
+    {
+      title: "Mã nhóm",
+      dataIndex: "codeTeam",
+      key: "codeTeam",
+      sorter: (a, b) => a.codeTeam.localeCompare(b.codeTeam),
+      width: "150px",
     },
     {
       title: "Họ và tên",
@@ -101,22 +131,22 @@ const StudentsInMyClass = () => {
       title: "Email",
       dataIndex: "email",
       key: "email",
-      sorter: (a, b) => a.descriptions.localeCompare(b.descriptions),
-      width: "9%",
+      sorter: (a, b) => a.email.localeCompare(b.email),
     },
-    {
-      title: "Mã nhóm",
-      dataIndex: "level",
-      key: "level",
-      sorter: (a, b) => a.level - b.level,
-      width: "7%",
-    },
+
     {
       title: "Trạng thái",
-      dataIndex: "status",
-      key: "status",
-      sorter: (a, b) => a.status.localeCompare(b.status),
-      width: "7%",
+      dataIndex: "statusStudent",
+      key: "statusStudent",
+      sorter: (a, b) => a.statusStudent.localeCompare(b.statusStudent),
+      render: (text) => {
+        if (text === "0") {
+          return <span style={{ color: "green" }}>HD</span>;
+        } else {
+          return <span style={{ color: "red" }}>HL</span>;
+        }
+      },
+      width: "120px",
     },
   ];
   return (
@@ -147,8 +177,11 @@ const StudentsInMyClass = () => {
           >
             {" "}
             <span>
-              {classDetail.classSize} thành viên | Level:{" "}
+              {classDetail.classSize} thành viên{" "}
+              <span style={{ color: "yellow" }}>| </span> Level{"  "}
               {classDetail.activityLevel}
+              <span style={{ color: "yellow" }}>| </span> Ca{"  "}
+              {classDetail.classPeriod}
             </span>
           </div>
           <div>
@@ -179,39 +212,45 @@ const StudentsInMyClass = () => {
             <hr />
           </div>
         </div>
-        <div className="content">
-          <Row gutter={16} style={{ marginBottom: "15px", marginTop: "15px" }}>
-            <Col span={8}>
+        <div className="content-class">
+          <Row gutter={16} style={{ marginBottom: "4px" }}>
+            <Col span={16}>
               <span>Hoạt động: &nbsp; {classDetail.activityName}</span>
             </Col>
-            <Col span={8}>
+          </Row>
+          <Row gutter={16} style={{ marginBottom: "4px" }}>
+            {" "}
+            <Col span={24}>
               <span>
                 Thời gian bắt đầu:&nbsp;
                 {moment(classDetail.startTime).format("DD-MM-YYYY")}
               </span>{" "}
             </Col>
-            <Col span={8}>
-              <span>Ca học: &nbsp;{classDetail.classPeriod}</span>
-            </Col>
           </Row>
-          <Row gutter={16} style={{ marginBottom: "15px" }}>
-            <Col span={8}>
+          <Row gutter={16} style={{ marginBottom: "4px" }}>
+            <Col>
               <span>Mã lớp: &nbsp;{classDetail.code}</span>
             </Col>
-            <Col span={8}>
+          </Row>
+          <Row style={{ marginBottom: "4px" }}>
+            <Col>
               <span>Tên lớp: &nbsp;{classDetail.name}</span>
             </Col>
-            <Col span={8}>
+          </Row>
+          <Row gutter={16} style={{ marginBottom: "4px" }}>
+            <Col span={24}>
+              <span>Mô tả: &nbsp;{classDetail.descriptions}</span>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
               <span>Mật khẩu: &nbsp;{classDetail.passWord}</span>
             </Col>
           </Row>
-          <Row gutter={16} style={{ marginBottom: "15px" }}>
-            <Col span={24}>Mô tả: &nbsp;{classDetail.descriptions}</Col>
-          </Row>
           <br />
         </div>
-        {/* <div>
-          {listMyClass.length > 0 ? (
+        <div>
+          {dataTable.length > 0 ? (
             <>
               <div className="table">
                 <Table
@@ -219,16 +258,6 @@ const StudentsInMyClass = () => {
                   rowKey="id"
                   columns={columns}
                   pagination={false}
-                />
-              </div>
-              <div className="pagination_box">
-                <Pagination
-                  simple
-                  current={current}
-                  onChange={(value) => {
-                    setCurrent(value);
-                  }}
-                  total={totalPages * 10}
                 />
               </div>
             </>
@@ -239,7 +268,7 @@ const StudentsInMyClass = () => {
               </p>
             </>
           )}
-        </div> */}
+        </div>
       </div>
     </>
   );
