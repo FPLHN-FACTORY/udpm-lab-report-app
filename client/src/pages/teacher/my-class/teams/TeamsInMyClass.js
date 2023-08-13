@@ -1,12 +1,20 @@
 import { useParams } from "react-router-dom";
 import "./styleTeamsInMyClass.css";
-import { Row, Col, Table, Button, Tooltip } from "antd";
+import { Row, Table, Button, Tooltip, Col } from "antd";
 import { Link } from "react-router-dom";
-import { ControlOutlined } from "@ant-design/icons";
+import {
+  ControlOutlined,
+  ProjectOutlined,
+  UnorderedListOutlined,
+} from "@ant-design/icons";
 import { TeacherTeamsAPI } from "../../../../api/teacher/teams-class/TeacherTeams.api";
 import { useEffect, useState } from "react";
+import {
+  SetTeams,
+  GetTeams,
+} from "../../../../app/teacher/teams/teamsSlice.reduce";
+import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import LoadingIndicator from "../../../../helper/loading";
-import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import ModalDetailTeam from "./modal-detail/ModalDetailTeam";
@@ -14,14 +22,11 @@ import ModalCreateTeam from "./modal-create/ModalCreateTeam";
 import ModalUpdateTeam from "./modal-update/ModalUpdateTeam";
 
 const TeamsInMyClass = () => {
-  const [listTeams, setListTeams] = useState([]);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
-  const [checkAdd, setCheckAdd] = useState(false);
-  const [dataTable, setDataTable] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [loadingStudentClass, setLoadingStudentClass] = useState(false);
+  const dispatch = useAppDispatch();
   const { id } = useParams();
 
   useEffect(() => {
@@ -30,19 +35,11 @@ const TeamsInMyClass = () => {
     featchTeams(id);
   }, []);
 
-  useEffect(() => {
-    if (checkAdd) {
-      window.scrollTo(0, 0);
-      document.title = "Bảng điều khiển";
-      featchTeams(id);
-    }
-  }, [checkAdd]);
-
   const featchTeams = async (id) => {
     setLoading(false);
     try {
       await TeacherTeamsAPI.getTeamsByIdClass(id).then((responese) => {
-        setDataTable(responese.data.data);
+        dispatch(SetTeams(responese.data.data));
         setLoading(true);
       });
     } catch (error) {
@@ -54,15 +51,12 @@ const TeamsInMyClass = () => {
     document.querySelector("body").style.overflowX = "hidden";
     setShowCreateModal(false);
     setShowUpdateModal(false);
-    setCheckAdd(true);
     setLoading(true);
   };
   const handleCancelModalCreateFaild = () => {
     document.querySelector("body").style.overflowX = "hidden";
     setShowCreateModal(false);
     setShowUpdateModal(false);
-    // setCheckAdd(false);
-    setCheckAdd(true);
     setLoading(true);
   };
   const handleCancelCreate = {
@@ -84,7 +78,7 @@ const TeamsInMyClass = () => {
     document.querySelector("body").style.overflowX = "hidden";
     setShowDetailModal(false);
   };
-  const data = dataTable;
+  const data = useAppSelector(GetTeams);
   const columns = [
     {
       title: "#",
@@ -210,19 +204,35 @@ const TeamsInMyClass = () => {
         </div>
         <div className="content">
           <Row>
-            <Button
-              style={{ marginLeft: "92%" }}
-              className="primary"
-              onClick={() => {
-                setShowCreateModal(true);
-              }}
-            >
-              Tạo nhóm
-            </Button>
+            <Col span={22}>
+              <div>
+                {" "}
+                <span style={{ fontSize: "17px", fontWeight: "500" }}>
+                  {" "}
+                  <UnorderedListOutlined
+                    style={{ marginRight: "10px", fontSize: "20px" }}
+                  />
+                  Danh sách nhóm
+                </span>
+              </div>
+            </Col>
+            <Col span={2}>
+              <Button
+                className="btn_clear"
+                style={{
+                  color: "white",
+                }}
+                onClick={() => {
+                  setShowCreateModal(true);
+                }}
+              >
+                Tạo nhóm
+              </Button>
+            </Col>
           </Row>
         </div>
         <div>
-          {dataTable.length > 0 ? (
+          {data.length > 0 ? (
             <>
               <div className="table">
                 <Table
@@ -240,6 +250,7 @@ const TeamsInMyClass = () => {
                   textAlign: "center",
                   marginTop: "100px",
                   fontSize: "15px",
+                  color: "red",
                 }}
               >
                 Không có nhóm nào trong lớp
@@ -259,6 +270,7 @@ const TeamsInMyClass = () => {
         <ModalUpdateTeam
           visible={showUpdateModal}
           onCancel={handleCancelCreate}
+          idClass={id}
         />
       </div>
     </>

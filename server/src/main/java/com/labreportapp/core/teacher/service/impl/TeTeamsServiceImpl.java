@@ -82,14 +82,20 @@ public Team createTeam(@Valid TeCreateTeamsRequest request) {
     Team teamCreate = teTeamsRepositoty.save(team);
     List<StudentClasses> studentClassesNew = new ArrayList<>();
     List<TeTeamUpdateStudentClassRequest> studentClassesRequest = request.getListStudentClasses();
+    System.out.println("++++++++++++++++++++++++");
+    System.out.println(studentClassesRequest.get(0).toString());
     studentClassesRequest.forEach(item -> {
         StudentClasses studentClasses = teStudentClassesRepository.findStudentClassesById(item.getIdStudentClass());
+        System.out.println("----------------------------------------------");
+        System.out.println(studentClasses.toString());
+
         if (studentClasses != null) {
             if ("0".equals(item.getRole())) {
                 studentClasses.setRole(RoleTeam.LEADER);
             } else {
                 studentClasses.setRole(RoleTeam.MEMBER);
             }
+            studentClasses.setClassId(request.getClassId());
             studentClasses.setTeamId(teamCreate.getId());
             studentClassesNew.add(studentClasses);
         }

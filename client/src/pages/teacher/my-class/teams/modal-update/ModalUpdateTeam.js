@@ -31,6 +31,8 @@
 // } from "../../../../app/reducer/admin/member-project-management/memberProjectManagement.reduce";
 // import { SearchOutlined } from "@ant-design/icons";
 
+import { Modal } from "antd";
+
 // const { TextArea } = Input;
 // const { Option } = Select;
 // const ModalUpdateTeam = ({ visible, onCancel, idProject }) => {
@@ -760,8 +762,18 @@
 //   );
 // };
 
-const ModalUpdateTeam = ({ visible, onCancel, idProject }) => {
-  return <div>Modal update</div>;
+const ModalUpdateTeam = ({ visible, onCancel, idClass }) => {
+  return (
+    <Modal
+      onCancel={onCancel}
+      visible={visible}
+      width={750}
+      footer={null}
+      className="modal_project_show_detail"
+    >
+      <div>Modal update day</div>
+    </Modal>
+  );
 };
 
 export default ModalUpdateTeam;

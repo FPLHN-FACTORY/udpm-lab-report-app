@@ -36,7 +36,7 @@ public interface TeStudentClassesRepository extends JpaRepository<StudentClasses
     List<TeStudentClassesRespone> findStudentClassByIdTeacherAndIdClass(@Param("req") TeFindStudentClasses req);
 
     @Query(value = """
-                SELECT sc.id, sc.role, sc.team_id FROM student_classes sc WHERE sc.id = :idStudentClass
+                SELECT * FROM student_classes sc WHERE sc.id = :#{#idStudentClass}
             """, nativeQuery = true)
     StudentClasses findStudentClassesById(@Param("idStudentClass") String idStudentClass);
 

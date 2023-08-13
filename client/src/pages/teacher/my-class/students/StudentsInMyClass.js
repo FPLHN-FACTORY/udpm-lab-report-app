@@ -275,6 +275,7 @@ const StudentsInMyClass = () => {
                   textAlign: "center",
                   marginTop: "100px",
                   fontSize: "15px",
+                  color:"red"
                 }}
               >
                 Không có thành viên

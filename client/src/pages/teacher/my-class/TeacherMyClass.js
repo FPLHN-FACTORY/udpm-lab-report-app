@@ -409,10 +409,10 @@ const TeacherMyClass = () => {
         <div className="title-table">
           <div>
             {" "}
-            <span style={{ fontSize: "18px", fontWeight: "500" }}>
+            <span style={{ fontSize: "17px", fontWeight: "500" }}>
               {" "}
               <ProjectOutlined
-                style={{ marginRight: "10px", fontSize: "26px" }}
+                style={{ marginRight: "10px", fontSize: "24px" }}
               />
               Danh sách lớp học
             </span>

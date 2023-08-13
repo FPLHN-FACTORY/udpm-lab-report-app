@@ -19,6 +19,9 @@ public interface TeStudentClassesRespone {
     @Value("#{target.statusStudent}")
     String getStatusStudent();
 
+    @Value("#{target.idTeam}")
+    String getIdTeam();
+
     @Value("#{target.codeTeam}")
     String getCodeTeam();
 

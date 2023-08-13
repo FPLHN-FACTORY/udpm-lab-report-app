@@ -20,8 +20,8 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
     private TeStudentClassesRepository teStudentClassesRepository;
 
     @Override
-    @CacheEvict(value = {"studentClasses"}, allEntries = true)
-    public List<TeStudentClassesRespone> searchStudentClasses(TeFindStudentClasses teFindStudentClasses) {
+//    @CacheEvict(value = {"studentClasses"}, allEntries = true)
+    public List<TeStudentClassesRespone> searchStudentClasses(final TeFindStudentClasses teFindStudentClasses) {
         List<TeStudentClassesRespone> pageList = teStudentClassesRepository
                 .findStudentClassByIdTeacherAndIdClass(teFindStudentClasses);
         return pageList;

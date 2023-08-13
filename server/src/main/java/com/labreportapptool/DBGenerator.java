@@ -349,6 +349,25 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses18.setStatus(StatusTeam.ACTIVE);
         studentClasses18.setId(studentClassesRepository.save(studentClasses18).getId());
 
+
+        StudentClasses studentClasses19 = new StudentClasses();
+        studentClasses19.setStudentId("ad2a384f-f20f-430d-a378-e856018f3338");
+        studentClasses19.setClassId(class1.getId());
+        studentClasses19.setTeamId(null);
+        studentClasses19.setEmail("rndph24014@fpt.edu.vn");
+        studentClasses19.setRole(RoleTeam.MEMBER);
+        studentClasses19.setStatus(StatusTeam.ACTIVE);
+        studentClasses19.setId(studentClassesRepository.save(studentClasses19).getId());
+
+        StudentClasses studentClasses20 = new StudentClasses();
+        studentClasses20.setStudentId("c9c3ecbc-4dc1-46a3-9585-f3ee7550a97c");
+        studentClasses20.setClassId(class1.getId());
+        studentClasses20.setTeamId(null);
+        studentClasses20.setEmail("tndph24015@fpt.edu.vn");
+        studentClasses20.setRole(RoleTeam.MEMBER);
+        studentClasses20.setStatus(StatusTeam.ACTIVE);
+        studentClasses20.setId(studentClassesRepository.save(studentClasses20).getId());
+
         // class 2 - team 1
         StudentClasses studentClasses16 = new StudentClasses();
         studentClasses16.setStudentId("6178966a-c08b-45f6-98aa-35b8ac243ede");
