@@ -104,7 +104,7 @@ public class DBGenerator implements CommandLineRunner {
         class1.setName("Lớp Java 6 thầy Nguyên");
         class1.setClassPeriod(ClassPeriod.CA_3);
         class1.setStartTime(new Date().getTime() + 50000);
-        class1.setClassSize(0);
+        class1.setClassSize(15);
         class1.setPassword("123456");
         class1.setActivityId(activity2.getId());
         class1.setTeacherId("6f0e60a6-a3a8-45d3-b6e6-d7632eb64c1a");
@@ -161,8 +161,7 @@ public class DBGenerator implements CommandLineRunner {
         team4.setCode("TC1_4");
         team4.setName("Base Poly");
         team4.setSubjectName("Website bán nước hoa Base Poly");
-        team3.setClassId(class1.getId());
-        team3.setId(teamRepository.save(team3).getId());
+        team4.setClassId(class1.getId());
         team4.setId(teamRepository.save(team4).getId());
 
         //Team - class 2
@@ -184,7 +183,7 @@ public class DBGenerator implements CommandLineRunner {
         team7.setCode("TC2_3");
         team7.setName("ONE SHOES");
         team7.setSubjectName("Website bán áo ONESH Poly");
-        team7.setClassId(class1.getId());
+        team7.setClassId(class2.getId());
         team7.setId(teamRepository.save(team7).getId());
 
         Team team8 = new Team();
@@ -332,6 +331,24 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses15.setStatus(StatusTeam.ACTIVE);
         studentClasses15.setId(studentClassesRepository.save(studentClasses15).getId());
 
+        StudentClasses studentClasses17 = new StudentClasses();
+        studentClasses17.setStudentId("5000cd3b-ad08-4abe-9b71-c85c98aa07ed");
+        studentClasses17.setClassId(class1.getId());
+        studentClasses17.setTeamId(null);
+        studentClasses17.setEmail("undph24012@fpt.edu.vn");
+        studentClasses17.setRole(RoleTeam.MEMBER);
+        studentClasses17.setStatus(StatusTeam.ACTIVE);
+        studentClasses17.setId(studentClassesRepository.save(studentClasses17).getId());
+
+        StudentClasses studentClasses18 = new StudentClasses();
+        studentClasses18.setStudentId("dac59af0-6bdb-4b26-ad8a-b5effa44875d");
+        studentClasses18.setClassId(class1.getId());
+        studentClasses18.setTeamId(null);
+        studentClasses18.setEmail("endph24013@fpt.edu.vn");
+        studentClasses18.setRole(RoleTeam.MEMBER);
+        studentClasses18.setStatus(StatusTeam.ACTIVE);
+        studentClasses18.setId(studentClassesRepository.save(studentClasses18).getId());
+
         // class 2 - team 1
         StudentClasses studentClasses16 = new StudentClasses();
         studentClasses16.setStudentId("6178966a-c08b-45f6-98aa-35b8ac243ede");
@@ -341,6 +358,9 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses16.setRole(RoleTeam.LEADER);
         studentClasses16.setStatus(StatusTeam.ACTIVE);
         studentClasses16.setId(studentClassesRepository.save(studentClasses16).getId());
+
+
+
     }
 
     public static void main(String[] args) {

@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import "./styleStudentsInMyClass.css";
-import { Modal, Row, Col, Input, Table, Image, Pagination, Button } from "antd";
+import { Row, Col, Table } from "antd";
 import { Link } from "react-router-dom";
 import { ControlOutlined } from "@ant-design/icons";
 import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
@@ -8,7 +8,6 @@ import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/
 import { useEffect, useState } from "react";
 import LoadingIndicator from "../../../../helper/loading";
 import moment from "moment";
-import { color } from "framer-motion";
 
 const StudentsInMyClass = () => {
   const [classDetail, setClassDetail] = useState({});
@@ -22,7 +21,7 @@ const StudentsInMyClass = () => {
     window.scrollTo(0, 0);
     document.title = "Bảng điều khiển";
     featchClass(id);
-    featchStudentClass(id);
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -118,6 +117,13 @@ const StudentsInMyClass = () => {
       dataIndex: "codeTeam",
       key: "codeTeam",
       sorter: (a, b) => a.codeTeam.localeCompare(b.codeTeam),
+      render: (text, record) => {
+        if (text === null) {
+          return <span style={{ color: "blue" }}>Chưa vào nhóm</span>;
+        } else {
+          return <span>{text}</span>;
+        }
+      },
       width: "150px",
     },
     {
@@ -165,28 +171,9 @@ const StudentsInMyClass = () => {
       </div>
       <div className="box-students-in-class">
         <div className="button-menu-teacher">
-          <div
-            className="box-center"
-            style={{
-              height: "30px",
-              width: "180px",
-              backgroundColor: "#007bff",
-              color: "white",
-              margin: "0px 0px 4px 10px",
-            }}
-          >
-            {" "}
-            <span>
-              {classDetail.classSize} thành viên{" "}
-              <span style={{ color: "yellow" }}>| </span> Level{"  "}
-              {classDetail.activityLevel}
-              <span style={{ color: "yellow" }}>| </span> Ca{"  "}
-              {classDetail.classPeriod}
-            </span>
-          </div>
           <div>
             <Link
-              to={`/teacher/my-class/students-in-class/${id}`}
+              to={`/teacher/my-class/students/${id}`}
               id="menu-checked"
               style={{
                 fontSize: "16px",
@@ -203,7 +190,7 @@ const StudentsInMyClass = () => {
               ĐIỂM DANH &nbsp;
             </Link>
             <Link
-              to={`/teacher/my-class/students-in-class/${id}`}
+              to={`/teacher/my-class/teams/${id}`}
               className="custom-link"
               style={{ fontSize: "16px", paddingLeft: "10px" }}
             >
@@ -212,9 +199,29 @@ const StudentsInMyClass = () => {
             <hr />
           </div>
         </div>
+
         <div className="content-class">
+          <div
+            className="box-center"
+            style={{
+              height: "28px",
+              width: "180px",
+              backgroundColor: "#007bff",
+              color: "white",
+              margin: "0px 0px 0px 85%",
+            }}
+          >
+            {" "}
+            <span style={{ fontSize: "14px" }}>
+              {classDetail.classSize} thành viên{" "}
+              <span style={{ color: "yellow" }}>| </span> Level{"  "}
+              {classDetail.activityLevel}
+              <span style={{ color: "yellow" }}>| </span> Ca{"  "}
+              {classDetail.classPeriod}
+            </span>
+          </div>
           <Row gutter={16} style={{ marginBottom: "4px" }}>
-            <Col span={16}>
+            <Col span={24}>
               <span>Hoạt động: &nbsp; {classDetail.activityName}</span>
             </Col>
           </Row>

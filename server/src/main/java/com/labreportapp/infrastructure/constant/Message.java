@@ -10,10 +10,12 @@ public enum Message {
 
     SUCCESS("Success"),
 
-    ERROR_UNKNOWN("Error Unknown");
-     //  CREATE_PERIOD_BEFORE_CREATE_TODO(PropertiesReader.getProperty(PropertyKeys.CREATE_PERIOD_BEFORE_CREATE_TODO));
-   // CLASS_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeyss.CLASS_NOT_EXISTS));
-    public static final String CLASS_NOT_EXISTS = PropertiesReader.getProperty(PropertyKeyss.CLASS_NOT_EXISTS);
+    ERROR_UNKNOWN("Error Unknown"),
+    //  CREATE_PERIOD_BEFORE_CREATE_TODO(PropertiesReader.getProperty(PropertyKeys.CREATE_PERIOD_BEFORE_CREATE_TODO));
+    // CLASS_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeyss.CLASS_NOT_EXISTS));
+    CLASS_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeyss.CLASS_NOT_EXISTS)),
+    CODE_TEAM_EXISTS(PropertiesReader.getProperty(PropertyKeyss.CODE_TEAM_EXISTS));
+
     private String message;
 
     Message(String message) {

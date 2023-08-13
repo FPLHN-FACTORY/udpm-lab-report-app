@@ -1,0 +1,268 @@
+import { useParams } from "react-router-dom";
+import "./styleTeamsInMyClass.css";
+import { Row, Col, Table, Button, Tooltip } from "antd";
+import { Link } from "react-router-dom";
+import { ControlOutlined } from "@ant-design/icons";
+import { TeacherTeamsAPI } from "../../../../api/teacher/teams-class/TeacherTeams.api";
+import { useEffect, useState } from "react";
+import LoadingIndicator from "../../../../helper/loading";
+import moment from "moment";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import ModalDetailTeam from "./modal-detail/ModalDetailTeam";
+import ModalCreateTeam from "./modal-create/ModalCreateTeam";
+import ModalUpdateTeam from "./modal-update/ModalUpdateTeam";
+
+const TeamsInMyClass = () => {
+  const [listTeams, setListTeams] = useState([]);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showDetailModal, setShowDetailModal] = useState(false);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [checkAdd, setCheckAdd] = useState(false);
+  const [dataTable, setDataTable] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [loadingStudentClass, setLoadingStudentClass] = useState(false);
+  const { id } = useParams();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    document.title = "Bảng điều khiển";
+    featchTeams(id);
+  }, []);
+
+  useEffect(() => {
+    if (checkAdd) {
+      window.scrollTo(0, 0);
+      document.title = "Bảng điều khiển";
+      featchTeams(id);
+    }
+  }, [checkAdd]);
+
+  const featchTeams = async (id) => {
+    setLoading(false);
+    try {
+      await TeacherTeamsAPI.getTeamsByIdClass(id).then((responese) => {
+        setDataTable(responese.data.data);
+        setLoading(true);
+      });
+    } catch (error) {
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+    }
+  };
+
+  const handleCancelModalCreateSusscess = () => {
+    document.querySelector("body").style.overflowX = "hidden";
+    setShowCreateModal(false);
+    setShowUpdateModal(false);
+    setCheckAdd(true);
+    setLoading(true);
+  };
+  const handleCancelModalCreateFaild = () => {
+    document.querySelector("body").style.overflowX = "hidden";
+    setShowCreateModal(false);
+    setShowUpdateModal(false);
+    // setCheckAdd(false);
+    setCheckAdd(true);
+    setLoading(true);
+  };
+  const handleCancelCreate = {
+    handleCancelModalCreateSusscess,
+    handleCancelModalCreateFaild,
+  };
+
+  const handleUpdateTeam = (id) => {
+    document.querySelector("body").style.overflowX = "hidden";
+    setShowUpdateModal(true);
+  };
+
+  const handleDetailTeam = async (id) => {
+    document.querySelector("body").style.overflowX = "hidden";
+    setShowDetailModal(true);
+  };
+
+  const handleModalDetailCancel = () => {
+    document.querySelector("body").style.overflowX = "hidden";
+    setShowDetailModal(false);
+  };
+  const data = dataTable;
+  const columns = [
+    {
+      title: "#",
+      dataIndex: "stt",
+      key: "stt",
+      render: (text, record, index) => index + 1,
+      width: "12px",
+    },
+    {
+      title: "Mã",
+      dataIndex: "code",
+      key: "code",
+      sorter: (a, b) => a.code.localeCompare(b.code),
+      render: (text, record, index) => {
+        return <span style={{ color: "#007bff" }}>{text}</span>;
+      },
+      width: "130px",
+    },
+
+    {
+      title: "Tên",
+      dataIndex: "name",
+      key: "name",
+      sorter: (a, b) => a.name.localeCompare(b.name),
+    },
+    {
+      title: "Chủ đề",
+      dataIndex: "subjectName",
+      key: "subjectName",
+      sorter: (a, b) => a.subjectName.localeCompare(b.subjectName),
+    },
+
+    {
+      title: "Ngày tạo",
+      dataIndex: "createdDate",
+      key: "createdDate",
+      sorter: (a, b) => a.createdDate.localeCompare(b.createdDate),
+      render: (text, record) => {
+        const startTime = new Date(record.createdDate);
+
+        const formattedStartTime = `${startTime.getDate()}/${
+          startTime.getMonth() + 1
+        }/${startTime.getFullYear()}`;
+
+        return <span>{formattedStartTime}</span>;
+      },
+    },
+    {
+      title: "Hành động",
+      dataIndex: "actions",
+      key: "actions",
+      render: (text, record) => (
+        <>
+          <div>
+            <Tooltip title="Chi tiết">
+              <FontAwesomeIcon
+                icon={faEye}
+                className="icon"
+                style={{ paddingRight: 8 }}
+                onClick={() => {
+                  handleDetailTeam(record.id);
+                }}
+              />
+            </Tooltip>
+            <Tooltip title="Cập nhật">
+              <FontAwesomeIcon
+                className="icon"
+                icon={faPenToSquare}
+                onClick={() => {
+                  handleUpdateTeam(record.id);
+                }}
+              />
+            </Tooltip>
+          </div>
+        </>
+      ),
+      width: "105px",
+    },
+  ];
+  return (
+    <>
+      {!loading && <LoadingIndicator />}
+      <div className="title-teacher-my-class">
+        <span style={{ paddingLeft: "20px" }}>
+          <ControlOutlined style={{ fontSize: "22px" }} />
+          <span
+            style={{ fontSize: "18px", marginLeft: "10px", fontWeight: "500" }}
+          >
+            Bảng điều khiển
+          </span>
+          <span style={{ color: "gray" }}> - lớp của tôi</span>
+        </span>
+      </div>
+      <div className="box-students-in-class">
+        <div className="button-menu-teacher">
+          <div>
+            <Link
+              to={`/teacher/my-class/students/${id}`}
+              className="custom-link"
+              style={{
+                fontSize: "16px",
+                paddingLeft: "10px",
+              }}
+            >
+              THÀNH VIÊN TRONG LỚP &nbsp;
+            </Link>
+            <Link
+              to={`/teacher/my-class/students-in-class/${id}`}
+              className="custom-link"
+              style={{ fontSize: "16px", paddingLeft: "10px" }}
+            >
+              ĐIỂM DANH &nbsp;
+            </Link>
+            <Link
+              to={`/teacher/my-class/teams/${id}`}
+              id="menu-checked"
+              style={{ fontSize: "16px", paddingLeft: "10px" }}
+            >
+              QUẢN LÝ NHÓM &nbsp;
+            </Link>
+            <hr />
+          </div>
+        </div>
+        <div className="content">
+          <Row>
+            <Button
+              style={{ marginLeft: "92%" }}
+              className="primary"
+              onClick={() => {
+                setShowCreateModal(true);
+              }}
+            >
+              Tạo nhóm
+            </Button>
+          </Row>
+        </div>
+        <div>
+          {dataTable.length > 0 ? (
+            <>
+              <div className="table">
+                <Table
+                  dataSource={data}
+                  rowKey="id"
+                  columns={columns}
+                  pagination={false}
+                />
+              </div>
+            </>
+          ) : (
+            <>
+              <p
+                style={{
+                  textAlign: "center",
+                  marginTop: "100px",
+                  fontSize: "15px",
+                }}
+              >
+                Không có nhóm nào trong lớp
+              </p>
+            </>
+          )}
+        </div>
+        <ModalDetailTeam
+          visible={showDetailModal}
+          onCancel={handleModalDetailCancel}
+        />
+        <ModalCreateTeam
+          visible={showCreateModal}
+          onCancel={handleCancelCreate}
+          idClass={id}
+        />
+        <ModalUpdateTeam
+          visible={showUpdateModal}
+          onCancel={handleCancelCreate}
+        />
+      </div>
+    </>
+  );
+};
+
+export default TeamsInMyClass;

@@ -11,8 +11,6 @@ import lombok.Setter;
 @Setter
 public class TeFindStudentClasses extends PageableRequest {
 
-//    private String idTeacher;
-
     private String idClass;
 
 }
