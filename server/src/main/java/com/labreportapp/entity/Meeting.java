@@ -2,6 +2,7 @@ package com.labreportapp.entity;
 
 import com.labreportapp.entity.base.PrimaryEntity;
 import com.labreportapp.infrastructure.constant.EntityProperties;
+import com.labreportapp.infrastructure.constant.MeetingPeriod;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -30,10 +31,10 @@ public class Meeting extends PrimaryEntity {
     private String name;
 
     @Column
-    private Long startTime;
+    private Long meetingDate;
 
     @Column
-    private Long endTime;
+    private MeetingPeriod meetingPeriod;
 
     @Column(length = EntityProperties.LENGTH_DESCRIPTION)
     @Nationalized
