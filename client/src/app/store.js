@@ -1,8 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
+import activityManagementSliceReducer from "./admin/activity-management/activityManagementSlice.reducer";
 
 export const store = configureStore({
   reducer: {
-
+    activityManagement: activityManagementSliceReducer,
   },
 });
 
