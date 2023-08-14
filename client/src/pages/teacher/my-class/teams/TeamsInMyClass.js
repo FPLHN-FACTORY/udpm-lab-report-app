@@ -262,7 +262,6 @@ const TeamsInMyClass = () => {
           onCancel={handleModalDetailCancel}
           idClass={id}
           team={objeactTeam}
-          click={(a) => a + 1}
         />
         <ModalCreateTeam
           visible={showCreateModal}
