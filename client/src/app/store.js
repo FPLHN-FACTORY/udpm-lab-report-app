@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
-
+import adSemesterSliceReducer from "./admin/AdSemester.reducer";
 export const store = configureStore({
   reducer: {
-
+    adSemester: adSemesterSliceReducer,
   },
 });
 

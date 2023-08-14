@@ -10,8 +10,10 @@ public enum Message {
 
     SUCCESS("Success"),
 
-    ERROR_UNKNOWN("Error Unknown");
-//    CREATE_PERIOD_BEFORE_CREATE_TODO(PropertiesReader.getProperty(PropertyKeys.CREATE_PERIOD_BEFORE_CREATE_TODO));
+    ERROR_UNKNOWN("Error Unknown"),
+
+//        CREATE_PERIOD_BEFORE_CREATE_TODO(PropertiesReader.getProperty(PropertyKeys.CREATE_PERIOD_BEFORE_CREATE_TODO));
+    SEMESTER_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeys.SEMESTER_NOT_EXISTS));
 
     private String message;
 

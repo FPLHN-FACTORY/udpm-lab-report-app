@@ -1,2 +1,4 @@
-package com.labreportapp.core.admin.model.request;public class AdCreateSemesterRequest {
+package com.labreportapp.core.admin.model.request;
+
+public class AdCreateSemesterRequest extends AdBaseSemesterRequest{
 }
