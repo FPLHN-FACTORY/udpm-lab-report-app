@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-
+import activityManagementSliceReducer from "./admin/activity-management/activityManagementSlice.reducer";
 import teMyClassSliceReduce from "./teacher/my-class/teacherMyClassSlice.reduce";
 import teSemesterSliceReduce from "./teacher/semester/teacherSemesterSlice.reduce";
 import teTeamsSliceReduce from "./teacher/teams/teamsSlice.reduce";
@@ -11,6 +11,7 @@ export const store = configureStore({
     teSemester: teSemesterSliceReduce,
     teTeams: teTeamsSliceReduce,
     teacherSemester: teacherSemesterSliceReduce,
+    activityManagement: activityManagementSliceReducer,
   },
 });
 
