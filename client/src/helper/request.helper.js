@@ -12,3 +12,6 @@ export const requestCommon = axios.create({
 export const requestCommonStakeHolder = axios.create({
   baseURL: `https://63ddb6c1f1af41051b085a9b.mockapi.io/user`,
 });
+export const requestCommonTeacher = axios.create({
+  baseURL: `https://63ddb6cff1af41051b085b6d.mockapi.io/giang-vien`,
+});
