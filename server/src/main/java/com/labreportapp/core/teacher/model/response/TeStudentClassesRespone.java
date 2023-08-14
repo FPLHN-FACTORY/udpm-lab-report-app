@@ -16,6 +16,9 @@ public interface TeStudentClassesRespone {
     @Value("#{target.emailStudent}")
     String getEmailStudentClass();
 
+    @Value("#{target.role}")
+    String getRole();
+
     @Value("#{target.statusStudent}")
     String getStatusStudent();
 

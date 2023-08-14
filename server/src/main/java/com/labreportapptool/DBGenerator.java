@@ -378,8 +378,6 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses16.setStatus(StatusTeam.ACTIVE);
         studentClasses16.setId(studentClassesRepository.save(studentClasses16).getId());
 
-
-
     }
 
     public static void main(String[] args) {

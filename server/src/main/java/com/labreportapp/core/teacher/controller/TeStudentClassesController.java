@@ -25,7 +25,13 @@ public class TeStudentClassesController {
 
     @GetMapping("")
     public ResponseObject getTeStudentClasses(final TeFindStudentClasses request) {
-        List<TeStudentClassesRespone> pageList = teStudentClassesService.searchStudentClasses(request);
+        List<TeStudentClassesRespone> pageList = teStudentClassesService.searchStudentClassesByIdClass(request);
+        return new ResponseObject(pageList);
+    }
+
+    @GetMapping("/team")
+    public ResponseObject getTeStudentClassesByIdClassAndIdTeam(final TeFindStudentClasses request) {
+        List<TeStudentClassesRespone> pageList = teStudentClassesService.searchStudentClassesByIdClassAndIdTeam(request);
         return new ResponseObject(pageList);
     }
 

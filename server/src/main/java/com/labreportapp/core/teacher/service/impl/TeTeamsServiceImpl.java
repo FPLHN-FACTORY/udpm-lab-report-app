@@ -38,70 +38,35 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         return teTeamsRepositoty.findTeamsByIdClass(teFindStudentClasses);
     }
 
-//    @Override
-//    public Team createTeam(@Valid TeCreateTeamsRequest request) {
-//        String checkCode = teTeamsRepositoty.getTeamByCode(request.getCode());
-//        if (checkCode != null) {
-//            throw new RestApiException(Message.CODE_TEAM_EXISTS);
-//        }
-//        Team team = new Team();
-//        team.setCode(request.getCode());
-//        team.setName(request.getName());
-//        team.setSubjectName(request.getSubjectName());
-//        team.setClassId(request.getClassId());
-//        team.setClassId(request.getClassId());
-//        Team teamCreate = teTeamsRepositoty.save(team);
-//        List<StudentClasses> studentClassesNew = new ArrayList<>();
-//        List<TeTeamUpdateStudentClassRequest> studentClassesRequest = request.getListStudentClasses();
-//        studentClassesRequest.forEach(item -> {
-//            StudentClasses studentClasses = teStudentClassesRepository.findStudentClassesById(item.getIdStudentClass());
-//            if (studentClasses != null) {
-//                if (item.getRole().equals("0") || item.getRole() == "0") {
-//                    studentClasses.setRole(RoleTeam.LEADER);
-//                } else {
-//                    studentClasses.setRole(RoleTeam.MEMBER);
-//                }
-//            }
-//            studentClasses.setTeamId(teamCreate.getId());
-//            studentClassesNew.add(studentClasses);
-//        });
-//        teStudentClassesRepository.saveAll(studentClassesNew);
-//        return teamCreate;
-//    }
-@Override
-public Team createTeam(@Valid TeCreateTeamsRequest request) {
-    String checkCode = teTeamsRepositoty.getTeamByCode(request.getCode());
-    if (checkCode != null) {
-        throw new RestApiException(Message.CODE_TEAM_EXISTS);
-    }
-    Team team = new Team();
-    team.setCode(request.getCode());
-    team.setName(request.getName());
-    team.setSubjectName(request.getSubjectName());
-    team.setClassId(request.getClassId());
-    Team teamCreate = teTeamsRepositoty.save(team);
-    List<StudentClasses> studentClassesNew = new ArrayList<>();
-    List<TeTeamUpdateStudentClassRequest> studentClassesRequest = request.getListStudentClasses();
-    System.out.println("++++++++++++++++++++++++");
-    System.out.println(studentClassesRequest.get(0).toString());
-    studentClassesRequest.forEach(item -> {
-        StudentClasses studentClasses = teStudentClassesRepository.findStudentClassesById(item.getIdStudentClass());
-        System.out.println("----------------------------------------------");
-        System.out.println(studentClasses.toString());
-
-        if (studentClasses != null) {
-            if ("0".equals(item.getRole())) {
-                studentClasses.setRole(RoleTeam.LEADER);
-            } else {
-                studentClasses.setRole(RoleTeam.MEMBER);
-            }
-            studentClasses.setClassId(request.getClassId());
-            studentClasses.setTeamId(teamCreate.getId());
-            studentClassesNew.add(studentClasses);
+    @Override
+    public Team createTeam(@Valid TeCreateTeamsRequest request) {
+        String checkCode = teTeamsRepositoty.getTeamByCode(request.getCode());
+        if (checkCode != null) {
+            throw new RestApiException(Message.CODE_TEAM_EXISTS);
         }
-    });
-    teStudentClassesRepository.saveAll(studentClassesNew);
-    return teamCreate;
-}
+        Team team = new Team();
+        team.setCode(request.getCode());
+        team.setName(request.getName());
+        team.setSubjectName(request.getSubjectName());
+        team.setClassId(request.getClassId());
+        Team teamCreate = teTeamsRepositoty.save(team);
+        List<StudentClasses> studentClassesNew = new ArrayList<>();
+        List<TeTeamUpdateStudentClassRequest> studentClassesRequest = request.getListStudentClasses();
+        studentClassesRequest.forEach(item -> {
+            StudentClasses studentClasses = teStudentClassesRepository.findStudentClassesById(item.getIdStudentClass());
+            if (studentClasses != null) {
+                if ("0".equals(item.getRole())) {
+                    studentClasses.setRole(RoleTeam.LEADER);
+                } else {
+                    studentClasses.setRole(RoleTeam.MEMBER);
+                }
+                studentClasses.setClassId(request.getClassId());
+                studentClasses.setTeamId(teamCreate.getId());
+                studentClassesNew.add(studentClasses);
+            }
+        });
+        teStudentClassesRepository.saveAll(studentClassesNew);
+        return teamCreate;
+    }
 
 }

@@ -2,8 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = [];
 
-const teacherMyClassSlice = createSlice({
-  name: "teacherMyClass",
+const teMyClassSlice = createSlice({
+  name: "teMyClass",
   initialState,
   reducers: {
     SetTeacherMyClass: (state, action) => {
@@ -13,8 +13,8 @@ const teacherMyClassSlice = createSlice({
   },
 });
 
-export const { SetTeacherMyClass } = teacherMyClassSlice.actions;
+export const { SetTeacherMyClass } = teMyClassSlice.actions;
 
-export const GetTeacherMyClass = (state) => state.teacherMyClass;
+export const GetTeacherMyClass = (state) => state.teMyClass;
 
-export default teacherMyClassSlice.reducer;
+export default teMyClassSlice.reducer;

@@ -46,7 +46,7 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
   };
 
   useEffect(() => {
-    if (visible) {
+    if (visible === true) {
       setVisitedCreate(true);
       setSubjectName("");
       setCode("");
@@ -60,7 +60,7 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
   }, [visible]);
 
   useEffect(() => {
-    if (!visitedCreate) {
+    if (visitedCreate === false) {
       fetchData(idClass);
     }
   }, [visitedCreate]);
@@ -257,7 +257,7 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
     <>
       {loading && <LoadingIndicator />}
       <Modal
-        visible={visible}
+        open={visible}
         onCancel={cancelFaild}
         width={750}
         footer={null}

@@ -2,8 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = [];
 
-const teacherSemesterSlice = createSlice({
-  name: "teacherSemester",
+const teSemesterSlice = createSlice({
+  name: "teSemester",
   initialState,
   reducers: {
     SetTeacherSemester: (state, action) => {
@@ -13,8 +13,8 @@ const teacherSemesterSlice = createSlice({
   },
 });
 
-export const { SetTeacherSemester } = teacherSemesterSlice.actions;
+export const { SetTeacherSemester } = teSemesterSlice.actions;
 
-export const GetTeacherSemester = (state) => state.teacherSemester;
+export const GetTeacherSemester = (state) => state.teSemester;
 
-export default teacherSemesterSlice.reducer;
+export default teSemesterSlice.reducer;

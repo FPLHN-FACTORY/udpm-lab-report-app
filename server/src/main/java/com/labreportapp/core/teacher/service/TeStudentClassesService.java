@@ -11,6 +11,8 @@ import java.util.List;
  */
 public interface TeStudentClassesService {
 
-    List<TeStudentClassesRespone> searchStudentClasses(final TeFindStudentClasses teFindStudentClasses);
+    List<TeStudentClassesRespone> searchStudentClassesByIdClass(final TeFindStudentClasses teFindStudentClasses);
+
+    List<TeStudentClassesRespone> searchStudentClassesByIdClassAndIdTeam(final TeFindStudentClasses teFindStudentClasses);
 
 }

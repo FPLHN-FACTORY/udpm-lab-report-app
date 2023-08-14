@@ -766,7 +766,7 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass }) => {
   return (
     <Modal
       onCancel={onCancel}
-      visible={visible}
+      open={visible}
       width={750}
       footer={null}
       className="modal_project_show_detail"

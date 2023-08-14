@@ -13,4 +13,6 @@ public class TeFindStudentClasses extends PageableRequest {
 
     private String idClass;
 
+    private String idTeam;
+
 }

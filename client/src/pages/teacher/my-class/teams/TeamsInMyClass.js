@@ -2,11 +2,7 @@ import { useParams } from "react-router-dom";
 import "./styleTeamsInMyClass.css";
 import { Row, Table, Button, Tooltip, Col } from "antd";
 import { Link } from "react-router-dom";
-import {
-  ControlOutlined,
-  ProjectOutlined,
-  UnorderedListOutlined,
-} from "@ant-design/icons";
+import { ControlOutlined, UnorderedListOutlined } from "@ant-design/icons";
 import { TeacherTeamsAPI } from "../../../../api/teacher/teams-class/TeacherTeams.api";
 import { useEffect, useState } from "react";
 import {
@@ -26,6 +22,7 @@ const TeamsInMyClass = () => {
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [objeactTeam, setObjeactTeam] = useState({});
   const dispatch = useAppDispatch();
   const { id } = useParams();
 
@@ -69,13 +66,15 @@ const TeamsInMyClass = () => {
     setShowUpdateModal(true);
   };
 
-  const handleDetailTeam = async (id) => {
+  const handleDetailTeam = (objectTeam) => {
     document.querySelector("body").style.overflowX = "hidden";
+    setObjeactTeam(objectTeam);
     setShowDetailModal(true);
   };
 
   const handleModalDetailCancel = () => {
     document.querySelector("body").style.overflowX = "hidden";
+    setObjeactTeam({});
     setShowDetailModal(false);
   };
   const data = useAppSelector(GetTeams);
@@ -118,11 +117,9 @@ const TeamsInMyClass = () => {
       sorter: (a, b) => a.createdDate.localeCompare(b.createdDate),
       render: (text, record) => {
         const startTime = new Date(record.createdDate);
-
         const formattedStartTime = `${startTime.getDate()}/${
           startTime.getMonth() + 1
         }/${startTime.getFullYear()}`;
-
         return <span>{formattedStartTime}</span>;
       },
     },
@@ -139,7 +136,8 @@ const TeamsInMyClass = () => {
                 className="icon"
                 style={{ paddingRight: 8 }}
                 onClick={() => {
-                  handleDetailTeam(record.id);
+                  setShowDetailModal(true);
+                  handleDetailTeam(record);
                 }}
               />
             </Tooltip>
@@ -236,6 +234,7 @@ const TeamsInMyClass = () => {
             <>
               <div className="table">
                 <Table
+                  style={{ marginTop: "150px" }}
                   dataSource={data}
                   rowKey="id"
                   columns={columns}
@@ -261,6 +260,9 @@ const TeamsInMyClass = () => {
         <ModalDetailTeam
           visible={showDetailModal}
           onCancel={handleModalDetailCancel}
+          idClass={id}
+          team={objeactTeam}
+          click={(a) => a + 1}
         />
         <ModalCreateTeam
           visible={showCreateModal}

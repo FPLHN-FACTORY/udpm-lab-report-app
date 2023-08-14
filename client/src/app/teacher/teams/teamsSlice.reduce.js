@@ -2,8 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = [];
 
-const teamsSlice = createSlice({
-  name: "teams",
+const teTeamsSlice = createSlice({
+  name: "teTeams",
   initialState,
   reducers: {
     SetTeams: (state, action) => {
@@ -34,8 +34,8 @@ const teamsSlice = createSlice({
   },
 });
 
-export const { SetTeams, CreateTeam } = teamsSlice.actions;
+export const { SetTeams, CreateTeam } = teTeamsSlice.actions;
 
-export const GetTeams = (state) => state.teams;
+export const GetTeams = (state) => state.teTeams;
 
-export default teamsSlice.reducer;
+export default teTeamsSlice.reducer;
