@@ -1,5 +1,5 @@
 import { request } from "../../../helper/request.helper";
-import { requestCommonGiangVien } from "../../../helper/request.helper";
+import { apiDanhSachGiangVien } from "../../../helper/request.helper";
 
 export class ClassAPI {
   static fetchAllClass = () => {
@@ -10,14 +10,14 @@ export class ClassAPI {
   };
 
   static fetchAllTeacher = () => {
-    return requestCommonGiangVien({
+    return apiDanhSachGiangVien({
       method: "GET",
       url: ``,
     });
   };
 
   static fetchAllByCondition = (code, classPeriod, idTeacher) => {
-    return requestCommonGiangVien({
+    return apiDanhSachGiangVien({
       method: "GET",
       url:
         `/admin/class-managerment/find-by-condition` +

@@ -14,7 +14,6 @@ import { Button, Input, Pagination, Select, Table, Tooltip } from "antd";
 import { useAppDispatch, useAppSelector } from "../../../app/hook";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { userCurrent } from "../../../helper/inForUser";
 import { ActivityManagementAPI } from "../../../api/admin/activity-management/activityManagement.api";
 import { Option } from "antd/es/mentions";
 import { GetActivityManagement, SetActivityManagement } from "../../../app/admin/activity-management/activityManagementSlice.reducer";
@@ -47,7 +46,6 @@ const ActivityManagement = () => {
 
   const fetchData = async () => {
     let filter = {
-      idUser: userCurrent.id,
       nameActivity: name,
       name: searchName,
       status: status === "" ? null : parseInt(status),

@@ -33,8 +33,8 @@ public class Attendance extends PrimaryEntity {
     private StatusAttendance status;
 
     @Column(length = EntityProperties.LENGTH_ID)
-    private Long meetingId;
+    private String meetingId;
 
     @Column(length = EntityProperties.LENGTH_ID)
-    private Long studentId;
+    private String studentId;
 }
