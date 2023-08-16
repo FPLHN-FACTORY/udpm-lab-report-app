@@ -10,7 +10,7 @@ import {
   Tooltip,
   Table,
 } from "antd";
-import "./styleModalCreateProject.css";
+import "./styleModalCreateTeam.css";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -183,8 +183,6 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
         subjectName: subjectName,
         listStudentClasses: dataTable,
       };
-      console.log("daaaaaaaaaaaaaaaa");
-      console.log(teamNew);
       TeacherTeamsAPI.createTeam(teamNew).then(
         (respone) => {
           toast.success("Thêm thành công !");
@@ -205,7 +203,7 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
 
   const columns = [
     {
-      title: "STT",
+      title: "#",
       dataIndex: "stt",
       key: "stt",
       render: (text, record, index) => index + 1,
@@ -262,7 +260,7 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
         width={750}
         footer={null}
         bodyStyle={{ overflow: "hidden" }}
-        className="modal_show_create"
+        style={{ top: "8px" }}
       >
         {" "}
         <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>

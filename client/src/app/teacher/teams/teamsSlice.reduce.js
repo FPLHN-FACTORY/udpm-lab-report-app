@@ -23,6 +23,12 @@ const teTeamsSlice = createSlice({
       state.unshift(newTeam);
       return state;
     },
+    DeleteTeam: (state, action) => {
+      const team = action.payload;
+      const newData = state.filter((item) => item.id !== team.id);
+      state = newData;
+      return state;
+    },
     // AddStudentClassJoin: (state, action) => {
     //   const studentClass = action.payload;
     //   const index = state.findIndex((item) => item.id === studentClass.id);
@@ -34,7 +40,7 @@ const teTeamsSlice = createSlice({
   },
 });
 
-export const { SetTeams, CreateTeam } = teTeamsSlice.actions;
+export const { SetTeams, CreateTeam, DeleteTeam } = teTeamsSlice.actions;
 
 export const GetTeams = (state) => state.teTeams;
 

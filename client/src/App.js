@@ -86,7 +86,7 @@ function App() {
             />
             {/* router của Hiệu */}
             <Route
-              path="/teacher/my-class/students/:id"
+              path="/teacher/my-class/students/:idClass"
               element={
                 <AuthGuard>
                   <DashBoardTeacher>
@@ -97,7 +97,7 @@ function App() {
             />
             {/* router của Hiệu */}
             <Route
-              path="/teacher/my-class/teams/:id"
+              path="/teacher/my-class/teams/:idClass"
               element={
                 <AuthGuard>
                   <DashBoardTeacher>

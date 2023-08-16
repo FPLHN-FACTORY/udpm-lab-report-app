@@ -104,7 +104,7 @@ public class DBGenerator implements CommandLineRunner {
         class1.setName("Lớp Java 6 thầy Nguyên");
         class1.setClassPeriod(ClassPeriod.CA_3);
         class1.setStartTime(new Date().getTime() + 50000);
-        class1.setClassSize(15);
+        class1.setClassSize(19);
         class1.setPassword("123456");
         class1.setActivityId(activity2.getId());
         class1.setTeacherId("6f0e60a6-a3a8-45d3-b6e6-d7632eb64c1a");

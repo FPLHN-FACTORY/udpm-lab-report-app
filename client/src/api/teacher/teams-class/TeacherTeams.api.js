@@ -3,10 +3,10 @@ import { apiDanhSachSinhVien, request } from "../../../helper/request.helper";
 const url = `/teacher/teams`;
 
 export class TeacherTeamsAPI {
-  static getTeamsByIdClass(id) {
+  static getTeamsByIdClass(idClass) {
     return request({
       method: "GET",
-      url: url + `?idClass=` + id,
+      url: url + `?idClass=` + idClass,
     });
   }
   static getAllInforStudent(request) {
@@ -20,6 +20,12 @@ export class TeacherTeamsAPI {
       method: "POST",
       url: url,
       data: data,
+    });
+  };
+  static deleteById = (idTeam) => {
+    return request({
+      method: "DELETE",
+      url: url + `/` + idTeam,
     });
   };
 }

@@ -4,3 +4,27 @@
 .notBlank {
   color: red;
 }
+.modal-overlay {
+  z-index: 1001; /* Đặt giá trị lớn hơn các phần tử khác để modal hiển thị lên trên */
+}
+.ok-button {
+  background-color: rgb(9, 117, 185);
+  color: white;
+}
+
+.ok-button:hover {
+  color: white;
+  background-color: rgb(9, 117, 185);
+  border: 1px solid rgb(200, 5, 5);
+}
+
+.cancel-button {
+  background-color: #e53935;
+  color: white;
+  transition: 0.3s ease, color 0.3s ease;
+}
+
+.cancel-button:hover {
+  color: white;
+  border: 1px solid rgb(194, 3, 3);
+}

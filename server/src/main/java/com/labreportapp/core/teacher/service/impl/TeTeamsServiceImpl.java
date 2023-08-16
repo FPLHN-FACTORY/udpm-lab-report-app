@@ -3,6 +3,7 @@ package com.labreportapp.core.teacher.service.impl;
 import com.labreportapp.core.teacher.model.request.TeCreateTeamsRequest;
 import com.labreportapp.core.teacher.model.request.TeFindStudentClasses;
 import com.labreportapp.core.teacher.model.request.TeTeamUpdateStudentClassRequest;
+import com.labreportapp.core.teacher.model.request.TeUpdateTeamsRequest;
 import com.labreportapp.core.teacher.model.response.TeTeamsRespone;
 import com.labreportapp.core.teacher.repository.TeStudentClassesRepository;
 import com.labreportapp.core.teacher.repository.TeTeamsRepositoty;
@@ -67,6 +68,55 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         });
         teStudentClassesRepository.saveAll(studentClassesNew);
         return teamCreate;
+    }
+
+    @Override
+    public Team updateTeam(@Valid TeUpdateTeamsRequest request) {
+        Optional<Team> teamFilter = teTeamsRepositoty.findById(request.getId());
+        if (teamFilter == null) {
+            throw new RestApiException(Message.TEAM_NOT_EXISTS);
+        }
+        String checkCode = teTeamsRepositoty.getTeamByCode(request.getCode());
+        Team team = teamFilter.get();
+        if (checkCode != null && !team.getCode().equals(request.getCode())) {
+            throw new RestApiException(Message.CODE_TEAM_EXISTS);
+        }
+        team.setCode(request.getCode());
+        team.setName(request.getName());
+        team.setSubjectName(request.getSubjectName());
+        List<StudentClasses> studentClassesNew = new ArrayList<>();
+        List<TeTeamUpdateStudentClassRequest> studentClassesRequest = request.getListStudentClasses();
+        studentClassesRequest.forEach(item -> {
+            StudentClasses studentClasses = teStudentClassesRepository.findStudentClassesById(item.getIdStudentClass());
+            if (studentClasses != null) {
+                if ("0".equals(item.getRole())) {
+                    studentClasses.setRole(RoleTeam.LEADER);
+                } else {
+                    studentClasses.setRole(RoleTeam.MEMBER);
+                }
+                studentClasses.setTeamId(team.getId());
+//                studentClasses.setClassId(team.getClassId());
+                studentClassesNew.add(studentClasses);
+            }
+        });
+        teStudentClassesRepository.saveAll(studentClassesNew);
+        return teTeamsRepositoty.save(team);
+    }
+
+    @Override
+    public String deleteTeamById(String idTeam) {
+        Team team = teTeamsRepositoty.findById(idTeam).get();
+        if (team != null) {
+            List<StudentClasses> listStudentClass = teStudentClassesRepository.findAllStudentClassesByIdTeam(idTeam);
+            listStudentClass.forEach(item -> {
+                item.setTeamId(null);
+                teStudentClassesRepository.save(item);
+            });
+            teTeamsRepositoty.delete(team);
+            return "Xóa nhóm thành công !";
+        } else {
+            return "Không tìm thấy nhóm, xóa thất bại !";
+        }
     }
 
 }

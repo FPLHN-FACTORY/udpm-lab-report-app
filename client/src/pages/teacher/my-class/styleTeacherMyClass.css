@@ -42,15 +42,6 @@
   border: none;
   font-size: 15px;
 }
-.button-menu-teacher .buttonChange:focus {
-  border-bottom: 2px solid rgb(215, 91, 133);
-  color: rgb(215, 91, 133);
-}
-
-.button-menu-teacher .buttonChange:active {
-  border-bottom: 2px solid rgb(215, 91, 133);
-  color: rgb(215, 91, 133);
-}
 
 .menu-teacher-search {
   padding-left: 20px;

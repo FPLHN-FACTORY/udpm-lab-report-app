@@ -14,6 +14,7 @@ public enum Message {
 
     // CLASS_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeyss.CLASS_NOT_EXISTS));
     CLASS_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeyss.CLASS_NOT_EXISTS)),
+    TEAM_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeyss.TEAM_NOT_EXISTS)),
     CODE_TEAM_EXISTS(PropertiesReader.getProperty(PropertyKeyss.CODE_TEAM_EXISTS)),
     SEMESTER_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeys.SEMESTER_NOT_EXISTS));
 

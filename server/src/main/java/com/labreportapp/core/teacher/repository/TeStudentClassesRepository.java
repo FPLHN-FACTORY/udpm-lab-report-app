@@ -61,4 +61,13 @@ public interface TeStudentClassesRepository extends JpaRepository<StudentClasses
             """, nativeQuery = true)
     StudentClasses findStudentClassesById(@Param("idStudentClass") String idStudentClass);
 
+    @Query(value = """
+                SELECT * FROM student_classes sc WHERE sc.team_id = :#{#idTeam}
+            """, nativeQuery = true)
+    List<StudentClasses> findAllStudentClassesByIdTeam(@Param("idTeam") String idTeam);
+
+//    @Query(value = """
+//                SELECT * FROM student_classes sc WHERE sc.team_id = :#{#idTeam}
+//            """, nativeQuery = true)
+//    StudentClasses findStudentClassesByIdTeam(@Param("idTeam") String idTeam);
 }

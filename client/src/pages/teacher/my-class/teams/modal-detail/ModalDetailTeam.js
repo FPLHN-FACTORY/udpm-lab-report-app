@@ -1,95 +1,35 @@
 import { Modal, Row, Col, Input, Table, Select } from "antd";
-import "./styleModalDetailProject.css";
+import "./styleModalDetailTeam.css";
 import { useEffect, useState } from "react";
-import { TeacherStudentClassesAPI } from "../../../../../api/teacher/student-class/TeacherStudentClasses.api";
+import { useAppSelector } from "../../../../../app/hook";
 import moment from "moment";
-import LoadingIndicator from "../../../../../helper/loading";
+import { GetStudentClasses } from "../../../../../app/teacher/student-class/studentClassesSlice.reduce";
 
 const { Option } = Select;
 const ModalDetailTeam = ({ visible, onCancel, team, idClass, click }) => {
   const [teamDetail, setTeamDetail] = useState({});
-  const [listStudentClasses, setListStudentClasses] = useState([]);
   const [listShowTable, setListShowTable] = useState([]);
-  const [loadingModalDetail, setLoadingModalDetail] = useState(true);
-  useEffect(() => {
-    if (visible === false && team === {} && idClass !== "") {
-      return () => {
-        setTeamDetail({});
-        setListStudentClasses([]);
-        setListShowTable([]);
-      };
-    }
-  }, [visible]);
-
+  const dataStudentClasses = useAppSelector(GetStudentClasses);
   useEffect(() => {
     if (visible === true && team !== {} && idClass !== "") {
       setTeamDetail(team);
-      fetchDataDetail();
+      featchDataStudent();
     } else {
       setTeamDetail({});
-      setListStudentClasses([]);
       setListShowTable([]);
     }
   }, [visible]);
 
-  useEffect(() => {
-    if (listStudentClasses.length >= 0) {
-      featInforStudentTable();
-      setLoadingModalDetail(false);
-    }
-  }, [listStudentClasses]);
-
   const featchDataStudent = async () => {
-    setLoadingModalDetail(true);
-    let data = {
-      idClass: idClass,
-      idTeam: team.id,
-    };
-    try {
-      await TeacherStudentClassesAPI.getStudentByIdClassAndIdTeam(data).then(
-        (respone) => {
-          setListStudentClasses(respone.data.data);
-        }
-      );
-    } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
-    }
-  };
-
-  const featInforStudentTable = async () => {
-    try {
-      let request = listStudentClasses.map((item) => item.idStudent).join("|");
-      const listStudentAPI = await TeacherStudentClassesAPI.getAllInforStudent(
-        `?id=` + request
-      );
-      const tempDataTable = listStudentAPI.data
-        .filter((item1) =>
-          listStudentClasses.some((item2) => item1.id === item2.idStudent)
-        )
-        .map((item1) => {
-          const matchedObject = listStudentClasses.find(
-            (item2) => item2.idStudent === item1.id
-          );
-          return {
-            ...item1,
-            ...matchedObject,
-          };
-        });
-      setListShowTable(tempDataTable);
-      setLoadingModalDetail(false);
-    } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
-    }
-  };
-  const fetchDataDetail = async () => {
-    await featchDataStudent();
-    await featInforStudentTable();
-    setLoadingModalDetail(false);
+    const listFilter = dataStudentClasses.filter(
+      (item) => item.idTeam === team.id
+    );
+    setListShowTable(listFilter);
   };
 
   const columns = [
     {
-      title: "STT",
+      title: "#",
       dataIndex: "stt",
       key: "stt",
       render: (text, record, index) => index + 1,
@@ -130,11 +70,15 @@ const ModalDetailTeam = ({ visible, onCancel, team, idClass, click }) => {
       ),
     },
   ];
-  const rowTable = "row_table";
   return (
     <>
-      {/* {!loadingModalDetail && <LoadingIndicator />} */}
-      <Modal onCancel={onCancel} open={visible} width={750} footer={null}>
+      <Modal
+        onCancel={onCancel}
+        open={visible}
+        width={750}
+        footer={null}
+        style={{ top: "8px" }}
+      >
         <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
           <span style={{ fontSize: "18px" }}>Chi tiết nhóm</span>
         </div>
@@ -163,13 +107,29 @@ const ModalDetailTeam = ({ visible, onCancel, team, idClass, click }) => {
               <span>Thành viên:</span>
             </Col>
           </Row>
-          <Table
-            dataSource={listShowTable}
-            rowKey="id"
-            columns={columns}
-            pagination={false}
-            rowClassName={rowTable}
-          />
+          {listShowTable.length >= 0 ? (
+            <>
+              <Table
+                dataSource={listShowTable}
+                rowKey="id"
+                columns={columns}
+                pagination={false}
+              />
+            </>
+          ) : (
+            <>
+              <p
+                style={{
+                  textAlign: "center",
+                  marginTop: "100px",
+                  fontSize: "15px",
+                  color: "red",
+                }}
+              >
+                Không có thành viên nào trong nhóm
+              </p>
+            </>
+          )}
         </div>
       </Modal>
     </>

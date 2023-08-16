@@ -4,7 +4,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import java.util.List;
 
@@ -13,12 +12,11 @@ import java.util.List;
  */
 @Getter
 @Setter
-@ToString
-public class TeCreateTeamsRequest {
+public class TeUpdateTeamsRequest {
 
     @NotEmpty
     @NotBlank
-    private String classId;
+    private String id;
 
     @NotEmpty
     @NotBlank
@@ -33,5 +31,4 @@ public class TeCreateTeamsRequest {
     private String subjectName;
 
     private List<TeTeamUpdateStudentClassRequest> listStudentClasses;
-
 }
