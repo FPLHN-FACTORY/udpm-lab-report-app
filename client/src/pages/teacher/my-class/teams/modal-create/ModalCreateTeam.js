@@ -14,12 +14,15 @@ import "./styleModalCreateTeam.css";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 import { useAppDispatch, useAppSelector } from "../../../../../app/hook";
 import LoadingIndicator from "../../../../../helper/loading";
 import { CreateTeam } from "../../../../../app/teacher/teams/teamsSlice.reduce";
 import { TeacherStudentClassesAPI } from "../../../../../api/teacher/student-class/TeacherStudentClasses.api";
 import { TeacherTeamsAPI } from "../../../../../api/teacher/teams-class/TeacherTeams.api";
+import {
+  GetStudentClasses,
+  SetStudentClasses,
+} from "../../../../../app/teacher/student-class/studentClassesSlice.reduce";
 
 const { Option } = Select;
 
@@ -36,6 +39,7 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
   const [dataTable, setDataTable] = useState([]);
   const [loading, setLoading] = useState(false);
   const [listStudentsChange, setListStudentsChange] = useState([]);
+  const [checkDataStudent, setCheckDataStudent] = useState(false);
   const [visitedCreate, setVisitedCreate] = useState(false);
   const dispatch = useAppDispatch();
   const cancelSuccess = () => {
@@ -69,6 +73,20 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
     featchDataTable();
   }, [listStudentsChange]);
 
+  useEffect(() => {
+    if (checkDataStudent === true) {
+      featchDataStudent();
+    }
+  }, [checkDataStudent]);
+
+  const featchDataStudent = () => {
+    const listNotFilter = dataStudentClasses.filter(
+      (item) => item.idTeam == null || item.idTeam === "null"
+    );
+    setListStudent(listNotFilter);
+    // setListStudentDetail(listFilter);
+    setCheckDataStudent(false);
+  };
   const fetchData = async (idClass) => {
     await featchStudentClass(idClass);
     await featInforStudent();
@@ -191,7 +209,22 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
             ...data,
             stt: 1,
           };
+          const mergedList = dataStudentClasses.map((item1) => {
+            const matchedAddedItem = dataTable.find(
+              (item2) => item2.idStudentClass === item1.idStudentClass
+            );
+            if (matchedAddedItem != null) {
+              return {
+                ...matchedAddedItem,
+                codeTeam: teamNew.code,
+                idTeam: data.id,
+              };
+            }
+            return item1;
+          });
+          dispatch(SetStudentClasses(mergedList));
           dispatch(CreateTeam(dataAddTable));
+          setCheckDataStudent(true);
           cancelSuccess();
         },
         (error) => {
@@ -200,7 +233,7 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
       );
     }
   };
-
+  const dataStudentClasses = useAppSelector(GetStudentClasses);
   const columns = [
     {
       title: "#",
@@ -257,7 +290,7 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
       <Modal
         open={visible}
         onCancel={cancelFaild}
-        width={750}
+        width={850}
         footer={null}
         bodyStyle={{ overflow: "hidden" }}
         style={{ top: "8px" }}
@@ -365,18 +398,21 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
                 </div>
               </Row>
               {dataTable.length > 0 && (
-                <Row>
-                  {" "}
-                  <Col span={24}>
-                    <Table
-                      pagination={false}
-                      className="table-member-management"
-                      columns={columns}
-                      dataSource={dataTable}
-                      rowKey="id"
-                    />
-                  </Col>{" "}
-                </Row>
+                <>
+                  <span>Thành viên:</span>
+                  <Row>
+                    {" "}
+                    <Col span={24}>
+                      <Table
+                        pagination={false}
+                        className="table-member-management"
+                        columns={columns}
+                        dataSource={dataTable}
+                        rowKey="id"
+                      />
+                    </Col>{" "}
+                  </Row>
+                </>
               )}
             </div>
           </>

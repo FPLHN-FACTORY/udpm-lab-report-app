@@ -22,6 +22,13 @@ export class TeacherTeamsAPI {
       data: data,
     });
   };
+  static updateTeam = (data) => {
+    return request({
+      method: "PUT",
+      url: url,
+      data: data,
+    });
+  };
   static deleteById = (idTeam) => {
     return request({
       method: "DELETE",

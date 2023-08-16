@@ -14,17 +14,13 @@ import "./styleModalUpdateTeam.css";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 import { useAppDispatch, useAppSelector } from "../../../../../app/hook";
-import LoadingIndicator from "../../../../../helper/loading";
-import { CreateTeam } from "../../../../../app/teacher/teams/teamsSlice.reduce";
-import { TeacherStudentClassesAPI } from "../../../../../api/teacher/student-class/TeacherStudentClasses.api";
+import { UpdateTeam } from "../../../../../app/teacher/teams/teamsSlice.reduce";
 import { TeacherTeamsAPI } from "../../../../../api/teacher/teams-class/TeacherTeams.api";
 import {
-  SetTeams,
-  GetTeams,
-} from "../../../../../app/teacher/teams/teamsSlice.reduce";
-import { GetStudentClasses } from "../../../../../app/teacher/student-class/studentClassesSlice.reduce";
+  GetStudentClasses,
+  SetStudentClasses,
+} from "../../../../../app/teacher/student-class/studentClassesSlice.reduce";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
@@ -37,19 +33,34 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
   const [errorName, setErrorName] = useState("");
   const [subjectName, setSubjectName] = useState("");
   const [errorSubjectName, setErrorSubjectName] = useState("");
-  const [errorMembers, setErrorMembers] = useState("");
-  const [listStudentDetail, setListStudentDetail] = useState([]);
+  const [errorStudent, setErrorStudent] = useState("");
   const [listStudentNotJoin, setListStudentNotJoin] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [listStudentsChange, setListStudentsChange] = useState([]);
-
-  const [listFilterAdd, setListFilterAdd] = useState([]);
+  const [listStudentDetail, setListStudentDetail] = useState([]);
+  const [listStudentMulty, setListStudentMulty] = useState([]);
+  const [listShowTable, setListShowTable] = useState([]);
+  const [checkDataStudent, setCheckDataStudent] = useState(false);
+  const [listDetelteTemp, setListDeleteTemp] = useState([]);
   const dispatch = useAppDispatch();
 
   const cancelSuccess = () => {
+    setCheckDataStudent(false);
     onCancel.handleCancelModalCreateSusscess();
   };
+
   const cancelFaild = () => {
+    setErrorCode("");
+    setErrorName("");
+    setErrorSubjectName("");
+    setErrorStudent("");
+    const objFilter = dataStudentClasses.map((item2) => {
+      const matchedItem = listDetelteTemp.find(
+        (item3) => item3.idStudentClass === item2.idStudentClass
+      );
+      return { ...item2, ...matchedItem };
+    });
+    dispatch(SetStudentClasses(objFilter));
+    featchDataStudent();
     onCancel.handleCancelModalCreateFaild();
   };
 
@@ -59,12 +70,13 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
       setCode(team.code);
       setName(team.name);
       setListStudentsChange([]);
-      setListFilterAdd([]);
+      setListStudentMulty([]);
+      setListStudentDetail([]);
+      setListDeleteTemp([]);
+      setListShowTable([]);
       featchDataStudent();
-      // fetchData(idClass);
     }
   }, [visible]);
-  const dataStudentClasses = useAppSelector(GetStudentClasses);
 
   useEffect(() => {
     if (visible === true) {
@@ -72,80 +84,89 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
     }
   }, [listStudentsChange]);
 
-  const featchDataStudentChange = () => {
-    let listFilter = listStudentNotJoin.filter((item1) =>
-      listStudentsChange.some((item2) => item1.id === item2)
-    );
-
-    let listFilterDuplicate = listStudentDetail.filter((item1) =>
-      listFilter.map((item2) => item1.id === item2.id)
-    );
-    console.log("dup");
-    console.log(listFilterDuplicate);
-    if (listFilterDuplicate.length >= 0) {
-      let a = listFilter.filter((item1) =>
-        listFilterDuplicate.find((item2) => item1.id !== item2.id)
-      );
-      setListFilterAdd(a);
-    } else {
-      setListFilterAdd(listFilter);
+  useEffect(() => {
+    if (checkDataStudent === true) {
+      featchDataStudent();
     }
-    console.log("ấksakasks");
-    console.log(listFilterAdd);
-    // if (listFilterDuplicate.length > 0) {
-    //   listFilter = listFilter.filter((item1) =>
-    //     listFilterDuplicate.some((item2) => item1.id !== item2)
-    //   );
-    //  }
-    const listJoin = [...listFilterAdd, ...listStudentDetail];
-    // console.log(
-    //   "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-    // );
-    console.log(listJoin);
-    // // console.log(listJoin);
-    setListStudentDetail(listJoin);
+  }, [checkDataStudent]);
+
+  const featchDataStudentChange = () => {
+    const listMulty = listStudentNotJoin
+      .filter((item1) =>
+        listStudentsChange.find((item2) => item2 === item1.idStudentClass)
+      )
+      .map((obj) => {
+        return {
+          ...obj,
+          role: `1`,
+          codeTeam: team.code,
+          idTeam: team.id,
+        };
+      });
+    setListStudentMulty(listMulty);
+    setListShowTable([...listMulty, ...listStudentDetail]);
   };
 
-  const featchDataStudent = async () => {
+  const featchDataStudent = () => {
     const listFilter = dataStudentClasses.filter(
       (item) => item.idTeam === team.id
     );
     const listNotFilter = dataStudentClasses.filter(
-      (item) => item.idTeam !== team.id
+      (item) => item.idTeam == null || item.idTeam === "null"
     );
     setListStudentNotJoin(listNotFilter);
     setListStudentDetail(listFilter);
+    setCheckDataStudent(false);
+  };
+
+  const handleDeleteStudentInTeam = (id) => {
+    const objCheckDetail = listStudentDetail.filter(
+      (item) => item.idStudentClass !== id
+    );
+    const objCheckMulty = listStudentMulty.filter(
+      (item) => item.idStudentClass !== id
+    );
+    if (objCheckDetail.length > 0) {
+      setListStudentDetail(objCheckDetail);
+    }
+    if (objCheckMulty.length > 0) {
+      setListStudentMulty(objCheckMulty);
+    }
+    const obj = dataStudentClasses.filter((item) => item.idStudentClass === id);
+    setListDeleteTemp([...listDetelteTemp, ...obj]);
+    const objFilter = dataStudentClasses.map((item) => {
+      if (item.idStudentClass === id) {
+        setCheckDataStudent(true);
+        return { ...item, idTeam: null, codeTeam: null };
+      }
+      return item;
+    });
+    dispatch(SetStudentClasses(objFilter));
+    const listNew = listShowTable.filter((item) => item.idStudentClass !== id);
+    setListShowTable(listNew);
   };
 
   const handleChangeStudents = (idStudent) => {
     setListStudentsChange(idStudent);
-    // const uniqueSelectedItems = listStudentsChange.filter(
-    //   (id, index, self) => index === self.indexOf(id)
-    // );
-    // setListStudentsChange(uniqueSelectedItems);
   };
 
-  const handleRoleChange = (id, value) => {
-    let updatedListInfo = listStudentDetail.map((record) => {
-      if (record.idStudent === id) {
-        let newData = {
-          idStudentClass: record.idStudentClass,
-          classId: idClass,
+  const handleRoleChange = (idStudentClass, value) => {
+    setListShowTable([...listStudentMulty, ...listStudentDetail]);
+    let updatedListInfo = listShowTable.map((item) => {
+      if (item.idStudentClass === idStudentClass) {
+        return {
+          ...item,
           role: value,
+          codeTeam: team.code,
+          idTeam: team.id,
         };
-        return { ...record, ...newData };
       }
-      return record;
+      return item;
     });
-    setListStudentDetail(updatedListInfo);
+    setListShowTable(updatedListInfo);
   };
 
-  const handleDeleteStudentInTeam = (id) => {
-    const listNew = listStudentDetail.filter((item) => item.idStudent !== id);
-    setListStudentDetail(listNew);
-  };
-
-  const create = () => {
+  const update = async () => {
     let check = 0;
     if (code.trim() === "") {
       setErrorCode("Mã nhóm không được để trống");
@@ -165,32 +186,42 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
     } else {
       setErrorSubjectName("");
     }
-
-    if (listStudentsChange.length <= 0) {
-      setErrorMembers("Nhóm phải có ít nhất 1 thành viên");
+    if (listShowTable.length <= 0) {
+      setErrorStudent("Nhóm phải có ít nhất 1 thành viên");
       check++;
     } else {
-      setErrorMembers("");
+      setErrorStudent("");
     }
 
     if (check === 0) {
-      // featchDataTable();
-      let teamNew = {
+      let teamUpdate = {
+        id: team.id,
         code: code,
         name: name,
-        classId: idClass + ``,
         subjectName: subjectName,
-        listStudentClasses: listStudentDetail,
+        listStudentClasses: listShowTable,
+        listStudentClassesDeleteIdTeam: listDetelteTemp,
       };
-      TeacherTeamsAPI.createTeam(teamNew).then(
+      await TeacherTeamsAPI.updateTeam(teamUpdate).then(
         (respone) => {
-          toast.success("Thêm thành công !");
+          toast.success("Sửa thông tin nhóm thành công !");
           let data = respone.data.data;
-          let dataAddTable = {
+          let dataTableTeam = {
             ...data,
             stt: 1,
           };
-          dispatch(CreateTeam(dataAddTable));
+          const mergedList = dataStudentClasses.map((item1) => {
+            const matchedAddedItem = listShowTable.find(
+              (item2) => item2.idStudentClass === item1.idStudentClass
+            );
+            return {
+              ...item1,
+              ...matchedAddedItem,
+            };
+          });
+          dispatch(SetStudentClasses(mergedList));
+          dispatch(UpdateTeam(dataTableTeam));
+          setCheckDataStudent(true);
           cancelSuccess();
         },
         (error) => {
@@ -200,6 +231,7 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
     }
   };
 
+  const dataStudentClasses = useAppSelector(GetStudentClasses);
   const columns = [
     {
       title: "#",
@@ -213,6 +245,7 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
       dataIndex: "name",
       key: "name",
       sorter: (a, b) => a.name.localeCompare(b.name),
+      sortDirections: ["ascend", "descend"],
       render: (text, record) => {
         return (
           <div>
@@ -238,8 +271,8 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
       render: (text, record) => (
         <Select
           style={{ width: "100%" }}
-          value={record.role}
-          onChange={(value) => handleRoleChange(record.id, value)}
+          defaultValue={`${text}`}
+          onChange={(value) => handleRoleChange(record.idStudentClass, value)}
         >
           <Option value="0">Trưởng nhóm</Option>
           <Option value="1">Thành viên</Option>
@@ -258,7 +291,7 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
                 className="icon"
                 icon={faTrashCan}
                 onClick={() => {
-                  handleDeleteStudentInTeam(record.id);
+                  handleDeleteStudentInTeam(record.idStudentClass);
                 }}
               />
             </Tooltip>
@@ -271,11 +304,10 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
 
   return (
     <>
-      {loading && <LoadingIndicator />}
       <Modal
         open={visible}
         onCancel={cancelFaild}
-        width={750}
+        width={850}
         footer={null}
         bodyStyle={{ overflow: "hidden" }}
         style={{ top: "8px" }}
@@ -284,128 +316,136 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
         <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
           <span style={{ fontSize: "18px" }}>Sửa thông tin nhóm </span>
         </div>
-        {/* {listStudent.length <= 0 ? (
-          <p style={{ color: "red", fontSize: "15px", marginLeft: "10px" }}>
-            {" "}
-            Không thể tạo nhóm vì tất cả thành viên trong lớp đã có nhóm
-          </p>
-        ) : ( */}
-        <>
-          <div style={{ marginTop: "15px", borderBottom: "1px solid black" }}>
-            <Row gutter={16} style={{ marginBottom: "15px" }}>
-              <Col span={12}>
-                {" "}
-                <span className="notBlank">*</span>
-                <span>Mã nhóm:</span> <br />
-                <Input
-                  placeholder="Nhập mã"
-                  value={code}
-                  onChange={(e) => {
-                    setCode(e.target.value);
-                  }}
-                  type="text"
-                />
-                <span className="error">{errorCode}</span>
-              </Col>
-              <Col span={12}>
-                {" "}
-                <span className="notBlank">*</span>
-                <span>Tên nhóm:</span> <br />
-                <Input
-                  placeholder="Nhập tên"
-                  value={name}
-                  onChange={(e) => {
-                    setName(e.target.value);
-                  }}
-                  type="text"
-                />
-                <span className="error">{errorName}</span>
-              </Col>
-            </Row>
-            <Row gutter={16} style={{ marginBottom: "15px" }}>
-              <Col span={24}>
-                {" "}
-                <span className="notBlank">*</span>
-                <span>Chủ đề:</span> <br />
-                <Input
-                  placeholder="Nhập chủ đề"
-                  value={subjectName}
-                  onChange={(e) => {
-                    setSubjectName(e.target.value);
-                  }}
-                  type="text"
-                />
-                <span className="error">{errorSubjectName}</span>
-              </Col>
-            </Row>
-            <Row style={{ marginBottom: "15px" }}>
-              <div style={{ width: "100%" }}>
-                {" "}
-                <span className="notBlank">*</span>
-                <span>Thành viên:</span>
-                <Select
-                  mode="multiple"
-                  placeholder="Thêm thành viên"
-                  style={{
-                    width: "100%",
-                    height: "auto",
-                  }}
-                  value={listStudentsChange}
-                  onChange={handleChangeStudents}
-                  optionLabelProp="label"
-                  defaultValue={[]}
-                  filterOption={(text, option) =>
-                    option.label.toLowerCase().indexOf(text.toLowerCase()) !==
-                    -1
-                  }
-                >
-                  {listStudentNotJoin.map((member) => (
-                    <Option
-                      label={member.email}
-                      value={member.id}
-                      key={member.idStudent}
-                    >
-                      <Tooltip title={member.email}>
-                        <Space>
-                          {member.name + " " + " (" + member.email + ")"}
-                          {}
-                        </Space>
-                      </Tooltip>
-                    </Option>
-                  ))}{" "}
-                </Select>
-                <span
-                  className="error"
-                  style={{ display: "block", marginTop: "2px" }}
-                >
-                  {errorMembers}
-                </span>
-              </div>
-            </Row>
-            {/* {dataTable.length > 0 && ( */}
-            <Row>
+        <div style={{ marginTop: "15px", borderBottom: "1px solid black" }}>
+          <Row gutter={16} style={{ marginBottom: "15px" }}>
+            <Col span={12}>
               {" "}
-              <Col span={24}>
-                <Table
-                  pagination={false}
-                  className="table-member-management"
-                  columns={columns}
-                  dataSource={listStudentDetail}
-                  rowKey="id"
-                />
-              </Col>{" "}
-            </Row>
-            {/* )} */}
-          </div>
-        </>
-        {/* )} */}
+              <span className="notBlank">*</span>
+              <span>Mã nhóm:</span> <br />
+              <Input
+                placeholder="Nhập mã"
+                value={code}
+                onChange={(e) => {
+                  setCode(e.target.value);
+                }}
+                type="text"
+              />
+              <span className="error">{errorCode}</span>
+            </Col>
+            <Col span={12}>
+              {" "}
+              <span className="notBlank">*</span>
+              <span>Tên nhóm:</span> <br />
+              <Input
+                placeholder="Nhập tên"
+                value={name}
+                onChange={(e) => {
+                  setName(e.target.value);
+                }}
+                type="text"
+              />
+              <span className="error">{errorName}</span>
+            </Col>
+          </Row>
+          <Row gutter={16} style={{ marginBottom: "15px" }}>
+            <Col span={24}>
+              {" "}
+              <span className="notBlank">*</span>
+              <span>Chủ đề:</span> <br />
+              <Input
+                placeholder="Nhập chủ đề"
+                value={subjectName}
+                onChange={(e) => {
+                  setSubjectName(e.target.value);
+                }}
+                type="text"
+              />
+              <span className="error">{errorSubjectName}</span>
+            </Col>
+          </Row>
+          <Row style={{ marginBottom: "15px" }}>
+            <div style={{ width: "100%" }}>
+              {" "}
+              <span className="notBlank">*</span>
+              <span>
+                Thành viên:{" "}
+                {listShowTable.length <= 0 ? (
+                  <span
+                    style={{
+                      color: "black",
+                      fontSize: "14px",
+                    }}
+                  >
+                    {" "}
+                    Chưa có thành viên nào tham gia nhóm
+                  </span>
+                ) : (
+                  ""
+                )}
+              </span>
+              <Select
+                mode="multiple"
+                placeholder="Thêm thành viên"
+                style={{
+                  width: "100%",
+                  height: "auto",
+                }}
+                value={listStudentsChange}
+                onChange={handleChangeStudents}
+                optionLabelProp="label"
+                defaultValue={[]}
+                filterOption={(text, option) =>
+                  option.label.toLowerCase().indexOf(text.toLowerCase()) !== -1
+                }
+              >
+                {listStudentNotJoin.map((member) => (
+                  <Option
+                    label={member.email}
+                    value={member.idStudentClass}
+                    key={member.idStudentClass}
+                  >
+                    <Tooltip title={member.email}>
+                      <Space>
+                        {member.name + " " + " (" + member.email + ")"}
+                      </Space>
+                    </Tooltip>
+                  </Option>
+                ))}{" "}
+              </Select>
+              <span
+                className="error"
+                style={{ display: "block", marginTop: "2px" }}
+              >
+                {errorStudent}
+              </span>
+            </div>
+          </Row>
+          {listShowTable.length > 0 ? (
+            <>
+              <Row>
+                {" "}
+                <Col span={24}>
+                  <Table
+                    pagination={false}
+                    columns={columns}
+                    dataSource={listShowTable}
+                    rowKey="id"
+                  />
+                </Col>{" "}
+              </Row>
+            </>
+          ) : (
+            <>
+              <span></span>
+            </>
+          )}
+        </div>
         <div
           style={{
             textAlign: "right",
             marginTop: "20px",
           }}
         >
-          {/* {listStudent.length >= 1 ? ( */}
           <>
             <div style={{ paddingTop: "15px" }}>
               <Button
@@ -413,7 +453,7 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
                   backgroundColor: "rgb(61, 139, 227)",
                   color: "white",
                 }}
-                onClick={create}
+                onClick={update}
               >
                 Sửa
               </Button>
@@ -428,29 +468,6 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
               </Button>
             </div>
           </>
-          {/* ) : (
-            <>
-              <div style={{ paddingTop: "15px" }}>
-                <Button
-                  style={{
-                    backgroundColor: "gray",
-                    color: "white",
-                  }}
-                >
-                  Thêm
-                </Button>
-                <Button
-                  style={{
-                    backgroundColor: "red",
-                    color: "white",
-                  }}
-                  onClick={cancelFaild}
-                >
-                  Hủy
-                </Button>
-              </div>
-            </>
-          )} */}
         </div>
       </Modal>
     </>

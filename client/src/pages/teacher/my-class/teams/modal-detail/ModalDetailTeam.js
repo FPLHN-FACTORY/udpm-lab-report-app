@@ -75,7 +75,7 @@ const ModalDetailTeam = ({ visible, onCancel, team, idClass, click }) => {
       <Modal
         onCancel={onCancel}
         open={visible}
-        width={750}
+        width={850}
         footer={null}
         style={{ top: "8px" }}
       >

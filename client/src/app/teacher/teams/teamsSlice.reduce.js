@@ -29,18 +29,24 @@ const teTeamsSlice = createSlice({
       state = newData;
       return state;
     },
-    // AddStudentClassJoin: (state, action) => {
-    //   const studentClass = action.payload;
-    //   const index = state.findIndex((item) => item.id === studentClass.id);
-    //   console.log("reduceeeee");
-    //   console.log(state[index]);
-    //   const newData = state.filter((item) => item.id !== studentClass.id);
-    //   state = newData;
-    // },
+    UpdateTeam: (state, action) => {
+      const team = action.payload;
+      const index = state.findIndex((item) => item.id === team.id);
+      if (index !== -1) {
+        let teamUpdate = state[index];
+        teamUpdate.id = team.id;
+        teamUpdate.code = team.code;
+        teamUpdate.name = team.name;
+        teamUpdate.subjectName = team.subjectName;
+        teamUpdate.classId = team.classId;
+        teamUpdate.createdDate = team.createdDate;
+      }
+      return state;
+    },
   },
 });
-
-export const { SetTeams, CreateTeam, DeleteTeam } = teTeamsSlice.actions;
+export const { SetTeams, CreateTeam, DeleteTeam, UpdateTeam } =
+  teTeamsSlice.actions;
 
 export const GetTeams = (state) => state.teTeams;
 

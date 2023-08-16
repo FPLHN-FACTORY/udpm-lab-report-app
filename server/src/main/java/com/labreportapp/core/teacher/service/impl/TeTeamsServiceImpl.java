@@ -95,11 +95,20 @@ public class TeTeamsServiceImpl implements TeTeamsService {
                     studentClasses.setRole(RoleTeam.MEMBER);
                 }
                 studentClasses.setTeamId(team.getId());
-//                studentClasses.setClassId(team.getClassId());
                 studentClassesNew.add(studentClasses);
             }
         });
         teStudentClassesRepository.saveAll(studentClassesNew);
+        List<StudentClasses> studentClassesDeleteId = new ArrayList<>();
+        List<TeTeamUpdateStudentClassRequest> studentClassesDeleteIdTeamRequest = request.getListStudentClassesDeleteIdTeam();
+        studentClassesDeleteIdTeamRequest.forEach(item -> {
+            StudentClasses studentClasses = teStudentClassesRepository.findStudentClassesById(item.getIdStudentClass());
+            if (studentClasses != null) {
+                studentClasses.setTeamId(null);
+                studentClassesDeleteId.add(studentClasses);
+            }
+        });
+        teStudentClassesRepository.saveAll(studentClassesDeleteId);
         return teTeamsRepositoty.save(team);
     }
 

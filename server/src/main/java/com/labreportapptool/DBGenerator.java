@@ -209,7 +209,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses2.setClassId(class1.getId());
         studentClasses2.setTeamId(team2.getId());
         studentClasses2.setEmail("thangncph26123@fpt.edu.vn");
-        studentClasses2.setRole(RoleTeam.MEMBER);
+        studentClasses2.setRole(RoleTeam.LEADER);
         studentClasses2.setStatus(StatusTeam.ACTIVE);
         studentClasses2.setId(studentClassesRepository.save(studentClasses2).getId());
 

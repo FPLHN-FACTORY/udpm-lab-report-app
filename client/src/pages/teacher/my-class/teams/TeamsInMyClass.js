@@ -297,35 +297,34 @@ const TeamsInMyClass = () => {
             <hr />
           </div>
         </div>
-        <div className="content">
-          <Row>
-            <Col span={22}>
-              <div>
+
+        <Row gutter={16} style={{ margin: "40px 10px 30px 10px" }}>
+          <Col span={22}>
+            <div style={{ marginLeft: "0px" }}>
+              {" "}
+              <span style={{ fontSize: "17px", fontWeight: "500" }}>
                 {" "}
-                <span style={{ fontSize: "17px", fontWeight: "500" }}>
-                  {" "}
-                  <UnorderedListOutlined
-                    style={{ marginRight: "10px", fontSize: "20px" }}
-                  />
-                  Danh sách nhóm
-                </span>
-              </div>
-            </Col>
-            <Col span={2}>
-              <Button
-                className="btn_clear"
-                style={{
-                  color: "white",
-                }}
-                onClick={() => {
-                  setShowCreateModal(true);
-                }}
-              >
-                Tạo nhóm
-              </Button>
-            </Col>
-          </Row>
-        </div>
+                <UnorderedListOutlined
+                  style={{ marginRight: "10px", fontSize: "20px" }}
+                />
+                Danh sách nhóm
+              </span>
+            </div>
+          </Col>
+          <Col span={2}>
+            <Button
+              className="btn_clear"
+              style={{
+                color: "white",
+              }}
+              onClick={() => {
+                setShowCreateModal(true);
+              }}
+            >
+              Tạo nhóm
+            </Button>
+          </Col>
+        </Row>
         <div>
           {data.length > 0 ? (
             <>

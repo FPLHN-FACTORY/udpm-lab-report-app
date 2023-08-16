@@ -31,4 +31,6 @@ public class TeUpdateTeamsRequest {
     private String subjectName;
 
     private List<TeTeamUpdateStudentClassRequest> listStudentClasses;
+
+    private List<TeTeamUpdateStudentClassRequest> listStudentClassesDeleteIdTeam;
 }
