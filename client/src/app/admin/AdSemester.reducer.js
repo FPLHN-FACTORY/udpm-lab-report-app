@@ -33,10 +33,15 @@ const adSemesterSlice = createSlice({
         state[index].endTime = updateSemester.endTime;
       }
     },
+    DeleteSemester: (state, action) => {
+      const idSemester = action.payload;
+      const index = state.findIndex((semester) => semester.id === idSemester);
+      state.splice(index, 1);
+    },
   },
 });
 
-export const { SetSemester, AddSemester, UpdateSemester } =
+export const { SetSemester, AddSemester, UpdateSemester, DeleteSemester } =
   adSemesterSlice.actions;
 
 export const GetSemester = (state) => state.adSemester;
