@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import LoadingIndicator from "../../../../helper/loading";
 import moment from "moment";
 
-const StudentsInMyClass = () => {
+const MeetingInMyClass = () => {
   const dispatch = useAppDispatch();
   const [classDetail, setClassDetail] = useState({});
   const [listStudentClass, setListStudentClass] = useState([]);
@@ -176,7 +176,7 @@ const StudentsInMyClass = () => {
           <div>
             <Link
               to={`/teacher/my-class/students/${idClass}`}
-              id="menu-checked"
+              className="custom-link"
               style={{
                 fontSize: "16px",
                 paddingLeft: "10px",
@@ -297,4 +297,4 @@ const StudentsInMyClass = () => {
   );
 };
 
-export default StudentsInMyClass;
+export default MeetingInMyClass;

@@ -10,7 +10,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class TeFindClass extends PageableRequest {
+public class TeFindClassRequest extends PageableRequest {
 
     private String idTeacher;
 

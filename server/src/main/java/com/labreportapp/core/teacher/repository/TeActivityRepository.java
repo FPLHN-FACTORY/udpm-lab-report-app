@@ -1,6 +1,6 @@
 package com.labreportapp.core.teacher.repository;
 
-import com.labreportapp.core.teacher.model.request.TeFindClass;
+import com.labreportapp.core.teacher.model.request.TeFindClassRequest;
 import com.labreportapp.core.teacher.model.response.TeActivityRespone;
 import com.labreportapp.entity.Activity;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -23,6 +23,6 @@ public interface TeActivityRepository extends JpaRepository<Activity, String> {
            OR :#{#req.idSemester} = '' 
            OR a.semester_id = :#{#req.idSemester})
             """, nativeQuery = true)
-    List<TeActivityRespone> getAllByIdSemester(@Param("req") TeFindClass req);
+    List<TeActivityRespone> getAllByIdSemester(@Param("req") TeFindClassRequest req);
 
 }

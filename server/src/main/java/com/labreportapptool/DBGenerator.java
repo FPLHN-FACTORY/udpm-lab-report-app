@@ -8,8 +8,10 @@ import com.labreportapp.entity.StudentClasses;
 import com.labreportapp.entity.Team;
 import com.labreportapp.infrastructure.constant.ClassPeriod;
 import com.labreportapp.infrastructure.constant.Level;
+import com.labreportapp.infrastructure.constant.MeetingPeriod;
 import com.labreportapp.infrastructure.constant.RoleTeam;
 import com.labreportapp.infrastructure.constant.StatusTeam;
+import com.labreportapp.infrastructure.constant.TypeMeeting;
 import com.labreportapp.repository.ActivityRepository;
 import com.labreportapp.repository.AttendanceRepository;
 import com.labreportapp.repository.ClassRepository;
@@ -379,9 +381,108 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses16.setStatus(StatusTeam.ACTIVE);
         studentClasses16.setId(studentClassesRepository.save(studentClasses16).getId());
 
-    // meeting
+// Meeting
+        //metting class1 meeting tang 1 ngay
         Meeting meeting1 = new Meeting();
-//        meeting1.set
+        meeting1.setName("Buổi 1");
+        meeting1.setMeetingDate(new Date().getTime()+ 86400000);
+        meeting1.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting1.setDescriptions("Buổi học 1 online");
+        meeting1.setClassId(class1.getId());
+        meeting1.setTypeMeeting(TypeMeeting.ONLINE);
+        meeting1.setAddress("https://meet.google.com/kea-hhgi-yix");
+        meetingRepository.save(meeting1);
+
+        Meeting meeting2 = new Meeting();
+        meeting2.setName("Buổi 2");
+        meeting2.setMeetingDate(new Date().getTime() + 2*86400000);
+        meeting2.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting2.setDescriptions("Buổi học 2 online");
+        meeting2.setClassId(class1.getId());
+        meeting2.setTypeMeeting(TypeMeeting.OFFLINE);
+        meeting2.setAddress("Xưởng");
+        meetingRepository.save(meeting2);
+
+        Meeting meeting3 = new Meeting();
+        meeting3.setName("Buổi 3");
+        meeting3.setMeetingDate(new Date().getTime() + 3 * 86400000);
+        meeting3.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting3.setDescriptions("Buổi học 3 online");
+        meeting3.setClassId(class1.getId());
+        meeting3.setTypeMeeting(TypeMeeting.ONLINE);
+        meeting3.setAddress("https://meet.google.com/kea-hhgi-yix");
+        meetingRepository.save(meeting3);
+
+        Meeting meeting4 = new Meeting();
+        meeting4.setName("Buổi 4");
+        meeting4.setMeetingDate(new Date().getTime() + 4 * 86400000);
+        meeting4.setMeetingPeriod(MeetingPeriod.CA_2);
+        meeting4.setDescriptions("Buổi học 4 online");
+        meeting4.setClassId(class1.getId());
+        meeting4.setTypeMeeting(TypeMeeting.ONLINE);
+        meeting4.setAddress("https://meet.google.com/kea-hhgi-yix");
+        meetingRepository.save(meeting4);
+
+        Meeting meeting5 = new Meeting();
+        meeting5.setName("Buổi 5");
+        meeting5.setMeetingDate(new Date().getTime() + 5 * 86400000);
+        meeting5.setMeetingPeriod(MeetingPeriod.CA_3);
+        meeting5.setDescriptions("Buổi học 5 offline");
+        meeting5.setClassId(class1.getId());
+        meeting5.setTypeMeeting(TypeMeeting.OFFLINE);
+        meeting5.setAddress("Xưởng");
+        meetingRepository.save(meeting5);
+
+        Meeting meeting6 = new Meeting();
+        meeting6.setName("Buổi 6");
+        meeting6.setMeetingDate(new Date().getTime() + 6 * 86400000);
+        meeting6.setMeetingPeriod(MeetingPeriod.CA_4);
+        meeting6.setDescriptions("Buổi học 6 online");
+        meeting6.setClassId(class1.getId());
+        meeting6.setTypeMeeting(TypeMeeting.ONLINE);
+        meeting6.setAddress("https://meet.google.com/kea-hhgi-yix");
+        meetingRepository.save(meeting6);
+
+        Meeting meeting7 = new Meeting();
+        meeting7.setName("Buổi 7");
+        meeting7.setMeetingDate(new Date().getTime() + 7 * 86400000);
+        meeting7.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting7.setDescriptions("Buổi học 7 online");
+        meeting7.setClassId(class1.getId());
+        meeting7.setTypeMeeting(TypeMeeting.ONLINE);
+        meeting7.setAddress("https://meet.google.com/kea-hhgi-yix");
+        meetingRepository.save(meeting7);
+
+        Meeting meeting8 = new Meeting();
+        meeting8.setName("Buổi 8");
+        meeting8.setMeetingDate(new Date().getTime() + 8 * 86400000);
+        meeting8.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting8.setDescriptions("Buổi học 8 ofline");
+        meeting8.setClassId(class1.getId());
+        meeting8.setTypeMeeting(TypeMeeting.OFFLINE);
+        meeting8.setAddress("Xưởng");
+        meetingRepository.save(meeting8);
+
+        Meeting meeting9 = new Meeting();
+        meeting9.setName("Buổi 9 ");
+        meeting9.setMeetingDate(new Date().getTime() + 9 * 86400000);
+        meeting9.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting9.setDescriptions("Buổi học 9 ofline");
+        meeting9.setClassId(class1.getId());
+        meeting9.setTypeMeeting(TypeMeeting.OFFLINE);
+        meeting9.setAddress("Xưởng");
+        meetingRepository.save(meeting9);
+
+        Meeting meeting10 = new Meeting();
+        meeting10.setName("Buổi 10 ");
+        meeting10.setMeetingDate(new Date().getTime() + 10 * 86400000);
+        meeting10.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting10.setDescriptions("Buổi học 10 ofline");
+        meeting10.setClassId(class1.getId());
+        meeting10.setTypeMeeting(TypeMeeting.OFFLINE);
+        meeting10.setAddress("Xưởng");
+        meetingRepository.save(meeting10);
+
     }
 
     public static void main(String[] args) {

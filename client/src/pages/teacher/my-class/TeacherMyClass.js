@@ -135,7 +135,7 @@ const TeacherMyClass = () => {
         }
       );
     } catch (error) {
-      alert("Vui lòng F5 lại trang do featchData activiti!");
+      alert("Vui lòng F5 lại trang !");
     }
   };
 
