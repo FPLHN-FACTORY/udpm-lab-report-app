@@ -24,21 +24,26 @@ const StudentsInMyClass = () => {
     window.scrollTo(0, 0);
     document.title = "Bảng điều khiển - thành viên";
     featchClass(idClass);
+    fetchData(idClass);
   }, []);
 
-  useEffect(() => {
-    if (loadingStudentClass === true) {
-      fetchData(idClass);
+  const featchClass = async (idClass) => {
+    setLoading(false);
+    try {
+      await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
+        setClassDetail(responese.data.data);
+      });
+    } catch (error) {
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
-  }, [loadingStudentClass]);
-
+  };
   const fetchData = async (idClass) => {
     await featchStudentClass(idClass);
-    featInforStudent(idClass);
+    await featInforStudent(idClass);
   };
-  const featchStudentClass = async (id) => {
+  const featchStudentClass = async (idClass) => {
     try {
-      await TeacherStudentClassesAPI.getStudentInClasses(id).then(
+      await TeacherStudentClassesAPI.getStudentInClasses(idClass).then(
         (responese) => {
           setListStudentClass(responese.data.data);
           setLoadingStudentClass(true);
@@ -75,19 +80,11 @@ const StudentsInMyClass = () => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-
-  const featchClass = async (idClass) => {
-    setLoading(false);
-    try {
-      await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
-        setClassDetail(responese.data.data);
-        fetchData(idClass);
-      });
-    } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+  useEffect(() => {
+    if (loadingStudentClass === true) {
+      fetchData(idClass);
     }
-  };
-
+  }, [loadingStudentClass]);
   const data = dataTable;
   const columns = [
     {

@@ -12,4 +12,8 @@ public class TeFindMeetingRequest {
 
     private String idClass;
 
+    private String idTeam;
+
+    private String idMeeting;
+
 }

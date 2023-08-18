@@ -2,6 +2,7 @@ package com.labreportapptool;
 
 import com.labreportapp.entity.Activity;
 import com.labreportapp.entity.Class;
+import com.labreportapp.entity.HomeWork;
 import com.labreportapp.entity.Meeting;
 import com.labreportapp.entity.Semester;
 import com.labreportapp.entity.StudentClasses;
@@ -385,23 +386,23 @@ public class DBGenerator implements CommandLineRunner {
         //metting class1 meeting tang 1 ngay
         Meeting meeting1 = new Meeting();
         meeting1.setName("Buổi 1");
-        meeting1.setMeetingDate(new Date().getTime()+ 86400000);
+        meeting1.setMeetingDate(new Date().getTime() + 86400000);
         meeting1.setMeetingPeriod(MeetingPeriod.CA_1);
-        meeting1.setDescriptions("Buổi học 1 online");
+        meeting1.setDescriptions("Buổi học 1 online - beee fliy");
         meeting1.setClassId(class1.getId());
         meeting1.setTypeMeeting(TypeMeeting.ONLINE);
         meeting1.setAddress("https://meet.google.com/kea-hhgi-yix");
-        meetingRepository.save(meeting1);
+        meeting1.setId(meetingRepository.save(meeting1).getId());
 
         Meeting meeting2 = new Meeting();
         meeting2.setName("Buổi 2");
-        meeting2.setMeetingDate(new Date().getTime() + 2*86400000);
+        meeting2.setMeetingDate(new Date().getTime() + 2 * 86400000);
         meeting2.setMeetingPeriod(MeetingPeriod.CA_1);
         meeting2.setDescriptions("Buổi học 2 online");
         meeting2.setClassId(class1.getId());
         meeting2.setTypeMeeting(TypeMeeting.OFFLINE);
         meeting2.setAddress("Xưởng");
-        meetingRepository.save(meeting2);
+        meeting2.setId(meetingRepository.save(meeting2).getId());
 
         Meeting meeting3 = new Meeting();
         meeting3.setName("Buổi 3");
@@ -411,7 +412,7 @@ public class DBGenerator implements CommandLineRunner {
         meeting3.setClassId(class1.getId());
         meeting3.setTypeMeeting(TypeMeeting.ONLINE);
         meeting3.setAddress("https://meet.google.com/kea-hhgi-yix");
-        meetingRepository.save(meeting3);
+        meeting3.setId(meetingRepository.save(meeting3).getId());
 
         Meeting meeting4 = new Meeting();
         meeting4.setName("Buổi 4");
@@ -421,7 +422,7 @@ public class DBGenerator implements CommandLineRunner {
         meeting4.setClassId(class1.getId());
         meeting4.setTypeMeeting(TypeMeeting.ONLINE);
         meeting4.setAddress("https://meet.google.com/kea-hhgi-yix");
-        meetingRepository.save(meeting4);
+        meeting4.setId(meetingRepository.save(meeting4).getId());
 
         Meeting meeting5 = new Meeting();
         meeting5.setName("Buổi 5");
@@ -431,7 +432,7 @@ public class DBGenerator implements CommandLineRunner {
         meeting5.setClassId(class1.getId());
         meeting5.setTypeMeeting(TypeMeeting.OFFLINE);
         meeting5.setAddress("Xưởng");
-        meetingRepository.save(meeting5);
+        meeting5.setId(meetingRepository.save(meeting5).getId());
 
         Meeting meeting6 = new Meeting();
         meeting6.setName("Buổi 6");
@@ -441,7 +442,7 @@ public class DBGenerator implements CommandLineRunner {
         meeting6.setClassId(class1.getId());
         meeting6.setTypeMeeting(TypeMeeting.ONLINE);
         meeting6.setAddress("https://meet.google.com/kea-hhgi-yix");
-        meetingRepository.save(meeting6);
+        meeting6.setId(meetingRepository.save(meeting6).getId());
 
         Meeting meeting7 = new Meeting();
         meeting7.setName("Buổi 7");
@@ -451,7 +452,7 @@ public class DBGenerator implements CommandLineRunner {
         meeting7.setClassId(class1.getId());
         meeting7.setTypeMeeting(TypeMeeting.ONLINE);
         meeting7.setAddress("https://meet.google.com/kea-hhgi-yix");
-        meetingRepository.save(meeting7);
+        meeting7.setId(meetingRepository.save(meeting7).getId());
 
         Meeting meeting8 = new Meeting();
         meeting8.setName("Buổi 8");
@@ -461,7 +462,7 @@ public class DBGenerator implements CommandLineRunner {
         meeting8.setClassId(class1.getId());
         meeting8.setTypeMeeting(TypeMeeting.OFFLINE);
         meeting8.setAddress("Xưởng");
-        meetingRepository.save(meeting8);
+        meeting8.setId(meetingRepository.save(meeting8).getId());
 
         Meeting meeting9 = new Meeting();
         meeting9.setName("Buổi 9 ");
@@ -471,7 +472,7 @@ public class DBGenerator implements CommandLineRunner {
         meeting9.setClassId(class1.getId());
         meeting9.setTypeMeeting(TypeMeeting.OFFLINE);
         meeting9.setAddress("Xưởng");
-        meetingRepository.save(meeting9);
+        meeting9.setId(meetingRepository.save(meeting9).getId());
 
         Meeting meeting10 = new Meeting();
         meeting10.setName("Buổi 10 ");
@@ -481,7 +482,71 @@ public class DBGenerator implements CommandLineRunner {
         meeting10.setClassId(class1.getId());
         meeting10.setTypeMeeting(TypeMeeting.OFFLINE);
         meeting10.setAddress("Xưởng");
-        meetingRepository.save(meeting10);
+        meeting10.setId(meetingRepository.save(meeting10).getId());
+// homework
+        //class 1- team 2
+        HomeWork homeWork1 = new HomeWork();
+        homeWork1.setName("Bài tập về nhà buổi 1");
+        homeWork1.setDescriptions("Tạo entity và mapping dữ liệu - BEE FLY");
+        homeWork1.setMeetingId(meeting1.getId());
+        homeWork1.setTeamId(team2.getId());
+        homeWork1.setId(homeWorkRepository.save(homeWork1).getId());
+
+        HomeWork homeWork2 = new HomeWork();
+        homeWork2.setName("Bài tập về nhà buổi 2");
+        homeWork2.setDescriptions("Tạo repository sử dụng spring jpa - BEE FLY");
+        homeWork2.setMeetingId(meeting2.getId());
+        homeWork2.setTeamId(team2.getId());
+        homeWork2.setId(homeWorkRepository.save(homeWork2).getId());
+
+        HomeWork homeWork3 = new HomeWork();
+        homeWork3.setName("Bài tập về nhà buổi 3");
+        homeWork3.setDescriptions("Tạo serice và service implements - BEE FLY");
+        homeWork3.setMeetingId(meeting3.getId());
+        homeWork3.setTeamId(team2.getId());
+        homeWork3.setId(homeWorkRepository.save(homeWork3).getId());
+
+        HomeWork homeWork4 = new HomeWork();
+        homeWork4.setName("Bài tập về nhà buổi 4");
+        homeWork4.setDescriptions("Tạo model chứa các request và responese - BEE FLY");
+        homeWork4.setMeetingId(meeting4.getId());
+        homeWork4.setTeamId(team2.getId());
+        homeWork4.setId(homeWorkRepository.save(homeWork4).getId());
+
+        HomeWork homeWork5 = new HomeWork();
+        homeWork5.setName("Bài tập về nhà buổi 5");
+        homeWork5.setDescriptions("Thêm config vào file application.properties - BEE FLY");
+        homeWork5.setMeetingId(meeting5.getId());
+        homeWork5.setTeamId(team2.getId());
+        homeWork5.setId(homeWorkRepository.save(homeWork5).getId());
+
+        HomeWork homeWork6 = new HomeWork();
+        homeWork6.setName("Bài tập về nhà buổi 6");
+        homeWork6.setDescriptions("Tạo file config message.properties chứa các key validations - BEE FLY");
+        homeWork6.setMeetingId(meeting6.getId());
+        homeWork6.setTeamId(team2.getId());
+        homeWork6.setId(homeWorkRepository.save(homeWork6).getId());
+
+        HomeWork homeWork7 = new HomeWork();
+        homeWork7.setName("Bài tập về nhà buổi 7");
+        homeWork7.setDescriptions("Thêm 1 số chức năng vào service - BEE FLY");
+        homeWork7.setMeetingId(meeting7.getId());
+        homeWork7.setTeamId(team2.getId());
+        homeWork7.setId(homeWorkRepository.save(homeWork7).getId());
+
+        HomeWork homeWork8 = new HomeWork();
+        homeWork8.setName("Bài tập về nhà buổi 8");
+        homeWork8.setDescriptions("Tạo package Controller sử dụng SPRINGBOOT - BEE FLY");
+        homeWork8.setMeetingId(meeting8.getId());
+        homeWork8.setTeamId(team2.getId());
+        homeWork8.setId(homeWorkRepository.save(homeWork8).getId());
+
+        HomeWork homeWork9 = new HomeWork();
+        homeWork9.setName("Bài tập về nhà buổi 9");
+        homeWork9.setDescriptions("Sử dụng @RestController API và Sercurity ADMIN - BEE FLY");
+        homeWork9.setMeetingId(meeting9.getId());
+        homeWork9.setTeamId(team2.getId());
+        homeWork9.setId(homeWorkRepository.save(homeWork9).getId());
 
     }
 

@@ -27,7 +27,6 @@ import {
 import ModalDetailTeam from "./modal-detail/ModalDetailTeam";
 import ModalCreateTeam from "./modal-create/ModalCreateTeam";
 import ModalUpdateTeam from "./modal-update/ModalUpdateTeam";
-import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
 import { toast } from "react-toastify";
 
 const TeamsInMyClass = () => {

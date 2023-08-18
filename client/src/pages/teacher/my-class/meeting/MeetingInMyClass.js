@@ -1,9 +1,18 @@
 import { useParams } from "react-router-dom";
 import "./styleMeetingInMyClass.css";
-import { Row, Col, Table, Tooltip } from "antd";
+import { Row, Col, Table, Tooltip, Select } from "antd";
 import { Link } from "react-router-dom";
-import { ControlOutlined, UnorderedListOutlined } from "@ant-design/icons";
+import {
+  ControlOutlined,
+  QuestionCircleFilled,
+  UnorderedListOutlined,
+} from "@ant-design/icons";
 import { TeacherMeetingAPI } from "../../../../api/teacher/meeting/TeacherMeeting.api";
+import { TeacherTeamsAPI } from "../../../../api/teacher/teams-class/TeacherTeams.api";
+import {
+  SetTeams,
+  GetTeams,
+} from "../../../../app/teacher/teams/teamsSlice.reduce";
 import {
   SetMeeting,
   GetMeeting,
@@ -14,22 +23,63 @@ import LoadingIndicator from "../../../../helper/loading";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+const { Option } = Select;
 const MeetingInMyClass = () => {
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
   const { idClass } = useParams();
+  const [idTeamSearch, setIdTeamSearch] = useState("");
+  const [listdataMeeting, setListDataMeeting] = useState([]);
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Bảng điều khiển - buổi họp";
-    featchMeeting(idClass);
+    //featchData(idClass);
+    // featchMeeting(idClass);
+    setListDataMeeting([]);
+    setIdTeamSearch("");
+    featchTeams(idClass);
   }, []);
 
-  const featchMeeting = async (idClass) => {
+  // const featchData = async (idClass, idTeam) => {
+  //   await featchTeams(idClass);
+  //   await featchMeeting(idClass);
+  // };
+  useEffect(() => {
+    featchMeeting(idClass, idTeamSearch);
+  }, [idTeamSearch]);
+  const featchTeams = async (idClass) => {
     setLoading(false);
     try {
-      await TeacherMeetingAPI.getAllMeetingByClass(idClass).then(
+      await TeacherTeamsAPI.getTeamsByIdClass(idClass).then((responese) => {
+        dispatch(SetTeams(responese.data.data));
+        console.log("----------------------------");
+        console.log(responese.data.data);
+        // if (responese.data.data.length >= 0) {
+        setIdTeamSearch(responese.data.data[0].id);
+        // featchMeeting(idClass, responese.data.data[0].id);
+        // } else {
+        //   setIdTeamSearch("null");
+        // }
+        setLoading(true);
+      });
+    } catch (error) {
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+    }
+  };
+  const featchMeeting = async (idClass, idTeam) => {
+    setLoading(false);
+    try {
+      let dataSearch = {
+        idClass: idClass,
+        idTeam: idTeam,
+      };
+      await TeacherMeetingAPI.getAllMeetingByIdClassAndIdTeam(dataSearch).then(
         (responese) => {
-          dispatch(SetMeeting(responese.data.data));
+          // dispatch(SetMeeting([]));
+          // dispatch(SetMeeting(responese.data.data));
+          setListDataMeeting(responese.data.data);
+          console.log("+++++++++++++++++++++++++++++");
+          console.log(responese.data.data);
           setLoading(true);
         }
       );
@@ -37,8 +87,13 @@ const MeetingInMyClass = () => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
+  useEffect(() => {
+    featchMeeting(idClass, idTeamSearch);
+  }, [idTeamSearch]);
 
-  const data = useAppSelector(GetMeeting);
+  const dataTeams = useAppSelector(GetTeams);
+  //const dataMeeting = useAppSelector(GetMeeting);
+  const dataMeeting = listdataMeeting;
   const columns = [
     {
       title: "#",
@@ -52,6 +107,11 @@ const MeetingInMyClass = () => {
       dataIndex: "name",
       key: "name",
       sorter: (a, b) => a.name.localeCompare(b.name),
+    },
+    {
+      title: "Mô tả",
+      dataIndex: "descriptions",
+      key: "descriptions",
     },
     {
       title: "Hành động",
@@ -88,7 +148,7 @@ const MeetingInMyClass = () => {
           <span style={{ color: "gray" }}> - lớp của tôi</span>
         </span>
       </div>
-      <div className="box-students-in-class">
+      <div className="box-filter">
         <div className="button-menu-teacher">
           <div>
             <Link
@@ -125,7 +185,67 @@ const MeetingInMyClass = () => {
             <hr />
           </div>
         </div>
-
+        <div className="menu-teacher-search">
+          <Row
+            gutter={16}
+            style={{
+              margin: "0px 0px 15px 10px",
+              paddingTop: "20px",
+              fontSize: "14px",
+            }}
+          >
+            <Col span={24}>
+              <span>Chọn nhóm</span>
+              <QuestionCircleFilled
+                style={{ paddingLeft: "12px", fontSize: "15px" }}
+              />
+              <br />
+              {idTeamSearch !== "" ? (
+                <>
+                  <Select
+                    value={idTeamSearch}
+                    onChange={(value) => {
+                      setIdTeamSearch(value);
+                    }}
+                    style={{
+                      width: "auto",
+                      minWidth: "120px",
+                      maxWidth: "263px",
+                      margin: "6px 0 10px 0",
+                    }}
+                  >
+                    {dataTeams.map((item) => {
+                      return (
+                        <Option
+                          value={item.id}
+                          key={item.id}
+                          style={{ width: "auto" }}
+                        >
+                          {item.name}
+                        </Option>
+                      );
+                    })}
+                  </Select>
+                </>
+              ) : (
+                <>
+                  <span
+                    style={{
+                      textAlign: "center",
+                      marginTop: "100px",
+                      fontSize: "15px",
+                      color: "red",
+                    }}
+                  >
+                    Lớp học hiện chưa có nhóm nào, vui lòng tạo nhóm !
+                  </span>
+                </>
+              )}
+            </Col>
+          </Row>
+        </div>
+      </div>
+      <div className="box-students-in-class">
         <div className="content-class">
           <div
             className="box-center"
@@ -138,7 +258,9 @@ const MeetingInMyClass = () => {
             }}
           >
             {" "}
-            <span style={{ fontSize: "14px" }}>{data.length} buổi học </span>
+            <span style={{ fontSize: "14px" }}>
+              {dataMeeting.length} buổi học{" "}
+            </span>
           </div>
           <Row gutter={16} style={{ margin: "3px 10px 0px 0px" }}>
             <Col span={24}>
@@ -157,11 +279,11 @@ const MeetingInMyClass = () => {
           <br />
         </div>
         <div>
-          {data.length > 0 ? (
+          {dataMeeting.length > 0 ? (
             <>
               <div className="table">
                 <Table
-                  dataSource={data}
+                  dataSource={dataMeeting}
                   rowKey="id"
                   columns={columns}
                   pagination={false}

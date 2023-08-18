@@ -19,17 +19,20 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
     @Query(value = """
             SELECT DISTINCT 
             m.id as id,
-          
+            m.name as name,
             m.descriptions as descriptions,
-              m.name as name,
             m.meeting_date as meeting_date
             FROM meeting m
-            WHERE m.class_id = :#{#req.idClass}
+            JOIN class c ON c.id = m.class_id
+            JOIN team t ON t.class_id = c.id
+            WHERE m.class_id = :#{#req.idClass} and t.id = :#{#req.idTeam}
             ORDER BY m.meeting_date ASC
                      """, countQuery = """
             SELECT COUNT(DISTINCT m.id)
               FROM meeting m
-            WHERE m.class_id = :#{#req.idClass}
+            JOIN class c ON c.id = m.class_id
+            JOIN team t ON t.class_id = c.id
+            WHERE m.class_id = :#{#req.idClass} and t.id = :#{#req.idTeam}
             """, nativeQuery = true)
     List<TeMeetingRespone> findMeetingByIdClass(@Param("req") TeFindMeetingRequest req);
 
