@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author hieundph25894
  */
 @RestController
-@RequestMapping("/teacher")
+@RequestMapping("/teacher/class")
 @CrossOrigin(origins = {"*"})
 public class TeClassController {
 

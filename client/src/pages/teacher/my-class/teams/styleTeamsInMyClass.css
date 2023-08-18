@@ -5,7 +5,7 @@
   color: red;
 }
 .modal-overlay {
-  z-index: 1001; /* Đặt giá trị lớn hơn các phần tử khác để modal hiển thị lên trên */
+  z-index: 1001;
 }
 .ok-button {
   background-color: rgb(9, 117, 185);

@@ -10,12 +10,12 @@ public interface TeMeetingRespone {
     @Value("#{target.id}")
     String getId();
 
-    @Value("#{#target.name}")
+    @Value("#{target.name}")
     String getName();
 
-    @Value("#{#target.descriptions}")
+    @Value("#{target.descriptions}")
     String getDescriptions();
 
-    @Value("#{#target.meeting_date}")
+    @Value("#{target.meeting_date}")
     Long getMeetingDate();
 }

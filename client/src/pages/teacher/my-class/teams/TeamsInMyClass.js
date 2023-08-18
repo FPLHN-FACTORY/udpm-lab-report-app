@@ -43,7 +43,7 @@ const TeamsInMyClass = () => {
   const { idClass } = useParams();
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = "Bảng điều khiển";
+    document.title = "Bảng điều khiển - nhóm";
     featchTeams(idClass);
   }, []);
 

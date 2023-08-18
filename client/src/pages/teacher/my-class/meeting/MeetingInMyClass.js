@@ -1,94 +1,44 @@
 import { useParams } from "react-router-dom";
 import "./styleMeetingInMyClass.css";
-import { Row, Col, Table } from "antd";
+import { Row, Col, Table, Tooltip } from "antd";
 import { Link } from "react-router-dom";
-import { ControlOutlined } from "@ant-design/icons";
-import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
-import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/TeacherStudentClasses.api";
-import { SetStudentClasses } from "../../../../app/teacher/student-class/studentClassesSlice.reduce";
+import { ControlOutlined, UnorderedListOutlined } from "@ant-design/icons";
+import { TeacherMeetingAPI } from "../../../../api/teacher/meeting/TeacherMeeting.api";
+import {
+  SetMeeting,
+  GetMeeting,
+} from "../../../../app/teacher/meeting/teacherMeetingSlice.reduce";
 import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import { useEffect, useState } from "react";
 import LoadingIndicator from "../../../../helper/loading";
-import moment from "moment";
+import { faEye } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const MeetingInMyClass = () => {
   const dispatch = useAppDispatch();
-  const [classDetail, setClassDetail] = useState({});
-  const [listStudentClass, setListStudentClass] = useState([]);
-  const [dataTable, setDataTable] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [loadingStudentClass, setLoadingStudentClass] = useState(false);
   const { idClass } = useParams();
-
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = "Bảng điều khiển";
-    featchClass(idClass);
+    document.title = "Bảng điều khiển - buổi họp";
+    featchMeeting(idClass);
   }, []);
 
-  useEffect(() => {
-    if (loadingStudentClass === true) {
-      fetchData();
-    }
-  }, [loadingStudentClass]);
-
-  const fetchData = async (idClass) => {
-    await featchStudentClass(idClass);
-    featInforStudent();
-  };
-  const featchStudentClass = async (id) => {
+  const featchMeeting = async (idClass) => {
+    setLoading(false);
     try {
-      await TeacherStudentClassesAPI.getStudentInClasses(id).then(
+      await TeacherMeetingAPI.getAllMeetingByClass(idClass).then(
         (responese) => {
-          setListStudentClass(responese.data.data);
-          setLoadingStudentClass(true);
+          dispatch(SetMeeting(responese.data.data));
+          setLoading(true);
         }
       );
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-  const featInforStudent = async () => {
-    setLoading(false);
-    try {
-      let request = listStudentClass.map((item) => item.idStudent).join("|");
-      const listStudentAPI = await TeacherStudentClassesAPI.getAllInforStudent(
-        `?id=` + request
-      );
-      const listShowTable = listStudentAPI.data
-        .filter((item1) =>
-          listStudentClass.some((item2) => item1.id === item2.idStudent)
-        )
-        .map((item1) => {
-          const matchedObject = listStudentClass.find(
-            (item2) => item2.idStudent === item1.id
-          );
-          return {
-            ...item1,
-            ...matchedObject,
-          };
-        });
-      dispatch(SetStudentClasses(listShowTable));
-      setDataTable(listShowTable);
-      setLoading(true);
-    } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
-    }
-  };
 
-  const featchClass = async (idClass) => {
-    setLoading(false);
-    try {
-      await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
-        setClassDetail(responese.data.data);
-        fetchData(idClass);
-      });
-    } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
-    }
-  };
-
-  const data = dataTable;
+  const data = useAppSelector(GetMeeting);
   const columns = [
     {
       title: "#",
@@ -98,63 +48,30 @@ const MeetingInMyClass = () => {
       width: "12px",
     },
     {
-      title: "Mã sinh viên",
-      dataIndex: "code",
-      key: "code",
-      render: (text, record, index) => {
-        const countSpace = (record.name.match(/ /g) || []).length;
-        const lastSpaceIndex = record.name.lastIndexOf(" ");
-        const wordCount =
-          lastSpaceIndex >= 0
-            ? record.name.substring(lastSpaceIndex + 1).length
-            : 0;
-        const nameIndexCut = countSpace + wordCount;
-        const codeShow = record.username.substring(nameIndexCut).toUpperCase();
-        return <span style={{ color: "#007bff" }}>{codeShow}</span>;
-      },
-      width: "130px",
-    },
-    {
-      title: "Mã nhóm",
-      dataIndex: "codeTeam",
-      key: "codeTeam",
-      sorter: (a, b) => a.codeTeam.localeCompare(b.codeTeam),
-      render: (text, record) => {
-        if (text === null) {
-          return <span style={{ color: "blue" }}>Chưa vào nhóm</span>;
-        } else {
-          return <span>{text}</span>;
-        }
-      },
-      width: "150px",
-    },
-    {
-      title: "Họ và tên",
+      title: "Tên buổi",
       dataIndex: "name",
       key: "name",
       sorter: (a, b) => a.name.localeCompare(b.name),
     },
-
     {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
-      sorter: (a, b) => a.email.localeCompare(b.email),
-    },
-
-    {
-      title: "Trạng thái",
-      dataIndex: "statusStudent",
-      key: "statusStudent",
-      sorter: (a, b) => a.statusStudent.localeCompare(b.statusStudent),
-      render: (text) => {
-        if (text === "0") {
-          return <span style={{ color: "green" }}>HD</span>;
-        } else {
-          return <span style={{ color: "red" }}>HL</span>;
-        }
-      },
-      width: "120px",
+      title: "Hành động",
+      dataIndex: "actions",
+      key: "actions",
+      render: (text, record) => (
+        <>
+          <div className="box_icon">
+            <Link
+              to={`/teacher/meeting/detail/${record.id}`}
+              className="btn btn-success ml-4"
+            >
+              <Tooltip title="Xem chi tiết buổi học">
+                <FontAwesomeIcon icon={faEye} className="icon" />
+              </Tooltip>
+            </Link>
+          </div>
+        </>
+      ),
+      width: "105px",
     },
   ];
   return (
@@ -214,59 +131,33 @@ const MeetingInMyClass = () => {
             className="box-center"
             style={{
               height: "28px",
-              width: "180px",
+              width: "100px",
               backgroundColor: "#007bff",
               color: "white",
-              margin: "0px 0px 0px 85%",
+              margin: "0px 0px 0px 92%",
             }}
           >
             {" "}
-            <span style={{ fontSize: "14px" }}>
-              {classDetail.classSize} thành viên{" "}
-              <span style={{ color: "yellow" }}>| </span> Level{"  "}
-              {classDetail.activityLevel}
-              <span style={{ color: "yellow" }}>| </span> Ca{"  "}
-              {classDetail.classPeriod}
-            </span>
+            <span style={{ fontSize: "14px" }}>{data.length} buổi học </span>
           </div>
-          <Row gutter={16} style={{ marginBottom: "4px" }}>
+          <Row gutter={16} style={{ margin: "3px 10px 0px 0px" }}>
             <Col span={24}>
-              <span>Hoạt động: &nbsp; {classDetail.activityName}</span>
-            </Col>
-          </Row>
-          <Row gutter={16} style={{ marginBottom: "4px" }}>
-            {" "}
-            <Col span={24}>
-              <span>
-                Thời gian bắt đầu:&nbsp;
-                {moment(classDetail.startTime).format("DD-MM-YYYY")}
-              </span>{" "}
-            </Col>
-          </Row>
-          <Row gutter={16} style={{ marginBottom: "4px" }}>
-            <Col>
-              <span>Mã lớp: &nbsp;{classDetail.code}</span>
-            </Col>
-          </Row>
-          <Row style={{ marginBottom: "4px" }}>
-            <Col>
-              <span>Tên lớp: &nbsp;{classDetail.name}</span>
-            </Col>
-          </Row>
-          <Row gutter={16} style={{ marginBottom: "4px" }}>
-            <Col span={24}>
-              <span>Mô tả: &nbsp;{classDetail.descriptions}</span>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <span>Mật khẩu: &nbsp;{classDetail.passWord}</span>
+              <div style={{ marginLeft: "0px" }}>
+                {" "}
+                <span style={{ fontSize: "17px", fontWeight: "500" }}>
+                  {" "}
+                  <UnorderedListOutlined
+                    style={{ marginRight: "10px", fontSize: "20px" }}
+                  />
+                  Danh sách buổi họp
+                </span>
+              </div>
             </Col>
           </Row>
           <br />
         </div>
         <div>
-          {dataTable.length > 0 ? (
+          {data.length > 0 ? (
             <>
               <div className="table">
                 <Table
@@ -287,7 +178,7 @@ const MeetingInMyClass = () => {
                   color: "red",
                 }}
               >
-                Không có thành viên
+                Chưa có buổi họp
               </p>
             </>
           )}

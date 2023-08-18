@@ -2,11 +2,8 @@ package com.labreportapp.core.teacher.controller;
 
 import com.labreportapp.core.common.base.ResponseObject;
 import com.labreportapp.core.teacher.model.request.TeFindMeetingRequest;
-import com.labreportapp.core.teacher.model.request.TeFindStudentClasses;
 import com.labreportapp.core.teacher.model.response.TeMeetingRespone;
-import com.labreportapp.core.teacher.model.response.TeStudentClassesRespone;
 import com.labreportapp.core.teacher.service.TeMeetingService;
-import com.labreportapp.core.teacher.service.TeStudentClassesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;

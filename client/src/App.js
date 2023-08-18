@@ -118,6 +118,17 @@ function App() {
                 </AuthGuard>
               }
             />
+            {/* router của Hiệu */}
+            <Route
+              path="/teacher/my-class/meeting/detail/:idClass"
+              element={
+                <AuthGuard>
+                  <DashBoardTeacher>
+                    <MeetingInMyClass />
+                  </DashBoardTeacher>
+                </AuthGuard>
+              }
+            />
             <Route
               path="/student/my-class"
               element={

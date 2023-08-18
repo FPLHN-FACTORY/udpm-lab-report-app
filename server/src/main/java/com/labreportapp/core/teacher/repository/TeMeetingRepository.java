@@ -19,8 +19,9 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
     @Query(value = """
             SELECT DISTINCT 
             m.id as id,
-            m.name as name,
+          
             m.descriptions as descriptions,
+              m.name as name,
             m.meeting_date as meeting_date
             FROM meeting m
             WHERE m.class_id = :#{#req.idClass}

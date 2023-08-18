@@ -6,7 +6,7 @@ import { ControlOutlined } from "@ant-design/icons";
 import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
 import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/TeacherStudentClasses.api";
 import { SetStudentClasses } from "../../../../app/teacher/student-class/studentClassesSlice.reduce";
-import { useAppDispatch, useAppSelector } from "../../../../app/hook";
+import { useAppDispatch } from "../../../../app/hook";
 import { useEffect, useState } from "react";
 import LoadingIndicator from "../../../../helper/loading";
 import moment from "moment";
@@ -22,7 +22,7 @@ const StudentsInMyClass = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = "Bảng điều khiển";
+    document.title = "Bảng điều khiển - thành viên";
     featchClass(idClass);
   }, []);
 
