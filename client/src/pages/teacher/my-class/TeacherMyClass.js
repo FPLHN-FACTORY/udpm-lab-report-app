@@ -31,12 +31,10 @@ import {
   GetTeacherMyClass,
   SetTeacherMyClass,
 } from "../../../app/teacher/my-class/teacherMyClassSlice.reduce";
-import StudentsInMyClass from "./students/StudentsInMyClass";
 
 const { Option } = Select;
 
 const TeacherMyClass = () => {
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [listSemester, setListSemester] = useState([]);
   const [listActivity, setListActivity] = useState([]);

@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import "./styleStudentsInMyClass.css";
+import "./styleMeetingInMyClass.css";
 import { Row, Col, Table } from "antd";
 import { Link } from "react-router-dom";
 import { ControlOutlined } from "@ant-design/icons";
@@ -28,13 +28,13 @@ const StudentsInMyClass = () => {
 
   useEffect(() => {
     if (loadingStudentClass === true) {
-      fetchData(idClass);
+      fetchData();
     }
   }, [loadingStudentClass]);
 
   const fetchData = async (idClass) => {
     await featchStudentClass(idClass);
-    featInforStudent(idClass);
+    featInforStudent();
   };
   const featchStudentClass = async (id) => {
     try {
@@ -48,7 +48,7 @@ const StudentsInMyClass = () => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-  const featInforStudent = async (idClass) => {
+  const featInforStudent = async () => {
     setLoading(false);
     try {
       let request = listStudentClass.map((item) => item.idStudent).join("|");
@@ -200,7 +200,7 @@ const StudentsInMyClass = () => {
             </Link>
             <Link
               to={`/teacher/my-class/meeting/${idClass}`}
-              className="custom-link"
+              id="menu-checked"
               style={{ fontSize: "16px", paddingLeft: "10px" }}
             >
               BUỔI HỌP &nbsp;

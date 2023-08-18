@@ -101,7 +101,17 @@ const ModalDetailTeam = ({ visible, onCancel, team, idClass, click }) => {
               />
             </Col>
           </Row>
-
+          <Row gutter={16} style={{ marginBottom: "15px" }}>
+            <Col span={24}>
+              <span>Chủ đề:</span> <br />
+              {teamDetail.subjectName !== null &&
+              teamDetail.subjectName !== "" ? (
+                <Input value={teamDetail.subjectName} type="text" readOnly />
+              ) : (
+                <Input value="Chưa có chủ đề" type="text" readOnly />
+              )}
+            </Col>
+          </Row>
           <Row gutter={16}>
             <Col span={24}>
               <span>Thành viên:</span>

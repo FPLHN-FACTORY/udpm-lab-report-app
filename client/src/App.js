@@ -17,6 +17,7 @@ import AdminDashboard from "./pages/admin/admin-dashboard/AdminDashboard";
 import TeacherMyClass from "./pages/teacher/my-class/TeacherMyClass";
 import StudentsInMyClass from "./pages/teacher/my-class/students/StudentsInMyClass";
 import TeamsInMyClass from "./pages/teacher/my-class/teams/TeamsInMyClass";
+import MeetingInMyClass from "./pages/teacher/my-class/meeting/MeetingInMyClass";
 import StudentMyClass from "./pages/student/StudentMyClass";
 
 function App() {
@@ -102,6 +103,17 @@ function App() {
                 <AuthGuard>
                   <DashBoardTeacher>
                     <TeamsInMyClass />
+                  </DashBoardTeacher>
+                </AuthGuard>
+              }
+            />
+            {/* router của Hiệu */}
+            <Route
+              path="/teacher/my-class/meeting/:idClass"
+              element={
+                <AuthGuard>
+                  <DashBoardTeacher>
+                    <MeetingInMyClass />
                   </DashBoardTeacher>
                 </AuthGuard>
               }

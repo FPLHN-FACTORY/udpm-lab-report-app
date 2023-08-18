@@ -41,7 +41,6 @@ const TeamsInMyClass = () => {
   const [loadingStudentClass, setLoadingStudentClass] = useState(false);
   const dispatch = useAppDispatch();
   const { idClass } = useParams();
-
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Bảng điều khiển";
@@ -122,8 +121,15 @@ const TeamsInMyClass = () => {
       await TeacherTeamsAPI.deleteById(teamDelete.id).then((respone) => {
         toast.success(respone.data.data);
         dispatch(DeleteTeam(teamDelete));
-        handleCancelModalCreateSusscess();
+        const objFilter = dataStudentClasses.map((item) => {
+          if (item.idTeam === teamDelete.id) {
+            return { ...item, idTeam: null, codeTeam: null, role: `1` };
+          }
+          return item;
+        });
+        dispatch(SetStudentClasses(objFilter));
         setTeamDelete({});
+        handleCancelModalCreateSusscess();
       });
     } catch (error) {
       toast.warning("Xóa thất bại !");
@@ -166,6 +172,8 @@ const TeamsInMyClass = () => {
     setObjeactTeam({});
     setShowDetailModal(false);
   };
+
+  const dataStudentClasses = useAppSelector(GetStudentClasses);
   const data = useAppSelector(GetTeams);
   const columns = [
     {
@@ -293,6 +301,13 @@ const TeamsInMyClass = () => {
               style={{ fontSize: "16px", paddingLeft: "10px" }}
             >
               QUẢN LÝ NHÓM &nbsp;
+            </Link>
+            <Link
+              to={`/teacher/my-class/meeting/${idClass}`}
+              className="custom-link"
+              style={{ fontSize: "16px", paddingLeft: "10px" }}
+            >
+              BUỔI HỌP &nbsp;
             </Link>
             <hr />
           </div>

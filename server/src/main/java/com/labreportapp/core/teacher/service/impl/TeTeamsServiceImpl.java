@@ -45,6 +45,16 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         if (checkCode != null) {
             throw new RestApiException(Message.CODE_TEAM_EXISTS);
         }
+        List<TeTeamUpdateStudentClassRequest> studentClassesRequest = request.getListStudentClasses();
+        int checkLeader = 0;
+        for (int i = 0; i < studentClassesRequest.size(); i++) {
+            if (studentClassesRequest.get(i).getRole().equals("0") || studentClassesRequest.get(i).getRole() == "0") {
+                checkLeader++;
+            }
+        }
+        if (checkLeader > 1) {
+            throw new RestApiException(Message.UNIQUE_LEADER_TEAM);
+        }
         Team team = new Team();
         team.setCode(request.getCode());
         team.setName(request.getName());
@@ -52,7 +62,6 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         team.setClassId(request.getClassId());
         Team teamCreate = teTeamsRepositoty.save(team);
         List<StudentClasses> studentClassesNew = new ArrayList<>();
-        List<TeTeamUpdateStudentClassRequest> studentClassesRequest = request.getListStudentClasses();
         studentClassesRequest.forEach(item -> {
             StudentClasses studentClasses = teStudentClassesRepository.findStudentClassesById(item.getIdStudentClass());
             if (studentClasses != null) {
@@ -81,11 +90,20 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         if (checkCode != null && !team.getCode().equals(request.getCode())) {
             throw new RestApiException(Message.CODE_TEAM_EXISTS);
         }
+        List<TeTeamUpdateStudentClassRequest> studentClassesRequest = request.getListStudentClasses();
+        int checkLeader = 0;
+        for (int i = 0; i < studentClassesRequest.size(); i++) {
+            if (studentClassesRequest.get(i).getRole().equals("0") || studentClassesRequest.get(i).getRole() == "0") {
+                checkLeader++;
+            }
+        }
+        if (checkLeader > 1) {
+            throw new RestApiException(Message.UNIQUE_LEADER_TEAM);
+        }
         team.setCode(request.getCode());
         team.setName(request.getName());
         team.setSubjectName(request.getSubjectName());
         List<StudentClasses> studentClassesNew = new ArrayList<>();
-        List<TeTeamUpdateStudentClassRequest> studentClassesRequest = request.getListStudentClasses();
         studentClassesRequest.forEach(item -> {
             StudentClasses studentClasses = teStudentClassesRepository.findStudentClassesById(item.getIdStudentClass());
             if (studentClasses != null) {

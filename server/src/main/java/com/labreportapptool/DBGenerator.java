@@ -2,6 +2,7 @@ package com.labreportapptool;
 
 import com.labreportapp.entity.Activity;
 import com.labreportapp.entity.Class;
+import com.labreportapp.entity.Meeting;
 import com.labreportapp.entity.Semester;
 import com.labreportapp.entity.StudentClasses;
 import com.labreportapp.entity.Team;
@@ -378,6 +379,9 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses16.setStatus(StatusTeam.ACTIVE);
         studentClasses16.setId(studentClassesRepository.save(studentClasses16).getId());
 
+    // meeting
+        Meeting meeting1 = new Meeting();
+//        meeting1.set
     }
 
     public static void main(String[] args) {

@@ -26,8 +26,6 @@ public class TeUpdateTeamsRequest {
     @NotBlank
     private String name;
 
-    @NotEmpty
-    @NotBlank
     private String subjectName;
 
     private List<TeTeamUpdateStudentClassRequest> listStudentClasses;

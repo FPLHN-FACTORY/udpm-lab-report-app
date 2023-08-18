@@ -32,7 +32,6 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
   const [name, setName] = useState("");
   const [errorName, setErrorName] = useState("");
   const [subjectName, setSubjectName] = useState("");
-  const [errorSubjectName, setErrorSubjectName] = useState("");
   const [errorStudent, setErrorStudent] = useState("");
   const [listStudentNotJoin, setListStudentNotJoin] = useState([]);
   const [listStudentsChange, setListStudentsChange] = useState([]);
@@ -51,7 +50,6 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
   const cancelFaild = () => {
     setErrorCode("");
     setErrorName("");
-    setErrorSubjectName("");
     setErrorStudent("");
     const objFilter = dataStudentClasses.map((item2) => {
       const matchedItem = listDetelteTemp.find(
@@ -107,7 +105,7 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
     setListShowTable([...listMulty, ...listStudentDetail]);
   };
 
-  const featchDataStudent = () => {
+  const featchDataStudent = async () => {
     const listFilter = dataStudentClasses.filter(
       (item) => item.idTeam === team.id
     );
@@ -137,7 +135,7 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
     const objFilter = dataStudentClasses.map((item) => {
       if (item.idStudentClass === id) {
         setCheckDataStudent(true);
-        return { ...item, idTeam: null, codeTeam: null };
+        return { ...item, idTeam: null, codeTeam: null, role: `1` };
       }
       return item;
     });
@@ -179,12 +177,6 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
       check++;
     } else {
       setErrorName("");
-    }
-    if (subjectName.trim() === "") {
-      setErrorSubjectName("Chủ đề không được để trống");
-      check++;
-    } else {
-      setErrorSubjectName("");
     }
     if (listShowTable.length <= 0) {
       setErrorStudent("Nhóm phải có ít nhất 1 thành viên");
@@ -350,7 +342,6 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
           <Row gutter={16} style={{ marginBottom: "15px" }}>
             <Col span={24}>
               {" "}
-              <span className="notBlank">*</span>
               <span>Chủ đề:</span> <br />
               <Input
                 placeholder="Nhập chủ đề"
@@ -360,7 +351,6 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
                 }}
                 type="text"
               />
-              <span className="error">{errorSubjectName}</span>
             </Col>
           </Row>
           <Row style={{ marginBottom: "15px" }}>

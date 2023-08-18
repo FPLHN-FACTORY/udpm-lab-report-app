@@ -32,9 +32,8 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
   const [name, setName] = useState("");
   const [errorName, setErrorName] = useState("");
   const [subjectName, setSubjectName] = useState("");
-  const [errorSubjectName, setErrorSubjectName] = useState("");
   const [errorMembers, setErrorMembers] = useState("");
-  const [listStudent, setListStudent] = useState([]);
+  const [listStudentMulty, setListStudentMulty] = useState([]);
   const [listStudentClass, setListStudentClass] = useState([]);
   const [dataTable, setDataTable] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -55,7 +54,7 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
       setSubjectName("");
       setCode("");
       setName("");
-      setListStudent([]);
+      setListStudentMulty([]);
       setListStudentClass([]);
       setListStudentsChange([]);
       setDataTable([]);
@@ -83,8 +82,7 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
     const listNotFilter = dataStudentClasses.filter(
       (item) => item.idTeam == null || item.idTeam === "null"
     );
-    setListStudent(listNotFilter);
-    // setListStudentDetail(listFilter);
+    setListStudentMulty(listNotFilter);
     setCheckDataStudent(false);
   };
   const fetchData = async (idClass) => {
@@ -113,25 +111,10 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
   const featInforStudent = async () => {
     setLoading(false);
     try {
-      let request = listStudentClass.map((item) => item.idStudent).join("|");
-      const listStudentAPI = await TeacherStudentClassesAPI.getAllInforStudent(
-        `?id=` + request
+      const listNotFilter = dataStudentClasses.filter(
+        (item) => item.idTeam == null || item.idTeam === "null"
       );
-      const listStudentInfor = listStudentAPI.data
-        .filter((item1) =>
-          listStudentClass.some((item2) => item1.id === item2.idStudent)
-        )
-        .map((item1) => {
-          const matchedObject = listStudentClass.find(
-            (item2) => item2.idStudent === item1.id
-          );
-          return {
-            ...item1,
-            ...matchedObject,
-            role: "1",
-          };
-        });
-      setListStudent(listStudentInfor);
+      setListStudentMulty(listNotFilter);
       setLoading(false);
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
@@ -139,9 +122,13 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
   };
 
   const featchDataTable = () => {
-    const list = listStudent.filter((item1) => {
-      return listStudentsChange.find((item2) => item1.idStudent === item2);
-    });
+    const list = dataStudentClasses
+      .filter((item1) => {
+        return listStudentsChange.find((item2) => item1.idStudent === item2);
+      })
+      .map((item) => {
+        return { ...item, role: `1` };
+      });
     setDataTable(list);
   };
 
@@ -178,13 +165,6 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
     } else {
       setErrorName("");
     }
-    if (subjectName.trim() === "") {
-      setErrorSubjectName("Chủ đề không được để trống");
-      check++;
-    } else {
-      setErrorSubjectName("");
-    }
-
     if (listStudentsChange.length <= 0) {
       setErrorMembers("Nhóm phải có ít nhất 1 thành viên");
       check++;
@@ -340,7 +320,6 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
               <Row gutter={16} style={{ marginBottom: "15px" }}>
                 <Col span={24}>
                   {" "}
-                  <span className="notBlank">*</span>
                   <span>Chủ đề:</span> <br />
                   <Input
                     placeholder="Nhập chủ đề"
@@ -350,7 +329,6 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
                     }}
                     type="text"
                   />
-                  <span className="error">{errorSubjectName}</span>
                 </Col>
               </Row>
               <Row style={{ marginBottom: "15px" }}>
@@ -374,7 +352,7 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
                       -1
                     }
                   >
-                    {listStudent.map((member) => (
+                    {listStudentMulty.map((member) => (
                       <Option
                         label={member.email}
                         value={member.id}
