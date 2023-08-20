@@ -6,6 +6,7 @@ import teSemesterSliceReduce from "./teacher/semester/teacherSemesterSlice.reduc
 import teTeamsSliceReduce from "./teacher/teams/teamsSlice.reduce";
 import teacherSemesterSliceReduce from "./admin/ClassManager.reducer";
 
+
 export const store = configureStore({
   reducer: {
     teMyClass: teMyClassSliceReduce,

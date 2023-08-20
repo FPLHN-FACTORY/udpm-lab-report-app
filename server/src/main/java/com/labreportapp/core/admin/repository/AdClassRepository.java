@@ -6,6 +6,8 @@ import com.labreportapp.core.admin.model.response.AdClassResponse;
 import com.labreportapp.core.admin.model.response.AdSemesterAcResponse;
 import com.labreportapp.entity.Class;
 import com.labreportapp.repository.ClassRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -69,4 +71,31 @@ public interface AdClassRepository extends ClassRepository {
            OR a.semester_id = :#{#req.idSemester})
             """, nativeQuery = true)
     List<AdActivityClassResponse> getAllByIdSemester(@Param("req") AdFindClassRequest req);
+
+    @Query(value = """
+            SELECT ROW_NUMBER() OVER(ORDER BY c.last_modified_date DESC ) AS stt,
+            c.code, c.name,c.start_time
+            ,c.class_period,c.class_size,c.teacher_id,a.name as nameActivity 
+            FROM activity a
+            JOIN class c ON c.activity_id = a.id
+            JOIN semester s ON s.id = a.semester_id
+            where (:#{#req.idSemester} IS NULL OR :#{#req.idSemester} LIKE '' OR :#{#req.idSemester} LIKE s.id)
+            and (:#{#req.idActivity} IS NULL OR :#{#req.idActivity} LIKE '' OR :#{#req.idActivity} LIKE a.id)
+            and (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR c.code LIKE %:#{#req.code}%)
+            and (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR  c.class_period = :#{#req.classPeriod})
+            and (:#{#req.idTeacher} IS NULL OR :#{#req.idTeacher} LIKE '' OR :#{#req.idTeacher} LIKE c.teacher_id)
+            ORDER BY c.last_modified_date DESC
+                                 """,countQuery = """
+                        SELECT COUNT(c.id)
+                         FROM activity a
+                        JOIN class c ON c.activity_id = a.id
+                        JOIN semester s ON s.id = a.semester_id
+                         WHERE (:#{#req.idSemester} IS NULL OR :#{#req.idSemester} LIKE '' OR :#{#req.idSemester} LIKE s.id)
+                        and (:#{#req.idActivity} IS NULL OR :#{#req.idActivity} LIKE '' OR :#{#req.idActivity} LIKE a.id)
+                        and (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR c.code LIKE %:#{#req.code}%)
+                        and (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR  c.class_period = :#{#req.classPeriod})
+                        and (:#{#req.idTeacher} IS NULL OR :#{#req.idTeacher} LIKE '' OR :#{#req.idTeacher} LIKE c.teacher_id)
+
+            """ ,nativeQuery = true)
+    Page<AdClassResponse> findClassBySemesterAndActivity(@Param("req") AdFindClassRequest req, Pageable pageable);
 }

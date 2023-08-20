@@ -13,7 +13,9 @@ import org.springframework.data.rest.core.config.Projection;
 @Projection(types = {Class.class, Activity.class})
 
 public interface AdClassResponse extends IsIdentified {
+    @Value("#{target.stt}")
     Integer getStt();
+
     @Value("#{target.code}")
     String getCode();
 
@@ -35,6 +37,6 @@ public interface AdClassResponse extends IsIdentified {
     @Value("#{target.nameActivity}")
     String getActivityName();
 
-    @Value("#{target.semesterId}")
-    String getSemesterName();
+//    @Value("#{target.semesterId}")
+//    String getSemesterName();
 }

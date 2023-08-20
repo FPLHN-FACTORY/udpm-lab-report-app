@@ -2,16 +2,17 @@ body {
     background-image: url("");
   }
   
-  .stakeholder_management {
-    padding-top: 50px;
+  .class_management {
+    padding-top: 20px;
     padding-left: 10px;
+    overflow-x: hidden
   }
   
-  .title_stakeholder_management{
+  .title_class{
     /* margin-top: -20px; */
     font-size: 20px;
     font-weight: 500;
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
   }
   
   .filter {
@@ -117,14 +118,31 @@ body {
   
   .inputCode{
     margin-top: 0px;
-    margin-left: 110px;
+    margin-left: 165px;
     
   }
-  .selectSearch1{
-    margin-left: 150px;
-  }
-  .selectSearch2{
-    margin-right: 110px;
-    margin-left: 50px;
 
+  .selectSearch2{
+    /* margin-right: 10px; */
+    margin-left: 279px;
+  }
+
+  .selectSearch3{
+      /* margin-right: 10px; */
+      margin-left: 250px;
+  
+    }
+    .selectActiAndSemes{
+      margin-left: 155px;
+      margin-top: 20px;
+      margin-bottom: 20px;
+
+    }
+    .selectPriodAndPerson{
+      margin-bottom: -10px;
+      margin-left: 157px;
+
+    }
+  .createButton{
+    margin-left: 1050px;
   }

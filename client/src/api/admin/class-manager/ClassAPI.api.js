@@ -47,5 +47,32 @@ export class ClassAPI {
       url: `/admin/class-managerment/get-all/id-semester?idSemester=` + id,
     });
   }
-  
+  static create = (data) => {
+    return request({
+      method: "POST",
+      url: `/admin/class-managerment/add`,
+      data: data,
+    });
+  };
+  static getAllMyClass(filter) {
+    return request({
+      method: "GET",
+      url:
+      `/admin/class-managerment/getAllSearch` +
+        `?idTeacher=` +
+        filter.idTeacher +
+        `&idSemester=` +
+        filter.idSemester +
+        `&idActivity=` +
+        filter.idActivity +
+        `&code=` +
+        filter.code +
+        `&classPeriod=` +
+        filter.classPeriod +
+        `&page=` +
+        filter.page +
+        `&size=` +
+        filter.size,
+    });
+  }
 }
