@@ -3,12 +3,12 @@ import { useEffect, useState } from "react";
 import { AdSemesterAPI } from "../../../../api/admin/AdSemesterAPI";
 import moment from "moment";
 import { useAppSelector } from "../../../../app/hook";
-import { AddSemester } from "../../../../app/admin/AdSemester.reducer";
+import { UpdateSemester } from "../../../../app/admin/AdSemester.reducer";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAppDispatch } from "../../../../app/hook";
 
-const ModalCreateSemester = ({ visible, onCancel }) => {
+const ModalUpdateSemester = ({ visible, onCancel, semester }) => {
   const [name, setName] = useState("");
   const [errorName, setErrorName] = useState("");
   const [startTime, setStartTime] = useState("");
@@ -18,15 +18,21 @@ const ModalCreateSemester = ({ visible, onCancel }) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    return () => {
-      setName("");
-      setStartTime("");
-      setEndTime("");
-      setErrorEndTime("");
-      setErrorStartTime("");
-      setErrorName();
-    };
-  }, [visible]);
+    if (semester !== null) {
+      setName(semester.name);
+      setStartTime(semester.startTime);
+      setEndTime(semester.endTime);
+
+      return () => {
+        setName("");
+        setStartTime("");
+        setEndTime("");
+        setErrorEndTime("");
+        setErrorStartTime("");
+        setErrorName();
+      };
+    }
+  }, [semester]);
 
   const create = () => {
     let check = 0;
@@ -70,15 +76,16 @@ const ModalCreateSemester = ({ visible, onCancel }) => {
 
     if (check === 0) {
       let obj = {
+        id: semester.id,
         name: name,
-        startTime: moment(startTime, "YYYY-MM-DD").valueOf(),
-        endTime: moment(endTime, "YYYY-MM-DD").valueOf(),
+        startTime: moment(startTime).valueOf(),
+        endTime: moment(endTime).valueOf(),
       };
 
-      AdSemesterAPI.addSemester(obj).then(
+      AdSemesterAPI.updateSemester(obj, semester.id).then(
         (response) => {
-          toast.success("Thêm thành công!");
-          dispatch(AddSemester(response.data.data));
+          toast.success("Cập nhật thành công!");
+          dispatch(UpdateSemester(response.data.data));
           onCancel();
         },
         (error) => {
@@ -99,7 +106,7 @@ const ModalCreateSemester = ({ visible, onCancel }) => {
       >
         {" "}
         <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
-          <span style={{ fontSize: "18px" }}>Thêm mới học kỳ</span>
+          <span style={{ fontSize: "18px" }}>Cập nhật học kỳ</span>
         </div>
         <div style={{ marginTop: "15px", borderBottom: "1px solid black" }}>
           <Row gutter={16} style={{ marginBottom: "15px" }}>
@@ -119,7 +126,7 @@ const ModalCreateSemester = ({ visible, onCancel }) => {
             <Col span={12}>
               <span>Thời gian bắt đầu:</span> <br />
               <Input
-                value={startTime}
+                value={moment(startTime).format("YYYY-MM-DD")}
                 onChange={(e) => {
                   setStartTime(e.target.value);
                 }}
@@ -130,7 +137,7 @@ const ModalCreateSemester = ({ visible, onCancel }) => {
             <Col span={12}>
               <span>Thời gian kết thúc:</span> <br />
               <Input
-                value={endTime}
+                value={moment(endTime).format("YYYY-MM-DD")}
                 onChange={(e) => {
                   setEndTime(e.target.value);
                 }}
@@ -150,7 +157,7 @@ const ModalCreateSemester = ({ visible, onCancel }) => {
               }}
               onClick={create}
             >
-              Thêm
+              Cập nhật
             </Button>
             <Button
               style={{
@@ -168,4 +175,4 @@ const ModalCreateSemester = ({ visible, onCancel }) => {
   );
 };
 
-export default ModalCreateSemester;
+export default ModalUpdateSemester;

@@ -10,18 +10,22 @@ import {
   faTrash,
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
-import { Button, Input, Pagination, Table, Tooltip } from "antd";
+import { Button, Input, Pagination, Table, Tooltip, Popconfirm } from "antd";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useAppSelector, useAppDispatch } from "../../../app/hook";
 import {
   SetSemester,
   GetSemester,
+  DeleteSemester,
 } from "../../../app/admin/AdSemester.reducer";
-import { AdSemesterAPI } from "../../../api/admin/AdSemesterAPI";
-import React, { useCallback } from 'react';
-import LoadingIndicator from "../../../helper/loading";
 import { toast } from "react-toastify";
+import { AdSemesterAPI } from "../../../api/admin/AdSemesterAPI";
+import moment from "moment";
+import React, { useCallback } from "react";
+import ModalCreateSemester from "./modal-create/ModalCreateSemester";
+import ModalUpdateSemester from "./modal-update/ModalUpdateSemester";
+import LoadingIndicator from "../../../helper/loading";
 
 const SemesterManagement = () => {
   const [semester, setSemester] = useState(null);
@@ -30,23 +34,26 @@ const SemesterManagement = () => {
   const [current, setCurrent] = useState(1);
   const [total, setTotal] = useState(0);
   const dispatch = useAppDispatch();
-  const [start, setStart] = useState(0);
-  const startIndex = (current - 1) * 10;
   const [loading, setLoading] = useState(false);
-
-  const fetchData = useCallback(() => {
-    setLoading(true);
-    AdSemesterAPI.fetchAllSemester(name, current).then((response) => {
-      dispatch(SetSemester(response.data.data.data));
-      setTotal(response.data.data.totalPages);
-      setLoading(false);
-      console.log(response.data.data.data)
-    });
-  }, [name, current, dispatch]);
 
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+  }, [current]);
+
+  const fetchData = () => {
+    setLoading(true);
+    let filter = {
+      name: name,
+      page: current,
+      size: 10,
+    };
+    AdSemesterAPI.fetchAllSemester(filter).then((response) => {
+      dispatch(SetSemester(response.data.data.data));
+      setTotal(response.data.data.totalPages);
+      setLoading(false);
+      console.log(response.data.data.data);
+    });
+  };
 
   const data = useAppSelector(GetSemester);
 
@@ -55,14 +62,14 @@ const SemesterManagement = () => {
       title: "STT",
       dataIndex: "stt",
       key: "stt",
-      //sorter: (a, b) => a.stt.localeCompare(b.stt),
-      render: (text, record, index) => startIndex + index + 1,
+      render: (text, record, index) => (current - 1) * 10 + index + 1,
     },
     {
       title: "Tên học kỳ",
       dataIndex: "name",
       key: "name",
       sorter: (a, b) => a.name.localeCompare(b.name),
+      width: "30%",
     },
     {
       title: "Thời gian",
@@ -85,7 +92,6 @@ const SemesterManagement = () => {
           </span>
         );
       },
-      width: "15%",
     },
     {
       title: "Hành động",
@@ -96,18 +102,82 @@ const SemesterManagement = () => {
           <Tooltip title="Cập nhật">
             <FontAwesomeIcon
               onClick={() => {
-                // buttonUpdate(record);
+                buttonUpdate(record);
               }}
               style={{ marginRight: "15px", cursor: "pointer" }}
               icon={faPencil}
               size="1x"
             />
           </Tooltip>
+          <Popconfirm
+            title="Xóa học kỳ"
+            description="Bạn có chắc chắn muốn xóa học kỳ này không?"
+            onConfirm={() => {
+              buttonDelete(record.id);
+            }}
+            okText="Có"
+            cancelText="Không"
+          >
+            <Tooltip title="Xóa">
+              <FontAwesomeIcon
+                style={{ cursor: "pointer" }}
+                icon={faTrash}
+                size="1x"
+              />
+            </Tooltip>
+          </Popconfirm>
         </div>
       ),
     },
   ];
 
+  const [modalUpdate, setModalUpdate] = useState(false);
+  const [modalCreate, setModalCreate] = useState(false);
+
+  const buttonCreate = () => {
+    document.querySelector("body").style.overflowX = "hidden";
+    setModalCreate(true);
+  };
+
+  const buttonCreateCancel = () => {
+    document.querySelector("body").style.overflowX = "auto";
+    setModalCreate(false);
+    setSemester(null);
+  };
+
+  const buttonUpdate = (record) => {
+    document.querySelector("body").style.overflowX = "hidden";
+    setModalUpdate(true);
+    setSemester(record);
+  };
+
+  const buttonUpdateCancel = () => {
+    document.querySelector("body").style.overflowX = "auto";
+    setModalUpdate(false);
+  };
+
+  const buttonSearch = () => {
+    fetchData();
+    setCurrent(1);
+  };
+
+  const clearData = () => {
+    setName("");
+  };
+
+  const buttonDelete = (id) => {
+    AdSemesterAPI.deleteSemester(id).then(
+      (response) => {
+        toast.success("Xóa thành công!");
+        dispatch(DeleteSemester(response.data.data));
+        fetchData();
+        console.log(response.data.data);
+      },
+      (error) => {
+        toast.error(error.response.data.message);
+      }
+    );
+  };
   return (
     <div className="semester">
       {loading && <LoadingIndicator />}
@@ -121,7 +191,7 @@ const SemesterManagement = () => {
         <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
         <hr />
         <div className="title__search">
-          Tên kỳ học:{" "}
+          Tên học kỳ:{" "}
           <Input
             type="text"
             value={name}
@@ -132,16 +202,10 @@ const SemesterManagement = () => {
           />
         </div>
         <div className="box_btn_filter">
-          <Button
-            className="btn_filter"
-            // onClick={buttonSearch}
-          >
+          <Button className="btn_filter" onClick={buttonSearch}>
             Tìm kiếm
           </Button>
-          <Button
-            className="btn__clear"
-            // onClick={clearData}
-          >
+          <Button className="btn__clear" onClick={clearData}>
             Làm mới bộ lọc
           </Button>
         </div>
@@ -163,7 +227,7 @@ const SemesterManagement = () => {
                 color: "white",
                 backgroundColor: "rgb(55, 137, 220)",
               }}
-              // onClick={buttonCreate}
+              onClick={buttonCreate}
             >
               <FontAwesomeIcon
                 icon={faPlus}
@@ -188,14 +252,25 @@ const SemesterManagement = () => {
             <Pagination
               simple
               current={current}
-              onChange={(value) => {
-                setCurrent(value);
+              onChange={(page) => {
+                setCurrent(page);
               }}
               total={total * 10}
             />
           </div>
         </div>
       </div>
+
+      <ModalCreateSemester
+        visible={modalCreate}
+        onCancel={buttonCreateCancel}
+      />
+
+      <ModalUpdateSemester
+        visible={modalUpdate}
+        onCancel={buttonUpdateCancel}
+        semester={semester}
+      />
     </div>
   );
 };

@@ -15,8 +15,8 @@ public interface AdSemesterResponse extends IsIdentified {
     String getName();
 
     @Value("#{target.start_time}")
-    String getStartTime();
+    Long getStartTime();
 
     @Value("#{target.end_time}")
-    String getendTime();
+    Long getEndTime();
 }
