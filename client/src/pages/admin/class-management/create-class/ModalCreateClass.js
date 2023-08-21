@@ -35,6 +35,7 @@ const ModalCreateProject = ({visible,onCancel}) => {
   const [code, setCode] = useState("");
   const [classPeriod, setClassPeriod] = useState("");
   const [startTime, setStartTime] = useState("");
+  const [classSize, setClassSize] = useState(0);
 
   const [errorName, setErrorName] = useState("");
   const [errorCode, setErrorCode] = useState("");
@@ -149,7 +150,7 @@ const ModalCreateProject = ({visible,onCancel}) => {
       let obj = {
         name: name,
         code: code,
-        // classSize: classSize,
+        classSize: classSize,
         classPeriod: classPeriod,
         startTime: moment(startTime, "YYYY-MM-DD").valueOf(),
         teacherId: selectedItemsPerson,
@@ -182,7 +183,7 @@ const ModalCreateProject = ({visible,onCancel}) => {
       >
         <div>
           <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
-            <span style={{ fontSize: "18px" }}>Cập nhật giai đoạn</span>
+            <span style={{ fontSize: "18px" }}>Thêm Lớp Học</span>
           </div>
           
           <div style={{ marginTop: "15px", borderBottom: "1px solid black" }}>
