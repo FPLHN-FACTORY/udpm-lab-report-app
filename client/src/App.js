@@ -19,6 +19,9 @@ import StudentsInMyClass from "./pages/teacher/my-class/students/StudentsInMyCla
 import TeamsInMyClass from "./pages/teacher/my-class/teams/TeamsInMyClass";
 import StudentMyClass from "./pages/student/my-class/StudentMyClass";
 import StudentSchedule from "./pages/student/schedule/StudentSchedule";
+import MeetingInMyClass from "./pages/teacher/my-class/meeting/MeetingInMyClass";
+import DetailMeeting from "./pages/teacher/my-class/meeting/detail/DetailMeeting";
+import StudentMyClass from "./pages/student/StudentMyClass";
 
 function App() {
   return (
@@ -103,7 +106,7 @@ function App() {
             />
             {/* router của Hiệu */}
             <Route
-              path="/teacher/my-class/students/:id"
+              path="/teacher/my-class/students/:idClass"
               element={
                 <AuthGuard>
                   <DashBoardTeacher>
@@ -114,11 +117,33 @@ function App() {
             />
             {/* router của Hiệu */}
             <Route
-              path="/teacher/my-class/teams/:id"
+              path="/teacher/my-class/teams/:idClass"
               element={
                 <AuthGuard>
                   <DashBoardTeacher>
                     <TeamsInMyClass />
+                  </DashBoardTeacher>
+                </AuthGuard>
+              }
+            />
+            {/* router của Hiệu */}
+            <Route
+              path="/teacher/my-class/meeting/:idClass"
+              element={
+                <AuthGuard>
+                  <DashBoardTeacher>
+                    <MeetingInMyClass />
+                  </DashBoardTeacher>
+                </AuthGuard>
+              }
+            />
+            {/* router detail  meeting của Hiệu */}
+            <Route
+              path="/teacher/my-class/meeting/detail/:idClass/:idMeeting"
+              element={
+                <AuthGuard>
+                  <DashBoardTeacher>
+                    <DetailMeeting />
                   </DashBoardTeacher>
                 </AuthGuard>
               }

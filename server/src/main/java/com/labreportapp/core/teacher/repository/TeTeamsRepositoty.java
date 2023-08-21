@@ -25,6 +25,7 @@ public interface TeTeamsRepositoty extends JpaRepository<Team, String> {
             t.created_date as createdDate
             FROM team t
             WHERE t.class_id = :#{#req.idClass}
+            ORDER BY t.code ASC
                      """, countQuery = """
             SELECT COUNT(DISTINCT t.id)
             FROM team t

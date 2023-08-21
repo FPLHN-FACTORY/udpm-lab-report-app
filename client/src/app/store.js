@@ -4,8 +4,9 @@ import activityManagementSliceReducer from "./admin/activity-management/activity
 import teMyClassSliceReduce from "./teacher/my-class/teacherMyClassSlice.reduce";
 import teSemesterSliceReduce from "./teacher/semester/teacherSemesterSlice.reduce";
 import teTeamsSliceReduce from "./teacher/teams/teamsSlice.reduce";
+import teMeetingSliceReduce from "./teacher/meeting/teacherMeetingSlice.reduce";
 import teacherSemesterSliceReduce from "./admin/ClassManager.reducer";
-
+import teStudentClassesSliceReduce from "./teacher/student-class/studentClassesSlice.reduce";
 
 export const store = configureStore({
   reducer: {
@@ -13,6 +14,8 @@ export const store = configureStore({
     teSemester: teSemesterSliceReduce,
     teTeams: teTeamsSliceReduce,
     teacherSemester: teacherSemesterSliceReduce,
+    teStudentClasses: teStudentClassesSliceReduce,
+    teMeetingClass: teMeetingSliceReduce,
     activityManagement: activityManagementSliceReducer,
     adSemester: adSemesterSliceReducer,
   },

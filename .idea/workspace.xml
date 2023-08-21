@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="fe93e581-5589-4bad-ba6a-389fa82a0816" name="Default Changelist" comment="" />
+    <list default="true" id="fe93e581-5589-4bad-ba6a-389fa82a0816" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/infrastructure/constant/TypeMeeting.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/teacher/my-class/teams/modal-create/ModalCreateTeam.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/teacher/my-class/teams/modal-create/ModalCreateTeam.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/entity/Meeting.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/entity/Meeting.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -19,7 +24,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/server" />
     <property name="nodejs_package_manager_path" value="npm" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -31,6 +36,8 @@
       <option name="presentableId" value="Default" />
       <updated>1689935329923</updated>
       <workItem from="1689935331793" duration="207000" />
+      <workItem from="1692284603639" duration="47000" />
+      <workItem from="1692333622067" duration="32000" />
     </task>
     <servers />
   </component>
