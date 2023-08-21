@@ -2,11 +2,16 @@ import { request } from "../../../helper/request.helper";
 const url = `/teacher/meeting`;
 
 export class TeacherMeetingAPI {
-  static getAllMeetingByIdClassAndIdTeam(data) {
+  static countMeetingByIdClass(idClass) {
     return request({
       method: "GET",
-      url: url + `?idClass=` + data.idClass + `&idTeam=` + data.idTeam,
-      //url: `http://localhost:2509/teacher/meeting?idClass=a9c0ce5b-039e-456a-909d-dabec3e7b231&idTeam=3e01b3f8-cedd-4308-9108-0ef43c3f10fa`,
+      url: url + `/count?idClass=` + idClass,
+    });
+  }
+  static getAllMeetingByIdClass(idClass) {
+    return request({
+      method: "GET",
+      url: url + `?idClass=` + idClass,
     });
   }
   static getDetailByIdMeeting(idMeeting) {

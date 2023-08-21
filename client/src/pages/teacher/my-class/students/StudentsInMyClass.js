@@ -5,8 +5,11 @@ import { Link } from "react-router-dom";
 import { ControlOutlined } from "@ant-design/icons";
 import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
 import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/TeacherStudentClasses.api";
-import { SetStudentClasses } from "../../../../app/teacher/student-class/studentClassesSlice.reduce";
-import { useAppDispatch } from "../../../../app/hook";
+import {
+  GetStudentClasses,
+  SetStudentClasses,
+} from "../../../../app/teacher/student-class/studentClassesSlice.reduce";
+import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import { useEffect, useState } from "react";
 import LoadingIndicator from "../../../../helper/loading";
 import moment from "moment";
@@ -23,21 +26,13 @@ const StudentsInMyClass = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Bảng điều khiển - thành viên";
-    featchClass(idClass);
     fetchData(idClass);
+    // featchClass(idClass);
+    // featchStudentClass(idClass);
   }, []);
 
-  const featchClass = async (idClass) => {
-    setLoading(false);
-    try {
-      await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
-        setClassDetail(responese.data.data);
-      });
-    } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
-    }
-  };
   const fetchData = async (idClass) => {
+    await featchClass(idClass);
     await featchStudentClass(idClass);
     await featInforStudent(idClass);
   };
@@ -46,6 +41,9 @@ const StudentsInMyClass = () => {
       await TeacherStudentClassesAPI.getStudentInClasses(idClass).then(
         (responese) => {
           setListStudentClass(responese.data.data);
+          console.log("______________________");
+          console.log(listStudentClass);
+          featInforStudent(idClass);
           setLoadingStudentClass(true);
         }
       );
@@ -54,7 +52,6 @@ const StudentsInMyClass = () => {
     }
   };
   const featInforStudent = async (idClass) => {
-    setLoading(false);
     try {
       let request = listStudentClass.map((item) => item.idStudent).join("|");
       const listStudentAPI = await TeacherStudentClassesAPI.getAllInforStudent(
@@ -73,19 +70,34 @@ const StudentsInMyClass = () => {
             ...matchedObject,
           };
         });
-      dispatch(SetStudentClasses(listShowTable));
       setDataTable(listShowTable);
+      dispatch(SetStudentClasses(listShowTable));
+      console.log(
+        "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+      );
+      console.log(listShowTable);
       setLoading(true);
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-  useEffect(() => {
-    if (loadingStudentClass === true) {
-      fetchData(idClass);
+  const featchClass = async (idClass) => {
+    setLoading(false);
+    try {
+      await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
+        setClassDetail(responese.data.data);
+      });
+    } catch (error) {
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
-  }, [loadingStudentClass]);
-  const data = dataTable;
+  };
+  // useEffect(() => {
+  //   if (loadingStudentClass === true) {
+  //     fetchData(idClass);
+  //   }
+  // }, [loadingStudentClass]);
+
+  const data = useAppSelector(GetStudentClasses);
   const columns = [
     {
       title: "#",
@@ -210,11 +222,12 @@ const StudentsInMyClass = () => {
           <div
             className="box-center"
             style={{
-              height: "28px",
-              width: "180px",
+              height: "30px",
+              width: "200px",
               backgroundColor: "#007bff",
               color: "white",
-              margin: "0px 0px 0px 85%",
+              borderRadius: "5px",
+              margin: "5px 0px 0px 84.4%",
             }}
           >
             {" "}

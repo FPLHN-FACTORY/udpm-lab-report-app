@@ -15,7 +15,7 @@ public interface TeMeetingRespone {
 
     @Value("#{target.descriptions}")
     String getDescriptions();
-//
-//    @Value("#{target.meeting_date}")
-//    Long getMeetingDate();
+
+    @Value("#{target.meeting_date}")
+    Long getMeetingDate();
 }

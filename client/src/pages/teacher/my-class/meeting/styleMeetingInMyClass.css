@@ -3,6 +3,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  place-items: center;
 }
 .box-filter {
   margin: 15px 10px 15px 13px;
@@ -28,4 +29,44 @@
 .content-class span {
   font-size: 17px;
   font-weight: 400;
+}
+.box-card {
+  margin: 0px 0px 0px 15%;
+  width: 800px;
+  height: 68px;
+  display: flex;
+  place-items: center;
+  border-bottom: 1px solid rgb(206, 206, 206);
+}
+.box-card .content-left {
+  margin-left: 35px;
+}
+.box-card:hover {
+  border-radius: 10px;
+  background-color: rgb(240, 240, 240);
+}
+.box-icon {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background-color: #007bff;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 40px;
+  border: 2px solid white;
+  background-color: #4285f4;
+  margin-right: 10px;
+}
+.title-left {
+  float: left;
+  min-width: 600px;
+}
+.title-right {
+  width: 200px;
+  margin-right: 0;
+  font-size: 13px;
+  color: grey;
+}
+.data-table {
+  margin: 100px 0px 0xp 0px;
 }

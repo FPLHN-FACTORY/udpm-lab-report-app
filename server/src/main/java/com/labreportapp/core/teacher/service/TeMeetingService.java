@@ -12,4 +12,5 @@ public interface TeMeetingService {
 
     List<TeMeetingRespone> searchMeetingByIdClass(final TeFindMeetingRequest request);
 
+    Integer countMeetingByClassId(String idClass);
 }

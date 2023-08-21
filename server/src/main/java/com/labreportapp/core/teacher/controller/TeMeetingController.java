@@ -28,4 +28,10 @@ public class TeMeetingController {
         List<TeMeetingRespone> list = teMeetingService.searchMeetingByIdClass(request);
         return new ResponseObject(list);
     }
+
+    @GetMapping("/count")
+    public ResponseObject getCountTeMeeting(final TeFindMeetingRequest request) {
+        Integer count = teMeetingService.countMeetingByClassId(request.getIdClass());
+        return new ResponseObject(count);
+    }
 }

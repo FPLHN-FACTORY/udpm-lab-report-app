@@ -24,4 +24,9 @@ public class TeMeetingServiceImpl implements TeMeetingService {
         return list;
     }
 
+    @Override
+    public Integer countMeetingByClassId(String idClass) {
+        return teMeetingRepository.countMeetingByClassId(idClass);
+    }
+
 }

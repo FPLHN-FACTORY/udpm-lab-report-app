@@ -24,16 +24,16 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
             m.meeting_date as meeting_date
             FROM meeting m
             JOIN class c ON c.id = m.class_id
-            JOIN team t ON t.class_id = c.id
-            WHERE m.class_id = :#{#req.idClass} and t.id = :#{#req.idTeam}
+            WHERE m.class_id = :#{#req.idClass}
             ORDER BY m.meeting_date ASC
                      """, countQuery = """
             SELECT COUNT(DISTINCT m.id)
               FROM meeting m
             JOIN class c ON c.id = m.class_id
-            JOIN team t ON t.class_id = c.id
-            WHERE m.class_id = :#{#req.idClass} and t.id = :#{#req.idTeam}
+            WHERE m.class_id = :#{#req.idClass}
             """, nativeQuery = true)
     List<TeMeetingRespone> findMeetingByIdClass(@Param("req") TeFindMeetingRequest req);
+
+    Integer countMeetingByClassId(String idClass);
 
 }

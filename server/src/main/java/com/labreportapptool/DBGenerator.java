@@ -4,6 +4,7 @@ import com.labreportapp.entity.Activity;
 import com.labreportapp.entity.Class;
 import com.labreportapp.entity.HomeWork;
 import com.labreportapp.entity.Meeting;
+import com.labreportapp.entity.Note;
 import com.labreportapp.entity.Semester;
 import com.labreportapp.entity.StudentClasses;
 import com.labreportapp.entity.Team;
@@ -388,7 +389,7 @@ public class DBGenerator implements CommandLineRunner {
         meeting1.setName("Buổi 1");
         meeting1.setMeetingDate(new Date().getTime() + 86400000);
         meeting1.setMeetingPeriod(MeetingPeriod.CA_1);
-        meeting1.setDescriptions("Buổi học 1 online - beee fliy");
+        meeting1.setDescriptions("Buổi học 1 online - BEE FLY");
         meeting1.setClassId(class1.getId());
         meeting1.setTypeMeeting(TypeMeeting.ONLINE);
         meeting1.setAddress("https://meet.google.com/kea-hhgi-yix");
@@ -547,7 +548,55 @@ public class DBGenerator implements CommandLineRunner {
         homeWork9.setMeetingId(meeting9.getId());
         homeWork9.setTeamId(team2.getId());
         homeWork9.setId(homeWorkRepository.save(homeWork9).getId());
+    // note -team 2
+        Note note1 = new Note();
+        note1.setName("Note buổi 1 team 2 Bee fly");
+        note1.setMeetingId(meeting1.getId());
+        note1.setTeamId(team2.getId());
+        note1.setDescriptions("Entity ok");
+        note1.setId(noteRepository.save(note1).getId());
 
+        Note note2 = new Note();
+        note2.setName("Note buổi 2 team 2");
+        note2.setMeetingId(meeting1.getId());
+        note2.setTeamId(team2.getId());
+        note2.setDescriptions("JPA ok");
+        note2.setId(noteRepository.save(note2).getId());
+
+        Note note3 = new Note();
+        note3.setName("Note buổi 3 team 2");
+        note3.setMeetingId(meeting1.getId());
+        note3.setTeamId(team2.getId());
+        note3.setDescriptions("Service ok");
+        note3.setId(noteRepository.save(note3).getId());
+
+        Note note4 = new Note();
+        note4.setName("Note buổi 4 team 2");
+        note4.setMeetingId(meeting1.getId());
+        note4.setTeamId(team2.getId());
+        note4.setDescriptions("Model view ok");
+        note4.setId(noteRepository.save(note4).getId());
+
+        Note note5 = new Note();
+        note5.setName("Note buổi 5 team 2");
+        note5.setMeetingId(meeting1.getId());
+        note5.setTeamId(team2.getId());
+        note5.setDescriptions("Config ok");
+        note5.setId(noteRepository.save(note5).getId());
+
+        Note note6 = new Note();
+        note6.setName("Note buổi 6 team 2");
+        note6.setMeetingId(meeting1.getId());
+        note6.setTeamId(team2.getId());
+        note6.setDescriptions("Message config ok");
+        note6.setId(noteRepository.save(note6).getId());
+
+        Note note7 = new Note();
+        note7.setName("Note buổi 7 team 2");
+        note7.setMeetingId(meeting1.getId());
+        note7.setTeamId(team2.getId());
+        note7.setDescriptions("Chức năng bee fly ok");
+        note7.setId(noteRepository.save(note7).getId());
     }
 
     public static void main(String[] args) {

@@ -48,12 +48,17 @@ const TeamsInMyClass = () => {
 
   useEffect(() => {
     if (loadingStudentClass === true) {
+      setLoading(false);
       fetchData(idClass);
+      setLoading(true);
     }
   }, [loadingStudentClass]);
-
-  const featchTeams = async (id) => {
+  const fetchData = async (idClass) => {
     setLoading(false);
+    await featchStudentClass(idClass);
+    featInforStudent();
+  };
+  const featchTeams = async (id) => {
     try {
       await TeacherTeamsAPI.getTeamsByIdClass(id).then((responese) => {
         dispatch(SetTeams(responese.data.data));
@@ -64,13 +69,7 @@ const TeamsInMyClass = () => {
     }
   };
 
-  const fetchData = async (idClass) => {
-    setLoading(false);
-    await featchStudentClass(idClass);
-    featInforStudent();
-  };
   const featchStudentClass = async (id) => {
-    setLoading(false);
     try {
       await TeacherStudentClassesAPI.getStudentInClasses(id).then(
         (responese) => {
@@ -82,7 +81,6 @@ const TeamsInMyClass = () => {
     }
   };
   const featInforStudent = async () => {
-    setLoading(false);
     try {
       let request = listStudentClass.map((item) => item.idStudent).join("|");
       const listStudentAPI = await TeacherStudentClassesAPI.getAllInforStudent(
@@ -103,7 +101,6 @@ const TeamsInMyClass = () => {
         });
       dispatch(SetStudentClasses(listShowTable));
       setLoadingStudentClass(true);
-      setLoading(true);
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
@@ -311,7 +308,6 @@ const TeamsInMyClass = () => {
             <hr />
           </div>
         </div>
-
         <Row gutter={16} style={{ margin: "40px 10px 30px 10px" }}>
           <Col span={22}>
             <div style={{ marginLeft: "0px" }}>
