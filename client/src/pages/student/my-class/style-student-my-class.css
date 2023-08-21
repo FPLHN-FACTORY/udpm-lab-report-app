@@ -1,0 +1,30 @@
+.my_project {
+  padding: 20px;
+  padding-top: 50px;
+}
+
+.filter {
+  margin-top: 20px;
+  background-color: rgb(255, 255, 255);
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+body {
+  background-image: url("");
+}
+
+.table_myclass {
+  background-color: white;
+  margin-top: 35px;
+  width: 100%;
+  border-radius: 5px;
+  height: auto;
+  padding: 15px;
+}
+
+.content_filter {
+  padding: 20px;
+}

@@ -17,7 +17,8 @@ import AdminDashboard from "./pages/admin/admin-dashboard/AdminDashboard";
 import TeacherMyClass from "./pages/teacher/my-class/TeacherMyClass";
 import StudentsInMyClass from "./pages/teacher/my-class/students/StudentsInMyClass";
 import TeamsInMyClass from "./pages/teacher/my-class/teams/TeamsInMyClass";
-import StudentMyClass from "./pages/student/StudentMyClass";
+import StudentMyClass from "./pages/student/my-class/StudentMyClass";
+import StudentSchedule from "./pages/student/schedule/StudentSchedule";
 
 function App() {
   return (
@@ -31,8 +32,24 @@ function App() {
 
             <Route
               path="/"
+              element={<Navigate replace to="/admin/class-management" />}
+            />
+
+            <Route
+              path="/teacher"
               element={<Navigate replace to="/teacher/my-class" />}
             />
+
+            <Route
+              path="/student"
+              element={<Navigate replace to="/student/my-class" />}
+            />
+
+            <Route
+              path="/admin"
+              element={<Navigate replace to="/admin/class-management" />}
+            />
+
             <Route
               path="/admin/semester-management"
               element={
@@ -112,6 +129,16 @@ function App() {
                 <AuthGuard>
                   <DashBoardStudent>
                     <StudentMyClass />
+                  </DashBoardStudent>
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/student/schedule"
+              element={
+                <AuthGuard>
+                  <DashBoardStudent>
+                    <StudentSchedule />
                   </DashBoardStudent>
                 </AuthGuard>
               }
