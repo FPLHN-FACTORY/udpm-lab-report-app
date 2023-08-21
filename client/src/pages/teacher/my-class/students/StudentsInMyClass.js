@@ -28,13 +28,28 @@ const StudentsInMyClass = () => {
 
   useEffect(() => {
     if (loadingStudentClass === true) {
+      setLoading(false);
       fetchData(idClass);
+      setLoading(true);
     }
   }, [loadingStudentClass]);
 
   const fetchData = async (idClass) => {
+    setLoading(false);
     await featchStudentClass(idClass);
-    featInforStudent(idClass);
+    featInforStudent();
+  };
+
+  const featchClass = async (idClass) => {
+    setLoading(false);
+    try {
+      await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
+        setClassDetail(responese.data.data);
+        fetchData(idClass);
+      });
+    } catch (error) {
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+    }
   };
   const featchStudentClass = async (id) => {
     try {
@@ -71,18 +86,6 @@ const StudentsInMyClass = () => {
       dispatch(SetStudentClasses(listShowTable));
       setDataTable(listShowTable);
       setLoading(true);
-    } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
-    }
-  };
-
-  const featchClass = async (idClass) => {
-    setLoading(false);
-    try {
-      await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
-        setClassDetail(responese.data.data);
-        fetchData(idClass);
-      });
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }

@@ -146,13 +146,9 @@ const MeetingInMyClass = () => {
               {dataMeeting.map((record) => (
                 <Link
                   to={`/teacher/my-class/meeting/detail/${idClass}/${record.id}`}
+                  key={record.id}
                 >
-                  <div
-                    tabIndex={0}
-                    role="button"
-                    key={record.id}
-                    className="box-card"
-                  >
+                  <div tabIndex={0} role="button" className="box-card">
                     <div className="title-left">
                       <div className="box-icon">
                         <BookOutlined
@@ -164,7 +160,6 @@ const MeetingInMyClass = () => {
                           fontSize: "16px",
                           color: "black",
                         }}
-                        key={record.id}
                       >
                         {record.descriptions}
                       </span>
