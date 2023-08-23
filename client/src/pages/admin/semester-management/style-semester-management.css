@@ -3,10 +3,9 @@
     margin-top: -30px;
     margin-right: 15px;
 }
-.filter {
-    margin-top: 15px;
+.filter-semester {
+    margin-top: 0px;
     background-color: rgb(255, 255, 255);
-    width: 99%;
     height: auto;
     border-radius: 5px;
     padding: 10px;
@@ -98,15 +97,6 @@ body {
     margin-left: 81%;
 }
 
-.filter {
-    margin-top: 20px;
-    background-color: rgb(255, 255, 255);
-    width: 99%;
-    height: auto;
-    border-radius: 5px;
-    padding: 10px;
-}
-
 .project_management h1 {
     font-size: 20px;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
@@ -126,11 +116,8 @@ body {
 
 .title-semester{
     width: 100%;
-    height: 70px;
+    height: 50px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    background-color: rgb(255, 255, 255);
-    border-radius: 0 0 5px 5px;
     color: rgb(35, 35, 35);
 }

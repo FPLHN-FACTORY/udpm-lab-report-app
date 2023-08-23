@@ -181,14 +181,14 @@ const SemesterManagement = () => {
     <div className="semester">
       {loading && <LoadingIndicator />}
       <div className="title-semester">
-        <span style={{ fontSize: "18px", paddingLeft: "20px" }}>
+        <span style={{ fontSize: "18px" }}>
           <FontAwesomeIcon icon={faLayerGroup} size="1x" />{" "}
           <span style={{ marginLeft: "10px", fontWeight: "500" }}>
           Quản lý học kỳ
           </span>
         </span>
       </div>
-      <div className="filter">
+      <div className="filter-semester">
         <FontAwesomeIcon icon={faFilter} size="2x" />{" "}
         <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
         <hr />
