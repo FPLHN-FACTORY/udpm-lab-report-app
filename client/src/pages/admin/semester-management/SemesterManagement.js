@@ -1,11 +1,9 @@
 import "./style-semester-management.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faCogs,
-  faEye,
   faFilter,
   faHome,
-  faRepeat,
+  faLayerGroup,
   faPencil,
   faTrash,
   faPlus,
@@ -179,14 +177,18 @@ const SemesterManagement = () => {
     );
   };
   return (
+    
     <div className="semester">
       {loading && <LoadingIndicator />}
-      <div className="title_my_project">
-        {" "}
-        <FontAwesomeIcon icon={faHome} size="1x" />
-        <span style={{ marginLeft: "10px" }}>Danh sách học kỳ</span>
+      <div className="title-semester">
+        <span style={{ fontSize: "18px" }}>
+          <FontAwesomeIcon icon={faLayerGroup} size="1x" />{" "}
+          <span style={{ marginLeft: "10px", fontWeight: "500" }}>
+          Quản lý học kỳ
+          </span>
+        </span>
       </div>
-      <div className="filter">
+      <div className="filter-semester">
         <FontAwesomeIcon icon={faFilter} size="2x" />{" "}
         <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
         <hr />
@@ -215,7 +217,7 @@ const SemesterManagement = () => {
         <div className="tittle__category">
           <div>
             {" "}
-            {<FontAwesomeIcon icon={faHome} size="2x" />}
+            {<FontAwesomeIcon icon={faLayerGroup} size="1x" />}
             <span style={{ fontSize: "18px", fontWeight: "500" }}>
               {" "}
               Danh sách học kỳ
