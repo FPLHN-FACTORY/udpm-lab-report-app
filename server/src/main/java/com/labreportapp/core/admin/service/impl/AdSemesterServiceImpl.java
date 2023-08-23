@@ -7,6 +7,7 @@ import com.labreportapp.core.admin.model.response.AdSemesterResponse;
 import com.labreportapp.core.admin.repository.AdSemesterRepository;
 import com.labreportapp.core.admin.service.AdSemesterService;
 import com.labreportapp.core.common.base.PageableObject;
+import com.labreportapp.entity.Activity;
 import com.labreportapp.entity.Semester;
 import com.labreportapp.infrastructure.constant.Message;
 import com.labreportapp.infrastructure.exception.rest.RestApiException;
@@ -56,7 +57,7 @@ public class AdSemesterServiceImpl implements AdSemesterService {
 
     @Override
     public PageableObject<AdSemesterResponse> searchSemester(AdFindSemesterRequest rep) {
-        Pageable pageable = PageRequest.of(rep.getPage(), rep.getSize());
+        Pageable pageable = PageRequest.of(rep.getPage()-1, rep.getSize());
         Page<AdSemesterResponse> adSemesterResponses = adSemesterRepository.searchSemester(rep, pageable);
         adSemesterResponseList = adSemesterResponses.stream().toList();
         return new PageableObject<>(adSemesterResponses);
@@ -74,8 +75,15 @@ public class AdSemesterServiceImpl implements AdSemesterService {
     @Override
     public Boolean deleteSemester(String id) {
         Optional<Semester> findSemesterById = adSemesterRepository.findById(id);
+        Integer countActivities = adSemesterRepository.countActivitiesBySemesterId(id);
+
         if (!findSemesterById.isPresent()) {
             throw new RestApiException(Message.SEMESTER_NOT_EXISTS);
+        }
+
+        if (countActivities > 0){
+            System.out.println(countActivities);
+            throw new RestApiException(Message.SEMESTER_ACTIVITY_ALREADY_EXISTS);
         }
         adSemesterRepository.delete(findSemesterById.get());
         return true;

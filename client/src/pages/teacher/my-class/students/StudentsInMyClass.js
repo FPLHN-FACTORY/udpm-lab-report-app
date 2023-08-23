@@ -5,48 +5,50 @@ import { Link } from "react-router-dom";
 import { ControlOutlined } from "@ant-design/icons";
 import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
 import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/TeacherStudentClasses.api";
+import { SetStudentClasses } from "../../../../app/teacher/student-class/studentClassesSlice.reduce";
+import { useAppDispatch } from "../../../../app/hook";
 import { useEffect, useState } from "react";
 import LoadingIndicator from "../../../../helper/loading";
 import moment from "moment";
 
 const StudentsInMyClass = () => {
+  const dispatch = useAppDispatch();
   const [classDetail, setClassDetail] = useState({});
   const [listStudentClass, setListStudentClass] = useState([]);
   const [dataTable, setDataTable] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingStudentClass, setLoadingStudentClass] = useState(false);
-  const { id } = useParams();
+  const { idClass } = useParams();
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = "Bảng điều khiển";
-    featchClass(id);
-    fetchData();
+    document.title = "Bảng điều khiển - thành viên";
+    featchClass(idClass);
   }, []);
 
   useEffect(() => {
     if (loadingStudentClass === true) {
-      fetchData();
+      fetchData(idClass);
     }
   }, [loadingStudentClass]);
 
-  const fetchData = async () => {
-    await featchStudentClass(id);
-    featInforStudent();
+  const fetchData = async (idClass) => {
+    await featchStudentClass(idClass);
+    featInforStudent(idClass);
   };
-
-  const featchClass = async (id) => {
-    setLoading(false);
+  const featchStudentClass = async (id) => {
     try {
-      await TeacherMyClassAPI.detailMyClass(id).then((responese) => {
-        setClassDetail(responese.data.data);
-      });
+      await TeacherStudentClassesAPI.getStudentInClasses(id).then(
+        (responese) => {
+          setListStudentClass(responese.data.data);
+          setLoadingStudentClass(true);
+        }
+      );
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-
-  const featInforStudent = async () => {
+  const featInforStudent = async (idClass) => {
     setLoading(false);
     try {
       let request = listStudentClass.map((item) => item.idStudent).join("|");
@@ -66,6 +68,7 @@ const StudentsInMyClass = () => {
             ...matchedObject,
           };
         });
+      dispatch(SetStudentClasses(listShowTable));
       setDataTable(listShowTable);
       setLoading(true);
     } catch (error) {
@@ -73,19 +76,18 @@ const StudentsInMyClass = () => {
     }
   };
 
-  const featchStudentClass = async (id) => {
+  const featchClass = async (idClass) => {
     setLoading(false);
     try {
-      await TeacherStudentClassesAPI.getStudentInClasses(id).then(
-        (responese) => {
-          setListStudentClass(responese.data.data);
-          setLoadingStudentClass(true);
-        }
-      );
+      await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
+        setClassDetail(responese.data.data);
+        fetchData(idClass);
+      });
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang aaaaaaaa!");
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
+
   const data = dataTable;
   const columns = [
     {
@@ -173,7 +175,7 @@ const StudentsInMyClass = () => {
         <div className="button-menu-teacher">
           <div>
             <Link
-              to={`/teacher/my-class/students/${id}`}
+              to={`/teacher/my-class/students/${idClass}`}
               id="menu-checked"
               style={{
                 fontSize: "16px",
@@ -183,18 +185,25 @@ const StudentsInMyClass = () => {
               THÀNH VIÊN TRONG LỚP &nbsp;
             </Link>
             <Link
-              to={`/teacher/my-class/students-in-class/${id}`}
+              to={`/teacher/my-class/students-in-class/${idClass}`}
               className="custom-link"
               style={{ fontSize: "16px", paddingLeft: "10px" }}
             >
               ĐIỂM DANH &nbsp;
             </Link>
             <Link
-              to={`/teacher/my-class/teams/${id}`}
+              to={`/teacher/my-class/teams/${idClass}`}
               className="custom-link"
               style={{ fontSize: "16px", paddingLeft: "10px" }}
             >
               QUẢN LÝ NHÓM &nbsp;
+            </Link>
+            <Link
+              to={`/teacher/my-class/meeting/${idClass}`}
+              className="custom-link"
+              style={{ fontSize: "16px", paddingLeft: "10px" }}
+            >
+              BUỔI HỌP &nbsp;
             </Link>
             <hr />
           </div>
@@ -204,11 +213,12 @@ const StudentsInMyClass = () => {
           <div
             className="box-center"
             style={{
-              height: "28px",
-              width: "180px",
+              height: "30px",
+              width: "200px",
               backgroundColor: "#007bff",
               color: "white",
-              margin: "0px 0px 0px 85%",
+              borderRadius: "5px",
+              margin: "5px 0px 0px 84.4%",
             }}
           >
             {" "}

@@ -1,8 +1,7 @@
 package com.labreportapp.core.teacher.service.impl;
 
 import com.labreportapp.core.common.base.PageableObject;
-import com.labreportapp.core.common.base.PageableRequest;
-import com.labreportapp.core.teacher.model.request.TeFindClass;
+import com.labreportapp.core.teacher.model.request.TeFindClassRequest;
 import com.labreportapp.core.teacher.model.response.TeClassResponse;
 import com.labreportapp.core.teacher.model.response.TeDetailClassRespone;
 import com.labreportapp.core.teacher.repository.TeClassRepository;
@@ -16,8 +15,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -31,7 +28,7 @@ public class TeClassServiceImpl implements TeClassService {
 
     @Override
     @CacheEvict(value = {"teacherClass"}, allEntries = true)
-    public PageableObject<TeClassResponse> searchTeacherClass(final TeFindClass teFindClass) {
+    public PageableObject<TeClassResponse> searchTeacherClass(final TeFindClassRequest teFindClass) {
         Pageable pageable = PageRequest.of(teFindClass.getPage() - 1, teFindClass.getSize());
         Page<TeClassResponse> pageList = teClassRepository.findClassBySemesterAndActivity(teFindClass, pageable);
         return new PageableObject<>(pageList);

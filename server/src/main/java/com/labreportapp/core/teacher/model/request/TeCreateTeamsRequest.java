@@ -16,6 +16,8 @@ import java.util.List;
 @ToString
 public class TeCreateTeamsRequest {
 
+    @NotEmpty
+    @NotBlank
     private String classId;
 
     @NotEmpty
