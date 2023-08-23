@@ -386,7 +386,7 @@ public class DBGenerator implements CommandLineRunner {
 // Meeting
         //metting class1 meeting tang 1 ngay
         Meeting meeting1 = new Meeting();
-        meeting1.setName("Buổi 1");
+        meeting1.setName("Buổi 1 buổi đầu làm quen giới thiệu bản thân");
         meeting1.setMeetingDate(new Date().getTime() + 86400000);
         meeting1.setMeetingPeriod(MeetingPeriod.CA_1);
         meeting1.setDescriptions("Buổi học 1 online - BEE FLY");
@@ -399,7 +399,7 @@ public class DBGenerator implements CommandLineRunner {
         meeting2.setName("Buổi 2");
         meeting2.setMeetingDate(new Date().getTime() + 2 * 86400000);
         meeting2.setMeetingPeriod(MeetingPeriod.CA_1);
-        meeting2.setDescriptions("Buổi học 2 online");
+        meeting2.setDescriptions("Buổi học 2 offline");
         meeting2.setClassId(class1.getId());
         meeting2.setTypeMeeting(TypeMeeting.OFFLINE);
         meeting2.setAddress("Xưởng");

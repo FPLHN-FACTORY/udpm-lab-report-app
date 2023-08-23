@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author hieundph25894
@@ -33,5 +34,11 @@ public class TeMeetingController {
     public ResponseObject getCountTeMeeting(final TeFindMeetingRequest request) {
         Integer count = teMeetingService.countMeetingByClassId(request.getIdClass());
         return new ResponseObject(count);
+    }
+
+    @GetMapping("/detail")
+    public ResponseObject getTeMeetingDetail(final TeFindMeetingRequest request) {
+        TeMeetingRespone find = teMeetingService.searchMeetingByIdMeeting(request);
+        return new ResponseObject(find);
     }
 }

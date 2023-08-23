@@ -118,10 +118,10 @@ const StudentsInMyClass = () => {
       width: "130px",
     },
     {
-      title: "Mã nhóm",
-      dataIndex: "codeTeam",
-      key: "codeTeam",
-      sorter: (a, b) => a.codeTeam.localeCompare(b.codeTeam),
+      title: "Nhóm",
+      dataIndex: "nameTeam",
+      key: "nameTeam",
+      sorter: (a, b) => a.nameTeam.localeCompare(b.nameTeam),
       render: (text, record) => {
         if (text === null) {
           return <span style={{ color: "blue" }}>Chưa vào nhóm</span>;
@@ -206,7 +206,7 @@ const StudentsInMyClass = () => {
               className="custom-link"
               style={{ fontSize: "16px", paddingLeft: "10px" }}
             >
-              BUỔI HỌP &nbsp;
+              BUỔI HỌC &nbsp;
             </Link>
             <hr />
           </div>

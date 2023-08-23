@@ -138,7 +138,7 @@ function App() {
             />
             {/* router detail  meeting của Hiệu */}
             <Route
-              path="/teacher/my-class/meeting/detail/:idClass/:idMeeting"
+              path="/teacher/my-class/meeting/detail/:idMeeting"
               element={
                 <AuthGuard>
                   <DashBoardTeacher>

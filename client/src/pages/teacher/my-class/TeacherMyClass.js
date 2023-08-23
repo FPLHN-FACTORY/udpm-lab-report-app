@@ -161,7 +161,7 @@ const TeacherMyClass = () => {
   const data = useAppSelector(GetTeacherMyClass);
   const columns = [
     {
-      title: "STT",
+      title: "#",
       dataIndex: "stt",
       key: "stt",
       sorter: (a, b) => a.stt - b.stt,
@@ -193,7 +193,7 @@ const TeacherMyClass = () => {
         }/${startTime.getFullYear()}`;
         return <span>{formattedStartTime}</span>;
       },
-      width: "100px",
+      width: "120px",
     },
     {
       title: "Ca học",

@@ -18,4 +18,13 @@ public interface TeMeetingRespone {
 
     @Value("#{target.meeting_date}")
     Long getMeetingDate();
+
+    @Value("#{target.type_meeting}")
+    Integer getTypeMeeting();
+
+    @Value("#{target.meeting_period}")
+    Integer getMeetingPeriod();
+
+    @Value("#{target.class_id}")
+    String getIdClass();
 }

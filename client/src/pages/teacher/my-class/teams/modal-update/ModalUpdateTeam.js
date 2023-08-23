@@ -166,12 +166,12 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
 
   const update = async () => {
     let check = 0;
-    if (code.trim() === "") {
-      setErrorCode("Mã nhóm không được để trống");
-      check++;
-    } else {
-      setErrorCode("");
-    }
+    // if (code.trim() === "") {
+    //   setErrorCode("Mã nhóm không được để trống");
+    //   check++;
+    // } else {
+    //   setErrorCode("");
+    // }
     if (name.trim() === "") {
       setErrorName("Tên nhóm không được để trống");
       check++;
@@ -310,7 +310,7 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
         </div>
         <div style={{ marginTop: "15px", borderBottom: "1px solid black" }}>
           <Row gutter={16} style={{ marginBottom: "15px" }}>
-            <Col span={12}>
+            {/* <Col span={12}>
               {" "}
               <span className="notBlank">*</span>
               <span>Mã nhóm:</span> <br />
@@ -323,7 +323,7 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
                 type="text"
               />
               <span className="error">{errorCode}</span>
-            </Col>
+            </Col> */}
             <Col span={12}>
               {" "}
               <span className="notBlank">*</span>
@@ -338,9 +338,7 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
               />
               <span className="error">{errorName}</span>
             </Col>
-          </Row>
-          <Row gutter={16} style={{ marginBottom: "15px" }}>
-            <Col span={24}>
+            <Col span={12}>
               {" "}
               <span>Chủ đề:</span> <br />
               <Input

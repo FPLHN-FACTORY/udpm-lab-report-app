@@ -1,6 +1,5 @@
 import { useParams } from "react-router-dom";
 import "./styleMeetingInMyClass.css";
-import { Row, Col, Table, Tooltip, Select, Input } from "antd";
 import { Link } from "react-router-dom";
 import {
   BookOutlined,
@@ -8,7 +7,6 @@ import {
   UnorderedListOutlined,
 } from "@ant-design/icons";
 import { TeacherMeetingAPI } from "../../../../api/teacher/meeting/TeacherMeeting.api";
-
 import {
   SetMeeting,
   GetMeeting,
@@ -25,7 +23,7 @@ const MeetingInMyClass = () => {
   const [countMeeting, setCountMeeting] = useState(0);
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = "Bảng điều khiển - buổi họp";
+    document.title = "Bảng điều khiển - buổi học";
     featchCountMeeting(idClass);
     featchMeeting(idClass);
   }, []);
@@ -40,7 +38,7 @@ const MeetingInMyClass = () => {
         }
       );
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang aaa!");
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
   const featchCountMeeting = async (idClass) => {
@@ -52,7 +50,7 @@ const MeetingInMyClass = () => {
         }
       );
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang aaa!");
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
 
@@ -111,7 +109,7 @@ const MeetingInMyClass = () => {
               id="menu-checked"
               style={{ fontSize: "16px", paddingLeft: "10px" }}
             >
-              BUỔI HỌP &nbsp;
+              BUỔI HỌC &nbsp;
             </Link>
             <hr />
           </div>
@@ -145,31 +143,42 @@ const MeetingInMyClass = () => {
             <div className="data-table">
               {dataMeeting.map((record) => (
                 <Link
-                  to={`/teacher/my-class/meeting/detail/${idClass}/${record.id}`}
+                  to={`/teacher/my-class/meeting/detail/${record.id}`}
                   key={record.id}
                 >
-                  <div tabIndex={0} role="button" className="box-card">
+                  <div role="button" className="box-card">
                     <div className="title-left">
-                      <div className="box-icon">
-                        <BookOutlined
-                          style={{ color: "white", fontSize: 21 }}
-                        />
+                      <div className="flex-container">
+                        {" "}
+                        <div className="title-icon">
+                          <div className="box-icon">
+                            <BookOutlined
+                              style={{ color: "white", fontSize: 21 }}
+                            />
+                          </div>
+                        </div>
+                        <p
+                          className="title-text"
+                          style={{
+                            fontSize: "16px",
+                            color: "black",
+                          }}
+                        >
+                          {record.name} {" - "}
+                          {record.typeMeeting === 0 ? (
+                            <span>trực tuyến</span>
+                          ) : (
+                            <span>trên lớp</span>
+                          )}
+                        </p>
                       </div>
-                      <span
-                        style={{
-                          fontSize: "16px",
-                          color: "black",
-                        }}
-                      >
-                        {record.descriptions}
-                      </span>
                     </div>
                     <div className="title-right">
                       <div>
                         {" "}
                         <span>
-                          {" "}
-                          Đã đăng vào {convertLongToDate(record.meetingDate)}
+                          Thời gian: {convertLongToDate(record.meetingDate)} -
+                          Ca {record.meetingPeriod + 1}
                         </span>
                       </div>
                     </div>

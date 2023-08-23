@@ -180,18 +180,7 @@ const TeamsInMyClass = () => {
       width: "12px",
     },
     {
-      title: "Mã",
-      dataIndex: "code",
-      key: "code",
-      sorter: (a, b) => a.code.localeCompare(b.code),
-      render: (text, record, index) => {
-        return <span style={{ color: "#007bff" }}>{text}</span>;
-      },
-      width: "130px",
-    },
-
-    {
-      title: "Tên",
+      title: "Tên nhóm",
       dataIndex: "name",
       key: "name",
       sorter: (a, b) => a.name.localeCompare(b.name),
@@ -303,7 +292,7 @@ const TeamsInMyClass = () => {
               className="custom-link"
               style={{ fontSize: "16px", paddingLeft: "10px" }}
             >
-              BUỔI HỌP &nbsp;
+              BUỔI HỌC &nbsp;
             </Link>
             <hr />
           </div>

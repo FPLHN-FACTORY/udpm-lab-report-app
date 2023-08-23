@@ -14,7 +14,7 @@
   color: rgb(35, 35, 35);
 }
 .filter-teacher-my-class {
-  margin: 15px 10px 15px 13px;
+  margin: 13px 10px 0px 13px;
   background-color: rgb(255, 255, 255);
   width: 98%;
   height: auto;
@@ -22,7 +22,7 @@
   padding: 20px;
 }
 .table-teacher-my-class {
-  margin: 15px 10px 15px 13px;
+  margin: 13px 10px 0px 13px;
   background-color: rgb(255, 255, 255);
   width: 98%;
   height: auto;
@@ -116,14 +116,12 @@
   transform: scaleX(1);
   background: linear-gradient(to left, #d79e2c 0%, #d79e2c 100%);
 }
-
 #menu-checked {
   position: relative;
   font-weight: 500;
   color: #c28d24;
   text-decoration: none;
 }
-
 #menu-checked::before {
   content: "";
   position: absolute;
@@ -132,4 +130,35 @@
   width: 100%;
   height: 2px;
   background: linear-gradient(to right, #d79e2c 0%, #d79e2c 100%);
+}
+
+.ant-table-wrapper .ant-table-thead > tr > th {
+  background-color: #baa16f;
+  color: white;
+}
+.ant-table-wrapper .ant-table-thead > tr > th:hover {
+  background-color: #baa16f;
+  color: white;
+}
+.ant-table-column-sorters .ant-tooltip-open:focus {
+  background-color: #baa16f;
+  color: white;
+}
+/*  .ant-table-column-sorters  */
+.ant-table-thead > tr > th {
+  background-color: #e1af4a;
+  color: white;
+}
+.ant-table-thead > tr > th:focus {
+  background-color: #e1af4a;
+  color: white;
+}
+.ant-table-wrapper .ant-table-thead > tr > th:hover {
+  background-color: #e1af4a;
+  color: white;
+}
+
+.ant-table-column-sorters .ant-tooltip-open:focus th {
+  background-color: initial;
+  color: initial;
 }

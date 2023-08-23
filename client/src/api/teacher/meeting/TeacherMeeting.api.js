@@ -17,7 +17,7 @@ export class TeacherMeetingAPI {
   static getDetailByIdMeeting(idMeeting) {
     return request({
       method: "GET",
-      url: url`?idMeeting=` + idMeeting,
+      url: url + `/detail?idMeeting=` + idMeeting,
     });
   }
 }
