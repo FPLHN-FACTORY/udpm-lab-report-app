@@ -1,6 +1,6 @@
 import { Row, Col } from "antd";
 import { useParams } from "react-router";
-import "./styleDetailMeeting.css";
+import "./styleTeamInMeeting.css";
 import {
   BookOutlined,
   ControlOutlined,
@@ -10,12 +10,14 @@ import LoadingIndicator from "../../../../../helper/loading";
 import { useEffect, useState } from "react";
 import { TeacherMeetingAPI } from "../../../../../api/teacher/meeting/TeacherMeeting.api";
 import { TeacherTeamsAPI } from "../../../../../api/teacher/teams-class/TeacherTeams.api";
-const DetailMeeting = () => {
+
+const TeamInMeeting = () => {
   const { idMeeting } = useParams();
   const [meeting, setMeeting] = useState({});
   const [team, setTeam] = useState([]);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
+    window.scrollTo(0, 0);
     featchMeeting(idMeeting);
   }, []);
 
@@ -77,12 +79,14 @@ const DetailMeeting = () => {
                     color: "#1967D2",
                   }}
                 >
-                  Thông tin {meeting.name} - {meeting.descriptions}
+                  {meeting.name} - {meeting.descriptions}
                 </span>
               </div>
             </Col>
             <Col span={3}>
-              <div style={{ lineHeight: "42px", color: "grey" }}>
+              <div
+                style={{ lineHeight: "42px", color: "grey", float: "right" }}
+              >
                 <span>{convertLongToDate(meeting.meetingDate)}</span>
               </div>
             </Col>
@@ -134,4 +138,4 @@ const DetailMeeting = () => {
   );
 };
 
-export default DetailMeeting;
+export default TeamInMeeting;

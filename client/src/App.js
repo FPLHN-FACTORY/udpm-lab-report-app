@@ -19,7 +19,7 @@ import StudentsInMyClass from "./pages/teacher/my-class/students/StudentsInMyCla
 import TeamsInMyClass from "./pages/teacher/my-class/teams/TeamsInMyClass";
 import StudentSchedule from "./pages/student/schedule/StudentSchedule";
 import MeetingInMyClass from "./pages/teacher/my-class/meeting/MeetingInMyClass";
-import DetailMeeting from "./pages/teacher/my-class/meeting/detail/DetailMeeting";
+import TeamInMeeting from "./pages/teacher/my-class/meeting/team/TeamInMeeting";
 import StudentMyClass from "./pages/student/my-class/StudentMyClass";
 
 function App() {
@@ -142,7 +142,7 @@ function App() {
               element={
                 <AuthGuard>
                   <DashBoardTeacher>
-                    <DetailMeeting />
+                    <TeamInMeeting />
                   </DashBoardTeacher>
                 </AuthGuard>
               }
