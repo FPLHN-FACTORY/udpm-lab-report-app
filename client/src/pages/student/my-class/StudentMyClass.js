@@ -63,6 +63,15 @@ const StudentMyClass = () => {
       dataIndex: "startTime",
       key: "startTime",
       sorter: (a, b) => a.startTime - b.startTime,
+      render: (text, record) => {
+        const startTime = new Date(record.startTime);
+
+        const formattedStartTime = `${startTime.getDate()}/${
+          startTime.getMonth() + 1
+        }/${startTime.getFullYear()}`;
+
+        return <span>{formattedStartTime}</span>;
+      },
     },
     {
       title: "Ca học",
@@ -122,7 +131,7 @@ const StudentMyClass = () => {
       key: "action",
       render: (text, record) => (
         <>
-          <Link to={`/teacher/my-class/students/${record.id}`}>
+          <Link to={`/student/my-class/team/${record.id}`}>
             <Tooltip title="Xem chi tiết lớp học">
               <FontAwesomeIcon icon={faEye} className="icon" />
             </Tooltip>

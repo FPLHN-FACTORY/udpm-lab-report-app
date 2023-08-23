@@ -43,7 +43,7 @@ const SidebarStudentComponent = ({ collapsed, toggleCollapsed }) => {
             />
           }
         >
-          <Link to="/student/my-class">Lịch học</Link>
+          <Link to="/student/schedule">Lịch học</Link>
         </Menu.Item>
         <Menu.Item
           key="2"

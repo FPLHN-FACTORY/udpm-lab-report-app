@@ -88,6 +88,12 @@ const StudentsInMyClass = () => {
     }
   };
 
+  useEffect(() => {
+    if (loadingStudentClass === true) {
+      fetchData(idClass);
+    }
+  }, [loadingStudentClass]);
+
   const data = dataTable;
   const columns = [
     {

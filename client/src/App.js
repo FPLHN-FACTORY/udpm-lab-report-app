@@ -21,7 +21,7 @@ import StudentMyClass from "./pages/student/my-class/StudentMyClass";
 import StudentSchedule from "./pages/student/schedule/StudentSchedule";
 import MeetingInMyClass from "./pages/teacher/my-class/meeting/MeetingInMyClass";
 import DetailMeeting from "./pages/teacher/my-class/meeting/detail/DetailMeeting";
-import StudentMyClass from "./pages/student/StudentMyClass";
+import DetailMyClassTeam from "./pages/student/detail-my-class/team/DetailMyClassTeam";
 
 function App() {
   return (
@@ -164,6 +164,16 @@ function App() {
                 <AuthGuard>
                   <DashBoardStudent>
                     <StudentSchedule />
+                  </DashBoardStudent>
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/student/my-class/team/:id"
+              element={
+                <AuthGuard>
+                  <DashBoardStudent>
+                    <DetailMyClassTeam />
                   </DashBoardStudent>
                 </AuthGuard>
               }

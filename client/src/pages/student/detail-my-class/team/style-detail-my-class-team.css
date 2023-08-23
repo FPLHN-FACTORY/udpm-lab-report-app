@@ -1,0 +1,41 @@
+.info-team {
+  font-size: 16px;
+  margin-bottom: 10px;
+  margin-top: 20px;
+}
+
+.info-heading {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.group-info {
+  background-color: #f4f4f4;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 5px;
+}
+
+.group-info-item {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.table-member-team {
+  margin-top: 20px;
+}
+
+.btnRoiNhom {
+  margin-top: 10px;
+  color: white !important;
+  background-color: #ebdf62;
+  float: right;
+}
+
+.btnRoiNhom {
+  margin-top: 10px;
+  color: white !important;
+  background-color: #d3c848;
+  float: right;
+}
