@@ -21,22 +21,24 @@ import java.util.UUID;
  */
 @Repository
 public interface AdClassRepository extends ClassRepository {
+
     @Query(value = """ 
             select a.code, a.name,a.start_time
             ,a.class_period,a.class_size,a.teacher_id,b.name as nameActivity 
               from class a join activity b on a.activity_id=b.id""", nativeQuery = true)
     List<AdClassResponse> getAllClass();
+
     @Query(value = """ 
-            select a.code, a.name,a.start_time
-            ,a.class_period,a.class_size,a.teacher_id,b.name as nameActivity ,b.semester_id as semesterId
-              from class a join activity b join semester s 
-              on s.id = b.semester_id 
-              on a.activity_id=b.id
-              WHERE
-          (:#{#req.idSemester} IS NULL 
-           OR :#{#req.idSemester} = '' 
-           OR b.semester_id = :#{#req.idSemester})
-              """, nativeQuery = true)
+              select a.code, a.name,a.start_time
+              ,a.class_period,a.class_size,a.teacher_id,b.name as nameActivity ,b.semester_id as semesterId
+                from class a join activity b join semester s 
+                on s.id = b.semester_id 
+                on a.activity_id=b.id
+                WHERE
+            (:#{#req.idSemester} IS NULL 
+             OR :#{#req.idSemester} = '' 
+             OR b.semester_id = :#{#req.idSemester})
+                """, nativeQuery = true)
     List<AdClassResponse> getAllClassBySemester(@Param("req") AdFindClassRequest req);
 
     @Query(value = """ 
@@ -52,10 +54,7 @@ public interface AdClassRepository extends ClassRepository {
             , nativeQuery = true)
     List<AdClassResponse> findClassByCondition(@Param("codeClass") String code,
                                                @Param("classPeriod") Long classPeriod,
-                                               @Param("idPerson") String idTeacher
-//            , AdFindClassRequest request
-
-                                               );//error bỏ
+                                               @Param("idPerson") String idTeacher);
 
     @Query(value = """
             SELECT s.id as id, s.name as name FROM semester s
@@ -64,12 +63,12 @@ public interface AdClassRepository extends ClassRepository {
     List<AdSemesterAcResponse> getAllSemesters();
 
     @Query(value = """
-            SELECT a.id as id, a.name as name FROM activity a 
-            WHERE
-          (:#{#req.idSemester} IS NULL 
-           OR :#{#req.idSemester} = '' 
-           OR a.semester_id = :#{#req.idSemester})
-            """, nativeQuery = true)
+              SELECT a.id as id, a.name as name FROM activity a 
+              WHERE
+            (:#{#req.idSemester} IS NULL 
+             OR :#{#req.idSemester} = '' 
+             OR a.semester_id = :#{#req.idSemester})
+              """, nativeQuery = true)
     List<AdActivityClassResponse> getAllByIdSemester(@Param("req") AdFindClassRequest req);
 
     @Query(value = """
@@ -85,17 +84,16 @@ public interface AdClassRepository extends ClassRepository {
             and (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR  c.class_period = :#{#req.classPeriod})
             and (:#{#req.idTeacher} IS NULL OR :#{#req.idTeacher} LIKE '' OR :#{#req.idTeacher} LIKE c.teacher_id)
             ORDER BY c.last_modified_date DESC
-                                 """,countQuery = """
-                        SELECT COUNT(c.id)
-                         FROM activity a
-                        JOIN class c ON c.activity_id = a.id
-                        JOIN semester s ON s.id = a.semester_id
-                         WHERE (:#{#req.idSemester} IS NULL OR :#{#req.idSemester} LIKE '' OR :#{#req.idSemester} LIKE s.id)
-                        and (:#{#req.idActivity} IS NULL OR :#{#req.idActivity} LIKE '' OR :#{#req.idActivity} LIKE a.id)
-                        and (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR c.code LIKE %:#{#req.code}%)
-                        and (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR  c.class_period = :#{#req.classPeriod})
-                        and (:#{#req.idTeacher} IS NULL OR :#{#req.idTeacher} LIKE '' OR :#{#req.idTeacher} LIKE c.teacher_id)
-
-            """ ,nativeQuery = true)
+            """, countQuery = """
+            SELECT COUNT(c.id)
+            FROM activity a
+            JOIN class c ON c.activity_id = a.id
+            JOIN semester s ON s.id = a.semester_id
+            WHERE (:#{#req.idSemester} IS NULL OR :#{#req.idSemester} LIKE '' OR :#{#req.idSemester} LIKE s.id)
+            and (:#{#req.idActivity} IS NULL OR :#{#req.idActivity} LIKE '' OR :#{#req.idActivity} LIKE a.id)
+            and (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR c.code LIKE %:#{#req.code}%)
+            and (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR  c.class_period = :#{#req.classPeriod})
+            and (:#{#req.idTeacher} IS NULL OR :#{#req.idTeacher} LIKE '' OR :#{#req.idTeacher} LIKE c.teacher_id)
+            """, nativeQuery = true)
     Page<AdClassResponse> findClassBySemesterAndActivity(@Param("req") AdFindClassRequest req, Pageable pageable);
 }

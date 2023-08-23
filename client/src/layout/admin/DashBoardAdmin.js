@@ -47,8 +47,6 @@ const DashBoardAdmin = ({ children }) => {
               marginLeft: collapsed ? 80 : 250,
               backgroundColor: "#f8f8f8",
               minHeight: "calc(100vh)",
-              paddingTop: "65px",
-              paddingLeft: "45px",
             }}
           >
             {children}

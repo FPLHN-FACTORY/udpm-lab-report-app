@@ -3,7 +3,7 @@ import {
   faFilter,
   faCogs,
   faPencil,
-  faPlus
+  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { useAppDispatch, useAppSelector } from "../../../app/hook";
 import {
@@ -13,7 +13,8 @@ import {
   Table,
   Tooltip,
   Select,
-  Row
+  Row,
+  Col,
 } from "antd";
 import LoadingIndicator from "../../../helper/loading";
 import { SetTeacherSemester } from "../../../app/admin/ClassManager.reducer";
@@ -30,6 +31,7 @@ import {
   QuestionCircleFilled,
   ProjectOutlined,
 } from "@ant-design/icons";
+
 const ClassManagement = () => {
   const { Option } = Select;
   const [listClassAll, setlistClassAll] = useState([]); //getAll
@@ -40,7 +42,7 @@ const ClassManagement = () => {
   const [idActivitiSearch, setIdActivitiSearch] = useState("");
 
   const [selectedItems, setSelectedItems] = useState([]);
-  const [code, setCode] = useState('');
+  const [code, setCode] = useState("");
   const [selectedItemsPerson, setSelectedItemsPerson] = useState("");
   const [loading, setLoading] = useState(true);
   const [current, setCurrent] = useState(1);
@@ -48,17 +50,15 @@ const ClassManagement = () => {
   const [clear, setClear] = useState(false);
 
   const dispatch = useAppDispatch();
-const listClassPeriod = [];
+  const listClassPeriod = [];
 
   for (let i = 1; i <= 10; i++) {
     listClassPeriod.push("" + i);
   }
 
   useEffect(() => {
-    document.title = "Bảng điều khiển";
     setIdSemesterSearch("");
     featchAllMyClass();
-
   }, []);
 
   useEffect(() => {
@@ -102,50 +102,47 @@ const listClassPeriod = [];
     };
     fetchTeacherData();
   }, []);
+
   useEffect(() => {
     const featchDataActivity = async (idSemesterSeach) => {
       console.log(idSemesterSeach);
-        await ClassAPI.getAllActivityByIdSemester(idSemesterSeach).then(
-          (respone) => {
-            setActivityDataAll(respone.data.data);
-            setLoading(true);
-          }
-        );
-
+      await ClassAPI.getAllActivityByIdSemester(idSemesterSeach).then(
+        (respone) => {
+          setActivityDataAll(respone.data.data);
+          setLoading(true);
+        }
+      );
     };
     featchDataActivity(idSemesterSeach);
   }, [idSemesterSeach]);
+
   useEffect(() => {
     const featchDataSemester = async () => {
       try {
         setLoading(false);
-        const responseClassAll =
-        await ClassAPI.fetchAllSemester();
-      const listClassAll = responseClassAll.data;
-          dispatch(SetTeacherSemester(listClassAll.data));
-          if (listClassAll.data.length > 0) {
-            setIdSemesterSearch(listClassAll.data[0].id);
-          } else {
-            setIdSemesterSearch("null");
-          }
-          setSemesterDataAll(listClassAll.data);
-          setLoading(true);
-    
+        const responseClassAll = await ClassAPI.fetchAllSemester();
+        const listClassAll = responseClassAll.data;
+        dispatch(SetTeacherSemester(listClassAll.data));
+        if (listClassAll.data.length > 0) {
+          setIdSemesterSearch(listClassAll.data[0].id);
+        } else {
+          setIdSemesterSearch("null");
+        }
+        setSemesterDataAll(listClassAll.data);
+        setLoading(true);
       } catch (error) {
         alert("Vui lòng F5 lại trang !");
       }
     };
     featchDataSemester();
   }, []);
-  
+
   useEffect(() => {
     document.title = "Quản lý lớp | Portal-Projects";
     setCode("");
     setSelectedItems("");
     setSelectedItemsPerson("");
   }, []);
-
-
 
   const columns = [
     {
@@ -177,13 +174,8 @@ const listClassPeriod = [];
         const formattedStartTime = `${startTime.getDate()}/${
           startTime.getMonth() + 1
         }/${startTime.getFullYear()}`;
-       
 
-        return (
-          <span>
-            {formattedStartTime}
-          </span>
-        );
+        return <span>{formattedStartTime}</span>;
       },
     },
     {
@@ -204,7 +196,9 @@ const listClassPeriod = [];
       key: "teacherId",
       sorter: (a, b) => a.teacherId.localeCompare(b.teacherId),
       render: (text, record) => {
-        const teacher = teacherDataAll.find((item) => item.id === record.teacherId);
+        const teacher = teacherDataAll.find(
+          (item) => item.id === record.teacherId
+        );
         return teacher ? teacher.username : "";
       },
     },
@@ -218,7 +212,7 @@ const listClassPeriod = [];
       title: "Hành động",
       dataIndex: "actions",
       key: "actions",
-      
+
       // render: (text,record) => (
       //   <div>
       //     <Tooltip title="Cập nhật">
@@ -235,77 +229,111 @@ const listClassPeriod = [];
       // ),
     },
   ];
-  
+
   const handleSearchAllByFilter = async () => {
     await featchAllMyClass();
-    toast.success("Tìm kiếm thành công !");
   };
-const handleCodeChange = (e) => {
-  setCode(e.target.value);
-};
-const handleSelectChange = (value) => {
-  setSelectedItems(value);
-};
+  const handleCodeChange = (e) => {
+    setCode(e.target.value);
+  };
+  const handleSelectChange = (value) => {
+    setSelectedItems(value);
+  };
 
-const handleSelectPersonChange = (value) => {
-  setSelectedItemsPerson(value);
-};
+  const handleSelectPersonChange = (value) => {
+    setSelectedItemsPerson(value);
+  };
 
+  const handleClear = () => {
+    if (semesterDataAll.length > 0) {
+      setIdSemesterSearch(semesterDataAll[0].id);
+    } else {
+      setIdSemesterSearch("null");
+    }
+    setSelectedItems("");
+    setCode("");
+    setIdActivitiSearch("");
+    setSelectedItemsPerson("");
+    setClear(true);
+  };
+  const [showCreateModal, setShowCreateModal] = useState(false);
 
-
-const handleClear = () => {
-  if (semesterDataAll.length > 0) {
-    setIdSemesterSearch(semesterDataAll[0].id);
-  } else {
-    setIdSemesterSearch("null");
-  }
-  setSelectedItems("");
-  setCode("");
-  setIdActivitiSearch("");
-  setSelectedItemsPerson("");
-  toast.success("Hủy bộ lọc thành công !");
-  setClear(true);
-};
-const [showCreateModal, setShowCreateModal] = useState(false);
-
-  const handleModalCreateCancel = async() => {
+  const handleModalCreateCancel = async () => {
     document.querySelector("body").style.overflowX = "auto";
     setShowCreateModal(false);
     await featchAllMyClass();
-
   };
 
   return (
     <div className="class_management">
-            {!loading && <LoadingIndicator />}
+      {!loading && <LoadingIndicator />}
 
       <div className="title_class">
         {" "}
-        <FontAwesomeIcon icon={faCogs} size="1x" />
-        <span style={{ marginLeft: "10px" }}>Quản lý lớp học</span>
+        <span style={{ fontSize: "18px" }}>Quản lý lớp học</span>
       </div>
       <div className="filter">
         <FontAwesomeIcon icon={faFilter} size="2x" />{" "}
         <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
         <hr />
-        <div className="content">
-          <div className="content-wrapper">
-            <Row className="selectPriodAndPerson">
-            <div >
-              <span style={{marginLeft:'20px'}}>Ca Học:</span>
-            <QuestionCircleFilled
-                style={{ paddingLeft: "5px", fontSize: "15px" }}
-              />
-              <br/>
+        <Row>
+          <Col span={12} style={{ padding: "10px" }}>
+            <div>
+              <span>Học kỳ:</span>
+              <br />
               <Select
-                  showSearch
-                  placeholder="Select a class Period"
-                  value={selectedItems}
-                  onChange={handleSelectChange}
-                  style={{ width: '270px' , height: '50%',marginLeft:'20px'}}
-                  >
-                      <Option value="">Tất Cả</Option>
-                      {listClassPeriod.map((value) => {
+                showSearch
+                style={{ width: "100%" }}
+                value={idSemesterSeach}
+                onChange={(value) => {
+                  setIdSemesterSearch(value);
+                }}
+              >
+                <Option value="">Tất cả</Option>
+
+                {semesterDataAll.map((semester) => (
+                  <Option key={semester.id} value={semester.id}>
+                    {semester.name}
+                  </Option>
+                ))}
+              </Select>
+            </div>
+          </Col>
+          <Col span={12} style={{ padding: "10px" }}>
+            <div className="selectSearch3">
+              <span>Hoạt Động:</span>
+              <br />
+              <Select
+                showSearch
+                style={{ width: "100%" }}
+                value={idActivitiSearch}
+                onChange={(value) => {
+                  setIdActivitiSearch(value);
+                }}
+              >
+                <Option value="">Tất cả</Option>
+                {activityDataAll.map((activity) => (
+                  <Option key={activity.id} value={activity.id}>
+                    {activity.name}
+                  </Option>
+                ))}
+              </Select>
+            </div>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={12} style={{ padding: "10px" }}>
+            <div>
+              <span>Ca học:</span>
+              <br />
+              <Select
+                showSearch
+                style={{ width: "100%" }}
+                value={selectedItems}
+                onChange={handleSelectChange}
+              >
+                <Option value="">Tất Cả</Option>
+                {listClassPeriod.map((value) => {
                   return (
                     <Option value={value} key={value}>
                       {value}
@@ -314,20 +342,18 @@ const [showCreateModal, setShowCreateModal] = useState(false);
                 })}
               </Select>
             </div>
-            <div className="selectSearch2" >
-            <span style={{marginLeft:'20px'}}>GVHD:</span>
-            <QuestionCircleFilled
-                style={{ paddingLeft: "5px", fontSize: "15px" }}
-              />
-              <br/>
+          </Col>
+          <Col span={12} style={{ padding: "10px" }}>
+            <div>
+              <span>Giảng viên:</span>
+              <br />
               <Select
-                  showSearch
-                  placeholder="Select a person "
-                  value={selectedItemsPerson}
-                  onChange={handleSelectPersonChange}
-                style={{ width: '270px', height: '50%',marginLeft:'20px'}}
-                   >
-                      <Option value="">Tất cả</Option>
+                showSearch
+                style={{ width: "100%" }}
+                value={selectedItemsPerson}
+                onChange={handleSelectPersonChange}
+              >
+                <Option value="">Tất cả</Option>
 
                 {teacherDataAll.map((teacher) => (
                   <Option key={teacher.id} value={teacher.id}>
@@ -335,109 +361,50 @@ const [showCreateModal, setShowCreateModal] = useState(false);
                   </Option>
                 ))}
               </Select>
-              </div>
-                        
-            </Row>
-          </div>
-          
-        </div>
-        <Row className="selectActiAndSemes">
-        <div >
-        <span style={{marginLeft:'20px'}}>Semester:</span>
-            <QuestionCircleFilled
-                style={{ paddingLeft: "5px", fontSize: "15px" }}
-              />
-              <br/>
-              <Select
-                  showSearch
-                  placeholder="Select a person "
-                  value={idSemesterSeach}
-                  onChange={(value) => {
-                    setIdSemesterSearch(value);
-                  }}
-                style={{ width: '270px', height: '50%',marginLeft:'20px' }}
-                   >
-
-                      <Option value="">Tất cả</Option>
-
-                {semesterDataAll.map((semester) => (
-                  <Option key={semester.id} value={semester.id}>
-                    {semester.name}
-                  </Option>
-                ))}
-              </Select>
-              </div>
-              <div className="selectSearch3" >
-
-              <span style={{marginLeft:'20px'}}>Hoạt Động:</span>
-            <QuestionCircleFilled
-                style={{ paddingLeft: "5px", fontSize: "15px" }}
-              />
-              <br/>
-              <Select
-                  showSearch
-                  placeholder="Select a activity "
-                  value={idActivitiSearch}
-                  onChange={(value) => {
-                    setIdActivitiSearch(value);
-                  }}
-                style={{ width: '270px', height: '50%',marginLeft:'20px'}}
-              >
-                      <Option value="">Tất cả</Option>
-                        {activityDataAll.map((activity) => (
-                      <Option key={activity.id} value={activity.id}>
-                               {activity.name}
-                      </Option>
-                ))}
-              </Select>
-              </div>
-              </Row>
-              <Row>
-              <div className="inputCode">
-              <span style={{marginLeft:'20px'}}>Mã Lớp:</span>
-            <QuestionCircleFilled
-                style={{ paddingLeft: "5px", fontSize: "15px" }}
-              />
-              <br/>
-              <Input
-                placeholder="Import Class Code"
-                type="text"
-                value={code}
-                
-                onChange={handleCodeChange}
-
-                style={{ width: "780px" ,marginLeft:'20px'}}
-              />
             </div>
-              </Row>
-              <div className="box_btn_filter">
-            <Button className="btn_filter" 
-            onClick={handleSearchAllByFilter}
-            >
-              Tìm kiếm
-            </Button>
-            <Button className="btn_clear" 
-            onClick={handleClear}
-            >
-              Làm mới
-            </Button>
-          </div>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={12} style={{ padding: "10px" }}>
+            <div className="inputCode">
+              <span>Mã Lớp:</span>
+              <br />
+              <Input type="text" value={code} onChange={handleCodeChange} />
+            </div>
+          </Col>
+        </Row>
+        <div className="box_btn_filter">
+          <Button className="btn_filter" onClick={handleSearchAllByFilter}>
+            Tìm kiếm
+          </Button>
+          <Button className="btn_clear" onClick={handleClear}>
+            Làm mới
+          </Button>
+        </div>
       </div>
 
-      <div className="table_Allstakeholder_management">
-        <div className="title_stakeholder_management">
-          {" "}
-          <FontAwesomeIcon icon={faCogs} size="1x" />
-          <span style={{ fontSize: "18px", fontWeight: "500",marginBottom:"-50px" }}>
+      <div className="table-class-management">
+        {" "}
+        <div style={{ marginBottom: "8px" }}>
+          <div className="table-class-management-info">
             {" "}
-            Danh sách lớp học
-          </span>
+            <FontAwesomeIcon icon={faCogs} size="1x" />
+            <span
+              style={{
+                fontSize: "18px",
+                fontWeight: "500",
+                marginBottom: "-50px",
+              }}
+            >
+              {" "}
+              Danh sách lớp học
+            </span>{" "}
+          </div>
           <div className="createButton">
-            <Button 
+            <Button
               style={{
                 color: "white",
                 backgroundColor: "rgb(55, 137, 220)",
-                
               }}
               onClick={() => {
                 setShowCreateModal(true);
@@ -453,54 +420,51 @@ const [showCreateModal, setShowCreateModal] = useState(false);
               Thêm Lớp
             </Button>
           </div>
-          
-      </div>
-      
         </div>
-        
-        <div style={{ marginTop: "25px" }}>
+        <br />
         <div>
-          {listClassAll.length > 0 ? (
-            <>
-              <div className="table">
-                <Table
-                  dataSource={listClassAll}
-                  rowKey="id"
-                  columns={columns}
-                  pagination={false}
-                />
-              </div>
-              <div className="pagination_box">
-                <Pagination
-                  simple
-                  current={current}
-                  onChange={(value) => {
-                    setCurrent(value);
+          <div>
+            {listClassAll.length > 0 ? (
+              <>
+                <div className="table">
+                  <Table
+                    dataSource={listClassAll}
+                    rowKey="id"
+                    columns={columns}
+                    pagination={false}
+                  />
+                </div>
+                <div className="pagination_box">
+                  <Pagination
+                    simple
+                    current={current}
+                    onChange={(value) => {
+                      setCurrent(value);
+                    }}
+                    total={totalPages * 10}
+                  />
+                </div>
+              </>
+            ) : (
+              <>
+                <p
+                  style={{
+                    textAlign: "center",
+                    marginTop: "100px",
+                    fontSize: "15px",
                   }}
-                  total={totalPages * 10}
-                />
-              </div>
-            </>
-          ) : (
-            <>
-              <p
-                style={{
-                  textAlign: "center",
-                  marginTop: "100px",
-                  fontSize: "15px",
-                }}
-              >
-                Không có lớp học
-              </p>
-            </>
-          )}
+                >
+                  Không có lớp học
+                </p>
+              </>
+            )}
+          </div>
         </div>
-        </div>
-        
+      </div>
       <ModalCreateProject
-          visible={showCreateModal}
-          onCancel={handleModalCreateCancel}
-          />
+        visible={showCreateModal}
+        onCancel={handleModalCreateCancel}
+      />
     </div>
   );
 };
