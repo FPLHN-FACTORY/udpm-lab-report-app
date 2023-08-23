@@ -25,7 +25,11 @@ import { list } from "@chakra-ui/react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ModalCreateProject from "../../admin/class-management/create-class/ModalCreateClass";
-
+import {
+  ControlOutlined,
+  QuestionCircleFilled,
+  ProjectOutlined,
+} from "@ant-design/icons";
 const ClassManagement = () => {
   const { Option } = Select;
   const [listClassAll, setlistClassAll] = useState([]); //getAll
@@ -288,13 +292,17 @@ const [showCreateModal, setShowCreateModal] = useState(false);
           <div className="content-wrapper">
             <Row className="selectPriodAndPerson">
             <div >
-            Ca Học:{" "}
+              <span style={{marginLeft:'20px'}}>Ca Học:</span>
+            <QuestionCircleFilled
+                style={{ paddingLeft: "5px", fontSize: "15px" }}
+              />
+              <br/>
               <Select
                   showSearch
                   placeholder="Select a class Period"
                   value={selectedItems}
                   onChange={handleSelectChange}
-                  style={{ width: '220px' , height: '50%'}}
+                  style={{ width: '270px' , height: '50%',marginLeft:'20px'}}
                   >
                       <Option value="">Tất Cả</Option>
                       {listClassPeriod.map((value) => {
@@ -307,13 +315,17 @@ const [showCreateModal, setShowCreateModal] = useState(false);
               </Select>
             </div>
             <div className="selectSearch2" >
-            GVHD:{" "}
+            <span style={{marginLeft:'20px'}}>GVHD:</span>
+            <QuestionCircleFilled
+                style={{ paddingLeft: "5px", fontSize: "15px" }}
+              />
+              <br/>
               <Select
                   showSearch
                   placeholder="Select a person "
                   value={selectedItemsPerson}
                   onChange={handleSelectPersonChange}
-                style={{ width: '220px', height: '50%'}}
+                style={{ width: '270px', height: '50%',marginLeft:'20px'}}
                    >
                       <Option value="">Tất cả</Option>
 
@@ -331,7 +343,11 @@ const [showCreateModal, setShowCreateModal] = useState(false);
         </div>
         <Row className="selectActiAndSemes">
         <div >
-         Semester:{" "}
+        <span style={{marginLeft:'20px'}}>Semester:</span>
+            <QuestionCircleFilled
+                style={{ paddingLeft: "5px", fontSize: "15px" }}
+              />
+              <br/>
               <Select
                   showSearch
                   placeholder="Select a person "
@@ -339,7 +355,7 @@ const [showCreateModal, setShowCreateModal] = useState(false);
                   onChange={(value) => {
                     setIdSemesterSearch(value);
                   }}
-                style={{ width: '220px', height: '50%' }}
+                style={{ width: '270px', height: '50%',marginLeft:'20px' }}
                    >
 
                       <Option value="">Tất cả</Option>
@@ -353,7 +369,11 @@ const [showCreateModal, setShowCreateModal] = useState(false);
               </div>
               <div className="selectSearch3" >
 
-        Hoạt Động:{" "}
+              <span style={{marginLeft:'20px'}}>Hoạt Động:</span>
+            <QuestionCircleFilled
+                style={{ paddingLeft: "5px", fontSize: "15px" }}
+              />
+              <br/>
               <Select
                   showSearch
                   placeholder="Select a activity "
@@ -361,7 +381,7 @@ const [showCreateModal, setShowCreateModal] = useState(false);
                   onChange={(value) => {
                     setIdActivitiSearch(value);
                   }}
-                style={{ width: '220px', height: '50%'}}
+                style={{ width: '270px', height: '50%',marginLeft:'20px'}}
               >
                       <Option value="">Tất cả</Option>
                         {activityDataAll.map((activity) => (
@@ -374,7 +394,11 @@ const [showCreateModal, setShowCreateModal] = useState(false);
               </Row>
               <Row>
               <div className="inputCode">
-            Mã Lớp:{" "}
+              <span style={{marginLeft:'20px'}}>Mã Lớp:</span>
+            <QuestionCircleFilled
+                style={{ paddingLeft: "5px", fontSize: "15px" }}
+              />
+              <br/>
               <Input
                 placeholder="Import Class Code"
                 type="text"
@@ -382,7 +406,7 @@ const [showCreateModal, setShowCreateModal] = useState(false);
                 
                 onChange={handleCodeChange}
 
-                style={{ width: "767px" }}
+                style={{ width: "780px" ,marginLeft:'20px'}}
               />
             </div>
               </Row>

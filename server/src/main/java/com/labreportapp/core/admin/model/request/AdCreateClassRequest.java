@@ -23,7 +23,7 @@ public class AdCreateClassRequest {
 
     private Long classPeriod;
 
-//    private Integer classSize;
+    private Integer classSize;
 
     private Long startTime;
 
