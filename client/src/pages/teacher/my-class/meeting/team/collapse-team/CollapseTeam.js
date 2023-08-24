@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import LoadingIndicator from "../../../../../../helper/loading";
 const { Panel } = Collapse;
 
-const CollapseTeam = ({ data }) => {
+const CollapseTeam = ({ items }) => {
   const [activePanel, setActivePanel] = useState(null);
   const [edit, setEdit] = useState(false);
   const { idMeeting } = useParams();
@@ -121,7 +121,7 @@ const CollapseTeam = ({ data }) => {
     >
       {/* {!loading && <LoadingIndicator />} */}
       <Collapse bordered={false} accordion={true} ghost showArrow={true}>
-        {data.map((item, index) => (
+        {items.map((item, index) => (
           <Panel
             style={{
               minWidth: "900px",

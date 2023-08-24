@@ -105,7 +105,7 @@ const TeamInMeeting = () => {
               Danh sách nhóm
             </span>
           </div>
-          <CollapseTeam data={team} />
+          <CollapseTeam items={team}></CollapseTeam>
         </div>
       </div>
     </>
