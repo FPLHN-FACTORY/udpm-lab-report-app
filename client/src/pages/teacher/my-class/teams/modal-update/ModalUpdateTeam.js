@@ -166,12 +166,6 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
 
   const update = async () => {
     let check = 0;
-    // if (code.trim() === "") {
-    //   setErrorCode("Mã nhóm không được để trống");
-    //   check++;
-    // } else {
-    //   setErrorCode("");
-    // }
     if (name.trim() === "") {
       setErrorName("Tên nhóm không được để trống");
       check++;
@@ -310,21 +304,7 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
         </div>
         <div style={{ marginTop: "15px", borderBottom: "1px solid black" }}>
           <Row gutter={16} style={{ marginBottom: "15px" }}>
-            {/* <Col span={12}>
-              {" "}
-              <span className="notBlank">*</span>
-              <span>Mã nhóm:</span> <br />
-              <Input
-                placeholder="Nhập mã"
-                value={code}
-                onChange={(e) => {
-                  setCode(e.target.value);
-                }}
-                type="text"
-              />
-              <span className="error">{errorCode}</span>
-            </Col> */}
-            <Col span={12}>
+          <Col span={12}>
               {" "}
               <span className="notBlank">*</span>
               <span>Tên nhóm:</span> <br />

@@ -12,14 +12,14 @@ import lombok.Setter;
 @Setter
 public class TeUpdateHomeWorkAndNoteInMeetingRequest {
 
-    @NotEmpty
-    @NotBlank
+    private String idMeeting;
+
+    private String idTeam;
+
     private String idHomeWork;
 
     private String descriptionsHomeWork;
 
-    @NotBlank
-    @NotEmpty
     private String idNote;
 
     private String descriptionsNote;

@@ -1,21 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Button, Col, Collapse, Row, Space, Switch } from "antd";
-import {
-  PlusOutlined,
-  MinusOutlined,
-  BookOutlined,
-  CheckOutlined,
-  CloseOutlined,
-} from "@ant-design/icons";
+import { BookOutlined } from "@ant-design/icons";
 import "./styleCollapseTeam.css";
 import TextArea from "antd/es/input/TextArea";
 import { TeacherMeetingAPI } from "../../../../../../api/teacher/meeting/TeacherMeeting.api";
 import { TeacherMeetingHomeWorkNoteAPI } from "../../../../../../api/teacher/meeting/homework-note/TeacherMeetingHomeWorkNote.api";
 import { useParams } from "react-router";
+import { toast } from "react-toastify";
 import LoadingIndicator from "../../../../../../helper/loading";
 const { Panel } = Collapse;
 
-const CollapseTeam = ({ items }) => {
+const CollapseTeam = ({ data }) => {
   const [activePanel, setActivePanel] = useState(null);
   const [edit, setEdit] = useState(false);
   const { idMeeting } = useParams();
@@ -49,6 +44,7 @@ const CollapseTeam = ({ items }) => {
 
   const handleCancel = () => {
     setEdit(false);
+    toast.success("Hủy thành công");
     featchHomeWorkNote(idTeamDetail);
   };
 
@@ -68,15 +64,16 @@ const CollapseTeam = ({ items }) => {
         data
       ).then((response) => {
         if (response.data.data === null) {
+          let respone = {
+            idHomeWork: "",
+            idNote: "",
+          };
+          setObjDetail(respone);
           setDescriptionsHomeWork("");
           setDescriptionsNote("");
         } else {
           setDescriptionsHomeWork(response.data.data.descriptionsHomeWork);
           setDescriptionsNote(response.data.data.descriptionsNote);
-          console.log(
-            "----------------------------------------------------------------"
-          );
-          console.log(response.data.data);
           setObjDetail(response.data.data);
         }
         setLoading(true);
@@ -89,6 +86,8 @@ const CollapseTeam = ({ items }) => {
   const update = async () => {
     try {
       let data = {
+        idMeeting: idMeeting,
+        idTeam: idTeamDetail,
         idHomeWork: objDetail.idHomeWork,
         descriptionsHomeWork: descriptionsHomeWork,
         idNote: objDetail.idNote,
@@ -96,17 +95,13 @@ const CollapseTeam = ({ items }) => {
       };
       await TeacherMeetingHomeWorkNoteAPI.updateHomeWorkAndNote(data).then(
         (response) => {
-          console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-          console.log(response);
+          toast.success("Lưu thành công");
         }
       );
     } catch (error) {
-      alert(error.message);
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-  // const toggleEdit = (index) => {
-  //   setEdit(!edit);
-  // };
 
   // const customExpandIcon = ({ isActive }) => {
   //   return isActive ? (
@@ -126,7 +121,7 @@ const CollapseTeam = ({ items }) => {
     >
       {/* {!loading && <LoadingIndicator />} */}
       <Collapse bordered={false} accordion={true} ghost showArrow={true}>
-        {items.map((item, index) => (
+        {data.map((item, index) => (
           <Panel
             style={{
               minWidth: "900px",
