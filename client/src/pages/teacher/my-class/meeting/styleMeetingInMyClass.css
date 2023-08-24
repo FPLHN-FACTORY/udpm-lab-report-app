@@ -39,9 +39,6 @@
   place-items: center;
   border-bottom: 1px solid rgb(206, 206, 206);
 }
-/* .box-card .content-left {
-  margin-left: 35px;
-} */
 .box-card:hover {
   border-radius: 10px;
   background-color: rgb(240, 240, 240);
@@ -75,10 +72,15 @@
   float: left;
   min-width: 600px;
   width: 75%;
-
   margin-left: 20px;
 }
-/* word-wrap: break-word; */
+
+.title-right {
+  float: left;
+  width: 35%;
+  font-size: 13px;
+  color: grey;
+}
 .title-text {
   font-size: 16px;
   color: black;
@@ -88,12 +90,6 @@
   text-overflow: ellipsis;
 }
 
-.title-right {
-  float: left;
-  width: 35%;
-  font-size: 13px;
-  color: grey;
-}
 .data-table {
   margin: 100px 0px 0xp 0px;
 }

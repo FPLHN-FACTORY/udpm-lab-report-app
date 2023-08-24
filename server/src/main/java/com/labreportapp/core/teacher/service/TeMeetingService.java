@@ -1,8 +1,10 @@
 package com.labreportapp.core.teacher.service;
 
 import com.labreportapp.core.teacher.model.request.TeFindMeetingRequest;
+import com.labreportapp.core.teacher.model.request.TeUpdateHomeWorkAndNoteInMeetingRequest;
+import com.labreportapp.core.teacher.model.response.TeHomeWorkAndNoteMeetingRespone;
 import com.labreportapp.core.teacher.model.response.TeMeetingRespone;
-import com.labreportapp.entity.Meeting;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -16,4 +18,10 @@ public interface TeMeetingService {
     Integer countMeetingByClassId(String idClass);
 
     TeMeetingRespone searchMeetingByIdMeeting(final TeFindMeetingRequest request);
+
+    TeHomeWorkAndNoteMeetingRespone searchDetailMeetingTeamByIdMeIdTeam(final TeFindMeetingRequest request);
+
+    TeHomeWorkAndNoteMeetingRespone updateDetailMeetingTeamByIdMeIdTeam(@Valid TeUpdateHomeWorkAndNoteInMeetingRequest request);
+//    List<TeHomeWorkAndNoteMeetingRespone> searchMeetingHomeWNoteByIdMeetingAndIdClass(final TeFindMeetingRequest request);
+
 }

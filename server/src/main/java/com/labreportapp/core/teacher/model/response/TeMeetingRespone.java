@@ -27,4 +27,5 @@ public interface TeMeetingRespone {
 
     @Value("#{target.class_id}")
     String getIdClass();
+
 }

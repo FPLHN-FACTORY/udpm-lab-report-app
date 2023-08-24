@@ -10,7 +10,7 @@ import LoadingIndicator from "../../../../../helper/loading";
 import { useEffect, useState } from "react";
 import { TeacherMeetingAPI } from "../../../../../api/teacher/meeting/TeacherMeeting.api";
 import { TeacherTeamsAPI } from "../../../../../api/teacher/teams-class/TeacherTeams.api";
-
+import CollapseTeam from "../team/collapse-team/CollapseTeam";
 const TeamInMeeting = () => {
   const { idMeeting } = useParams();
   const [meeting, setMeeting] = useState({});
@@ -18,6 +18,7 @@ const TeamInMeeting = () => {
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     window.scrollTo(0, 0);
+    document.title = "Bảng điều khiển - buổi học";
     featchMeeting(idMeeting);
   }, []);
 
@@ -104,34 +105,7 @@ const TeamInMeeting = () => {
               Danh sách nhóm
             </span>
           </div>
-          <div className="data-table">
-            {team.map((record) => (
-              <div role="button" className="box-card" key={record.id}>
-                <div className="title-left">
-                  <div className="box-icon">
-                    <BookOutlined style={{ color: "white", fontSize: 21 }} />
-                  </div>
-                  <span
-                    style={{
-                      fontSize: "16px",
-                      color: "black",
-                    }}
-                  >
-                    {record.name}
-                  </span>
-                </div>
-                <div className="title-right">
-                  <div>
-                    {" "}
-                    <span style={{ color: "grey", float: "right" }}>
-                      {" "}
-                      {record.subjectName}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+          <CollapseTeam items={team} />
         </div>
       </div>
     </>

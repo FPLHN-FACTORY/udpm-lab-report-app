@@ -21,6 +21,7 @@ const MeetingInMyClass = () => {
   const [loading, setLoading] = useState(false);
   const { idClass } = useParams();
   const [countMeeting, setCountMeeting] = useState(0);
+
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Bảng điều khiển - buổi học";

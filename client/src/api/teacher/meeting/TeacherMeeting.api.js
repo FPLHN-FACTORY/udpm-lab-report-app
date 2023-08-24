@@ -20,4 +20,13 @@ export class TeacherMeetingAPI {
       url: url + `/detail?idMeeting=` + idMeeting,
     });
   }
+  static getDetailHomeWorkAndNoteByIdMeetingandIdTeam(data) {
+    return request({
+      method: "GET",
+      url:
+        url + `/hw-note?idMeeting=` + data.idMeeting + `&idTeam=` + data.idTeam,
+    });
+  }
+
+  
 }
