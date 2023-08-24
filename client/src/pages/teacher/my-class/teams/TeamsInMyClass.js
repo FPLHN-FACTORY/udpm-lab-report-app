@@ -45,20 +45,12 @@ const TeamsInMyClass = () => {
     document.title = "Bảng điều khiển - nhóm";
     featchTeams(idClass);
   }, []);
-
-  useEffect(() => {
-    if (loadingStudentClass === true) {
-      setLoading(false);
-      fetchData(idClass);
-      setLoading(true);
-    }
-  }, [loadingStudentClass]);
   const fetchData = async (idClass) => {
-    setLoading(false);
     await featchStudentClass(idClass);
     featInforStudent();
   };
   const featchTeams = async (id) => {
+    setLoading(false);
     try {
       await TeacherTeamsAPI.getTeamsByIdClass(id).then((responese) => {
         dispatch(SetTeams(responese.data.data));
@@ -100,11 +92,18 @@ const TeamsInMyClass = () => {
           };
         });
       dispatch(SetStudentClasses(listShowTable));
+      setLoading(true);
       setLoadingStudentClass(true);
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
+
+  useEffect(() => {
+    if (loadingStudentClass === true) {
+      fetchData(idClass);
+    }
+  }, [loadingStudentClass]);
 
   const [teamDelete, setTeamDelete] = useState({});
 

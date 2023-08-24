@@ -5,8 +5,11 @@ import { Link } from "react-router-dom";
 import { ControlOutlined } from "@ant-design/icons";
 import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
 import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/TeacherStudentClasses.api";
-import { SetStudentClasses } from "../../../../app/teacher/student-class/studentClassesSlice.reduce";
-import { useAppDispatch } from "../../../../app/hook";
+import {
+  GetStudentClasses,
+  SetStudentClasses,
+} from "../../../../app/teacher/student-class/studentClassesSlice.reduce";
+import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import { useEffect, useState } from "react";
 import LoadingIndicator from "../../../../helper/loading";
 import moment from "moment";
@@ -26,18 +29,8 @@ const StudentsInMyClass = () => {
     featchClass(idClass);
   }, []);
 
-  useEffect(() => {
-    if (loadingStudentClass === true) {
-      setLoading(false);
-      fetchData(idClass);
-      setLoading(true);
-    }
-  }, [loadingStudentClass]);
-
   const fetchData = async (idClass) => {
-    setLoading(false);
-    await featchStudentClass(idClass);
-    featInforStudent();
+    await Promise.all([featchStudentClass(idClass), featInforStudent(idClass)]);
   };
 
   const featchClass = async (idClass) => {
@@ -56,7 +49,6 @@ const StudentsInMyClass = () => {
       await TeacherStudentClassesAPI.getStudentInClasses(id).then(
         (responese) => {
           setListStudentClass(responese.data.data);
-          setLoadingStudentClass(true);
         }
       );
     } catch (error) {
@@ -64,7 +56,6 @@ const StudentsInMyClass = () => {
     }
   };
   const featInforStudent = async (idClass) => {
-    setLoading(false);
     try {
       let request = listStudentClass.map((item) => item.idStudent).join("|");
       const listStudentAPI = await TeacherStudentClassesAPI.getAllInforStudent(
@@ -83,15 +74,24 @@ const StudentsInMyClass = () => {
             ...matchedObject,
           };
         });
-      dispatch(SetStudentClasses(listShowTable));
       setDataTable(listShowTable);
+      dispatch(SetStudentClasses(listShowTable));
       setLoading(true);
+      setLoadingStudentClass(true);
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
 
-  const data = dataTable;
+  useEffect(() => {
+    if (loadingStudentClass === true) {
+      setLoading(false);
+      fetchData(idClass);
+    }
+  }, [loadingStudentClass]);
+
+  // const data = dataTable;
+  const data = useAppSelector(GetStudentClasses);
   const columns = [
     {
       title: "#",

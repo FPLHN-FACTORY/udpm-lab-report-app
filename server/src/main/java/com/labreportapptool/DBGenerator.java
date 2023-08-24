@@ -493,22 +493,6 @@ public class DBGenerator implements CommandLineRunner {
         homeWork1.setTeamId(team2.getId());
         homeWork1.setId(homeWorkRepository.save(homeWork1).getId());
 
-
-
-//        HomeWork homeWork2a = new HomeWork();
-//        homeWork2a.setName("Bài tập về nhà buổi 1 team 3");
-//        homeWork2a.setDescriptions("Tạo entity và mapping dữ liệu  team 3");
-//        homeWork2a.setMeetingId(meeting1.getId());
-//        homeWork2a.setTeamId(team3.getId());
-//        homeWork2a.setId(homeWorkRepository.save(homeWork2a).getId());
-//
-//        Note note2a = new Note();
-//        note2a.setName("Note buổi 1 team 3");
-//        note2a.setMeetingId(meeting1.getId());
-//        note2a.setTeamId(team3.getId());
-//        note2a.setDescriptions(" team 3");
-//        note2a.setId(noteRepository.save(note2a).getId());
-
         HomeWork homeWork2 = new HomeWork();
         homeWork2.setName("Bài tập về nhà buổi 2");
         homeWork2.setDescriptions("Tạo repository sử dụng spring jpa - BEE FLY");
@@ -573,7 +557,6 @@ public class DBGenerator implements CommandLineRunner {
         note1.setDescriptions("team 2");
         note1.setId(noteRepository.save(note1).getId());
 
-
         Note note3 = new Note();
         note3.setName("Note buổi 3 team 2");
         note3.setMeetingId(meeting3.getId());
@@ -608,7 +591,7 @@ public class DBGenerator implements CommandLineRunner {
         note7.setTeamId(team2.getId());
         note7.setDescriptions("Chức năng bee fly ok");
         note7.setId(noteRepository.save(note7).getId());
-     
+
         Note note8 = new Note();
         note8.setName("Note buổi 1 team 2");
         note8.setMeetingId(meeting8.getId());

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, Collapse, Row, Space, Switch } from "antd";
-import { BookOutlined } from "@ant-design/icons";
+import { Button, Col, Collapse, Row } from "antd";
 import "./styleCollapseTeam.css";
 import TextArea from "antd/es/input/TextArea";
 import { TeacherMeetingAPI } from "../../../../../../api/teacher/meeting/TeacherMeeting.api";
@@ -8,6 +7,8 @@ import { TeacherMeetingHomeWorkNoteAPI } from "../../../../../../api/teacher/mee
 import { useParams } from "react-router";
 import { toast } from "react-toastify";
 import LoadingIndicator from "../../../../../../helper/loading";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUsersRectangle } from "@fortawesome/free-solid-svg-icons";
 const { Panel } = Collapse;
 
 const CollapseTeam = ({ items }) => {
@@ -17,7 +18,6 @@ const CollapseTeam = ({ items }) => {
   const [idTeamDetail, setIdTeamDetail] = useState("");
   const [objDetail, setObjDetail] = useState({});
   const [loading, setLoading] = useState(true);
-  const [descriptionsMeeting, setDescriptionsMeeting] = useState("");
   const [descriptionsHomeWork, setDescriptionsHomeWork] = useState("");
   const [descriptionsNote, setDescriptionsNote] = useState("");
   useEffect(() => {
@@ -33,13 +33,9 @@ const CollapseTeam = ({ items }) => {
   }, [idTeamDetail, activePanel]);
 
   const toggleCard = (index, item) => {
-    // if (index === activePanel) {
-    //   setActivePanel(null);
-    // } else {
     setEdit(false);
     setActivePanel(index);
     setIdTeamDetail(item.id);
-    //  }
   };
 
   const handleCancel = () => {
@@ -64,11 +60,11 @@ const CollapseTeam = ({ items }) => {
         data
       ).then((response) => {
         if (response.data.data === null) {
-          let respone = {
+          let dataNew = {
             idHomeWork: "",
             idNote: "",
           };
-          setObjDetail(respone);
+          setObjDetail(dataNew);
           setDescriptionsHomeWork("");
           setDescriptionsNote("");
         } else {
@@ -119,7 +115,6 @@ const CollapseTeam = ({ items }) => {
         clear();
       }}
     >
-      {/* {!loading && <LoadingIndicator />} */}
       <Collapse bordered={false} accordion={true} ghost showArrow={true}>
         {items.map((item, index) => (
           <Panel
@@ -147,7 +142,11 @@ const CollapseTeam = ({ items }) => {
               >
                 <div className="title-left">
                   <div className="box-icon">
-                    <BookOutlined style={{ color: "white", fontSize: 21 }} />
+                    {/* <BookOutlined style={{ color: "white", fontSize: 21 }} /> */}
+                    <FontAwesomeIcon
+                      icon={faUsersRectangle}
+                      style={{ color: "white", fontSize: 21 }}
+                    />
                   </div>
                   <span
                     style={{
@@ -158,12 +157,6 @@ const CollapseTeam = ({ items }) => {
                     {item.name}
                   </span>
                 </div>
-                {/* <div className="title-right">
-                  <span style={{ color: "grey", float: "right" }}>
-                    {" "}
-                    {item.subjectName}
-                  </span>
-                </div> */}
               </div>
             }
             key={index}
@@ -172,7 +165,9 @@ const CollapseTeam = ({ items }) => {
               <Row gutter={16}>
                 <Col span={12}>
                   {" "}
-                  <span>Bài tập về nhà :</span>
+                  <span style={{ color: "black", fontFamily: "unset" }}>
+                    Bài tập về nhà :
+                  </span>
                   <TextArea
                     rows={4}
                     placeholder="Nhập bài tập"
@@ -187,7 +182,7 @@ const CollapseTeam = ({ items }) => {
                 </Col>
                 <Col span={12}>
                   {" "}
-                  <span>Nhận xét :</span>
+                  <span style={{ color: "black" }}>Nhận xét :</span>
                   <TextArea
                     rows={4}
                     placeholder="Nhập nhận xét"

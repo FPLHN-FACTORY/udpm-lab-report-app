@@ -167,9 +167,9 @@ const MeetingInMyClass = () => {
                         >
                           {record.name} {" - "}
                           {record.typeMeeting === 0 ? (
-                            <span>trực tuyến</span>
+                            <span>online</span>
                           ) : (
-                            <span>trên lớp</span>
+                            <span>offline</span>
                           )}
                         </p>
                       </div>

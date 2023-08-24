@@ -68,7 +68,7 @@ const TeamInMeeting = () => {
       <div className="box-filter">
         <div style={{ marginLeft: "30px" }}>
           <Row gutter={16}>
-            <Col span={21}>
+            <Col span={20}>
               {" "}
               <div className="title-left-meeting">
                 <div className="box-icon-detail">
@@ -84,11 +84,14 @@ const TeamInMeeting = () => {
                 </span>
               </div>
             </Col>
-            <Col span={3}>
+            <Col span={4}>
               <div
                 style={{ lineHeight: "42px", color: "grey", float: "right" }}
               >
-                <span>{convertLongToDate(meeting.meetingDate)}</span>
+                <span>
+                  Thời gian: {convertLongToDate(meeting.meetingDate)} - Ca{" "}
+                  {meeting.meetingPeriod + 1}
+                </span>
               </div>
             </Col>
           </Row>
