@@ -10,6 +10,7 @@ import { TeacherMeetingAPI } from "../../../../api/teacher/meeting/TeacherMeetin
 import { Link } from "react-router-dom";
 import CustomSwitch from "./CustomSwitch";
 import { Table } from "antd";
+import { toast } from "react-toastify";
 const TeacherAttendanceMeeting = () => {
   const { idMeeting } = useParams();
   const [classFind, setClassFind] = useState({});
@@ -32,10 +33,16 @@ const TeacherAttendanceMeeting = () => {
 
   const featchMeeting = async (id) => {
     try {
-      await TeacherMeetingAPI.getDetailByIdMeeting(id).then((response) => {
-        setIdClass(response.data.data.idClass);
-        fetchData(response.data.data.idClass);
-      });
+      await TeacherMeetingAPI.getAndCheckMeetingById(id).then(
+        (response) => {
+          setIdClass(response.data.data.idClass);
+          fetchData(response.data.data.idClass);
+        },
+        (error) => {
+          setLoading(true);
+          toast.error(error.response.data.message);
+        }
+      );
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang");
     }

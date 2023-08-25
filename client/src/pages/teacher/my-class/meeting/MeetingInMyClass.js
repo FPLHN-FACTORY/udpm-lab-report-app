@@ -78,7 +78,7 @@ const MeetingInMyClass = () => {
           <span style={{ color: "gray" }}> - lớp của tôi</span>
         </span>
       </div>
-      <div className="box-filter">
+      <div className="box-filter" style={{ minHeight: "580px" }}>
         <div className="button-menu-teacher">
           <div>
             <Link
@@ -142,50 +142,67 @@ const MeetingInMyClass = () => {
               </span>
             </div>
             <div className="data-table">
-              {dataMeeting.map((record) => (
-                <Link
-                  to={`/teacher/my-class/meeting/detail/${record.id}`}
-                  key={record.id}
-                >
-                  <div role="button" className="box-card">
-                    <div className="title-left">
-                      <div className="flex-container">
-                        {" "}
-                        <div className="title-icon">
-                          <div className="box-icon">
-                            <BookOutlined
-                              style={{ color: "white", fontSize: 21 }}
-                            />
+              {dataMeeting.length > 0 ? (
+                <>
+                  {dataMeeting.map((record) => (
+                    <Link
+                      to={`/teacher/my-class/meeting/detail/${record.id}`}
+                      key={record.id}
+                    >
+                      <div role="button" className="box-card">
+                        <div className="title-left">
+                          <div className="flex-container">
+                            {" "}
+                            <div className="title-icon">
+                              <div className="box-icon">
+                                <BookOutlined
+                                  style={{ color: "white", fontSize: 21 }}
+                                />
+                              </div>
+                            </div>
+                            <p
+                              className="title-text"
+                              style={{
+                                fontSize: "16px",
+                                color: "black",
+                              }}
+                            >
+                              {record.name} {" - "}
+                              {record.typeMeeting === 0 ? (
+                                <span>online</span>
+                              ) : (
+                                <span>offline</span>
+                              )}
+                            </p>
                           </div>
                         </div>
-                        <p
-                          className="title-text"
-                          style={{
-                            fontSize: "16px",
-                            color: "black",
-                          }}
-                        >
-                          {record.name} {" - "}
-                          {record.typeMeeting === 0 ? (
-                            <span>online</span>
-                          ) : (
-                            <span>offline</span>
-                          )}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="title-right">
-                      <div>
-                        {" "}
-                        <span>
-                          Thời gian: {convertLongToDate(record.meetingDate)} -
-                          Ca {record.meetingPeriod + 1}
-                        </span>
-                      </div>
-                    </div>
-                  </div>{" "}
-                </Link>
-              ))}
+                        <div className="title-right">
+                          <div>
+                            {" "}
+                            <span>
+                              Thời gian: {convertLongToDate(record.meetingDate)}{" "}
+                              - Ca {record.meetingPeriod + 1}
+                            </span>
+                          </div>
+                        </div>
+                      </div>{" "}
+                    </Link>
+                  ))}
+                </>
+              ) : (
+                <>
+                  <p
+                    style={{
+                      textAlign: "center",
+                      marginTop: "100px",
+                      fontSize: "15px",
+                      color: "red",
+                    }}
+                  >
+                    Không có buổi học
+                  </p>
+                </>
+              )}
             </div>
           </div>
         </div>

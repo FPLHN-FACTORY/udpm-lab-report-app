@@ -62,7 +62,7 @@ public class TeMeetingController {
 
     @GetMapping("/detail-attendance")
     public ResponseObject getTeMeetingAndCheckAttendance(final TeFindMeetingRequest request) {
-        TeMeetingRespone find = teMeetingService.searchMeetingByIdMeeting(request);
+        TeMeetingRespone find = teMeetingService.searchMeetingAndCheckAttendanceByIdMeeting(request);
         return new ResponseObject(find);
     }
 
@@ -77,9 +77,5 @@ public class TeMeetingController {
         List<TeScheduleMeetingClassRespone> list = teMeetingService.updateDescriptionMeeting(request);
         return new ResponseObject(list);
     }
-//    @GetMapping("/details")
-//    public ResponseObject getTeamMeetingHomeNoteDetail(final TeFindMeetingRequest request) {
-//        List<TeHomeWorkAndNoteMeetingRespone> find = teMeetingService.searchMeetingHomeWNoteByIdMeetingAndIdClass(request);
-//        return new ResponseObject(find);
-//    }
+
 }

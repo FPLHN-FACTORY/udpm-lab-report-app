@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,6 +56,25 @@ public class TeMeetingServiceImpl implements TeMeetingService {
         Optional<TeMeetingRespone> meeting = teMeetingRepository.searchMeetingByIdMeeting(request);
         if (!meeting.isPresent()) {
             throw new RestApiException(Message.MEETING_NOT_EXISTS);
+        }
+        return meeting.get();
+    }
+
+    @Override
+    public TeMeetingRespone searchMeetingAndCheckAttendanceByIdMeeting(TeFindMeetingRequest request) {
+        Optional<TeMeetingRespone> meeting = teMeetingRepository.searchMeetingByIdMeeting(request);
+        if (!meeting.isPresent()) {
+            throw new RestApiException(Message.MEETING_NOT_EXISTS);
+        }
+        TeMeetingRespone meetingFind = meeting.get();
+        Long dateNow = new Date().getTime();
+        Long dateMeeting = meetingFind.getMeetingDate();
+        Long check = dateNow - dateMeeting;
+        if (check < 0) {
+            throw new RestApiException(Message.MEETING_HAS_NOT_COME);
+        }
+        if (check > 86400000) {
+            throw new RestApiException(Message.MEETING_IS_OVER);
         }
         return meeting.get();
     }

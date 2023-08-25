@@ -23,7 +23,10 @@ public interface TeMeetingService {
 
     TeMeetingRespone searchMeetingByIdMeeting(final TeFindMeetingRequest request);
 
+    TeMeetingRespone searchMeetingAndCheckAttendanceByIdMeeting(final TeFindMeetingRequest request);
+
     TeHomeWorkAndNoteMeetingRespone searchDetailMeetingTeamByIdMeIdTeam(final TeFindMeetingRequest request);
+
 
     TeHomeWorkAndNoteMeetingRespone updateDetailMeetingTeamByIdMeIdTeam(@Valid TeUpdateHomeWorkAndNoteInMeetingRequest request);
 
