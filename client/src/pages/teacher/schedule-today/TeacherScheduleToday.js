@@ -169,16 +169,6 @@ const TeacherScheduleToday = () => {
               className="btn btn-success ml-4"
             >
               <Tooltip title="Xem chi tiết">
-                {/* <FontAwesomeIcon icon={faEye} className="icon" /> */}
-                {/* <Space direction="vertical">
-                <Switch
-                  checkedChildren={"Có mặt"}
-                  unCheckedChildren={"Vắng mặt"}
-                  iconChecked={null}
-                  iconUnChecked={null}
-                  defaultChecked
-                />
-              </Space> */}
                 <div
                   className="box-center"
                   style={{

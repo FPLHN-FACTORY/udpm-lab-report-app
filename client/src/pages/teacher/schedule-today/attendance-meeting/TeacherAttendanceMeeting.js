@@ -5,12 +5,10 @@ import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/
 import { useState } from "react";
 import LoadingIndicator from "../../../../helper/loading";
 import { ControlOutlined } from "@ant-design/icons";
-import { Table } from "antd";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClipboardUser } from "@fortawesome/free-solid-svg-icons";
+import { Space, Switch, Table } from "antd";
 import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
 import { Link } from "react-router-dom";
-
+import CustomSwitch from "./CustomSwitch";
 const TeacherAttendanceMeeting = () => {
   const { idMeeting, idClass } = useParams();
   const [classFind, setClassFind] = useState({});
@@ -67,6 +65,7 @@ const TeacherAttendanceMeeting = () => {
           return {
             ...item1,
             ...matchedObject,
+            status: 0,
           };
         });
       setDataTable(listShowTable);
@@ -92,7 +91,6 @@ const TeacherAttendanceMeeting = () => {
       dataIndex: "stt",
       key: "stt",
       render: (text, record, index) => index + 1,
-      width: "12px",
     },
     {
       title: "Mã sinh viên",
@@ -109,7 +107,6 @@ const TeacherAttendanceMeeting = () => {
         const codeShow = record.username.substring(nameIndexCut).toUpperCase();
         return <span style={{ color: "#007bff" }}>{codeShow}</span>;
       },
-      width: "130px",
     },
     {
       title: "Nhóm",
@@ -123,35 +120,35 @@ const TeacherAttendanceMeeting = () => {
           return <span>{text}</span>;
         }
       },
-      width: "150px",
     },
     {
-      title: "Họ và tên",
+      title: "Tên sinh viên",
       dataIndex: "name",
       key: "name",
       sorter: (a, b) => a.name.localeCompare(b.name),
     },
-
     {
       title: "Email",
       dataIndex: "email",
       key: "email",
       sorter: (a, b) => a.email.localeCompare(b.email),
     },
-
     {
       title: "Trạng thái",
-      dataIndex: "statusStudent",
-      key: "statusStudent",
-      sorter: (a, b) => a.statusStudent.localeCompare(b.statusStudent),
+      dataIndex: "status",
+      key: "status",
+      width: "30%",
       render: (text) => {
-        if (text === "0") {
-          return <span style={{ color: "green" }}>HD</span>;
-        } else {
-          return <span style={{ color: "red" }}>HL</span>;
-        }
+        return (
+          <>
+            <CustomSwitch
+              leftLabel="Có mặt"
+              rightLabel="Vắng mặt"
+              status={text}
+            />
+          </>
+        );
       },
-      width: "120px",
     },
   ];
   return (
