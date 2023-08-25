@@ -4,7 +4,6 @@ import com.labreportapp.core.teacher.model.request.TeFindMeetingRequest;
 import com.labreportapp.core.teacher.model.request.TeFindScheduleMeetingClassRequest;
 import com.labreportapp.core.teacher.model.request.TeScheduleUpdateMeetingRequest;
 import com.labreportapp.core.teacher.model.request.TeUpdateHomeWorkAndNoteInMeetingRequest;
-import com.labreportapp.core.teacher.model.request.TeUpdateMeetingRequest;
 import com.labreportapp.core.teacher.model.response.TeHomeWorkAndNoteMeetingRespone;
 import com.labreportapp.core.teacher.model.response.TeMeetingRespone;
 import com.labreportapp.core.teacher.model.response.TeScheduleMeetingClassRespone;
