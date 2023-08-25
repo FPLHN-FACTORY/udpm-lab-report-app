@@ -34,7 +34,6 @@ const StudentsInMyClass = () => {
   };
 
   const featchClass = async (idClass) => {
-    setLoading(false);
     try {
       await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
         setClassDetail(responese.data.data);
@@ -45,6 +44,7 @@ const StudentsInMyClass = () => {
     }
   };
   const featchStudentClass = async (id) => {
+    setLoading(false);
     try {
       await TeacherStudentClassesAPI.getStudentInClasses(id).then(
         (responese) => {
@@ -85,7 +85,6 @@ const StudentsInMyClass = () => {
 
   useEffect(() => {
     if (loadingStudentClass === true) {
-      setLoading(false);
       fetchData(idClass);
     }
   }, [loadingStudentClass]);
@@ -121,7 +120,6 @@ const StudentsInMyClass = () => {
       title: "Nhóm",
       dataIndex: "nameTeam",
       key: "nameTeam",
-      sorter: (a, b) => a.nameTeam.localeCompare(b.nameTeam),
       render: (text, record) => {
         if (text === null) {
           return <span style={{ color: "blue" }}>Chưa vào nhóm</span>;
@@ -149,7 +147,6 @@ const StudentsInMyClass = () => {
       title: "Trạng thái",
       dataIndex: "statusStudent",
       key: "statusStudent",
-      sorter: (a, b) => a.statusStudent.localeCompare(b.statusStudent),
       render: (text) => {
         if (text === "0") {
           return <span style={{ color: "green" }}>HD</span>;
@@ -228,9 +225,9 @@ const StudentsInMyClass = () => {
             <span style={{ fontSize: "14px" }}>
               {classDetail.classSize} thành viên{" "}
               <span style={{ color: "yellow" }}>| </span> Level{"  "}
-              {classDetail.activityLevel}
+              {classDetail.activityLevel + 1}
               <span style={{ color: "yellow" }}>| </span> Ca{"  "}
-              {classDetail.classPeriod}
+              {classDetail.classPeriod + 1}
             </span>
           </div>
           <Row gutter={16} style={{ marginBottom: "4px" }}>

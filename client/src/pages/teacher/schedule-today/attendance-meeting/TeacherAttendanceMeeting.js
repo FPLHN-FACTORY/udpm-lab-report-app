@@ -5,26 +5,40 @@ import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/
 import { useState } from "react";
 import LoadingIndicator from "../../../../helper/loading";
 import { ControlOutlined } from "@ant-design/icons";
-import { Space, Switch, Table } from "antd";
 import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
+import { TeacherMeetingAPI } from "../../../../api/teacher/meeting/TeacherMeeting.api";
 import { Link } from "react-router-dom";
 import CustomSwitch from "./CustomSwitch";
+import { Table } from "antd";
 const TeacherAttendanceMeeting = () => {
-  const { idMeeting, idClass } = useParams();
+  const { idMeeting } = useParams();
   const [classFind, setClassFind] = useState({});
   const [listStudentClassAPI, setListStudentClassAPI] = useState([]);
   const [dataTable, setDataTable] = useState([]);
   const [loadingData, setLoadingData] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [idClass, setIdClass] = useState("");
   useEffect(() => {
-    console.log("attdance id meeeting " + idMeeting);
-    console.log("attdance id class " + idClass);
-    fetchData(idClass);
-    featchClass(idClass);
+    featchMeeting(idMeeting);
   }, []);
 
   const fetchData = async (idClass) => {
-    await Promise.all([featchStudentClass(idClass), featInforStudent(idClass)]);
+    await Promise.all([
+      featchClass(idClass),
+      featchStudentClass(idClass),
+      featInforStudent(idClass),
+    ]);
+  };
+
+  const featchMeeting = async (id) => {
+    try {
+      await TeacherMeetingAPI.getDetailByIdMeeting(id).then((response) => {
+        setIdClass(response.data.data.idClass);
+        fetchData(response.data.data.idClass);
+      });
+    } catch (error) {
+      alert("Lỗi hệ thống, vui lòng F5 lại trang");
+    }
   };
 
   const featchClass = async (idClass) => {
@@ -34,9 +48,10 @@ const TeacherAttendanceMeeting = () => {
         setClassFind(responese.data.data);
       });
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      alert("Lỗi hệ thống, vui lòng F5 lại trang");
     }
   };
+
   const featchStudentClass = async (id) => {
     try {
       await TeacherStudentClassesAPI.getStudentInClasses(id).then(
@@ -45,7 +60,7 @@ const TeacherAttendanceMeeting = () => {
         }
       );
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      alert("Lỗi hệ thống, vui lòng F5 lại trang");
     }
   };
   const featInforStudent = async (idClass) => {
@@ -70,7 +85,6 @@ const TeacherAttendanceMeeting = () => {
         });
       setDataTable(listShowTable);
       //   dispatch(SetStudentClasses(listShowTable));
-      console.log(listShowTable);
       setLoading(true);
       setLoadingData(true);
     } catch (error) {
@@ -79,7 +93,6 @@ const TeacherAttendanceMeeting = () => {
   };
   useEffect(() => {
     if (loadingData === true) {
-      setLoading(false);
       fetchData(idClass);
     }
   }, [loadingData]);

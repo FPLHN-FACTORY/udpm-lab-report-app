@@ -107,7 +107,7 @@ function App() {
             />
             {/* router của Hiệu trang phụ điểm danh lịch dạy hôm nay*/}
             <Route
-              path="/teacher/schedule-today/attendance/:idMeeting/:idClass"
+              path="/teacher/schedule-today/attendance/:idMeeting"
               element={
                 <AuthGuard>
                   <DashBoardTeacher>

@@ -93,7 +93,7 @@ public class DBGenerator implements CommandLineRunner {
         activity1.setStartTime(new Date().getTime() + 10000);
         activity1.setEndTime(new Date().getTime() + 10000 + 2678400000L);
         activity1.setSemesterId(semester.getId());
-        activity1.setLevel(Level.LEVEL_1);
+        activity1.setLevel(Level.LEVEL_3);
         activity1.setId(activityRepository.save(activity1).getId());
 
         Activity activity2 = new Activity();
@@ -111,7 +111,7 @@ public class DBGenerator implements CommandLineRunner {
         class1.setStartTime(new Date().getTime() + 50000);
         class1.setClassSize(19);
         class1.setPassword("123456");
-        class1.setActivityId(activity2.getId());
+        class1.setActivityId(activity1.getId());
         class1.setTeacherId("6f0e60a6-a3a8-45d3-b6e6-d7632eb64c1a");
         class1.setDescriptions("Lớp làm trước đồ án tốt nghiệp bán hàng");
         class1.setId(classRepository.save(class1).getId());

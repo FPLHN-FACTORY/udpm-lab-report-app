@@ -5,16 +5,16 @@ import { useEffect } from "react";
 import { ControlOutlined, ProjectOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import LoadingIndicator from "../../../helper/loading";
-import { Input, Space, Switch, Table, Tooltip } from "antd";
+import { Input, Table, Tooltip } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faL, faUpload } from "@fortawesome/free-solid-svg-icons";
+import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import { TeacherScheduleTodayAPI } from "../../../api/teacher/meeting/schedule-today/TeacherScheduleToday.api";
-import { each } from "lodash";
 import { toast } from "react-toastify";
 
 const TeacherScheduleToday = () => {
   const [loading, setLoading] = useState(false);
   const [dataToday, setDataToday] = useState([]);
+  const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -22,6 +22,20 @@ const TeacherScheduleToday = () => {
     featchData(giangVienCurrent.id);
   }, []);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 60000);
+    console.log("------------------------------------------------");
+    console.log(currentTime);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [currentTime]);
+
+  const convertDateToPeriod = (date) => {
+    
+  };
   const featchData = async (idTeacher) => {
     setLoading(false);
     try {
@@ -56,7 +70,6 @@ const TeacherScheduleToday = () => {
       await TeacherScheduleTodayAPI.updateDescriptionMeeting(dataUp).then(
         (response) => {
           setDataToday(response.data.data);
-
           toast.success("Lưu thành công");
         }
       );
@@ -104,9 +117,10 @@ const TeacherScheduleToday = () => {
     },
 
     {
-      title: "Giảng đường",
+      title: "Địa điểm",
       dataIndex: "meetingAddress",
       key: "meetingAddress",
+      width: "120px",
     },
     {
       title: "Ca học",
@@ -165,7 +179,7 @@ const TeacherScheduleToday = () => {
         <>
           <div className="box_icon">
             <Link
-              to={`/teacher/schedule-today/attendance/${record.idMeeting}/${record.idClass}`}
+              to={`/teacher/schedule-today/attendance/${record.idMeeting}`}
               className="btn btn-success ml-4"
             >
               <Tooltip title="Xem chi tiết">

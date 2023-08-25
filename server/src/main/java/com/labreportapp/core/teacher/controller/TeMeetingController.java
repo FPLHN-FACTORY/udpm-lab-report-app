@@ -63,6 +63,12 @@ public class TeMeetingController {
         return new ResponseObject(find);
     }
 
+    @GetMapping("/detail-attendance")
+    public ResponseObject getTeMeetingAndCheckAttendance(final TeFindMeetingRequest request) {
+        TeMeetingRespone find = teMeetingService.searchMeetingByIdMeeting(request);
+        return new ResponseObject(find);
+    }
+
     @GetMapping("/schedule")
     public ResponseObject getScheduleTodayTeacher(final TeFindScheduleMeetingClassRequest request) {
         List<TeScheduleMeetingClassRespone> list = teMeetingService.searchScheduleToDayByIdTeacherAndMeetingDate(request);

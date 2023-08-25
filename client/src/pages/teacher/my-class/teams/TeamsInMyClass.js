@@ -176,26 +176,28 @@ const TeamsInMyClass = () => {
       dataIndex: "stt",
       key: "stt",
       render: (text, record, index) => index + 1,
-      width: "12px",
+      width: "5%",
     },
     {
       title: "Tên nhóm",
       dataIndex: "name",
       key: "name",
       sorter: (a, b) => a.name.localeCompare(b.name),
+      width: "30%",
     },
     {
       title: "Chủ đề",
       dataIndex: "subjectName",
       key: "subjectName",
       sorter: (a, b) => a.subjectName.localeCompare(b.subjectName),
+      width: "40%",
     },
 
     {
       title: "Ngày tạo",
       dataIndex: "createdDate",
       key: "createdDate",
-      sorter: (a, b) => a.createdDate.localeCompare(b.createdDate),
+      sorter: (a, b) => a.createdDate - b.createdDate,
       render: (text, record) => {
         const startTime = new Date(record.createdDate);
         const formattedStartTime = `${startTime.getDate()}/${
@@ -203,6 +205,7 @@ const TeamsInMyClass = () => {
         }/${startTime.getFullYear()}`;
         return <span>{formattedStartTime}</span>;
       },
+      width: "15%",
     },
     {
       title: "Hành động",
@@ -242,7 +245,7 @@ const TeamsInMyClass = () => {
           </div>
         </>
       ),
-      width: "105px",
+      width: "10%",
     },
   ];
   return (
