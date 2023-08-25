@@ -80,9 +80,6 @@
   outline: #e2ac3f !important;
   box-shadow: none !important;
 }
-.box_icon {
-  text-align: center;
-}
 .icon {
   size: 1;
   color: #4096ff;
@@ -144,7 +141,6 @@
   background-color: #baa16f;
   color: white;
 }
-/*  .ant-table-column-sorters  */
 .ant-table-thead > tr > th {
   background-color: #e1af4a;
   color: white;

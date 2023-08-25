@@ -1,10 +1,9 @@
-import "./styleTeacherMyClass.css";
-import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import "./styleTeacherMyClass.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
-import { giangVienCurrent } from "../../../helper/inForUser";
-import LoadingIndicator from "../../../helper/loading";
+import { giangVienCurrent } from "../../helper/inForUser";
+import LoadingIndicator from "../../helper/loading";
 import {
   ControlOutlined,
   QuestionCircleFilled,
@@ -22,15 +21,15 @@ import {
 } from "antd";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../../app/hook";
-import { TeacherMyClassAPI } from "../../../api/teacher/my-class/TeacherMyClass.api";
-import { TeacherSemesterAPI } from "../../../api/teacher/semester/TeacherSemester.api";
-import { TeacherActivityAPI } from "../../../api/teacher/activity/TeacherActivity.api";
-import { SetTeacherSemester } from "../../../app/teacher/semester/teacherSemesterSlice.reduce";
+import { useAppDispatch, useAppSelector } from "../../app/hook";
+import { TeacherMyClassAPI } from "../../api/teacher/my-class/TeacherMyClass.api";
+import { TeacherSemesterAPI } from "../../api/teacher/semester/TeacherSemester.api";
+import { TeacherActivityAPI } from "../../api/teacher/activity/TeacherActivity.api";
+import { SetTeacherSemester } from "../../app/teacher/semester/teacherSemesterSlice.reduce";
 import {
   GetTeacherMyClass,
   SetTeacherMyClass,
-} from "../../../app/teacher/my-class/teacherMyClassSlice.reduce";
+} from "../../app/teacher/my-class/teacherMyClassSlice.reduce";
 
 const { Option } = Select;
 
@@ -39,14 +38,12 @@ const TeacherMyClass = () => {
   const [listSemester, setListSemester] = useState([]);
   const [listActivity, setListActivity] = useState([]);
   const [listMyClass, setListMyClass] = useState([]);
-
   const [idSemesterSeach, setIdSemesterSearch] = useState("");
   const [idActivitiSearch, setIdActivitiSearch] = useState("");
   const [codeSearch, setCodeSearch] = useState("");
   const [nameSearch, setNameSearch] = useState("");
   const [classPeriodSearch, setClassPeriodSearch] = useState("");
   const [levelSearch, setLevelSearch] = useState("");
-
   const [clear, setClear] = useState(false);
   const listClassPeriod = [];
 
@@ -56,8 +53,10 @@ const TeacherMyClass = () => {
   const [current, setCurrent] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(false);
+
   useEffect(() => {
-    document.title = "Bảng điều khiển";
+    window.scrollTo(0, 0);
+    document.title = "Bảng điều khiển - lớp của tôi";
     setIdSemesterSearch("");
     setIdActivitiSearch("");
     setCodeSearch("");
@@ -244,11 +243,15 @@ const TeacherMyClass = () => {
       </div>
       <div className="filter-teacher-my-class">
         <div className="button-menu-teacher">
-          <Link style={{ fontSize: "17px" }} className="custom-link">
-            Lịch dạy hôm nay &nbsp;
+          <Link
+            to="/teacher/schedule-today"
+            style={{ fontSize: "17px" }}
+            className="custom-link"
+          >
+            &nbsp; Lịch dạy hôm nay &nbsp;
           </Link>
           <Link
-            to="/"
+            to="/teacher/my-class"
             id="menu-checked"
             style={{ fontSize: "17px", paddingLeft: "10px" }}
           >

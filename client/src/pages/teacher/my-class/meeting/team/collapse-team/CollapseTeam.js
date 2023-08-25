@@ -142,7 +142,6 @@ const CollapseTeam = ({ items }) => {
               >
                 <div className="title-left">
                   <div className="box-icon">
-                    {/* <BookOutlined style={{ color: "white", fontSize: 21 }} /> */}
                     <FontAwesomeIcon
                       icon={faUsersRectangle}
                       style={{ color: "white", fontSize: 21 }}

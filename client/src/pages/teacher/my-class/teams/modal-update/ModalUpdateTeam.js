@@ -251,7 +251,6 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
       title: "Vai trò",
       dataIndex: "role",
       key: "role",
-
       sorter: (a, b) => a.role.localeCompare(b.role),
       sortDirections: ["ascend", "descend"],
       render: (text, record) => (
@@ -304,7 +303,7 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
         </div>
         <div style={{ marginTop: "15px", borderBottom: "1px solid black" }}>
           <Row gutter={16} style={{ marginBottom: "15px" }}>
-          <Col span={12}>
+            <Col span={12}>
               {" "}
               <span className="notBlank">*</span>
               <span>Tên nhóm:</span> <br />

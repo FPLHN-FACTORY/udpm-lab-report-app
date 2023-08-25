@@ -78,6 +78,4 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
              """,nativeQuery = true)
     Optional<TeDetailClassRespone> findClassById(@Param("id") String id);
 
-
-
 }

@@ -1,8 +1,10 @@
 package com.labreportapp.core.teacher.repository;
 
 import com.labreportapp.core.teacher.model.request.TeFindMeetingRequest;
+import com.labreportapp.core.teacher.model.request.TeFindScheduleMeetingClassRequest;
 import com.labreportapp.core.teacher.model.response.TeHomeWorkAndNoteMeetingRespone;
 import com.labreportapp.core.teacher.model.response.TeMeetingRespone;
+import com.labreportapp.core.teacher.model.response.TeScheduleMeetingClassRespone;
 import com.labreportapp.entity.Meeting;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -50,19 +52,37 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
     Optional<TeMeetingRespone> searchMeetingByIdMeeting(@Param("req") TeFindMeetingRequest req);
 
     @Query(value = """
-           SELECT m.id AS idMeeting,
-           m.name AS nameMeeting,
-           m.descriptions AS descriptionsMeeting,
-           m.created_date AS createdDate,
-           h.id AS idHomeWork,
-           h.descriptions AS descriptionsHomeWork,
-           n.id AS idNote,
-           n.descriptions AS descriptionsNote
-            FROM meeting m
-            JOIN home_work h ON h.meeting_id = m.id
-            JOIN note n ON n.meeting_id = m.id
-            WHERE m.id = :#{#req.idMeeting} and h.team_id = :#{#req.idTeam} and n.team_id= :#{#req.idTeam}
-                     """, nativeQuery = true)
+            SELECT m.id AS idMeeting,
+            m.name AS nameMeeting,
+            m.descriptions AS descriptionsMeeting,
+            m.created_date AS createdDate,
+            h.id AS idHomeWork,
+            h.descriptions AS descriptionsHomeWork,
+            n.id AS idNote,
+            n.descriptions AS descriptionsNote
+             FROM meeting m
+             JOIN home_work h ON h.meeting_id = m.id
+             JOIN note n ON n.meeting_id = m.id
+             WHERE m.id = :#{#req.idMeeting} and h.team_id = :#{#req.idTeam} and n.team_id= :#{#req.idTeam}
+                      """, nativeQuery = true)
     Optional<TeHomeWorkAndNoteMeetingRespone> searchDetailMeetingTeamByIdMeIdTeam(@Param("req") TeFindMeetingRequest req);
+
+    @Query(value = """
+            SELECT 
+             c.id as id_class,
+             c.code as code_class,
+             m.id as id_meeting,
+             m.meeting_date as meeting_date,
+             m.meeting_period as meeting_period,
+             m.name as name_meeting,
+             m.type_meeting as type_meeting,
+             m.address as address_meeting,
+             m.descriptions as descriptions_meeting
+             FROM class c
+             JOIN meeting m ON m.class_id = c.id
+             WHERE c.teacher_id = :#{#req.idTeacher} AND DATE(FROM_UNIXTIME(m.meeting_date / 1000)) = CURDATE()
+             ORDER BY  m.meeting_date DESC
+            """, nativeQuery = true)
+    List<TeScheduleMeetingClassRespone> searchScheduleToDayByIdTeacherAndMeetingDate(@Param("req") TeFindScheduleMeetingClassRequest req);
 
 }

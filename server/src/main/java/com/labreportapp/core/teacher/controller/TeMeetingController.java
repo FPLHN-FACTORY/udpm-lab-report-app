@@ -2,9 +2,12 @@ package com.labreportapp.core.teacher.controller;
 
 import com.labreportapp.core.common.base.ResponseObject;
 import com.labreportapp.core.teacher.model.request.TeFindMeetingRequest;
+import com.labreportapp.core.teacher.model.request.TeFindScheduleMeetingClassRequest;
+import com.labreportapp.core.teacher.model.request.TeScheduleUpdateMeetingRequest;
 import com.labreportapp.core.teacher.model.request.TeUpdateHomeWorkAndNoteInMeetingRequest;
 import com.labreportapp.core.teacher.model.response.TeHomeWorkAndNoteMeetingRespone;
 import com.labreportapp.core.teacher.model.response.TeMeetingRespone;
+import com.labreportapp.core.teacher.model.response.TeScheduleMeetingClassRespone;
 import com.labreportapp.core.teacher.service.TeMeetingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -60,6 +63,17 @@ public class TeMeetingController {
         return new ResponseObject(find);
     }
 
+    @GetMapping("/schedule")
+    public ResponseObject getScheduleTodayTeacher(final TeFindScheduleMeetingClassRequest request) {
+        List<TeScheduleMeetingClassRespone> list = teMeetingService.searchScheduleToDayByIdTeacherAndMeetingDate(request);
+        return new ResponseObject(list);
+    }
+
+    @PutMapping("/schedule")
+    public ResponseObject updateScheduleTodayTeacher(@RequestBody TeScheduleUpdateMeetingRequest request) {
+        List<TeScheduleMeetingClassRespone> list = teMeetingService.updateDescriptionMeeting(request);
+        return new ResponseObject(list);
+    }
 //    @GetMapping("/details")
 //    public ResponseObject getTeamMeetingHomeNoteDetail(final TeFindMeetingRequest request) {
 //        List<TeHomeWorkAndNoteMeetingRespone> find = teMeetingService.searchMeetingHomeWNoteByIdMeetingAndIdClass(request);

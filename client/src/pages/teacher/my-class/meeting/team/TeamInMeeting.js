@@ -80,7 +80,7 @@ const TeamInMeeting = () => {
                     color: "#1967D2",
                   }}
                 >
-                  {meeting.name} - {meeting.descriptions}
+                  {meeting.name}
                 </span>
               </div>
             </Col>
