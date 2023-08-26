@@ -1,11 +1,7 @@
 import { useParams } from "react-router-dom";
 import "./styleMeetingInMyClass.css";
 import { Link } from "react-router-dom";
-import {
-  BookOutlined,
-  ControlOutlined,
-  UnorderedListOutlined,
-} from "@ant-design/icons";
+import { BookOutlined, UnorderedListOutlined } from "@ant-design/icons";
 import { TeacherMeetingAPI } from "../../../../api/teacher/meeting/TeacherMeeting.api";
 import {
   SetMeeting,
@@ -17,20 +13,31 @@ import LoadingIndicator from "../../../../helper/loading";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHome } from "@fortawesome/free-solid-svg-icons";
+import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
 
 const MeetingInMyClass = () => {
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
   const { idClass } = useParams();
   const [countMeeting, setCountMeeting] = useState(0);
+  const [classDetail, setClassDetail] = useState({});
 
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Bảng điều khiển - buổi học";
     featchCountMeeting(idClass);
     featchMeeting(idClass);
+    featchClass(idClass);
   }, []);
-
+  const featchClass = async (idClass) => {
+    try {
+      await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
+        setClassDetail(responese.data.data);
+      });
+    } catch (error) {
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+    }
+  };
   const featchMeeting = async (idClass) => {
     setLoading(false);
     try {
@@ -117,6 +124,22 @@ const MeetingInMyClass = () => {
             >
               BUỔI HỌC &nbsp;
             </Link>
+            <div
+              className="box-center"
+              style={{
+                height: "28.5px",
+                width: "auto",
+                backgroundColor: "#007bff",
+                color: "white",
+                borderRadius: "5px",
+                float: "right",
+              }}
+            >
+              {" "}
+              <span style={{ fontSize: "14px", padding: "10px" }}>
+                {classDetail.code}
+              </span>
+            </div>
             <hr />
           </div>
         </div>

@@ -2,7 +2,6 @@ import { useParams } from "react-router-dom";
 import "./styleStudentsInMyClass.css";
 import { Row, Col, Table } from "antd";
 import { Link } from "react-router-dom";
-import { ControlOutlined } from "@ant-design/icons";
 import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
 import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/TeacherStudentClasses.api";
 import {
@@ -211,35 +210,35 @@ const StudentsInMyClass = () => {
               style={{ fontSize: "16px", paddingLeft: "10px" }}
             >
               BUỔI HỌC &nbsp;
-            </Link>
+            </Link>{" "}
+            <div
+              className="box-center"
+              style={{
+                height: "28.5px",
+                width: "auto",
+                backgroundColor: "#007bff",
+                color: "white",
+                borderRadius: "5px",
+                float: "right",
+              }}
+            >
+              {" "}
+              <span style={{ fontSize: "14px", padding: "10px" }}>
+                {classDetail.code}
+              </span>
+            </div>
             <hr />
           </div>
         </div>
-
         <div className="content-class">
-          <div
-            className="box-center"
-            style={{
-              height: "30px",
-              width: "200px",
-              backgroundColor: "#007bff",
-              color: "white",
-              borderRadius: "5px",
-              margin: "5px 0px 0px 84.4%",
-            }}
-          >
-            {" "}
-            <span style={{ fontSize: "14px" }}>
-              {classDetail.classSize} thành viên{" "}
-              <span style={{ color: "yellow" }}>| </span> Level{"  "}
-              {classDetail.activityLevel + 1}
-              <span style={{ color: "yellow" }}>| </span> Ca{"  "}
-              {classDetail.classPeriod + 1}
-            </span>
-          </div>
-          <Row gutter={16} style={{ marginBottom: "4px" }}>
+          <Row style={{ marginBottom: "4px", marginTop: "6px" }}>
             <Col span={24}>
               <span>Hoạt động: &nbsp; {classDetail.activityName}</span>
+            </Col>
+          </Row>
+          <Row style={{ marginBottom: "4px" }}>
+            <Col>
+              <span>Level: &nbsp; {classDetail.activityLevel + 1}</span>
             </Col>
           </Row>
           <Row gutter={16} style={{ marginBottom: "4px" }}>
@@ -259,6 +258,16 @@ const StudentsInMyClass = () => {
           <Row style={{ marginBottom: "4px" }}>
             <Col>
               <span>Tên lớp: &nbsp;{classDetail.name}</span>
+            </Col>
+          </Row>
+          <Row style={{ marginBottom: "4px" }}>
+            <Col>
+              <span>Ca học: &nbsp; {classDetail.classPeriod + 1} </span>
+            </Col>
+          </Row>
+          <Row style={{ marginBottom: "4px" }}>
+            <Col>
+              <span>Số thành viên: &nbsp;{classDetail.classSize}</span>
             </Col>
           </Row>
           <Row gutter={16} style={{ marginBottom: "4px" }}>

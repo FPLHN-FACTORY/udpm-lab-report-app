@@ -29,6 +29,7 @@ import ModalDetailTeam from "./modal-detail/ModalDetailTeam";
 import ModalCreateTeam from "./modal-create/ModalCreateTeam";
 import ModalUpdateTeam from "./modal-update/ModalUpdateTeam";
 import { toast } from "react-toastify";
+import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
 
 const TeamsInMyClass = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -39,13 +40,16 @@ const TeamsInMyClass = () => {
   const [objeactTeam, setObjeactTeam] = useState({});
   const [listStudentClass, setListStudentClass] = useState([]);
   const [loadingStudentClass, setLoadingStudentClass] = useState(false);
+  const [classDetail, setClassDetail] = useState({});
   const dispatch = useAppDispatch();
   const { idClass } = useParams();
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Bảng điều khiển - nhóm";
     featchTeams(idClass);
+    featchClass(idClass);
   }, []);
+
   const fetchData = async (idClass) => {
     await featchStudentClass(idClass);
     featInforStudent();
@@ -61,7 +65,15 @@ const TeamsInMyClass = () => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-
+  const featchClass = async (idClass) => {
+    try {
+      await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
+        setClassDetail(responese.data.data);
+      });
+    } catch (error) {
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+    }
+  };
   const featchStudentClass = async (id) => {
     try {
       await TeacherStudentClassesAPI.getStudentInClasses(id).then(
@@ -300,6 +312,22 @@ const TeamsInMyClass = () => {
             >
               BUỔI HỌC &nbsp;
             </Link>
+            <div
+              className="box-center"
+              style={{
+                height: "28.5px",
+                width: "auto",
+                backgroundColor: "#007bff",
+                color: "white",
+                borderRadius: "5px",
+                float: "right",
+              }}
+            >
+              {" "}
+              <span style={{ fontSize: "14px", padding: "10px" }}>
+                {classDetail.code}
+              </span>
+            </div>
             <hr />
           </div>
         </div>
@@ -321,6 +349,7 @@ const TeamsInMyClass = () => {
               className="btn_clear"
               style={{
                 color: "white",
+                backgroundColor: "#007bff",
               }}
               onClick={() => {
                 setShowCreateModal(true);
