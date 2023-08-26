@@ -19,6 +19,7 @@ import {
 } from "../../../../app/teacher/attendance-meeting-today/teacherAttendanceMeetingSlice.reduce";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHome } from "@fortawesome/free-solid-svg-icons";
+import FloatingDiv from "../../floatingDiv/FloatingDiv";
 
 const TeacherAttendanceMeeting = () => {
   const dispatch = useAppDispatch();
@@ -209,7 +210,9 @@ const TeacherAttendanceMeeting = () => {
   return (
     <>
       {!loading && <LoadingIndicator />}
-      <div className="title-teacher-my-class">
+      {/* items={classFind.code} */}
+      <FloatingDiv items={"Helloo cô yêu >.< ~~"} />
+      <div className="box-one">
         <Link to="/teacher/schedule-today" style={{ color: "black" }}>
           <span style={{ fontSize: "18px", paddingLeft: "20px" }}>
             <FontAwesomeIcon
@@ -226,8 +229,8 @@ const TeacherAttendanceMeeting = () => {
           </span>
         </Link>
       </div>
-      <div className="box-students-in-class">
-        <div className="button-menu-teacher">
+      <div className="box-two">
+        <div className="button-menu">
           <div>
             <span
               id="menu-checked"
@@ -269,7 +272,6 @@ const TeacherAttendanceMeeting = () => {
               style={{
                 paddingTop: "15px",
                 fontWeight: 500,
-                // color: "rgb(9, 117, 185)",
               }}
             >
               Mặc định trạng thái điểm danh của sinh viên là "Có mặt". Giảng
@@ -300,7 +302,7 @@ const TeacherAttendanceMeeting = () => {
                   color: "red",
                 }}
               >
-                Không có thành viên
+                Không có thông tin sinh viên
               </p>
             </>
           )}

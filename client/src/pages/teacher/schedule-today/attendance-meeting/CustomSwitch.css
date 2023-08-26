@@ -28,7 +28,6 @@
   height: 100%;
   transition: color 0.3s, background-color 0.3s;
   cursor: pointer;
-
   transform: translateX(0);
 }
 .checked-status-right {
@@ -41,6 +40,5 @@
   align-items: center;
   transition: color 0.3s, background-color 0.3s;
   cursor: pointer;
-
   transform: translateX(100);
 }

@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import "./styleTeamsInMyClass.css";
 import { Row, Table, Button, Tooltip, Col, Modal } from "antd";
 import { Link } from "react-router-dom";
-import { ControlOutlined, UnorderedListOutlined } from "@ant-design/icons";
+import { UnorderedListOutlined } from "@ant-design/icons";
 import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/TeacherStudentClasses.api";
 import {
   SetStudentClasses,
@@ -264,7 +264,7 @@ const TeamsInMyClass = () => {
   return (
     <>
       {!loading && <LoadingIndicator />}
-      <div className="title-teacher-my-class">
+      <div className="box-one">
         <Link to="/teacher/my-class" style={{ color: "black" }}>
           <span style={{ fontSize: "18px", paddingLeft: "20px" }}>
             <FontAwesomeIcon
@@ -278,7 +278,7 @@ const TeamsInMyClass = () => {
           </span>
         </Link>
       </div>
-      <div className="box-students-in-class">
+      <div className="box-two">
         <div className="button-menu-teacher">
           <div>
             <Link
@@ -293,7 +293,7 @@ const TeamsInMyClass = () => {
               THÀNH VIÊN TRONG LỚP &nbsp;
             </Link>
             <Link
-              to={`/teacher/my-class/students-in-class/${idClass}`}
+              to={`/teacher/my-class/attendance/${idClass}`}
               className="custom-link"
               style={{
                 fontSize: "16px",

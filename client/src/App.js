@@ -17,6 +17,7 @@ import AdminDashboard from "./pages/admin/admin-dashboard/AdminDashboard";
 import TeacherScheduleToday from "./pages/teacher/schedule-today/TeacherScheduleToday";
 import TeacherAttendanceMeeting from "./pages/teacher/schedule-today/attendance-meeting/TeacherAttendanceMeeting";
 import TeacherMyClass from "./pages/teacher/TeacherMyClass";
+import TeacherAttendanceClass from "./pages/teacher/my-class/attendance/TeacherAttendanceClass";
 import StudentsInMyClass from "./pages/teacher/my-class/students/StudentsInMyClass";
 import TeamsInMyClass from "./pages/teacher/my-class/teams/TeamsInMyClass";
 import StudentSchedule from "./pages/student/schedule/StudentSchedule";
@@ -138,6 +139,17 @@ function App() {
                 </AuthGuard>
               }
             />
+            {/* router detail  attendance của Hiệu trang nhỏ my class*/}
+            <Route
+              path="/teacher/my-class/attendance/:idClass"
+              element={
+                <AuthGuard>
+                  <DashBoardTeacher>
+                    <TeacherAttendanceClass />
+                  </DashBoardTeacher>
+                </AuthGuard>
+              }
+            />
             {/* router của Hiệu trang nhỏ nhóm*/}
             <Route
               path="/teacher/my-class/teams/:idClass"
@@ -171,6 +183,7 @@ function App() {
                 </AuthGuard>
               }
             />
+
             <Route
               path="/student/my-class"
               element={

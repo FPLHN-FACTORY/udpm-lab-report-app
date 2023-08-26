@@ -160,7 +160,7 @@ const StudentsInMyClass = () => {
   return (
     <>
       {!loading && <LoadingIndicator />}
-      <div className="title-teacher-my-class">
+      <div className="box-one">
         <Link to="/teacher/my-class" style={{ color: "black" }}>
           <span style={{ fontSize: "18px", paddingLeft: "20px" }}>
             <FontAwesomeIcon
@@ -177,7 +177,7 @@ const StudentsInMyClass = () => {
           </span>
         </Link>
       </div>
-      <div className="box-students-in-class">
+      <div className="box-two">
         <div className="button-menu-teacher">
           <div>
             <Link
@@ -192,7 +192,7 @@ const StudentsInMyClass = () => {
               THÀNH VIÊN TRONG LỚP &nbsp;
             </Link>
             <Link
-              to={`/teacher/my-class/students-in-class/${idClass}`}
+              to={`/teacher/my-class/attendance/${idClass}`}
               className="custom-link"
               style={{
                 fontSize: "16px",

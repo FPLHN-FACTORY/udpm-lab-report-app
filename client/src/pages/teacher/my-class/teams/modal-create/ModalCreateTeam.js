@@ -28,7 +28,6 @@ const { Option } = Select;
 
 const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
   const [code, setCode] = useState("");
-  const [errorCode, setErrorCode] = useState("");
   const [name, setName] = useState("");
   const [errorName, setErrorName] = useState("");
   const [subjectName, setSubjectName] = useState("");

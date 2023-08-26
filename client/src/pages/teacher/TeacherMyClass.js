@@ -4,11 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faHome } from "@fortawesome/free-solid-svg-icons";
 import { giangVienCurrent } from "../../helper/inForUser";
 import LoadingIndicator from "../../helper/loading";
-import {
-  ControlOutlined,
-  QuestionCircleFilled,
-  ProjectOutlined,
-} from "@ant-design/icons";
+import { QuestionCircleFilled, ProjectOutlined } from "@ant-design/icons";
 import {
   Row,
   Col,
@@ -235,7 +231,7 @@ const TeacherMyClass = () => {
   return (
     <>
       {!loading && <LoadingIndicator />}
-      <div className="title-teacher-my-class">
+      <div className="box-one">
         <Link to="/teacher/my-class" style={{ color: "black" }}>
           <span style={{ fontSize: "18px", paddingLeft: "20px" }}>
             <FontAwesomeIcon
@@ -248,8 +244,8 @@ const TeacherMyClass = () => {
           </span>
         </Link>
       </div>
-      <div className="filter-teacher-my-class">
-        <div className="button-menu-teacher">
+      <div className="box-three">
+        <div className="button-menu">
           <Link
             to="/teacher/schedule-today"
             style={{ fontSize: "17px", fontWeight: "bold" }}
@@ -271,7 +267,7 @@ const TeacherMyClass = () => {
 
           <hr />
         </div>
-        <div className="menu-teacher-search">
+        <div className="title-box-two">
           <Row gutter={16} style={{ marginBottom: "15px", paddingTop: "20px" }}>
             <Col span={6}>
               <span>Học kỳ</span>
@@ -417,7 +413,7 @@ const TeacherMyClass = () => {
           </div>
         </div>
       </div>
-      <div className="table-teacher-my-class">
+      <div className="box-four">
         <div className="title-table">
           <div>
             {" "}
@@ -441,7 +437,7 @@ const TeacherMyClass = () => {
                   pagination={false}
                 />
               </div>
-              <div className="pagination_box">
+              <div className="pagination-box">
                 <Pagination
                   simple
                   current={current}

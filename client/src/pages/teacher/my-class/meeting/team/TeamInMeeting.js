@@ -57,7 +57,7 @@ const TeamInMeeting = () => {
   return (
     <>
       {!loading && <LoadingIndicator />}
-      <div className="title-teacher-my-class">
+      <div className="box-one">
         <Link to="/teacher/my-class" style={{ color: "black" }}>
           <span style={{ fontSize: "18px", paddingLeft: "20px" }}>
             <FontAwesomeIcon
@@ -74,7 +74,7 @@ const TeamInMeeting = () => {
           </span>
         </Link>
       </div>
-      <div className="box-filter">
+      <div className="box-two">
         <div style={{ marginLeft: "30px" }}>
           <Row gutter={16}>
             <Col span={20}>

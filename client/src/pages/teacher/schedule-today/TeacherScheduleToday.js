@@ -194,7 +194,7 @@ const TeacherScheduleToday = () => {
   return (
     <>
       {!loading && <LoadingIndicator />}
-      <div className="title-teacher-my-class">
+      <div className="box-one">
         <Link to="/teacher/schedule-today" style={{ color: "black" }}>
           <span style={{ fontSize: "18px", paddingLeft: "20px" }}>
             <FontAwesomeIcon
@@ -207,8 +207,8 @@ const TeacherScheduleToday = () => {
           </span>
         </Link>
       </div>
-      <div className="filter-teacher-my-class">
-        <div className="button-menu-teacher">
+      <div className="box-two">
+        <div className="button-menu">
           <Link
             to="/teacher/schedule-today"
             style={{ fontSize: "17px", fontWeight: "bold" }}
@@ -230,7 +230,7 @@ const TeacherScheduleToday = () => {
           <hr />
         </div>
         <div
-          className="menu-teacher-search"
+          className="title-box-two"
           style={{ paddingTop: "20px", minHeight: "500px", height: "auto" }}
         >
           <div className="title-table">

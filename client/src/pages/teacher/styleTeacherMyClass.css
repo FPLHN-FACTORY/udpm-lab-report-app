@@ -1,8 +1,4 @@
-.teacher-my-class {
-  padding-top: 50px;
-  padding-left: 10px;
-}
-.title-teacher-my-class {
+.box-one {
   width: 100%;
   height: 92px;
   display: flex;
@@ -12,38 +8,58 @@
   background-color: rgb(255, 255, 255);
   border-radius: 5px;
   color: rgb(35, 35, 35);
+  box-shadow: 0 0 10px rgb(228, 227, 227);
 }
-.filter-teacher-my-class {
+.box-two {
+  margin: 15px 10px 15px 13px;
+  background-color: rgb(255, 255, 255);
+  width: 98%;
+  min-height: 575px;
+  height: auto;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgb(228, 227, 227);
+}
+.box-four {
   margin: 13px 10px 0px 13px;
   background-color: rgb(255, 255, 255);
   width: 98%;
   height: auto;
   border-radius: 5px;
   padding: 20px;
+  box-shadow: 0 0 10px rgb(228, 227, 227);
 }
-.table-teacher-my-class {
+.box-three {
   margin: 13px 10px 0px 13px;
   background-color: rgb(255, 255, 255);
   width: 98%;
   height: auto;
   border-radius: 5px;
   padding: 20px;
-  min-height: 54%;
+  box-shadow: 0 0 10px rgb(228, 227, 227);
+}
+
+.box-center {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .table {
   margin-top: 20px;
 }
-.table-teacher-my-class .pagination_box {
+
+.button-menu button {
+  border: none;
+  font-size: 15px;
+}
+.pagination-box {
   margin-top: 20px;
   align-items: center;
   text-align: center;
 }
-.button-menu-teacher button {
-  border: none;
-  font-size: 15px;
-}
 
-.menu-teacher-search {
+.title-box-two {
   padding-left: 20px;
 }
 

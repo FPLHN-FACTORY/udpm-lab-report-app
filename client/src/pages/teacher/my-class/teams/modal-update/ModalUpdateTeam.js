@@ -28,7 +28,6 @@ const { Option } = Select;
 
 const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
   const [code, setCode] = useState("");
-  const [errorCode, setErrorCode] = useState("");
   const [name, setName] = useState("");
   const [errorName, setErrorName] = useState("");
   const [subjectName, setSubjectName] = useState("");
@@ -48,7 +47,6 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
   };
 
   const cancelFaild = () => {
-    setErrorCode("");
     setErrorName("");
     setErrorStudent("");
     const objFilter = dataStudentClasses.map((item2) => {
