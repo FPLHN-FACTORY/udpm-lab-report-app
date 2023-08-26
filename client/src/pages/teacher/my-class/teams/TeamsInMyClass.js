@@ -344,7 +344,7 @@ const TeamsInMyClass = () => {
             <hr />
           </div>
         </div>
-        <Row gutter={16} style={{ margin: "30px 0px 20px 0px" }}>
+        <Row gutter={16} style={{ margin: "25px 0px 20px 10px" }}>
           <Col span={22}>
             <div style={{ marginLeft: "0px" }}>
               {" "}

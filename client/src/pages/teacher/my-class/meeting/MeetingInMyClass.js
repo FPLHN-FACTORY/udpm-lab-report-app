@@ -172,7 +172,7 @@ const MeetingInMyClass = () => {
             <span style={{ fontSize: "14px" }}> {countMeeting} buổi học </span>
           </div> */}
           <div>
-            <div style={{ margin: "30px 0px 20px 0px" }}>
+            <div style={{ margin: "25px 0px 20px 16px" }}>
               {" "}
               <span style={{ fontSize: "17px", fontWeight: "500" }}>
                 {" "}

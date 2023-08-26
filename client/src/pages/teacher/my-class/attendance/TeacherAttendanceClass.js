@@ -19,7 +19,10 @@ const TeacherAttendanceClass = () => {
             <span style={{ marginLeft: "10px", fontWeight: "500" }}>
               Bảng điều khiển
             </span>{" "}
-            <span style={{ color: "gray", fontSize: "14px" }}> - buổi học</span>
+            <span style={{ color: "gray", fontSize: "14px" }}>
+              {" "}
+              - điểm danh
+            </span>
           </span>
         </Link>
       </div>

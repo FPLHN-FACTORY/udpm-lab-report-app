@@ -178,7 +178,7 @@ const StudentsInMyClass = () => {
         </Link>
       </div>
       <div className="box-two">
-        <div className="button-menu-teacher">
+        <div className="button-menu">
           <div>
             <Link
               to={`/teacher/my-class/students/${idClass}`}
@@ -243,7 +243,7 @@ const StudentsInMyClass = () => {
             <hr />
           </div>
         </div>
-        <div className="content-class">
+        <div className="content-class" style={{ margin: "25px 0px 15px 15px" }}>
           <Row style={{ marginBottom: "4px", marginTop: "6px" }}>
             <Col span={24}>
               <span>Hoạt động: &nbsp; {classDetail.activityName}</span>
@@ -288,8 +288,8 @@ const StudentsInMyClass = () => {
               <span>Mô tả: &nbsp;{classDetail.descriptions}</span>
             </Col>
           </Row>
-          <Row>
-            <Col>
+          <Row gutter={16}>
+            <Col span={24}>
               <span>Mật khẩu: &nbsp;{classDetail.passWord}</span>
             </Col>
           </Row>
