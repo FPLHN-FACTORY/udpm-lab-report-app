@@ -21,6 +21,7 @@ import LoadingIndicator from "../../../../helper/loading";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEye,
+  faHome,
   faPenToSquare,
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
@@ -252,15 +253,18 @@ const TeamsInMyClass = () => {
     <>
       {!loading && <LoadingIndicator />}
       <div className="title-teacher-my-class">
-        <span style={{ paddingLeft: "20px" }}>
-          <ControlOutlined style={{ fontSize: "22px" }} />
-          <span
-            style={{ fontSize: "18px", marginLeft: "10px", fontWeight: "500" }}
-          >
-            Bảng điều khiển
+        <Link to="/teacher/my-class" style={{ color: "black" }}>
+          <span style={{ fontSize: "18px", paddingLeft: "20px" }}>
+            <FontAwesomeIcon
+              icon={faHome}
+              style={{ color: "#00000", fontSize: "23px" }}
+            />
+            <span style={{ marginLeft: "10px", fontWeight: "500" }}>
+              Bảng điều khiển
+            </span>{" "}
+            <span style={{ color: "gray", fontSize: "14px" }}> - nhóm</span>
           </span>
-          <span style={{ color: "gray" }}> - lớp của tôi</span>
-        </span>
+        </Link>
       </div>
       <div className="box-students-in-class">
         <div className="button-menu-teacher">

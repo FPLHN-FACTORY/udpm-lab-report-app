@@ -18,6 +18,7 @@ import com.labreportapp.entity.Note;
 import com.labreportapp.infrastructure.constant.Message;
 import com.labreportapp.infrastructure.exception.rest.RestApiException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -47,6 +48,7 @@ public class TeMeetingServiceImpl implements TeMeetingService {
     }
 
     @Override
+    @CacheEvict(value = {"countMeeting"}, allEntries = true)
     public Integer countMeetingByClassId(String idClass) {
         return teMeetingRepository.countMeetingByClassId(idClass);
     }

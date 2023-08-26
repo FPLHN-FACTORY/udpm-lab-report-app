@@ -7,19 +7,19 @@ import org.springframework.beans.factory.annotation.Value;
  */
 public interface TeAttendanceRespone {
 
-    @Value("#{target.id}")
-    String getId();
+    @Value("#{target.idAttendance}")
+    String getIdAttendance();
 
     @Value("#{target.name_meeting}")
     String getNameMeeting();
 
     @Value("#{target.status}")
-    Integer getStatus();
+    String getStatusAttendance();
 
     @Value("#{target.student_id}")
-    String getStudentId();
+    String getIdStudent();
 
     @Value("#{target.meeting_id}")
-    String getMeetingId();
+    String getIdMeeting();
 
 }

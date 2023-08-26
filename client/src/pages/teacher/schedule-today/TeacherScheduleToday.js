@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import LoadingIndicator from "../../../helper/loading";
 import { Input, Table, Tooltip } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUpload } from "@fortawesome/free-solid-svg-icons";
+import { faHome, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { TeacherScheduleTodayAPI } from "../../../api/teacher/meeting/schedule-today/TeacherScheduleToday.api";
 import { toast } from "react-toastify";
 
@@ -55,7 +55,7 @@ const TeacherScheduleToday = () => {
       await TeacherScheduleTodayAPI.updateDescriptionMeeting(dataUp).then(
         (response) => {
           setDataToday(response.data.data);
-          toast.success("Lưu thành công");
+          toast.success("Lưu link học thành công");
         }
       );
     } catch (error) {
@@ -77,6 +77,7 @@ const TeacherScheduleToday = () => {
       title: "Mã lớp",
       dataIndex: "codeClass",
       key: "codeClass",
+      width: "15%",
     },
     {
       title: "Ngày",
@@ -85,12 +86,13 @@ const TeacherScheduleToday = () => {
       render: (text, record) => {
         return <span>{convertLongToDate(text)}</span>;
       },
+      width: "5%",
     },
-
     {
       title: "Tên buổi học",
       dataIndex: "meetingName",
       key: "meetingName",
+      width: "25%",
     },
     {
       title: "Phòng",
@@ -99,13 +101,14 @@ const TeacherScheduleToday = () => {
       render: (text, record) => {
         return <span>{text === 0 ? "Online" : "Offline"}</span>;
       },
+      width: "5%",
     },
 
     {
       title: "Địa điểm",
       dataIndex: "meetingAddress",
       key: "meetingAddress",
-      width: "120px",
+      width: "13%",
     },
     {
       title: "Ca học",
@@ -115,7 +118,7 @@ const TeacherScheduleToday = () => {
       render: (text, record) => {
         return <span>{text + 1}</span>;
       },
-      width: "7%",
+      width: "8%",
     },
     {
       title: "Link học trực tuyến",
@@ -153,7 +156,7 @@ const TeacherScheduleToday = () => {
           </div>
         );
       },
-      width: "20%",
+      width: "28%",
     },
 
     {
@@ -186,19 +189,24 @@ const TeacherScheduleToday = () => {
           </div>
         </>
       ),
-      width: "105px",
+      width: "10%",
     },
   ];
   return (
     <>
       {!loading && <LoadingIndicator />}
       <div className="title-teacher-my-class">
-        <span style={{ fontSize: "18px", paddingLeft: "20px" }}>
-          <ControlOutlined style={{ fontSize: "22px" }} />
-          <span style={{ marginLeft: "10px", fontWeight: "500" }}>
-            Bảng điều khiển
+        <Link to="/teacher/schedule-today" style={{ color: "black" }}>
+          <span style={{ fontSize: "18px", paddingLeft: "20px" }}>
+            <FontAwesomeIcon
+              icon={faHome}
+              style={{ color: "#00000", fontSize: "23px" }}
+            />
+            <span style={{ marginLeft: "10px", fontWeight: "500" }}>
+              Bảng điều khiển
+            </span>
           </span>
-        </span>
+        </Link>
       </div>
       <div className="filter-teacher-my-class">
         <div className="button-menu-teacher">

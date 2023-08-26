@@ -1,7 +1,7 @@
 import { toast } from "react-toastify";
 import "./styleTeacherMyClass.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faHome } from "@fortawesome/free-solid-svg-icons";
 import { giangVienCurrent } from "../../helper/inForUser";
 import LoadingIndicator from "../../helper/loading";
 import {
@@ -236,12 +236,17 @@ const TeacherMyClass = () => {
     <>
       {!loading && <LoadingIndicator />}
       <div className="title-teacher-my-class">
-        <span style={{ fontSize: "18px", paddingLeft: "20px" }}>
-          <ControlOutlined style={{ fontSize: "22px" }} />
-          <span style={{ marginLeft: "10px", fontWeight: "500" }}>
-            Bảng điều khiển
+        <Link to="/teacher/my-class" style={{ color: "black" }}>
+          <span style={{ fontSize: "18px", paddingLeft: "20px" }}>
+            <FontAwesomeIcon
+              icon={faHome}
+              style={{ color: "#00000", fontSize: "23px" }}
+            />
+            <span style={{ marginLeft: "10px", fontWeight: "500" }}>
+              Bảng điều khiển
+            </span>
           </span>
-        </span>
+        </Link>
       </div>
       <div className="filter-teacher-my-class">
         <div className="button-menu-teacher">

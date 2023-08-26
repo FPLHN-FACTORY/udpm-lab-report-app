@@ -9,5 +9,12 @@
   border: 1px solid white;
 }
 .box-icon-square:hover {
-  background-color: #386ec3;
+  box-shadow: 0 0 20px rgba(11, 99, 251, 0.3);
+  transition: box-shadow 0.3s, background-color 0.3s;
+  cursor: pointer;
+}
+.box-center:hover {
+  box-shadow: 0 0 20px rgba(11, 99, 251, 0.3);
+  transition: box-shadow 0.3s, background-color 0.3s;
+  cursor: pointer;
 }

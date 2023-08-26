@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import "./styleTeacherAttendance.css";
 import { useParams } from "react-router";
 import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/TeacherStudentClasses.api";
+import { TeacherAttendanceAPI } from "../../../../api/teacher/attendance/TeacherAttendance.api";
 import { useState } from "react";
 import LoadingIndicator from "../../../../helper/loading";
 import { ControlOutlined } from "@ant-design/icons";
@@ -15,10 +16,15 @@ import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import {
   SetAttendanceMeeting,
   GetAttendanceMeeting,
+  UpdateAttendanceMeeting,
 } from "../../../../app/teacher/attendance-meeting-today/teacherAttendanceMeetingSlice.reduce";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHome } from "@fortawesome/free-solid-svg-icons";
+
 const TeacherAttendanceMeeting = () => {
   const dispatch = useAppDispatch();
   const { idMeeting } = useParams();
+  const [meeting, setMeeting] = useState({});
   const [classFind, setClassFind] = useState({});
   const [listStudentClassAPI, setListStudentClassAPI] = useState([]);
   const [dataTable, setDataTable] = useState([]);
@@ -26,21 +32,95 @@ const TeacherAttendanceMeeting = () => {
   const [loading, setLoading] = useState(false);
   const [idClass, setIdClass] = useState("");
   useEffect(() => {
-    featchMeeting(idMeeting);
+    featchMeetingCheckDate(idMeeting);
   }, []);
 
   const fetchData = async (idClass) => {
-    await Promise.all([
-      featchClass(idClass),
-      featchStudentClass(idClass),
-      featInforStudent(idClass),
-    ]);
+    await Promise.all([featchClass(idClass), featchAttendance(idClass)]);
   };
 
-  const featchMeeting = async (id) => {
+  const featchClass = async (idClass) => {
+    try {
+      await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
+        setClassFind(responese.data.data);
+      });
+    } catch (error) {
+      alert("Lỗi hệ thống, vui lòng F5 lại trang");
+    }
+  };
+
+  const featchAttendance = async (idClass) => {
+    try {
+      await TeacherAttendanceAPI.getAttendanceByIdMeeting(idMeeting).then(
+        (response) => {
+          if (response.data.data.length >= 1) {
+            setListStudentClassAPI(response.data.data);
+            featInforStudent(idClass);
+          } else {
+            featchStudentClass(idClass);
+            featInforStudent(idClass);
+          }
+        }
+      );
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
+  const featchStudentClass = async (idClass) => {
+    try {
+      await TeacherStudentClassesAPI.getStudentInClasses(idClass).then(
+        (responese) => {
+          const listAPI = responese.data.data.map((item) => {
+            return { ...item, statusAttendance: "0" };
+          });
+          setListStudentClassAPI(listAPI);
+        }
+      );
+    } catch (error) {
+      alert("Lỗi hệ thống, vui lòng F5 lại trang");
+    }
+  };
+
+  const featInforStudent = async (idClass) => {
+    try {
+      let request = listStudentClassAPI.map((item) => item.idStudent).join("|");
+      const listStudentAPI = await TeacherStudentClassesAPI.getAllInforStudent(
+        `?id=` + request
+      );
+      const listShowTable = listStudentAPI.data
+        .filter((item1) =>
+          listStudentClassAPI.some((item2) => item1.id === item2.idStudent)
+        )
+        .map((item1) => {
+          const matchedObject = listStudentClassAPI.find(
+            (item2) => item2.idStudent === item1.id
+          );
+          return {
+            ...item1,
+            ...matchedObject,
+            idMeeting: idMeeting,
+            nameMeeting: meeting.name,
+            statusAttendance:
+              matchedObject.statusAttendance === "0" ? "YES" : "NO",
+          };
+        });
+      setDataTable(listShowTable);
+      dispatch(SetAttendanceMeeting(listShowTable));
+      if (loadingData === true) {
+        setLoading(true);
+      }
+      setLoadingData(true);
+    } catch (error) {
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+    }
+  };
+  const featchMeetingCheckDate = async (id) => {
+    setLoading(false);
     try {
       await TeacherMeetingAPI.getAndCheckMeetingById(id).then(
         (response) => {
+          setMeeting(response.data.data);
           setIdClass(response.data.data.idClass);
           fetchData(response.data.data.idClass);
         },
@@ -53,72 +133,25 @@ const TeacherAttendanceMeeting = () => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang");
     }
   };
-
-  const featchClass = async (idClass) => {
-    setLoading(false);
-    try {
-      await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
-        setClassFind(responese.data.data);
-      });
-    } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang");
-    }
-  };
-
-  const featchStudentClass = async (id) => {
-    try {
-      await TeacherStudentClassesAPI.getStudentInClasses(id).then(
-        (responese) => {
-          setListStudentClassAPI(responese.data.data);
-        }
-      );
-    } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang");
-    }
-  };
-  const featInforStudent = async (idClass) => {
-    try {
-      let request = listStudentClassAPI.map((item) => item.idStudent).join("|");
-      const listStudentAPI = await TeacherStudentClassesAPI.getAllInforStudent(
-        `?id=` + request
-      );
-
-      const listShowTable = listStudentAPI.data
-        .filter((item1) =>
-          listStudentClassAPI.some((item2) => item1.id === item2.idStudent)
-        )
-        .map((item1) => {
-          return {
-            ...item1,
-            // ...matchedObject,
-            idMeeting: idMeeting,
-            idStudent: item1.id,
-          };
-        });
-      console.log("----------------------------------------------------");
-      console.log(listShowTable);
-      setDataTable(listShowTable);
-      //   dispatch(SetStudentClasses(listShowTable));
-      setLoading(true);
-      setLoadingData(true);
-    } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
-    }
-  };
-
-  const featchStudentAttendance = async () => {
-    try {
-    } catch (error) {
-      alert(error.message);
-    }
-  };
   useEffect(() => {
     if (loadingData === true) {
       fetchData(idClass);
     }
   }, [loadingData]);
 
-  const data = dataTable;
+  const handleSave = async () => {
+    try {
+      let dataFind = { listAttendance: data };
+      await TeacherAttendanceAPI.createOrUpdate(dataFind).then((respone) => {
+        dispatch(UpdateAttendanceMeeting(respone.data.data));
+        toast.success("Lưu điểm danh thành công !");
+      });
+    } catch (error) {
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+    }
+  };
+
+  const data = useAppSelector(GetAttendanceMeeting);
   const columns = [
     {
       title: "#",
@@ -157,16 +190,17 @@ const TeacherAttendanceMeeting = () => {
     },
     {
       title: "Trạng thái",
-      dataIndex: "status",
-      key: "status",
+      dataIndex: "statusAttendance",
+      key: "statusAttendance",
       width: "30%",
-      render: (text) => {
+      render: (text, record) => {
         return (
           <>
             <CustomSwitch
               leftLabel="Có mặt"
               rightLabel="Vắng mặt"
               status={text}
+              items={record}
             />
           </>
         );
@@ -179,9 +213,16 @@ const TeacherAttendanceMeeting = () => {
       <div className="title-teacher-my-class">
         <Link to="/teacher/schedule-today" style={{ color: "black" }}>
           <span style={{ fontSize: "18px", paddingLeft: "20px" }}>
-            <ControlOutlined style={{ fontSize: "22px" }} />
+            <FontAwesomeIcon
+              icon={faHome}
+              style={{ color: "#00000", fontSize: "23px" }}
+            />
             <span style={{ marginLeft: "10px", fontWeight: "500" }}>
               Bảng điều khiển
+            </span>
+            <span style={{ color: "gray", fontSize: "14px" }}>
+              {" "}
+              - điểm danh
             </span>
           </span>
         </Link>
@@ -242,6 +283,11 @@ const TeacherAttendanceMeeting = () => {
               </p>
             </>
           )}
+        </div>
+        <div className="box-button-center">
+          <div className="box-button" onClick={handleSave}>
+            Lưu điểm danh
+          </div>
         </div>
       </div>
     </>
