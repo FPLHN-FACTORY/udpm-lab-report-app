@@ -9,7 +9,6 @@ function CustomSwitch({ leftLabel, rightLabel, status }) {
     } else {
       setChecked(false);
     }
-    console.log(status);
   }, []);
 
   return (

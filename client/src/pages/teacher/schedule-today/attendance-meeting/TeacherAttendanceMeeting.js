@@ -11,7 +11,13 @@ import { Link } from "react-router-dom";
 import CustomSwitch from "./CustomSwitch";
 import { Table } from "antd";
 import { toast } from "react-toastify";
+import { useAppDispatch, useAppSelector } from "../../../../app/hook";
+import {
+  SetAttendanceMeeting,
+  GetAttendanceMeeting,
+} from "../../../../app/teacher/attendance-meeting-today/teacherAttendanceMeetingSlice.reduce";
 const TeacherAttendanceMeeting = () => {
+  const dispatch = useAppDispatch();
   const { idMeeting } = useParams();
   const [classFind, setClassFind] = useState({});
   const [listStudentClassAPI, setListStudentClassAPI] = useState([]);
@@ -76,26 +82,34 @@ const TeacherAttendanceMeeting = () => {
       const listStudentAPI = await TeacherStudentClassesAPI.getAllInforStudent(
         `?id=` + request
       );
+
       const listShowTable = listStudentAPI.data
         .filter((item1) =>
           listStudentClassAPI.some((item2) => item1.id === item2.idStudent)
         )
         .map((item1) => {
-          const matchedObject = listStudentClassAPI.find(
-            (item2) => item2.idStudent === item1.id
-          );
           return {
             ...item1,
-            ...matchedObject,
-            status: 0,
+            // ...matchedObject,
+            idMeeting: idMeeting,
+            idStudent: item1.id,
           };
         });
+      console.log("----------------------------------------------------");
+      console.log(listShowTable);
       setDataTable(listShowTable);
       //   dispatch(SetStudentClasses(listShowTable));
       setLoading(true);
       setLoadingData(true);
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+    }
+  };
+
+  const featchStudentAttendance = async () => {
+    try {
+    } catch (error) {
+      alert(error.message);
     }
   };
   useEffect(() => {
@@ -128,19 +142,7 @@ const TeacherAttendanceMeeting = () => {
         return <span style={{ color: "#007bff" }}>{codeShow}</span>;
       },
     },
-    {
-      title: "Nhóm",
-      dataIndex: "nameTeam",
-      key: "nameTeam",
-      sorter: (a, b) => a.nameTeam.localeCompare(b.nameTeam),
-      render: (text, record) => {
-        if (text === null) {
-          return <span style={{ color: "blue" }}>Chưa vào nhóm</span>;
-        } else {
-          return <span>{text}</span>;
-        }
-      },
-    },
+
     {
       title: "Tên sinh viên",
       dataIndex: "name",

@@ -14,7 +14,6 @@ import { toast } from "react-toastify";
 const TeacherScheduleToday = () => {
   const [loading, setLoading] = useState(false);
   const [dataToday, setDataToday] = useState([]);
-  const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -22,20 +21,6 @@ const TeacherScheduleToday = () => {
     featchData(giangVienCurrent.id);
   }, []);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 60000);
-    console.log("------------------------------------------------");
-    console.log(currentTime);
-    return () => {
-      clearInterval(interval);
-    };
-  }, [currentTime]);
-
-  const convertDateToPeriod = (date) => {
-    
-  };
   const featchData = async (idTeacher) => {
     setLoading(false);
     try {
