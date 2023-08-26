@@ -186,6 +186,7 @@ const StudentsInMyClass = () => {
               style={{
                 fontSize: "16px",
                 paddingLeft: "10px",
+                fontWeight: "bold",
               }}
             >
               THÀNH VIÊN TRONG LỚP &nbsp;
@@ -193,21 +194,33 @@ const StudentsInMyClass = () => {
             <Link
               to={`/teacher/my-class/students-in-class/${idClass}`}
               className="custom-link"
-              style={{ fontSize: "16px", paddingLeft: "10px" }}
+              style={{
+                fontSize: "16px",
+                paddingLeft: "10px",
+                fontWeight: "bold",
+              }}
             >
               ĐIỂM DANH &nbsp;
             </Link>
             <Link
               to={`/teacher/my-class/teams/${idClass}`}
               className="custom-link"
-              style={{ fontSize: "16px", paddingLeft: "10px" }}
+              style={{
+                fontSize: "16px",
+                paddingLeft: "10px",
+                fontWeight: "bold",
+              }}
             >
               QUẢN LÝ NHÓM &nbsp;
             </Link>
             <Link
               to={`/teacher/my-class/meeting/${idClass}`}
               className="custom-link"
-              style={{ fontSize: "16px", paddingLeft: "10px" }}
+              style={{
+                fontSize: "16px",
+                paddingLeft: "10px",
+                fontWeight: "bold",
+              }}
             >
               BUỔI HỌC &nbsp;
             </Link>{" "}

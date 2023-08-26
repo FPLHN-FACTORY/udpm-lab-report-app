@@ -211,7 +211,7 @@ const TeacherScheduleToday = () => {
         <div className="button-menu-teacher">
           <Link
             to="/teacher/schedule-today"
-            style={{ fontSize: "17px" }}
+            style={{ fontSize: "17px", fontWeight: "bold" }}
             id="menu-checked"
           >
             &nbsp; Lịch dạy hôm nay &nbsp;
@@ -219,7 +219,11 @@ const TeacherScheduleToday = () => {
           <Link
             to="/teacher/my-class"
             className="custom-link"
-            style={{ fontSize: "17px", paddingLeft: "10px" }}
+            style={{
+              fontSize: "17px",
+              paddingLeft: "10px",
+              fontWeight: "bold",
+            }}
           >
             Lớp của tôi &nbsp;
           </Link>
@@ -237,7 +241,7 @@ const TeacherScheduleToday = () => {
                 <ProjectOutlined
                   style={{ marginRight: "10px", fontSize: "24px" }}
                 />
-                Danh sách lịch dạy hôm nay
+                Danh sách ca dạy
               </span>
             </div>
           </div>

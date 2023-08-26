@@ -234,28 +234,50 @@ const TeacherAttendanceMeeting = () => {
               style={{
                 fontSize: "16px",
                 paddingLeft: "10px",
+                fontWeight: "bold",
               }}
             >
               ĐIỂM DANH &nbsp;
             </span>
+            <div
+              className="box-center"
+              style={{
+                height: "28.5px",
+                width: "auto",
+                backgroundColor: "#007bff",
+                color: "white",
+                borderRadius: "5px",
+                float: "right",
+              }}
+            >
+              {" "}
+              <span style={{ fontSize: "14px", padding: "10px" }}>
+                {classFind.code}
+              </span>
+            </div>
             <hr />
           </div>
         </div>
-        <div
-          className="box-center"
-          style={{
-            height: "30px",
-            width: "200px",
-            backgroundColor: "#007bff",
-            color: "white",
-            borderRadius: "5px",
-            margin: "5px 0px 0px 83.5%",
-          }}
-        >
-          {" "}
-          <span style={{ fontSize: "14px" }}>Mã lớp: {classFind.code}</span>
+        <div className="content-class" backgroundColor>
+          <div
+            style={{
+              height: "auto",
+              margin: "20px 10px 20px 10px",
+            }}
+          >
+            <span
+              style={{
+                paddingTop: "15px",
+                fontWeight: 500,
+                // color: "rgb(9, 117, 185)",
+              }}
+            >
+              Mặc định trạng thái điểm danh của sinh viên là "Có mặt". Giảng
+              viên chuyển từ "Có mặt" thành "Vắng mặt" nếu sinh viên vi phạm một
+              trong những nội quy như ra ngoài không lý do, mất trật tự,..
+            </span>
+          </div>
         </div>
-
         <div>
           {dataTable.length > 0 ? (
             <>

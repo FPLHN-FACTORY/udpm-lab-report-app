@@ -99,6 +99,7 @@ const MeetingInMyClass = () => {
               style={{
                 fontSize: "16px",
                 paddingLeft: "10px",
+                fontWeight: "bold",
               }}
             >
               THÀNH VIÊN TRONG LỚP &nbsp;
@@ -106,21 +107,33 @@ const MeetingInMyClass = () => {
             <Link
               to={`/teacher/my-class/students-in-class/${idClass}`}
               className="custom-link"
-              style={{ fontSize: "16px", paddingLeft: "10px" }}
+              style={{
+                fontSize: "16px",
+                paddingLeft: "10px",
+                fontWeight: "bold",
+              }}
             >
               ĐIỂM DANH &nbsp;
             </Link>
             <Link
               to={`/teacher/my-class/teams/${idClass}`}
               className="custom-link"
-              style={{ fontSize: "16px", paddingLeft: "10px" }}
+              style={{
+                fontSize: "16px",
+                paddingLeft: "10px",
+                fontWeight: "bold",
+              }}
             >
               QUẢN LÝ NHÓM &nbsp;
             </Link>
             <Link
               to={`/teacher/my-class/meeting/${idClass}`}
               id="menu-checked"
-              style={{ fontSize: "16px", paddingLeft: "10px" }}
+              style={{
+                fontSize: "16px",
+                paddingLeft: "10px",
+                fontWeight: "bold",
+              }}
             >
               BUỔI HỌC &nbsp;
             </Link>
@@ -144,7 +157,7 @@ const MeetingInMyClass = () => {
           </div>
         </div>
         <div className="menu-teacher-search">
-          <div
+          {/* <div
             className="box-center"
             style={{
               height: "30px",
@@ -157,16 +170,16 @@ const MeetingInMyClass = () => {
           >
             {" "}
             <span style={{ fontSize: "14px" }}> {countMeeting} buổi học </span>
-          </div>
+          </div> */}
           <div>
-            <div style={{ marginLeft: "0px", marginBottom: "20px" }}>
+            <div style={{ margin: "30px 0px 20px 0px" }}>
               {" "}
               <span style={{ fontSize: "17px", fontWeight: "500" }}>
                 {" "}
                 <UnorderedListOutlined
                   style={{ marginRight: "10px", fontSize: "20px" }}
                 />
-                Danh sách buổi học
+                Danh sách buổi học : {countMeeting} buổi học
               </span>
             </div>
             <div className="data-table">

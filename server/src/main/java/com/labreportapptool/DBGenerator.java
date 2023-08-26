@@ -397,7 +397,7 @@ public class DBGenerator implements CommandLineRunner {
 
         Meeting meeting2 = new Meeting();
         meeting2.setName("Buổi 2");
-        meeting2.setMeetingDate(new Date().getTime());
+        meeting2.setMeetingDate(new Date().getTime() + 2 * 86400000);
         meeting2.setMeetingPeriod(MeetingPeriod.CA_6);
         meeting2.setDescriptions("Buổi học 2 offline");
         meeting2.setClassId(class1.getId());
@@ -548,7 +548,7 @@ public class DBGenerator implements CommandLineRunner {
         homeWork9.setMeetingId(meeting9.getId());
         homeWork9.setTeamId(team2.getId());
         homeWork9.setId(homeWorkRepository.save(homeWork9).getId());
-     //note -team 2
+        //note -team 2
 
         Note note1 = new Note();
         note1.setName("Note buổi 1 team 2 Bee fly");

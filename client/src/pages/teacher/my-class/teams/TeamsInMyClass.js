@@ -287,6 +287,7 @@ const TeamsInMyClass = () => {
               style={{
                 fontSize: "16px",
                 paddingLeft: "10px",
+                fontWeight: "bold",
               }}
             >
               THÀNH VIÊN TRONG LỚP &nbsp;
@@ -294,21 +295,33 @@ const TeamsInMyClass = () => {
             <Link
               to={`/teacher/my-class/students-in-class/${idClass}`}
               className="custom-link"
-              style={{ fontSize: "16px", paddingLeft: "10px" }}
+              style={{
+                fontSize: "16px",
+                paddingLeft: "10px",
+                fontWeight: "bold",
+              }}
             >
               ĐIỂM DANH &nbsp;
             </Link>
             <Link
               to={`/teacher/my-class/teams/${idClass}`}
               id="menu-checked"
-              style={{ fontSize: "16px", paddingLeft: "10px" }}
+              style={{
+                fontSize: "16px",
+                paddingLeft: "10px",
+                fontWeight: "bold",
+              }}
             >
               QUẢN LÝ NHÓM &nbsp;
             </Link>
             <Link
               to={`/teacher/my-class/meeting/${idClass}`}
               className="custom-link"
-              style={{ fontSize: "16px", paddingLeft: "10px" }}
+              style={{
+                fontSize: "16px",
+                paddingLeft: "10px",
+                fontWeight: "bold",
+              }}
             >
               BUỔI HỌC &nbsp;
             </Link>
@@ -331,7 +344,7 @@ const TeamsInMyClass = () => {
             <hr />
           </div>
         </div>
-        <Row gutter={16} style={{ margin: "40px 10px 30px 10px" }}>
+        <Row gutter={16} style={{ margin: "30px 0px 20px 0px" }}>
           <Col span={22}>
             <div style={{ marginLeft: "0px" }}>
               {" "}
