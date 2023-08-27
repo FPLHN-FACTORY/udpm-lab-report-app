@@ -261,7 +261,7 @@ const TeacherAttendanceMeeting = () => {
             <hr />
           </div>
         </div>
-        <div className="content-class" backgroundColor>
+        <div className="content-class">
           <div
             style={{
               height: "auto",

@@ -8,7 +8,6 @@ const TeacherAttendanceClass = () => {
   const { idClass } = useParams();
   return (
     <>
-      <FloatingDiv items={"Cô ơi điểm danh giúp em ạ !!! > <"} />
       <div className="box-one">
         <Link to="/teacher/my-class" style={{ color: "black" }}>
           <span style={{ fontSize: "18px", paddingLeft: "20px" }}>

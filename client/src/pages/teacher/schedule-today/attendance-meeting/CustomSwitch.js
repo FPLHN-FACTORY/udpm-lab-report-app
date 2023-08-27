@@ -6,7 +6,7 @@ import {
   GetAttendanceMeeting,
 } from "../../../../app/teacher/attendance-meeting-today/teacherAttendanceMeetingSlice.reduce";
 
-function CustomSwitch({ leftLabel, rightLabel, status, items }) {
+const CustomSwitch = ({ leftLabel, rightLabel, status, items }) => {
   const dispatch = useAppDispatch();
   const data = useAppSelector(GetAttendanceMeeting);
   const [checked, setChecked] = useState(true);
@@ -54,6 +54,6 @@ function CustomSwitch({ leftLabel, rightLabel, status, items }) {
       </div>
     </div>
   );
-}
+};
 
 export default CustomSwitch;
