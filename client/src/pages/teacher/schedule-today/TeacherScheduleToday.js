@@ -207,64 +207,66 @@ const TeacherScheduleToday = () => {
           </span>
         </Link>
       </div>
-      <div className="box-two">
-        <div className="button-menu">
-          <Link
-            to="/teacher/schedule-today"
-            style={{ fontSize: "17px", fontWeight: "bold" }}
-            id="menu-checked"
-          >
-            &nbsp; Lịch dạy hôm nay &nbsp;
-          </Link>
-          <Link
-            to="/teacher/my-class"
-            className="custom-link"
-            style={{
-              fontSize: "17px",
-              paddingLeft: "10px",
-              fontWeight: "bold",
-            }}
-          >
-            Lớp của tôi &nbsp;
-          </Link>
-          <hr />
-        </div>
-        <div
-          className="title-box-two"
-          style={{ paddingTop: "20px", minHeight: "500px", height: "auto" }}
-        >
-          <div className="title-table">
-            <div>
-              {" "}
-              <span style={{ fontSize: "17px", fontWeight: "500" }}>
-                {" "}
-                <ProjectOutlined
-                  style={{ marginRight: "10px", fontSize: "24px" }}
-                />
-                Danh sách ca dạy
-              </span>
-            </div>
+      <div className="box-two-student-in-my-class">
+        <div className="box-two-student-in-my-class-son">
+          <div className="button-menu">
+            <Link
+              to="/teacher/schedule-today"
+              style={{ fontSize: "17px", fontWeight: "500" }}
+              id="menu-checked"
+            >
+              &nbsp; LỊCH DẠY HÔM NAY &nbsp;
+            </Link>
+            <Link
+              to="/teacher/my-class"
+              className="custom-link"
+              style={{
+                fontSize: "17px",
+                paddingLeft: "10px",
+                fontWeight: "500",
+              }}
+            >
+              LỚP CỦA TÔI &nbsp;
+            </Link>
+            <hr />
           </div>
-          <div className="table" style={{ marginTop: "30px" }}>
-            {dataToday.length > 0 ? (
-              <Table
-                dataSource={data}
-                rowKey="idMeeting"
-                columns={columns}
-                pagination={false}
-              />
-            ) : (
-              <p
-                style={{
-                  textAlign: "center",
-                  marginTop: "100px",
-                  fontSize: "15px",
-                  color: "red",
-                }}
-              >
-                Không có ca dạy
-              </p>
-            )}
+          <div
+            className="title-box-two"
+            style={{ paddingTop: "20px", minHeight: "500px", height: "auto" }}
+          >
+            <div className="title-table">
+              <div>
+                {" "}
+                <span style={{ fontSize: "17px", fontWeight: "500" }}>
+                  {" "}
+                  <ProjectOutlined
+                    style={{ marginRight: "10px", fontSize: "24px" }}
+                  />
+                  Danh sách ca dạy
+                </span>
+              </div>
+            </div>
+            <div className="table" style={{ marginTop: "30px" }}>
+              {dataToday.length > 0 ? (
+                <Table
+                  dataSource={data}
+                  rowKey="idMeeting"
+                  columns={columns}
+                  pagination={false}
+                />
+              ) : (
+                <p
+                  style={{
+                    textAlign: "center",
+                    marginTop: "100px",
+                    fontSize: "15px",
+                    color: "red",
+                  }}
+                >
+                  Không có ca dạy
+                </p>
+              )}
+            </div>
           </div>
         </div>
       </div>

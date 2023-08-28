@@ -181,155 +181,160 @@ const StudentsInMyClass = () => {
             </span>{" "}
             <span style={{ color: "gray", fontSize: "14px" }}>
               {" "}
-              - thành viên
+              - Thành viên
             </span>
           </span>
         </Link>
       </div>
-      <div className="box-two">
-        <div className="button-menu">
-          <div>
-            <Link
-              to={`/teacher/my-class/students/${idClass}`}
-              id="menu-checked"
-              style={{
-                fontSize: "16px",
-                paddingLeft: "10px",
-                fontWeight: "bold",
-              }}
-            >
-              THÀNH VIÊN TRONG LỚP &nbsp;
-            </Link>
-            <Link
-              to={`/teacher/my-class/attendance/${idClass}`}
-              className="custom-link"
-              style={{
-                fontSize: "16px",
-                paddingLeft: "10px",
-                fontWeight: "bold",
-              }}
-            >
-              ĐIỂM DANH &nbsp;
-            </Link>
-            <Link
-              to={`/teacher/my-class/teams/${idClass}`}
-              className="custom-link"
-              style={{
-                fontSize: "16px",
-                paddingLeft: "10px",
-                fontWeight: "bold",
-              }}
-            >
-              QUẢN LÝ NHÓM &nbsp;
-            </Link>
-            <Link
-              to={`/teacher/my-class/meeting/${idClass}`}
-              className="custom-link"
-              style={{
-                fontSize: "16px",
-                paddingLeft: "10px",
-                fontWeight: "bold",
-              }}
-            >
-              BUỔI HỌC &nbsp;
-            </Link>{" "}
-            <div
-              className="box-center"
-              style={{
-                height: "28.5px",
-                width: "auto",
-                backgroundColor: "#007bff",
-                color: "white",
-                borderRadius: "5px",
-                float: "right",
-              }}
-            >
-              {" "}
-              <span style={{ fontSize: "14px", padding: "10px" }}>
-                {classDetail.code}
-              </span>
-            </div>
-            <hr />
-          </div>
-        </div>
-        <div className="content-class" style={{ margin: "25px 0px 15px 15px" }}>
-          <Row style={{ marginBottom: "4px", marginTop: "6px" }}>
-            <Col span={24}>
-              <span>Hoạt động: &nbsp; {classDetail.activityName}</span>
-            </Col>
-          </Row>
-          <Row style={{ marginBottom: "4px" }}>
-            <Col>
-              <span>Level: &nbsp; {classDetail.activityLevel + 1}</span>
-            </Col>
-          </Row>
-          <Row gutter={16} style={{ marginBottom: "4px" }}>
-            {" "}
-            <Col span={24}>
-              <span>
-                Thời gian bắt đầu:&nbsp;
-                {moment(classDetail.startTime).format("DD-MM-YYYY")}
-              </span>{" "}
-            </Col>
-          </Row>
-          <Row gutter={16} style={{ marginBottom: "4px" }}>
-            <Col>
-              <span>Mã lớp: &nbsp;{classDetail.code}</span>
-            </Col>
-          </Row>
-          <Row style={{ marginBottom: "4px" }}>
-            <Col>
-              <span>Tên lớp: &nbsp;{classDetail.name}</span>
-            </Col>
-          </Row>
-          <Row style={{ marginBottom: "4px" }}>
-            <Col>
-              <span>Ca học: &nbsp; {classDetail.classPeriod + 1} </span>
-            </Col>
-          </Row>
-          <Row style={{ marginBottom: "4px" }}>
-            <Col>
-              <span>Số thành viên: &nbsp;{classDetail.classSize}</span>
-            </Col>
-          </Row>
-          <Row gutter={16} style={{ marginBottom: "4px" }}>
-            <Col span={24}>
-              <span>Mô tả: &nbsp;{classDetail.descriptions}</span>
-            </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col span={24}>
-              <span>Mật khẩu: &nbsp;{classDetail.passWord}</span>
-            </Col>
-          </Row>
-          <br />
-        </div>
-        <div>
-          {dataTable.length > 0 ? (
-            <>
-              <div className="table">
-                <Table
-                  dataSource={data}
-                  rowKey="id"
-                  columns={columns}
-                  pagination={false}
-                />
-              </div>
-            </>
-          ) : (
-            <>
-              <p
+      <div className="box-two-student-in-my-class">
+        <div className="box-two-student-in-my-class-son">
+          <div className="button-menu">
+            <div>
+              <Link
+                to={`/teacher/my-class/students/${idClass}`}
+                id="menu-checked"
                 style={{
-                  textAlign: "center",
-                  marginTop: "100px",
-                  fontSize: "15px",
-                  color: "red",
+                  fontSize: "16px",
+                  paddingLeft: "10px",
+                  fontWeight: "bold",
                 }}
               >
-                Không có thành viên
-              </p>
-            </>
-          )}
+                THÀNH VIÊN TRONG LỚP &nbsp;
+              </Link>
+              <Link
+                to={`/teacher/my-class/attendance/${idClass}`}
+                className="custom-link"
+                style={{
+                  fontSize: "16px",
+                  paddingLeft: "10px",
+                  fontWeight: "bold",
+                }}
+              >
+                ĐIỂM DANH &nbsp;
+              </Link>
+              <Link
+                to={`/teacher/my-class/teams/${idClass}`}
+                className="custom-link"
+                style={{
+                  fontSize: "16px",
+                  paddingLeft: "10px",
+                  fontWeight: "bold",
+                }}
+              >
+                QUẢN LÝ NHÓM &nbsp;
+              </Link>
+              <Link
+                to={`/teacher/my-class/meeting/${idClass}`}
+                className="custom-link"
+                style={{
+                  fontSize: "16px",
+                  paddingLeft: "10px",
+                  fontWeight: "bold",
+                }}
+              >
+                BUỔI HỌC &nbsp;
+              </Link>{" "}
+              <div
+                className="box-center"
+                style={{
+                  height: "28.5px",
+                  width: "auto",
+                  backgroundColor: "#007bff",
+                  color: "white",
+                  borderRadius: "5px",
+                  float: "right",
+                }}
+              >
+                {" "}
+                <span style={{ fontSize: "14px", padding: "10px" }}>
+                  {classDetail.code}
+                </span>
+              </div>
+              <hr />
+            </div>
+          </div>
+          <div
+            className="content-class"
+            style={{ margin: "25px 0px 15px 15px" }}
+          >
+            <Row style={{ marginBottom: "4px", marginTop: "6px" }}>
+              <Col span={24}>
+                <span>Hoạt động: &nbsp; {classDetail.activityName}</span>
+              </Col>
+            </Row>
+            <Row style={{ marginBottom: "4px" }}>
+              <Col>
+                <span>Level: &nbsp; {classDetail.activityLevel + 1}</span>
+              </Col>
+            </Row>
+            <Row gutter={16} style={{ marginBottom: "4px" }}>
+              {" "}
+              <Col span={24}>
+                <span>
+                  Thời gian bắt đầu:&nbsp;
+                  {moment(classDetail.startTime).format("DD-MM-YYYY")}
+                </span>{" "}
+              </Col>
+            </Row>
+            <Row gutter={16} style={{ marginBottom: "4px" }}>
+              <Col>
+                <span>Mã lớp: &nbsp;{classDetail.code}</span>
+              </Col>
+            </Row>
+            <Row style={{ marginBottom: "4px" }}>
+              <Col>
+                <span>Tên lớp: &nbsp;{classDetail.name}</span>
+              </Col>
+            </Row>
+            <Row style={{ marginBottom: "4px" }}>
+              <Col>
+                <span>Ca học: &nbsp; {classDetail.classPeriod + 1} </span>
+              </Col>
+            </Row>
+            <Row style={{ marginBottom: "4px" }}>
+              <Col>
+                <span>Số thành viên: &nbsp;{classDetail.classSize}</span>
+              </Col>
+            </Row>
+            <Row gutter={16} style={{ marginBottom: "4px" }}>
+              <Col span={24}>
+                <span>Mô tả: &nbsp;{classDetail.descriptions}</span>
+              </Col>
+            </Row>
+            <Row gutter={16}>
+              <Col span={24}>
+                <span>Mật khẩu: &nbsp;{classDetail.passWord}</span>
+              </Col>
+            </Row>
+            <br />
+          </div>
+          <div>
+            {dataTable.length > 0 ? (
+              <>
+                <div className="table">
+                  <Table
+                    dataSource={data}
+                    rowKey="id"
+                    columns={columns}
+                    pagination={false}
+                  />
+                </div>
+              </>
+            ) : (
+              <>
+                <p
+                  style={{
+                    textAlign: "center",
+                    marginTop: "100px",
+                    fontSize: "15px",
+                    color: "red",
+                  }}
+                >
+                  Không có thành viên
+                </p>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </>

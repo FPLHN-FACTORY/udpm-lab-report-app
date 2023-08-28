@@ -83,9 +83,9 @@ const MeetingManagment = () => {
   };
 
   return (
-    <div>
+    <div style={{ paddingTop: "35px" }}>
       {isLoading && <LoadingIndicator />}
-      <div className="title-teacher-my-class">
+      <div className="title-meeting-managemnt-my-class">
         <span style={{ paddingLeft: "20px" }}>
           <ControlOutlined style={{ fontSize: "22px" }} />
           <span
@@ -100,155 +100,157 @@ const MeetingManagment = () => {
           <span style={{ color: "gray" }}> - Quản lý lớp học</span>
         </span>
       </div>
-      <div className="box-filter">
-        <div className="button-menu-teacher">
-          <div>
-            <Link
-              className="custom-link"
-              style={{ fontSize: "16px", paddingLeft: "10px" }}
-            >
-              THÔNG TIN LỚP HỌC &nbsp;
-            </Link>
-            <Link
-              id="menu-checked"
-              style={{ fontSize: "16px", paddingLeft: "10px" }}
-            >
-              QUẢN LÝ LỊCH HỌC &nbsp;
-            </Link>
-
-            <hr />
-          </div>
-        </div>
-        <div className="menu-teacher-search">
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              marginTop: "20px",
-            }}
-          >
+      <div className="box-filter-meeting-management">
+        <div className="box-filter-meeting-management-son">
+          <div className="button-menu-teacher">
             <div>
-              {" "}
-              <span style={{ fontSize: "17px", fontWeight: "500" }}>
-                {" "}
-                <UnorderedListOutlined
-                  style={{ marginRight: "10px", fontSize: "20px" }}
-                />
-                Danh sách lịch học
-              </span>
-            </div>{" "}
+              <Link
+                className="custom-link"
+                style={{ fontSize: "16px", paddingLeft: "10px" }}
+              >
+                THÔNG TIN LỚP HỌC &nbsp;
+              </Link>
+              <Link
+                id="menu-checked"
+                style={{ fontSize: "16px", paddingLeft: "10px" }}
+              >
+                QUẢN LÝ LỊCH HỌC &nbsp;
+              </Link>
+
+              <hr />
+            </div>
+          </div>
+          <div className="menu-teacher-search">
             <div
               style={{
-                fontSize: "14px",
-                float: "right",
                 display: "flex",
-                alignItems: "center",
+                justifyContent: "space-between",
+                marginTop: "20px",
               }}
             >
-              {" "}
+              <div>
+                {" "}
+                <span style={{ fontSize: "17px", fontWeight: "500" }}>
+                  {" "}
+                  <UnorderedListOutlined
+                    style={{ marginRight: "10px", fontSize: "20px" }}
+                  />
+                  Danh sách lịch học
+                </span>
+              </div>{" "}
               <div
-                className="box-center"
                 style={{
-                  height: "30px",
-                  width: "100px",
-                  backgroundColor: "#007bff",
-                  color: "white",
-                  borderRadius: "5px",
-                  marginLeft: "35px",
+                  fontSize: "14px",
+                  float: "right",
+                  display: "flex",
+                  alignItems: "center",
                 }}
               >
                 {" "}
-                <span style={{ fontSize: "14px" }}>
+                <div
+                  className="box-center"
+                  style={{
+                    height: "30px",
+                    width: "100px",
+                    backgroundColor: "#007bff",
+                    color: "white",
+                    borderRadius: "5px",
+                    marginLeft: "35px",
+                  }}
+                >
                   {" "}
-                  {data != null ? data.length : 0} buổi học{" "}
-                </span>
+                  <span style={{ fontSize: "14px" }}>
+                    {" "}
+                    {data != null ? data.length : 0} buổi học{" "}
+                  </span>
+                </div>
+                <Button
+                  style={{ marginLeft: "10px" }}
+                  className="btn-create-meeting"
+                  onClick={openModalCreateMeeting}
+                >
+                  Thêm buổi học
+                </Button>
               </div>
-              <Button
-                style={{ marginLeft: "10px" }}
-                className="btn-create-meeting"
-                onClick={openModalCreateMeeting}
-              >
-                Thêm buổi học
-              </Button>
             </div>
-          </div>
-          <div className="data-table">
-            {data != null &&
-              data.length > 0 &&
-              data.map((item) => (
-                <div>
-                  <div tabIndex={0} role="button" className="box-card">
-                    <div className="title-left">
-                      <Link>
-                        <div className="box-icon">
-                          <BookOutlined
-                            style={{ color: "white", fontSize: 21 }}
-                          />
-                        </div>
-                        <span
-                          style={{
-                            fontSize: "16px",
-                            color: "black",
-                          }}
-                        >
-                          {item.name} -{" "}
-                          {item.typeMeeting === 0 ? "Online" : "Offline"}
-                        </span>
-                      </Link>
-                    </div>
-                    <div className="title-right">
-                      <div>
-                        {" "}
-                        <span>
-                          {" "}
-                          Time:{" "}
+            <div className="data-table">
+              {data != null &&
+                data.length > 0 &&
+                data.map((item) => (
+                  <div>
+                    <div tabIndex={0} role="button" className="box-card">
+                      <div className="title-left">
+                        <Link>
+                          <div className="box-icon">
+                            <BookOutlined
+                              style={{ color: "white", fontSize: 21 }}
+                            />
+                          </div>
                           <span
                             style={{
-                              color: "red",
-                              fontWeight: "500",
+                              fontSize: "16px",
+                              color: "black",
                             }}
                           >
-                            {convertLongToDate(item.meetingDate)} -{" "}
-                            {convertMeetingPeriod(item.meetingPeriod)}
+                            {item.name} -{" "}
+                            {item.typeMeeting === 0 ? "Online" : "Offline"}
                           </span>
-                        </span>
+                        </Link>
                       </div>
-                    </div>
-                    <div className="icon-right">
-                      <FontAwesomeIcon
-                        icon={faPencilAlt}
-                        style={{
-                          marginRight: "10px",
-                          cursor: "pointer",
-                          color: "#007bff",
-                        }}
-                        onClick={() => {
-                          openModalUpdateMeeting(item);
-                        }}
-                      />
-                      <Popconfirm
-                        title="Xóa buổi học"
-                        description="Bạn có chắc chắn muốn xóa buổi học này không?"
-                        onConfirm={() => {
-                          deleteMeeting(item.id);
-                        }}
-                        okText="Yes"
-                        cancelText="No"
-                      >
+                      <div className="title-right">
+                        <div>
+                          {" "}
+                          <span>
+                            {" "}
+                            Time:{" "}
+                            <span
+                              style={{
+                                color: "red",
+                                fontWeight: "500",
+                              }}
+                            >
+                              {convertLongToDate(item.meetingDate)} -{" "}
+                              {convertMeetingPeriod(item.meetingPeriod)}
+                            </span>
+                          </span>
+                        </div>
+                      </div>
+                      <div className="icon-right">
                         <FontAwesomeIcon
-                          icon={faTrash}
+                          icon={faPencilAlt}
                           style={{
                             marginRight: "10px",
-                            marginLeft: "5px",
                             cursor: "pointer",
                             color: "#007bff",
                           }}
+                          onClick={() => {
+                            openModalUpdateMeeting(item);
+                          }}
                         />
-                      </Popconfirm>
-                    </div>
-                  </div>{" "}
-                </div>
-              ))}
+                        <Popconfirm
+                          title="Xóa buổi học"
+                          description="Bạn có chắc chắn muốn xóa buổi học này không?"
+                          onConfirm={() => {
+                            deleteMeeting(item.id);
+                          }}
+                          okText="Yes"
+                          cancelText="No"
+                        >
+                          <FontAwesomeIcon
+                            icon={faTrash}
+                            style={{
+                              marginRight: "10px",
+                              marginLeft: "5px",
+                              cursor: "pointer",
+                              color: "#007bff",
+                            }}
+                          />
+                        </Popconfirm>
+                      </div>
+                    </div>{" "}
+                  </div>
+                ))}
+            </div>
           </div>
         </div>
       </div>

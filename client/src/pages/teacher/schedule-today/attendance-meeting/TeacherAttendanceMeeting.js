@@ -211,7 +211,6 @@ const TeacherAttendanceMeeting = () => {
     <>
       {!loading && <LoadingIndicator />}
       {/* items={classFind.code} */}
-      <FloatingDiv items={"Helloo cô yêu >.< ~~"} />
       <div className="box-one">
         <Link to="/teacher/schedule-today" style={{ color: "black" }}>
           <span style={{ fontSize: "18px", paddingLeft: "20px" }}>
@@ -224,92 +223,94 @@ const TeacherAttendanceMeeting = () => {
             </span>
             <span style={{ color: "gray", fontSize: "14px" }}>
               {" "}
-              - điểm danh
+              - Điểm danh
             </span>
           </span>
         </Link>
       </div>
-      <div className="box-two">
-        <div className="button-menu">
-          <div>
-            <span
-              id="menu-checked"
-              style={{
-                fontSize: "16px",
-                paddingLeft: "10px",
-                fontWeight: "bold",
-              }}
-            >
-              ĐIỂM DANH &nbsp;
-            </span>
-            <div
-              className="box-center"
-              style={{
-                height: "28.5px",
-                width: "auto",
-                backgroundColor: "#007bff",
-                color: "white",
-                borderRadius: "5px",
-                float: "right",
-              }}
-            >
-              {" "}
-              <span style={{ fontSize: "14px", padding: "10px" }}>
-                {classFind.code}
-              </span>
-            </div>
-            <hr />
-          </div>
-        </div>
-        <div className="content-class">
-          <div
-            style={{
-              height: "auto",
-              margin: "20px 10px 20px 10px",
-            }}
-          >
-            <span
-              style={{
-                paddingTop: "15px",
-                fontWeight: 500,
-              }}
-            >
-              Mặc định trạng thái điểm danh của sinh viên là "Có mặt". Giảng
-              viên chuyển từ "Có mặt" thành "Vắng mặt" nếu sinh viên vi phạm một
-              trong những nội quy như ra ngoài không lý do, mất trật tự,..
-            </span>
-          </div>
-        </div>
-        <div>
-          {dataTable.length > 0 ? (
-            <>
-              <div className="table">
-                <Table
-                  dataSource={data}
-                  rowKey="id"
-                  columns={columns}
-                  pagination={false}
-                />
-              </div>
-            </>
-          ) : (
-            <>
-              <p
+      <div className="box-two-student-in-my-class">
+        <div className="box-two-student-in-my-class-son">
+          <div className="button-menu">
+            <div>
+              <span
+                id="menu-checked"
                 style={{
-                  textAlign: "center",
-                  marginTop: "100px",
-                  fontSize: "15px",
-                  color: "red",
+                  fontSize: "16px",
+                  paddingLeft: "10px",
+                  fontWeight: "bold",
                 }}
               >
-                Không có thông tin sinh viên
-              </p>
-            </>
-          )}
-        </div>
-        <div className="box-button-center">
-          <div className="box-button" onClick={handleSave}>
-            Lưu điểm danh
+                ĐIỂM DANH &nbsp;
+              </span>
+              <div
+                className="box-center"
+                style={{
+                  height: "28.5px",
+                  width: "auto",
+                  backgroundColor: "#007bff",
+                  color: "white",
+                  borderRadius: "5px",
+                  float: "right",
+                }}
+              >
+                {" "}
+                <span style={{ fontSize: "14px", padding: "10px" }}>
+                  {classFind.code}
+                </span>
+              </div>
+              <hr />
+            </div>
+          </div>
+          <div className="content-class">
+            <div
+              style={{
+                height: "auto",
+                margin: "20px 10px 20px 10px",
+              }}
+            >
+              <span
+                style={{
+                  paddingTop: "15px",
+                  fontWeight: 500,
+                }}
+              >
+                Mặc định trạng thái điểm danh của sinh viên là "Có mặt". Giảng
+                viên chuyển từ "Có mặt" thành "Vắng mặt" nếu sinh viên vi phạm
+                một trong những nội quy như ra ngoài không lý do, mất trật tự,..
+              </span>
+            </div>
+          </div>
+          <div>
+            {dataTable.length > 0 ? (
+              <>
+                <div className="table">
+                  <Table
+                    dataSource={data}
+                    rowKey="id"
+                    columns={columns}
+                    pagination={false}
+                  />
+                </div>
+              </>
+            ) : (
+              <>
+                <p
+                  style={{
+                    textAlign: "center",
+                    marginTop: "100px",
+                    fontSize: "15px",
+                    color: "red",
+                  }}
+                >
+                  Không có thông tin sinh viên
+                </p>
+              </>
+            )}
+          </div>
+          <div className="box-button-center">
+            <div className="box-button" onClick={handleSave}>
+              Lưu điểm danh
+            </div>
           </div>
         </div>
       </div>

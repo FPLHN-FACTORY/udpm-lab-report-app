@@ -274,188 +274,193 @@ const TeamsInMyClass = () => {
             <span style={{ marginLeft: "10px", fontWeight: "500" }}>
               Bảng điều khiển
             </span>{" "}
-            <span style={{ color: "gray", fontSize: "14px" }}> - nhóm</span>
+            <span style={{ color: "gray", fontSize: "14px" }}> - Nhóm</span>
           </span>
         </Link>
       </div>
-      <div className="box-two">
-        <div className="button-menu-teacher">
-          <div>
-            <Link
-              to={`/teacher/my-class/students/${idClass}`}
-              className="custom-link"
-              style={{
-                fontSize: "16px",
-                paddingLeft: "10px",
-                fontWeight: "bold",
-              }}
-            >
-              THÀNH VIÊN TRONG LỚP &nbsp;
-            </Link>
-            <Link
-              to={`/teacher/my-class/attendance/${idClass}`}
-              className="custom-link"
-              style={{
-                fontSize: "16px",
-                paddingLeft: "10px",
-                fontWeight: "bold",
-              }}
-            >
-              ĐIỂM DANH &nbsp;
-            </Link>
-            <Link
-              to={`/teacher/my-class/teams/${idClass}`}
-              id="menu-checked"
-              style={{
-                fontSize: "16px",
-                paddingLeft: "10px",
-                fontWeight: "bold",
-              }}
-            >
-              QUẢN LÝ NHÓM &nbsp;
-            </Link>
-            <Link
-              to={`/teacher/my-class/meeting/${idClass}`}
-              className="custom-link"
-              style={{
-                fontSize: "16px",
-                paddingLeft: "10px",
-                fontWeight: "bold",
-              }}
-            >
-              BUỔI HỌC &nbsp;
-            </Link>
-            <div
-              className="box-center"
-              style={{
-                height: "28.5px",
-                width: "auto",
-                backgroundColor: "#007bff",
-                color: "white",
-                borderRadius: "5px",
-                float: "right",
-              }}
-            >
-              {" "}
-              <span style={{ fontSize: "14px", padding: "10px" }}>
-                {classDetail.code}
-              </span>
-            </div>
-            <hr />
-          </div>
-        </div>
-        <Row gutter={16} style={{ margin: "25px 0px 20px 10px" }}>
-          <Col span={22}>
-            <div style={{ marginLeft: "0px" }}>
-              {" "}
-              <span style={{ fontSize: "17px", fontWeight: "500" }}>
+      <div className="box-two-student-in-my-class">
+        <div
+          className="box-two-student-in-my-class-son"
+          style={{ height: "580px" }}
+        >
+          <div className="button-menu-teacher">
+            <div>
+              <Link
+                to={`/teacher/my-class/students/${idClass}`}
+                className="custom-link"
+                style={{
+                  fontSize: "16px",
+                  paddingLeft: "10px",
+                  fontWeight: "bold",
+                }}
+              >
+                THÀNH VIÊN TRONG LỚP &nbsp;
+              </Link>
+              <Link
+                to={`/teacher/my-class/attendance/${idClass}`}
+                className="custom-link"
+                style={{
+                  fontSize: "16px",
+                  paddingLeft: "10px",
+                  fontWeight: "bold",
+                }}
+              >
+                ĐIỂM DANH &nbsp;
+              </Link>
+              <Link
+                to={`/teacher/my-class/teams/${idClass}`}
+                id="menu-checked"
+                style={{
+                  fontSize: "16px",
+                  paddingLeft: "10px",
+                  fontWeight: "bold",
+                }}
+              >
+                QUẢN LÝ NHÓM &nbsp;
+              </Link>
+              <Link
+                to={`/teacher/my-class/meeting/${idClass}`}
+                className="custom-link"
+                style={{
+                  fontSize: "16px",
+                  paddingLeft: "10px",
+                  fontWeight: "bold",
+                }}
+              >
+                BUỔI HỌC &nbsp;
+              </Link>
+              <div
+                className="box-center"
+                style={{
+                  height: "28.5px",
+                  width: "auto",
+                  backgroundColor: "#007bff",
+                  color: "white",
+                  borderRadius: "5px",
+                  float: "right",
+                }}
+              >
                 {" "}
-                <UnorderedListOutlined
-                  style={{ marginRight: "10px", fontSize: "20px" }}
-                />
-                Danh sách nhóm
-              </span>
+                <span style={{ fontSize: "14px", padding: "10px" }}>
+                  {classDetail.code}
+                </span>
+              </div>
+              <hr />
             </div>
-          </Col>
-          <Col span={2}>
-            <Button
-              className="btn_clear"
-              style={{
-                color: "white",
-                backgroundColor: "#007bff",
-              }}
-              onClick={() => {
-                setShowCreateModal(true);
-              }}
-            >
-              Tạo nhóm
-            </Button>
-          </Col>
-        </Row>
-        <div>
-          {data.length > 0 ? (
+          </div>
+          <Row gutter={16} style={{ margin: "25px 0px 20px 10px" }}>
+            <Col span={22}>
+              <div style={{ marginLeft: "0px" }}>
+                {" "}
+                <span style={{ fontSize: "17px", fontWeight: "500" }}>
+                  {" "}
+                  <UnorderedListOutlined
+                    style={{ marginRight: "10px", fontSize: "20px" }}
+                  />
+                  Danh sách nhóm
+                </span>
+              </div>
+            </Col>
+            <Col span={2}>
+              <Button
+                className="btn_clear"
+                style={{
+                  color: "white",
+                  backgroundColor: "#007bff",
+                }}
+                onClick={() => {
+                  setShowCreateModal(true);
+                }}
+              >
+                Tạo nhóm
+              </Button>
+            </Col>
+          </Row>
+          <div>
+            {data.length > 0 ? (
+              <>
+                <div className="table">
+                  <Table
+                    style={{ marginTop: "150px" }}
+                    dataSource={data}
+                    rowKey="id"
+                    columns={columns}
+                    pagination={false}
+                  />
+                </div>
+              </>
+            ) : (
+              <>
+                <p
+                  style={{
+                    textAlign: "center",
+                    marginTop: "100px",
+                    fontSize: "15px",
+                    color: "red",
+                  }}
+                >
+                  Không có nhóm nào trong lớp
+                </p>
+              </>
+            )}
+          </div>
+          <ModalDetailTeam
+            visible={showDetailModal}
+            onCancel={handleModalDetailCancel}
+            idClass={idClass}
+            team={objeactTeam}
+          />
+          <ModalCreateTeam
+            visible={showCreateModal}
+            onCancel={handleCancelCreate}
+            idClass={idClass}
+          />
+          <ModalUpdateTeam
+            visible={showUpdateModal}
+            onCancel={handleCancelCreate}
+            idClass={idClass}
+            team={objeactTeam}
+          />
+          <Modal
+            onCancel={handleCancelModalCreateFaild}
+            open={showDeleteModal}
+            width={750}
+            footer={null}
+          >
             <>
-              <div className="table">
-                <Table
-                  style={{ marginTop: "150px" }}
-                  dataSource={data}
-                  rowKey="id"
-                  columns={columns}
-                  pagination={false}
-                />
+              <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
+                <span style={{ fontSize: "18px" }}>
+                  Bạn có muốn xóa nhóm {teamDelete.name} không ?{" "}
+                </span>
+              </div>
+              <div
+                style={{
+                  textAlign: "right",
+                  marginTop: "20px",
+                }}
+              >
+                <Button
+                  style={{
+                    backgroundColor: "red",
+                    color: "white",
+                  }}
+                  onClick={handleCancelModalCreateFaild}
+                >
+                  Hủy
+                </Button>{" "}
+                <Button
+                  style={{
+                    backgroundColor: "rgb(61, 139, 227)",
+                    color: "white",
+                  }}
+                  onClick={handleDeleteTeam}
+                >
+                  Xóa
+                </Button>
               </div>
             </>
-          ) : (
-            <>
-              <p
-                style={{
-                  textAlign: "center",
-                  marginTop: "100px",
-                  fontSize: "15px",
-                  color: "red",
-                }}
-              >
-                Không có nhóm nào trong lớp
-              </p>
-            </>
-          )}
+          </Modal>
         </div>
-        <ModalDetailTeam
-          visible={showDetailModal}
-          onCancel={handleModalDetailCancel}
-          idClass={idClass}
-          team={objeactTeam}
-        />
-        <ModalCreateTeam
-          visible={showCreateModal}
-          onCancel={handleCancelCreate}
-          idClass={idClass}
-        />
-        <ModalUpdateTeam
-          visible={showUpdateModal}
-          onCancel={handleCancelCreate}
-          idClass={idClass}
-          team={objeactTeam}
-        />
-        <Modal
-          onCancel={handleCancelModalCreateFaild}
-          open={showDeleteModal}
-          width={750}
-          footer={null}
-        >
-          <>
-            <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
-              <span style={{ fontSize: "18px" }}>
-                Bạn có muốn xóa nhóm {teamDelete.name} không ?{" "}
-              </span>
-            </div>
-            <div
-              style={{
-                textAlign: "right",
-                marginTop: "20px",
-              }}
-            >
-              <Button
-                style={{
-                  backgroundColor: "red",
-                  color: "white",
-                }}
-                onClick={handleCancelModalCreateFaild}
-              >
-                Hủy
-              </Button>{" "}
-              <Button
-                style={{
-                  backgroundColor: "rgb(61, 139, 227)",
-                  color: "white",
-                }}
-                onClick={handleDeleteTeam}
-              >
-                Xóa
-              </Button>
-            </div>
-          </>
-        </Modal>
       </div>
     </>
   );

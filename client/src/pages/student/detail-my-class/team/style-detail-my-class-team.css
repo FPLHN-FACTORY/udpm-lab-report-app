@@ -3,7 +3,7 @@
   margin-bottom: 10px;
   margin-top: 20px;
 }
-.info-team-not-join{
+.info-team-not-join {
   margin-left: 10px;
 }
 .info-heading {
@@ -42,6 +42,33 @@
   background-color: #d3c848;
   float: right;
 }
-.table-not-join{
+.table-not-join {
   margin-top: 90px;
+}
+
+.box-students-in-class {
+  margin-top: 20px;
+  background-color: #333;
+}
+
+.button-menu-student {
+}
+
+.title-student-my-class {
+  background-color: white;
+  height: 55px;
+  align-items: center;
+  box-shadow: 0px 0px 20px 1px rgba(148, 148, 148, 0.3);
+  display: flex;
+}
+
+.box-students-detail-my-class {
+  padding: 25px !important;
+}
+
+.button-menu-student-detail-my-class {
+  background-color: white;
+  padding: 20px;
+  box-shadow: 0px 0px 20px 1px rgba(148, 148, 148, 0.3);
+  border-radius: 5px;
 }

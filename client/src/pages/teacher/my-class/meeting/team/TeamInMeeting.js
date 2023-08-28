@@ -69,55 +69,60 @@ const TeamInMeeting = () => {
             </span>{" "}
             <span style={{ color: "gray", fontSize: "14px" }}>
               {" "}
-              - chi tiết buổi học
+              - Chi tiết buổi học
             </span>
           </span>
         </Link>
       </div>
-      <div className="box-two">
-        <div style={{ marginLeft: "30px" }}>
-          <Row gutter={16}>
-            <Col span={20}>
-              {" "}
-              <div className="title-left-meeting">
-                <div className="box-icon-detail">
-                  <BookOutlined style={{ color: "white", fontSize: 21 }} />
+      <div className="box-two-student-in-my-class">
+        <div
+          className="box-two-student-in-my-class-son"
+          style={{ height: "580px" }}
+        >
+          <div style={{ marginLeft: "30px" }}>
+            <Row gutter={16}>
+              <Col span={20}>
+                {" "}
+                <div className="title-left-meeting">
+                  <div className="box-icon-detail">
+                    <BookOutlined style={{ color: "white", fontSize: 21 }} />
+                  </div>
+                  <span
+                    style={{
+                      fontSize: "24px",
+                      color: "#1967D2",
+                    }}
+                  >
+                    {meeting.name}
+                  </span>
                 </div>
-                <span
-                  style={{
-                    fontSize: "24px",
-                    color: "#1967D2",
-                  }}
+              </Col>
+              <Col span={4}>
+                <div
+                  style={{ lineHeight: "42px", color: "grey", float: "right" }}
                 >
-                  {meeting.name}
-                </span>
-              </div>
-            </Col>
-            <Col span={4}>
-              <div
-                style={{ lineHeight: "42px", color: "grey", float: "right" }}
-              >
-                <span>
-                  Thời gian: {convertLongToDate(meeting.meetingDate)} - Ca{" "}
-                  {meeting.meetingPeriod + 1}
-                </span>
-              </div>
-            </Col>
-          </Row>
-          <hr />
-        </div>
-        <div className="row-meeting">
-          <div style={{ margin: "0px 0px 20px 80px" }}>
-            {" "}
-            <span style={{ fontSize: "17px", fontWeight: "500" }}>
-              {" "}
-              <UnorderedListOutlined
-                style={{ marginRight: "10px", fontSize: "20px" }}
-              />
-              Danh sách nhóm
-            </span>
+                  <span>
+                    Thời gian: {convertLongToDate(meeting.meetingDate)} - Ca{" "}
+                    {meeting.meetingPeriod + 1}
+                  </span>
+                </div>
+              </Col>
+            </Row>
+            <hr />
           </div>
-          <CollapseTeam items={team}></CollapseTeam>
+          <div className="row-meeting">
+            <div style={{ margin: "0px 0px 20px 80px" }}>
+              {" "}
+              <span style={{ fontSize: "17px", fontWeight: "500" }}>
+                {" "}
+                <UnorderedListOutlined
+                  style={{ marginRight: "10px", fontSize: "20px" }}
+                />
+                Danh sách nhóm
+              </span>
+            </div>
+            <CollapseTeam items={team}></CollapseTeam>
+          </div>
         </div>
       </div>
     </>

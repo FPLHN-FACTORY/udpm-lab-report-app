@@ -272,7 +272,7 @@ const ClassManagement = () => {
 
       <div className="title_class">
         {" "}
-        <span style={{ fontSize: "18px" }}>Quản lý lớp học</span>
+        <span style={{ fontSize: "22px" }}>Quản lý lớp học</span>
       </div>
       <div className="filter">
         <FontAwesomeIcon icon={faFilter} size="2x" />{" "}

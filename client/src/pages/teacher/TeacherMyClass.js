@@ -52,7 +52,7 @@ const TeacherMyClass = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = "Bảng điều khiển - lớp của tôi";
+    document.title = "Bảng điều khiển - Lớp của tôi";
     setIdSemesterSearch("");
     setIdActivitiSearch("");
     setCodeSearch("");
@@ -229,7 +229,7 @@ const TeacherMyClass = () => {
   ];
 
   return (
-    <>
+    <div>
       {!loading && <LoadingIndicator />}
       <div className="box-one">
         <Link to="/teacher/my-class" style={{ color: "black" }}>
@@ -245,225 +245,235 @@ const TeacherMyClass = () => {
         </Link>
       </div>
       <div className="box-three">
-        <div className="button-menu">
-          <Link
-            to="/teacher/schedule-today"
-            style={{ fontSize: "17px", fontWeight: "bold" }}
-            className="custom-link"
-          >
-            &nbsp; Lịch dạy hôm nay &nbsp;
-          </Link>
-          <Link
-            to="/teacher/my-class"
-            id="menu-checked"
-            style={{
-              fontSize: "17px",
-              paddingLeft: "10px",
-              fontWeight: "bold",
-            }}
-          >
-            Lớp của tôi &nbsp;
-          </Link>
+        <div className="box-three-son">
+          <div className="button-menu">
+            <Link
+              to="/teacher/schedule-today"
+              style={{ fontSize: "17px", fontWeight: "500" }}
+              className="custom-link"
+            >
+              &nbsp; LỊCH DẠY HÔM NAY &nbsp;
+            </Link>
+            <Link
+              to="/teacher/my-class"
+              id="menu-checked"
+              style={{
+                fontSize: "17px",
+                paddingLeft: "10px",
+                fontWeight: "500",
+              }}
+            >
+              LỚP CỦA TÔI &nbsp;
+            </Link>
 
-          <hr />
-        </div>
-        <div className="title-box-two">
-          <Row gutter={16} style={{ marginBottom: "15px", paddingTop: "20px" }}>
-            <Col span={6}>
-              <span>Học kỳ</span>
-              <QuestionCircleFilled
-                style={{ paddingLeft: "12px", fontSize: "15px" }}
-              />
-              <br />
-              <Select
-                value={idSemesterSeach}
-                onChange={(value) => {
-                  setIdSemesterSearch(value);
-                }}
-                style={{
-                  width: "263px",
-                  minWidth: "120px",
-                  maxWidth: "263px",
-                  margin: "6px 0 10px 0",
-                }}
-              >
-                {listSemester.map((item) => {
-                  return (
-                    <Option
-                      value={item.id}
-                      key={item.id}
-                      style={{ width: "auto" }}
-                    >
-                      {item.name}
-                    </Option>
-                  );
-                })}
-              </Select>
-            </Col>
-            <Col span={14}>
-              <span>Hoạt động</span>
-              <QuestionCircleFilled
-                style={{ paddingLeft: "12px", fontSize: "15px" }}
-              />{" "}
-              <br />
-              <Select
-                value={idActivitiSearch}
-                onChange={(value) => {
-                  setIdActivitiSearch(value);
-                }}
-                style={{
-                  width: "868px",
-                  margin: "6px 0 10px 0",
-                }}
-              >
-                <Option value="">Tất cả</Option>
-                {listActivity.map((item) => {
-                  return (
-                    <Option value={item.id} key={item.id} title={item.name}>
-                      {item.name}
-                    </Option>
-                  );
-                })}
-              </Select>
-            </Col>
-          </Row>
-          <Row gutter={16} style={{ marginBottom: "15px", paddingTop: "20px" }}>
-            <Col span={6}>
-              <span>Mã lớp</span>{" "}
-              <QuestionCircleFilled
-                style={{ paddingLeft: "12px", fontSize: "15px" }}
-              />{" "}
-              <br />
-              <Input
-                style={{ width: "92%", marginTop: "6px" }}
-                type="text"
-                placeholder="Nhập mã lớp"
-                value={codeSearch}
-                onChange={(e) => {
-                  setCodeSearch(e.target.value);
-                }}
-              />
-            </Col>
-            <Col span={6}>
-              <span>Tên lớp</span>{" "}
-              <QuestionCircleFilled
-                style={{ paddingLeft: "12px", fontSize: "15px" }}
-              />
-              {""} <br />
-              <Input
-                style={{ width: "92%", marginTop: "6px" }}
-                placeholder="Nhập tên lớp"
-                type="text"
-                value={nameSearch}
-                onChange={(e) => {
-                  setNameSearch(e.target.value);
-                }}
-              />
-            </Col>
-            <Col span={6}>
-              <span>Ca học</span>
-              <QuestionCircleFilled
-                style={{ paddingLeft: "12px", fontSize: "15px" }}
-              />{" "}
-              <br />
-              <Select
-                value={classPeriodSearch}
-                onChange={(value) => {
-                  setClassPeriodSearch(value);
-                }}
-                style={{ width: "92%", marginTop: "6px" }}
-              >
-                <Option value="">Tất cả</Option>
-                {listClassPeriod.map((value) => {
-                  return (
-                    <Option value={value} key={value}>
-                      {value}
-                    </Option>
-                  );
-                })}
-              </Select>
-            </Col>
-            <Col span={6}>
-              <span>Level</span>{" "}
-              <QuestionCircleFilled
-                style={{ paddingLeft: "12px", fontSize: "15px" }}
-              />{" "}
-              <br />
-              <Select
-                value={levelSearch}
-                onChange={(value) => {
-                  setLevelSearch(value);
-                }}
-                style={{ width: "92%", marginTop: "6px" }}
-              >
-                <Option value="">Tất cả</Option>
-                <Option value="1">1</Option>
-                <Option value="2">2</Option>
-                <Option value="3">3</Option>
-              </Select>
-            </Col>
-          </Row>
-          <div className="box_btn_filter">
-            <Button className="btn_filter" onClick={handleSearch}>
-              Tìm kiếm
-            </Button>
-            <Button className="btn_clear" onClick={handleClear}>
-              Làm mới
-            </Button>
+            <hr />
+          </div>
+          <div className="title-box-two">
+            <Row
+              gutter={16}
+              style={{ marginBottom: "15px", paddingTop: "20px" }}
+            >
+              <Col span={6}>
+                <span>Học kỳ</span>
+                <QuestionCircleFilled
+                  style={{ paddingLeft: "12px", fontSize: "15px" }}
+                />
+                <br />
+                <Select
+                  value={idSemesterSeach}
+                  onChange={(value) => {
+                    setIdSemesterSearch(value);
+                  }}
+                  style={{
+                    width: "263px",
+                    minWidth: "120px",
+                    maxWidth: "263px",
+                    margin: "6px 0 10px 0",
+                  }}
+                >
+                  {listSemester.map((item) => {
+                    return (
+                      <Option
+                        value={item.id}
+                        key={item.id}
+                        style={{ width: "auto" }}
+                      >
+                        {item.name}
+                      </Option>
+                    );
+                  })}
+                </Select>
+              </Col>
+              <Col span={14}>
+                <span>Hoạt động</span>
+                <QuestionCircleFilled
+                  style={{ paddingLeft: "12px", fontSize: "15px" }}
+                />{" "}
+                <br />
+                <Select
+                  value={idActivitiSearch}
+                  onChange={(value) => {
+                    setIdActivitiSearch(value);
+                  }}
+                  style={{
+                    width: "868px",
+                    margin: "6px 0 10px 0",
+                  }}
+                >
+                  <Option value="">Tất cả</Option>
+                  {listActivity.map((item) => {
+                    return (
+                      <Option value={item.id} key={item.id} title={item.name}>
+                        {item.name}
+                      </Option>
+                    );
+                  })}
+                </Select>
+              </Col>
+            </Row>
+            <Row
+              gutter={16}
+              style={{ marginBottom: "15px", paddingTop: "20px" }}
+            >
+              <Col span={6}>
+                <span>Mã lớp</span>{" "}
+                <QuestionCircleFilled
+                  style={{ paddingLeft: "12px", fontSize: "15px" }}
+                />{" "}
+                <br />
+                <Input
+                  style={{ width: "92%", marginTop: "6px" }}
+                  type="text"
+                  placeholder="Nhập mã lớp"
+                  value={codeSearch}
+                  onChange={(e) => {
+                    setCodeSearch(e.target.value);
+                  }}
+                />
+              </Col>
+              <Col span={6}>
+                <span>Tên lớp</span>{" "}
+                <QuestionCircleFilled
+                  style={{ paddingLeft: "12px", fontSize: "15px" }}
+                />
+                {""} <br />
+                <Input
+                  style={{ width: "92%", marginTop: "6px" }}
+                  placeholder="Nhập tên lớp"
+                  type="text"
+                  value={nameSearch}
+                  onChange={(e) => {
+                    setNameSearch(e.target.value);
+                  }}
+                />
+              </Col>
+              <Col span={6}>
+                <span>Ca học</span>
+                <QuestionCircleFilled
+                  style={{ paddingLeft: "12px", fontSize: "15px" }}
+                />{" "}
+                <br />
+                <Select
+                  value={classPeriodSearch}
+                  onChange={(value) => {
+                    setClassPeriodSearch(value);
+                  }}
+                  style={{ width: "92%", marginTop: "6px" }}
+                >
+                  <Option value="">Tất cả</Option>
+                  {listClassPeriod.map((value) => {
+                    return (
+                      <Option value={value} key={value}>
+                        {value}
+                      </Option>
+                    );
+                  })}
+                </Select>
+              </Col>
+              <Col span={6}>
+                <span>Level</span>{" "}
+                <QuestionCircleFilled
+                  style={{ paddingLeft: "12px", fontSize: "15px" }}
+                />{" "}
+                <br />
+                <Select
+                  value={levelSearch}
+                  onChange={(value) => {
+                    setLevelSearch(value);
+                  }}
+                  style={{ width: "92%", marginTop: "6px" }}
+                >
+                  <Option value="">Tất cả</Option>
+                  <Option value="1">1</Option>
+                  <Option value="2">2</Option>
+                  <Option value="3">3</Option>
+                </Select>
+              </Col>
+            </Row>
+            <div className="box_btn_filter">
+              <Button className="btn_filter" onClick={handleSearch}>
+                Tìm kiếm
+              </Button>
+              <Button className="btn_clear" onClick={handleClear}>
+                Làm mới
+              </Button>
+            </div>
           </div>
         </div>
       </div>
       <div className="box-four">
-        <div className="title-table">
-          <div>
-            {" "}
-            <span style={{ fontSize: "17px", fontWeight: "500" }}>
+        <div className="box-four-son">
+          <div className="title-table">
+            <div>
               {" "}
-              <ProjectOutlined
-                style={{ marginRight: "10px", fontSize: "24px" }}
-              />
-              Danh sách lớp học
-            </span>
+              <span style={{ fontSize: "17px", fontWeight: "500" }}>
+                {" "}
+                <ProjectOutlined
+                  style={{ marginRight: "10px", fontSize: "24px" }}
+                />
+                Danh sách lớp học
+              </span>
+            </div>
+          </div>
+          <div>
+            {listMyClass.length > 0 ? (
+              <>
+                <div className="table">
+                  <Table
+                    dataSource={data}
+                    rowKey="id"
+                    columns={columns}
+                    pagination={false}
+                  />
+                </div>
+                <div className="pagination-box">
+                  <Pagination
+                    simple
+                    current={current}
+                    onChange={(value) => {
+                      setCurrent(value);
+                    }}
+                    total={totalPages * 10}
+                  />
+                </div>
+              </>
+            ) : (
+              <>
+                <p
+                  style={{
+                    textAlign: "center",
+                    marginTop: "100px",
+                    fontSize: "15px",
+                  }}
+                >
+                  Không có lớp học
+                </p>
+              </>
+            )}
           </div>
         </div>
-        <div>
-          {listMyClass.length > 0 ? (
-            <>
-              <div className="table">
-                <Table
-                  dataSource={data}
-                  rowKey="id"
-                  columns={columns}
-                  pagination={false}
-                />
-              </div>
-              <div className="pagination-box">
-                <Pagination
-                  simple
-                  current={current}
-                  onChange={(value) => {
-                    setCurrent(value);
-                  }}
-                  total={totalPages * 10}
-                />
-              </div>
-            </>
-          ) : (
-            <>
-              <p
-                style={{
-                  textAlign: "center",
-                  marginTop: "100px",
-                  fontSize: "15px",
-                }}
-              >
-                Không có lớp học
-              </p>
-            </>
-          )}
-        </div>
       </div>
-    </>
+    </div>
   );
 };
 
