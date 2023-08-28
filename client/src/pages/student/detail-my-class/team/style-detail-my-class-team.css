@@ -3,7 +3,9 @@
   margin-bottom: 10px;
   margin-top: 20px;
 }
-
+.info-team-not-join{
+  margin-left: 10px;
+}
 .info-heading {
   color: #333;
   margin-bottom: 10px;
@@ -31,6 +33,7 @@
   color: white !important;
   background-color: #ebdf62;
   float: right;
+  margin-bottom: 20px;
 }
 
 .btnRoiNhom {
@@ -38,4 +41,7 @@
   color: white !important;
   background-color: #d3c848;
   float: right;
+}
+.table-not-join{
+  margin-top: 90px;
 }

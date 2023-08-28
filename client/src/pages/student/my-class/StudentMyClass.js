@@ -3,7 +3,7 @@ import "./style-student-my-class.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import LoadingIndicator from "../../../helper/loading";
-import { Button, Col, Input, Row, Select, Table, Tooltip } from "antd";
+import { Button, Col, Input, Row, Select, Table, Tooltip ,Pagination,} from "antd";
 import {
   ControlOutlined,
   QuestionCircleFilled,

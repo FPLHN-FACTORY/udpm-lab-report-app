@@ -1,7 +1,11 @@
 package com.labreportapp.core.student.repository;
 
+import com.labreportapp.core.student.model.request.FindTeamByIdClass;
+import com.labreportapp.core.student.model.request.FindTeamClassRequest;
 import com.labreportapp.core.student.model.request.StFindClassRequest;
 import com.labreportapp.core.student.model.response.StMyClassResponse;
+import com.labreportapp.core.student.model.response.StMyStudentTeamResponse;
+import com.labreportapp.core.student.model.response.StMyTeamInClassResponse;
 import com.labreportapp.repository.ClassRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -29,4 +33,43 @@ public interface StMyClassRepository extends ClassRepository {
             ORDER BY c.created_date DESC
             """, nativeQuery = true)
     List<StMyClassResponse> getAllClass(@Param("req") StFindClassRequest req);
+
+    @Query(value = """
+            SELECT a.code , a.name , a.subject_name , a.class_id FROM team a
+             WHERE
+             (:#{#req.idClass} IS NULL
+             OR :#{#req.idClass} = ''
+             OR a.idClass = :#{#req.idClass})
+            """, nativeQuery = true)
+    List<StMyTeamInClassResponse> getTeamInClass(@Param("req") FindTeamByIdClass req);
+
+    @Query(value = """
+            SELECT a.id, a.code , a.name , a.subject_name , a.class_id FROM team a
+            JOIN student_classes b ON b.team_id = a.id
+            WHERE
+            (:#{#req.idClass} LIKE a.class_id)
+            and (:#{#req.idStudent} IS NULL OR :#{#req.idStudent} LIKE '' OR :#{#req.idStudent} LIKE b.student_id)
+
+            """, nativeQuery = true)
+    List<StMyTeamInClassResponse> getTeamByIdClassAndIdStudent(@Param("req") FindTeamClassRequest req);
+
+    @Query(value = """
+            SELECT a.id, a.student_id , a.class_id , a.team_id , a.email , a.role ,a.status FROM student_classes a
+            JOIN team b ON b.id = a.team_id
+            WHERE
+            (:#{#req.idClass} LIKE a.class_id)
+            and (:#{#req.idTeam} LIKE b.id)
+            """, nativeQuery = true)
+    List<StMyStudentTeamResponse> getTeamByIdAll(@Param("req") FindTeamClassRequest req);
+
+    @Query(value = """
+            SELECT a.id, a.code , a.name , a.subject_name , a.class_id FROM team a
+            JOIN student_classes b ON b.team_id = a.id
+            WHERE
+            (:#{#req.idClass} LIKE a.class_id)
+            and ( b.student_id <> :#{#req.idStudent})
+            and b.team_id is not NULL
+            """, nativeQuery = true)
+    List<StMyTeamInClassResponse> getTeamByStNotJoin(@Param("req") FindTeamClassRequest req);
+
 }
