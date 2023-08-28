@@ -7,7 +7,7 @@ import { ActivityManagementAPI } from "../../../../api/admin/activity-management
 import { UpdateActivityManagement } from "../../../../app/admin/activity-management/activityManagementSlice.reducer";
 import { Option } from "antd/es/mentions";
 
-const ModalUpdateActivity = ({visible, onCancel}) => {
+const ModalUpdateActivity = ({ visible, onCancel, listSemester }) => {
     const [name, setName] = useState("");
     const [startTime, setStartTime] = useState("");
     const [endTime, setEndTime] = useState("");
@@ -22,15 +22,20 @@ const ModalUpdateActivity = ({visible, onCancel}) => {
 
     useEffect(() => {
         if (visible === true) {
+            if(listSemester.length > 0) {
+                setSemesterId(listSemester[0].id)
+            }
             return () => {
                 setName("");
                 setStartTime("");
                 setEndTime("");
-                setLevel("");
+                setLevel("0");
+                setSemesterId("");
                 setErrorName("");
                 setErrorStartTime("");
                 setErrorEndTime("");
                 setErrorLevel("");
+                setErrorSemesterId("");
             };
         }
     }, [visible]);
@@ -56,24 +61,40 @@ const ModalUpdateActivity = ({visible, onCancel}) => {
         } else {
             setErrorEndTime("");
         }
+        if (new Date(startTime) > new Date(endTime)) {
+            setErrorStartTime(
+                "Thời gian bắt đầu không được lớn hơn thời gian kết thúc"
+            );
+            check++;
+        } else {
+            if (startTime === "") {
+                setErrorStartTime("Thời gian bắt đầu không được để trống");
+                check++;
+            } else {
+                setErrorStartTime("");
+            }
+        }
         if (level === "") {
             setErrorLevel("Hãy chọn cấp độ");
             check++;
         } else {
             setErrorLevel("");
         }
+        const semesterNameItem = listSemester.find((item) => item.id === semesterId)
         if (check === 0) {
             let obj = {
+                id: visible.id,
                 name: name,
                 startTime: startTime,
                 endTime: endTime,
                 level: level,
                 semesterId: semesterId,
             };
-            ActivityManagementAPI.update(obj).then(
+            ActivityManagementAPI.update(obj, visible.id).then(
                 (response) => {
-                    toast.success("Thêm thành công!");
-                    dispatch(UpdateActivityManagement(response.data.data));
+                    toast.success("Cập nhật thành công!");
+                    let objUpdate = {...response.data.data, nameSemester:semesterNameItem.name, levelText: level}
+                    dispatch(UpdateActivityManagement(objUpdate));
                     onCancel();
                 },
                 (error) => {
@@ -93,7 +114,7 @@ const ModalUpdateActivity = ({visible, onCancel}) => {
         >
             {" "}
             <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
-                <span style={{ fontSize: "18px" }}>Thêm hoạt động</span>
+                <span style={{ fontSize: "18px" }}>Sửa hoạt động</span>
             </div>
             <div style={{ marginTop: "15px", borderBottom: "1px solid black" }}>
                 <Row gutter={16} style={{ marginTop: "15px" }}>
@@ -106,51 +127,66 @@ const ModalUpdateActivity = ({visible, onCancel}) => {
                             }}
                             type="text"
                         />
+                        <span className="error">{errorName}</span>
                     </Col>
                 </Row>
                 <Row gutter={16} style={{ marginTop: "15px" }}>
                     <Col span={12}>
                         <span>Thời gian bắt đầu:</span> <br />
-                        <DatePicker
+                        <DatePicker style={{width: "100%"}}
                             value={startTime}
                             onChange={(date) => {
                                 setStartTime(date);
                             }}
                         />
+                        <span className="error">{errorStartTime}</span>
                     </Col>
                     <Col span={12}>
                         <span>Thời gian kết thúc:</span> <br />
-                        <DatePicker
+                        <DatePicker style={{width: "100%"}}
                             value={endTime}
                             onChange={(date) => {
                                 setEndTime(date);
                             }}
                         />
+                        <span className="error">{errorEndTime}</span>
                     </Col>
                 </Row>
                 <Row gutter={16} style={{ marginTop: "15px" }}>
-                    <Col span={12}>
+                    <Col span={24}>
                         <span>Cấp độ:</span> <br />
-                        <Select
+                        <Select style={{ width: "100%" }}
                             value={level}
                             onChange={(value) => {
                                 setLevel(value);
                             }}
                         >
-                            <Option value="easy">Dễ</Option>
-                            <Option value="medium">Trung bình</Option>
-                            <Option value="hard">Khó</Option>
+                            <Option value="0">level 1</Option>
+                            <Option value="1">level 2</Option>
+                            <Option value="2">level 3</Option>
                         </Select>
+                        <span className="error">{errorLevel}</span>
                     </Col>
-                    <Col span={12}>
-                        <span>Semester ID:</span> <br />
-                        <Input
+                    </Row>
+                    <Row gutter={16} style={{ marginTop: "15px", marginBottom: "15px" }}>
+                    <Col span={24}>
+                    <span>Tên học kỳ:</span> <br />
+                        <Select
                             value={semesterId}
-                            onChange={(e) => {
-                                setSemesterId(e.target.value);
+                            onChange={(value) => {
+                                setSemesterId(value);
                             }}
-                            type="text"
-                        />
+                            style={{ marginTop: "6px",width:"100%" }}
+                        >
+                            {listSemester.map((value) => {
+                                return (
+                                    <Option value={value.id} key={value.id}>
+                                        {value.name}
+                                    </Option>
+                                );
+                            })}
+                        </Select>
+                        <span className="error">{errorSemesterId}</span>
                     </Col>
                 </Row>
             </div>
@@ -164,7 +200,7 @@ const ModalUpdateActivity = ({visible, onCancel}) => {
                         }}
                         onClick={update}
                     >
-                        Thêm
+                        Cập nhật
                     </Button>
                     <Button
                         style={{

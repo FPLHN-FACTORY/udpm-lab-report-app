@@ -5,9 +5,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Setter
 @Getter
+@ToString
 public abstract class AdBaseActivityRequest {
 
     @NotEmpty
@@ -16,17 +18,18 @@ public abstract class AdBaseActivityRequest {
 
     @NotEmpty
     @NotBlank
-    private Long startTime;
+    private String startTime;
 
     @NotEmpty
     @NotBlank
-    private Long endTime;
+    private String endTime;
 
     @NotEmpty
     @NotBlank
-    private Level level;
+    private String level;
 
     @NotEmpty
     @NotBlank
     private String semesterId;
+
 }

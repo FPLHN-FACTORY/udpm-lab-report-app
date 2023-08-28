@@ -23,7 +23,7 @@ export class ActivityManagementAPI {
             method: "PUT",
             url: `/admin/activity/${data.id}`,
             data: data,
-        })
+        });
     };
 
     static delete = (id) => {
@@ -32,4 +32,11 @@ export class ActivityManagementAPI {
             url: `/admin/activity/${id}`,
         });
     };
+
+    static semester = () => {
+        return request({
+            method: "GET",
+            url: '/admin/activity/activity-semester',
+        })
+    }
 }
