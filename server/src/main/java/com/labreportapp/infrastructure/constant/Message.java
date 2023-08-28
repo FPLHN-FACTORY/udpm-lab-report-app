@@ -18,7 +18,10 @@ public enum Message {
     SEMESTER_ACTIVITY_ALREADY_EXISTS(PropertiesReader.getProperty(PropertyKeys.SEMESTER_ACTIVITY_ALREADY_EXISTS)),
     CLASS_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeys.CLASS_NOT_EXISTS)),
     TEAM_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeys.TEAM_NOT_EXISTS)),
-    UNIQUE_LEADER_TEAM(PropertiesReader.getProperty(PropertyKeys.UNIQUE_LEADER_TEAM));
+    UNIQUE_LEADER_TEAM(PropertiesReader.getProperty(PropertyKeys.UNIQUE_LEADER_TEAM)),
+    INVALID_DATE(PropertiesReader.getProperty(PropertyKeys.INVALID_DATE)),
+    MEETING_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeys.MEETING_NOT_EXISTS)),
+    DANG_CO_DU_LIEU_LIEN_QUAN_KHONG_THE_XOA_BUOI_HOC(PropertiesReader.getProperty(PropertyKeys.DANG_CO_DU_LIEU_LIEN_QUAN_KHONG_THE_XOA_BUOI_HOC));
 
     private String message;
 

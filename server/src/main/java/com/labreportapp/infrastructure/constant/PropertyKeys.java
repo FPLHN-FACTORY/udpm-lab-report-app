@@ -10,6 +10,8 @@ public class PropertyKeys {
     public static final String CODE_TEAM_EXISTS = "code.team.exists";
     public static final String SEMESTER_NOT_EXISTS = "semester.not.exist";
     public static final String SEMESTER_ACTIVITY_ALREADY_EXISTS = "semester.activity.already.exist";
-
+    public static final String INVALID_DATE = "invalid.date";
+    public static final String MEETING_NOT_EXISTS = "meeting.not.exists";
+    public static final String DANG_CO_DU_LIEU_LIEN_QUAN_KHONG_THE_XOA_BUOI_HOC = "dang.co.du.lieu.lien.quan.khong.the.xoa.buoi.hoc";
 
 }

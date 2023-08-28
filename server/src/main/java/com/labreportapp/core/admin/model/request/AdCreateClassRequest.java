@@ -16,7 +16,6 @@ import java.util.List;
 @Setter
 public class AdCreateClassRequest {
 
-
     private String code;
 
     private String name;
@@ -30,8 +29,5 @@ public class AdCreateClassRequest {
     private String teacherId;
 
     private String activityId;
-
-
-
 
 }
