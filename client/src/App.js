@@ -22,6 +22,7 @@ import StudentSchedule from "./pages/student/schedule/StudentSchedule";
 import MeetingInMyClass from "./pages/teacher/my-class/meeting/MeetingInMyClass";
 import DetailMeeting from "./pages/teacher/my-class/meeting/detail/DetailMeeting";
 import DetailMyClassTeam from "./pages/student/detail-my-class/team/DetailMyClassTeam";
+import MeetingManagment from "./pages/admin/detail-class/meeting-management/MeetingManagement";
 
 function App() {
   return (
@@ -79,6 +80,16 @@ function App() {
                 <AuthGuard>
                   <DashBoardAdmin>
                     <ClassManagement />
+                  </DashBoardAdmin>
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/admin/class-management/meeting-management/:id"
+              element={
+                <AuthGuard>
+                  <DashBoardAdmin>
+                    <MeetingManagment />
                   </DashBoardAdmin>
                 </AuthGuard>
               }

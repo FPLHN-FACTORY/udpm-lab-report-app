@@ -4,17 +4,14 @@ import com.labreportapp.core.admin.model.request.AdFindClassRequest;
 import com.labreportapp.core.admin.model.response.AdActivityClassResponse;
 import com.labreportapp.core.admin.model.response.AdClassResponse;
 import com.labreportapp.core.admin.model.response.AdSemesterAcResponse;
-import com.labreportapp.entity.Class;
 import com.labreportapp.repository.ClassRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * @author quynhncph26201
@@ -73,6 +70,7 @@ public interface AdClassRepository extends ClassRepository {
 
     @Query(value = """
             SELECT ROW_NUMBER() OVER(ORDER BY c.last_modified_date DESC ) AS stt,
+            c.id,
             c.code, c.name,c.start_time
             ,c.class_period,c.class_size,c.teacher_id,a.name as nameActivity 
             FROM activity a

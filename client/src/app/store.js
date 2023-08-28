@@ -7,6 +7,7 @@ import teTeamsSliceReduce from "./teacher/teams/teamsSlice.reduce";
 import teMeetingSliceReduce from "./teacher/meeting/teacherMeetingSlice.reduce";
 import teacherSemesterSliceReduce from "./admin/ClassManager.reducer";
 import teStudentClassesSliceReduce from "./teacher/student-class/studentClassesSlice.reduce";
+import AdMeetingManagementReducer from "./admin/AdMeetingManagement.reducer";
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ export const store = configureStore({
     teMeetingClass: teMeetingSliceReduce,
     activityManagement: activityManagementSliceReducer,
     adSemester: adSemesterSliceReducer,
+    adMeetingManagement: AdMeetingManagementReducer
   },
 });
 

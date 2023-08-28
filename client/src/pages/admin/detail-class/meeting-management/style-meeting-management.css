@@ -1,0 +1,97 @@
+.box-center {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  place-items: center;
+}
+
+.box-filter {
+  margin: 15px 10px 15px 13px;
+  background-color: rgb(255, 255, 255);
+  width: 98%;
+  min-height: 100px;
+  height: auto;
+  border-radius: 5px;
+  padding: 20px;
+}
+
+.box-students-in-class {
+  margin: 15px 10px 15px 13px;
+  background-color: rgb(255, 255, 255);
+  width: 98%;
+  min-height: 575px;
+  height: auto;
+  border-radius: 5px;
+  padding: 20px;
+}
+
+.content-class {
+  margin: 0px 15px 15px 15px;
+}
+
+.content-class span {
+  font-size: 17px;
+  font-weight: 400;
+}
+
+.box-card {
+  margin: 0px 0px 0px 15%;
+  width: 800px;
+  cursor: pointer;
+  height: 68px;
+  display: flex;
+  place-items: center;
+  border-bottom: 1px solid rgb(206, 206, 206);
+}
+
+.box-card .content-left {
+  margin-left: 35px;
+}
+
+.box-card:hover {
+  border-radius: 10px;
+  background-color: rgb(240, 240, 240);
+}
+
+.box-icon {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background-color: #007bff;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 40px;
+  border: 2px solid white;
+  background-color: #4285f4;
+  margin-right: 10px;
+}
+
+.title-left {
+  float: left;
+  padding-left: 20px;
+  min-width: 500px;
+}
+
+.title-right {
+  margin-right: 10px !important;
+  font-size: 13px;
+  text-align: center;
+  width: 250px;
+  color: grey;
+}
+
+.icon-right {
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.data-table {
+  margin-top: 20px;
+}
+
+.btn-create-meeting {
+  background-color: #007bff;
+  color: white !important;
+}

@@ -4,6 +4,7 @@ import {
   faCogs,
   faPencil,
   faPlus,
+  faEye,
 } from "@fortawesome/free-solid-svg-icons";
 import { useAppDispatch, useAppSelector } from "../../../app/hook";
 import {
@@ -31,6 +32,7 @@ import {
   QuestionCircleFilled,
   ProjectOutlined,
 } from "@ant-design/icons";
+import { Link } from "react-router-dom";
 
 const ClassManagement = () => {
   const { Option } = Select;
@@ -212,21 +214,21 @@ const ClassManagement = () => {
       title: "Hành động",
       dataIndex: "actions",
       key: "actions",
-
-      // render: (text,record) => (
-      //   <div>
-      //     <Tooltip title="Cập nhật">
-      //       <FontAwesomeIcon
-      //         onClick={() => {
-      //           handlePeriodUpdate(record.id);
-      //         }}
-      //         style={{ marginRight: "15px", cursor: "pointer" }}
-      //         icon={faPencil}
-      //         size="1x"
-      //       />
-      //     </Tooltip>
-      //   </div>
-      // ),
+      render: (text, record) => (
+        <div>
+          <Tooltip title="Xem chi tiết">
+            <Link
+              to={`/admin/class-management/meeting-management/${record.id}`}
+            >
+              <FontAwesomeIcon
+                style={{ marginRight: "15px", cursor: "pointer" }}
+                icon={faEye}
+                size="1x"
+              />
+            </Link>
+          </Tooltip>
+        </div>
+      ),
     },
   ];
 

@@ -11,8 +11,8 @@ import org.springframework.data.rest.core.config.Projection;
  * @author quynhncph26201
  */
 @Projection(types = {Class.class, Activity.class})
-
 public interface AdClassResponse extends IsIdentified {
+
     @Value("#{target.stt}")
     Integer getStt();
 

@@ -1,6 +1,5 @@
 import React from "react";
 import { Modal, Row, Col, Input, Button, Select } from "antd";
-
 import "./styleCreateClass.css";
 import { useEffect, useState } from "react";
 import moment from "moment";
@@ -44,7 +43,14 @@ const ModalCreateProject = ({ visible, onCancel }) => {
     setStartTime("");
     setSelectedItemsPerson("");
     setIdActivitiSearch("");
+    setErrorName("");
+    setErrorCode("");
+    setErrorActivity("");
+    setErrorClassPeriod("");
+    setErrorStartTime("");
+    setErrorActivitySelect("");
   };
+
   const listClassPeriod = [];
 
   for (let i = 1; i <= 10; i++) {
@@ -52,13 +58,30 @@ const ModalCreateProject = ({ visible, onCancel }) => {
   }
 
   useEffect(() => {
-    const fetchTeacherData = async () => {
-      const responseTeacherData = await ClassAPI.fetchAllTeacher();
-      const teacherData = responseTeacherData.data;
-      setTeacherDataAll(teacherData);
+    if (visible) {
+      const fetchTeacherData = async () => {
+        const responseTeacherData = await ClassAPI.fetchAllTeacher();
+        const teacherData = responseTeacherData.data;
+        setTeacherDataAll(teacherData);
+      };
+      fetchTeacherData();
+    }
+
+    return () => {
+      setName("");
+      setCode("");
+      setClassPeriod("");
+      setStartTime("");
+      setSelectedItemsPerson("");
+      setIdActivitiSearch("");
+      setErrorName("");
+      setErrorCode("");
+      setErrorActivity("");
+      setErrorClassPeriod("");
+      setErrorStartTime("");
+      setErrorActivitySelect("");
     };
-    fetchTeacherData();
-  }, []);
+  }, [visible]);
 
   useEffect(() => {
     const featchDataSemester = async () => {
@@ -166,7 +189,7 @@ const ModalCreateProject = ({ visible, onCancel }) => {
       <Modal
         visible={visible}
         onCancel={onCancel}
-        width={650}
+        width={800}
         footer={null}
         className="modal_show_detail"
       >
@@ -174,13 +197,13 @@ const ModalCreateProject = ({ visible, onCancel }) => {
           <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
             <span style={{ fontSize: "18px" }}>Thêm Lớp Học</span>
           </div>
-
           <div style={{ marginTop: "15px", borderBottom: "1px solid black" }}>
             <Row style={{ marginBottom: "15px" }}>
-              <Col span={16}>
-                Semester:{" "}
+              <Col span={12} style={{ paddingRight: "10px" }}>
+                Semester: <br />
                 <Select
                   showSearch
+                  style={{ width: "100%" }}
                   value={idSemesterSeach}
                   onChange={(value) => {
                     setIdSemesterSearch(value);
@@ -195,10 +218,11 @@ const ModalCreateProject = ({ visible, onCancel }) => {
                   ))}
                 </Select>
               </Col>
-              <Col span={16}>
-                Hoạt Động:{" "}
+              <Col span={12} style={{ paddingRight: "10px" }}>
+                Hoạt Động: <br />
                 <Select
                   showSearch
+                  style={{ width: "100%" }}
                   value={idActivitiSearch}
                   onChange={(value) => {
                     setIdActivitiSearch(value);
@@ -214,50 +238,44 @@ const ModalCreateProject = ({ visible, onCancel }) => {
                 <span className="error">{errorActivitySelect}</span>
               </Col>
             </Row>
-            <Col span={16} style={{ marginTop: "15px" }}>
-              GVHD:{" "}
-              <Select
-                showSearch
-                placeholder="Select a person "
-                value={selectedItemsPerson}
-                onChange={handleSelectPersonChange}
-                style={{
-                  height: "50%",
-                  marginRight: "210px",
-                }}
-              >
-                <Option value="NULL">Chọn 1 GVHD</Option>
-
-                {teacherDataAll.map((teacher) => (
-                  <Option key={teacher.id} value={teacher.id}>
-                    {teacher.username}
-                  </Option>
-                ))}
-              </Select>
-            </Col>
-            <Col span={16} style={{ marginTop: "15px", marginLeft: "227px" }}>
-              {" "}
-              <span className="notBlank">*</span>
-              <span>Thời gian bắt đầu:</span> <br />
-              <Input
-                value={startTime}
-                style={{
-                  height: "60%",
-                  marginRight: "210px",
-                }}
-                onChange={(e) => {
-                  setStartTime(e.target.value);
-                }}
-                type="date"
-              />
-              <span className="error">{errorstartTime}</span>
-            </Col>
-
             <Row style={{ marginBottom: "15px" }}>
-              <Col span={16} style={{ marginRight: "150px" }}>
-                <span>Mã Lớp</span> <br />
+              <Col span={12} style={{ paddingRight: "10px" }}>
+                GVHD: <br />
+                <Select
+                  showSearch
+                  value={selectedItemsPerson}
+                  onChange={handleSelectPersonChange}
+                  style={{ width: "100%" }}
+                >
+                  <Option value="NULL">Chọn 1 GVHD</Option>
+
+                  {teacherDataAll.map((teacher) => (
+                    <Option key={teacher.id} value={teacher.id}>
+                      {teacher.username}
+                    </Option>
+                  ))}
+                </Select>
+              </Col>
+              <Col span={12} style={{ paddingRight: "10px" }}>
+                <span className="notBlank">(*) </span>
+                <span>Thời gian bắt đầu:</span> <br />
+                <Input
+                  value={startTime}
+                  onChange={(e) => {
+                    setStartTime(e.target.value);
+                  }}
+                  style={{ width: "100%" }}
+                  type="date"
+                />
+                <span className="error">{errorstartTime}</span>
+              </Col>
+            </Row>
+            <Row style={{ marginBottom: "15px" }}>
+              <Col span={12} style={{ paddingRight: "10px" }}>
+                <span>Mã lớp:</span> <br />
                 <Input
                   value={code}
+                  style={{ width: "100%" }}
                   onChange={(e) => {
                     setCode(e.target.value);
                   }}
@@ -265,14 +283,13 @@ const ModalCreateProject = ({ visible, onCancel }) => {
                 />
                 <span className="error">{errorCode}</span>
               </Col>
-              <Col span={16}>
-                Ca Học:{" "}
+              <Col span={12} style={{ paddingRight: "10px" }}>
+                Ca học: <br />
                 <Select
                   showSearch
-                  placeholder="Select a class Period"
+                  style={{ width: "100%" }}
                   value={classPeriod}
                   onChange={handleSelectChange}
-                  style={{ height: "50%" }}
                 >
                   <Option value="">Tất Cả</Option>
                   {listClassPeriod.map((value) => {
@@ -287,8 +304,8 @@ const ModalCreateProject = ({ visible, onCancel }) => {
               </Col>
             </Row>
             <Row gutter={16} style={{ marginBottom: "15px" }}>
-              <Col span={10}>
-                <span>Tên Lớp</span> <br />
+              <Col span={12} style={{ paddingRight: "10px" }}>
+                <span>Tên lớp:</span> <br />
                 <Input
                   value={name}
                   onChange={(e) => {
