@@ -249,7 +249,7 @@ const TeacherMyClass = () => {
           <div className="button-menu">
             <Link
               to="/teacher/schedule-today"
-              style={{ fontSize: "17px", fontWeight: "500" }}
+              style={{ fontSize: "17px", fontWeight: "bold" }}
               className="custom-link"
             >
               &nbsp; LỊCH DẠY HÔM NAY &nbsp;
@@ -260,7 +260,7 @@ const TeacherMyClass = () => {
               style={{
                 fontSize: "17px",
                 paddingLeft: "10px",
-                fontWeight: "500",
+                fontWeight: "bold",
               }}
             >
               LỚP CỦA TÔI &nbsp;

@@ -109,17 +109,6 @@ const MeetingInMyClass = () => {
                 THÀNH VIÊN TRONG LỚP &nbsp;
               </Link>
               <Link
-                to={`/teacher/my-class/attendance/${idClass}`}
-                className="custom-link"
-                style={{
-                  fontSize: "16px",
-                  paddingLeft: "10px",
-                  fontWeight: "bold",
-                }}
-              >
-                ĐIỂM DANH &nbsp;
-              </Link>
-              <Link
                 to={`/teacher/my-class/teams/${idClass}`}
                 className="custom-link"
                 style={{
@@ -140,6 +129,29 @@ const MeetingInMyClass = () => {
                 }}
               >
                 BUỔI HỌC &nbsp;
+              </Link>
+              <Link
+                to={`/teacher/my-class/attendance/${idClass}`}
+                className="custom-link"
+                style={{
+                  fontSize: "16px",
+                  paddingLeft: "10px",
+                  fontWeight: "bold",
+                }}
+              >
+                ĐIỂM DANH &nbsp;
+              </Link>
+
+              <Link
+                to=""
+                className="custom-link"
+                style={{
+                  fontSize: "16px",
+                  paddingLeft: "10px",
+                  fontWeight: "bold",
+                }}
+              >
+                ĐIỂM &nbsp;
               </Link>
               <div
                 className="box-center"

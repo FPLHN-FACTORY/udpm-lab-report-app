@@ -18,7 +18,7 @@ import {
   UpdateAttendanceMeeting,
 } from "../../../../app/teacher/attendance-meeting-today/teacherAttendanceMeetingSlice.reduce";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome } from "@fortawesome/free-solid-svg-icons";
+import { faBook, faHome } from "@fortawesome/free-solid-svg-icons";
 import FloatingDiv from "../../floatingDiv/FloatingDiv";
 
 const TeacherAttendanceMeeting = () => {
@@ -229,7 +229,29 @@ const TeacherAttendanceMeeting = () => {
         </Link>
       </div>
       <div className="box-two-student-in-my-class">
-        <div className="box-two-student-in-my-class-son">
+        <div>
+          <Link to={`/teacher/schedule-today`} style={{ color: "black" }}>
+            <span style={{ fontSize: "18px" }}>
+              <FontAwesomeIcon
+                icon={faHome}
+                style={{ fontSize: 19, marginRight: 6 }}
+              />
+              Lịch dạy
+            </span>{" "}
+          </Link>
+          <span style={{ fontSize: "18px" }}> / </span>{" "}
+          <span style={{ fontSize: "18px" }}>
+            <FontAwesomeIcon
+              icon={faBook}
+              style={{ fontSize: 19, marginRight: 6 }}
+            />
+            Điểm danh
+          </span>{" "}
+        </div>
+        <div
+          className="box-two-student-in-my-class-son"
+          style={{ marginTop: "25px" }}
+        >
           <div className="button-menu">
             <div>
               <span
@@ -272,6 +294,7 @@ const TeacherAttendanceMeeting = () => {
                 style={{
                   paddingTop: "15px",
                   fontWeight: 500,
+                  color: "red",
                 }}
               >
                 Mặc định trạng thái điểm danh của sinh viên là "Có mặt". Giảng

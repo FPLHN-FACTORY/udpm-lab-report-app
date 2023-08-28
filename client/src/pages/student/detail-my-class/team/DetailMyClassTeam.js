@@ -221,6 +221,7 @@ const DetailMyClassTeam = () => {
                 fontSize: "16px",
                 paddingLeft: "10px",
                 paddingRight: "10px",
+                fontWeight: "bold",
               }}
             >
               DANH SÁCH NHÓM
@@ -231,14 +232,37 @@ const DetailMyClassTeam = () => {
                 fontSize: "16px",
                 paddingLeft: "10px",
                 paddingRight: "10px",
+                fontWeight: "bold",
               }}
             >
               DANH SÁCH BUỔI HỌC
             </Link>
+            <Link
+              className="custom-link"
+              style={{
+                fontSize: "16px",
+                paddingLeft: "10px",
+                paddingRight: "10px",
+                fontWeight: "bold",
+              }}
+            >
+              ĐIỂM DANH
+            </Link>
+            <Link
+              className="custom-link"
+              style={{
+                fontSize: "16px",
+                fontWeight: "bold",
+                paddingLeft: "10px",
+                paddingRight: "10px",
+              }}
+            >
+              ĐIỂM
+            </Link>
             <hr />
             {listTeamClassAll.length > 0 && listTeamClassAll.length < 2 ? (
               <div className="info-team">
-                <span className="info-heading">Thông tin nhóm tôi:</span>
+                <span className="info-heading">Thông tin nhóm:</span>
                 <div className="group-info">
                   <span
                     className="group-info-item"

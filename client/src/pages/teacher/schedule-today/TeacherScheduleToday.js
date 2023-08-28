@@ -212,7 +212,7 @@ const TeacherScheduleToday = () => {
           <div className="button-menu">
             <Link
               to="/teacher/schedule-today"
-              style={{ fontSize: "17px", fontWeight: "500" }}
+              style={{ fontSize: "17px", fontWeight: "blod" }}
               id="menu-checked"
             >
               &nbsp; LỊCH DẠY HÔM NAY &nbsp;
@@ -223,7 +223,7 @@ const TeacherScheduleToday = () => {
               style={{
                 fontSize: "17px",
                 paddingLeft: "10px",
-                fontWeight: "500",
+                fontWeight: "bold",
               }}
             >
               LỚP CỦA TÔI &nbsp;

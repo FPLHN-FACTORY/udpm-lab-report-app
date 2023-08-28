@@ -75,9 +75,29 @@ const TeamInMeeting = () => {
         </Link>
       </div>
       <div className="box-two-student-in-my-class">
+        <div>
+          <Link
+            to={`/teacher/my-class/meeting/${meeting.idClass}`}
+            style={{ color: "black" }}
+          >
+            <span style={{ fontSize: "18px" }}>
+              <BookOutlined
+                style={{ color: "black", fontSize: 18, marginRight: "5px" }}
+              />
+              Danh sách buổi học
+            </span>{" "}
+          </Link>
+          <span style={{ fontSize: "18px" }}> / </span>{" "}
+          <span style={{ fontSize: "18px" }}>
+            <BookOutlined
+              style={{ color: "black", fontSize: 18, marginRight: "5px" }}
+            />
+            {meeting.name}
+          </span>{" "}
+        </div>
         <div
           className="box-two-student-in-my-class-son"
-          style={{ height: "580px" }}
+          style={{ minHeight: "580px", marginTop: "25px" }}
         >
           <div style={{ marginLeft: "30px" }}>
             <Row gutter={16}>

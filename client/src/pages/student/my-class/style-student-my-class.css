@@ -30,3 +30,8 @@ body {
 .content_filter {
   padding: 20px;
 }
+
+.btn_join_class {
+  background-color: rgb(54, 142, 220);
+  color: white;
+}

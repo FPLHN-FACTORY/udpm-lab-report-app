@@ -164,15 +164,12 @@ const CollapseTeam = ({ items }) => {
               <Row gutter={16}>
                 <Col span={12}>
                   {" "}
-                  <span style={{ color: "black", fontFamily: "unset" }}>
-                    Bài tập về nhà :
-                  </span>
+                  <span style={{ color: "black" }}>Nhận xét:</span>
                   <TextArea
                     rows={4}
-                    placeholder="Nhập bài tập"
-                    value={descriptionsHomeWork}
-                    style={{ readOnly: edit && "false" }}
-                    onChange={(e) => setDescriptionsHomeWork(e.target.value)}
+                    placeholder="Nhập nhận xét"
+                    value={descriptionsNote}
+                    onChange={(e) => setDescriptionsNote(e.target.value)}
                     onClick={(e) => {
                       e.stopPropagation();
                       setEdit(true);
@@ -181,12 +178,15 @@ const CollapseTeam = ({ items }) => {
                 </Col>
                 <Col span={12}>
                   {" "}
-                  <span style={{ color: "black" }}>Nhận xét :</span>
+                  <span style={{ color: "black", fontFamily: "unset" }}>
+                    Bài tập về nhà:
+                  </span>
                   <TextArea
                     rows={4}
-                    placeholder="Nhập nhận xét"
-                    value={descriptionsNote}
-                    onChange={(e) => setDescriptionsNote(e.target.value)}
+                    placeholder="Nhập bài tập"
+                    value={descriptionsHomeWork}
+                    style={{ readOnly: edit && "false" }}
+                    onChange={(e) => setDescriptionsHomeWork(e.target.value)}
                     onClick={(e) => {
                       e.stopPropagation();
                       setEdit(true);

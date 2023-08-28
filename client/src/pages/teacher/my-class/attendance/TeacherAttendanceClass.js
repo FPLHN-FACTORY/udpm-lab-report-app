@@ -45,17 +45,6 @@ const TeacherAttendanceClass = () => {
                 THÀNH VIÊN TRONG LỚP &nbsp;
               </Link>
               <Link
-                to={`/teacher/my-class/attendance/${idClass}`}
-                id="menu-checked"
-                style={{
-                  fontSize: "16px",
-                  paddingLeft: "10px",
-                  fontWeight: "bold",
-                }}
-              >
-                ĐIỂM DANH &nbsp;
-              </Link>
-              <Link
                 to={`/teacher/my-class/teams/${idClass}`}
                 className="custom-link"
                 style={{
@@ -76,6 +65,29 @@ const TeacherAttendanceClass = () => {
                 }}
               >
                 BUỔI HỌC &nbsp;
+              </Link>
+              <Link
+                to={`/teacher/my-class/attendance/${idClass}`}
+                id="menu-checked"
+                style={{
+                  fontSize: "16px",
+                  paddingLeft: "10px",
+                  fontWeight: "bold",
+                }}
+              >
+                ĐIỂM DANH &nbsp;
+              </Link>
+
+              <Link
+                to=""
+                className="custom-link"
+                style={{
+                  fontSize: "16px",
+                  paddingLeft: "10px",
+                  fontWeight: "bold",
+                }}
+              >
+                ĐIỂM &nbsp;
               </Link>
               <div
                 className="box-center"

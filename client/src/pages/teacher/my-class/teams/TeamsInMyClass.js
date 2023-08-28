@@ -24,6 +24,7 @@ import {
   faHome,
   faPenToSquare,
   faTrashCan,
+  faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import ModalDetailTeam from "./modal-detail/ModalDetailTeam";
 import ModalCreateTeam from "./modal-create/ModalCreateTeam";
@@ -274,7 +275,10 @@ const TeamsInMyClass = () => {
             <span style={{ marginLeft: "10px", fontWeight: "500" }}>
               Bảng điều khiển
             </span>{" "}
-            <span style={{ color: "gray", fontSize: "14px" }}> - Nhóm</span>
+            <span style={{ color: "gray", fontSize: "14px" }}>
+              {" "}
+              - Quản lý nhóm
+            </span>
           </span>
         </Link>
       </div>
@@ -297,6 +301,28 @@ const TeamsInMyClass = () => {
                 THÀNH VIÊN TRONG LỚP &nbsp;
               </Link>
               <Link
+                to={`/teacher/my-class/teams/${idClass}`}
+                id="menu-checked"
+                style={{
+                  fontSize: "16px",
+                  paddingLeft: "10px",
+                  fontWeight: "bold",
+                }}
+              >
+                QUẢN LÝ NHÓM &nbsp;
+              </Link>{" "}
+              <Link
+                to={`/teacher/my-class/meeting/${idClass}`}
+                className="custom-link"
+                style={{
+                  fontSize: "16px",
+                  paddingLeft: "10px",
+                  fontWeight: "bold",
+                }}
+              >
+                BUỔI HỌC &nbsp;
+              </Link>
+              <Link
                 to={`/teacher/my-class/attendance/${idClass}`}
                 className="custom-link"
                 style={{
@@ -308,18 +334,7 @@ const TeamsInMyClass = () => {
                 ĐIỂM DANH &nbsp;
               </Link>
               <Link
-                to={`/teacher/my-class/teams/${idClass}`}
-                id="menu-checked"
-                style={{
-                  fontSize: "16px",
-                  paddingLeft: "10px",
-                  fontWeight: "bold",
-                }}
-              >
-                QUẢN LÝ NHÓM &nbsp;
-              </Link>
-              <Link
-                to={`/teacher/my-class/meeting/${idClass}`}
+                to=""
                 className="custom-link"
                 style={{
                   fontSize: "16px",
@@ -327,7 +342,7 @@ const TeamsInMyClass = () => {
                   fontWeight: "bold",
                 }}
               >
-                BUỔI HỌC &nbsp;
+                ĐIỂM &nbsp;
               </Link>
               <div
                 className="box-center"
@@ -348,13 +363,14 @@ const TeamsInMyClass = () => {
               <hr />
             </div>
           </div>
-          <Row gutter={16} style={{ margin: "25px 0px 20px 10px" }}>
+          <Row style={{ margin: "25px 0px 20px 10px" }}>
             <Col span={22}>
               <div style={{ marginLeft: "0px" }}>
                 {" "}
                 <span style={{ fontSize: "17px", fontWeight: "500" }}>
                   {" "}
-                  <UnorderedListOutlined
+                  <FontAwesomeIcon
+                    icon={faUsers}
                     style={{ marginRight: "10px", fontSize: "20px" }}
                   />
                   Danh sách nhóm

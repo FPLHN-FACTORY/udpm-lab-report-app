@@ -3,7 +3,16 @@ import "./style-student-my-class.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import LoadingIndicator from "../../../helper/loading";
-import { Button, Col, Input, Row, Select, Table, Tooltip ,Pagination,} from "antd";
+import {
+  Button,
+  Col,
+  Input,
+  Row,
+  Select,
+  Table,
+  Tooltip,
+  Pagination,
+} from "antd";
 import {
   ControlOutlined,
   QuestionCircleFilled,
@@ -347,6 +356,10 @@ const StudentMyClass = () => {
               {" "}
               Danh sách lớp học
             </span>
+          </div>
+          <div style={{ float: "right" }}>
+            {" "}
+            <Button className="btn_join_class">Tham gia lớp học</Button>
           </div>
         </div>
         <br />

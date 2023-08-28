@@ -202,17 +202,6 @@ const StudentsInMyClass = () => {
                 THÀNH VIÊN TRONG LỚP &nbsp;
               </Link>
               <Link
-                to={`/teacher/my-class/attendance/${idClass}`}
-                className="custom-link"
-                style={{
-                  fontSize: "16px",
-                  paddingLeft: "10px",
-                  fontWeight: "bold",
-                }}
-              >
-                ĐIỂM DANH &nbsp;
-              </Link>
-              <Link
                 to={`/teacher/my-class/teams/${idClass}`}
                 className="custom-link"
                 style={{
@@ -222,7 +211,7 @@ const StudentsInMyClass = () => {
                 }}
               >
                 QUẢN LÝ NHÓM &nbsp;
-              </Link>
+              </Link>{" "}
               <Link
                 to={`/teacher/my-class/meeting/${idClass}`}
                 className="custom-link"
@@ -234,6 +223,28 @@ const StudentsInMyClass = () => {
               >
                 BUỔI HỌC &nbsp;
               </Link>{" "}
+              <Link
+                to={`/teacher/my-class/attendance/${idClass}`}
+                className="custom-link"
+                style={{
+                  fontSize: "16px",
+                  paddingLeft: "10px",
+                  fontWeight: "bold",
+                }}
+              >
+                ĐIỂM DANH &nbsp;
+              </Link>
+              <Link
+                to=""
+                className="custom-link"
+                style={{
+                  fontSize: "16px",
+                  paddingLeft: "10px",
+                  fontWeight: "bold",
+                }}
+              >
+                ĐIỂM &nbsp;
+              </Link>
               <div
                 className="box-center"
                 style={{
