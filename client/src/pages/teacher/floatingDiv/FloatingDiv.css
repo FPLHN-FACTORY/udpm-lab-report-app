@@ -1,0 +1,21 @@
+.floating-div {
+  margin-left: 800px;
+  margin-top: 200px;
+  position: fixed;
+  color: white;
+  font-size: 18px;
+  padding: 10px;
+  border-radius: 5px;
+  animation: float 3s infinite ease-in-out alternate;
+  z-index: 9999;
+  background-color: rgb(226, 160, 171);
+}
+
+@keyframes float {
+  from {
+    transform: translate(-900px, -100px);
+  }
+  to {
+    transform: translate(200px, 0px);
+  }
+}

@@ -14,15 +14,18 @@ import SemesterManagement from "./pages/admin/semester-management/SemesterManage
 import ActivityManagement from "./pages/admin/activity-management/ActivityManagement";
 import ClassManagement from "./pages/admin/class-management/ClassManagement";
 import AdminDashboard from "./pages/admin/admin-dashboard/AdminDashboard";
-import TeacherMyClass from "./pages/teacher/my-class/TeacherMyClass";
+import TeacherScheduleToday from "./pages/teacher/schedule-today/TeacherScheduleToday";
+import TeacherAttendanceMeeting from "./pages/teacher/schedule-today/attendance-meeting/TeacherAttendanceMeeting";
+import TeacherMyClass from "./pages/teacher/TeacherMyClass";
+import TeacherAttendanceClass from "./pages/teacher/my-class/attendance/TeacherAttendanceClass";
 import StudentsInMyClass from "./pages/teacher/my-class/students/StudentsInMyClass";
 import TeamsInMyClass from "./pages/teacher/my-class/teams/TeamsInMyClass";
 import StudentSchedule from "./pages/student/schedule/StudentSchedule";
 import MeetingInMyClass from "./pages/teacher/my-class/meeting/MeetingInMyClass";
-import DetailMeeting from "./pages/teacher/my-class/meeting/detail/DetailMeeting";
 import DetailMyClassTeam from "./pages/student/detail-my-class/team/DetailMyClassTeam";
 import StudentMyClass from "./pages/student/my-class/StudentMyClass";
 import MeetingManagment from "./pages/admin/detail-class/meeting-management/MeetingManagement";
+import TeamInMeeting from "./pages/teacher/my-class/meeting/team/TeamInMeeting";
 
 function App() {
   return (
@@ -36,7 +39,7 @@ function App() {
 
             <Route
               path="/"
-              element={<Navigate replace to="/admin/class-management" />}
+              element={<Navigate replace to="/teacher/schedule-today" />}
             />
 
             <Route
@@ -104,7 +107,29 @@ function App() {
                 </AuthGuard>
               }
             />
-            {/* router của Hiệu */}
+            {/* router của Hiệu trang chính lịch dạy hôm nay*/}
+            <Route
+              path="/teacher/schedule-today"
+              element={
+                <AuthGuard>
+                  <DashBoardTeacher>
+                    <TeacherScheduleToday />
+                  </DashBoardTeacher>
+                </AuthGuard>
+              }
+            />
+            {/* router của Hiệu trang phụ điểm danh lịch dạy hôm nay*/}
+            <Route
+              path="/teacher/schedule-today/attendance/:idMeeting"
+              element={
+                <AuthGuard>
+                  <DashBoardTeacher>
+                    <TeacherAttendanceMeeting />
+                  </DashBoardTeacher>
+                </AuthGuard>
+              }
+            />
+            {/* router của Hiệu trang chính lớp của tôi*/}
             <Route
               path="/teacher/my-class"
               element={
@@ -115,7 +140,7 @@ function App() {
                 </AuthGuard>
               }
             />
-            {/* router của Hiệu */}
+            {/* router của Hiệu trang nhỏ thành viên lớp */}
             <Route
               path="/teacher/my-class/students/:idClass"
               element={
@@ -126,7 +151,18 @@ function App() {
                 </AuthGuard>
               }
             />
-            {/* router của Hiệu */}
+            {/* router detail  attendance của Hiệu trang nhỏ my class*/}
+            <Route
+              path="/teacher/my-class/attendance/:idClass"
+              element={
+                <AuthGuard>
+                  <DashBoardTeacher>
+                    <TeacherAttendanceClass />
+                  </DashBoardTeacher>
+                </AuthGuard>
+              }
+            />
+            {/* router của Hiệu trang nhỏ nhóm*/}
             <Route
               path="/teacher/my-class/teams/:idClass"
               element={
@@ -137,7 +173,7 @@ function App() {
                 </AuthGuard>
               }
             />
-            {/* router của Hiệu */}
+            {/* router của Hiệu trang nhỏ meeting*/}
             <Route
               path="/teacher/my-class/meeting/:idClass"
               element={
@@ -148,17 +184,18 @@ function App() {
                 </AuthGuard>
               }
             />
-            {/* router detail  meeting của Hiệu */}
+            {/* router detail  meeting của Hiệu trang nhỏ detail meeting*/}
             <Route
-              path="/teacher/my-class/meeting/detail/:idClass/:idMeeting"
+              path="/teacher/my-class/meeting/detail/:idMeeting"
               element={
                 <AuthGuard>
                   <DashBoardTeacher>
-                    <DetailMeeting />
+                    <TeamInMeeting />
                   </DashBoardTeacher>
                 </AuthGuard>
               }
             />
+
             <Route
               path="/student/my-class"
               element={

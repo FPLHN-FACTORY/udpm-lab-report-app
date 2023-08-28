@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import "./styleTeamsInMyClass.css";
 import { Row, Table, Button, Tooltip, Col, Modal } from "antd";
 import { Link } from "react-router-dom";
-import { ControlOutlined, UnorderedListOutlined } from "@ant-design/icons";
+import { UnorderedListOutlined } from "@ant-design/icons";
 import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/TeacherStudentClasses.api";
 import {
   SetStudentClasses,
@@ -21,6 +21,7 @@ import LoadingIndicator from "../../../../helper/loading";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEye,
+  faHome,
   faPenToSquare,
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
@@ -28,6 +29,7 @@ import ModalDetailTeam from "./modal-detail/ModalDetailTeam";
 import ModalCreateTeam from "./modal-create/ModalCreateTeam";
 import ModalUpdateTeam from "./modal-update/ModalUpdateTeam";
 import { toast } from "react-toastify";
+import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
 
 const TeamsInMyClass = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -38,27 +40,22 @@ const TeamsInMyClass = () => {
   const [objeactTeam, setObjeactTeam] = useState({});
   const [listStudentClass, setListStudentClass] = useState([]);
   const [loadingStudentClass, setLoadingStudentClass] = useState(false);
+  const [classDetail, setClassDetail] = useState({});
   const dispatch = useAppDispatch();
   const { idClass } = useParams();
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Bảng điều khiển - nhóm";
     featchTeams(idClass);
+    featchClass(idClass);
   }, []);
 
-  useEffect(() => {
-    if (loadingStudentClass === true) {
-      setLoading(false);
-      fetchData(idClass);
-      setLoading(true);
-    }
-  }, [loadingStudentClass]);
   const fetchData = async (idClass) => {
-    setLoading(false);
     await featchStudentClass(idClass);
     featInforStudent();
   };
   const featchTeams = async (id) => {
+    setLoading(false);
     try {
       await TeacherTeamsAPI.getTeamsByIdClass(id).then((responese) => {
         dispatch(SetTeams(responese.data.data));
@@ -68,7 +65,15 @@ const TeamsInMyClass = () => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-
+  const featchClass = async (idClass) => {
+    try {
+      await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
+        setClassDetail(responese.data.data);
+      });
+    } catch (error) {
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+    }
+  };
   const featchStudentClass = async (id) => {
     try {
       await TeacherStudentClassesAPI.getStudentInClasses(id).then(
@@ -100,11 +105,18 @@ const TeamsInMyClass = () => {
           };
         });
       dispatch(SetStudentClasses(listShowTable));
+      setLoading(true);
       setLoadingStudentClass(true);
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
+
+  useEffect(() => {
+    if (loadingStudentClass === true) {
+      fetchData(idClass);
+    }
+  }, [loadingStudentClass]);
 
   const [teamDelete, setTeamDelete] = useState({});
 
@@ -177,37 +189,28 @@ const TeamsInMyClass = () => {
       dataIndex: "stt",
       key: "stt",
       render: (text, record, index) => index + 1,
-      width: "12px",
+      width: "5%",
     },
     {
-      title: "Mã",
-      dataIndex: "code",
-      key: "code",
-      sorter: (a, b) => a.code.localeCompare(b.code),
-      render: (text, record, index) => {
-        return <span style={{ color: "#007bff" }}>{text}</span>;
-      },
-      width: "130px",
-    },
-
-    {
-      title: "Tên",
+      title: "Tên nhóm",
       dataIndex: "name",
       key: "name",
       sorter: (a, b) => a.name.localeCompare(b.name),
+      width: "30%",
     },
     {
       title: "Chủ đề",
       dataIndex: "subjectName",
       key: "subjectName",
       sorter: (a, b) => a.subjectName.localeCompare(b.subjectName),
+      width: "40%",
     },
 
     {
       title: "Ngày tạo",
       dataIndex: "createdDate",
       key: "createdDate",
-      sorter: (a, b) => a.createdDate.localeCompare(b.createdDate),
+      sorter: (a, b) => a.createdDate - b.createdDate,
       render: (text, record) => {
         const startTime = new Date(record.createdDate);
         const formattedStartTime = `${startTime.getDate()}/${
@@ -215,6 +218,7 @@ const TeamsInMyClass = () => {
         }/${startTime.getFullYear()}`;
         return <span>{formattedStartTime}</span>;
       },
+      width: "15%",
     },
     {
       title: "Hành động",
@@ -254,24 +258,27 @@ const TeamsInMyClass = () => {
           </div>
         </>
       ),
-      width: "105px",
+      width: "10%",
     },
   ];
   return (
     <>
       {!loading && <LoadingIndicator />}
-      <div className="title-teacher-my-class">
-        <span style={{ paddingLeft: "20px" }}>
-          <ControlOutlined style={{ fontSize: "22px" }} />
-          <span
-            style={{ fontSize: "18px", marginLeft: "10px", fontWeight: "500" }}
-          >
-            Bảng điều khiển
+      <div className="box-one">
+        <Link to="/teacher/my-class" style={{ color: "black" }}>
+          <span style={{ fontSize: "18px", paddingLeft: "20px" }}>
+            <FontAwesomeIcon
+              icon={faHome}
+              style={{ color: "#00000", fontSize: "23px" }}
+            />
+            <span style={{ marginLeft: "10px", fontWeight: "500" }}>
+              Bảng điều khiển
+            </span>{" "}
+            <span style={{ color: "gray", fontSize: "14px" }}> - nhóm</span>
           </span>
-          <span style={{ color: "gray" }}> - lớp của tôi</span>
-        </span>
+        </Link>
       </div>
-      <div className="box-students-in-class">
+      <div className="box-two">
         <div className="button-menu-teacher">
           <div>
             <Link
@@ -280,35 +287,64 @@ const TeamsInMyClass = () => {
               style={{
                 fontSize: "16px",
                 paddingLeft: "10px",
+                fontWeight: "bold",
               }}
             >
               THÀNH VIÊN TRONG LỚP &nbsp;
             </Link>
             <Link
-              to={`/teacher/my-class/students-in-class/${idClass}`}
+              to={`/teacher/my-class/attendance/${idClass}`}
               className="custom-link"
-              style={{ fontSize: "16px", paddingLeft: "10px" }}
+              style={{
+                fontSize: "16px",
+                paddingLeft: "10px",
+                fontWeight: "bold",
+              }}
             >
               ĐIỂM DANH &nbsp;
             </Link>
             <Link
               to={`/teacher/my-class/teams/${idClass}`}
               id="menu-checked"
-              style={{ fontSize: "16px", paddingLeft: "10px" }}
+              style={{
+                fontSize: "16px",
+                paddingLeft: "10px",
+                fontWeight: "bold",
+              }}
             >
               QUẢN LÝ NHÓM &nbsp;
             </Link>
             <Link
               to={`/teacher/my-class/meeting/${idClass}`}
               className="custom-link"
-              style={{ fontSize: "16px", paddingLeft: "10px" }}
+              style={{
+                fontSize: "16px",
+                paddingLeft: "10px",
+                fontWeight: "bold",
+              }}
             >
-              BUỔI HỌP &nbsp;
+              BUỔI HỌC &nbsp;
             </Link>
+            <div
+              className="box-center"
+              style={{
+                height: "28.5px",
+                width: "auto",
+                backgroundColor: "#007bff",
+                color: "white",
+                borderRadius: "5px",
+                float: "right",
+              }}
+            >
+              {" "}
+              <span style={{ fontSize: "14px", padding: "10px" }}>
+                {classDetail.code}
+              </span>
+            </div>
             <hr />
           </div>
         </div>
-        <Row gutter={16} style={{ margin: "40px 10px 30px 10px" }}>
+        <Row gutter={16} style={{ margin: "25px 0px 20px 10px" }}>
           <Col span={22}>
             <div style={{ marginLeft: "0px" }}>
               {" "}
@@ -326,6 +362,7 @@ const TeamsInMyClass = () => {
               className="btn_clear"
               style={{
                 color: "white",
+                backgroundColor: "#007bff",
               }}
               onClick={() => {
                 setShowCreateModal(true);

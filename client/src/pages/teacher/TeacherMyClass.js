@@ -1,15 +1,10 @@
-import "./styleTeacherMyClass.css";
-import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import "./styleTeacherMyClass.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye } from "@fortawesome/free-solid-svg-icons";
-import { giangVienCurrent } from "../../../helper/inForUser";
-import LoadingIndicator from "../../../helper/loading";
-import {
-  ControlOutlined,
-  QuestionCircleFilled,
-  ProjectOutlined,
-} from "@ant-design/icons";
+import { faEye, faHome } from "@fortawesome/free-solid-svg-icons";
+import { giangVienCurrent } from "../../helper/inForUser";
+import LoadingIndicator from "../../helper/loading";
+import { QuestionCircleFilled, ProjectOutlined } from "@ant-design/icons";
 import {
   Row,
   Col,
@@ -22,15 +17,15 @@ import {
 } from "antd";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../../app/hook";
-import { TeacherMyClassAPI } from "../../../api/teacher/my-class/TeacherMyClass.api";
-import { TeacherSemesterAPI } from "../../../api/teacher/semester/TeacherSemester.api";
-import { TeacherActivityAPI } from "../../../api/teacher/activity/TeacherActivity.api";
-import { SetTeacherSemester } from "../../../app/teacher/semester/teacherSemesterSlice.reduce";
+import { useAppDispatch, useAppSelector } from "../../app/hook";
+import { TeacherMyClassAPI } from "../../api/teacher/my-class/TeacherMyClass.api";
+import { TeacherSemesterAPI } from "../../api/teacher/semester/TeacherSemester.api";
+import { TeacherActivityAPI } from "../../api/teacher/activity/TeacherActivity.api";
+import { SetTeacherSemester } from "../../app/teacher/semester/teacherSemesterSlice.reduce";
 import {
   GetTeacherMyClass,
   SetTeacherMyClass,
-} from "../../../app/teacher/my-class/teacherMyClassSlice.reduce";
+} from "../../app/teacher/my-class/teacherMyClassSlice.reduce";
 
 const { Option } = Select;
 
@@ -39,14 +34,12 @@ const TeacherMyClass = () => {
   const [listSemester, setListSemester] = useState([]);
   const [listActivity, setListActivity] = useState([]);
   const [listMyClass, setListMyClass] = useState([]);
-
   const [idSemesterSeach, setIdSemesterSearch] = useState("");
   const [idActivitiSearch, setIdActivitiSearch] = useState("");
   const [codeSearch, setCodeSearch] = useState("");
   const [nameSearch, setNameSearch] = useState("");
   const [classPeriodSearch, setClassPeriodSearch] = useState("");
   const [levelSearch, setLevelSearch] = useState("");
-
   const [clear, setClear] = useState(false);
   const listClassPeriod = [];
 
@@ -56,8 +49,10 @@ const TeacherMyClass = () => {
   const [current, setCurrent] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(false);
+
   useEffect(() => {
-    document.title = "Bảng điều khiển";
+    window.scrollTo(0, 0);
+    document.title = "Bảng điều khiển - lớp của tôi";
     setIdSemesterSearch("");
     setIdActivitiSearch("");
     setCodeSearch("");
@@ -161,7 +156,7 @@ const TeacherMyClass = () => {
   const data = useAppSelector(GetTeacherMyClass);
   const columns = [
     {
-      title: "STT",
+      title: "#",
       dataIndex: "stt",
       key: "stt",
       sorter: (a, b) => a.stt - b.stt,
@@ -193,19 +188,21 @@ const TeacherMyClass = () => {
         }/${startTime.getFullYear()}`;
         return <span>{formattedStartTime}</span>;
       },
-      width: "100px",
+      width: "120px",
     },
     {
       title: "Ca học",
       dataIndex: "classPeriod",
       key: "classPeriod",
-      sorter: (a, b) => a.descriptions.localeCompare(b.descriptions),
+      render: (text) => <span>{text + 1}</span>,
+      sorter: (a, b) => a.classPeriod - b.classPeriod,
       width: "9%",
     },
     {
       title: "Level",
       dataIndex: "level",
       key: "level",
+      render: (text) => <span>{text + 1}</span>,
       sorter: (a, b) => a.level - b.level,
       width: "7%",
     },
@@ -234,30 +231,43 @@ const TeacherMyClass = () => {
   return (
     <>
       {!loading && <LoadingIndicator />}
-      <div className="title-teacher-my-class">
-        <span style={{ fontSize: "18px", paddingLeft: "20px" }}>
-          <ControlOutlined style={{ fontSize: "22px" }} />
-          <span style={{ marginLeft: "10px", fontWeight: "500" }}>
-            Bảng điều khiển
+      <div className="box-one">
+        <Link to="/teacher/my-class" style={{ color: "black" }}>
+          <span style={{ fontSize: "18px", paddingLeft: "20px" }}>
+            <FontAwesomeIcon
+              icon={faHome}
+              style={{ color: "#00000", fontSize: "23px" }}
+            />
+            <span style={{ marginLeft: "10px", fontWeight: "500" }}>
+              Bảng điều khiển
+            </span>
           </span>
-        </span>
+        </Link>
       </div>
-      <div className="filter-teacher-my-class">
-        <div className="button-menu-teacher">
-          <Link style={{ fontSize: "17px" }} className="custom-link">
-            Lịch dạy hôm nay &nbsp;
+      <div className="box-three">
+        <div className="button-menu">
+          <Link
+            to="/teacher/schedule-today"
+            style={{ fontSize: "17px", fontWeight: "bold" }}
+            className="custom-link"
+          >
+            &nbsp; Lịch dạy hôm nay &nbsp;
           </Link>
           <Link
-            to="/"
+            to="/teacher/my-class"
             id="menu-checked"
-            style={{ fontSize: "17px", paddingLeft: "10px" }}
+            style={{
+              fontSize: "17px",
+              paddingLeft: "10px",
+              fontWeight: "bold",
+            }}
           >
             Lớp của tôi &nbsp;
           </Link>
 
           <hr />
         </div>
-        <div className="menu-teacher-search">
+        <div className="title-box-two">
           <Row gutter={16} style={{ marginBottom: "15px", paddingTop: "20px" }}>
             <Col span={6}>
               <span>Học kỳ</span>
@@ -403,7 +413,7 @@ const TeacherMyClass = () => {
           </div>
         </div>
       </div>
-      <div className="table-teacher-my-class">
+      <div className="box-four">
         <div className="title-table">
           <div>
             {" "}
@@ -427,7 +437,7 @@ const TeacherMyClass = () => {
                   pagination={false}
                 />
               </div>
-              <div className="pagination_box">
+              <div className="pagination-box">
                 <Pagination
                   simple
                   current={current}

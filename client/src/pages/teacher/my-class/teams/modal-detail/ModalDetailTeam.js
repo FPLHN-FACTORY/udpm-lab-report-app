@@ -84,15 +84,11 @@ const ModalDetailTeam = ({ visible, onCancel, team, idClass, click }) => {
         </div>
         <div style={{ marginTop: "15px" }}>
           <Row gutter={16} style={{ marginBottom: "15px" }}>
-            <Col span={8}>
-              <span>Mã nhóm:</span> <br />
-              <Input value={teamDetail.code} type="text" readOnly />
-            </Col>
-            <Col span={8}>
+            <Col span={12}>
               <span>Tên nhóm:</span> <br />
               <Input type="text" value={teamDetail.name} readOnly />
             </Col>
-            <Col span={8}>
+            <Col span={12}>
               <span>Ngày tạo:</span> <br />
               <Input
                 value={moment(teamDetail.createdDate).format("YYYY-MM-DD")}

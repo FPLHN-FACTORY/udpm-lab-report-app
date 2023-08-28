@@ -28,7 +28,6 @@ const { Option } = Select;
 
 const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
   const [code, setCode] = useState("");
-  const [errorCode, setErrorCode] = useState("");
   const [name, setName] = useState("");
   const [errorName, setErrorName] = useState("");
   const [subjectName, setSubjectName] = useState("");
@@ -48,7 +47,6 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
   };
 
   const cancelFaild = () => {
-    setErrorCode("");
     setErrorName("");
     setErrorStudent("");
     const objFilter = dataStudentClasses.map((item2) => {
@@ -166,12 +164,6 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
 
   const update = async () => {
     let check = 0;
-    if (code.trim() === "") {
-      setErrorCode("Mã nhóm không được để trống");
-      check++;
-    } else {
-      setErrorCode("");
-    }
     if (name.trim() === "") {
       setErrorName("Tên nhóm không được để trống");
       check++;
@@ -257,7 +249,6 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
       title: "Vai trò",
       dataIndex: "role",
       key: "role",
-
       sorter: (a, b) => a.role.localeCompare(b.role),
       sortDirections: ["ascend", "descend"],
       render: (text, record) => (
@@ -313,20 +304,6 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
             <Col span={12}>
               {" "}
               <span className="notBlank">*</span>
-              <span>Mã nhóm:</span> <br />
-              <Input
-                placeholder="Nhập mã"
-                value={code}
-                onChange={(e) => {
-                  setCode(e.target.value);
-                }}
-                type="text"
-              />
-              <span className="error">{errorCode}</span>
-            </Col>
-            <Col span={12}>
-              {" "}
-              <span className="notBlank">*</span>
               <span>Tên nhóm:</span> <br />
               <Input
                 placeholder="Nhập tên"
@@ -338,9 +315,7 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
               />
               <span className="error">{errorName}</span>
             </Col>
-          </Row>
-          <Row gutter={16} style={{ marginBottom: "15px" }}>
-            <Col span={24}>
+            <Col span={12}>
               {" "}
               <span>Chủ đề:</span> <br />
               <Input

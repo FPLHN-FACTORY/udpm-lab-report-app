@@ -28,7 +28,6 @@ const { Option } = Select;
 
 const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
   const [code, setCode] = useState("");
-  const [errorCode, setErrorCode] = useState("");
   const [name, setName] = useState("");
   const [errorName, setErrorName] = useState("");
   const [subjectName, setSubjectName] = useState("");
@@ -153,12 +152,6 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
 
   const create = () => {
     let check = 0;
-    if (code.trim() === "") {
-      setErrorCode("Mã nhóm không được để trống");
-      check++;
-    } else {
-      setErrorCode("");
-    }
     if (name.trim() === "") {
       setErrorName("Tên nhóm không được để trống");
       check++;
@@ -291,20 +284,6 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
                 <Col span={12}>
                   {" "}
                   <span className="notBlank">*</span>
-                  <span>Mã nhóm:</span> <br />
-                  <Input
-                    placeholder="Nhập mã"
-                    value={code}
-                    onChange={(e) => {
-                      setCode(e.target.value);
-                    }}
-                    type="text"
-                  />
-                  <span className="error">{errorCode}</span>
-                </Col>
-                <Col span={12}>
-                  {" "}
-                  <span className="notBlank">*</span>
                   <span>Tên nhóm:</span> <br />
                   <Input
                     placeholder="Nhập tên"
@@ -316,9 +295,7 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
                   />
                   <span className="error">{errorName}</span>
                 </Col>
-              </Row>
-              <Row gutter={16} style={{ marginBottom: "15px" }}>
-                <Col span={24}>
+                <Col span={12}>
                   {" "}
                   <span>Chủ đề:</span> <br />
                   <Input

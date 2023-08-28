@@ -17,7 +17,20 @@ export class TeacherMeetingAPI {
   static getDetailByIdMeeting(idMeeting) {
     return request({
       method: "GET",
-      url: url`?idMeeting=` + idMeeting,
+      url: url + `/detail?idMeeting=` + idMeeting,
+    });
+  }
+  static getAndCheckMeetingById(idMeeting) {
+    return request({
+      method: "GET",
+      url: url + `/detail-attendance?idMeeting=` + idMeeting,
+    });
+  }
+  static getDetailHomeWorkAndNoteByIdMeetingandIdTeam(data) {
+    return request({
+      method: "GET",
+      url:
+        url + `/hw-note?idMeeting=` + data.idMeeting + `&idTeam=` + data.idTeam,
     });
   }
 }
