@@ -4,9 +4,9 @@ import com.labreportapp.entity.base.IsIdentified;
 import org.springframework.beans.factory.annotation.Value;
 
 /**
- * @author quynhncph26201
+ * @author thangncph26123
  */
-public interface StMyTeamInClassResponse extends IsIdentified {
+public interface StListTeamInClassResponse extends IsIdentified {
 
     @Value("#{target.code}")
     String getCode();
@@ -16,7 +16,4 @@ public interface StMyTeamInClassResponse extends IsIdentified {
 
     @Value("#{target.subject_name}")
     String getSubjectName();
-
-    @Value("#{target.class_id}")
-    String getClassId();
 }

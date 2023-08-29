@@ -5,6 +5,7 @@ import {
   faPencil,
   faPlus,
   faEye,
+  faTags,
 } from "@fortawesome/free-solid-svg-icons";
 import { useAppDispatch, useAppSelector } from "../../../app/hook";
 import {
@@ -270,9 +271,10 @@ const ClassManagement = () => {
     <div className="class_management">
       {!loading && <LoadingIndicator />}
 
-      <div className="title_class">
+      <div className="title_activity_management">
         {" "}
-        <span style={{ fontSize: "22px" }}>Quản lý lớp học</span>
+        <FontAwesomeIcon icon={faTags} size="1x" />
+        <span style={{ marginLeft: "10px" }}>Quản lý lớp học</span>
       </div>
       <div className="filter">
         <FontAwesomeIcon icon={faFilter} size="2x" />{" "}

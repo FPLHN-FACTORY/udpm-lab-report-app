@@ -35,11 +35,11 @@ public interface StMyClassRepository extends ClassRepository {
     List<StMyClassResponse> getAllClass(@Param("req") StFindClassRequest req);
 
     @Query(value = """
-            SELECT a.code , a.name , a.subject_name , a.class_id FROM team a
+            SELECT a.id, a.code , a.name , a.subject_name , a.class_id FROM team a
              WHERE
              (:#{#req.idClass} IS NULL
              OR :#{#req.idClass} = ''
-             OR a.idClass = :#{#req.idClass})
+             OR a.class_id = :#{#req.idClass})
             """, nativeQuery = true)
     List<StMyTeamInClassResponse> getTeamInClass(@Param("req") FindTeamByIdClass req);
 
@@ -61,15 +61,5 @@ public interface StMyClassRepository extends ClassRepository {
             and (:#{#req.idTeam} LIKE b.id)
             """, nativeQuery = true)
     List<StMyStudentTeamResponse> getTeamByIdAll(@Param("req") FindTeamClassRequest req);
-
-    @Query(value = """
-            SELECT a.id, a.code , a.name , a.subject_name , a.class_id FROM team a
-            JOIN student_classes b ON b.team_id = a.id
-            WHERE
-            (:#{#req.idClass} LIKE a.class_id)
-            and ( b.student_id <> :#{#req.idStudent})
-            and b.team_id is not NULL
-            """, nativeQuery = true)
-    List<StMyTeamInClassResponse> getTeamByStNotJoin(@Param("req") FindTeamClassRequest req);
 
 }

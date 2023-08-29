@@ -6,7 +6,7 @@ import com.labreportapp.core.admin.model.request.AdUpdateActivityRequest;
 import com.labreportapp.core.admin.model.response.AdActivityResponse;
 import com.labreportapp.core.admin.repository.AdActivityRepository;
 import com.labreportapp.core.admin.repository.AdSemesterRepository;
-
+import com.labreportapp.core.admin.service.AdActivityService;
 import com.labreportapp.core.common.base.PageableObject;
 import com.labreportapp.entity.Activity;
 import com.labreportapp.entity.Semester;
@@ -50,22 +50,22 @@ public class AdActivityServiceImpl implements AdActivityService {
     @Override
     public Activity creatActivity(AdCreatActivityRequest command) {
         String name = adActivityRepository.getMaActivity(command.getName());
-        if(name != null) {
+        if (name != null) {
             throw new RestApiException(Message.ACTIVITY_NOT_EXISTS);
         }
 //        Activity activity = formUtils.convertToObject(Activity.class, command);
         Activity activity = new Activity();
         activity.setName(command.getName());
-        if (command.getLevel().equals("0")){
+        if (command.getLevel().equals("0")) {
             activity.setLevel(Level.LEVEL_1);
         }
-        if (command.getLevel().equals("1")){
+        if (command.getLevel().equals("1")) {
             activity.setLevel(Level.LEVEL_2);
         }
-        if (command.getLevel().equals("2")){
+        if (command.getLevel().equals("2")) {
             activity.setLevel(Level.LEVEL_3);
         }
-        if (!command.getStartTime().equals("") && !command.getEndTime().equals("")){
+        if (!command.getStartTime().equals("") && !command.getEndTime().equals("")) {
             Long startTime = convertDateToString(command.getStartTime());
             Long endTime = convertDateToString(command.getEndTime());
             activity.setStartTime(startTime);
@@ -79,22 +79,22 @@ public class AdActivityServiceImpl implements AdActivityService {
     @Override
     public Activity updateActivity(AdUpdateActivityRequest command) {
         Optional<Activity> optional = adActivityRepository.findById(command.getId());
-        if(!optional.isPresent()){
+        if (!optional.isPresent()) {
             throw new RestApiException(Message.ACTIVITY_NOT_EXISTS);
         }
         Activity activity = optional.get();
         activity.setName(command.getName());
 
-        if (command.getLevel().equals("0")){
+        if (command.getLevel().equals("0")) {
             activity.setLevel(Level.LEVEL_1);
         }
-        if (command.getLevel().equals("1")){
+        if (command.getLevel().equals("1")) {
             activity.setLevel(Level.LEVEL_2);
         }
-        if (command.getLevel().equals("2")){
+        if (command.getLevel().equals("2")) {
             activity.setLevel(Level.LEVEL_3);
         }
-        if (!command.getStartTime().equals("") && !command.getEndTime().equals("")){
+        if (!command.getStartTime().equals("") && !command.getEndTime().equals("")) {
             Long startTime = convertDateToString(command.getStartTime());
             Long endTime = convertDateToString(command.getEndTime());
             activity.setStartTime(startTime);
@@ -108,7 +108,7 @@ public class AdActivityServiceImpl implements AdActivityService {
     @Override
     public boolean deleteActivity(String id) {
         Optional<Activity> optional = adActivityRepository.findById(id);
-        if(!optional.isPresent()){
+        if (!optional.isPresent()) {
             throw new RestApiException(Message.ACTIVITY_NOT_EXISTS);
         }
         adActivityRepository.delete(optional.get());
@@ -118,7 +118,7 @@ public class AdActivityServiceImpl implements AdActivityService {
     @Override
     public Activity getOneByIdActivity(String id) {
         Optional<Activity> optional = adActivityRepository.findById(id);
-        if(!optional.isPresent()){
+        if (!optional.isPresent()) {
             throw new RestApiException(Message.ACTIVITY_NOT_EXISTS);
         }
         return optional.get();
@@ -135,19 +135,19 @@ public class AdActivityServiceImpl implements AdActivityService {
         return adSemesterRepository.findAll();
     }
 
-    public Long convertDateToString(String dateStringToLong){
+    public Long convertDateToString(String dateStringToLong) {
 
-            String pattern = "yyyy-MM-dd"; // Định dạng của chuỗi ngày
+        String pattern = "yyyy-MM-dd"; // Định dạng của chuỗi ngày
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
-            try {
-                Date date = dateFormat.parse(dateStringToLong); // Chuyển đổi chuỗi ngày thành đối tượng Date
-                long timeInMillis = date.getTime(); // Lấy giá trị thời gian dưới dạng milliseconds
-                return timeInMillis;
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            return null;
+        SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
+        try {
+            Date date = dateFormat.parse(dateStringToLong); // Chuyển đổi chuỗi ngày thành đối tượng Date
+            long timeInMillis = date.getTime(); // Lấy giá trị thời gian dưới dạng milliseconds
+            return timeInMillis;
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
+        return null;
     }
+}
 
