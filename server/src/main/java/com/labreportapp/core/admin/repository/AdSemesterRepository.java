@@ -35,8 +35,8 @@ public interface AdSemesterRepository extends SemesterRepository {
                    OR obj.name LIKE %:#{#req.name}% )
                     ORDER BY obj.last_modified_date DESC         
                     """, countQuery = """    
-            SELECT COUNT(obj.id) 
-            FROM semester obj 
+            (obj.id) 
+            FROM semester obj SELECT COUNT
             WHERE   ( :#{#req.name} IS NULL 
                     OR :#{#req.name} LIKE '' 
                     OR obj.name LIKE %:#{#req.name}% )     
