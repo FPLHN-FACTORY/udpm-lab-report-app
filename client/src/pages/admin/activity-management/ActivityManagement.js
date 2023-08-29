@@ -9,16 +9,21 @@ import {
   faTrashCan,
   faTags,
   faPlus,
+  faTrash,
 } from "@fortawesome/free-solid-svg-icons";
-import { Button, Input, Pagination, Select, Table, Tooltip } from "antd";
+import { Button, Input, Pagination, Popconfirm, Select, Table, Tooltip } from "antd";
 import { useAppDispatch, useAppSelector } from "../../../app/hook";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ActivityManagementAPI } from "../../../api/admin/activity-management/activityManagement.api";
 import { Option } from "antd/es/mentions";
-import { GetActivityManagement, SetActivityManagement } from "../../../app/admin/activity-management/activityManagementSlice.reducer";
+import { DeleteActivityManagement, GetActivityManagement, SetActivityManagement } from "../../../app/admin/activity-management/activityManagementSlice.reducer";
 import LoadingIndicator from "../../../helper/loading";
 import ModalCreateActivity from "./modal-create/ModalCreateActivity";
+import ModalUpdateActivity from "./modal-update/ModalUpdateActivity";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { Center } from "@chakra-ui/react";
 
 
 
@@ -29,12 +34,21 @@ const ActivityManagement = () => {
   const [endTime, setEndTime] = useState("");
   const [level, setLevel] = useState("");
   const [semesterId, setSemesterId] = useState("");
+
+  const [searchName, setSearchName] = useState("");
+  const [levelSearch, setLevelSearch] = useState("");
+  const [semesterSearch, setSemesterSearch] = useState("");
+
   const [status, setStatus] = useState("");
   const [current, setCurrent] = useState(1);
   const [total, setTotal] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
-  const [searchName, setSearchName] = useState("");
+  const [loading, setLoading] = useState(true);
+
   const { id } = useParams();
+  const [activity, setActivity] = useState(null);
+  const [idActivity, setIdActivity] = useState("");
+  const [listSemester, setListSemester] = useState([]);
+
 
   useEffect(() => {
     fetchData();
@@ -44,22 +58,40 @@ const ActivityManagement = () => {
     };
   }, [current]);
 
+  useEffect(() => {
+    // Gọi hàm để tải dữ liệu học kỳ từ API
+    fetchSemesterData();
+  }, []);
+
   const fetchData = async () => {
     let filter = {
       nameActivity: name,
       name: searchName,
+      level: levelSearch,
       status: status === "" ? null : parseInt(status),
       page: current - 1,
     };
-    setIsLoading(true);
+    setLoading(true);
     try {
       const response = await ActivityManagementAPI.fetchAll(filter);
       let listAcivityManagement = response.data.data.data;
       dispatch(SetActivityManagement(listAcivityManagement));
       setTotal(response.data.data.totalPages);
-      setIsLoading(false);
+      setLoading(false);
+      console.log(response.data.data.data);
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng ấn F5 để tải lại trang");
+    }
+  };
+
+  const fetchSemesterData = async () => {
+    try {
+      const response = await ActivityManagementAPI.semester();
+      const semesterData = response.data.data; // Dữ liệu học kỳ từ API
+      // Cập nhật state hoặc Redux store với dữ liệu học kỳ
+      setListSemester(semesterData);
+    } catch (error) {
+      console.error('Error fetching semester data:', error);
     }
   };
 
@@ -79,68 +111,86 @@ const ActivityManagement = () => {
       sorter: (a, b) => a.name.localeCompare(b.name),
     },
     {
-      title: "Thời gian bắt đầu",
-      dataIndex: "startTime",
-      key: "startTime",
-      sorter: (a, b) => new Date(a.startTime) - new Date(b.startTime),
+      title: "Thời gian",
+      dataIndex: "startTimeAndEndTime",
+      key: "startTimeAndEndTime",
+      render: (text, record) => {
+        const startTime = new Date(record.startTime);
+        const endTime = new Date(record.endTime);
+
+        const formattedStartTime = `${startTime.getDate()}/${startTime.getMonth() + 1
+          }/${startTime.getFullYear()}`;
+        const formattedEndTime = `${endTime.getDate()}/${endTime.getMonth() + 1
+          }/${endTime.getFullYear()}`;
+
+        return (
+          <span>
+            {formattedStartTime} - {formattedEndTime}
+          </span>
+        );
+      },
+      width: "175px",
     },
     {
-      title: "Thời gian kết thúc",
-      dataIndex: "endTime",
-      key: "endTime",
-      sorter: (a, b) => new Date(a.endTime) - new Date(b.endTime),
-    },
-    {
-      title: "Cấp độ",
-      dataIndex: "level",
-      key: "level",
+      title: 'Cấp độ',
+      dataIndex: 'level',
+      key: 'level',
       sorter: (a, b) => a.level - b.level,
+      render: (text) => {
+        let displayText = '';
+        if (text === 0) {
+          displayText = 'Level 1';
+        } else if (text === 1) {
+          displayText = 'Level 2';
+        } else if (text === 2) {
+          displayText = 'Level 3';
+        } else {
+          displayText = text;
+        }
+
+        return <span>{displayText}</span>;
+      },
     },
     {
-      title: "kỳ",
-      dataIndex: "semesterId",
-      key: "semesterId",
-      sorter: (a, b) => a.semesterId.localeCompare(b.semesterId),
+      title: "Học kỳ",
+      dataIndex: "nameSemester",
+      key: "nameSemester",
+      sorter: (a, b) => a.nameSemester.localeCompare(b.nameSemester),
     },
     {
       title: "Hành động",
       dataIndex: "actions",
       key: "actions",
       render: (text, record) => (
-        <div>
-          <Link>
-            <Tooltip title="Xem chi tiết">
-              <FontAwesomeIcon
-                icon={faEye}
-                size="1x"
-                onClick={() => {
-
-                }}
-              />
-            </Tooltip>
-          </Link>
-          <Link>
+        <div style={{ textAlign: "center" }}>
+          <Link style={{ marginRight: "30px" }}>
             <Tooltip title="Chỉnh sửa chi tiết">
               <FontAwesomeIcon
                 icon={faEdit}
                 size="1x"
                 onClick={() => {
-
+                  handleUpdateActivity(record.id, record);
                 }}
               />
             </Tooltip>
           </Link>
-          <Link>
+          <Popconfirm
+            title="Xóa hoạt động"
+            description="Bạn có chắc chắn muốn xóa hoạt động này không?"
+            onConfirm={() => {
+              handleDeleteActivity(record.id);
+            }}
+            okText="Có"
+            cancelText="Không"
+          >
             <Tooltip title="Xóa">
               <FontAwesomeIcon
-                icon={faTrashCan}
+                style={{ cursor: "pointer" }}
+                icon={faTrash}
                 size="1x"
-                onClick={() => {
-
-                }}
               />
             </Tooltip>
-          </Link>
+          </Popconfirm>
         </div>
       ),
     },
@@ -155,41 +205,80 @@ const ActivityManagement = () => {
   };
 
   const handleActivityCreate = () => {
-    document.querySelector("body").style.overflowX = "auto";
+    document.querySelector("body").style.overflowX = "hidden";
     setShowCreateModal(true);
-
   };
 
   const handleModalCreateCancel = () => {
-    document.querySelector("body").style.overflowX = "hidden";
+    document.querySelector("body").style.overflowX = "auto";
     setShowCreateModal(false);
   };
 
-  const handleUpdateActivity = (id) => {
+  const handleUpdateActivity = (id, activity) => {
     document.querySelector("body").style.overflowX = "hidden";
     setShowUpdateModal(true);
-
+    setIdActivity(id);
+    setActivity(activity);
   };
 
   const handleModalUpdateCancel = () => {
-    document.querySelector("body").style.overflowX = "hidden";
+    document.querySelector("body").style.overflowX = "auto";
     setShowUpdateModal(false);
 
   };
-  const handleSearch = () => {
-    setCurrent(1);
-    fetchData();
+  const handleSearch = async () => {
+    await fetchData();
+    toast.success("Tìm kiếm thành công!");
   };
 
   const handleClear = () => {
     setName("");
     setStatus("");
     setSearchName("");
+    setLevelSearch("");
+    setSemesterSearch("");
   };
-  
+
+  const handleSemesterSearch = (value) => {
+    setSemesterSearch(value);
+    searchActivitiesBySemester(value);
+  };
+
+  const handleLevelSearch = (value) => {
+    setLevelSearch(value);
+    searchActivitiesByLevel(value);
+  };
+
+  const searchActivitiesByLevel = (level) => {
+    const filteredActivities = data.filter(activity => activity.level === level);
+    dispatch(SetActivityManagement(filteredActivities));
+    setCurrent(1);
+  };
+
+  const handleDeleteActivity = async (id) => {
+    try {
+      await ActivityManagementAPI.deleteActivity(id);
+      toast.success("Xóa thành công!");
+      fetchData(); // Gọi lại hàm fetchData để cập nhật danh sách hoạt động sau khi xóa
+    } catch (error) {
+      toast.error("Xóa không thành công. Vui lòng thử lại!");
+    }
+  };
+
+  const searchActivitiesBySemester = (semesterId) => {
+    // Thực hiện tìm kiếm hoạt động dựa trên học kỳ ở đây
+    const filteredActivities = data.filter(activity => activity.semesterId === semesterId);
+
+    // Cập nhật dữ liệu hiển thị hoạt động theo kết quả tìm kiếm
+    dispatch(SetActivityManagement(filteredActivities));
+
+    // Cập nhật giá trị trang hiện tại nếu cần
+    setCurrent(1);
+  };
+
   return (
     <div className="activity_management">
-
+      {/* {loading && <LoadingIndicator />} */}
 
       <div className="title_activity_management">
         {" "}
@@ -207,7 +296,7 @@ const ActivityManagement = () => {
               <Input
                 type="text"
                 value={searchName}
-
+                onChange={handleChangeSearch}
                 style={{ width: "50%", marginLeft: "10px" }}
               />
             </div>
@@ -217,35 +306,39 @@ const ActivityManagement = () => {
               Cấp độ:{" "}
               <Select
                 style={{ width: "50%", marginLeft: "10px" }}
-              // value={searchSemester}
-              // onChange={value => setSearchSemester(value)}
+                value={levelSearch}
+                onChange={handleLevelSearch}
               >
-                <Option value="level1">1</Option>
-                <Option value="level2">2</Option>
-                <Option value="level3">3</Option>
+                <Option value=" ">Tất cả</Option>
+                <Option value="1">Level 1</Option>
+                <Option value="2">Level 2</Option>
+                <Option value="3">Level 3</Option>
               </Select>
             </div>
           </div>
           <div className="content-wrapper">
             <div className="content-center">
-              Kỳ:{" "}
+              Học kỳ:{" "}
               <Select
                 style={{ width: "50%", marginLeft: "10px" }}
-              // value={searchSemester}
-              // onChange={value => setSearchSemester(value)}
+                value={semesterSearch}
+                onChange={handleSemesterSearch} // Gọi hàm khi có thay đổi học kỳ
               >
-                <Option value="semester1">Kỳ 1</Option>
-                <Option value="semester2">Kỳ 2</Option>
-                <Option value="semester3">Kỳ 3</Option>
+                {/* Render danh sách học kỳ */}
+                {listSemester.map((semester) => (
+                  <Option key={semester.id} value={semester.id}>
+                    {semester.name}
+                  </Option>
+                ))}
               </Select>
             </div>
           </div>
         </div>
         <div className="box_btn_filter">
-          <Button className="btn_filter">
+          <Button className="btn_filter" onClick={handleSearch}>
             Tìm kiếm
           </Button>
-          <Button className="btn_clear">
+          <Button className="btn_clear" onClick={handleClear}>
             Làm mới bộ lọc
           </Button>
         </div>
@@ -302,6 +395,12 @@ const ActivityManagement = () => {
       <ModalCreateActivity
         visible={showCreateModal}
         onCancel={handleModalCreateCancel}
+        listSemester={listSemester}
+      />
+      <ModalUpdateActivity
+        visible={showUpdateModal}
+        onCancel={handleModalUpdateCancel}
+        listSemester={listSemester}
       />
     </div>
   );

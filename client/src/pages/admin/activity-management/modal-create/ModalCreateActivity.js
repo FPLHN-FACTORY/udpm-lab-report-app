@@ -6,8 +6,11 @@ import { toast } from "react-toastify";
 import { ActivityManagementAPI } from "../../../../api/admin/activity-management/activityManagement.api";
 import { CreateActivityManagement } from "../../../../app/admin/activity-management/activityManagementSlice.reducer";
 import { Option } from "antd/es/mentions";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
 
-const ModalCreateActivity = ({ visible, onCancel }) => {
+const ModalCreateActivity = ({ visible, onCancel, listSemester }) => {
     const [name, setName] = useState("");
     const [startTime, setStartTime] = useState("");
     const [endTime, setEndTime] = useState("");
@@ -22,18 +25,24 @@ const ModalCreateActivity = ({ visible, onCancel }) => {
 
     useEffect(() => {
         if (visible === true) {
+            if (listSemester.length > 0) {
+                setSemesterId(listSemester[0].id)
+            }
             return () => {
                 setName("");
                 setStartTime("");
                 setEndTime("");
-                setLevel("");
+                setLevel("0");
+                setSemesterId("");
                 setErrorName("");
                 setErrorStartTime("");
                 setErrorEndTime("");
                 setErrorLevel("");
+                setErrorSemesterId("");
             };
         }
     }, [visible]);
+
 
     const create = () => {
         let check = 0;
@@ -56,12 +65,26 @@ const ModalCreateActivity = ({ visible, onCancel }) => {
         } else {
             setErrorEndTime("");
         }
+        if (new Date(startTime) > new Date(endTime)) {
+            setErrorStartTime(
+                "Thời gian bắt đầu không được lớn hơn thời gian kết thúc"
+            );
+            check++;
+        } else {
+            if (startTime === "") {
+                setErrorStartTime("Thời gian bắt đầu không được để trống");
+                check++;
+            } else {
+                setErrorStartTime("");
+            }
+        }
         if (level === "") {
             setErrorLevel("Hãy chọn cấp độ");
             check++;
         } else {
             setErrorLevel("");
         }
+        const semesterNameItem = listSemester.find((item) => item.id === semesterId)
         if (check === 0) {
             let obj = {
                 name: name,
@@ -73,7 +96,8 @@ const ModalCreateActivity = ({ visible, onCancel }) => {
             ActivityManagementAPI.create(obj).then(
                 (response) => {
                     toast.success("Thêm thành công!");
-                    dispatch(CreateActivityManagement(response.data.data));
+                    let objCreate = { ...response.data.data, nameSemester: semesterNameItem.name, levelText: level }
+                    dispatch(CreateActivityManagement(objCreate));
                     onCancel();
                 },
                 (error) => {
@@ -106,51 +130,66 @@ const ModalCreateActivity = ({ visible, onCancel }) => {
                             }}
                             type="text"
                         />
+                        <span className="error">{errorName}</span>
                     </Col>
                 </Row>
                 <Row gutter={16} style={{ marginTop: "15px" }}>
                     <Col span={12}>
                         <span>Thời gian bắt đầu:</span> <br />
-                        <DatePicker
+                        <DatePicker style={{ width: "100%" }}
                             value={startTime}
                             onChange={(date) => {
                                 setStartTime(date);
                             }}
                         />
+                        <span className="error">{errorStartTime}</span>
                     </Col>
                     <Col span={12}>
                         <span>Thời gian kết thúc:</span> <br />
-                        <DatePicker
+                        <DatePicker style={{ width: "100%" }}
                             value={endTime}
                             onChange={(date) => {
                                 setEndTime(date);
                             }}
                         />
+                        <span className="error">{errorEndTime}</span>
                     </Col>
                 </Row>
                 <Row gutter={16} style={{ marginTop: "15px" }}>
-                    <Col span={12}>
+                    <Col span={24}>
                         <span>Cấp độ:</span> <br />
-                        <Select
+                        <Select style={{ width: "100%" }}
                             value={level}
                             onChange={(value) => {
                                 setLevel(value);
                             }}
                         >
-                            <Option value="easy">Dễ</Option>
-                            <Option value="medium">Trung bình</Option>
-                            <Option value="hard">Khó</Option>
+                            <Option value="0">level 1</Option>
+                            <Option value="1">level 2</Option>
+                            <Option value="2">level 3</Option>
                         </Select>
+                        <span className="error">{errorLevel}</span>
                     </Col>
-                    <Col span={12}>
-                        <span>Semester ID:</span> <br />
-                        <Input
+                </Row>
+                <Row gutter={16} style={{ marginTop: "15px", marginBottom: "15px" }}>
+                    <Col span={24}>
+                        <span>Tên học kỳ:</span> <br />
+                        <Select
                             value={semesterId}
-                            onChange={(e) => {
-                                setSemesterId(e.target.value);
+                            onChange={(value) => {
+                                setSemesterId(value);
                             }}
-                            type="text"
-                        />
+                            style={{ marginTop: "6px", width: "100%" }}
+                        >
+                            {listSemester.map((value) => {
+                                return (
+                                    <Option value={value.id} key={value.id}>
+                                        {value.name}
+                                    </Option>
+                                );
+                            })}
+                        </Select>
+                        <span className="error">{errorSemesterId}</span>
                     </Col>
                 </Row>
             </div>

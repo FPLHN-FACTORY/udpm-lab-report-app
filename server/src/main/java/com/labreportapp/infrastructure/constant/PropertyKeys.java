@@ -19,5 +19,5 @@ public class PropertyKeys {
     public static final String INVALID_DATE = "invalid.date";
     public static final String DANG_CO_DU_LIEU_LIEN_QUAN_KHONG_THE_XOA_BUOI_HOC = "dang.co.du.lieu.lien.quan.khong.the.xoa.buoi.hoc";
 
-
+    public static final String ACTIVITY_NOT_EXISTS = "activity.not.exist";
 }
