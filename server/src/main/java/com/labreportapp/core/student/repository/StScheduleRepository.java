@@ -34,8 +34,7 @@ public interface StScheduleRepository extends JpaRepository<Meeting, String> {
             JOIN student_classes AS sc ON c.id = sc.class_id
             WHERE
               sc.student_id = :#{#req.idStudent}
-            ORDER BY
-              c.start_time ASC  
+         
                AND
                 ( :#{#req.searchTime} IS NULL
                 OR :#{#req.searchTime} LIKE 'null'
@@ -50,7 +49,9 @@ public interface StScheduleRepository extends JpaRepository<Meeting, String> {
                 ( :#{#req.searchTime} IS NULL
                 OR :#{#req.searchTime} LIKE 'null'
                 OR :#{#req.searchTime} LIKE ''
-                OR C.start_time >= UNIX_TIMESTAMP(:#{#req.searchTime}))
+                OR C.start_time >= UNIX_TIMESTAMP(:#{#req.searchTime})
+              ORDER BY
+              c.start_time ASC  
                      """, countQuery = """   
             SELECT COUNT(DISTINCT m.id)
             FROM meeting AS m
