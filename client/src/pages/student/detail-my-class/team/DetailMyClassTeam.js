@@ -6,201 +6,119 @@ import { useAppDispatch } from "../../../../app/hook";
 import { useEffect, useState } from "react";
 import LoadingIndicator from "../../../../helper/loading";
 import { StMyTeamClassAPI } from "../../../../api/student/StTeamClass";
-import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
-import { Table, Button, Tooltip } from "antd";
+import { faEye, faUserPlus } from "@fortawesome/free-solid-svg-icons";
+import { Table, Button, Tooltip, Space } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { sinhVienCurrent } from "../../../../helper/inForUser";
+import {
+  convertMeetingPeriod,
+  convertMeetingPeriodToNumber,
+} from "../../../../helper/util.helper";
+import { convertLongToDate } from "../../../../helper/convertDate";
+import { EyeOutlined, UserAddOutlined } from "@ant-design/icons";
 
 const DetailMyClassTeam = () => {
   const dispatch = useAppDispatch();
   const { id } = useParams();
-  const [listTeamClassAll, setlistTeamClassAll] = useState([]); //getAll
-  const [listTeamAll, setlistTeamAll] = useState([]); //getAllPerson
-  const [studentDataAll, setStudentDataAll] = useState([]); // student data
-  const [studentNotJoinDataAll, setStudentNotJoinDataAll] = useState([]); // student not join data
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [detailClass, setDetailClass] = useState(null);
+  const [checkStatus, setCheckStatus] = useState(false);
+  const [listStudentMyTeam, setStudentMyTeam] = useState([]);
+  const [listTeam, setListTeam] = useState([]);
+  const [detailTeam, setDetailTeam] = useState(null);
 
   useEffect(() => {
-    featchAllMyTeamClass();
+    setIsLoading(true);
+    loadDataDetailClass();
+    checkStatusStudentInClass();
   }, []);
 
-  const featchAllMyTeamClass = async () => {
-    setLoading(false);
-    let filter = {
-      idClass: id,
-      idStudent: sinhVienCurrent.id,
-    };
-
-    try {
-      StMyTeamClassAPI.getAllTeamMyClass(filter).then((respone) => {
-        setlistTeamClassAll(respone.data.data);
-        setLoading(true);
-      });
-    } catch (error) {
-      alert("Vui lòng F5 lại trang !");
-    }
+  const loadDataDetailClass = () => {
+    StMyTeamClassAPI.detailClass(id).then((response) => {
+      setDetailClass(response.data.data);
+      setIsLoading(false);
+    });
   };
 
-  useEffect(() => {
-    featchAllTeamStNotJoin();
-  }, []);
-  const featchAllTeamStNotJoin = async () => {
-    setLoading(false);
-    let filter = {
-      idClass: id,
-      idStudent: sinhVienCurrent.id,
-    };
-
-    try {
-      StMyTeamClassAPI.getAllTeamByStNotJoin(filter).then((respone) => {
-        setStudentNotJoinDataAll(respone.data.data);
-        console.log(respone.data.data);
-        setLoading(true);
-      });
-    } catch (error) {
-      alert("Vui lòng F5 lại trang !");
-    }
-  };
-
-  useEffect(() => {
-    setLoading(false);
-
-    if (
-      listTeamAll.length === 0 &&
-      listTeamClassAll.length > 0 &&
-      listTeamClassAll.length < 2
-    ) {
-      let filter = {
-        idClass: id,
-        idTeam: listTeamClassAll[0].id,
-      };
-
-      try {
-        StMyTeamClassAPI.getAllMyTeam(filter).then((respone) => {
-          setlistTeamAll(respone.data.data);
+  const checkStatusStudentInClass = () => {
+    StMyTeamClassAPI.checkStatusStudentInClass(id).then((response) => {
+      setCheckStatus(response.data.data != null ? true : false);
+      if (response.data.data != null) {
+        setDetailTeam(response.data.data);
+        StMyTeamClassAPI.getStudentInMyTeam(id, response.data.data.id).then(
+          (response) => {
+            setStudentMyTeam(response.data.data);
+          }
+        );
+      } else {
+        StMyTeamClassAPI.getTeamInClass(id).then((response) => {
+          setListTeam(response.data.data);
         });
-        setLoading(true);
-      } catch (error) {
-        alert("Vui lòng F5 lại trang !");
       }
-    }
-  }, [listTeamAll, listTeamClassAll]);
+    });
+  };
 
-  useEffect(() => {
-    const fetchStudentData = async () => {
-      const responseStudentData = await StMyTeamClassAPI.fetchAllStudent();
-      const studentData = responseStudentData.data;
-      setStudentDataAll(studentData);
-    };
-    fetchStudentData();
-  }, []);
   const columns = [
     {
-      title: "#",
+      title: "STT",
       dataIndex: "stt",
       key: "stt",
-      render: (text, record, index) => index + 1,
-      width: "12px",
-    },
-    {
-      title: "Mã",
-      dataIndex: "studentId",
-      key: "studentId",
-      sorter: (a, b) => a.studentId.localeCompare(b.studentId),
-      render: (text, record) => {
-        const student = studentDataAll.find(
-          (item) => item.id === record.studentId
-        );
-        return student ? student.username : "";
-      },
-    },
-
-    {
-      title: "Tên",
-      dataIndex: "studentId",
-      key: "studentId",
-      sorter: (a, b) => a.studentId.localeCompare(b.studentId),
-      render: (text, record) => {
-        const student = studentDataAll.find(
-          (item) => item.id === record.studentId
-        );
-        return student ? student.name : "";
-      },
-    },
-
-    {
-      title: "Vai trò",
-      dataIndex: "role",
-      key: "role",
-      sorter: (a, b) => a.role.localeCompare(b.role),
-      render: (text, record, index) => (
-        <span style={{ color: "black" }}>
-          {text == 1 ? "Thành viên" : "Trưởng nhóm"}
-        </span>
-      ),
+      render: (text, record, index) => <>{index + 1}</>,
     },
     {
       title: "Email",
       dataIndex: "email",
       key: "email",
-      sorter: (a, b) => a.email.localeCompare(b.email),
+    },
+    {
+      title: "Vai trò",
+      dataIndex: "role",
+      key: "role",
+      render: (text, record, index) => (
+        <>{record.role === 0 ? "Trưởng nhóm" : "Thành viên"}</>
+      ),
     },
   ];
 
-  const columnsTeamStNotJoin = [
+  const columnsTeam = [
     {
       title: "STT",
       dataIndex: "stt",
       key: "stt",
-      render: (text, record, index) => index + 1,
-      width: "12px",
+      render: (text, record, index) => <>{index + 1}</>,
     },
     {
-      title: "Mã Nhóm",
+      title: "Mã nhóm",
       dataIndex: "code",
       key: "code",
-      sorter: (a, b) => a.code.localeCompare(b.code),
     },
     {
-      title: "Tên Nhóm",
+      title: "Tên nhóm",
       dataIndex: "name",
       key: "name",
-      sorter: (a, b) => a.name.localeCompare(b.name),
     },
     {
-      title: "Đề tài",
+      title: "Tên đề tài",
       dataIndex: "subjectName",
       key: "subjectName",
-      sorter: (a, b) => a.subjectName.localeCompare(b.subjectName),
     },
     {
       title: "Hành động",
       dataIndex: "actions",
       key: "actions",
-      render: (text, record) => (
-        <>
-          <div style={{ width: "105px" }}>
-            <Tooltip title="Tham gia nhóm">
-              <FontAwesomeIcon
-                icon={faUserPlus}
-                className="icon"
-                onClick={() => {
-                  // setShowDetailModal(true);
-                  // handleDetailTeam(record);
-                }}
-              />
-            </Tooltip>
-          </div>
-        </>
+      render: (text, record, index) => (
+        <Space>
+          <FontAwesomeIcon icon={faEye} style={{ marginRight: "10px" }} />
+          <FontAwesomeIcon icon={faUserPlus} />
+        </Space>
       ),
-      width: "105px",
     },
   ];
 
   return (
     <div style={{ paddingTop: "35px" }}>
+      {isLoading && <LoadingIndicator />}
       <div className="title-student-my-class">
-        {loading && <LoadingIndicator />}
         <span style={{ paddingLeft: "20px" }}>
           <ControlOutlined style={{ fontSize: "22px" }} />
           <span
@@ -224,7 +142,7 @@ const DetailMyClassTeam = () => {
                 fontWeight: "bold",
               }}
             >
-              DANH SÁCH NHÓM
+              THÔNG TIN LỚP HỌC
             </Link>
             <Link
               className="custom-link"
@@ -260,100 +178,124 @@ const DetailMyClassTeam = () => {
               ĐIỂM
             </Link>
             <hr />
-            {listTeamClassAll.length > 0 && listTeamClassAll.length < 2 ? (
-              <div className="info-team">
-                <span className="info-heading">Thông tin nhóm:</span>
-                <div className="group-info">
-                  <span
-                    className="group-info-item"
-                    style={{ marginTop: "10px", marginBottom: "15px" }}
-                  >
-                    Mã nhóm:{" "}
-                    {listTeamClassAll.length > 0 &&
-                      listTeamClassAll.length < 2 &&
-                      listTeamClassAll[0].code}
-                  </span>
-                  <span className="group-info-item">
-                    Tên nhóm:{" "}
-                    {listTeamClassAll.length > 0 &&
-                      listTeamClassAll.length < 2 &&
-                      listTeamClassAll[0].name}
-                  </span>
-                  <span
-                    className="group-info-item"
-                    style={{ marginTop: "13px", marginBottom: "15px" }}
-                  >
-                    Tên đề tài:{" "}
-                    {listTeamClassAll.length > 0 &&
-                      listTeamClassAll.length < 2 &&
-                      listTeamClassAll[0].subjectName}
-                  </span>
-                </div>
+            <div className="info-team">
+              <span className="info-heading">Thông tin lớp học:</span>
+              <div className="group-info">
+                <span
+                  className="group-info-item"
+                  style={{ marginTop: "10px", marginBottom: "15px" }}
+                >
+                  Mã lớp: {detailClass != null ? detailClass.code : ""}
+                </span>
+                <span className="group-info-item">
+                  Tên lớp: {detailClass != null ? detailClass.name : ""}
+                </span>
+                <span
+                  className="group-info-item"
+                  style={{ marginTop: "13px", marginBottom: "15px" }}
+                >
+                  Thời gian bắt đầu:{" "}
+                  {detailClass != null
+                    ? convertLongToDate(detailClass.startTime)
+                    : ""}
+                </span>
+                <span
+                  className="group-info-item"
+                  style={{ marginTop: "13px", marginBottom: "15px" }}
+                >
+                  Ca học:{" "}
+                  {detailClass != null
+                    ? "Ca " +
+                      parseInt(
+                        convertMeetingPeriodToNumber(detailClass.classPeriod) +
+                          1
+                      )
+                    : ""}
+                </span>
+                <span
+                  className="group-info-item"
+                  style={{ marginTop: "13px", marginBottom: "15px" }}
+                >
+                  Mô tả:{" "}
+                  {detailClass != null ? detailClass.descriptions : "Không có"}
+                </span>
+                <span
+                  className="group-info-item"
+                  style={{ marginTop: "13px", marginBottom: "15px" }}
+                >
+                  Giảng viên:{" "}
+                  {detailClass != null
+                    ? detailClass.nameTeacher +
+                      " - " +
+                      detailClass.usernameTeacher
+                    : ""}
+                </span>
               </div>
-            ) : (
-              ""
-            )}
-            {listTeamClassAll.length > 0 && listTeamClassAll.length < 2 ? (
-              <>
-                <div className="table-member-team">
-                  <span className="info-heading" style={{ fontSize: "16px" }}>
-                    Danh sách thành viên trong nhóm:
-                  </span>
-                </div>
-                <div style={{ marginTop: "8px", paddingBottom: "40px" }}>
-                  <div>
-                    {listTeamAll.length > 0 ? (
-                      <>
-                        <div className="table">
-                          <Table
-                            style={{ marginTop: "150px" }}
-                            dataSource={listTeamAll}
-                            rowKey="id"
-                            columns={columns}
-                            pagination={false}
-                          />{" "}
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <p
-                          style={{
-                            textAlign: "center",
-                            marginTop: "100px",
-                            fontSize: "15px",
-                            color: "red",
-                          }}
-                        >
-                          Không có nhóm nào trong lớp
-                        </p>
-                      </>
-                    )}
+            </div>
+            {checkStatus && (
+              <div>
+                <div className="info-team">
+                  <span className="info-heading">Thông tin nhóm:</span>
+                  <div className="group-info">
+                    <span
+                      className="group-info-item"
+                      style={{ marginTop: "10px", marginBottom: "15px" }}
+                    >
+                      Mã nhóm: {detailTeam != null ? detailTeam.code : ""}
+                    </span>
+                    <span className="group-info-item">
+                      Tên nhóm: {detailTeam != null ? detailTeam.name : ""}{" "}
+                    </span>
+                    <span
+                      className="group-info-item"
+                      style={{ marginTop: "13px", marginBottom: "15px" }}
+                    >
+                      Tên đề tài:{" "}
+                      {detailTeam != null ? detailTeam.subjectName : ""}
+                    </span>
                   </div>
-                  <Button className="btnRoiNhom">Rời nhóm</Button>
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="table-member-team">
-                  {/* <span className="info-team-not-join" style={{ fontSize: "16px" }}>
-                Danh sách nhóm:
-              </span> */}
                 </div>
 
-                <div className="table-not-join">
+                <>
+                  <div
+                    className="table-member-team"
+                    style={{ marginBottom: "7px" }}
+                  >
+                    <span className="info-heading" style={{ fontSize: "16px" }}>
+                      Danh sách thành viên trong nhóm:
+                    </span>
+                  </div>
                   <Table
-                    // style={{ marginTop: '250px' }}
-                    dataSource={studentNotJoinDataAll}
-                    rowKey="stt"
-                    columns={columnsTeamStNotJoin}
-                    pagination={{
-                      pageSize: 5,
-                      showSizeChanger: false,
-                      size: "small",
-                    }}
+                    columns={columns}
+                    dataSource={listStudentMyTeam}
+                    pagination={false}
+                    rowKey="id"
                   />
-                </div>
-              </>
+                  <div style={{ marginTop: "8px", paddingBottom: "40px" }}>
+                    <Button className="btnRoiNhom">Rời nhóm</Button>
+                  </div>
+                </>
+              </div>
+            )}
+            {!checkStatus && (
+              <div>
+                <>
+                  <div
+                    className="table-member-team"
+                    style={{ marginBottom: "7px" }}
+                  >
+                    <span className="info-heading" style={{ fontSize: "16px" }}>
+                      Danh sách nhóm trong lớp:
+                    </span>
+                  </div>
+                  <Table
+                    columns={columnsTeam}
+                    dataSource={listTeam}
+                    pagination={false}
+                    rowKey="id"
+                  />
+                </>
+              </div>
             )}
           </div>
         </div>

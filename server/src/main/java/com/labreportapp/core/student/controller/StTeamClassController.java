@@ -22,9 +22,24 @@ public class StTeamClassController {
     @Autowired
     private StTeamClassService service;
 
-    @GetMapping
-    public ResponseObject getTeamClassByIdSt(final FindTeamClassRequest request) {
-        return new ResponseObject(service.getTeamInClassByIdStudent(request));
+    @GetMapping("/get-team-in-class")
+    public ResponseObject getTeamInClass(final FindTeamByIdClass request) {
+        return new ResponseObject(service.getTeamInClass(request));
+    }
+
+    @GetMapping("/call-api")
+    public ResponseObject callApi() {
+        return new ResponseObject(service.callApi());
+    }
+
+    @GetMapping("/get-student-in-my-team")
+    public ResponseObject getStudentInMyTeam(final FindTeamClassRequest request) {
+        return new ResponseObject(service.getStudentInMyTeam(request));
+    }
+
+    @GetMapping("/check-status")
+    public ResponseObject checkStatusStudentInClass(@RequestParam("idClass") String idClass, @RequestParam("idStudent") String idStudent) {
+        return new ResponseObject(service.checkStatusStudentInClass(idClass, idStudent));
     }
 
     @GetMapping("/detail")
@@ -32,13 +47,4 @@ public class StTeamClassController {
         return new ResponseObject(service.detailClass(idClass));
     }
 
-    @GetMapping("/my-person")
-    public ResponseObject getMyTeam(final FindTeamClassRequest request) {
-        return new ResponseObject(service.getMyStudentTeam(request));
-    }
-
-    @GetMapping("/my-person-not-join-team")
-    public ResponseObject getTeamWithStNotJoin(FindTeamByIdClass request) {
-        return new ResponseObject(service.getListTeamInClass(request));
-    }
 }

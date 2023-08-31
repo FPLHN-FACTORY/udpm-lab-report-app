@@ -1,47 +1,49 @@
-import { request } from "../../helper/request.helper";
-import { apiDanhSachSinhVien } from "../../helper/request.helper";
+import { sinhVienCurrent } from "../../helper/inForUser";
+import { apiDanhSachGiangVien, request } from "../../helper/request.helper";
 
 export class StMyTeamClassAPI {
+  static getTeamInClass(idClass) {
+    return request({
+      method: "GET",
+      url: `/student/my-class/team/get-team-in-class?idClass=` + idClass,
+    });
+  }
 
-    static getAllTeamMyClass(filter) {
-        return request({
-          method: "GET",
-          url:
-          `/student/my-class/team` +
-            `?idClass=` +
-            filter.idClass +
-            `&idStudent=` +
-            filter.idStudent,
-        });
-      }
-      static getAllMyTeam(filter) {
-        return request({
-          method: "GET",
-          url:
-          `/student/my-class/team/my-person` +
-            `?idClass=` +
-            filter.idClass +
-            `&idTeam=` +
-            filter.idTeam,
-        });
-      }
-      static fetchAllStudent = () => {
-        return apiDanhSachSinhVien({
-          method: "GET",
-          url: ``,
-        });
-      };
+  static getStudentInMyTeam(idClass, idTeam) {
+    return request({
+      method: "GET",
+      url:
+        `/student/my-class/team/get-student-in-my-team` +
+        `?idClass=` +
+        idClass +
+        `&idTeam=` +
+        idTeam,
+    });
+  }
 
-      static getAllTeamByStNotJoin(filter) {
-        return request({
-          method: "GET",
-          url:
-          `/student/my-class/team/my-person-not-join-team` +
-            `?idClass=` +
-            filter.idClass +
-            `&idStudent=` +
-            filter.idStudent,
-        });
-      }
+  static checkStatusStudentInClass(idClass) {
+    return request({
+      method: "GET",
+      url:
+        `/student/my-class/team/check-status` +
+        `?idClass=` +
+        idClass +
+        `&idStudent=` +
+        sinhVienCurrent.id,
+    });
+  }
 
+  static detailClass(idClass) {
+    return request({
+      method: "GET",
+      url: `/student/my-class/team/detail?idClass=` + idClass,
+    });
+  }
+
+  static findGiangVien(idGiangVien) {
+    return apiDanhSachGiangVien({
+      method: "GET",
+      url: `/` + idGiangVien,
+    });
+  }
 }

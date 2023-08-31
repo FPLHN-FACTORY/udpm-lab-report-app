@@ -9,16 +9,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class FindTeamClassRequest {
+
     private String idClass;
 
-    private String idStudent;
-
     private String idTeam;
-
-    private Long role;
-
-    private Long status;
-
-
 
 }

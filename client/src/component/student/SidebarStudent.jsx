@@ -57,6 +57,18 @@ const SidebarStudentComponent = ({ collapsed, toggleCollapsed }) => {
         >
           <Link to="/student/my-class">Lớp của tôi</Link>
         </Menu.Item>
+        <Menu.Item
+          key="3"
+          className="menu_custom"
+          icon={
+            <FontAwesomeIcon
+              icon={faHome}
+              style={{ color: "rgb(226, 179, 87)" }}
+            />
+          }
+        >
+          <Link to="/student/my-class">Điểm</Link>
+        </Menu.Item>
       </Menu>
     </Sider>
   );

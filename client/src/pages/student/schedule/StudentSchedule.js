@@ -143,13 +143,10 @@ const StudentSchedule = () => {
   return (
     <div className="shedule">
       {loading && <LoadingIndicator />}
-      <div className="title-semester">
-        <span style={{ fontSize: "18px" }}>
-          <FontAwesomeIcon icon={faLayerGroup} size="1x" />{" "}
-          <span style={{ marginLeft: "10px", fontWeight: "500" }}>
-            Quản lý lịch học
-          </span>
-        </span>
+      <div className="title_activity_management">
+        {" "}
+        <FontAwesomeIcon icon={faLayerGroup} size="1x" />
+        <span style={{ marginLeft: "10px" }}>Lịch học</span>
       </div>
       <div className="filter-semester">
         <FontAwesomeIcon icon={faFilter} size="2x" />{" "}
@@ -170,13 +167,16 @@ const StudentSchedule = () => {
           <Button className="btn_filter" onClick={buttonSearch}>
             Tìm kiếm
           </Button>
-          <Button className="btn__clear" onClick={clearData}>
+          <Button className="btn_clear" onClick={clearData}>
             Làm mới bộ lọc
           </Button>
         </div>
       </div>
 
-      <div className="table__category">
+      <div
+        className="table__category"
+        style={{ marginTop: "25px", padding: "20px" }}
+      >
         <div className="tittle__category">
           <div>
             {" "}

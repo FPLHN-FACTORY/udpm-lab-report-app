@@ -44,22 +44,15 @@ public interface StMyClassRepository extends ClassRepository {
     List<StMyTeamInClassResponse> getTeamInClass(@Param("req") FindTeamByIdClass req);
 
     @Query(value = """
-            SELECT a.id, a.code , a.name , a.subject_name , a.class_id FROM team a
-            JOIN student_classes b ON b.team_id = a.id
-            WHERE
-            (:#{#req.idClass} LIKE a.class_id)
-            and (:#{#req.idStudent} IS NULL OR :#{#req.idStudent} LIKE '' OR :#{#req.idStudent} LIKE b.student_id)
-
-            """, nativeQuery = true)
-    List<StMyTeamInClassResponse> getTeamByIdClassAndIdStudent(@Param("req") FindTeamClassRequest req);
-
-    @Query(value = """
             SELECT a.id, a.student_id , a.class_id , a.team_id , a.email , a.role ,a.status FROM student_classes a
             JOIN team b ON b.id = a.team_id
-            WHERE
-            (:#{#req.idClass} LIKE a.class_id)
-            and (:#{#req.idTeam} LIKE b.id)
+            WHERE a.class_id = :#{#req.idClass} AND a.team_id = :#{#req.idTeam}
             """, nativeQuery = true)
-    List<StMyStudentTeamResponse> getTeamByIdAll(@Param("req") FindTeamClassRequest req);
+    List<StMyStudentTeamResponse> getStudentInMyTeam(@Param("req") FindTeamClassRequest req);
+
+    @Query(value = """
+            SELECT a.team_id FROM student_classes a WHERE a.class_id = :idClass AND student_id = :idStudent
+            """, nativeQuery = true)
+    String checkStatusStudentInClass(@Param("idClass") String idClass, @Param("idStudent") String idStudent);
 
 }

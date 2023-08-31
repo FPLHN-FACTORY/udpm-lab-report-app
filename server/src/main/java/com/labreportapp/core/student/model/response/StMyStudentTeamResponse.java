@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
  * @author quynhncph26201
  */
 public interface StMyStudentTeamResponse extends IsIdentified {
+
     @Value("#{target.student_id}")
     String getStudentId();
 
@@ -20,7 +21,7 @@ public interface StMyStudentTeamResponse extends IsIdentified {
     String getEmail();
 
     @Value("#{target.role}")
-    String getRole();
+    Integer getRole();
 
     @Value("#{target.status}")
     String getStatus();

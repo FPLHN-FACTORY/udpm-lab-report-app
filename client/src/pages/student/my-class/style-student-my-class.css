@@ -35,3 +35,7 @@ body {
   background-color: rgb(54, 142, 220);
   color: white;
 }
+
+.btn_filter {
+  background-color: rgb(231, 192, 35) !important;
+}
