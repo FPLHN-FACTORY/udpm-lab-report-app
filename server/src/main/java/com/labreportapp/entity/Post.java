@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.Nationalized;
 
 /**
  * @author thangncph26123
@@ -24,6 +25,7 @@ import lombok.ToString;
 public class Post extends PrimaryEntity {
 
     @Column(length = EntityProperties.LENGTH_DESCRIPTION)
+    @Nationalized
     private String descriptions;
 
     @Column(length = EntityProperties.LENGTH_ID)
