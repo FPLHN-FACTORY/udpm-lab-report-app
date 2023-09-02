@@ -10,6 +10,15 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AdFindClassRequest extends PageableRequest {
+
     private String idSemester;
+
+    private String idTeacher;
+
+    private String idActivity;
+
+    private String code;
+
+    private String classPeriod;
 
 }

@@ -47,7 +47,7 @@ public class AdSemesterController {
         return new ResponseObject(adSemesterService.createSermester(obj));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseObject deleteSemester(@PathVariable("id") String id) {
         return new ResponseObject(adSemesterService.deleteSemester(id));
     }

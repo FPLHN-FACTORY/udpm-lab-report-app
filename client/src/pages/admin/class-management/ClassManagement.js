@@ -3,7 +3,9 @@ import {
   faFilter,
   faCogs,
   faPencil,
-  faPlus
+  faPlus,
+  faEye,
+  faTags,
 } from "@fortawesome/free-solid-svg-icons";
 import { useAppDispatch, useAppSelector } from "../../../app/hook";
 import {
@@ -12,7 +14,9 @@ import {
   Pagination,
   Table,
   Tooltip,
-  Select
+  Select,
+  Row,
+  Col,
 } from "antd";
 import LoadingIndicator from "../../../helper/loading";
 import { SetTeacherSemester } from "../../../app/admin/ClassManager.reducer";
@@ -21,7 +25,15 @@ import { useEffect, useState } from "react";
 import { ClassAPI } from "../../../api/admin/class-manager/ClassAPI.api";
 import "./style-class-management.css";
 import { list } from "@chakra-ui/react";
-
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import ModalCreateProject from "../../admin/class-management/create-class/ModalCreateClass";
+import {
+  ControlOutlined,
+  QuestionCircleFilled,
+  ProjectOutlined,
+} from "@ant-design/icons";
+import { Link } from "react-router-dom";
 
 const ClassManagement = () => {
   const { Option } = Select;
@@ -33,19 +45,59 @@ const ClassManagement = () => {
   const [idActivitiSearch, setIdActivitiSearch] = useState("");
 
   const [selectedItems, setSelectedItems] = useState([]);
-  const [code, setCode] = useState('');
-  const [selectedItemsPerson, setSelectedItemsPerson] = useState('');
-  const [filteredData, setFilteredData] = useState([...listClassAll]);
+  const [code, setCode] = useState("");
+  const [selectedItemsPerson, setSelectedItemsPerson] = useState("");
   const [loading, setLoading] = useState(true);
+  const [current, setCurrent] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [clear, setClear] = useState(false);
 
   const dispatch = useAppDispatch();
+  const listClassPeriod = [];
+
+  for (let i = 1; i <= 10; i++) {
+    listClassPeriod.push("" + i);
+  }
 
   useEffect(() => {
-    fetchData(idSemesterSeach)
-  }, [idSemesterSeach]);
-  
+    setIdSemesterSearch("");
+    featchAllMyClass();
+  }, []);
+
   useEffect(() => {
-    // Lấy dữ liệu teacherId và username từ mock API
+    featchAllMyClass();
+  }, [current]);
+  const featchAllMyClass = async () => {
+    setLoading(false);
+    let filter = {
+      idTeacher: selectedItemsPerson,
+      idActivity: idActivitiSearch,
+      idSemester: idSemesterSeach,
+      code: code,
+      classPeriod: selectedItems,
+      page: current,
+      size: 10,
+    };
+
+    try {
+      await ClassAPI.getAllMyClass(filter).then((respone) => {
+        console.log(selectedItemsPerson);
+        setTotalPages(parseInt(respone.data.data.totalPages));
+        setlistClassAll(respone.data.data.data);
+        console.log(respone.data.data.data);
+
+        setLoading(true);
+      });
+    } catch (error) {
+      alert("Vui lòng F5 lại trang !");
+    }
+  };
+  useEffect(() => {
+    featchAllMyClass();
+    setClear(false);
+  }, [clear]);
+
+  useEffect(() => {
     const fetchTeacherData = async () => {
       const responseTeacherData = await ClassAPI.fetchAllTeacher();
       const teacherData = responseTeacherData.data;
@@ -53,66 +105,55 @@ const ClassManagement = () => {
     };
     fetchTeacherData();
   }, []);
+
   useEffect(() => {
     const featchDataActivity = async (idSemesterSeach) => {
       console.log(idSemesterSeach);
-        await ClassAPI.getAllActivityByIdSemester(idSemesterSeach).then(
-          (respone) => {
-            setActivityDataAll(respone.data.data);
-            setLoading(true);
-          }
-        );
-
+      await ClassAPI.getAllActivityByIdSemester(idSemesterSeach).then(
+        (respone) => {
+          setActivityDataAll(respone.data.data);
+          setLoading(true);
+        }
+      );
     };
     featchDataActivity(idSemesterSeach);
   }, [idSemesterSeach]);
+
   useEffect(() => {
     const featchDataSemester = async () => {
-      // try {
+      try {
         setLoading(false);
-        const responseClassAll =
-        await ClassAPI.fetchAllSemester();
-      const listClassAll = responseClassAll.data;
-          dispatch(SetTeacherSemester(listClassAll.data));
-          if (listClassAll.data.length > 0) {
-            setIdSemesterSearch(listClassAll.data[0].id);
-          } else {
-            setIdSemesterSearch("null");
-          }
-          setSemesterDataAll(listClassAll.data);
-          setLoading(true);
-    
-      // } catch (error) {
-      //   alert("Vui lòng F5 lại trang !");
-      // }
+        const responseClassAll = await ClassAPI.fetchAllSemester();
+        const listClassAll = responseClassAll.data;
+        dispatch(SetTeacherSemester(listClassAll.data));
+        if (listClassAll.data.length > 0) {
+          setIdSemesterSearch(listClassAll.data[0].id);
+        } else {
+          setIdSemesterSearch("null");
+        }
+        setSemesterDataAll(listClassAll.data);
+        setLoading(true);
+      } catch (error) {
+        alert("Vui lòng F5 lại trang !");
+      }
     };
     featchDataSemester();
   }, []);
-  
+
   useEffect(() => {
-    // document.title = "Quản lý dự án | Portal-Projects";
+    document.title = "Quản lý lớp | Portal-Projects";
     setCode("");
     setSelectedItems("");
     setSelectedItemsPerson("");
-    // fetchDataByCondition();
-
   }, []);
 
-  const fetchData = async (idSemesterSeach) => {
-
-    const responseClassAll =
-        await ClassAPI.getAllMyClassByIdSemester(idSemesterSeach);
-      const listClassAll = responseClassAll.data;
-      setlistClassAll(listClassAll.data); //All Project
-      
-  }
   const columns = [
     {
       title: "STT",
-      dataIndex: "id",
-      key: "id",
-      sorter: (a, b) => a.stt.localeCompare(b.stt),
-      render: (text, record, index) => index + 1,
+      dataIndex: "stt",
+      key: "stt",
+      sorter: (a, b) => a.stt - b.stt,
+      width: "3%",
     },
     {
       title: "Mã",
@@ -130,7 +171,15 @@ const ClassManagement = () => {
       title: "Thời gian bắt đầu",
       dataIndex: "startTime",
       key: "startTime",
-      sorter: (a, b) => a.startTime.localeCompare(b.startTime),
+      render: (text, record) => {
+        const startTime = new Date(record.startTime);
+
+        const formattedStartTime = `${startTime.getDate()}/${
+          startTime.getMonth() + 1
+        }/${startTime.getFullYear()}`;
+
+        return <span>{formattedStartTime}</span>;
+      },
     },
     {
       title: "Ca học",
@@ -150,7 +199,9 @@ const ClassManagement = () => {
       key: "teacherId",
       sorter: (a, b) => a.teacherId.localeCompare(b.teacherId),
       render: (text, record) => {
-        const teacher = teacherDataAll.find((item) => item.id === record.teacherId);
+        const teacher = teacherDataAll.find(
+          (item) => item.id === record.teacherId
+        );
         return teacher ? teacher.username : "";
       },
     },
@@ -164,190 +215,85 @@ const ClassManagement = () => {
       title: "Hành động",
       dataIndex: "actions",
       key: "actions",
-      
-      // render: (text,record) => (
-      //   <div>
-      //     <Tooltip title="Cập nhật">
-      //       <FontAwesomeIcon
-      //         onClick={() => {
-      //           handlePeriodUpdate(record.id);
-      //         }}
-      //         style={{ marginRight: "15px", cursor: "pointer" }}
-      //         icon={faPencil}
-      //         size="1x"
-      //       />
-      //     </Tooltip>
-      //   </div>
-      // ),
+      render: (text, record) => (
+        <div>
+          <Tooltip title="Xem chi tiết">
+            <Link
+              to={`/admin/class-management/meeting-management/${record.id}`}
+            >
+              <FontAwesomeIcon
+                style={{ marginRight: "15px", cursor: "pointer" }}
+                icon={faEye}
+                size="1x"
+              />
+            </Link>
+          </Tooltip>
+        </div>
+      ),
     },
   ];
-  
-  
 
-const handleCodeChange = (e) => {
-  setCode(e.target.value);
-};
-const handleSelectChange = (value) => {
-  setSelectedItems(value);
-};
+  const handleSearchAllByFilter = async () => {
+    await featchAllMyClass();
+  };
+  const handleCodeChange = (e) => {
+    setCode(e.target.value);
+  };
+  const handleSelectChange = (value) => {
+    setSelectedItems(value);
+  };
 
-const handleSelectPersonChange = (value) => {
-  setSelectedItemsPerson(value);
-};
+  const handleSelectPersonChange = (value) => {
+    setSelectedItemsPerson(value);
+  };
 
-useEffect(() => {
-
-  handleSearch(idSemesterSeach);
-  
-}, [code, selectedItems, selectedItemsPerson,idActivitiSearch,idSemesterSeach]);
-const handleSearch =async (idSemesterSeach) => {
-
-  if (listClassAll.length===0){
-    const responseClassAll =
-        await ClassAPI.getAllMyClassByIdSemester(idSemesterSeach);
-      const listClass = responseClassAll.data;
-      
-    setFilteredData([...listClass.data]);
-    console.log(listClass);
-  } else {
-  const filteredList = listClassAll.filter((classItem) => {
-    const codeMatch = classItem.code.includes(code);
-    const periodMatch = classItem.classPeriod === selectedItems;
-    const teacherMatch = classItem.teacherId === selectedItemsPerson;
-    const activityMatch = classItem.activityName === idActivitiSearch;
-    const semesterMatch = classItem.semesterName === idSemesterSeach;
-
-    if (code && selectedItems && selectedItemsPerson && idActivitiSearch && idSemesterSeach) {
-      return codeMatch && periodMatch && teacherMatch && activityMatch && semesterMatch;
-    } else if (code && selectedItems) {
-      return codeMatch && periodMatch;
-    } else if (code && selectedItemsPerson) {
-      return codeMatch && teacherMatch;
-    }else if (code && idActivitiSearch) {
-      return codeMatch && activityMatch;
-    } else if (code && idSemesterSeach) {
-      return codeMatch && semesterMatch;
-    } else if (selectedItems && selectedItemsPerson) {
-      return periodMatch && teacherMatch;
-    }else if (selectedItems && idActivitiSearch) {
-      return periodMatch && activityMatch;
-    }else if (selectedItems && idSemesterSeach) {
-      return periodMatch && semesterMatch;
-    }else if (selectedItemsPerson && idActivitiSearch) {
-      return activityMatch && teacherMatch;
-    }else if (selectedItemsPerson && idSemesterSeach) {
-      return activityMatch && semesterMatch;
-    }else if (idSemesterSeach && idActivitiSearch) {
-      return activityMatch && semesterMatch;
-    } else if (code) {
-      return codeMatch;
-    } else if (selectedItems) {
-      return periodMatch;
-    } else if (selectedItemsPerson) {
-      return teacherMatch;
-    } else if (idActivitiSearch) {
-      return activityMatch;
-    } else if (idSemesterSeach) {
-      return semesterMatch;
+  const handleClear = () => {
+    if (semesterDataAll.length > 0) {
+      setIdSemesterSearch(semesterDataAll[0].id);
     } else {
-      return true; // Nếu không có bất kỳ điều kiện nào được chọn, hiển thị tất cả lớp
+      setIdSemesterSearch("null");
     }
-  });
+    setSelectedItems("");
+    setCode("");
+    setIdActivitiSearch("");
+    setSelectedItemsPerson("");
+    setClear(true);
+  };
+  const [showCreateModal, setShowCreateModal] = useState(false);
 
-  setFilteredData([...filteredList]);
-}
-};
+  const handleModalCreateCancel = async () => {
+    document.querySelector("body").style.overflowX = "auto";
+    setShowCreateModal(false);
+    await featchAllMyClass();
+  };
 
   return (
-    <div className="stakeholder_management">
-            {/* {loading && <LoadingIndicator />} */}
+    <div className="class_management">
+      {!loading && <LoadingIndicator />}
 
-      <div className="title_stakeholder_management">
+      <div className="title_activity_management">
         {" "}
-        <FontAwesomeIcon icon={faCogs} size="1x" />
-        <span style={{ marginLeft: "10px" }}>Quản lý lớp</span>
+        <FontAwesomeIcon icon={faTags} size="1x" />
+        <span style={{ marginLeft: "10px" }}>Quản lý lớp học</span>
       </div>
       <div className="filter">
         <FontAwesomeIcon icon={faFilter} size="2x" />{" "}
         <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
         <hr />
-        <div className="content">
-          <div className="content-wrapper">
-            <div className="inputCode">
-            Mã Lớp:{" "}
-              <Input
-                placeholder="Import Class Code"
-                type="text"
-                value={code}
-                // onChange={handleInputChange}
-                onChange={handleCodeChange}
-
-                style={{ width: "220px" }}
-              />
-            </div>
-            <div className="selectSearch1">
-            Ca Học:{" "}
+        <Row>
+          <Col span={12} style={{ padding: "10px" }}>
+            <div>
+              <span>Học kỳ:</span>
+              <br />
               <Select
-                  showSearch
-                  placeholder="Select a class Period"
-                  value={selectedItems}
-                  onChange={handleSelectChange}
-                  style={{ width: '220px' , height: '50%',marginRight:'110px'}}
-                  >
-                      <Option value="">Tất Cả</Option>
-                     {listClassAll.map((classItem) => (
-                    <Option key={classItem.id} value={classItem.classPeriod}>
-                      {classItem.classPeriod}
-                    </Option>
-                       ))}
-              </Select>
-            </div>
-            <div className="selectSearch2" >
-            GVHD:{" "}
-              <Select
-                  showSearch
-                  placeholder="Select a person "
-                  value={selectedItemsPerson}
-                  onChange={handleSelectPersonChange}
-                style={{ width: '220px', height: '50%', marginRight: '210px' }}
-                   >
-
-                      <Option value="">Tất cả</Option>
-
-                {teacherDataAll.map((teacher) => (
-                  <Option key={teacher.id} value={teacher.id}>
-                    {teacher.username}
-                  </Option>
-                ))}
-              </Select>
-                        </div>
-          </div>
-        </div>
-        
-        
-      </div>
-
-      <div className="table_Allstakeholder_management">
-        <div className="title_stakeholder_management">
-          {" "}
-          <FontAwesomeIcon icon={faCogs} size="1x" />
-          <span style={{ fontSize: "18px", fontWeight: "500" }}>
-            {" "}
-            Danh sách Lớp
-          </span>
-        </div>
-        Semester:{" "}
-              <Select
-                  showSearch
-                  placeholder="Select a person "
-                  value={idSemesterSeach}
-                  onChange={(value) => {
-                    setIdSemesterSearch(value);
-                  }}
-                style={{ width: '220px', height: '50%', marginRight: '210px' }}
-                   >
-
-                      <Option value="">Tất cả</Option>
+                showSearch
+                style={{ width: "100%" }}
+                value={idSemesterSeach}
+                onChange={(value) => {
+                  setIdSemesterSearch(value);
+                }}
+              >
+                <Option value="">Tất cả</Option>
 
                 {semesterDataAll.map((semester) => (
                   <Option key={semester.id} value={semester.id}>
@@ -355,44 +301,118 @@ const handleSearch =async (idSemesterSeach) => {
                   </Option>
                 ))}
               </Select>
-        Hoạt Động:{" "}
+            </div>
+          </Col>
+          <Col span={12} style={{ padding: "10px" }}>
+            <div className="selectSearch3">
+              <span>Hoạt Động:</span>
+              <br />
               <Select
-                  showSearch
-                  placeholder="Select a activity "
-                  value={idActivitiSearch}
-                  onChange={(value) => {
-                    setIdActivitiSearch(value);
-                  }}
-                style={{ width: '220px', height: '50%', marginRight: '210px' }}
+                showSearch
+                style={{ width: "100%" }}
+                value={idActivitiSearch}
+                onChange={(value) => {
+                  setIdActivitiSearch(value);
+                }}
               >
-                      <Option value="">Tất cả</Option>
-                        {activityDataAll.map((activity) => (
-                      <Option key={activity.name} value={activity.name}>
-                               {activity.name}
-                      </Option>
+                <Option value="">Tất cả</Option>
+                {activityDataAll.map((activity) => (
+                  <Option key={activity.id} value={activity.id}>
+                    {activity.name}
+                  </Option>
                 ))}
               </Select>
-        <div style={{ marginTop: "25px" }}>
-          <Table
-            dataSource={filteredData}
+            </div>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={12} style={{ padding: "10px" }}>
+            <div>
+              <span>Ca học:</span>
+              <br />
+              <Select
+                showSearch
+                style={{ width: "100%" }}
+                value={selectedItems}
+                onChange={handleSelectChange}
+              >
+                <Option value="">Tất Cả</Option>
+                {listClassPeriod.map((value) => {
+                  return (
+                    <Option value={value} key={value}>
+                      {value}
+                    </Option>
+                  );
+                })}
+              </Select>
+            </div>
+          </Col>
+          <Col span={12} style={{ padding: "10px" }}>
+            <div>
+              <span>Giảng viên:</span>
+              <br />
+              <Select
+                showSearch
+                style={{ width: "100%" }}
+                value={selectedItemsPerson}
+                onChange={handleSelectPersonChange}
+              >
+                <Option value="">Tất cả</Option>
 
-            rowKey="id"
-            columns={columns}
-            className="table_stakeholder_management"
-            pagination={{
-              pageSize: 3,
-              showSizeChanger: false,
-              size: "small",
-            }}
-          />
+                {teacherDataAll.map((teacher) => (
+                  <Option key={teacher.id} value={teacher.id}>
+                    {teacher.username}
+                  </Option>
+                ))}
+              </Select>
+            </div>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={12} style={{ padding: "10px" }}>
+            <div className="inputCode">
+              <span>Mã Lớp:</span>
+              <br />
+              <Input type="text" value={code} onChange={handleCodeChange} />
+            </div>
+          </Col>
+        </Row>
+        <div className="box_btn_filter">
+          <Button className="btn_filter" onClick={handleSearchAllByFilter}>
+            Tìm kiếm
+          </Button>
+          <Button className="btn_clear" onClick={handleClear}>
+            Làm mới
+          </Button>
         </div>
-        <div>
+      </div>
+
+      <div className="table-class-management">
+        {" "}
+        <div style={{ marginBottom: "8px" }}>
+          <div className="table-class-management-info">
+            {" "}
+            <FontAwesomeIcon icon={faCogs} size="1x" />
+            <span
+              style={{
+                fontSize: "18px",
+                fontWeight: "500",
+                marginBottom: "-50px",
+              }}
+            >
+              {" "}
+              Danh sách lớp học
+            </span>{" "}
+          </div>
+          <div className="createButton">
             <Button
               style={{
                 color: "white",
                 backgroundColor: "rgb(55, 137, 220)",
               }}
-              // onClick={buttonCreate}
+              onClick={() => {
+                setShowCreateModal(true);
+              }}
             >
               <FontAwesomeIcon
                 icon={faPlus}
@@ -404,12 +424,51 @@ const handleSearch =async (idSemesterSeach) => {
               Thêm Lớp
             </Button>
           </div>
-          
+        </div>
+        <br />
+        <div>
+          <div>
+            {listClassAll.length > 0 ? (
+              <>
+                <div className="table">
+                  <Table
+                    dataSource={listClassAll}
+                    rowKey="id"
+                    columns={columns}
+                    pagination={false}
+                  />
+                </div>
+                <div className="pagination_box">
+                  <Pagination
+                    simple
+                    current={current}
+                    onChange={(value) => {
+                      setCurrent(value);
+                    }}
+                    total={totalPages * 10}
+                  />
+                </div>
+              </>
+            ) : (
+              <>
+                <p
+                  style={{
+                    textAlign: "center",
+                    marginTop: "100px",
+                    fontSize: "15px",
+                  }}
+                >
+                  Không có lớp học
+                </p>
+              </>
+            )}
+          </div>
+        </div>
       </div>
-      {/* <ModalCreateProject
-          visible={showCreateModal}
-          onCancel={handleCancelCreate}
-        /> */}
+      <ModalCreateProject
+        visible={showCreateModal}
+        onCancel={handleModalCreateCancel}
+      />
     </div>
   );
 };

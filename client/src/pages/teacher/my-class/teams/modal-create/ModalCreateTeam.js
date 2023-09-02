@@ -10,32 +10,34 @@ import {
   Tooltip,
   Table,
 } from "antd";
-import "./styleModalCreateProject.css";
+import "./styleModalCreateTeam.css";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 import { useAppDispatch, useAppSelector } from "../../../../../app/hook";
 import LoadingIndicator from "../../../../../helper/loading";
 import { CreateTeam } from "../../../../../app/teacher/teams/teamsSlice.reduce";
 import { TeacherStudentClassesAPI } from "../../../../../api/teacher/student-class/TeacherStudentClasses.api";
 import { TeacherTeamsAPI } from "../../../../../api/teacher/teams-class/TeacherTeams.api";
+import {
+  GetStudentClasses,
+  SetStudentClasses,
+} from "../../../../../app/teacher/student-class/studentClassesSlice.reduce";
 
 const { Option } = Select;
 
 const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
   const [code, setCode] = useState("");
-  const [errorCode, setErrorCode] = useState("");
   const [name, setName] = useState("");
   const [errorName, setErrorName] = useState("");
   const [subjectName, setSubjectName] = useState("");
-  const [errorSubjectName, setErrorSubjectName] = useState("");
   const [errorMembers, setErrorMembers] = useState("");
-  const [listStudent, setListStudent] = useState([]);
+  const [listStudentMulty, setListStudentMulty] = useState([]);
   const [listStudentClass, setListStudentClass] = useState([]);
   const [dataTable, setDataTable] = useState([]);
   const [loading, setLoading] = useState(false);
   const [listStudentsChange, setListStudentsChange] = useState([]);
+  const [checkDataStudent, setCheckDataStudent] = useState(false);
   const [visitedCreate, setVisitedCreate] = useState(false);
   const dispatch = useAppDispatch();
   const cancelSuccess = () => {
@@ -51,7 +53,7 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
       setSubjectName("");
       setCode("");
       setName("");
-      setListStudent([]);
+      setListStudentMulty([]);
       setListStudentClass([]);
       setListStudentsChange([]);
       setDataTable([]);
@@ -69,6 +71,19 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
     featchDataTable();
   }, [listStudentsChange]);
 
+  useEffect(() => {
+    if (checkDataStudent === true) {
+      featchDataStudent();
+    }
+  }, [checkDataStudent]);
+
+  const featchDataStudent = () => {
+    const listNotFilter = dataStudentClasses.filter(
+      (item) => item.idTeam == null || item.idTeam === "null"
+    );
+    setListStudentMulty(listNotFilter);
+    setCheckDataStudent(false);
+  };
   const fetchData = async (idClass) => {
     await featchStudentClass(idClass);
     await featInforStudent();
@@ -95,25 +110,10 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
   const featInforStudent = async () => {
     setLoading(false);
     try {
-      let request = listStudentClass.map((item) => item.idStudent).join("|");
-      const listStudentAPI = await TeacherStudentClassesAPI.getAllInforStudent(
-        `?id=` + request
+      const listNotFilter = dataStudentClasses.filter(
+        (item) => item.idTeam == null || item.idTeam === "null"
       );
-      const listStudentInfor = listStudentAPI.data
-        .filter((item1) =>
-          listStudentClass.some((item2) => item1.id === item2.idStudent)
-        )
-        .map((item1) => {
-          const matchedObject = listStudentClass.find(
-            (item2) => item2.idStudent === item1.id
-          );
-          return {
-            ...item1,
-            ...matchedObject,
-            role: "1",
-          };
-        });
-      setListStudent(listStudentInfor);
+      setListStudentMulty(listNotFilter);
       setLoading(false);
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
@@ -121,9 +121,13 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
   };
 
   const featchDataTable = () => {
-    const list = listStudent.filter((item1) => {
-      return listStudentsChange.find((item2) => item1.idStudent === item2);
-    });
+    const list = dataStudentClasses
+      .filter((item1) => {
+        return listStudentsChange.find((item2) => item1.idStudent === item2);
+      })
+      .map((item) => {
+        return { ...item, role: `1` };
+      });
     setDataTable(list);
   };
 
@@ -148,25 +152,12 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
 
   const create = () => {
     let check = 0;
-    if (code.trim() === "") {
-      setErrorCode("Mã nhóm không được để trống");
-      check++;
-    } else {
-      setErrorCode("");
-    }
     if (name.trim() === "") {
       setErrorName("Tên nhóm không được để trống");
       check++;
     } else {
       setErrorName("");
     }
-    if (subjectName.trim() === "") {
-      setErrorSubjectName("Chủ đề không được để trống");
-      check++;
-    } else {
-      setErrorSubjectName("");
-    }
-
     if (listStudentsChange.length <= 0) {
       setErrorMembers("Nhóm phải có ít nhất 1 thành viên");
       check++;
@@ -183,8 +174,6 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
         subjectName: subjectName,
         listStudentClasses: dataTable,
       };
-      console.log("daaaaaaaaaaaaaaaa");
-      console.log(teamNew);
       TeacherTeamsAPI.createTeam(teamNew).then(
         (respone) => {
           toast.success("Thêm thành công !");
@@ -193,7 +182,22 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
             ...data,
             stt: 1,
           };
+          const mergedList = dataStudentClasses.map((item1) => {
+            const matchedAddedItem = dataTable.find(
+              (item2) => item2.idStudentClass === item1.idStudentClass
+            );
+            if (matchedAddedItem != null) {
+              return {
+                ...matchedAddedItem,
+                codeTeam: teamNew.code,
+                idTeam: data.id,
+              };
+            }
+            return item1;
+          });
+          dispatch(SetStudentClasses(mergedList));
           dispatch(CreateTeam(dataAddTable));
+          setCheckDataStudent(true);
           cancelSuccess();
         },
         (error) => {
@@ -202,10 +206,10 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
       );
     }
   };
-
+  const dataStudentClasses = useAppSelector(GetStudentClasses);
   const columns = [
     {
-      title: "STT",
+      title: "#",
       dataIndex: "stt",
       key: "stt",
       render: (text, record, index) => index + 1,
@@ -259,10 +263,10 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
       <Modal
         open={visible}
         onCancel={cancelFaild}
-        width={750}
+        width={850}
         footer={null}
         bodyStyle={{ overflow: "hidden" }}
-        className="modal_show_create"
+        style={{ top: "8px" }}
       >
         {" "}
         <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
@@ -280,20 +284,6 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
                 <Col span={12}>
                   {" "}
                   <span className="notBlank">*</span>
-                  <span>Mã nhóm:</span> <br />
-                  <Input
-                    placeholder="Nhập mã"
-                    value={code}
-                    onChange={(e) => {
-                      setCode(e.target.value);
-                    }}
-                    type="text"
-                  />
-                  <span className="error">{errorCode}</span>
-                </Col>
-                <Col span={12}>
-                  {" "}
-                  <span className="notBlank">*</span>
                   <span>Tên nhóm:</span> <br />
                   <Input
                     placeholder="Nhập tên"
@@ -305,11 +295,8 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
                   />
                   <span className="error">{errorName}</span>
                 </Col>
-              </Row>
-              <Row gutter={16} style={{ marginBottom: "15px" }}>
-                <Col span={24}>
+                <Col span={12}>
                   {" "}
-                  <span className="notBlank">*</span>
                   <span>Chủ đề:</span> <br />
                   <Input
                     placeholder="Nhập chủ đề"
@@ -319,7 +306,6 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
                     }}
                     type="text"
                   />
-                  <span className="error">{errorSubjectName}</span>
                 </Col>
               </Row>
               <Row style={{ marginBottom: "15px" }}>
@@ -343,7 +329,7 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
                       -1
                     }
                   >
-                    {listStudent.map((member) => (
+                    {listStudentMulty.map((member) => (
                       <Option
                         label={member.email}
                         value={member.id}
@@ -367,18 +353,21 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
                 </div>
               </Row>
               {dataTable.length > 0 && (
-                <Row>
-                  {" "}
-                  <Col span={24}>
-                    <Table
-                      pagination={false}
-                      className="table-member-management"
-                      columns={columns}
-                      dataSource={dataTable}
-                      rowKey="id"
-                    />
-                  </Col>{" "}
-                </Row>
+                <>
+                  <span>Thành viên:</span>
+                  <Row>
+                    {" "}
+                    <Col span={24}>
+                      <Table
+                        pagination={false}
+                        className="table-member-management"
+                        columns={columns}
+                        dataSource={dataTable}
+                        rowKey="id"
+                      />
+                    </Col>{" "}
+                  </Row>
+                </>
               )}
             </div>
           </>

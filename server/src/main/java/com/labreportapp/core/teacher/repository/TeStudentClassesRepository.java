@@ -18,13 +18,14 @@ public interface TeStudentClassesRepository extends JpaRepository<StudentClasses
 
     @Query(value = """
             SELECT DISTINCT 
-            sc.id as idStudentClasses,
+            sc.id as idStudentClass,
             sc.student_id as idStudent,
             sc.email as emailStudent,
             sc.role as role,
             sc.status as statusStudent,
             t.id as idTeam,
-            t.code as codeTeam
+            t.code as codeTeam,
+            t.name as nameTeam
             FROM student_classes sc
             LEFT JOIN team t on t.id = sc.team_id
             WHERE sc.class_id = :#{#req.idClass}
@@ -38,13 +39,14 @@ public interface TeStudentClassesRepository extends JpaRepository<StudentClasses
 
     @Query(value = """
             SELECT DISTINCT 
-            sc.id as idStudentClasses,
+            sc.id as idStudentClass,
             sc.student_id as idStudent,
             sc.email as emailStudent,
             sc.role as role,
             sc.status as statusStudent,
             t.id as idTeam,
-            t.code as codeTeam
+            t.code as codeTeam,
+            t.name as nameTeam
             FROM student_classes sc
             JOIN team t on t.id = sc.team_id
             WHERE sc.class_id = :#{#req.idClass} and sc.team_id =:#{#req.idTeam}
@@ -60,5 +62,10 @@ public interface TeStudentClassesRepository extends JpaRepository<StudentClasses
                 SELECT * FROM student_classes sc WHERE sc.id = :#{#idStudentClass}
             """, nativeQuery = true)
     StudentClasses findStudentClassesById(@Param("idStudentClass") String idStudentClass);
+
+    @Query(value = """
+                SELECT * FROM student_classes sc WHERE sc.team_id = :#{#idTeam}
+            """, nativeQuery = true)
+    List<StudentClasses> findAllStudentClassesByIdTeam(@Param("idTeam") String idTeam);
 
 }

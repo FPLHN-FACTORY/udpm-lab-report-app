@@ -1,6 +1,6 @@
 package com.labreportapp.core.teacher.repository;
 
-import com.labreportapp.core.teacher.model.request.TeFindClass;
+import com.labreportapp.core.teacher.model.request.TeFindClassRequest;
 import com.labreportapp.core.teacher.model.response.TeClassResponse;
 import com.labreportapp.core.teacher.model.response.TeDetailClassRespone;
 import org.springframework.data.domain.Page;
@@ -57,7 +57,7 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
             and (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR  c.class_period = :#{#req.classPeriod})
             and (:#{#req.level} IS NULL OR :#{#req.level} LIKE '' OR a.level = :#{#req.level})
             """ ,nativeQuery = true)
-    Page<TeClassResponse> findClassBySemesterAndActivity(@Param("req") TeFindClass req, Pageable pageable);
+    Page<TeClassResponse> findClassBySemesterAndActivity(@Param("req") TeFindClassRequest req, Pageable pageable);
 
     @Query(value = """
             SELECT c.id as id,
@@ -77,7 +77,5 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
             where c.id = :#{#id}
              """,nativeQuery = true)
     Optional<TeDetailClassRespone> findClassById(@Param("id") String id);
-
-
 
 }

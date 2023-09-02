@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
  */
 public interface TeStudentClassesRespone {
 
-    @Value("#{target.idStudentClasses}")
+    @Value("#{target.idStudentClass}")
     String getIdStudentClass();
 
     @Value("#{target.idStudent}")
@@ -27,5 +27,8 @@ public interface TeStudentClassesRespone {
 
     @Value("#{target.codeTeam}")
     String getCodeTeam();
+
+    @Value("#{target.nameTeam}")
+    String getNameTeam();
 
 }

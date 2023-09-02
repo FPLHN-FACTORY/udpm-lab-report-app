@@ -1,9 +1,12 @@
 package com.labreportapp.core.admin.controller;
 
+import com.labreportapp.core.admin.model.request.AdCreateClassRequest;
 import com.labreportapp.core.admin.model.request.AdFindClassRequest;
 import com.labreportapp.core.admin.model.response.AdActivityClassResponse;
+import com.labreportapp.core.admin.model.response.AdClassResponse;
 import com.labreportapp.core.admin.model.response.AdSemesterAcResponse;
 import com.labreportapp.core.admin.service.AdClassService;
+import com.labreportapp.core.common.base.PageableObject;
 import com.labreportapp.core.common.base.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -45,5 +48,14 @@ public class AdClassController {
     public ResponseObject getListActivitySemester(final AdFindClassRequest teFindClass) {
         List<AdActivityClassResponse> list = service.getAllByIdSemester(teFindClass);
         return new ResponseObject(list);
+    }
+    @PostMapping("/add")
+    public ResponseObject addCategory(@RequestBody AdCreateClassRequest request) {
+        return new ResponseObject(service.createClass(request));
+    }
+    @GetMapping("/getAllSearch")
+    public ResponseObject searchTeClass(final AdFindClassRequest adFindClass) {
+        PageableObject<AdClassResponse> pageList = service.searchClass(adFindClass);
+        return new ResponseObject(pageList);
     }
 }

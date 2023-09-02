@@ -8,6 +8,8 @@ import {
   faChartLine,
   faUsers,
   faCogs,
+  faCalendar,
+  faHome,
 } from "@fortawesome/free-solid-svg-icons";
 
 import "./style-sidebar.css";
@@ -36,12 +38,36 @@ const SidebarStudentComponent = ({ collapsed, toggleCollapsed }) => {
           className="menu_custom"
           icon={
             <FontAwesomeIcon
-              icon={faCogs}
+              icon={faCalendar}
+              style={{ color: "rgb(226, 179, 87)" }}
+            />
+          }
+        >
+          <Link to="/student/schedule">Lịch học</Link>
+        </Menu.Item>
+        <Menu.Item
+          key="2"
+          className="menu_custom"
+          icon={
+            <FontAwesomeIcon
+              icon={faHome}
               style={{ color: "rgb(226, 179, 87)" }}
             />
           }
         >
           <Link to="/student/my-class">Lớp của tôi</Link>
+        </Menu.Item>
+        <Menu.Item
+          key="3"
+          className="menu_custom"
+          icon={
+            <FontAwesomeIcon
+              icon={faHome}
+              style={{ color: "rgb(226, 179, 87)" }}
+            />
+          }
+        >
+          <Link to="/student/my-class">Điểm</Link>
         </Menu.Item>
       </Menu>
     </Sider>

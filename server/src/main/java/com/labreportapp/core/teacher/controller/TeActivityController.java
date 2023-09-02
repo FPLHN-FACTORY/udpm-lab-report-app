@@ -1,11 +1,14 @@
 package com.labreportapp.core.teacher.controller;
 
 import com.labreportapp.core.common.base.ResponseObject;
-import com.labreportapp.core.teacher.model.request.TeFindClass;
+import com.labreportapp.core.teacher.model.request.TeFindClassRequest;
 import com.labreportapp.core.teacher.model.response.TeActivityRespone;
 import com.labreportapp.core.teacher.service.TeActivitySevice;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -21,7 +24,7 @@ public class TeActivityController {
     private TeActivitySevice teActivitySevice;
 
     @GetMapping("/id-semester")
-    public ResponseObject listActivitySemester(final TeFindClass teFindClass) {
+    public ResponseObject listActivitySemester(final TeFindClassRequest teFindClass) {
         List<TeActivityRespone> list = teActivitySevice.getAllByIdSemester(teFindClass);
         return new ResponseObject(list);
     }

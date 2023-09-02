@@ -27,15 +27,15 @@ import org.hibernate.annotations.Index;
 public class StudentClasses extends PrimaryEntity {
 
     @Column(length = EntityProperties.LENGTH_ID)
-    @Index(name = "index_student_classes_student_id")
+//    @Index(name = "index_student_classes_student_id")
     private String studentId;
 
     @Column(length = EntityProperties.LENGTH_ID)
-    @Index(name = "index_student_classes_class_id")
+//    @Index(name = "index_student_classes_class_id")
     private String classId;
 
     @Column(length = EntityProperties.LENGTH_ID)
-    @Index(name = "index_student_classes_team_id")
+//    @Index(name = "index_student_classes_team_id")
     private String teamId;
 
     @Column(length = EntityProperties.LENGTH_EMAIL)

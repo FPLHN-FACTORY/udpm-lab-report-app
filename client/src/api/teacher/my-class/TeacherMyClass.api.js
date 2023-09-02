@@ -1,5 +1,5 @@
 import { request } from "../../../helper/request.helper";
-const url = `/teacher`;
+const url = `/teacher/class`;
 
 export class TeacherMyClassAPI {
   static getAllMyClass(filter) {

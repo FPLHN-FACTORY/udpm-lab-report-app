@@ -19,12 +19,12 @@ public interface AdSemesterRepository extends SemesterRepository {
     @Query(" SELECT obj FROM Semester obj")
     List<Semester> getAllSemester(Pageable pageable);
 
-    @Query(" SELECT obj FROM Activity obj")
-    List<Activity> findSemesterIdInActivity(String id);
+    @Query("SELECT COUNT(obj) FROM Activity obj WHERE obj.semesterId = :id")
+    Integer countActivitiesBySemesterId(@Param("id") String id);
 
     @Query(value = """
             SELECT 
-            ROW_NUMBER() OVER(ORDER BY obj.last_modified_date DESC ) AS STT ,
+            ROW_NUMBER() OVER(ORDER BY obj.last_modified_date DESC ) AS stt ,
             obj.id,
             obj.name,
             obj.start_time,
@@ -32,14 +32,14 @@ public interface AdSemesterRepository extends SemesterRepository {
             FROM semester obj 
             WHERE  ( :#{#req.name} IS NULL 
                    OR :#{#req.name} LIKE '' 
-                   OR obj.name LIKE %:#{#req.name}% )      
-                   ORDER BY obj.last_modified_date DESC        
+                   OR obj.name LIKE %:#{#req.name}% )
+                    ORDER BY obj.last_modified_date DESC         
                     """, countQuery = """    
             SELECT COUNT(obj.id) 
             FROM semester obj 
             WHERE   ( :#{#req.name} IS NULL 
                     OR :#{#req.name} LIKE '' 
-                    OR obj.name LIKE %:#{#req.name}% )                     
+                    OR obj.name LIKE %:#{#req.name}% )     
             """, nativeQuery = true)
     Page<AdSemesterResponse> searchSemester(@Param("req") AdFindSemesterRequest req, Pageable page);
 }

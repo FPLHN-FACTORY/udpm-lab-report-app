@@ -43,10 +43,22 @@ const SidebarTeacherComponent = ({ collapsed, toggleCollapsed }) => {
             />
           }
         >
-          <Link to="/teacher/my-class">Lớp của tôi</Link>
+          <Link to="/teacher/schedule-today">Lịch dạy</Link>
         </Menu.Item>
         <Menu.Item
           key="2"
+          className="menu_custom"
+          icon={
+            <FontAwesomeIcon
+              icon={faBook}
+              style={{ color: "rgb(226, 179, 87)" }}
+            />
+          }
+        >
+          <Link to="/teacher/my-class">Lớp của tôi</Link>
+        </Menu.Item>
+        <Menu.Item
+          key="3"
           className="menu_custom"
           icon={
             <FontAwesomeIcon

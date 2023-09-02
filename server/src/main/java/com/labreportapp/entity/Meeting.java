@@ -3,6 +3,7 @@ package com.labreportapp.entity;
 import com.labreportapp.entity.base.PrimaryEntity;
 import com.labreportapp.infrastructure.constant.EntityProperties;
 import com.labreportapp.infrastructure.constant.MeetingPeriod;
+import com.labreportapp.infrastructure.constant.TypeMeeting;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -41,6 +42,13 @@ public class Meeting extends PrimaryEntity {
     private String descriptions;
 
     @Column(length = EntityProperties.LENGTH_ID)
-    @Index(name = "index_meeting_team_id")
+//    @Index(name = "index_meeting_team_id")
     private String classId;
+
+    @Column
+    private TypeMeeting typeMeeting;
+
+    @Column(length = EntityProperties.LENGTH_NAME_SHORT)
+    private String address;
+
 }

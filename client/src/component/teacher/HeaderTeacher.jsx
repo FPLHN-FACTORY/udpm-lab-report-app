@@ -29,7 +29,7 @@ const HeaderTeacherComponent = ({ collapsed, toggleCollapsed }) => {
               src="https://raw.githubusercontent.com/FPLHN-FACTORY/udpm-common-resources/main/fpoly-udpm/logo-udpm-3.png"
               className="logo_project"
             />{" "}
-            Projects
+            LabReport
           </div>
           <div
             className="sidebar-toggle"
