@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import adSemesterSliceReducer from "./admin/AdSemester.reducer";
 import activityManagementSliceReducer from "./admin/activity-management/activityManagementSlice.reducer";
+import tePostSliceReduce from "./teacher/post/tePostSlice.reduce";
 import teMyClassSliceReduce from "./teacher/my-class/teacherMyClassSlice.reduce";
 import teSemesterSliceReduce from "./teacher/semester/teacherSemesterSlice.reduce";
 import teTeamsSliceReduce from "./teacher/teams/teamsSlice.reduce";
@@ -13,6 +14,7 @@ import stScheduleSliceReducer from "./student/StSchedule.reduce";
 
 export const store = configureStore({
   reducer: {
+    tePost: tePostSliceReduce,
     teMyClass: teMyClassSliceReduce,
     teSemester: teSemesterSliceReduce,
     teTeams: teTeamsSliceReduce,

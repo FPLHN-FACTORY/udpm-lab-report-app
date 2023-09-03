@@ -13,6 +13,7 @@ public enum Message {
     ERROR_UNKNOWN("Error Unknown"),
 
     // CLASS_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeyss.CLASS_NOT_EXISTS));
+    POST_IS_EXIST(PropertiesReader.getProperty(PropertyKeys.POST_IS_EXIST)),
     MEETING_HAS_NOT_COME(PropertiesReader.getProperty(PropertyKeys.MEETING_HAS_NOT_COME)),
     MEETING_IS_OVER(PropertiesReader.getProperty(PropertyKeys.MEETING_IS_OVER)),
     SCHEDULE_TODAY_IS_EMPTY(PropertiesReader.getProperty(PropertyKeys.SCHEDULE_TODAY_IS_EMPTY)),

@@ -5,6 +5,7 @@ import com.labreportapp.entity.Class;
 import com.labreportapp.entity.HomeWork;
 import com.labreportapp.entity.Meeting;
 import com.labreportapp.entity.Note;
+import com.labreportapp.entity.Post;
 import com.labreportapp.entity.Semester;
 import com.labreportapp.entity.StudentClasses;
 import com.labreportapp.entity.Team;
@@ -20,6 +21,7 @@ import com.labreportapp.repository.ClassRepository;
 import com.labreportapp.repository.HomeWorkRepository;
 import com.labreportapp.repository.MeetingRepository;
 import com.labreportapp.repository.NoteRepository;
+import com.labreportapp.repository.PostRepository;
 import com.labreportapp.repository.SemesterRepository;
 import com.labreportapp.repository.StudentClassesRepository;
 import com.labreportapp.repository.TeamRepository;
@@ -73,6 +75,9 @@ public class DBGenerator implements CommandLineRunner {
 
     @Autowired
     private TeamRepository teamRepository;
+
+    @Autowired
+    private PostRepository postRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -597,6 +602,48 @@ public class DBGenerator implements CommandLineRunner {
         note8.setTeamId(team2.getId());
         note8.setDescriptions("");
         note8.setId(noteRepository.save(note8).getId());
+//post - class 1
+        Post post1 = new Post();
+        post1.setDescriptions("Tất cả sinh viên hôm nay học offline trên xưởng nhé, lưu ý giúp tôi 1 !");
+        post1.setTeacherId(class1.getTeacherId());
+        post1.setClassId(class1.getId());
+        post1.setCreatedDate(new Date().getTime() - 3 * 86400000);
+        post1.setId(postRepository.save(post1).getId());
+
+        Post post2 = new Post();
+        post2.setDescriptions("Hôm nay được nghỉ nhé mọi người, quẫy đii 2 !");
+        post2.setTeacherId(class1.getTeacherId());
+        post2.setClassId(class1.getId());
+        post2.setCreatedDate(new Date().getTime() - 2 * 86400000);
+        post2.setId(postRepository.save(post2).getId());
+
+        Post post3 = new Post();
+        post3.setDescriptions("Mai đi học kiểm tra nhé, nhắc toàn thể các bạn 3 !");
+        post3.setTeacherId(class1.getTeacherId());
+        post3.setClassId(class1.getId());
+        post3.setCreatedDate(new Date().getTime() - 1 * 86400000);
+        post3.setId(postRepository.save(post3).getId());
+
+        Post post4 = new Post();
+        post4.setDescriptions("Giá trị đức tính “Cần, Kiệm, Liêm, Chính” trong tư tưởng Hồ Chí Minh về xây dựng đạo đức cách mạng của đội ngũ cán bộ, đảng viên hiện nay !");
+        post4.setTeacherId(class1.getTeacherId());
+        post4.setClassId(class1.getId());
+        post4.setCreatedDate(new Date().getTime());
+        post4.setId(postRepository.save(post4).getId());
+
+        Post post5 = new Post();
+        post5.setDescriptions("Tất cả sinh viên hôm nay học offline trên xưởng nhé, lưu ý giúp tôi 5 !");
+        post5.setTeacherId(class1.getTeacherId());
+        post5.setClassId(class1.getId());
+        post5.setCreatedDate(new Date().getTime() - 1 * 86400000);
+        post5.setId(postRepository.save(post5).getId());
+
+        Post post6 = new Post();
+        post6.setDescriptions("Tất cả sinh viên hôm nay học offline trên xưởng nhé, lưu ý giúp tôi 6 !");
+        post6.setTeacherId(class1.getTeacherId());
+        post6.setClassId(class1.getId());
+        post6.setCreatedDate(new Date().getTime() - 2 * 86400000);
+        post6.setId(postRepository.save(post6).getId());
 
     }
 

@@ -1,34 +1,106 @@
 import "./styleTeacherPostMyClass.css";
-import { Button, Card, Dropdown, Menu, Popover } from "antd";
+import { Button, Card, Dropdown, Menu } from "antd";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useParams } from "react-router";
+import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
+import { TeacherPostAPI } from "../../../../api/teacher/post/TeacherPost.api";
 import LoadingIndicator from "../../../../helper/loading";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical, faHome } from "@fortawesome/free-solid-svg-icons";
 import { BookOutlined } from "@ant-design/icons";
+import { giangVienCurrent } from "../../../../helper/inForUser";
+import RichTextEditor from "./rich-teach-edit/rich-teach-editor";
+import {
+  GetPost,
+  SetPost,
+} from "../../../../app/teacher/post/tePostSlice.reduce";
 
 const TeacherPostMyClass = () => {
+  const dispatch = useAppDispatch();
   const { idClass } = useParams();
   const [classDetail, setClassDetail] = useState({});
   const [loading, setLoading] = useState(false);
+  const [showCreate, setShowCreate] = useState(false);
+
+  const [items, setItems] = useState([]);
+  const [displayedItems, setDisplayedItems] = useState([]);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const [check, setCheck] = useState(false);
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Bảng điều khiển - bài viết";
     featchClass(idClass);
+    featchPost(idClass);
   }, []);
 
+  useEffect(() => {
+    if (check === true) {
+      window.scrollTo(0, 0);
+      document.title = "Bảng điều khiển - bài viết";
+
+      featchPost(idClass);
+    }
+  }, [check]);
+  // useEffect(() => {
+  //   const start = (currentPage - 1) * itemsPerPage;
+  //   const end = start + itemsPerPage;
+  //   setDisplayedItems(items.slice(start, end));
+  // }, [currentPage, items]);
+
+  // const handleScroll = () => {
+  //   if (
+  //     window.innerHeight + window.scrollY >=
+  //     document.body.offsetHeight - 100
+  //   ) {
+  //     setCurrentPage((prevPage) => prevPage + 1);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   window.addEventListener("scroll", handleScroll);
+  //   return () => {
+  //     window.removeEventListener("scroll", handleScroll);
+  //   };
+  // }, []);
+
+  const featchPost = async (idClass) => {
+    try {
+      let data = {
+        idClass: idClass,
+        idTeacher: giangVienCurrent.id,
+        page: currentPage,
+        size: 5,
+      };
+      await TeacherPostAPI.getPagePost(data).then((responese) => {
+        dispatch(SetPost(responese.data.data.data));
+        setCheck(true);
+        setLoading(true);
+      });
+    } catch (error) {
+      alert(error.message);
+    }
+  };
   const featchClass = async (idClass) => {
     try {
       await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
         setClassDetail(responese.data.data);
-        setLoading(true);
       });
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
+  };
+
+  const convertLongToDate = (longValue) => {
+    const date = new Date(longValue);
+    const format = `${date.getDate()}/${
+      date.getMonth() + 1
+    }/${date.getFullYear()} thời gian ${date.getHours()}: ${date.getMinutes()} `;
+    return format;
   };
 
   const menu = (
@@ -37,6 +109,7 @@ const TeacherPostMyClass = () => {
       <Menu.Item key="2">Xóa</Menu.Item>
     </Menu>
   );
+  const data = useAppSelector(GetPost);
   return (
     <>
       {!loading && <LoadingIndicator />}
@@ -147,73 +220,150 @@ const TeacherPostMyClass = () => {
             </div>
           </div>
           <div
-            className="content-class"
-            style={{ margin: "25px 0px 15px 15px" }}
+            className="box-image"
+            style={{ height: 200, backgroundColor: "blue" }}
           >
-            <br />
+            <span style={{ fontSize: 18, color: "white" }}>
+              {" "}
+              {classDetail.code}
+            </span>
           </div>
-          <div style={{ minHeight: "140px" }}>
-            <Card
-              title={
-                <>
-                  <div>Information</div>{" "}
-                  <div
-                    className="title-icon-drop"
-                    style={{ textAlign: "right" }}
-                  >
-                    <Dropdown
-                      overlay={menu}
-                      trigger={["click"]}
-                      className="box-drop"
-                    >
-                      <div
-                        className="box-icon-drop"
-                        style={{ backgroundColor: "white" }}
-                      >
-                        <FontAwesomeIcon icon={faEllipsisVertical} />
-                      </div>
-                    </Dropdown>
-                  </div>
-                </>
-              }
-              className="box-card-one"
+          <div className="box-post">
+            <div
+              className="box-post-left"
+              style={{
+                width: "20%",
+                height: 800,
+                //backgroundColor: "green"
+              }}
+            >
+              <div className="box-one" style={{ height: "160px" }}>
+                <div>Mã lớp:</div>
+                <div>{classDetail.code}</div>
+              </div>
+            </div>
+            <div
+              className="box-post-right"
+              style={{
+                width: "78%",
+                marginLeft: "2%",
+                height: 800,
+                // backgroundColor: "yellow",
+              }}
             >
               <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
+                className="box-one"
+                style={{ minHeight: "200px", width: "100%", height: "auto" }}
               >
-                <p>Ngày đăng</p>
-              </div>
-              <p>Mô tả ngắn nội dung bài viết</p>
-            </Card>
-            {/* {data.length > 0 ? (
-                  <>
-                    <div className="table">
-                      <Table
-                        dataSource={data}
-                        rowKey="id"
-                        columns={columns}
-                        pagination={false}
-                      />
+                {showCreate === true ? (
+                  <div style={{ width: "100%" }}>
+                    {" "}
+                    <RichTextEditor style={{ width: "100%", height: "300" }} />
+                    <div style={{ paddingTop: "15px", float: "right" }}>
+                      <Button
+                        style={{
+                          backgroundColor: "red",
+                          color: "white",
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setShowCreate(false);
+                        }}
+                      >
+                        Hủy
+                      </Button>
+                      <Button
+                        style={{
+                          backgroundColor: "rgb(61, 139, 227)",
+                          color: "white",
+                        }}
+                      >
+                        Đăng
+                      </Button>
                     </div>
-                  </>
+                  </div>
                 ) : (
-                  <>
-                    <p
+                  <div
+                    className="title-left"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShowCreate(true);
+                    }}
+                  >
+                    <div className="flex-container">
+                      <div className="title-icon">
+                        <div className="box-icon">
+                          <BookOutlined
+                            style={{ color: "white", fontSize: 21 }}
+                          />
+                        </div>
+                      </div>
+                      <p
+                        className="title-text"
+                        style={{
+                          fontSize: "16px",
+                          color: "black",
+                        }}
+                      >
+                        Thông báo nội dung nào đó cho lớp học
+                      </p>
+                    </div>
+                    <div style={{ paddingTop: "15px" }}></div>
+                  </div>
+                )}
+              </div>
+              <div style={{ height: "auto", marginTop: "20px" }}>
+                {data.map((item) => {
+                  <Card
+                    key={item.id}
+                    title={
+                      <>
+                        <div>{giangVienCurrent.name}</div>{" "}
+                        <div
+                          className="title-icon-drop"
+                          style={{ textAlign: "right" }}
+                        >
+                          <Dropdown
+                            overlay={menu}
+                            trigger={["click"]}
+                            className="box-drop"
+                          >
+                            <div
+                              className="box-icon-drop"
+                              style={{ backgroundColor: "white" }}
+                            >
+                              <FontAwesomeIcon icon={faEllipsisVertical} />
+                            </div>
+                          </Dropdown>
+                        </div>
+                      </>
+                    }
+                    className="box-card-one"
+                  >
+                    <div
                       style={{
-                        textAlign: "center",
-                        marginTop: "100px",
-                        fontSize: "15px",
-                        color: "red",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
                       }}
                     >
-                      Không có thành viên
-                    </p>
-                  </>
-                )} */}
+                      <p>{convertLongToDate(item.createdDate)}</p>
+                    </div>
+                    <p>{item.descriptions}</p>
+                  </Card>;
+                })}
+
+                <p
+                  style={{
+                    textAlign: "center",
+                    marginTop: "100px",
+                    fontSize: "15px",
+                  }}
+                >
+                  Chưa đăng bài viết nào được đăng!
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

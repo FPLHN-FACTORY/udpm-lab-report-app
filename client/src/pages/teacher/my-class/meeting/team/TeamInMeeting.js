@@ -1,11 +1,7 @@
 import { Row, Col } from "antd";
 import { useParams } from "react-router";
 import "./styleTeamInMeeting.css";
-import {
-  BookOutlined,
-  ControlOutlined,
-  UnorderedListOutlined,
-} from "@ant-design/icons";
+import { BookOutlined, UnorderedListOutlined } from "@ant-design/icons";
 import LoadingIndicator from "../../../../../helper/loading";
 import { useEffect, useState } from "react";
 import { TeacherMeetingAPI } from "../../../../../api/teacher/meeting/TeacherMeeting.api";

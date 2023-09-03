@@ -8,7 +8,17 @@
   font-size: 18px;
   font-weight: bold;
 }
-
+.box-image {
+  border-radius: 5px;
+  height: 200px;
+  box-shadow: 0 0 10px rgb(228, 227, 227);
+  margin: 20px 0 20px 0;
+}
+.box-create {
+  border-radius: 5px;
+  height: 100px;
+  box-shadow: 0 0 10px rgb(228, 227, 227);
+}
 .box-card-one {
   box-shadow: 0 0 10px rgb(228, 227, 227);
 }
@@ -42,4 +52,18 @@
 .box-icon-drop:hover {
   background-color: pink; /* Đổi màu nền khi hover */
   cursor: pointer; /* Biểu tượng con trỏ khi hover */
+}
+/* YourComponent.css */
+.box-post {
+  display: flex;
+  justify-content: space-between;
+}
+
+.box-post-left {
+  width: 28%;
+}
+
+.box-post-right {
+  width: 70%;
+  margin-left: 2%;
 }
