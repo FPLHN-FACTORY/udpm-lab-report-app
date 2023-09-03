@@ -22,7 +22,7 @@ const teacherAttendanceMeetingSlice = createSlice({
         if (matchingItem) {
           return {
             ...itemOld,
-            statusAttendance: matchingItem.statusAttendance,
+            statusAttendance: matchingItem.status,
           };
         }
         return itemOld;
