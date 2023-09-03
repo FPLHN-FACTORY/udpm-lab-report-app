@@ -140,55 +140,6 @@ const TeacherPostMyClass = () => {
             className="content-class"
             style={{ margin: "25px 0px 15px 15px" }}
           >
-            {/* <Row style={{ marginBottom: "4px", marginTop: "6px" }}>
-                  <Col span={24}>
-                    <span>Hoạt động: &nbsp; {classDetail.activityName}</span>
-                  </Col>
-                </Row>
-                <Row style={{ marginBottom: "4px" }}>
-                  <Col>
-                    <span>Level: &nbsp; {classDetail.activityLevel + 1}</span>
-                  </Col>
-                </Row>
-                <Row gutter={16} style={{ marginBottom: "4px" }}>
-                  {" "}
-                  <Col span={24}>
-                    <span>
-                      Thời gian bắt đầu:&nbsp;
-                      {moment(classDetail.startTime).format("DD-MM-YYYY")}
-                    </span>{" "}
-                  </Col>
-                </Row>
-                <Row gutter={16} style={{ marginBottom: "4px" }}>
-                  <Col>
-                    <span>Mã lớp: &nbsp;{classDetail.code}</span>
-                  </Col>
-                </Row>
-                <Row style={{ marginBottom: "4px" }}>
-                  <Col>
-                    <span>Tên lớp: &nbsp;{classDetail.name}</span>
-                  </Col>
-                </Row>
-                <Row style={{ marginBottom: "4px" }}>
-                  <Col>
-                    <span>Ca học: &nbsp; {classDetail.classPeriod + 1} </span>
-                  </Col>
-                </Row>
-                <Row style={{ marginBottom: "4px" }}>
-                  <Col>
-                    <span>Số thành viên: &nbsp;{classDetail.classSize}</span>
-                  </Col>
-                </Row>
-                <Row gutter={16} style={{ marginBottom: "4px" }}>
-                  <Col span={24}>
-                    <span>Mô tả: &nbsp;{classDetail.descriptions}</span>
-                  </Col>
-                </Row>
-                <Row gutter={16}>
-                  <Col span={24}>
-                    <span>Mật khẩu: &nbsp;{classDetail.passWord}</span>
-                  </Col>
-                </Row> */}
             <br />
           </div>
           <div style={{ minHeight: "140px" }}>
