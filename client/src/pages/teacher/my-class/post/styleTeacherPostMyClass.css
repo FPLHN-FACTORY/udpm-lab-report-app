@@ -1,0 +1,45 @@
+.card {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.box-card-one {
+  box-shadow: 0 0 10px rgb(228, 227, 227);
+}
+.box-dropdown {
+  width: 300;
+}
+.box-drop:hover {
+  background-color: grey;
+}
+.box-drop:focus {
+  background-color: grey;
+}
+
+.title-icon-drop {
+  height: auto;
+}
+.title-text {
+  height: auto;
+}
+.box-icon-drop {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background-color: #007bff;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 40px;
+  border: 2px solid white;
+  background-color: #4285f4;
+}
+.box-icon-drop:hover {
+  background-color: pink; /* Đổi màu nền khi hover */
+  cursor: pointer; /* Biểu tượng con trỏ khi hover */
+}

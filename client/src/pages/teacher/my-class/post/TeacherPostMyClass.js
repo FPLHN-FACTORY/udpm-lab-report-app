@@ -1,3 +1,5 @@
+import "./styleTeacherPostMyClass.css";
+import { Button, Card, Dropdown, Menu, Popover } from "antd";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useParams } from "react-router";
@@ -5,7 +7,8 @@ import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyCla
 import LoadingIndicator from "../../../../helper/loading";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome } from "@fortawesome/free-solid-svg-icons";
+import { faEllipsisVertical, faHome } from "@fortawesome/free-solid-svg-icons";
+import { BookOutlined } from "@ant-design/icons";
 
 const TeacherPostMyClass = () => {
   const { idClass } = useParams();
@@ -27,6 +30,13 @@ const TeacherPostMyClass = () => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
+
+  const menu = (
+    <Menu>
+      <Menu.Item key="1">Chỉnh sửa</Menu.Item>
+      <Menu.Item key="2">Xóa</Menu.Item>
+    </Menu>
+  );
   return (
     <>
       {!loading && <LoadingIndicator />}
@@ -143,6 +153,42 @@ const TeacherPostMyClass = () => {
             <br />
           </div>
           <div style={{ minHeight: "140px" }}>
+            <Card
+              title={
+                <>
+                  <div>Information</div>{" "}
+                  <div
+                    className="title-icon-drop"
+                    style={{ textAlign: "right" }}
+                  >
+                    <Dropdown
+                      overlay={menu}
+                      trigger={["click"]}
+                      className="box-drop"
+                    >
+                      <div
+                        className="box-icon-drop"
+                        style={{ backgroundColor: "white" }}
+                      >
+                        <FontAwesomeIcon icon={faEllipsisVertical} />
+                      </div>
+                    </Dropdown>
+                  </div>
+                </>
+              }
+              className="box-card-one"
+            >
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <p>Ngày đăng</p>
+              </div>
+              <p>Mô tả ngắn nội dung bài viết</p>
+            </Card>
             {/* {data.length > 0 ? (
                   <>
                     <div className="table">
