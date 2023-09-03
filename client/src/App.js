@@ -18,6 +18,7 @@ import TeacherScheduleToday from "./pages/teacher/schedule-today/TeacherSchedule
 import TeacherAttendanceMeeting from "./pages/teacher/schedule-today/attendance-meeting/TeacherAttendanceMeeting";
 import TeacherMyClass from "./pages/teacher/TeacherMyClass";
 import TeacherAttendanceClass from "./pages/teacher/my-class/attendance/TeacherAttendanceClass";
+import TeacherPostMyClass from "./pages/teacher/my-class/post/TeacherPostMyClass";
 import StudentsInMyClass from "./pages/teacher/my-class/students/StudentsInMyClass";
 import TeamsInMyClass from "./pages/teacher/my-class/teams/TeamsInMyClass";
 import StudentSchedule from "./pages/student/schedule/StudentSchedule";
@@ -107,7 +108,7 @@ function App() {
                 </AuthGuard>
               }
             />
-            {/* router của Hiệu trang chính lịch dạy hôm nay*/}
+            {/* router của Hiệu trang chính schedule lesson today*/}
             <Route
               path="/teacher/schedule-today"
               element={
@@ -118,7 +119,7 @@ function App() {
                 </AuthGuard>
               }
             />
-            {/* router của Hiệu trang phụ điểm danh lịch dạy hôm nay*/}
+            {/* router của Hiệu trang phụ attendance meeting today*/}
             <Route
               path="/teacher/schedule-today/attendance/:idMeeting"
               element={
@@ -136,6 +137,17 @@ function App() {
                 <AuthGuard>
                   <DashBoardTeacher>
                     <TeacherMyClass />
+                  </DashBoardTeacher>
+                </AuthGuard>
+              }
+            />
+            {/* router của Hiệu trang nhỏ post */}
+            <Route
+              path="/teacher/my-class/post/:idClass"
+              element={
+                <AuthGuard>
+                  <DashBoardTeacher>
+                    <TeacherPostMyClass />
                   </DashBoardTeacher>
                 </AuthGuard>
               }

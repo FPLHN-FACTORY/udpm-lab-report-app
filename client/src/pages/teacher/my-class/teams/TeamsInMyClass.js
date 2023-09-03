@@ -257,6 +257,17 @@ const TeamsInMyClass = () => {
           <div className="button-menu-teacher">
             <div>
               <Link
+                to={`/teacher/my-class/post/${idClass}`}
+                className="custom-link"
+                style={{
+                  fontSize: "16px",
+                  paddingLeft: "10px",
+                  fontWeight: "bold",
+                }}
+              >
+                BÀI VIẾT &nbsp;
+              </Link>
+              <Link
                 to={`/teacher/my-class/students/${idClass}`}
                 className="custom-link"
                 style={{
