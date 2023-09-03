@@ -19,7 +19,6 @@ import {
 } from "../../../../app/teacher/attendance-meeting-today/teacherAttendanceMeetingSlice.reduce";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBook, faHome } from "@fortawesome/free-solid-svg-icons";
-import FloatingDiv from "../../floatingDiv/FloatingDiv";
 
 const TeacherAttendanceMeeting = () => {
   const dispatch = useAppDispatch();
@@ -85,7 +84,7 @@ const TeacherAttendanceMeeting = () => {
   const featInforStudent = async (idClass) => {
     try {
       let request = listStudentClassAPI.map((item) => item.idStudent).join("|");
-      const listStudentAPI = await TeacherStudentClassesAPI.getAllInforStudent(
+      const listStudentAPI = await TeacherStudentClassesAPI.getApiStudent(
         `?id=` + request
       );
       const listShowTable = listStudentAPI.data
@@ -331,9 +330,13 @@ const TeacherAttendanceMeeting = () => {
             )}
           </div>
           <div className="box-button-center">
-            <div className="box-button" onClick={handleSave}>
-              Lưu điểm danh
-            </div>
+            {dataTable.length > 0 ? (
+              <div className="box-button" onClick={handleSave}>
+                Lưu điểm danh
+              </div>
+            ) : (
+              ""
+            )}
           </div>
         </div>
       </div>

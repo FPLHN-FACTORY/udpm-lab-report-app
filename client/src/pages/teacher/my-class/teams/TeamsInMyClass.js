@@ -39,8 +39,6 @@ const TeamsInMyClass = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [objeactTeam, setObjeactTeam] = useState({});
-  const [listStudentClass, setListStudentClass] = useState([]);
-  const [loadingStudentClass, setLoadingStudentClass] = useState(false);
   const [classDetail, setClassDetail] = useState({});
   const dispatch = useAppDispatch();
   const { idClass } = useParams();
@@ -53,7 +51,6 @@ const TeamsInMyClass = () => {
 
   const fetchData = async (idClass) => {
     await featchStudentClass(idClass);
-    featInforStudent();
   };
   const featchTeams = async (id) => {
     setLoading(false);
@@ -76,48 +73,18 @@ const TeamsInMyClass = () => {
     }
   };
   const featchStudentClass = async (id) => {
+    setLoading(false);
     try {
       await TeacherStudentClassesAPI.getStudentInClasses(id).then(
         (responese) => {
-          setListStudentClass(responese.data.data);
+          dispatch(SetStudentClasses(responese.data.data));
+          setLoading(true);
         }
       );
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-  const featInforStudent = async () => {
-    try {
-      let request = listStudentClass.map((item) => item.idStudent).join("|");
-      const listStudentAPI = await TeacherStudentClassesAPI.getAllInforStudent(
-        `?id=` + request
-      );
-      const listShowTable = listStudentAPI.data
-        .filter((item1) =>
-          listStudentClass.some((item2) => item1.id === item2.idStudent)
-        )
-        .map((item1) => {
-          const matchedObject = listStudentClass.find(
-            (item2) => item2.idStudent === item1.id
-          );
-          return {
-            ...item1,
-            ...matchedObject,
-          };
-        });
-      dispatch(SetStudentClasses(listShowTable));
-      setLoading(true);
-      setLoadingStudentClass(true);
-    } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
-    }
-  };
-
-  useEffect(() => {
-    if (loadingStudentClass === true) {
-      fetchData(idClass);
-    }
-  }, [loadingStudentClass]);
 
   const [teamDelete, setTeamDelete] = useState({});
 

@@ -1,11 +1,11 @@
-import { apiDanhSachSinhVien, request } from "../../../helper/request.helper";
+import { request } from "../../../helper/request.helper";
 
 const url = `/teacher/student-classes`;
 export class TeacherStudentClassesAPI {
-  static getAllInforStudent(request) {
-    return apiDanhSachSinhVien({
+  static getApiStudent(request) {
+    return request({
       method: "GET",
-      url: `` + request,
+      url: url + `/call-api-st` + request,
     });
   }
 
