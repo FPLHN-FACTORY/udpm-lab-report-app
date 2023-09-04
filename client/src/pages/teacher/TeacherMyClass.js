@@ -91,7 +91,6 @@ const TeacherMyClass = () => {
       page: current,
       size: 10,
     };
-
     try {
       await TeacherMyClassAPI.getAllMyClass(filter).then((respone) => {
         dispatch(SetTeacherMyClass(respone.data.data));

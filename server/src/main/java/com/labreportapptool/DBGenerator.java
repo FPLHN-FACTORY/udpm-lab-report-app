@@ -614,14 +614,14 @@ public class DBGenerator implements CommandLineRunner {
         post2.setDescriptions("Hôm nay được nghỉ nhé mọi người, quẫy đii 2 !");
         post2.setTeacherId(class1.getTeacherId());
         post2.setClassId(class1.getId());
-        post2.setCreatedDate(new Date().getTime() - 2 * 86400000);
+        post2.setCreatedDate(new Date().getTime() - 2 * 86400020);
         post2.setId(postRepository.save(post2).getId());
 
         Post post3 = new Post();
         post3.setDescriptions("Mai đi học kiểm tra nhé, nhắc toàn thể các bạn 3 !");
         post3.setTeacherId(class1.getTeacherId());
         post3.setClassId(class1.getId());
-        post3.setCreatedDate(new Date().getTime() - 1 * 86400000);
+        post3.setCreatedDate(new Date().getTime() - 1 * 86409000);
         post3.setId(postRepository.save(post3).getId());
 
         Post post4 = new Post();
@@ -644,6 +644,41 @@ public class DBGenerator implements CommandLineRunner {
         post6.setClassId(class1.getId());
         post6.setCreatedDate(new Date().getTime() - 2 * 86400000);
         post6.setId(postRepository.save(post6).getId());
+
+        Post post7 = new Post();
+        post7.setDescriptions("Tất cả sinh viên hôm nay học offline trên xưởng nhé, lưu ý giúp tôi 7 !");
+        post7.setTeacherId(class1.getTeacherId());
+        post7.setClassId(class1.getId());
+        post7.setCreatedDate(new Date().getTime());
+        post7.setId(postRepository.save(post7).getId());
+
+        Post post8 = new Post();
+        post8.setDescriptions("888888 sinh viên hôm nay học offline trên xưởng nhé, lưu ý giúp tôi 8 !");
+        post8.setTeacherId(class1.getTeacherId());
+        post8.setClassId(class1.getId());
+        post8.setCreatedDate(new Date().getTime() +  1 * 86400000);
+        post8.setId(postRepository.save(post8).getId());
+
+        Post post9 = new Post();
+        post9.setDescriptions("999999 sinh viên hôm nay học offline trên xưởng nhé, lưu ý giúp tôi 9 !");
+        post9.setTeacherId(class1.getTeacherId());
+        post9.setClassId(class1.getId());
+        post9.setCreatedDate(new Date().getTime() +  2 * 86400000);
+        post9.setId(postRepository.save(post9).getId());
+
+        Post post10 = new Post();
+        post10.setDescriptions("101010101010 sinh viên hôm nay học offline trên xưởng nhé, lưu ý giúp tôi 10 !");
+        post10.setTeacherId(class1.getTeacherId());
+        post10.setClassId(class1.getId());
+        post10.setCreatedDate(new Date().getTime() +  3 * 86400000);
+        post10.setId(postRepository.save(post10).getId());
+
+        Post post11 = new Post();
+        post11.setDescriptions("111111111111 sinh viên hôm nay học offline trên xưởng nhé, lưu ý giúp tôi 11 !");
+        post11.setTeacherId(class1.getTeacherId());
+        post11.setClassId(class1.getId());
+        post11.setCreatedDate(new Date().getTime() +  3 * 86400300);
+        post11.setId(postRepository.save(post11).getId());
 
     }
 

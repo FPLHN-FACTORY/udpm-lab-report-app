@@ -5,6 +5,8 @@ import com.labreportapp.core.teacher.model.request.TeFindClassRequest;
 import com.labreportapp.core.teacher.model.response.TeClassResponse;
 import com.labreportapp.core.teacher.model.response.TeDetailClassRespone;
 
+import java.util.List;
+
 /**
  * @author hieundph25894
  */
