@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical, faHome } from "@fortawesome/free-solid-svg-icons";
 import { giangVienCurrent } from "../../../../helper/inForUser";
 import RichTextEditor from "./rich-teach-edit/RichTextEditor";
+import MyEditor from "./form-editor/FormEditor";
 import {
   CreatePost,
   DeletePost,
@@ -19,7 +20,6 @@ import {
   NextPagePost,
   SetPost,
 } from "../../../../app/teacher/post/tePostSlice.reduce";
-import { create } from "lodash";
 import { toast } from "react-toastify";
 const TeacherPostMyClass = () => {
   const dispatch = useAppDispatch();
@@ -41,6 +41,8 @@ const TeacherPostMyClass = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Bảng điều khiển - bài viết";
+    setDescriptions("");
+    setErrorDescriptions("");
     featchClass(idClass);
     featchPost(idClass);
   }, []);
@@ -51,6 +53,9 @@ const TeacherPostMyClass = () => {
     }
     if (currentPage === totalPage) {
       setSeeMore(false);
+    }
+    if (currentPage === 1) {
+      return setDescriptions("");
     }
     featchNextPost(idClass);
   }, [currentPage]);
@@ -63,6 +68,7 @@ const TeacherPostMyClass = () => {
       setSeeMore(false);
     }
   };
+
   const featchPost = async (idClass) => {
     setLoading(false);
     try {
@@ -146,6 +152,7 @@ const TeacherPostMyClass = () => {
     }
   };
 
+  const handleUpdate = async (id) => {};
   const handleDelete = async (id) => {
     try {
       await TeacherPostAPI.delete(id).then((respone) => {
@@ -159,11 +166,15 @@ const TeacherPostMyClass = () => {
   const handleCancelModalCreateSusscess = () => {
     document.querySelector("body").style.overflowX = "hidden";
     setShowCreate(false);
+    setDescriptions("");
+    setErrorDescriptions("");
     setLoading(true);
   };
   const handleCancelModalCreateFaild = () => {
     document.querySelector("body").style.overflowX = "hidden";
     setShowCreate(false);
+    setDescriptions("");
+    setErrorDescriptions("");
     setLoading(true);
   };
   const handleCancelCreate = {
@@ -298,9 +309,11 @@ const TeacherPostMyClass = () => {
           </div>
           <div
             className="box-image"
-            style={{ height: 200, backgroundColor: "blue" }}
+            style={{
+              backgroundImage: "url(/assets/img/banner-post1.jpg)",
+            }}
           >
-            <span style={{ fontSize: 18, color: "white" }}>
+            <span style={{ fontSize: 18, color: "black" }}>
               {" "}
               {classDetail.code}
             </span>
@@ -308,24 +321,32 @@ const TeacherPostMyClass = () => {
           <div className="box-post">
             <div className="box-post-left">
               <div className="box-one" style={{ height: "160px" }}>
-                <div>Mã lớp:</div>
-                <div>{classDetail.code}</div>
+                <div style={{ width: "30%" }}>Mã lớp:</div>
+                <div style={{ width: "80%", fontSize: "16px" }}>
+                  {classDetail.code}
+                </div>
               </div>
             </div>
             <div className="box-post-right">
-              <div className="box-create-post">
-                {showCreate === true ? (
+              {showCreate === true ? (
+                <div className="box-create-post">
                   <div className="rich-text-editor" style={{ width: "100%" }}>
-                    Thêm bài viết
                     <div
                       style={{
                         width: "100%",
                         height: "auto",
                       }}
                     >
-                      <RichTextEditor
+                      {/* {descriptions} */}
+                      <MyEditor
                         descriptions={handleChangeDescriptions}
-                        style={{ width: "100%", height: "300" }}
+                        style={{
+                          color: "black !important",
+                          fontSize: "13px",
+                          display: "block",
+                          width: "100%",
+                          minHeight: "100px",
+                        }}
                       />
                       <span style={{ color: "red" }}>{errorDescriptions}</span>
                       <div style={{ paddingTop: "15px", float: "right" }}>
@@ -335,8 +356,8 @@ const TeacherPostMyClass = () => {
                             color: "white",
                           }}
                           onClick={(e) => {
-                            e.stopPropagation();
                             setShowCreate(false);
+                            setDescriptions("");
                           }}
                         >
                           Hủy
@@ -353,39 +374,42 @@ const TeacherPostMyClass = () => {
                       </div>
                     </div>
                   </div>
-                ) : (
+                </div>
+              ) : (
+                <div
+                  className="box-create-post"
+                  onClick={(e) => {
+                    setShowCreate(true);
+                  }}
+                >
                   <div
                     style={{
                       height: "80px",
                       lineHeight: "50px",
                       paddingLeft: "50px",
                     }}
-                    onClick={(e) => {
-                      setShowCreate(true);
-                    }}
                   >
                     <p
+                      className="link-create"
                       style={{
                         fontSize: "16px",
-                        color: "black",
                       }}
                     >
                       Thông báo nội dung nào đó cho lớp học của bạn
                     </p>
                   </div>
-                )}
-              </div>
+                </div>
+              )}
               <div style={{ height: "auto", margin: "20px 0 20px 0" }}>
                 {data.length > 0 ? (
                   data.map((item) => {
                     return (
-                      <>
+                      <div key={item.id}>
                         <Card
                           style={{
                             margin: "20px 0 20px 0",
                             height: "auto",
                           }}
-                          key={item.id}
                           title={
                             <>
                               <div style={{ width: "100%" }}>
@@ -411,7 +435,14 @@ const TeacherPostMyClass = () => {
                                   <Dropdown
                                     overlay={
                                       <Menu>
-                                        <Menu.Item key="1">Chỉnh sửa</Menu.Item>
+                                        <Menu.Item
+                                          key="1"
+                                          onClick={() => {
+                                            handleUpdate(item.id);
+                                          }}
+                                        >
+                                          Chỉnh sửa
+                                        </Menu.Item>
                                         <Menu.Item
                                           key="2"
                                           onClick={() => {
@@ -445,14 +476,14 @@ const TeacherPostMyClass = () => {
                               display: "flex",
                               justifyContent: "space-between",
                               alignItems: "center",
-                              wordWrap: "break-word", // Thêm thuộc tính này
+                              wordWrap: "break-word",
                             }}
                             dangerouslySetInnerHTML={parsedHTML(
                               item.descriptions
                             )}
                           />
                         </Card>
-                      </>
+                      </div>
                     );
                   })
                 ) : (

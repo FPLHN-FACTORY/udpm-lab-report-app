@@ -12,19 +12,45 @@ const RichTextEditor = ({ descriptions }) => {
       quillEditor.focus();
     }
   }, []);
-  // const handleChange = (value) => {
-  //   value = value.replace(/<ol>/g, "<ul>").replace(/<\/ol>/g, "</ul>");
-  //   setContent(value);
-  //   descriptions(value);
-  // };
   const handleChange = (value) => {
     setContent(value);
     descriptions(value);
   };
+  const formats = [
+    "header",
+    "font",
+    "size", // Thêm định dạng kích thước chữ
+    "bold",
+    "italic",
+    "underline",
+    "list",
+    "link",
+  ];
 
+  const modules = {
+    toolbar: {
+      container: [
+        [
+          { header: "1" },
+          { header: "2" },
+          { font: ["Arial", "Times New Roman"] },
+        ],
+        [{ list: "ordered" }, { list: "bullet" }],
+        ["bold", "italic", "underline"],
+        ["link"],
+        ["size"], // Thêm tùy chọn kích thước chữ
+      ],
+    },
+  };
   return (
     <div style={{ width: "100%", minHeight: "200px" }}>
-      <ReactQuill ref={quillRef} value={content} onChange={handleChange} />
+      <ReactQuill
+        ref={quillRef}
+        value={content}
+        onChange={handleChange}
+        modules={modules}
+        formats={formats}
+      />
     </div>
   );
 };

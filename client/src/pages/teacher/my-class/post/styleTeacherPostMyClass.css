@@ -3,6 +3,20 @@
   border-radius: 5px;
   padding: 10px;
 }
+.box-image {
+  background-image: url("../../../../assets/img/banner-post1.jpg");
+  border-radius: 5px;
+  height: 200px;
+  box-shadow: 0 0 10px rgb(228, 227, 227);
+}
+.box-create {
+  border-radius: 5px;
+  height: 100px;
+  box-shadow: 0 0 10px rgb(228, 227, 227);
+}
+.box-card-one {
+  box-shadow: 0 0 10px rgb(228, 227, 227);
+}
 .box-create-post {
   width: 100%;
   display: flex;
@@ -15,6 +29,7 @@
   cursor: pointer;
 }
 .box-post {
+  margin: 20px 0px 0px 0px;
   flex-grow: 1;
 }
 .box-background {
@@ -27,30 +42,6 @@
   font-size: 18px;
   font-weight: bold;
 }
-.box-image {
-  border-radius: 5px;
-  height: 200px;
-  box-shadow: 0 0 10px rgb(228, 227, 227);
-  margin: 20px 0 20px 0;
-}
-.box-create {
-  border-radius: 5px;
-  height: 100px;
-  box-shadow: 0 0 10px rgb(228, 227, 227);
-}
-.box-card-one {
-  box-shadow: 0 0 10px rgb(228, 227, 227);
-}
-.box-dropdown {
-  width: 300;
-}
-.box-drop:hover {
-  background-color: grey;
-}
-.box-drop:focus {
-  background-color: grey;
-}
-
 .title-icon-drop {
   height: auto;
 }
@@ -88,4 +79,7 @@
 }
 .rich-text-editor {
   padding: 10px;
+}
+.box-create-post:hover div > p {
+  color: #0b6cd3;
 }
