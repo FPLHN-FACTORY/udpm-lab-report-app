@@ -3,6 +3,7 @@ package com.labreportapp.core.teacher.repository;
 import com.labreportapp.core.teacher.model.request.TeFindClassRequest;
 import com.labreportapp.core.teacher.model.response.TeClassResponse;
 import com.labreportapp.core.teacher.model.response.TeDetailClassRespone;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import com.labreportapp.entity.Class;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -77,5 +79,29 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
             where c.id = :#{#id}
              """,nativeQuery = true)
     Optional<TeDetailClassRespone> findClassById(@Param("id") String id);
+
+    @Query(value = """
+            WITH LatestSemester AS (
+                 SELECT id, start_time, end_time
+                 FROM semester
+                 WHERE UNIX_TIMESTAMP(NOW()) BETWEEN start_time / 1000 AND end_time / 1000
+                 ORDER BY end_time DESC
+                 LIMIT 1
+                 )
+            SELECT
+            ROW_NUMBER() OVER(ORDER BY l.start_time DESC) AS stt,
+            c.id AS id,
+            c.code AS code,
+            c.name AS name,
+            l.start_time as start_time,
+            l.end_time as end_time,
+            c.class_period as class_period,
+            a.level as level
+            FROM class c
+            JOIN activity a ON a.id = c.activity_id
+            JOIN LatestSemester l ON l.id = a.semester_id
+            WHERE c.teacher_id = :#{#id}
+             """,nativeQuery = true)
+    List<TeClassResponse> getClassClosestToTheDateToSemester(@Param("id") String id);
 
 }

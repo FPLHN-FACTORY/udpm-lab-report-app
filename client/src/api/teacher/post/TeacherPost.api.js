@@ -36,7 +36,7 @@ export class TeacherPostAPI {
 
   static delete(idPost) {
     return request({
-      method: "PUT",
+      method: "DELETE",
       url: url + `/` + idPost,
     });
   }

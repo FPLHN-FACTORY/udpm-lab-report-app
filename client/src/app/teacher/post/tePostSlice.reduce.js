@@ -10,6 +10,10 @@ const tePostSlice = createSlice({
       state = action.payload;
       return state;
     },
+    NextPagePost: (state, action) => {
+      state = [...state, ...action.payload];
+      return state;
+    },
     CreatePost: (state, action) => {
       const data = action.payload;
       let newTeam = {
@@ -39,7 +43,7 @@ const tePostSlice = createSlice({
     },
   },
 });
-export const { SetPost, CreatePost, UpdatePost, DeletePost } =
+export const { SetPost, NextPagePost, CreatePost, UpdatePost, DeletePost } =
   tePostSlice.actions;
 
 export const GetPost = (state) => state.tePost;

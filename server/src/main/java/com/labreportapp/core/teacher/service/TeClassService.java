@@ -16,4 +16,6 @@ public interface TeClassService {
 
     TeDetailClassRespone findClassById(final String id);
 
+    List<TeClassResponse> getClassClosestToTheDateToSemester(String idTeacher);
+
 }
