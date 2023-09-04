@@ -11,55 +11,34 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical, faHome } from "@fortawesome/free-solid-svg-icons";
 import { giangVienCurrent } from "../../../../helper/inForUser";
-import RichTextEditor from "./rich-teach-edit/RichTextEditor";
-import MyEditor from "./form-editor/FormEditor";
+import Editor from "./form-editor/FormEditor";
+
 import {
-  CreatePost,
   DeletePost,
   GetPost,
   NextPagePost,
   SetPost,
 } from "../../../../app/teacher/post/tePostSlice.reduce";
 import { toast } from "react-toastify";
+import EditorUpdate from "./form-editor-update/FormEditorUpdate";
 const TeacherPostMyClass = () => {
   const dispatch = useAppDispatch();
   const { idClass } = useParams();
   const [classDetail, setClassDetail] = useState({});
   const [loading, setLoading] = useState(false);
   const [showCreate, setShowCreate] = useState(false);
+  const [showUpdateIndex, setShowUpdateIndex] = useState(null);
+  const [showUpdate, setShowUpdate] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
   const [seeMore, setSeeMore] = useState(true);
-  const [descriptions, setDescriptions] = useState("");
-  const [errorDescriptions, setErrorDescriptions] = useState("");
-  const [isLoadingMore, setIsLoadingMore] = useState(false);
-
-  const handleChangeDescriptions = (newContent) => {
-    setDescriptions(newContent);
-  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Bảng điều khiển - bài viết";
-    setDescriptions("");
-    setErrorDescriptions("");
     featchClass(idClass);
     featchPost(idClass);
   }, []);
-
-  useEffect(() => {
-    if (currentPage < totalPage) {
-      setSeeMore(true);
-    }
-    if (currentPage === totalPage) {
-      setSeeMore(false);
-    }
-    if (currentPage === 1) {
-      return setDescriptions("");
-    }
-    featchNextPost(idClass);
-  }, [currentPage]);
-
   const handleSeeMore = () => {
     if (currentPage < totalPage) {
       setCurrentPage((pre) => pre + 1);
@@ -68,7 +47,29 @@ const TeacherPostMyClass = () => {
       setSeeMore(false);
     }
   };
+  useEffect(() => {
+    if (currentPage < totalPage) {
+      setSeeMore(true);
+    }
+    if (currentPage === totalPage) {
+      setSeeMore(false);
+    }
+    if (currentPage === 1) {
+      return undefined;
+    }
+    featchNextPost(idClass);
+  }, [currentPage]);
 
+  const showHandleCreate = (value) => {
+    setShowCreate(value);
+  };
+  const handleUpdate = async (index) => {
+    setShowUpdateIndex(index);
+  };
+  const showHandleUpdate = (obj, value) => {
+    setShowUpdate(value);
+    setShowUpdateIndex(null);
+  };
   const featchPost = async (idClass) => {
     setLoading(false);
     try {
@@ -78,20 +79,15 @@ const TeacherPostMyClass = () => {
         page: currentPage,
         size: 5,
       };
-      await TeacherPostAPI.getPagePost(data)
-        .then((responese) => {
-          dispatch(SetPost(responese.data.data.data));
-          setTotalPage(responese.data.data.totalPages);
-          setLoading(true);
-        })
-        .finally(() => {
-          setIsLoadingMore(false);
-        });
+      await TeacherPostAPI.getPagePost(data).then((responese) => {
+        dispatch(SetPost(responese.data.data.data));
+        setTotalPage(responese.data.data.totalPages);
+        setLoading(true);
+      });
     } catch (error) {
       alert(error.message);
     }
   };
-
   const featchNextPost = async (idClass) => {
     try {
       let data = {
@@ -100,19 +96,14 @@ const TeacherPostMyClass = () => {
         page: currentPage,
         size: 5,
       };
-      await TeacherPostAPI.getPagePost(data)
-        .then((responese) => {
-          dispatch(NextPagePost(responese.data.data.data));
-          setTotalPage(responese.data.data.totalPages);
-        })
-        .finally(() => {
-          setIsLoadingMore(false);
-        });
+      await TeacherPostAPI.getPagePost(data).then((responese) => {
+        dispatch(NextPagePost(responese.data.data.data));
+        setTotalPage(responese.data.data.totalPages);
+      });
     } catch (error) {
       alert(error.message);
     }
   };
-
   const featchClass = async (idClass) => {
     try {
       await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
@@ -122,38 +113,7 @@ const TeacherPostMyClass = () => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-
-  const create = () => {
-    let check = 0;
-    if (descriptions.trim() === "") {
-      setErrorDescriptions("Nội dung không được để trống !");
-      check++;
-    } else {
-      setErrorDescriptions("");
-    }
-
-    if (check === 0) {
-      let obj = {
-        idTeacher: giangVienCurrent.id,
-        descriptions: descriptions,
-        idClass: idClass,
-      };
-      TeacherPostAPI.create(obj).then(
-        (respone) => {
-          setDescriptions("");
-          setShowCreate(false);
-          dispatch(CreatePost(respone.data.data));
-          toast.success("Thêm bài viết thành công !");
-        },
-        (error) => {
-          toast.error(error.response.data.message);
-        }
-      );
-    }
-  };
-
-  const handleUpdate = async (id) => {};
-  const handleDelete = async (id) => {
+  const clickDelete = async (id) => {
     try {
       await TeacherPostAPI.delete(id).then((respone) => {
         dispatch(DeletePost(respone.data.data));
@@ -163,29 +123,10 @@ const TeacherPostMyClass = () => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-  const handleCancelModalCreateSusscess = () => {
-    document.querySelector("body").style.overflowX = "hidden";
-    setShowCreate(false);
-    setDescriptions("");
-    setErrorDescriptions("");
-    setLoading(true);
-  };
-  const handleCancelModalCreateFaild = () => {
-    document.querySelector("body").style.overflowX = "hidden";
-    setShowCreate(false);
-    setDescriptions("");
-    setErrorDescriptions("");
-    setLoading(true);
-  };
-  const handleCancelCreate = {
-    handleCancelModalCreateSusscess,
-    handleCancelModalCreateFaild,
-  };
 
   const parsedHTML = (content) => {
     return { __html: content };
   };
-
   const convertLongToDate = (longValue) => {
     const date = new Date(longValue);
     const format = `${date.getDate()}/${
@@ -337,9 +278,10 @@ const TeacherPostMyClass = () => {
                         height: "auto",
                       }}
                     >
-                      {/* {descriptions} */}
-                      <MyEditor
-                        descriptions={handleChangeDescriptions}
+                      <Editor
+                        idTeacher={giangVienCurrent.id}
+                        idClass={idClass}
+                        showCreate={showHandleCreate}
                         style={{
                           color: "black !important",
                           fontSize: "13px",
@@ -348,30 +290,6 @@ const TeacherPostMyClass = () => {
                           minHeight: "100px",
                         }}
                       />
-                      <span style={{ color: "red" }}>{errorDescriptions}</span>
-                      <div style={{ paddingTop: "15px", float: "right" }}>
-                        <Button
-                          style={{
-                            backgroundColor: "red",
-                            color: "white",
-                          }}
-                          onClick={(e) => {
-                            setShowCreate(false);
-                            setDescriptions("");
-                          }}
-                        >
-                          Hủy
-                        </Button>
-                        <Button
-                          style={{
-                            backgroundColor: "rgb(61, 139, 227)",
-                            color: "white",
-                          }}
-                          onClick={create}
-                        >
-                          Đăng
-                        </Button>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -402,87 +320,111 @@ const TeacherPostMyClass = () => {
               )}
               <div style={{ height: "auto", margin: "20px 0 20px 0" }}>
                 {data.length > 0 ? (
-                  data.map((item) => {
+                  data.map((item, index) => {
                     return (
-                      <div key={item.id}>
-                        <Card
-                          style={{
-                            margin: "20px 0 20px 0",
-                            height: "auto",
-                          }}
-                          title={
-                            <>
-                              <div style={{ width: "100%" }}>
-                                <div style={{ width: "95%", float: "left" }}>
-                                  <span style={{ lineHeight: "50px" }}>
-                                    {" "}
-                                    {giangVienCurrent.name}{" "}
-                                    <span
-                                      style={{
-                                        color: "gray",
-                                        fontWeight: "initial",
-                                        fontSize: "13px",
-                                      }}
-                                    >
-                                      {convertLongToDate(item.createdDate)}
-                                    </span>
-                                  </span>
-                                </div>{" "}
-                                <div
-                                  style={{ width: "5%", float: "left" }}
-                                  className="title-icon-drop"
-                                >
-                                  <Dropdown
-                                    overlay={
-                                      <Menu>
-                                        <Menu.Item
-                                          key="1"
-                                          onClick={() => {
-                                            handleUpdate(item.id);
-                                          }}
-                                        >
-                                          Chỉnh sửa
-                                        </Menu.Item>
-                                        <Menu.Item
-                                          key="2"
-                                          onClick={() => {
-                                            handleDelete(item.id);
-                                          }}
-                                        >
-                                          Xóa
-                                        </Menu.Item>
-                                      </Menu>
-                                    }
-                                    trigger={["click"]}
-                                    className="box-drop"
-                                  >
-                                    <div
-                                      className="box-icon-drop"
-                                      style={{ backgroundColor: "white" }}
-                                    >
-                                      <FontAwesomeIcon
-                                        icon={faEllipsisVertical}
-                                      />
-                                    </div>
-                                  </Dropdown>
-                                </div>
+                      <div key={item.id} style={{ marginBottom: "20px" }}>
+                        {showUpdateIndex === index ? (
+                          <div className="box-create-post">
+                            <div
+                              className="rich-text-editor"
+                              style={{ width: "100%" }}
+                            >
+                              <div
+                                style={{
+                                  width: "100%",
+                                  height: "auto",
+                                }}
+                              >
+                                <EditorUpdate
+                                  obj={item}
+                                  showUpdate={showHandleUpdate}
+                                  style={{
+                                    color: "black !important",
+                                    fontSize: "13px",
+                                    display: "block",
+                                    width: "100%",
+                                    minHeight: "100px",
+                                  }}
+                                />
                               </div>
-                            </>
-                          }
-                          className="box-card-one"
-                        >
-                          <span
+                            </div>
+                          </div>
+                        ) : (
+                          <Card
+                            className="box-card-one"
                             style={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                              alignItems: "center",
-                              wordWrap: "break-word",
+                              margin: "20px 0 20px 0",
+                              height: "auto",
                             }}
-                            dangerouslySetInnerHTML={parsedHTML(
-                              item.descriptions
-                            )}
-                          />
-                        </Card>
+                            title={
+                              <>
+                                <div style={{ width: "100%" }}>
+                                  <div style={{ width: "95%", float: "left" }}>
+                                    <span style={{ lineHeight: "50px" }}>
+                                      {" "}
+                                      {giangVienCurrent.name}{" "}
+                                      <span
+                                        style={{
+                                          color: "gray",
+                                          fontWeight: "initial",
+                                          fontSize: "13px",
+                                        }}
+                                      >
+                                        {convertLongToDate(item.createdDate)}
+                                      </span>
+                                    </span>
+                                  </div>{" "}
+                                  <div
+                                    style={{ width: "5%", float: "left" }}
+                                    className="title-icon-drop"
+                                  >
+                                    <Dropdown
+                                      overlay={
+                                        <Menu>
+                                          <Menu.Item
+                                            key="1"
+                                            onClick={() => handleUpdate(index)}
+                                          >
+                                            Chỉnh sửa
+                                          </Menu.Item>
+                                          <Menu.Item
+                                            key="2"
+                                            onClick={() => clickDelete(item.id)}
+                                          >
+                                            Xóa
+                                          </Menu.Item>
+                                        </Menu>
+                                      }
+                                      trigger={["click"]}
+                                      className="box-drop"
+                                    >
+                                      <div
+                                        className="box-icon-drop"
+                                        style={{ backgroundColor: "white" }}
+                                      >
+                                        <FontAwesomeIcon
+                                          icon={faEllipsisVertical}
+                                        />
+                                      </div>
+                                    </Dropdown>
+                                  </div>
+                                </div>
+                              </>
+                            }
+                          >
+                            <span
+                              style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                                wordWrap: "break-word",
+                              }}
+                              dangerouslySetInnerHTML={parsedHTML(
+                                item.descriptions
+                              )}
+                            />
+                          </Card>
+                        )}
                       </div>
                     );
                   })
@@ -501,8 +443,6 @@ const TeacherPostMyClass = () => {
                   <Button
                     style={{ float: "right" }}
                     type="primary"
-                    // loading={isLoading}
-                    // onClick={handleLoadMore}
                     icon={<i className="fas fa-arrow-down" />}
                     onClick={() => {
                       handleSeeMore();

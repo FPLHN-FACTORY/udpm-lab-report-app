@@ -1,15 +1,19 @@
 import React, { useState } from "react";
 import JoditEditor from "jodit-react";
 import { TeacherPostAPI } from "../../../../../api/teacher/post/TeacherPost.api";
-import { CreatePost } from "../../../../../app/teacher/post/tePostSlice.reduce";
+import { UpdatePost } from "../../../../../app/teacher/post/tePostSlice.reduce";
 import { toast } from "react-toastify";
 import { Button } from "antd";
 import { useAppDispatch } from "../../../../../app/hook";
+import { useEffect } from "react";
 
-function Editor({ idTeacher, idClass, showCreate }) {
-  const [descriptionss, setDescriptionss] = useState("");
+function EditorUpdate({ obj, showUpdate }) {
+  const [descriptions, setDescriptions] = useState("");
   const [errorDescriptions, setErrorDescriptions] = useState("");
   const dispatch = useAppDispatch();
+  useEffect(() => {
+    setDescriptions(obj.descriptions);
+  }, []);
 
   const config = {
     readonly: false,
@@ -20,26 +24,26 @@ function Editor({ idTeacher, idClass, showCreate }) {
     showFullscreen: false,
     showAbout: false,
   };
-  const create = () => {
+
+  const update = () => {
     let check = 0;
-    if (descriptionss.trim() === "") {
-      setErrorDescriptions("Nội dung không được để trống !");
+    if (descriptions.trim() === "") {
+      setErrorDescriptions(" Nội dung không được để trống !");
       check++;
     } else {
       setErrorDescriptions("");
     }
     if (check === 0) {
-      let obj = {
-        idTeacher: idTeacher,
-        descriptions: descriptionss,
-        idClass: idClass,
+      let objUpdate = {
+        id: obj.id,
+        descriptions: descriptions,
       };
-      TeacherPostAPI.create(obj).then(
+      TeacherPostAPI.update(objUpdate).then(
         (respone) => {
-          setDescriptionss("");
-          showCreate(false);
-          dispatch(CreatePost(respone.data.data));
-          toast.success("Thêm bài viết thành công !");
+          setDescriptions("");
+          showUpdate(false);
+          dispatch(UpdatePost(respone.data.data));
+          toast.success("Sửa bài viết thành công !");
         },
         (error) => {
           toast.error(error.response.data.message);
@@ -47,24 +51,22 @@ function Editor({ idTeacher, idClass, showCreate }) {
       );
     }
   };
-
-  const handleEditorBlur = (value) => {
+  const handleEditorBlurUpdate = (value) => {
     if (value.trim() === "") {
       setErrorDescriptions("Nội dung không được để trống !");
     } else {
       setErrorDescriptions("");
-      setDescriptionss(value);
+      setDescriptions(value);
     }
   };
-
   return (
     <div>
       <JoditEditor
-        value={descriptionss}
+        value={descriptions}
         config={config}
         onBlur={(value) => {
-          setDescriptionss(value);
-          handleEditorBlur(value);
+          setDescriptions(value);
+          handleEditorBlurUpdate(value);
         }}
       />
       <span style={{ color: "red" }}>{errorDescriptions}</span>
@@ -74,9 +76,9 @@ function Editor({ idTeacher, idClass, showCreate }) {
             backgroundColor: "red",
             color: "white",
           }}
-          onClick={(e) => {
-            showCreate(false);
-            setDescriptionss("");
+          onClick={() => {
+            showUpdate(false);
+            setDescriptions("");
           }}
         >
           Hủy
@@ -86,13 +88,13 @@ function Editor({ idTeacher, idClass, showCreate }) {
             backgroundColor: "rgb(61, 139, 227)",
             color: "white",
           }}
-          onClick={create}
+          onClick={update}
         >
-          Đăng
+          Sửa
         </Button>
       </div>
     </div>
   );
 }
 
-export default Editor;
+export default EditorUpdate;
