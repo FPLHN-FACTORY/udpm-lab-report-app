@@ -28,54 +28,48 @@ public interface StScheduleRepository extends JpaRepository<Meeting, String> {
               m.type_meeting as type_meeting,
               c.code AS class_code,
               c.start_time as start_time,
-              m.descriptions as descriptions
+              m.descriptions as descriptions,
+              sc.student_id
             FROM meeting AS m
             JOIN class AS c ON m.class_id = c.id
             JOIN student_classes AS sc ON c.id = sc.class_id
             WHERE
               sc.student_id = :#{#req.idStudent}
-         
                AND
                 ( :#{#req.searchTime} IS NULL
-                OR :#{#req.searchTime} LIKE 'null'
-                OR :#{#req.searchTime} LIKE ''
-                OR C.start_t ime >= UNIX_TIMESTAMP(NOW())
-               AND
-                ( :#{#req.searchTime} IS NULL
-                OR :#{#req.searchTime} LIKE 'null'
-                R :#{#req.searchTime} LIKE ''
-                OR C.start_time <= UNIX_TIMESTAMP(DATE_ADD(NOW(), INTERVAL 10 DAY))
-               AND
-                ( :#{#req.searchTime} IS NULL
-                OR :#{#req.searchTime} LIKE 'null'
-                OR :#{#req.searchTime} LIKE ''
-                OR C.start_time >= UNIX_TIMESTAMP(:#{#req.searchTime})
-              ORDER BY
-              c.start_time ASC  
-                     """, countQuery = """   
+                                   OR :#{#req.searchTime} LIKE 'null'
+                                   OR :#{#req.searchTime} LIKE ''
+                                   OR :#{#req.searchTime} = 0
+                                   OR DATE(FROM_UNIXTIME(m.meeting_date/ 1000)) between CURDATE() and
+                                   DATE_ADD(CURDATE() , INTERVAL :#{#req.searchTime} DAY) 
+                                   OR DATE(FROM_UNIXTIME(m.meeting_date/ 1000)) between 
+                                   DATE_ADD(CURDATE() , INTERVAL :#{#req.searchTime} DAY) and  CURDATE()
+                                   )
+              ORDER BY m.meeting_date ASC
+              """, countQuery = """   
             SELECT COUNT(DISTINCT m.id)
             FROM meeting AS m
             JOIN class AS c ON m.class_id = c.id
             JOIN student_classes AS sc ON c.id = sc.class_id
             WHERE
               sc.student_id = :#{#req.idStudent}   
-                     AND
-                               ( :#{#req.searchTime} IS NULL
-                              OR :#{#req.searchTime} LIKE 'null'
-                              OR :#{#req.searchTime} LIKE ''
-                              OR C.start_time >= UNIX_TIMESTAMP(NOW())
-                            AND
-                               ( :#{#req.searchTime} IS NULL
-                              OR :#{#req.searchTime} LIKE 'null'
-                              OR :#{#req.searchTime} LIKE ''
-                              OR C.start_time <= UNIX_TIMESTAMP(DATE_ADD(NOW(), INTERVAL 10 DAY))
-                            AND
-                               ( :#{#req.searchTime} IS NULL
-                              OR :#{#req.searchTime} LIKE 'null'
-                              OR :#{#req.searchTime} LIKE ''
-                              OR C.start_time >= UNIX_TIMESTAMP(:#{#req.searchTime}))
+              AND
+                ( :#{#req.searchTime} IS NULL
+                                   OR :#{#req.searchTime} LIKE 'null'
+                                   OR :#{#req.searchTime} LIKE ''
+                                   OR :#{#req.searchTime} = 0
+                                   OR DATE(FROM_UNIXTIME(m.meeting_date/ 1000)) between CURDATE() and
+                                   DATE_ADD(CURDATE() , INTERVAL :#{#req.searchTime} DAY) 
+                                   OR DATE(FROM_UNIXTIME(m.meeting_date/ 1000)) between 
+                                   DATE_ADD(CURDATE() , INTERVAL :#{#req.searchTime} DAY) and  CURDATE()
+                                   )
             """, nativeQuery = true)
     Page<StScheduleResponse> findScheduleByStudent(@Param("req") StFindScheduleRequest req, Pageable pageable);
 }
 
-//              AND DATE(FROM_UNIXTIME(C.start_time / 1000)) between CURDATE() and CURDATE()
+// ( :#{#req.searchTime} IS NULL
+//                    OR :#{#req.searchTime} LIKE 'null'
+//                    OR :#{#req.searchTime} LIKE ''
+//                    OR :#{#req.searchTime} = 0
+//                    OR DATE(FROM_UNIXTIME(c.start_time / 1000)) between CURDATE() and
+//                    DATE_ADD(CURDATE() , INTERVAL :#{#req.searchTime} DAY) )
