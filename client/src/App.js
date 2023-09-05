@@ -26,6 +26,8 @@ import DetailMyClassTeam from "./pages/student/detail-my-class/team/DetailMyClas
 import StudentMyClass from "./pages/student/my-class/StudentMyClass";
 import MeetingManagment from "./pages/admin/detail-class/meeting-management/MeetingManagement";
 import TeamInMeeting from "./pages/teacher/my-class/meeting/team/TeamInMeeting";
+import StMeetingMyClass from "./pages/student/detail-my-class/meeting/StudentMeeting";
+import StTeamMeeting from "./pages/student/detail-my-class/meeting/detail-meeting/DetailMyClassMeeting";
 
 function App() {
   return (
@@ -222,6 +224,28 @@ function App() {
                 <AuthGuard>
                   <DashBoardStudent>
                     <DetailMyClassTeam />
+                  </DashBoardStudent>
+                </AuthGuard>
+              }
+            />
+             {/* router student meeting*/}
+             <Route
+              path="/student/my-class/meeting/:id"
+              element={
+                <AuthGuard>
+                  <DashBoardStudent>
+                    <StMeetingMyClass />
+                  </DashBoardStudent>
+                </AuthGuard>
+              }
+            />
+             {/* router detail  meeting task student*/}
+             <Route
+              path="/student/my-class/meeting/detail/:idMeeting"
+              element={
+                <AuthGuard>
+                  <DashBoardStudent>
+                    <StTeamMeeting/>
                   </DashBoardStudent>
                 </AuthGuard>
               }

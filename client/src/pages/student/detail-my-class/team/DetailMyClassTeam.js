@@ -146,6 +146,7 @@ const DetailMyClassTeam = () => {
             </Link>
             <Link
               className="custom-link"
+              to={`/student/my-class/meeting/${id}`}
               style={{
                 fontSize: "16px",
                 paddingLeft: "10px",

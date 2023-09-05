@@ -10,6 +10,8 @@ import teStudentClassesSliceReduce from "./teacher/student-class/studentClassesS
 import AdMeetingManagementReducer from "./admin/AdMeetingManagement.reducer";
 import teacherAttendanceMeetingSliceReduce from "./teacher/attendance-meeting-today/teacherAttendanceMeetingSlice.reduce";
 import stScheduleSliceReducer from "./student/StSchedule.reduce";
+import stMeetingSliceReduce from "./student/StTeacherMeetingSlice.reduce";
+
 
 export const store = configureStore({
   reducer: {
@@ -24,6 +26,8 @@ export const store = configureStore({
     adSemester: adSemesterSliceReducer,
     adMeetingManagement: AdMeetingManagementReducer,
     stSchedule: stScheduleSliceReducer,
+    stMeetingClass: stMeetingSliceReduce,
+
   },
 });
 
