@@ -28,7 +28,7 @@ public class HomeWork extends PrimaryEntity {
     @Nationalized
     private String name;
 
-    @Column(length = EntityProperties.LENGTH_DESCRIPTION)
+    @Column(length = Integer.MAX_VALUE)
     @Nationalized
     private String descriptions;
 

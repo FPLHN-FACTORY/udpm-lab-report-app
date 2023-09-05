@@ -37,7 +37,7 @@ public class Meeting extends PrimaryEntity {
     @Column
     private MeetingPeriod meetingPeriod;
 
-    @Column(length = EntityProperties.LENGTH_DESCRIPTION)
+    @Column(length = Integer.MAX_VALUE)
     @Nationalized
     private String descriptions;
 

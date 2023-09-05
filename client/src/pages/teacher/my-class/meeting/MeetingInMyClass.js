@@ -106,7 +106,7 @@ const MeetingInMyClass = () => {
                   fontWeight: "bold",
                 }}
               >
-                BÀI VIẾT &nbsp;
+                BÀI ĐĂNG &nbsp;
               </Link>
               <Link
                 to={`/teacher/my-class/students/${idClass}`}

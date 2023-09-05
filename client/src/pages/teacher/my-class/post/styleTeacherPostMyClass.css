@@ -4,10 +4,11 @@
   padding: 10px;
 }
 .box-image {
-  width: 1190px;
+  width: auto;
   height: 255px;
   background-image: url("../../../../assets/img/banner-post2.png");
   border-radius: 5px;
+  background-size: cover;
 }
 .box-create {
   border-radius: 5px;
@@ -87,4 +88,11 @@
 }
 .box-create-post:hover div > .link-create {
   color: #0b6cd3;
+}
+
+.ant-card-body {
+  padding-left: 7px !important;
+  padding-right: 7px !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
 }
