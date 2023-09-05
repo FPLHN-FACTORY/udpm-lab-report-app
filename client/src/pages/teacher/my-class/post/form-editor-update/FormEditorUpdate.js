@@ -19,7 +19,7 @@ function EditorUpdate({ obj, showUpdate }) {
     showCharsCounter: false,
     showWordsCounter: false,
     showXPathInStatusbar: false,
-    placeholder: "Nhập bài viết mới...",
+    placeholder: "Chỉnh sửa bài viết...",
     showFullscreen: false,
     showAbout: false,
     // enter: "Br",

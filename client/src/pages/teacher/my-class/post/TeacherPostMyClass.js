@@ -1,5 +1,5 @@
 import "./styleTeacherPostMyClass.css";
-import { Button, Card, Dropdown, Menu, Row } from "antd";
+import { Button, Card, Dropdown, Menu, Modal, Row } from "antd";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useParams } from "react-router";
@@ -31,7 +31,8 @@ const TeacherPostMyClass = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
   const [seeMore, setSeeMore] = useState(true);
-
+  const [idDelete, setIdDelete] = useState("");
+  const [visibleDelete, setVisibleDelete] = useState(false);
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Bảng điều khiển - bài viết";
@@ -69,6 +70,7 @@ const TeacherPostMyClass = () => {
     setShowUpdate(value);
     setShowUpdateIndex(null);
   };
+
   const featchPost = async (idClass) => {
     setLoading(false);
     try {
@@ -76,7 +78,7 @@ const TeacherPostMyClass = () => {
         idClass: idClass,
         idTeacher: giangVienCurrent.id,
         page: currentPage,
-        size: 5,
+        size: 8,
       };
       await TeacherPostAPI.getPagePost(data).then((responese) => {
         dispatch(SetPost(responese.data.data.data));
@@ -93,7 +95,7 @@ const TeacherPostMyClass = () => {
         idClass: idClass,
         idTeacher: giangVienCurrent.id,
         page: currentPage,
-        size: 5,
+        size: 8,
       };
       await TeacherPostAPI.getPagePost(data).then((responese) => {
         dispatch(NextPagePost(responese.data.data.data));
@@ -111,6 +113,20 @@ const TeacherPostMyClass = () => {
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
+  };
+
+  const showModal = (id) => {
+    setVisibleDelete(true);
+    setIdDelete(id);
+  };
+  const handleOkDelete = () => {
+    clickDelete(idDelete);
+    setVisibleDelete(false);
+    setIdDelete("");
+  };
+  const handleCancelDelete = () => {
+    setVisibleDelete(false);
+    setIdDelete("");
   };
   const clickDelete = async (id) => {
     try {
@@ -133,10 +149,19 @@ const TeacherPostMyClass = () => {
     }/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()} `;
     return format;
   };
-
   const data = useAppSelector(GetPost);
   return (
     <>
+      <Modal
+        title="Xác nhận xóa"
+        visible={visibleDelete}
+        onOk={handleOkDelete}
+        onCancel={handleCancelDelete}
+        okText="Xóa"
+        cancelText="Hủy"
+      >
+        <p>Bạn có chắc chắn muốn xóa bài viết?</p>
+      </Modal>
       {!loading && <LoadingIndicator />}
       <div className="box-one">
         <Link to="/teacher/my-class" style={{ color: "black" }}>
@@ -231,13 +256,7 @@ const TeacherPostMyClass = () => {
               <hr />
             </div>
           </div>
-          <div
-            className="box-image"
-            style={{
-              height: "200px",
-              width: "100%",
-            }}
-          ></div>
+          <div className="box-image"></div>
           <div className="box-post">
             <div className="box-post-left">
               <div className="box-infor" style={{ height: "140px" }}>
@@ -407,7 +426,7 @@ const TeacherPostMyClass = () => {
                                           </Menu.Item>
                                           <Menu.Item
                                             key="2"
-                                            onClick={() => clickDelete(item.id)}
+                                            onClick={() => showModal(item.id)}
                                           >
                                             Xóa
                                           </Menu.Item>

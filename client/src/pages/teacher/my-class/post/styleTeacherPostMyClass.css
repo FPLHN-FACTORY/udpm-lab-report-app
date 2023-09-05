@@ -4,13 +4,10 @@
   padding: 10px;
 }
 .box-image {
-  width: 1250px;
-  height: 200px;
-  /* object-fit: cover; */
-  background-image: url("../../../../assets/img/banner-post1.jpg");
+  width: 1190px;
+  height: 255px;
+  background-image: url("../../../../assets/img/banner-post2.png");
   border-radius: 5px;
-  /* height: 200px;
-  box-shadow: 0 0 10px rgb(228, 227, 227); */
 }
 .box-create {
   border-radius: 5px;
@@ -88,6 +85,6 @@
 .rich-text-editor {
   padding: 10px;
 }
-.box-create-post:hover div > p {
+.box-create-post:hover div > .link-create {
   color: #0b6cd3;
 }
