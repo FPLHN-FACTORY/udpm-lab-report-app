@@ -38,6 +38,9 @@ public class TePostServiceImpl implements TePostService {
     @Override
     public Post create(TeCreatePostRequest request) {
         Post post = new Post();
+        if(request.getDescriptions().equals("")){
+            throw new RestApiException(Message.DESCRIPTIONS_IS_EMPTY);
+        }
         post.setDescriptions(request.getDescriptions());
         post.setCreatedDate(new Date().getTime());
         post.setClassId(request.getIdClass());
@@ -50,6 +53,9 @@ public class TePostServiceImpl implements TePostService {
         Optional<Post> findObj = tePostRepository.findById(request.getId());
         if (!findObj.isPresent()) {
             throw new RestApiException(Message.POST_IS_EXIST);
+        }
+        if(request.getDescriptions().equals("")){
+            throw new RestApiException(Message.DESCRIPTIONS_IS_EMPTY);
         }
         Post post = findObj.get();
         post.setDescriptions(request.getDescriptions());

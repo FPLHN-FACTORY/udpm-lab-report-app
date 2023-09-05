@@ -1,5 +1,5 @@
 import "./styleTeacherPostMyClass.css";
-import { Button, Card, Dropdown, Menu } from "antd";
+import { Button, Card, Dropdown, Menu, Row } from "antd";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useParams } from "react-router";
@@ -11,8 +11,8 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical, faHome } from "@fortawesome/free-solid-svg-icons";
 import { giangVienCurrent } from "../../../../helper/inForUser";
-import Editor from "./form-editor/FormEditor";
-
+import Editor from "./form-editor-create/FormEditor";
+import EditorUpdate from "./form-editor-update/FormEditorUpdate";
 import {
   DeletePost,
   GetPost,
@@ -20,7 +20,6 @@ import {
   SetPost,
 } from "../../../../app/teacher/post/tePostSlice.reduce";
 import { toast } from "react-toastify";
-import EditorUpdate from "./form-editor-update/FormEditorUpdate";
 const TeacherPostMyClass = () => {
   const dispatch = useAppDispatch();
   const { idClass } = useParams();
@@ -229,43 +228,62 @@ const TeacherPostMyClass = () => {
               >
                 ĐIỂM &nbsp;
               </Link>
-              <div
-                className="box-center"
-                style={{
-                  height: "28.5px",
-                  width: "auto",
-                  backgroundColor: "#007bff",
-                  color: "white",
-                  borderRadius: "5px",
-                  float: "right",
-                }}
-              >
-                {" "}
-                <span style={{ fontSize: "14px", padding: "10px" }}>
-                  {classDetail.code}
-                </span>
-              </div>
               <hr />
             </div>
           </div>
           <div
             className="box-image"
             style={{
-              backgroundImage: "url(/assets/img/banner-post1.jpg)",
+              height: "200px",
+              width: "100%",
             }}
-          >
-            <span style={{ fontSize: 18, color: "black" }}>
-              {" "}
-              {classDetail.code}
-            </span>
-          </div>
+          ></div>
           <div className="box-post">
             <div className="box-post-left">
-              <div className="box-one" style={{ height: "160px" }}>
-                <div style={{ width: "30%" }}>Mã lớp:</div>
-                <div style={{ width: "80%", fontSize: "16px" }}>
+              <div className="box-infor" style={{ height: "140px" }}>
+                <p
+                  style={{
+                    padding: "5px 0px 0px 20px",
+                    fontWeight: "500",
+                    fontSize: "17px",
+                  }}
+                >
+                  Mã lớp
+                </p>
+                <p
+                  style={{
+                    padding: "5px 0px 0px 20px",
+                    fontWeight: "bold",
+                    fontSize: "20px",
+                    color: "#c99b40",
+                  }}
+                >
                   {classDetail.code}
-                </div>
+                </p>
+              </div>
+              <div
+                className="box-infor"
+                style={{ height: "140px", marginTop: "20px" }}
+              >
+                <p
+                  style={{
+                    padding: "5px 0px 0px 20px",
+                    fontWeight: "500",
+                    fontSize: "17px",
+                  }}
+                >
+                  Mật khẩu
+                </p>
+                <p
+                  style={{
+                    padding: "5px 0px 0px 20px",
+                    fontWeight: "bold",
+                    fontSize: "20px",
+                    color: "#c99b40",
+                  }}
+                >
+                  {classDetail.passWord}
+                </p>
               </div>
             </div>
             <div className="box-post-right">
@@ -304,7 +322,7 @@ const TeacherPostMyClass = () => {
                     style={{
                       height: "80px",
                       lineHeight: "50px",
-                      paddingLeft: "50px",
+                      paddingLeft: "25px",
                     }}
                   >
                     <p

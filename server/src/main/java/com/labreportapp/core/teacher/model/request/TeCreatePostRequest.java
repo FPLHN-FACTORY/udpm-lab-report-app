@@ -13,6 +13,7 @@ import lombok.Setter;
 @Builder
 public class TeCreatePostRequest {
 
+    @NotBlank
     private String descriptions;
 
     private String idClass;

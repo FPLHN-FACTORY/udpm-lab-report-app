@@ -212,7 +212,11 @@ const TeacherScheduleToday = () => {
           <div className="button-menu">
             <Link
               to="/teacher/schedule-today"
-              style={{ fontSize: "17px", fontWeight: "blod" }}
+              style={{
+                fontSize: "17px",
+                fontWeight: "blod",
+                fontWeight: "bold",
+              }}
               id="menu-checked"
             >
               &nbsp; LỊCH DẠY HÔM NAY &nbsp;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import JoditEditor from "jodit-react";
 import { TeacherPostAPI } from "../../../../../api/teacher/post/TeacherPost.api";
 import { CreatePost } from "../../../../../app/teacher/post/tePostSlice.reduce";
@@ -8,7 +8,6 @@ import { useAppDispatch } from "../../../../../app/hook";
 
 function Editor({ idTeacher, idClass, showCreate }) {
   const [descriptionss, setDescriptionss] = useState("");
-  const [errorDescriptions, setErrorDescriptions] = useState("");
   const dispatch = useAppDispatch();
 
   const config = {
@@ -19,16 +18,36 @@ function Editor({ idTeacher, idClass, showCreate }) {
     placeholder: "Nhập bài viết mới...",
     showFullscreen: false,
     showAbout: false,
+    // enter: "Row",
   };
+
   const create = () => {
-    let check = 0;
-    if (descriptionss.trim() === "") {
-      setErrorDescriptions("Nội dung không được để trống !");
-      check++;
-    } else {
-      setErrorDescriptions("");
+    let empty = 0;
+    if (descriptionss.trim() === "<p><br></p>") {
+      toast.error("Nội dung bài viết không được trống !");
+      empty++;
     }
-    if (check === 0) {
+    if (descriptionss.trim() === "<p><br></p><br>") {
+      toast.error("Nội dung bài viết không được trống !");
+      empty++;
+    }
+    if (descriptionss.trim() === "<ul><li><br></li><br></ul>") {
+      toast.error("Nội dung bài viết không được trống !");
+      empty++;
+    }
+    if (descriptionss.trim() === "<ul><li><br></li><br></ul><br>") {
+      toast.error("Nội dung bài viết không được trống !");
+      empty++;
+    }
+    if (descriptionss.trim() === "<ol><li><br></li><br></ol>") {
+      toast.error("Nội dung bài viết không được trống !");
+      empty++;
+    }
+    if (descriptionss.trim() === "<ol><li><br></li><br></ol><br>") {
+      toast.error("Nội dung bài viết không được trống !");
+      empty++;
+    }
+    if (empty === 0) {
       let obj = {
         idTeacher: idTeacher,
         descriptions: descriptionss,
@@ -47,15 +66,17 @@ function Editor({ idTeacher, idClass, showCreate }) {
       );
     }
   };
+  // const insertBr = (value) => {
+  //   const updatedValue = value.replace(/<\/p>/g, "</p></div><br/>");
 
-  const handleEditorBlur = (value) => {
-    if (value.trim() === "") {
-      setErrorDescriptions("Nội dung không được để trống !");
-    } else {
-      setErrorDescriptions("");
-      setDescriptionss(value);
-    }
-  };
+  //   return updatedValue;
+  // };
+  // const insertDivAroundParagraphs = (value) => {
+  //   const updatedValue = value
+  //     .replace(/<p>/g, "<div><p>")
+  //     .replace(/<\/p>/g, "</p></div>");
+  //   return updatedValue;
+  // };
 
   return (
     <div>
@@ -64,10 +85,8 @@ function Editor({ idTeacher, idClass, showCreate }) {
         config={config}
         onBlur={(value) => {
           setDescriptionss(value);
-          handleEditorBlur(value);
         }}
       />
-      <span style={{ color: "red" }}>{errorDescriptions}</span>
       <div style={{ paddingTop: "15px", float: "right" }}>
         <Button
           style={{

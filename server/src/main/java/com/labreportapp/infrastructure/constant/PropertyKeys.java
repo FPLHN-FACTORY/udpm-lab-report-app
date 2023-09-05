@@ -4,6 +4,7 @@ public class PropertyKeys {
 
     private PropertyKeys() {
     }
+    public static final String DESCRIPTIONS_IS_EMPTY  = "descriptions.is.empty";
     public static final String CLASS_IS_EMPTY = "class.is.empty";
     public static final String POST_IS_EXIST = "post.is.exists";
     public static final String MEETING_HAS_NOT_COME = "meeting.has.not.come";

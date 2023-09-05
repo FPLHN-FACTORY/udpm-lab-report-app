@@ -9,7 +9,6 @@ import { useEffect } from "react";
 
 function EditorUpdate({ obj, showUpdate }) {
   const [descriptions, setDescriptions] = useState("");
-  const [errorDescriptions, setErrorDescriptions] = useState("");
   const dispatch = useAppDispatch();
   useEffect(() => {
     setDescriptions(obj.descriptions);
@@ -23,17 +22,36 @@ function EditorUpdate({ obj, showUpdate }) {
     placeholder: "Nhập bài viết mới...",
     showFullscreen: false,
     showAbout: false,
+    // enter: "Br",
   };
 
   const update = () => {
-    let check = 0;
-    if (descriptions.trim() === "") {
-      setErrorDescriptions(" Nội dung không được để trống !");
-      check++;
-    } else {
-      setErrorDescriptions("");
+    let empty = 0;
+    if (descriptions.trim() === "<p><br></p>") {
+      toast.error("Nội dung bài viết không được trống !");
+      empty++;
     }
-    if (check === 0) {
+    if (descriptions.trim() === "<p><br></p><br>") {
+      toast.error("Nội dung bài viết không được trống !");
+      empty++;
+    }
+    if (descriptions.trim() === "<ul><li><br></li><br></ul>") {
+      toast.error("Nội dung bài viết không được trống !");
+      empty++;
+    }
+    if (descriptions.trim() === "<ul><li><br></li><br></ul><br>") {
+      toast.error("Nội dung bài viết không được trống !");
+      empty++;
+    }
+    if (descriptions.trim() === "<ol><li><br></li><br></ol>") {
+      toast.error("Nội dung bài viết không được trống !");
+      empty++;
+    }
+    if (descriptions.trim() === "<ol><li><br></li><br></ol><br>") {
+      toast.error("Nội dung bài viết không được trống !");
+      empty++;
+    }
+    if (empty === 0) {
       let objUpdate = {
         id: obj.id,
         descriptions: descriptions,
@@ -51,14 +69,32 @@ function EditorUpdate({ obj, showUpdate }) {
       );
     }
   };
-  const handleEditorBlurUpdate = (value) => {
-    if (value.trim() === "") {
-      setErrorDescriptions("Nội dung không được để trống !");
-    } else {
-      setErrorDescriptions("");
-      setDescriptions(value);
-    }
-  };
+  // const handleEditorBlur = (value) => {
+  //   const regexEmptyTags = /<[^>]*>(\s|&nbsp;)*<\/[^>]*>/g;
+  //   if (value.trim() === " ") {
+  //     setIsEmpty(true);
+  //     setCheck((pr) => pr + 2);
+  //   } else {
+  //     setIsEmpty(false);
+  //   }
+  //   if (value.trim() === "") {
+  //     setIsEmpty(true);
+  //     setCheck((pr) => pr + 2);
+  //   } else {
+  //     setIsEmpty(false);
+  //   }
+  // if (regexEmptyTags.test(value.trim())) {
+  //   setIsEmpty(true);
+  //   setCheck((pr) => pr + 2);
+  // } else {
+  //   setIsEmpty(false);
+  // }
+  // };
+
+  // useEffect(() => {
+  //   setDescriptions(descriptions);
+  // }, [check]);
+
   return (
     <div>
       <JoditEditor
@@ -66,19 +102,17 @@ function EditorUpdate({ obj, showUpdate }) {
         config={config}
         onBlur={(value) => {
           setDescriptions(value);
-          handleEditorBlurUpdate(value);
+          // handleEditorBlur(value);
         }}
       />
-      <span style={{ color: "red" }}>{errorDescriptions}</span>
       <div style={{ paddingTop: "15px", float: "right" }}>
         <Button
           style={{
             backgroundColor: "red",
             color: "white",
           }}
-          onClick={() => {
+          onClick={(e) => {
             showUpdate(false);
-            setDescriptions("");
           }}
         >
           Hủy
@@ -90,7 +124,7 @@ function EditorUpdate({ obj, showUpdate }) {
           }}
           onClick={update}
         >
-          Sửa
+          Đăng
         </Button>
       </div>
     </div>
