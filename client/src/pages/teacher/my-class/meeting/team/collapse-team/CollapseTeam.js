@@ -99,14 +99,6 @@ const CollapseTeam = ({ items }) => {
     }
   };
 
-  // const customExpandIcon = ({ isActive }) => {
-  //   return isActive ? (
-  //     <MinusOutlined style={{ fontSize: "16px", color: "#007bff" }} />
-  //   ) : (
-  //     <PlusOutlined style={{ fontSize: "16px", color: "#007bff" }} />
-  //   );
-  // };
-
   return (
     <div
       className="centered-collapse"

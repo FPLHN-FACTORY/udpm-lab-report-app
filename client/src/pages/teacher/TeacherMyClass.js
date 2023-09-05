@@ -91,7 +91,6 @@ const TeacherMyClass = () => {
       page: current,
       size: 10,
     };
-
     try {
       await TeacherMyClassAPI.getAllMyClass(filter).then((respone) => {
         dispatch(SetTeacherMyClass(respone.data.data));
@@ -214,7 +213,7 @@ const TeacherMyClass = () => {
         <>
           <div className="box_icon">
             <Link
-              to={`/teacher/my-class/students/${record.id}`}
+              to={`/teacher/my-class/post/${record.id}`}
               className="btn btn-success ml-4"
             >
               <Tooltip title="Xem chi tiết lớp học">

@@ -17,7 +17,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { useAppDispatch, useAppSelector } from "../../../../../app/hook";
 import LoadingIndicator from "../../../../../helper/loading";
 import { CreateTeam } from "../../../../../app/teacher/teams/teamsSlice.reduce";
-import { TeacherStudentClassesAPI } from "../../../../../api/teacher/student-class/TeacherStudentClasses.api";
 import { TeacherTeamsAPI } from "../../../../../api/teacher/teams-class/TeacherTeams.api";
 import {
   GetStudentClasses,
@@ -39,6 +38,7 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
   const [listStudentsChange, setListStudentsChange] = useState([]);
   const [checkDataStudent, setCheckDataStudent] = useState(false);
   const [visitedCreate, setVisitedCreate] = useState(false);
+  const dataStudentClasses = useAppSelector(GetStudentClasses);
   const dispatch = useAppDispatch();
   const cancelSuccess = () => {
     onCancel.handleCancelModalCreateSusscess();
@@ -91,18 +91,14 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
   const featchStudentClass = async (id) => {
     setLoading(false);
     try {
-      await TeacherStudentClassesAPI.getStudentInClasses(id).then(
-        (responese) => {
-          const listNotTeams = responese.data.data.filter(
-            (item) =>
-              item.idTeam == null ||
-              item.idTeam === "null" ||
-              item.idTeam === "NULL"
-          );
-          setListStudentClass(listNotTeams);
-          setVisitedCreate(false);
-        }
+      const listNotTeams = dataStudentClasses.filter(
+        (item) =>
+          item.idTeam == null ||
+          item.idTeam === "null" ||
+          item.idTeam === "NULL"
       );
+      setListStudentClass(listNotTeams);
+      setVisitedCreate(false);
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
@@ -206,7 +202,7 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
       );
     }
   };
-  const dataStudentClasses = useAppSelector(GetStudentClasses);
+
   const columns = [
     {
       title: "#",

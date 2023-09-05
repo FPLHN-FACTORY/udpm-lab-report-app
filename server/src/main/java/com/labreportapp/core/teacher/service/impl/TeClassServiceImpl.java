@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -42,4 +43,14 @@ public class TeClassServiceImpl implements TeClassService {
         }
         return classCheck.get();
     }
+
+    @Override
+    public List<TeClassResponse> getClassClosestToTheDateToSemester(String idTeacher) {
+        List<TeClassResponse> list = teClassRepository.getClassClosestToTheDateToSemester(idTeacher);
+        if(list.size() < 0){
+            throw new RestApiException(Message.CLASS_IS_EMPTY);
+        }
+        return list;
+    }
+
 }

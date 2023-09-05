@@ -18,10 +18,7 @@ import { faHome } from "@fortawesome/free-solid-svg-icons";
 const StudentsInMyClass = () => {
   const dispatch = useAppDispatch();
   const [classDetail, setClassDetail] = useState({});
-  const [listStudentClass, setListStudentClass] = useState([]);
-  const [dataTable, setDataTable] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [loadingStudentClass, setLoadingStudentClass] = useState(false);
   const { idClass } = useParams();
 
   useEffect(() => {
@@ -30,15 +27,11 @@ const StudentsInMyClass = () => {
     featchClass(idClass);
   }, []);
 
-  const fetchData = async (idClass) => {
-    await Promise.all([featchStudentClass(idClass), featInforStudent(idClass)]);
-  };
-
   const featchClass = async (idClass) => {
     try {
       await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
         setClassDetail(responese.data.data);
-        fetchData(idClass);
+        featchStudentClass(idClass);
       });
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
@@ -49,57 +42,16 @@ const StudentsInMyClass = () => {
     try {
       await TeacherStudentClassesAPI.getStudentInClasses(id).then(
         (responese) => {
-          setListStudentClass(responese.data.data);
+          dispatch(SetStudentClasses(responese.data.data));
+          setLoading(true);
         }
       );
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-  const featInforStudent = async (idClass) => {
-    try {
-      let request = listStudentClass.map((item) => item.idStudent).join("|");
-      const listStudentAPI = await TeacherStudentClassesAPI.getAllInforStudent(
-        `?id=` + request
-      );
-      const listShowTable = listStudentAPI.data
-        .filter((item1) =>
-          listStudentClass.some((item2) => item1.id === item2.idStudent)
-        )
-        .map((item1) => {
-          const matchedObject = listStudentClass.find(
-            (item2) => item2.idStudent === item1.id
-          );
-          return {
-            ...item1,
-            ...matchedObject,
-          };
-        });
-      setDataTable(listShowTable);
-      dispatch(SetStudentClasses(listShowTable));
-      setLoading(true);
-      setLoadingStudentClass(true);
-    } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
-    }
-  };
-
-  useEffect(() => {
-    if (loadingStudentClass === true) {
-      fetchData(idClass);
-    }
-  }, [loadingStudentClass]);
-
-  useEffect(() => {
-    if (loadingStudentClass === true) {
-      fetchData(idClass);
-    }
-  }, [loadingStudentClass]);
-
-  // const data = dataTable;
 
   const data = useAppSelector(GetStudentClasses);
-
   const columns = [
     {
       title: "#",
@@ -190,6 +142,17 @@ const StudentsInMyClass = () => {
         <div className="box-two-student-in-my-class-son">
           <div className="button-menu">
             <div>
+              <Link
+                to={`/teacher/my-class/post/${idClass}`}
+                className="custom-link"
+                style={{
+                  fontSize: "16px",
+                  paddingLeft: "10px",
+                  fontWeight: "bold",
+                }}
+              >
+                BÀI VIẾT &nbsp;
+              </Link>
               <Link
                 to={`/teacher/my-class/students/${idClass}`}
                 id="menu-checked"
@@ -319,8 +282,8 @@ const StudentsInMyClass = () => {
             </Row>
             <br />
           </div>
-          <div>
-            {dataTable.length > 0 ? (
+          <div style={{ minHeight: "140px" }}>
+            {data.length > 0 ? (
               <>
                 <div className="table">
                   <Table

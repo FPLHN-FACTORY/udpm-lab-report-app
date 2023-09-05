@@ -34,4 +34,9 @@ public class TeClassController {
         return new ResponseObject(teClassService.findClassById(id));
     }
 
+    @GetMapping("/semester-nearest/{id}")
+    public ResponseObject getClassClosestToTheDateToSemester(@PathVariable("id") String id) {
+        return new ResponseObject(teClassService.getClassClosestToTheDateToSemester(id));
+    }
+
 }

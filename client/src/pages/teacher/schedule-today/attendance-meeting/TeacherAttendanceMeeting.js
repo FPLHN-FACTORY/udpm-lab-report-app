@@ -19,7 +19,6 @@ import {
 } from "../../../../app/teacher/attendance-meeting-today/teacherAttendanceMeetingSlice.reduce";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBook, faHome } from "@fortawesome/free-solid-svg-icons";
-import FloatingDiv from "../../floatingDiv/FloatingDiv";
 
 const TeacherAttendanceMeeting = () => {
   const dispatch = useAppDispatch();
@@ -27,16 +26,21 @@ const TeacherAttendanceMeeting = () => {
   const [meeting, setMeeting] = useState({});
   const [classFind, setClassFind] = useState({});
   const [listStudentClassAPI, setListStudentClassAPI] = useState([]);
-  const [dataTable, setDataTable] = useState([]);
   const [loadingData, setLoadingData] = useState(false);
   const [loading, setLoading] = useState(false);
   const [idClass, setIdClass] = useState("");
+  const [checkAttendance, setCheckAttendance] = useState(false);
+  const [listAttendance, setListAttendance] = useState([]);
   useEffect(() => {
     featchMeetingCheckDate(idMeeting);
   }, []);
 
   const fetchData = async (idClass) => {
-    await Promise.all([featchClass(idClass), featchAttendance(idClass)]);
+    await Promise.all([
+      await featchStudentClass(idClass),
+      await featchClass(idClass),
+      await featchAttendance(idClass),
+    ]);
   };
 
   const featchClass = async (idClass) => {
@@ -54,9 +58,11 @@ const TeacherAttendanceMeeting = () => {
       await TeacherAttendanceAPI.getAttendanceByIdMeeting(idMeeting).then(
         (response) => {
           if (response.data.data.length >= 1) {
-            setListStudentClassAPI(response.data.data);
+            setCheckAttendance(true);
+            setListAttendance(response.data.data);
             featInforStudent(idClass);
           } else {
+            setCheckAttendance(false);
             featchStudentClass(idClass);
             featInforStudent(idClass);
           }
@@ -66,35 +72,12 @@ const TeacherAttendanceMeeting = () => {
       alert(error.message);
     }
   };
-
-  const featchStudentClass = async (idClass) => {
-    try {
-      await TeacherStudentClassesAPI.getStudentInClasses(idClass).then(
-        (responese) => {
-          const listAPI = responese.data.data.map((item) => {
-            return { ...item, statusAttendance: "0" };
-          });
-          setListStudentClassAPI(listAPI);
-        }
-      );
-    } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang");
-    }
-  };
-
   const featInforStudent = async (idClass) => {
     try {
-      let request = listStudentClassAPI.map((item) => item.idStudent).join("|");
-      const listStudentAPI = await TeacherStudentClassesAPI.getAllInforStudent(
-        `?id=` + request
-      );
-      const listShowTable = listStudentAPI.data
-        .filter((item1) =>
-          listStudentClassAPI.some((item2) => item1.id === item2.idStudent)
-        )
-        .map((item1) => {
-          const matchedObject = listStudentClassAPI.find(
-            (item2) => item2.idStudent === item1.id
+      if (checkAttendance) {
+        const listShowTable = listStudentClassAPI.map((item1) => {
+          const matchedObject = listAttendance.find(
+            (item2) => item2.idStudent === item1.idStudent
           );
           return {
             ...item1,
@@ -105,8 +88,18 @@ const TeacherAttendanceMeeting = () => {
               matchedObject.statusAttendance === "0" ? "YES" : "NO",
           };
         });
-      setDataTable(listShowTable);
-      dispatch(SetAttendanceMeeting(listShowTable));
+        dispatch(SetAttendanceMeeting(listShowTable));
+      } else {
+        const listShowTable = listStudentClassAPI.map((item1) => {
+          return {
+            ...item1,
+            idMeeting: idMeeting,
+            nameMeeting: meeting.name,
+            statusAttendance: "NO",
+          };
+        });
+        dispatch(SetAttendanceMeeting(listShowTable));
+      }
       if (loadingData === true) {
         setLoading(true);
       }
@@ -115,6 +108,22 @@ const TeacherAttendanceMeeting = () => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
+
+  const featchStudentClass = async (idClass) => {
+    try {
+      await TeacherStudentClassesAPI.getStudentInClasses(idClass).then(
+        (responese) => {
+          const listAPI = responese.data.data.map((item) => {
+            return { ...item, statusAttendance: "1" };
+          });
+          setListStudentClassAPI(listAPI);
+        }
+      );
+    } catch (error) {
+      alert("Lỗi hệ thống, vui lòng F5 lại trang");
+    }
+  };
+
   const featchMeetingCheckDate = async (id) => {
     setLoading(false);
     try {
@@ -122,6 +131,7 @@ const TeacherAttendanceMeeting = () => {
         (response) => {
           setMeeting(response.data.data);
           setIdClass(response.data.data.idClass);
+
           fetchData(response.data.data.idClass);
         },
         (error) => {
@@ -210,7 +220,6 @@ const TeacherAttendanceMeeting = () => {
   return (
     <>
       {!loading && <LoadingIndicator />}
-      {/* items={classFind.code} */}
       <div className="box-one">
         <Link to="/teacher/schedule-today" style={{ color: "black" }}>
           <span style={{ fontSize: "18px", paddingLeft: "20px" }}>
@@ -264,22 +273,24 @@ const TeacherAttendanceMeeting = () => {
               >
                 ĐIỂM DANH &nbsp;
               </span>
-              <div
-                className="box-center"
-                style={{
-                  height: "28.5px",
-                  width: "auto",
-                  backgroundColor: "#007bff",
-                  color: "white",
-                  borderRadius: "5px",
-                  float: "right",
-                }}
-              >
-                {" "}
-                <span style={{ fontSize: "14px", padding: "10px" }}>
-                  {classFind.code}
-                </span>
-              </div>
+              {data.length > 0 && (
+                <div
+                  className="box-center"
+                  style={{
+                    height: "28.5px",
+                    width: "auto",
+                    backgroundColor: "#007bff",
+                    color: "white",
+                    borderRadius: "5px",
+                    float: "right",
+                  }}
+                >
+                  {" "}
+                  <span style={{ fontSize: "14px", padding: "10px" }}>
+                    {classFind.code}
+                  </span>
+                </div>
+              )}
               <hr />
             </div>
           </div>
@@ -303,8 +314,8 @@ const TeacherAttendanceMeeting = () => {
               </span>
             </div>
           </div>
-          <div>
-            {dataTable.length > 0 ? (
+          <div style={{ minHeight: "200px" }}>
+            {data.length > 0 ? (
               <>
                 <div className="table">
                   <Table
@@ -331,9 +342,11 @@ const TeacherAttendanceMeeting = () => {
             )}
           </div>
           <div className="box-button-center">
-            <div className="box-button" onClick={handleSave}>
-              Lưu điểm danh
-            </div>
+            {data.length > 0 && (
+              <div className="box-button" onClick={handleSave}>
+                Lưu điểm danh
+              </div>
+            )}
           </div>
         </div>
       </div>

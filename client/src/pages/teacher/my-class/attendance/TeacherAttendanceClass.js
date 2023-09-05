@@ -1,6 +1,5 @@
 import { useParams } from "react-router";
 import { UnorderedListOutlined } from "@ant-design/icons";
-import FloatingDiv from "../../floatingDiv/FloatingDiv";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHome } from "@fortawesome/free-solid-svg-icons";
@@ -33,6 +32,18 @@ const TeacherAttendanceClass = () => {
         >
           <div className="button-menu">
             <div>
+              {" "}
+              <Link
+                to={`/teacher/my-class/post/${idClass}`}
+                className="custom-link"
+                style={{
+                  fontSize: "16px",
+                  paddingLeft: "10px",
+                  fontWeight: "bold",
+                }}
+              >
+                BÀI VIẾT &nbsp;
+              </Link>
               <Link
                 to={`/teacher/my-class/students/${idClass}`}
                 className="custom-link"
@@ -77,7 +88,6 @@ const TeacherAttendanceClass = () => {
               >
                 ĐIỂM DANH &nbsp;
               </Link>
-
               <Link
                 to=""
                 className="custom-link"
