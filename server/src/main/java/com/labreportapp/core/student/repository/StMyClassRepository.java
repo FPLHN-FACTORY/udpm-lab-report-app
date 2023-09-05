@@ -6,6 +6,7 @@ import com.labreportapp.core.student.model.request.StFindClassRequest;
 import com.labreportapp.core.student.model.response.StMyClassResponse;
 import com.labreportapp.core.student.model.response.StMyStudentTeamResponse;
 import com.labreportapp.core.student.model.response.StMyTeamInClassResponse;
+import com.labreportapp.entity.StudentClasses;
 import com.labreportapp.repository.ClassRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -55,4 +56,13 @@ public interface StMyClassRepository extends ClassRepository {
             """, nativeQuery = true)
     String checkStatusStudentInClass(@Param("idClass") String idClass, @Param("idStudent") String idStudent);
 
+    @Query(value = """
+            SELECT a.* FROM student_classes a WHERE a.class_id = :idClass AND a.student_id = :idStudent
+            """, nativeQuery = true)
+    StudentClasses findStudentClasses(@Param("idClass") String idClass, @Param("idStudent") String idStudent);
+
+    @Query(value = """
+            SELECT COUNT(a.id) FROM student_classes a WHERE a.class_id = :idClass AND a.team_id = :idTeam
+            """, nativeQuery = true)
+    Integer countMemberInTeam(@Param("idClass") String idClass, @Param("idTeam") String idTeam);
 }

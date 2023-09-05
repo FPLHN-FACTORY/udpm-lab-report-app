@@ -259,6 +259,7 @@ const ClassManagement = () => {
     setSelectedItemsPerson("");
     setClear(true);
   };
+  
   const [showCreateModal, setShowCreateModal] = useState(false);
 
   const handleModalCreateCancel = async () => {

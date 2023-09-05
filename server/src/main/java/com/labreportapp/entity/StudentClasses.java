@@ -41,9 +41,7 @@ public class StudentClasses extends PrimaryEntity {
     @Column(length = EntityProperties.LENGTH_EMAIL)
     private String email;
 
-    @Column(nullable = false)
     private RoleTeam role;
 
-    @Column(nullable = false)
     private StatusTeam status;
 }

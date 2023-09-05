@@ -40,10 +40,26 @@ export class StMyTeamClassAPI {
     });
   }
 
-  static findGiangVien(idGiangVien) {
-    return apiDanhSachGiangVien({
+  static detailTeam(id) {
+    return request({
       method: "GET",
-      url: `/` + idGiangVien,
+      url: `/student/my-class/team/detail-team?idTeam=` + id,
+    });
+  }
+
+  static joinTeam(data) {
+    return request({
+      method: "PUT",
+      url: `/student/my-class/team/join-team`,
+      data: data,
+    });
+  }
+
+  static outTeam(data) {
+    return request({
+      method: "PUT",
+      url: `/student/my-class/team/out-team`,
+      data: data,
     });
   }
 }

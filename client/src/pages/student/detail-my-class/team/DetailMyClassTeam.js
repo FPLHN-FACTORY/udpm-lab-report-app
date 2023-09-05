@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import LoadingIndicator from "../../../../helper/loading";
 import { StMyTeamClassAPI } from "../../../../api/student/StTeamClass";
 import { faEye, faUserPlus } from "@fortawesome/free-solid-svg-icons";
-import { Table, Button, Tooltip, Space } from "antd";
+import { Table, Button, Tooltip, Space, Popconfirm } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { sinhVienCurrent } from "../../../../helper/inForUser";
 import {
@@ -16,11 +16,14 @@ import {
 } from "../../../../helper/util.helper";
 import { convertLongToDate } from "../../../../helper/convertDate";
 import { EyeOutlined, UserAddOutlined } from "@ant-design/icons";
+import ModalDetailTeam from "./modal-detail-team/ModalDetailTeam";
+import LoadingIndicatorNoOverlay from "../../../../helper/loadingNoOverlay";
 
 const DetailMyClassTeam = () => {
   const dispatch = useAppDispatch();
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingOverlay, setIsLoadingOverlay] = useState(false);
   const [detailClass, setDetailClass] = useState(null);
   const [checkStatus, setCheckStatus] = useState(false);
   const [listStudentMyTeam, setStudentMyTeam] = useState([]);
@@ -108,16 +111,82 @@ const DetailMyClassTeam = () => {
       key: "actions",
       render: (text, record, index) => (
         <Space>
-          <FontAwesomeIcon icon={faEye} style={{ marginRight: "10px" }} />
-          <FontAwesomeIcon icon={faUserPlus} />
+          <Tooltip title="Xem chi tiết nhóm">
+            <FontAwesomeIcon
+              icon={faEye}
+              style={{ marginRight: "10px", cursor: "pointer" }}
+              onClick={() => {
+                openModalDetailTeam(record.id);
+              }}
+            />
+          </Tooltip>
+          <Popconfirm
+            title="Tham gia nhóm"
+            description="Bạn có chắc chắn muốn tham gia nhóm này?"
+            onConfirm={() => {
+              joinTeam(record.id);
+            }}
+            okText="Có"
+            cancelText="Không"
+          >
+            <Tooltip title="Tham gia nhóm">
+              <FontAwesomeIcon
+                style={{ marginRight: "10px", cursor: "pointer" }}
+                icon={faUserPlus}
+              />{" "}
+            </Tooltip>
+          </Popconfirm>
         </Space>
       ),
     },
   ];
 
+  const [showDetailTeam, setShowDetailTeam] = useState(false);
+  const [idSelected, setIdSelected] = useState(null);
+
+  const openModalDetailTeam = (id) => {
+    setShowDetailTeam(true);
+    setIdSelected(id);
+  };
+
+  const handleDetailTeamCancel = () => {
+    setShowDetailTeam(false);
+    setIdSelected(null);
+  };
+
+  const joinTeam = (idTeam) => {
+    setIsLoadingOverlay(true);
+    let obj = {
+      idStudent: sinhVienCurrent.id,
+      email: sinhVienCurrent.email,
+      idClass: id,
+      idTeam: idTeam,
+    };
+
+    StMyTeamClassAPI.joinTeam(obj).then((response) => {
+      checkStatusStudentInClass();
+      setIsLoadingOverlay(false);
+    });
+  };
+
+  const outTeam = () => {
+    setIsLoadingOverlay(true);
+
+    let obj = {
+      idStudent: sinhVienCurrent.id,
+      idClass: id,
+    };
+
+    StMyTeamClassAPI.outTeam(obj).then((response) => {
+      checkStatusStudentInClass();
+      setIsLoadingOverlay(false);
+    });
+  };
+
   return (
     <div style={{ paddingTop: "35px" }}>
       {isLoading && <LoadingIndicator />}
+      {isLoadingOverlay && <LoadingIndicatorNoOverlay />}
       <div className="title-student-my-class">
         <span style={{ paddingLeft: "20px" }}>
           <ControlOutlined style={{ fontSize: "22px" }} />
@@ -272,7 +341,17 @@ const DetailMyClassTeam = () => {
                     rowKey="id"
                   />
                   <div style={{ marginTop: "8px", paddingBottom: "40px" }}>
-                    <Button className="btnRoiNhom">Rời nhóm</Button>
+                    <Popconfirm
+                      title="Rời nhóm"
+                      description="Bạn có chắc chắn muốn rời nhóm này?"
+                      onConfirm={() => {
+                        outTeam();
+                      }}
+                      okText="Có"
+                      cancelText="Không"
+                    >
+                      <Button className="btnRoiNhom">Rời nhóm</Button>
+                    </Popconfirm>
                   </div>
                 </>
               </div>
@@ -300,6 +379,12 @@ const DetailMyClassTeam = () => {
           </div>
         </div>
       </div>
+      <ModalDetailTeam
+        id={idSelected}
+        visible={showDetailTeam}
+        onCancel={handleDetailTeamCancel}
+        idClass={id}
+      />
     </div>
   );
 };

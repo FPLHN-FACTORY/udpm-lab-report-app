@@ -3,10 +3,14 @@ package com.labreportapp.core.student.controller;
 import com.labreportapp.core.common.base.ResponseObject;
 import com.labreportapp.core.student.model.request.FindTeamByIdClass;
 import com.labreportapp.core.student.model.request.FindTeamClassRequest;
+import com.labreportapp.core.student.model.request.StJoinTeamRequest;
+import com.labreportapp.core.student.model.request.StOutTeamRequest;
 import com.labreportapp.core.student.service.StTeamClassService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +29,11 @@ public class StTeamClassController {
     @GetMapping("/get-team-in-class")
     public ResponseObject getTeamInClass(final FindTeamByIdClass request) {
         return new ResponseObject(service.getTeamInClass(request));
+    }
+
+    @GetMapping("/detail-team")
+    public ResponseObject detailTeam(@RequestParam("idTeam") String idTeam) {
+        return new ResponseObject(service.detailTeam(idTeam));
     }
 
     @GetMapping("/call-api")
@@ -47,4 +56,18 @@ public class StTeamClassController {
         return new ResponseObject(service.detailClass(idClass));
     }
 
+    @PutMapping("/join-team")
+    public ResponseObject joinTeam(@RequestBody StJoinTeamRequest request) {
+        return new ResponseObject(service.joinTeam(request));
+    }
+
+    @PutMapping("/out-team")
+    public ResponseObject outTeam(@RequestBody StOutTeamRequest request) {
+        return new ResponseObject(service.outTeam(request));
+    }
+
+    @GetMapping("/test")
+    public ResponseObject test() {
+        return new ResponseObject(service.test());
+    }
 }
