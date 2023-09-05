@@ -2,13 +2,11 @@ import "./style-student-schedule.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFilter,
-  faHome,
-  faLayerGroup,
-  faPencil,
-  faTrash,
-  faPlus,
+  faCalendar,
+  faCalendarAlt  ,
 } from "@fortawesome/free-solid-svg-icons";
-import { Button, Input, Pagination, Table, Tooltip, Popconfirm } from "antd";
+import { Button, Input, Pagination, Table, Select } from "antd";
+import { Option } from "antd/es/mentions";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useAppSelector, useAppDispatch } from "../../../app/hook";
@@ -28,41 +26,31 @@ const StudentSchedule = () => {
   const [total, setTotal] = useState(0);
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
-  const [searchTime, setSearchTime] = useState("");
+  const [searchTime, setSearchTime] = useState('7');
 
-  // useEffect(() => {
-  //   fetchData(sinhVienCurrent);
-  // }, [current]);
-
-  // const fetchData = (sinhVienCurrent) => {
-  //   setLoading(false);
-  //   let filter = {
-  //     idStudent: sinhVienCurrent.id,
-  //     searchTime: searchTime,
-  //     page: current,
-  //     size: 10,
-  //   };
-
-  //   StScheduleAPI.fetchAllSchedule(filter).then((response) => {
-  //     dispatch(SetSchedule(response.data.data));
-  //     setTotal(response.data.data.totalPages);
-  //     setLoading(false);
-  //     console.log(response.data.data.data);
-  //   });
-  // };
   useEffect(() => {
-    fetchData();
+    fetchData(sinhVienCurrent);
   }, [current]);
 
-  const fetchData = () => {
+  const fetchData = (sinhVienCurrent) => {
+    const searchTimeAsNumber = parseInt(searchTime);
+    console.log(searchTimeAsNumber);
     setLoading(false);
+    let filter = {
+      idStudent: sinhVienCurrent.id,
+      searchTime: searchTimeAsNumber,
+      page: current,
+      size: 10,
+    };
 
-    StScheduleAPI.getAllSchedule().then((response) => {
-      dispatch(SetSchedule(response.data));
+    StScheduleAPI.fetchAllSchedule(filter).then((response) => {
+      dispatch(SetSchedule(response.data.data.data));
+      setTotal(response.data.data.totalPages);
       setLoading(false);
-      console.log(response.data.data);
+      console.log(response.data.data.data);
     });
   };
+
 
   const data = useAppSelector(GetSchedule);
 
@@ -74,10 +62,10 @@ const StudentSchedule = () => {
       render: (text, record, index) => (current - 1) * 10 + index + 1,
     },
     {
-      title: "Tên buổi học",
-      dataIndex: "name",
-      key: "name",
-      sorter: (a, b) => a.name.localeCompare(b.name),
+      title: "Buổi học",
+      dataIndex: "meetingName",
+      key: "meetingName",
+      sorter: (a, b) => a.meetingName.localeCompare(b.meetingName),
     },
     {
       title: "Ngày",
@@ -85,10 +73,10 @@ const StudentSchedule = () => {
       key: "meetingDate",
       sorter: (a, b) => a.meetingDate - b.meetingDate,
       render: (text, record) => {
-        const startTime = new Date(record.meetingDate);
-        const formattedTime = `${startTime.getDate()}/${
-          startTime.getMonth() + 1
-        }/${startTime.getFullYear()}`;
+        const time = new Date(record.meetingDate);
+        const formattedTime = `${time.getDate()}/${
+          time.getMonth() + 1
+        }/${time.getFullYear()}`;
 
         return <span>{formattedTime}</span>;
       },
@@ -110,12 +98,15 @@ const StudentSchedule = () => {
       dataIndex: "typeMeeting",
       key: "typeMeeting",
       sorter: (a, b) => a.typeMeeting.localeCompare(b.typeMeeting),
+      render: (text, record) => (
+        <span>{record.typeMeeting === 0 ? "online" : "offline"}</span>
+      ),
     },
     {
       title: "Lớp",
-      dataIndex: "classId",
-      key: "classId",
-      sorter: (a, b) => a.classId.localeCompare(b.classId),
+      dataIndex: "classCode",
+      key: "classCode",
+      sorter: (a, b) => a.classCode.localeCompare(b.classCode),
     },
     {
       title: "Thời gian",
@@ -132,7 +123,7 @@ const StudentSchedule = () => {
     },
   ];
   const buttonSearch = () => {
-    fetchData();
+    fetchData(sinhVienCurrent);
     setCurrent(1);
   };
 
@@ -140,12 +131,16 @@ const StudentSchedule = () => {
     setSearchTime("");
   };
 
+  const handleOptionChange = (value) => {
+      setSearchTime(value);
+  };
+
   return (
     <div className="shedule">
       {loading && <LoadingIndicator />}
       <div className="title_activity_management">
         {" "}
-        <FontAwesomeIcon icon={faLayerGroup} size="1x" />
+        <FontAwesomeIcon icon={faCalendarAlt  } size="1x" />
         <span style={{ marginLeft: "10px" }}>Lịch học</span>
       </div>
       <div className="filter-semester">
@@ -154,14 +149,22 @@ const StudentSchedule = () => {
         <hr />
         <div className="title__search">
           Thời gian:{" "}
-          <Input
-            type="date"
-            value={moment(searchTime).format("YYYY-MM-DD")}
-            onChange={(e) => {
-              setSearchTime(e.target.value);
-            }}
-            style={{ width: "300px", marginLeft: "5px" }}
-          />
+          <Select
+            style={{ width: "300px", marginLeft: "5px", textAlign: "left"}}
+            value={searchTime}
+            onChange={handleOptionChange}
+          >
+            <Option value="7">7 ngày tới</Option>
+            <Option value="14">14 ngày tới</Option>
+            <Option value="30">30 ngày tới</Option>
+            <Option value="60">60 ngày tới</Option>
+            <Option value="90">90 ngày tới</Option>
+            <Option value="-7">7 ngày trước</Option>
+            <Option value="-14">14 ngày trước</Option>
+            <Option value="-30">30 ngày trước</Option>
+            <Option value="-60">60 ngày trước</Option>
+            <Option value="-90">90 ngày trước</Option>
+          </Select>
         </div>
         <div className="box_btn_filter">
           <Button className="btn_filter" onClick={buttonSearch}>
@@ -180,7 +183,7 @@ const StudentSchedule = () => {
         <div className="tittle__category">
           <div>
             {" "}
-            {<FontAwesomeIcon icon={faLayerGroup} size="1x" />}
+            {<FontAwesomeIcon icon={faCalendarAlt} size="1x" />}
             <span style={{ fontSize: "18px", fontWeight: "500" }}>
               {" "}
               Lịch học
