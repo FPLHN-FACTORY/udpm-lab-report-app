@@ -29,11 +29,13 @@ public interface TeStudentClassesRepository extends JpaRepository<StudentClasses
             FROM student_classes sc
             LEFT JOIN team t on t.id = sc.team_id
             WHERE sc.class_id = :#{#req.idClass}
+            ORDER BY t.code
                      """, countQuery = """
             SELECT COUNT(DISTINCT sc.id)
             FROM student_classes sc
             JOIN team t on t.id = sc.team_id
             WHERE sc.class_id = :#{#req.idClass}
+            ORDER BY t.code
             """, nativeQuery = true)
     List<TeStudentClassesRespone> findStudentClassByIdClass(@Param("req") TeFindStudentClasses req);
 

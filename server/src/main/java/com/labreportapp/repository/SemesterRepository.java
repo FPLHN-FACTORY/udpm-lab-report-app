@@ -17,7 +17,7 @@ public interface SemesterRepository extends JpaRepository<Semester, String> {
     String NAME = "BaseSemesterRepository";
 
     @Query(value = """
-            SELECT id, name FROM semester ORDER BY created_date DESC
+            SELECT id, name FROM semester ORDER BY start_time DESC
             """, nativeQuery = true)
     List<SimpleEntityProjection> getAllSimpleEntityProjection();
 }

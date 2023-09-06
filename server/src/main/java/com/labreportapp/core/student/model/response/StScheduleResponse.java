@@ -25,7 +25,7 @@ public interface StScheduleResponse {
     String getClassCode();
 
     @Value("#{target.start_time}")
-    String getStartTime();
+    Long getStartTime();
 
     @Value("#{target.descriptions}")
     String getDescriptions();

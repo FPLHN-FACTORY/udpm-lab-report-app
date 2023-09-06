@@ -7,7 +7,7 @@ import { Button } from "antd";
 import { useAppDispatch } from "../../../../../app/hook";
 
 function Editor({ idTeacher, idClass, showCreate }) {
-  const [descriptionss, setDescriptionss] = useState("");
+  const [descriptionss, setDescriptionss] = useState("<p><br></p>");
   const dispatch = useAppDispatch();
 
   const config = {

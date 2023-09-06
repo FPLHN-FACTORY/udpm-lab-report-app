@@ -95,7 +95,7 @@ const TeacherAttendanceMeeting = () => {
             ...item1,
             idMeeting: idMeeting,
             nameMeeting: meeting.name,
-            statusAttendance: "NO",
+            statusAttendance: "YES",
           };
         });
         dispatch(SetAttendanceMeeting(listShowTable));

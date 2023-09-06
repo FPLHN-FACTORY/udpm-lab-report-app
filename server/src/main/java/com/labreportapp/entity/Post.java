@@ -24,7 +24,7 @@ import org.hibernate.annotations.Nationalized;
 @Table(name = "post")
 public class Post extends PrimaryEntity {
 
-    @Column(length = EntityProperties.LENGTH_DESCRIPTION)
+    @Column(length = Integer.MAX_VALUE)
     @Nationalized
     private String descriptions;
 

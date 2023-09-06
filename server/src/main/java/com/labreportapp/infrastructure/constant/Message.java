@@ -29,7 +29,10 @@ public enum Message {
     UNIQUE_LEADER_TEAM(PropertiesReader.getProperty(PropertyKeys.UNIQUE_LEADER_TEAM)),
     INVALID_DATE(PropertiesReader.getProperty(PropertyKeys.INVALID_DATE)),
     DANG_CO_DU_LIEU_LIEN_QUAN_KHONG_THE_XOA_BUOI_HOC(PropertiesReader.getProperty(PropertyKeys.DANG_CO_DU_LIEU_LIEN_QUAN_KHONG_THE_XOA_BUOI_HOC)),
-    ACTIVITY_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeys.ACTIVITY_NOT_EXISTS));
+    ACTIVITY_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeys.ACTIVITY_NOT_EXISTS)),
+    STUDENT_CLASSES_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeys.STUDENT_CLASSES_NOT_EXISTS)),
+    STUDENT_HAD_TEAM(PropertiesReader.getProperty(PropertyKeys.STUDENT_HAD_TEAM)),
+    STUDENT_HAD_NOT_TEAM(PropertiesReader.getProperty(PropertyKeys.STUDENT_HAD_NOT_TEAM));
 
     private String message;
 

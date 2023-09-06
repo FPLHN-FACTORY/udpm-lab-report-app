@@ -124,7 +124,7 @@ function EditorUpdate({ obj, showUpdate }) {
           }}
           onClick={update}
         >
-          Đăng
+          Cập nhật
         </Button>
       </div>
     </div>

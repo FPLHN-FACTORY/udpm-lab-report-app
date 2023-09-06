@@ -203,7 +203,11 @@ const SemesterManagement = () => {
           <Button className="btn_filter" onClick={buttonSearch}>
             Tìm kiếm
           </Button>
-          <Button className="btn__clear" onClick={clearData}>
+          <Button
+            className="btn__clear"
+            onClick={clearData}
+            style={{ backgroundColor: "rgb(50, 144, 202)" }}
+          >
             Làm mới bộ lọc
           </Button>
         </div>

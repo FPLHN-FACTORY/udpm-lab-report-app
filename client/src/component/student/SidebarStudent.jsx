@@ -34,6 +34,18 @@ const SidebarStudentComponent = ({ collapsed, toggleCollapsed }) => {
     >
       <Menu theme="light" mode="inline">
         <Menu.Item
+          key="0"
+          className="menu_custom"
+          icon={
+            <FontAwesomeIcon
+              icon={faCalendar}
+              style={{ color: "rgb(226, 179, 87)" }}
+            />
+          }
+        >
+          <Link to="/student/schedule">Đăng ký lớp học</Link>
+        </Menu.Item>
+        <Menu.Item
           key="1"
           className="menu_custom"
           icon={
@@ -59,6 +71,18 @@ const SidebarStudentComponent = ({ collapsed, toggleCollapsed }) => {
         </Menu.Item>
         <Menu.Item
           key="3"
+          className="menu_custom"
+          icon={
+            <FontAwesomeIcon
+              icon={faHome}
+              style={{ color: "rgb(226, 179, 87)" }}
+            />
+          }
+        >
+          <Link to="/student/my-class">Điểm danh</Link>
+        </Menu.Item>
+        <Menu.Item
+          key="4"
           className="menu_custom"
           icon={
             <FontAwesomeIcon

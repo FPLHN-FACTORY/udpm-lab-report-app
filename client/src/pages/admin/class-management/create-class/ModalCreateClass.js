@@ -5,11 +5,12 @@ import { useEffect, useState } from "react";
 import moment from "moment";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useAppDispatch } from "../../../../app/hook";
+import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import LoadingIndicator from "../../../../helper/loading";
 import { ClassAPI } from "../../../../api/admin/class-manager/ClassAPI.api";
 import { SetTeacherSemester } from "../../../../app/admin/ClassManager.reducer";
 import { CreateClass } from "../../../../app/admin/ClassManager.reducer";
+import { GetAdTeacher } from "../../../../app/admin/AdTeacherSlice.reducer";
 
 const { Option } = Select;
 
@@ -21,7 +22,6 @@ const ModalCreateProject = ({ visible, onCancel }) => {
   const [idActivitiSearch, setIdActivitiSearch] = useState("");
   const [activityDataAll, setActivityDataAll] = useState([]); // Dữ liệu activity
   const [selectedItemsPerson, setSelectedItemsPerson] = useState("");
-  const [teacherDataAll, setTeacherDataAll] = useState([]); // Dữ liệu teacherId và username
   const [name, setName] = useState("");
   const [code, setCode] = useState("");
   const [classPeriod, setClassPeriod] = useState("");
@@ -59,12 +59,6 @@ const ModalCreateProject = ({ visible, onCancel }) => {
 
   useEffect(() => {
     if (visible) {
-      const fetchTeacherData = async () => {
-        const responseTeacherData = await ClassAPI.fetchAllTeacher();
-        const teacherData = responseTeacherData.data;
-        setTeacherDataAll(teacherData);
-      };
-      fetchTeacherData();
     }
 
     return () => {
@@ -184,6 +178,12 @@ const ModalCreateProject = ({ visible, onCancel }) => {
     setClassPeriod(value);
   };
 
+  const teacherDataAll = useAppSelector(GetAdTeacher);
+
+  const filterTeacherOptions = (input, option) => {
+    return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+  };
+
   return (
     <>
       <Modal
@@ -240,14 +240,15 @@ const ModalCreateProject = ({ visible, onCancel }) => {
             </Row>
             <Row style={{ marginBottom: "15px" }}>
               <Col span={12} style={{ paddingRight: "10px" }}>
-                GVHD: <br />
+                Giảng viên: <br />
                 <Select
                   showSearch
                   value={selectedItemsPerson}
                   onChange={handleSelectPersonChange}
                   style={{ width: "100%" }}
+                  filterOption={filterTeacherOptions}
                 >
-                  <Option value="NULL">Chọn 1 GVHD</Option>
+                  <Option value="NULL">Chọn 1 giảng viên</Option>
 
                   {teacherDataAll.map((teacher) => (
                     <Option key={teacher.id} value={teacher.id}>

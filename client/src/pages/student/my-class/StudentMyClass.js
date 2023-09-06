@@ -151,10 +151,11 @@ const StudentMyClass = () => {
   ];
 
   const handleChangeSemester = (e) => {
+    setSemester(e);
     if (e === "") {
+      setListActivity([]);
       setActivity("Không có hoạt động");
     } else {
-      setSemester(e);
       StMyClassAPI.getAllActivityByIdSemester(e).then((response) => {
         setListActivity(response.data.data);
         setActivity("");
@@ -166,9 +167,15 @@ const StudentMyClass = () => {
     loadDataClass();
   };
 
+  const filterOptions = (input, option) => {
+    return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+  };
+
+
   const loadDataClass = () => {
     setLoading(true);
     let filter = {
+      semesterId: semester,
       activityId: activity,
       code: code,
       name: name,
@@ -206,12 +213,14 @@ const StudentMyClass = () => {
         <div className="content_filter">
           <Row gutter={16} style={{ marginBottom: "10px", paddingTop: "10px" }}>
             <Col span={6}>
-              <span>Học kỳ</span>
+              <span>Học kỳ:</span>
               <QuestionCircleFilled
                 style={{ paddingLeft: "12px", fontSize: "15px" }}
               />
               <br />
               <Select
+              showSearch
+                  filterOption={filterOptions}
                 style={{
                   width: "263px",
                   minWidth: "120px",
@@ -233,12 +242,14 @@ const StudentMyClass = () => {
               </Select>
             </Col>
             <Col span={14}>
-              <span>Hoạt động</span>
+              <span>Hoạt động:</span>
               <QuestionCircleFilled
                 style={{ paddingLeft: "12px", fontSize: "15px" }}
               />{" "}
               <br />
               <Select
+              showSearch
+                  filterOption={filterOptions}
                 style={{
                   width: "868px",
                   margin: "6px 0 10px 0",
@@ -260,7 +271,7 @@ const StudentMyClass = () => {
           </Row>
           <Row gutter={16} style={{ marginBottom: "0px", paddingTop: "10px" }}>
             <Col span={6}>
-              <span>Mã lớp</span>{" "}
+              <span>Mã lớp:</span>{" "}
               <QuestionCircleFilled
                 style={{ paddingLeft: "12px", fontSize: "15px" }}
               />{" "}
@@ -276,7 +287,7 @@ const StudentMyClass = () => {
               />
             </Col>
             <Col span={6}>
-              <span>Tên lớp</span>{" "}
+              <span>Tên lớp:</span>{" "}
               <QuestionCircleFilled
                 style={{ paddingLeft: "12px", fontSize: "15px" }}
               />
@@ -292,7 +303,7 @@ const StudentMyClass = () => {
               />
             </Col>
             <Col span={6}>
-              <span>Ca học</span>
+              <span>Ca học:</span>
               <QuestionCircleFilled
                 style={{ paddingLeft: "12px", fontSize: "15px" }}
               />{" "}
@@ -302,6 +313,8 @@ const StudentMyClass = () => {
                 onChange={(e) => {
                   setClassPeriod(e);
                 }}
+                showSearch
+                  filterOption={filterOptions}
                 value={classPeriod}
               >
                 <Option value="">Tất cả</Option>
@@ -318,7 +331,7 @@ const StudentMyClass = () => {
               </Select>
             </Col>
             <Col span={6}>
-              <span>Level</span>{" "}
+              <span>Level:</span>{" "}
               <QuestionCircleFilled
                 style={{ paddingLeft: "12px", fontSize: "15px" }}
               />{" "}
@@ -328,6 +341,8 @@ const StudentMyClass = () => {
                 onChange={(e) => {
                   setLevel(e);
                 }}
+                showSearch
+                  filterOption={filterOptions}
                 value={level}
               >
                 <Option value="">Tất cả</Option>
@@ -356,10 +371,6 @@ const StudentMyClass = () => {
               {" "}
               Danh sách lớp học
             </span>
-          </div>
-          <div style={{ float: "right" }}>
-            {" "}
-            <Button className="btn_join_class">Tham gia lớp học</Button>
           </div>
         </div>
         <br />

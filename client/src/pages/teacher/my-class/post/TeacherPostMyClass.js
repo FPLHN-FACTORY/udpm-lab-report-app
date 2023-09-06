@@ -20,6 +20,8 @@ import {
   SetPost,
 } from "../../../../app/teacher/post/tePostSlice.reduce";
 import { toast } from "react-toastify";
+import JoditEditor from "jodit-react";
+import ViewEditorJodit from "../../../../helper/editor/ViewEditorJodit";
 const TeacherPostMyClass = () => {
   const dispatch = useAppDispatch();
   const { idClass } = useParams();
@@ -173,16 +175,13 @@ const TeacherPostMyClass = () => {
             <span style={{ marginLeft: "10px", fontWeight: "500" }}>
               Bảng điều khiển
             </span>{" "}
-            <span style={{ color: "gray", fontSize: "14px" }}>
-              {" "}
-              - Thành viên
-            </span>
+            <span style={{ color: "gray", fontSize: "14px" }}> - Bài đăng</span>
           </span>
         </Link>
       </div>
       <div
         className="box-two-student-in-my-class"
-        style={{ height: "auto", paddingBottom: "0px" }}
+        style={{ height: "auto", paddingBottom: "25px" }}
       >
         <div className="box-background">
           <div className="button-menu">
@@ -196,7 +195,7 @@ const TeacherPostMyClass = () => {
                   fontWeight: "bold",
                 }}
               >
-                BÀI VIẾT &nbsp;
+                BÀI ĐĂNG &nbsp;
               </Link>
               <Link
                 to={`/teacher/my-class/students/${idClass}`}
@@ -207,7 +206,7 @@ const TeacherPostMyClass = () => {
                   fontWeight: "bold",
                 }}
               >
-                THÀNH VIÊN TRONG LỚP &nbsp;
+                THÔNG TIN LỚP HỌC &nbsp;
               </Link>
               <Link
                 to={`/teacher/my-class/teams/${idClass}`}
@@ -291,7 +290,7 @@ const TeacherPostMyClass = () => {
                     fontSize: "17px",
                   }}
                 >
-                  Mật khẩu
+                  Mã tham gia
                 </p>
                 <p
                   style={{
@@ -340,18 +339,19 @@ const TeacherPostMyClass = () => {
                   <div
                     style={{
                       height: "80px",
-                      lineHeight: "50px",
                       paddingLeft: "25px",
+                      display: "flex",
+                      alignItems: "center",
                     }}
                   >
-                    <p
+                    <span
                       className="link-create"
                       style={{
                         fontSize: "16px",
                       }}
                     >
                       Thông báo nội dung nào đó cho lớp học của bạn
-                    </p>
+                    </span>
                   </div>
                 </div>
               )}
@@ -405,6 +405,7 @@ const TeacherPostMyClass = () => {
                                           color: "gray",
                                           fontWeight: "initial",
                                           fontSize: "13px",
+                                          marginLeft: "7px",
                                         }}
                                       >
                                         {convertLongToDate(item.createdDate)}
@@ -412,7 +413,7 @@ const TeacherPostMyClass = () => {
                                     </span>
                                   </div>{" "}
                                   <div
-                                    style={{ width: "5%", float: "left" }}
+                                    style={{ float: "left" }}
                                     className="title-icon-drop"
                                   >
                                     <Dropdown
@@ -449,17 +450,7 @@ const TeacherPostMyClass = () => {
                               </>
                             }
                           >
-                            <span
-                              style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                                alignItems: "center",
-                                wordWrap: "break-word",
-                              }}
-                              dangerouslySetInnerHTML={parsedHTML(
-                                item.descriptions
-                              )}
-                            />
+                            <ViewEditorJodit value={item.descriptions} />
                           </Card>
                         )}
                       </div>

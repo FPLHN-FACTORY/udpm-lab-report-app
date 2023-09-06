@@ -44,7 +44,7 @@ public class Class extends PrimaryEntity {
     @Column
     private Integer classSize;
 
-    @Column(length = EntityProperties.LENGTH_DESCRIPTION)
+    @Column(length = Integer.MAX_VALUE)
     @Nationalized
     private String descriptions;
 
@@ -53,4 +53,7 @@ public class Class extends PrimaryEntity {
 
     @Column(length = EntityProperties.LENGTH_ID)
     private String activityId;
+
+//    @Column
+//    private Boolean statusClass;
 }

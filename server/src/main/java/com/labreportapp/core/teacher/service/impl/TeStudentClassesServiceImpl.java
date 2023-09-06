@@ -31,7 +31,6 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
     private RestTemplate restTemplate;
 
     @Override
-    @CacheEvict(value = {"studentClasses"}, allEntries = true)
     public List<TeStudentCallApiResponse> searchStudentClassesByIdClass(TeFindStudentClasses teFindStudentClasses) {
         List<TeStudentClassesRespone> listRepository = teStudentClassesRepository
                 .findStudentClassByIdClass(teFindStudentClasses);

@@ -6,6 +6,7 @@ import com.labreportapp.core.student.model.request.StFindClassRequest;
 import com.labreportapp.core.student.model.response.StMyClassResponse;
 import com.labreportapp.core.student.model.response.StMyStudentTeamResponse;
 import com.labreportapp.core.student.model.response.StMyTeamInClassResponse;
+import com.labreportapp.entity.StudentClasses;
 import com.labreportapp.repository.ClassRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -23,12 +24,14 @@ public interface StMyClassRepository extends ClassRepository {
             SELECT a.id, ROW_NUMBER() OVER(ORDER BY c.created_date DESC) AS stt,
             a.code, a.name, a.start_time, a.class_period, a.teacher_id, b.level
             FROM class a JOIN activity b ON a.activity_id = b.id 
+            JOIN semester d ON b.semester_id = d.id
             JOIN student_classes c ON a.id = c.class_id
             WHERE (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR a.code LIKE %:#{#req.code}%) 
             AND (:#{#req.name} IS NULL OR :#{#req.name} LIKE '' OR a.name LIKE %:#{#req.name}%) 
             AND (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR a.class_period = :#{#req.classPeriod}) 
             AND (:#{#req.level} IS NULL OR :#{#req.level} LIKE '' OR b.level = :#{#req.level}) 
             AND (:#{#req.activityId} IS NULL OR :#{#req.activityId} LIKE '' OR b.id = :#{#req.activityId}) 
+            AND d.id = :#{#req.semesterId}
             AND c.student_id = :#{#req.studentId}
             ORDER BY c.created_date DESC
             """, nativeQuery = true)
@@ -55,4 +58,13 @@ public interface StMyClassRepository extends ClassRepository {
             """, nativeQuery = true)
     String checkStatusStudentInClass(@Param("idClass") String idClass, @Param("idStudent") String idStudent);
 
+    @Query(value = """
+            SELECT a.* FROM student_classes a WHERE a.class_id = :idClass AND a.student_id = :idStudent
+            """, nativeQuery = true)
+    StudentClasses findStudentClasses(@Param("idClass") String idClass, @Param("idStudent") String idStudent);
+
+    @Query(value = """
+            SELECT COUNT(a.id) FROM student_classes a WHERE a.class_id = :idClass AND a.team_id = :idTeam
+            """, nativeQuery = true)
+    Integer countMemberInTeam(@Param("idClass") String idClass, @Param("idTeam") String idTeam);
 }
