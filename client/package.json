@@ -23,6 +23,7 @@
     "@testing-library/user-event": "^13.5.0",
     "antd": "^5.8.2",
     "axios": "^1.4.0",
+    "dayjs": "^1.10.4",
     "draft-js": "^0.11.7",
     "emoji-picker-react": "^4.4.9",
     "framer-motion": "^10.12.17",

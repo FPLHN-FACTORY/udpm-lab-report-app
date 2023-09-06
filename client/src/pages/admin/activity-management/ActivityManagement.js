@@ -22,8 +22,6 @@ import LoadingIndicator from "../../../helper/loading";
 import ModalCreateActivity from "./modal-create/ModalCreateActivity";
 import ModalUpdateActivity from "./modal-update/ModalUpdateActivity";
 import { toast } from "react-toastify";
-import axios from "axios";
-import { Center } from "@chakra-ui/react";
 
 
 
@@ -45,21 +43,18 @@ const ActivityManagement = () => {
   const [loading, setLoading] = useState(true);
 
   const { id } = useParams();
-  const [activity, setActivity] = useState(null);
-  const [idActivity, setIdActivity] = useState("");
+  const [activity, setActivity] = useState({});
   const [listSemester, setListSemester] = useState([]);
 
 
   useEffect(() => {
     fetchData();
-
     return () => {
       dispatch(SetActivityManagement([]));
     };
   }, [current]);
 
   useEffect(() => {
-    // Gọi hàm để tải dữ liệu học kỳ từ API
     fetchSemesterData();
   }, []);
 
@@ -78,7 +73,6 @@ const ActivityManagement = () => {
       dispatch(SetActivityManagement(listAcivityManagement));
       setTotal(response.data.data.totalPages);
       setLoading(false);
-      console.log(response.data.data.data);
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng ấn F5 để tải lại trang");
     }
@@ -87,8 +81,7 @@ const ActivityManagement = () => {
   const fetchSemesterData = async () => {
     try {
       const response = await ActivityManagementAPI.semester();
-      const semesterData = response.data.data; // Dữ liệu học kỳ từ API
-      // Cập nhật state hoặc Redux store với dữ liệu học kỳ
+      const semesterData = response.data.data;
       setListSemester(semesterData);
     } catch (error) {
       console.error('Error fetching semester data:', error);
@@ -169,7 +162,7 @@ const ActivityManagement = () => {
                 icon={faEdit}
                 size="1x"
                 onClick={() => {
-                  handleUpdateActivity(record.id, record);
+                  handleUpdateActivity(record);
                 }}
               />
             </Tooltip>
@@ -212,13 +205,13 @@ const ActivityManagement = () => {
   const handleModalCreateCancel = () => {
     document.querySelector("body").style.overflowX = "auto";
     setShowCreateModal(false);
+    setActivity({})
   };
 
-  const handleUpdateActivity = (id, activity) => {
+  const handleUpdateActivity = (item) => {
     document.querySelector("body").style.overflowX = "hidden";
     setShowUpdateModal(true);
-    setIdActivity(id);
-    setActivity(activity);
+    setActivity(item);
   };
 
   const handleModalUpdateCancel = () => {
@@ -250,36 +243,31 @@ const ActivityManagement = () => {
   };
 
   const searchActivitiesByLevel = (level) => {
-    const filteredActivities = data.filter(activity => activity.level === level);
+    const filteredActivities = data.filter((activity) => activity.level === level);
     dispatch(SetActivityManagement(filteredActivities));
     setCurrent(1);
   };
 
   const handleDeleteActivity = async (id) => {
     try {
-      await ActivityManagementAPI.deleteActivity(id);
-      toast.success("Xóa thành công!");
-      fetchData(); // Gọi lại hàm fetchData để cập nhật danh sách hoạt động sau khi xóa
+      await ActivityManagementAPI.delete(id).then((response)=>{
+        toast.success("Xóa thành công!");
+        dispatch(DeleteActivityManagement(id));
+      });
     } catch (error) {
       toast.error("Xóa không thành công. Vui lòng thử lại!");
     }
   };
 
   const searchActivitiesBySemester = (semesterId) => {
-    // Thực hiện tìm kiếm hoạt động dựa trên học kỳ ở đây
     const filteredActivities = data.filter(activity => activity.semesterId === semesterId);
-
-    // Cập nhật dữ liệu hiển thị hoạt động theo kết quả tìm kiếm
     dispatch(SetActivityManagement(filteredActivities));
-
-    // Cập nhật giá trị trang hiện tại nếu cần
     setCurrent(1);
   };
 
   return (
     <div className="activity_management">
-      {/* {loading && <LoadingIndicator />} */}
-
+      {loading && <LoadingIndicator />}
       <div className="title_activity_management">
         {" "}
         <FontAwesomeIcon icon={faTags} size="1x" />
@@ -322,9 +310,8 @@ const ActivityManagement = () => {
               <Select
                 style={{ width: "50%", marginLeft: "10px" }}
                 value={semesterSearch}
-                onChange={handleSemesterSearch} // Gọi hàm khi có thay đổi học kỳ
+                onChange={handleSemesterSearch}
               >
-                {/* Render danh sách học kỳ */}
                 {listSemester.map((semester) => (
                   <Option key={semester.id} value={semester.id}>
                     {semester.name}
@@ -401,6 +388,7 @@ const ActivityManagement = () => {
         visible={showUpdateModal}
         onCancel={handleModalUpdateCancel}
         listSemester={listSemester}
+        activity={activity}
       />
     </div>
   );
