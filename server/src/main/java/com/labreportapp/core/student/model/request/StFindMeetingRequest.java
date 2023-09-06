@@ -14,4 +14,7 @@ public class StFindMeetingRequest {
     private String idTeam;
 
     private String idMeeting;
+
+    private String idStudent;
+
 }

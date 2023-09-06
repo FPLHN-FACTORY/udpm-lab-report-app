@@ -40,6 +40,7 @@ const TeamInMeeting = () => {
   const featchTeams = async (id) => {
     try {
       await TeacherTeamsAPI.getTeamsByIdClass(id).then((responese) => {
+    
         setTeam(responese.data.data);
         setLoading(true);
       });
