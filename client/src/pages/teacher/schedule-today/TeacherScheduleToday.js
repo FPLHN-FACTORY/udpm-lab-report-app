@@ -32,12 +32,12 @@ const TeacherScheduleToday = () => {
     }
   };
 
-  const handleDescriptionChange = (idMeeting, value) => {
+  const handleAddressChange = (idMeeting, value) => {
     const listNew = dataToday.map((item) => {
       if (item.idMeeting === idMeeting) {
         return {
           ...item,
-          descriptionsMeeting: value,
+          meetingAddress: value,
         };
       }
       return item;
@@ -45,7 +45,7 @@ const TeacherScheduleToday = () => {
     setDataToday(listNew);
   };
 
-  const updateDescription = async () => {
+  const updateAddress = async () => {
     try {
       let dataUp = {
         idTeacher: giangVienCurrent.id,
@@ -105,15 +105,19 @@ const TeacherScheduleToday = () => {
 
     {
       title: "Địa điểm",
-      dataIndex: "meetingAddress",
-      key: "meetingAddress",
+      dataIndex: "addressCustom",
+      key: "addressCustom",
+      render: (text, record) => {
+        return (
+          <span>{record.typeMeeting === 0 ? "Google Meet" : "Xưởng"}</span>
+        );
+      },
       width: "13%",
     },
     {
       title: "Ca học",
       dataIndex: "meetingPeriod",
       key: "meetingPeriod",
-
       render: (text, record) => {
         return <span>{text + 1}</span>;
       },
@@ -121,8 +125,8 @@ const TeacherScheduleToday = () => {
     },
     {
       title: "Link học trực tuyến",
-      dataIndex: "descriptionsMeeting",
-      key: "descriptionsMeeting",
+      dataIndex: "meetingAddress",
+      key: "meetingAddress",
       render: (text, record) => {
         return (
           <div key={record.idMeeting}>
@@ -140,7 +144,7 @@ const TeacherScheduleToday = () => {
                 e.target.readOnly = true;
               }}
               onChange={(e) => {
-                handleDescriptionChange(record.idMeeting, e.target.value);
+                handleAddressChange(record.idMeeting, e.target.value);
               }}
             />
             <span className="box-icon-square">
@@ -148,7 +152,7 @@ const TeacherScheduleToday = () => {
                 <FontAwesomeIcon
                   icon={faUpload}
                   style={{ color: "white", fontSize: 21 }}
-                  onClick={updateDescription}
+                  onClick={updateAddress}
                 />
               </Tooltip>
             </span>
@@ -215,7 +219,6 @@ const TeacherScheduleToday = () => {
               style={{
                 fontSize: "17px",
                 fontWeight: "blod",
-                fontWeight: "bold",
               }}
               id="menu-checked"
             >

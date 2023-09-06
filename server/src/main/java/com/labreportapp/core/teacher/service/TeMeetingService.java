@@ -32,5 +32,5 @@ public interface TeMeetingService {
 
     List<TeScheduleMeetingClassRespone> searchScheduleToDayByIdTeacherAndMeetingDate(final TeFindScheduleMeetingClassRequest request);
 
-    List<TeScheduleMeetingClassRespone> updateDescriptionMeeting(@RequestBody TeScheduleUpdateMeetingRequest request);
+    List<TeScheduleMeetingClassRespone> updateAddressMeeting(@RequestBody TeScheduleUpdateMeetingRequest request);
 }

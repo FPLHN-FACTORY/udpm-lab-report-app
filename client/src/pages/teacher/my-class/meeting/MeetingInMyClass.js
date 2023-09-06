@@ -184,20 +184,6 @@ const MeetingInMyClass = () => {
             </div>
           </div>
           <div className="menu-teacher-search">
-            {/* <div
-            className="box-center"
-            style={{
-              height: "30px",
-              width: "100px",
-              backgroundColor: "#007bff",
-              color: "white",
-              borderRadius: "5px",
-              margin: "5px 0px 0px 91.5%",
-            }}
-          >
-            {" "}
-            <span style={{ fontSize: "14px" }}> {countMeeting} buổi học </span>
-          </div> */}
             <div>
               <div style={{ margin: "25px 0px 20px 16px" }}>
                 {" "}

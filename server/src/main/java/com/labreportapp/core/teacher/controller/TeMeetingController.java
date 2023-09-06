@@ -74,7 +74,7 @@ public class TeMeetingController {
 
     @PutMapping("/schedule")
     public ResponseObject updateScheduleTodayTeacher(@RequestBody TeScheduleUpdateMeetingRequest request) {
-        List<TeScheduleMeetingClassRespone> list = teMeetingService.updateDescriptionMeeting(request);
+        List<TeScheduleMeetingClassRespone> list = teMeetingService.updateAddressMeeting(request);
         return new ResponseObject(list);
     }
 

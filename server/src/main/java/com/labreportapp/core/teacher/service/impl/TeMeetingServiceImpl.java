@@ -143,15 +143,17 @@ public class TeMeetingServiceImpl implements TeMeetingService {
     }
 
     @Override
-    public List<TeScheduleMeetingClassRespone> updateDescriptionMeeting(TeScheduleUpdateMeetingRequest request) {
+    public List<TeScheduleMeetingClassRespone> updateAddressMeeting(TeScheduleUpdateMeetingRequest request) {
         List<TeUpdateMeetingRequest> list = request.getListMeeting();
+        System.err.println(request.getListMeeting().get(0).getMeetingAddress());
+        System.err.println(request.getListMeeting().get(1).getMeetingAddress());
         if (list.size() < 0) {
             throw new RestApiException(Message.SCHEDULE_TODAY_IS_EMPTY);
         }
         List<Meeting> listNew = new ArrayList<>();
         list.forEach(item -> {
             Meeting meeting = teMeetingRepository.findById(item.getIdMeeting()).get();
-            meeting.setDescriptions(item.getDescriptionsMeeting());
+            meeting.setAddress(item.getMeetingAddress());
             listNew.add(meeting);
         });
         teMeetingRepository.saveAll(listNew);
@@ -159,12 +161,5 @@ public class TeMeetingServiceImpl implements TeMeetingService {
         find.setIdTeacher(request.getIdTeacher());
         return teMeetingRepository.searchScheduleToDayByIdTeacherAndMeetingDate(find);
     }
-
-
-//    @Override
-//    public List<TeHomeWorkAndNoteMeetingRespone> searchMeetingHomeWNoteByIdMeetingAndIdClass(TeFindMeetingRequest request) {
-//        List<TeHomeWorkAndNoteMeetingRespone> list = teMeetingRepository.findTeamAndHomeWorkAndNoteByIdClassAndIdMeeting(request);
-//        return list;
-//    }
 
 }

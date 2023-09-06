@@ -393,40 +393,40 @@ public class DBGenerator implements CommandLineRunner {
         meeting1.setName("Buổi 1 buổi đầu làm quen giới thiệu bản thân");
         meeting1.setMeetingDate(new Date().getTime() - 86400000);
         meeting1.setMeetingPeriod(MeetingPeriod.CA_1);
-        meeting1.setDescriptions("https://meet.google.com/kea-hhgi-yix");
+        meeting1.setDescriptions("Học tập và làm theo tấm gương đạo đức HỒ CHÍ MINH");
         meeting1.setClassId(class1.getId());
         meeting1.setTypeMeeting(TypeMeeting.ONLINE);
-        meeting1.setAddress("Google Meet");
+        meeting1.setAddress("https://meet.google.com/kea-hhgi-yix");
         meeting1.setId(meetingRepository.save(meeting1).getId());
 
         Meeting meeting2 = new Meeting();
         meeting2.setName("Buổi 2");
         meeting2.setMeetingDate(new Date().getTime());
         meeting2.setMeetingPeriod(MeetingPeriod.CA_2);
-        meeting2.setDescriptions("");
+        meeting2.setDescriptions("Yêu Tổ quốc, yêu đồng bào Học tập tốt, lao động tốt Đoàn kết tốt, kỷ luật tốt Giữ gìn vệ sinh thật tốt Khiêm tốn, thật thà, dũng cảm");
         meeting2.setClassId(class1.getId());
         meeting2.setTypeMeeting(TypeMeeting.OFFLINE);
-        meeting2.setAddress("Xưởng");
+        meeting2.setAddress("");
         meeting2.setId(meetingRepository.save(meeting2).getId());
 
         Meeting meeting3 = new Meeting();
         meeting3.setName("Buổi 3");
         meeting3.setMeetingDate(new Date().getTime() + 3);
         meeting3.setMeetingPeriod(MeetingPeriod.CA_6);
-        meeting3.setDescriptions("https://meet.google.com/kea-hhgi-yix");
+        meeting3.setDescriptions("Câu chuyện về 5 điều Bác Hồ dạy cũng nhắc nhở chúng ta, không chỉ các cơ quan báo chí mà nhiều ngành, nhiều lĩnh vực khác hiện nay cũng đang đơn giản, dễ dãi trong dùng từ ");
         meeting3.setClassId(class1.getId());
         meeting3.setTypeMeeting(TypeMeeting.ONLINE);
-        meeting3.setAddress("Google Meet");
+        meeting3.setAddress("https://meet.google.com/kea-hhgi-yix");
         meeting3.setId(meetingRepository.save(meeting3).getId());
 
         Meeting meeting4 = new Meeting();
         meeting4.setName("Buổi 4");
         meeting4.setMeetingDate(new Date().getTime() + 4 * 86400000);
         meeting4.setMeetingPeriod(MeetingPeriod.CA_2);
-        meeting4.setDescriptions("https://meet.google.com/kea-hhgi-yix");
+        meeting4.setDescriptions("5 Điều Bác Hồ Dạy Thiếu niên, Nhi đồng");
         meeting4.setClassId(class1.getId());
         meeting4.setTypeMeeting(TypeMeeting.ONLINE);
-        meeting4.setAddress("Google Meet");
+        meeting4.setAddress("https://meet.google.com/kea-hhgi-yix");
         meeting4.setId(meetingRepository.save(meeting4).getId());
 
         Meeting meeting5 = new Meeting();
@@ -436,34 +436,34 @@ public class DBGenerator implements CommandLineRunner {
         meeting5.setDescriptions("");
         meeting5.setClassId(class1.getId());
         meeting5.setTypeMeeting(TypeMeeting.OFFLINE);
-        meeting5.setAddress("Xưởng");
+        meeting5.setAddress("");
         meeting5.setId(meetingRepository.save(meeting5).getId());
 
         Meeting meeting6 = new Meeting();
         meeting6.setName("Buổi 6");
         meeting6.setMeetingDate(new Date().getTime() + 6 * 86400000);
         meeting6.setMeetingPeriod(MeetingPeriod.CA_4);
-        meeting6.setDescriptions("https://meet.google.com/kea-hhgi-yix");
+        meeting6.setDescriptions("Xét từ góc độ chủ thể sáng tạo và phát triển (ai làm nên nó): là hệ thống quan điểm và học thuyết đó được sáng lập bởi C. Mác, Ph. Ăngghen và sự phát triển, vận dụng vào thực tiễn của V.I. Lênin");
         meeting6.setClassId(class1.getId());
         meeting6.setTypeMeeting(TypeMeeting.ONLINE);
-        meeting6.setAddress("Google Meet");
+        meeting6.setAddress("https://meet.google.com/kea-hhgi-yix");
         meeting6.setId(meetingRepository.save(meeting6).getId());
 
         Meeting meeting7 = new Meeting();
         meeting7.setName("Buổi 7  ");
         meeting7.setMeetingDate(new Date().getTime() + 7 * 86400000);
         meeting7.setMeetingPeriod(MeetingPeriod.CA_1);
-        meeting7.setDescriptions("https://meet.google.com/kea-hhgi-yix");
+        meeting7.setDescriptions("Xét từ góc độ cấu tạo (nó gồm có những cái gì): Chủ nghĩa Mác - Lênin có ba bộ phận lý luận cơ bản hợp thành");
         meeting7.setClassId(class1.getId());
         meeting7.setTypeMeeting(TypeMeeting.ONLINE);
-        meeting7.setAddress("Google Meet");
+        meeting7.setAddress("https://meet.google.com/kea-hhgi-yix");
         meeting7.setId(meetingRepository.save(meeting7).getId());
 
         Meeting meeting8 = new Meeting();
         meeting8.setName("Buổi 8");
         meeting8.setMeetingDate(new Date().getTime() + 8 * 86400000);
         meeting8.setMeetingPeriod(MeetingPeriod.CA_1);
-        meeting8.setDescriptions("");
+        meeting8.setDescriptions("Triết học là bộ phận lý luận nghiên cứu những quy luật vận động, phát triển chung nhất của tự nhiên, xã hội và tư duy");
         meeting8.setClassId(class1.getId());
         meeting8.setTypeMeeting(TypeMeeting.OFFLINE);
         meeting8.setAddress("Xưởng");
@@ -473,20 +473,20 @@ public class DBGenerator implements CommandLineRunner {
         meeting9.setName("Buổi 9");
         meeting9.setMeetingDate(new Date().getTime() + 9 * 86400000);
         meeting9.setMeetingPeriod(MeetingPeriod.CA_1);
-        meeting9.setDescriptions("");
+        meeting9.setDescriptions("Triết học là bộ phận lý luận nghiên cứu những quy luật vận động, phát triển chung nhất của tự nhiên, xã hội và tư duy");
         meeting9.setClassId(class1.getId());
         meeting9.setTypeMeeting(TypeMeeting.OFFLINE);
-        meeting9.setAddress("Xưởng");
+        meeting9.setAddress("");
         meeting9.setId(meetingRepository.save(meeting9).getId());
 
         Meeting meeting10 = new Meeting();
         meeting10.setName("Buổi 10 ");
         meeting10.setMeetingDate(new Date().getTime() + 10 * 86400000);
         meeting10.setMeetingPeriod(MeetingPeriod.CA_1);
-        meeting10.setDescriptions("");
+        meeting10.setDescriptions("Triết học là bộ phận lý luận nghiên cứu những quy luật vận động, phát triển chung nhất của tự nhiên, xã hội và tư duy");
         meeting10.setClassId(class1.getId());
         meeting10.setTypeMeeting(TypeMeeting.OFFLINE);
-        meeting10.setAddress("Xưởng");
+        meeting10.setAddress("");
         meeting10.setId(meetingRepository.save(meeting10).getId());
 // homework
         //class 1- team 2

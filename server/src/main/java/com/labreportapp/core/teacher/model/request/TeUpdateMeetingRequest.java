@@ -13,6 +13,6 @@ public class TeUpdateMeetingRequest {
 
     private String idMeeting;
 
-    private String descriptionsMeeting;
+    private String meetingAddress;
 
 }
