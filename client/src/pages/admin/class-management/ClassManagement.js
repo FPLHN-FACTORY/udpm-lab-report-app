@@ -34,6 +34,7 @@ import {
   ProjectOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
+import { SetAdTeacher } from "../../../app/admin/AdTeacherSlice.reducer";
 
 const ClassManagement = () => {
   const { Option } = Select;
@@ -81,7 +82,6 @@ const ClassManagement = () => {
 
     try {
       await ClassAPI.getAllMyClass(filter).then((respone) => {
-        console.log(selectedItemsPerson);
         setTotalPages(parseInt(respone.data.data.totalPages));
         setlistClassAll(respone.data.data.data);
         console.log(respone.data.data.data);
@@ -100,7 +100,8 @@ const ClassManagement = () => {
   useEffect(() => {
     const fetchTeacherData = async () => {
       const responseTeacherData = await ClassAPI.fetchAllTeacher();
-      const teacherData = responseTeacherData.data;
+      const teacherData = responseTeacherData.data.data;
+      dispatch(SetAdTeacher(teacherData));
       setTeacherDataAll(teacherData);
     };
     fetchTeacherData();
@@ -194,7 +195,7 @@ const ClassManagement = () => {
       sorter: (a, b) => a.classSize.localeCompare(b.classSize),
     },
     {
-      title: "Giáo viên",
+      title: "Giảng viên",
       dataIndex: "teacherId",
       key: "teacherId",
       sorter: (a, b) => a.teacherId.localeCompare(b.teacherId),
@@ -259,13 +260,17 @@ const ClassManagement = () => {
     setSelectedItemsPerson("");
     setClear(true);
   };
-  
+
   const [showCreateModal, setShowCreateModal] = useState(false);
 
   const handleModalCreateCancel = async () => {
     document.querySelector("body").style.overflowX = "auto";
     setShowCreateModal(false);
     await featchAllMyClass();
+  };
+
+  const filterOptions = (input, option) => {
+    return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
   };
 
   return (
@@ -293,6 +298,7 @@ const ClassManagement = () => {
                 onChange={(value) => {
                   setIdSemesterSearch(value);
                 }}
+                filterOption={filterOptions}
               >
                 <Option value="">Tất cả</Option>
 
@@ -315,6 +321,7 @@ const ClassManagement = () => {
                 onChange={(value) => {
                   setIdActivitiSearch(value);
                 }}
+                filterOption={filterOptions}
               >
                 <Option value="">Tất cả</Option>
                 {activityDataAll.map((activity) => (
@@ -357,9 +364,9 @@ const ClassManagement = () => {
                 style={{ width: "100%" }}
                 value={selectedItemsPerson}
                 onChange={handleSelectPersonChange}
+                filterOption={filterOptions}
               >
                 <Option value="">Tất cả</Option>
-
                 {teacherDataAll.map((teacher) => (
                   <Option key={teacher.id} value={teacher.id}>
                     {teacher.username}

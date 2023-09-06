@@ -210,7 +210,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses1.setClassId(class1.getId());
         studentClasses1.setTeamId(team2.getId());
         studentClasses1.setEmail("hieundph25894@fpt.edu.vn");
-        studentClasses1.setRole(RoleTeam.LEADER);
+        studentClasses1.setRole(RoleTeam.MEMBER);
         studentClasses1.setStatus(StatusTeam.ACTIVE);
         studentClasses1.setId(studentClassesRepository.save(studentClasses1).getId());
 
@@ -292,7 +292,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses10.setClassId(class1.getId());
         studentClasses10.setTeamId(team1.getId());
         studentClasses10.setEmail("fndph24005@fpt.edu.vn");
-        studentClasses10.setRole(RoleTeam.LEADER);
+        studentClasses10.setRole(RoleTeam.MEMBER);
         studentClasses10.setStatus(StatusTeam.ACTIVE);
         studentClasses10.setId(studentClassesRepository.save(studentClasses10).getId());
         // class 1- team 3 (11-15)
@@ -358,7 +358,6 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses18.setRole(RoleTeam.MEMBER);
         studentClasses18.setStatus(StatusTeam.ACTIVE);
         studentClasses18.setId(studentClassesRepository.save(studentClasses18).getId());
-
 
         StudentClasses studentClasses19 = new StudentClasses();
         studentClasses19.setStudentId("ad2a384f-f20f-430d-a378-e856018f3338");
@@ -604,7 +603,29 @@ public class DBGenerator implements CommandLineRunner {
         note8.setId(noteRepository.save(note8).getId());
 //post - class 1
         Post post1 = new Post();
-        post1.setDescriptions("Tất cả sinh viên hôm nay học offline trên xưởng nhé, lưu ý giúp tôi 1 !");
+        post1.setDescriptions("""
+                🔥🔥🔥HOT HOT HOT🔥🔥🔥
+                🔥🔥🔥Một sự kiện không thể bỏ lỡ dành cho các bạn sinh viên Java 3-4-5 & Dự Án Mẫu- Dự Án 1 - SEMINIAR TẤT TẦN TẬT CÁC CÁCH LÀM VIỆC GIỮA JAVA VỚI CSDL đang chờ đón các bạn đây:🔥🔥🔥
+                                
+                💥Nội dung chính của seminar bao gồm:
+                ⁉️ HIỂU Lợi ích của việc kết nối với CSDL
+                ⁉️ BIẾT Các cách kết nối với CSDL như là JDBC, Hibernate, JPA
+                ⁉️ HIỂU Cơ chế của mỗi cách kết nối và cách hoạt động của từng loại
+                                
+                💥 Chắn chắn rằng SEMINIAR sẽ giúp các bạn có thể giúp các bạn hiểu rõ hơn về 3 khái niệm JDBC/Hibernate/JPA . Nó là nền tảng giúp các bạn sau học lên Java 4,5,6 một cách dễ dàng hơn ✅
+                🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡
+                🕘 Thời gian: 20h30- 22h30
+                🗓 Ngày: 27-07-2023
+                                
+                🧡🧡🧡Giảng viên tham gia:🧡🧡🧡
+                🥰 GV1: Nguyễn Thúy Hằng
+                🥰 GV2: Vũ Văn Nguyên
+                🥰 GV3: Nguyễn Hoàng Tiến
+                🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡
+                                
+                👋👋Hãy nhanh tay đăng ký tham gia sự kiện
+                LINK ĐĂNG KÝ: https://forms.gle/qER6gWqWfGDrrDoP9
+                """);
         post1.setTeacherId(class1.getTeacherId());
         post1.setClassId(class1.getId());
         post1.setCreatedDate(new Date().getTime() - 3 * 86400000);
@@ -674,7 +695,29 @@ public class DBGenerator implements CommandLineRunner {
         post10.setId(postRepository.save(post10).getId());
 
         Post post11 = new Post();
-        post11.setDescriptions("<ul><li>Chú ý đi học</li><li>Không đi học bị absent</li><li>Đi học đc present</li><li>Mặc quần dài</li><li>Áo có cổ</li><li>Đeo giày</li><br></ul>");
+        post11.setDescriptions("""
+                🔥🔥🔥HOT HOT HOT🔥🔥🔥
+                🔥🔥🔥Một sự kiện không thể bỏ lỡ dành cho các bạn sinh viên Java 3-4-5 & Dự Án Mẫu- Dự Án 1 - SEMINIAR TẤT TẦN TẬT CÁC CÁCH LÀM VIỆC GIỮA JAVA VỚI CSDL đang chờ đón các bạn đây:🔥🔥🔥
+                                
+                💥Nội dung chính của seminar bao gồm:
+                ⁉️ HIỂU Lợi ích của việc kết nối với CSDL
+                ⁉️ BIẾT Các cách kết nối với CSDL như là JDBC, Hibernate, JPA
+                ⁉️ HIỂU Cơ chế của mỗi cách kết nối và cách hoạt động của từng loại
+                                
+                💥 Chắn chắn rằng SEMINIAR sẽ giúp các bạn có thể giúp các bạn hiểu rõ hơn về 3 khái niệm JDBC/Hibernate/JPA . Nó là nền tảng giúp các bạn sau học lên Java 4,5,6 một cách dễ dàng hơn ✅
+                🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡
+                🕘 Thời gian: 20h30- 22h30
+                🗓 Ngày: 27-07-2023
+                                
+                🧡🧡🧡Giảng viên tham gia:🧡🧡🧡
+                🥰 GV1: Nguyễn Thúy Hằng
+                🥰 GV2: Vũ Văn Nguyên
+                🥰 GV3: Nguyễn Hoàng Tiến
+                🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡
+                                
+                👋👋Hãy nhanh tay đăng ký tham gia sự kiện
+                LINK ĐĂNG KÝ: https://forms.gle/qER6gWqWfGDrrDoP9
+                """);
         post11.setTeacherId(class1.getTeacherId());
         post11.setClassId(class1.getId());
         post11.setCreatedDate(new Date().getTime() +  3 * 86400300);

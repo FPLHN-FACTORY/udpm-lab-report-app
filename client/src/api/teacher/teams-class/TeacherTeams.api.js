@@ -9,12 +9,6 @@ export class TeacherTeamsAPI {
       url: url + `?idClass=` + idClass,
     });
   }
-  static getAllInforStudent(request) {
-    return apiDanhSachSinhVien({
-      method: "GET",
-      url: `` + request,
-    });
-  }
   static createTeam = (data) => {
     return request({
       method: "POST",

@@ -84,7 +84,31 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             />
           }
         >
-          <Link to="/admin/dashboard">Thống kê</Link>
+          <Link to="/admin/dashboard">Thống kê triển khai xưởng</Link>
+        </Menu.Item>
+        <Menu.Item
+          key="5"
+          className="menu_custom"
+          icon={
+            <FontAwesomeIcon
+              icon={faLineChart}
+              style={{ color: "rgb(226, 179, 87)" }}
+            />
+          }
+        >
+          <Link to="/admin/dashboard">Theo dõi chỉ số hoạt động</Link>
+        </Menu.Item>
+        <Menu.Item
+          key="6"
+          className="menu_custom"
+          icon={
+            <FontAwesomeIcon
+              icon={faLayerGroup}
+              style={{ color: "rgb(226, 179, 87)" }}
+            />
+          }
+        >
+          <Link to="/admin/semester-management">Cấu hình lớp học</Link>
         </Menu.Item>
       </Menu>
     </Sider>

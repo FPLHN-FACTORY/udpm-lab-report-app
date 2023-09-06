@@ -10,20 +10,9 @@ export class ClassAPI {
   };
 
   static fetchAllTeacher = () => {
-    return apiDanhSachGiangVien({
+    return request({
       method: "GET",
-      url: ``,
-    });
-  };
-
-  static fetchAllByCondition = (code, classPeriod, idTeacher) => {
-    return apiDanhSachGiangVien({
-      method: "GET",
-      url:
-        `/admin/class-managerment/find-by-condition` +
-        code +
-        classPeriod +
-        idTeacher,
+      url: `/admin/teacher`,
     });
   };
 

@@ -162,7 +162,7 @@ const StudentsInMyClass = () => {
                   fontWeight: "bold",
                 }}
               >
-                THÀNH VIÊN TRONG LỚP &nbsp;
+                THÔNG TIN LỚP HỌC &nbsp;
               </Link>
               <Link
                 to={`/teacher/my-class/teams/${idClass}`}
@@ -227,62 +227,67 @@ const StudentsInMyClass = () => {
               <hr />
             </div>
           </div>
-          <div
-            className="content-class"
-            style={{ margin: "25px 0px 15px 15px" }}
-          >
-            <Row style={{ marginBottom: "4px", marginTop: "6px" }}>
-              <Col span={24}>
-                <span>Hoạt động: &nbsp; {classDetail.activityName}</span>
-              </Col>
-            </Row>
-            <Row style={{ marginBottom: "4px" }}>
-              <Col>
-                <span>Level: &nbsp; {classDetail.activityLevel + 1}</span>
-              </Col>
-            </Row>
-            <Row gutter={16} style={{ marginBottom: "4px" }}>
-              {" "}
-              <Col span={24}>
-                <span>
-                  Thời gian bắt đầu:&nbsp;
-                  {moment(classDetail.startTime).format("DD-MM-YYYY")}
-                </span>{" "}
-              </Col>
-            </Row>
-            <Row gutter={16} style={{ marginBottom: "4px" }}>
-              <Col>
-                <span>Mã lớp: &nbsp;{classDetail.code}</span>
-              </Col>
-            </Row>
-            <Row style={{ marginBottom: "4px" }}>
-              <Col>
-                <span>Tên lớp: &nbsp;{classDetail.name}</span>
-              </Col>
-            </Row>
-            <Row style={{ marginBottom: "4px" }}>
-              <Col>
-                <span>Ca học: &nbsp; {classDetail.classPeriod + 1} </span>
-              </Col>
-            </Row>
-            <Row style={{ marginBottom: "4px" }}>
-              <Col>
-                <span>Số thành viên: &nbsp;{classDetail.classSize}</span>
-              </Col>
-            </Row>
-            <Row gutter={16} style={{ marginBottom: "4px" }}>
-              <Col span={24}>
-                <span>Mô tả: &nbsp;{classDetail.descriptions}</span>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col span={24}>
-                <span>Mật khẩu: &nbsp;{classDetail.passWord}</span>
-              </Col>
-            </Row>
-            <br />
+          <div className="info-team">
+            <span className="info-heading">Thông tin lớp học:</span>
+            <div className="group-info">
+              <span
+                className="group-info-item"
+                style={{ marginTop: "10px", marginBottom: "15px" }}
+              >
+                Hoạt động: &nbsp;{classDetail.activityName}
+              </span>
+              <span className="group-info-item">
+                Level: &nbsp; {classDetail.activityLevel + 1}
+              </span>
+              <span
+                className="group-info-item"
+                style={{ marginTop: "13px", marginBottom: "15px" }}
+              >
+                Thời gian bắt đầu: &nbsp;
+                {moment(classDetail.startTime).format("DD-MM-YYYY")}
+              </span>
+              <span
+                className="group-info-item"
+                style={{ marginTop: "13px", marginBottom: "15px" }}
+              >
+                Mã lớp: &nbsp;{classDetail.code}
+              </span>
+              <span
+                className="group-info-item"
+                style={{ marginTop: "13px", marginBottom: "15px" }}
+              >
+                Tên lớp: &nbsp;{classDetail.name}
+              </span>
+              <span
+                className="group-info-item"
+                style={{ marginTop: "13px", marginBottom: "15px" }}
+              >
+                Ca học: &nbsp; {classDetail.classPeriod + 1}
+              </span>
+              <span
+                className="group-info-item"
+                style={{ marginTop: "13px", marginBottom: "15px" }}
+              >
+                Số thành viên: &nbsp;{classDetail.classSize}
+              </span>
+              <span
+                className="group-info-item"
+                style={{ marginTop: "13px", marginBottom: "15px" }}
+              >
+                Mô tả: &nbsp;{classDetail.descriptions}
+              </span>
+              <span
+                className="group-info-item"
+                style={{ marginTop: "13px", marginBottom: "15px" }}
+              >
+                Mã tham gia: &nbsp;{classDetail.passWord}
+              </span>
+            </div>
           </div>
-          <div style={{ minHeight: "140px" }}>
+          <span style={{ fontSize: "16px" }}>
+            Danh sách sinh viên trong lớp:
+          </span>
+          <div style={{ minHeight: "140px", marginTop: "-8px" }}>
             {data.length > 0 ? (
               <>
                 <div className="table">

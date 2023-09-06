@@ -10,6 +10,8 @@ import lombok.Setter;
 @Setter
 public class StFindClassRequest {
 
+    private String semesterId;
+
     private String activityId;
 
     private String code;

@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFilter,
   faCalendar,
-  faCalendarAlt  ,
+  faCalendarAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { Button, Input, Pagination, Table, Select } from "antd";
 import { Option } from "antd/es/mentions";
@@ -26,7 +26,7 @@ const StudentSchedule = () => {
   const [total, setTotal] = useState(0);
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
-  const [searchTime, setSearchTime] = useState('7');
+  const [searchTime, setSearchTime] = useState("7");
 
   useEffect(() => {
     fetchData(sinhVienCurrent);
@@ -50,7 +50,6 @@ const StudentSchedule = () => {
       console.log(response.data.data.data);
     });
   };
-
 
   const data = useAppSelector(GetSchedule);
 
@@ -86,6 +85,9 @@ const StudentSchedule = () => {
       dataIndex: "meetingPeriod",
       key: "meetingPeriod",
       sorter: (a, b) => a.meetingPeriod.localeCompare(b.meetingPeriod),
+      render: (text, record) => {
+        return <span>{parseInt(record.meetingPeriod) + 1}</span>;
+      },
     },
     {
       title: "Địa điểm học",
@@ -99,7 +101,7 @@ const StudentSchedule = () => {
       key: "typeMeeting",
       sorter: (a, b) => a.typeMeeting.localeCompare(b.typeMeeting),
       render: (text, record) => (
-        <span>{record.typeMeeting === 0 ? "online" : "offline"}</span>
+        <span>{record.typeMeeting === 0 ? "Online" : "Offline"}</span>
       ),
     },
     {
@@ -107,19 +109,6 @@ const StudentSchedule = () => {
       dataIndex: "classCode",
       key: "classCode",
       sorter: (a, b) => a.classCode.localeCompare(b.classCode),
-    },
-    {
-      title: "Thời gian",
-      dataIndex: "startTime",
-      key: "startTime",
-      render: (text, record) => {
-        const startTime = new Date(record.startTime);
-        const formattedTime = `${startTime.getDate()}/${
-          startTime.getMonth() + 1
-        }/${startTime.getFullYear()}`;
-
-        return <span>{formattedTime}</span>;
-      },
     },
   ];
   const buttonSearch = () => {
@@ -132,7 +121,7 @@ const StudentSchedule = () => {
   };
 
   const handleOptionChange = (value) => {
-      setSearchTime(value);
+    setSearchTime(value);
   };
 
   return (
@@ -140,7 +129,7 @@ const StudentSchedule = () => {
       {loading && <LoadingIndicator />}
       <div className="title_activity_management">
         {" "}
-        <FontAwesomeIcon icon={faCalendarAlt  } size="1x" />
+        <FontAwesomeIcon icon={faCalendarAlt} size="1x" />
         <span style={{ marginLeft: "10px" }}>Lịch học</span>
       </div>
       <div className="filter-semester">
@@ -150,7 +139,7 @@ const StudentSchedule = () => {
         <div className="title__search">
           Thời gian:{" "}
           <Select
-            style={{ width: "300px", marginLeft: "5px", textAlign: "left"}}
+            style={{ width: "300px", marginLeft: "5px", textAlign: "left" }}
             value={searchTime}
             onChange={handleOptionChange}
           >

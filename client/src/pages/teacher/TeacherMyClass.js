@@ -135,7 +135,6 @@ const TeacherMyClass = () => {
 
   const handleSearch = async () => {
     await featchAllMyClass(giangVienCurrent);
-    toast.success("Tìm kiếm thành công !");
   };
 
   const handleClear = () => {
@@ -227,6 +226,10 @@ const TeacherMyClass = () => {
     },
   ];
 
+  const filterOptions = (input, option) => {
+    return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+  };
+
   return (
     <div>
       {!loading && <LoadingIndicator />}
@@ -283,6 +286,8 @@ const TeacherMyClass = () => {
                   onChange={(value) => {
                     setIdSemesterSearch(value);
                   }}
+                  showSearch
+                  filterOption={filterOptions}
                   style={{
                     width: "263px",
                     minWidth: "120px",
@@ -310,6 +315,8 @@ const TeacherMyClass = () => {
                 />{" "}
                 <br />
                 <Select
+                  showSearch
+                  filterOption={filterOptions}
                   value={idActivitiSearch}
                   onChange={(value) => {
                     setIdActivitiSearch(value);
@@ -373,6 +380,8 @@ const TeacherMyClass = () => {
                 />{" "}
                 <br />
                 <Select
+                  showSearch
+                  filterOption={filterOptions}
                   value={classPeriodSearch}
                   onChange={(value) => {
                     setClassPeriodSearch(value);
@@ -396,6 +405,8 @@ const TeacherMyClass = () => {
                 />{" "}
                 <br />
                 <Select
+                  showSearch
+                  filterOption={filterOptions}
                   value={levelSearch}
                   onChange={(value) => {
                     setLevelSearch(value);
@@ -403,9 +414,9 @@ const TeacherMyClass = () => {
                   style={{ width: "92%", marginTop: "6px" }}
                 >
                   <Option value="">Tất cả</Option>
-                  <Option value="1">1</Option>
-                  <Option value="2">2</Option>
-                  <Option value="3">3</Option>
+                  <Option value="0">1</Option>
+                  <Option value="1">2</Option>
+                  <Option value="2">3</Option>
                 </Select>
               </Col>
             </Row>
@@ -414,7 +425,7 @@ const TeacherMyClass = () => {
                 Tìm kiếm
               </Button>
               <Button className="btn_clear" onClick={handleClear}>
-                Làm mới
+                Làm mới bộ lọc
               </Button>
             </div>
           </div>

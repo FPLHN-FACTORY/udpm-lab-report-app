@@ -22,7 +22,6 @@ const teacherSemesterSlice = createSlice({
         startTime: data.startTime,
         teacherId: data.teacherId,
         activityId: data.activityId
-
       };
       state.unshift(newCategory);
       return state;

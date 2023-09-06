@@ -53,7 +53,7 @@ const TeacherAttendanceClass = () => {
                   fontWeight: "bold",
                 }}
               >
-                THÀNH VIÊN TRONG LỚP &nbsp;
+                THÔNG TIN LỚP HỌC &nbsp;
               </Link>
               <Link
                 to={`/teacher/my-class/teams/${idClass}`}
