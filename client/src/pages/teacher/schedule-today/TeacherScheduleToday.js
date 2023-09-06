@@ -218,7 +218,7 @@ const TeacherScheduleToday = () => {
               to="/teacher/schedule-today"
               style={{
                 fontSize: "17px",
-                fontWeight: "blod",
+                fontWeight: "bold",
               }}
               id="menu-checked"
             >

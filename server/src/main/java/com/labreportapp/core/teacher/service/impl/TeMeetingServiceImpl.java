@@ -145,8 +145,6 @@ public class TeMeetingServiceImpl implements TeMeetingService {
     @Override
     public List<TeScheduleMeetingClassRespone> updateAddressMeeting(TeScheduleUpdateMeetingRequest request) {
         List<TeUpdateMeetingRequest> list = request.getListMeeting();
-        System.err.println(request.getListMeeting().get(0).getMeetingAddress());
-        System.err.println(request.getListMeeting().get(1).getMeetingAddress());
         if (list.size() < 0) {
             throw new RestApiException(Message.SCHEDULE_TODAY_IS_EMPTY);
         }
