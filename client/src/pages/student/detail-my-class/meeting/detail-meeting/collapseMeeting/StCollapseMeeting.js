@@ -20,25 +20,22 @@ const CollapseMeeting = ({ items }) => {
     const [descriptionsHomeWork, setDescriptionsHomeWork] = useState("");
     const [descriptionsNote, setDescriptionsNote] = useState("");
 
-
     useEffect(() => {
         window.scrollTo(0, 0);
         document.title = "Bảng điều khiển - chi tiết buổi học";
         setDescriptionsHomeWork("");
         setDescriptionsNote("");
         setLoading(true);
-        // console.log(items);
-       
-      }, []);
+      }, [items]);
 
     const clear = () => {
         setEdit(false);
         setActivePanel(null);
-        // setObjDetail({});
       };
-    //   useEffect(() => {
-    //     featchHomeWorkNote(idTeamDetail);
-    //   }, [idTeamDetail, activePanel]);
+      useEffect(() => {
+        featchHomeWorkNote(idTeamDetail);
+        
+      }, [idTeamDetail, activePanel]);
 
     const toggleCard = (index, item) => {
         setEdit(false);
@@ -46,6 +43,14 @@ const CollapseMeeting = ({ items }) => {
         setIdTeamDetail(item.id);
 
       };
+
+    const callToggleCardForAllItems = () => {
+      items.forEach((item, index) => toggleCard(index, item));
+    };
+    
+    useEffect(() => {
+      callToggleCardForAllItems();
+    }, [items]);
 
     const featchHomeWorkNote = async (idTeam) => {
         setLoading(false);
@@ -62,114 +67,68 @@ const CollapseMeeting = ({ items }) => {
                 idHomeWork: "",
                 idNote: "",
               };
-            //   setObjDetail(dataNew);
               setDescriptionsHomeWork("");
               setDescriptionsNote("");
             } else {
               setDescriptionsHomeWork(response.data.data.descriptionsHomeWork);
               setDescriptionsNote(response.data.data.descriptionsNote);
-            //   setObjDetail(response.data.data);
+              
             }
             setLoading(true);
           });
-          console.log(data.idMeeting);
-
-
         } catch (error) {
           alert("Lỗi hệ thống, vui lòng F5 lại trang !");
         }
       };
-    <div
-      className="centered-collapse"
-    //   onClick={(e) => {
-    //     e.stopPropagation();
-    //     clear();
-    //   }} 
-    >
-      <Collapse bordered={false} accordion={true} ghost showArrow={true}>
+
+  return(
+    <div className="lesson-information">
         {items.map((item, index) => (
-          <Panel
-            style={{
-              minWidth: "900px",
-              boxShadow:
-                activePanel === index
-                  ? "0px 0px 10px rgba(0, 0, 0, 0.2)"
-                  : "none",
-              border: "none",
-              borderBottom: "1px solid #ccc",
-              borderRadius: activePanel === index ? "8px" : "",
-            }}
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleCard(index, item);
-            }}
-            className={`box-title ${activePanel === index ? "active" : ""}`}
-            header={
-              <div
-                className={`custom-collapse-header ${
-                  activePanel === index ? "active" : ""
-                }`}
-                name="box-card"
-              >
-                <div className="title-left">
-                  <div className="box-icon">
-                    <FontAwesomeIcon
-                      icon={faUsersRectangle}
-                      style={{ color: "white", fontSize: 21 }}
-                    />
-                  </div>
-                  <span
-                    style={{
-                      fontSize: "16px",
-                      color: "black",
-                    }}
-                  >
-                    {item.name}
-                  </span>
-                </div>
-              </div>
-            }
-            key={index}
-          >
-            <div className="info-content" >
+          <div className="info-team">
+          <span className="info-heading" style={{marginLeft:'40px'}}>Thông tin lớp học:</span>
+          <div className="group-info" style={{marginLeft:'40px',marginRight:'40px'}}>
+            <span
+              className="group-info-item"
+              style={{ marginTop: "10px", marginBottom: "15px" , marginLeft: "50px" }}
+            >
+              Mã lớp: {item != null ? item.code : ""}
+            </span>
+            <span className="group-info-item" style={{marginTop: "15px", marginLeft: "50px"}}>
+              Tên lớp: {item != null ? item.name : ""}
+            </span>
+            <span className="group-info-item" style={{marginTop: "15px", marginLeft: "50px"}}>
+              Tên lớp: {item != null ? item.subjectName : ""}
+            </span>
+          </div>
+        </div>
+        ))}
+           <div className="info-content" style={{marginLeft:'40px',marginRight:'40px'}} >
               <Row gutter={16}>
                 <Col span={12}>
                   {" "}
-                  <span style={{ color: "black" }}>Nhận xét:</span>
+                  <span style={{ color: "black" , fontWeight:'bold'}}>Nhận xét:</span>
                   <TextArea
+                    style={{marginTop: "10px"}}
                     rows={4}
-                    placeholder="Nhập nhận xét"
                     value={descriptionsNote}
-                    onChange={(e) => setDescriptionsNote(e.target.value)}
-                    // onClick={(e) => {
-                    //   e.stopPropagation();
-                    //   setEdit(true);
-                    // }}
+                    readOnly
                   />
                 </Col>
                 <Col span={12}>
                   {" "}
-                  <span style={{ color: "black", fontFamily: "unset" }}>
+                  <span style={{ color: "black", fontFamily: "unset"  , fontWeight:'bold'}}>
                     Bài tập về nhà:
                   </span>
                   <TextArea
+                    style={{marginTop: "10px"}}
                     rows={4}
-                    placeholder="Nhập bài tập"
                     value={descriptionsHomeWork}
-                    style={{ readOnly: edit && "false" }}
-                    onChange={(e) => setDescriptionsHomeWork(e.target.value)}
-                    // onClick={(e) => {
-                    //   e.stopPropagation();
-                    //   setEdit(true);
-                    // }}
+                    readOnly
                   />
                 </Col>
               </Row>
             </div>
-            
-          </Panel>
-        ))}
-      </Collapse>
      </div>
+  );
 }
 export default CollapseMeeting;

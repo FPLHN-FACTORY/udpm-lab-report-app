@@ -3,8 +3,10 @@ package com.labreportapp.core.student.service.impl;
 import com.labreportapp.core.student.model.request.StFindMeetingRequest;
 import com.labreportapp.core.student.model.response.StHomeWordAndNoteResponse;
 import com.labreportapp.core.student.model.response.StMeetingResponse;
+import com.labreportapp.core.student.model.response.StMyTeamInClassResponse;
 import com.labreportapp.core.student.repository.StMeetingRepository;
 import com.labreportapp.core.student.service.StMeetingService;
+import com.labreportapp.core.teacher.model.request.TeFindStudentClasses;
 import com.labreportapp.infrastructure.constant.Message;
 import com.labreportapp.infrastructure.exception.rest.RestApiException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,5 +51,10 @@ public class StMeetingServiceImpl implements StMeetingService {
             return null;
         }
         return object.get();
+    }
+
+    @Override
+    public List<StMyTeamInClassResponse> getAllTeams(StFindMeetingRequest stFindStudentClasses) {
+        return stMeetingrepository.getTeamInClass(stFindStudentClasses);
     }
 }

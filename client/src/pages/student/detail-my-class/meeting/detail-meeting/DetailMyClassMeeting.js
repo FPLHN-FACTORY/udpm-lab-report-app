@@ -25,33 +25,41 @@ const StTeamMeeting = () => {
         window.scrollTo(0, 0);
         document.title = "Bảng điều khiển - buổi học";
         featchMeeting(idMeeting);
+        // featchTeams(meeting.idClass)
       }, []);
+      
       const featchMeeting = async (id) => {
         setLoading(false);
         try {
           await StudentMeetingAPI.getDetailByIdMeeting(id).then((response) => {
             setMeeting(response.data.data);
-            featchTeams(response.data.data.idClass);
+            // featchTeams(response.data.data.idClass);
           });
         } catch (error) {
           alert("Lỗi hệ thống, vui lòng F5 lại trang !");
         }
       };
+     
       useEffect(() => {
-        console.log(team);
-      }, [team]);
 
+
+        featchTeams(meeting.idClass )
+      }, [meeting]);
       const featchTeams = async (id) => {
         try {
-          await TeacherTeamsAPI.getTeamsByIdClass(id).then((responese) => {
-            console.log(responese.data.data);
+          await StudentMeetingAPI.getTeamInMeeting(id).then((responese) => {
+            // console.log(responese.data.data);
             setTeam(responese.data.data);
+            // console.log(team);
+
             setLoading(true);
           });
         } catch (error) {
           alert("Lỗi hệ thống, vui lòng F5 lại trang !");
         }
       };
+
+
       const convertLongToDate = (dateLong) => {
         const date = new Date(dateLong);
         const format = `${date.getDate()}/${
@@ -139,20 +147,20 @@ const StTeamMeeting = () => {
                 <hr />
               </div>
               <div className="row-meeting">
-                <div style={{ margin: "0px 0px 20px 80px" }}>
+                <div style={{ marginLeft: "40px" }}>
                   {" "}
                   <span style={{ fontSize: "17px", fontWeight: "500" }}>
                     {" "}
                     <UnorderedListOutlined
                       style={{ marginRight: "10px", fontSize: "20px" }}
                     />
-                    Danh sách nhóm
+                    Bài tập nhóm tôi
                   </span>
                 </div>
-                {/* {team.length > 0 ? (
-              <> */}
+                {team.length > 0 ? (
+              <>
                 <CollapseMeeting items={team}></CollapseMeeting>
-              {/* </>
+              </>
             ) : (
               <>
                 <p
@@ -166,7 +174,7 @@ const StTeamMeeting = () => {
                  Bạn chưa thuộc nhóm nào
                 </p>
               </>
-            )} */}
+            )}
                 
               </div>
             </div>

@@ -1,4 +1,6 @@
 import { request } from "../../helper/request.helper";
+import { sinhVienCurrent } from "../../helper/inForUser";
+
 const url = `/student/meeting`;
 export class StudentMeetingAPI {
     static countMeetingByIdClass(idClass) {
@@ -24,6 +26,18 @@ export class StudentMeetingAPI {
         method: "GET",
         url:
           url + `/homeword-and-note?idMeeting=` + data.idMeeting + `&idTeam=` + data.idTeam,
+      });
+    }
+    static getTeamInMeeting(idClass, idStudent) {
+      return request({
+        method: "GET",
+        url:
+        url+
+          `/get-team-meeting` +
+          `?idClass=` +
+          idClass +
+        `&idStudent=` +
+        sinhVienCurrent.id,
       });
     }
 }
