@@ -234,13 +234,32 @@ const MeetingInMyClass = () => {
                             <div>
                               {" "}
                               <span>
+                                {" "}
+                                Time:{" "}
+                                <span
+                                  style={{
+                                    color: "red",
+                                    fontWeight: "500",
+                                  }}
+                                >
+                                  {convertLongToDate(record.meetingDate)} -{" "}
+                                  <span>Ca </span>
+                                  {record.meetingPeriod + 1}
+                                </span>
+                              </span>
+                            </div>
+                          </div>
+                          {/* <div className="title-right">
+                            <div>
+                              {" "}
+                              <span>
                                 Thời gian:{" "}
                                 {convertLongToDate(record.meetingDate)} - Ca{" "}
                                 {record.meetingPeriod + 1}
                               </span>
                             </div>
-                          </div>
-                        </div>{" "}
+                          </div> */}
+                        </div>
                       </Link>
                     ))}
                   </>

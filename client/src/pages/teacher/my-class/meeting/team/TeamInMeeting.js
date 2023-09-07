@@ -10,6 +10,7 @@ import CollapseTeam from "../team/collapse-team/CollapseTeam";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import { faHome } from "@fortawesome/free-solid-svg-icons";
+
 const TeamInMeeting = () => {
   const { idMeeting } = useParams();
   const [meeting, setMeeting] = useState({});
