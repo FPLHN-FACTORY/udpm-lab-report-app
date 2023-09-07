@@ -34,7 +34,8 @@ public class AdActivityController {
     private AdActivityService adActivityService;
 
     @GetMapping("")
-    public ResponseObject viewActivity(@ModelAttribute final AdFindActivityRequest request){
+    public ResponseObject viewActivity(final AdFindActivityRequest request){
+
         return new ResponseObject(adActivityService.searchActivity(request));
     }
 

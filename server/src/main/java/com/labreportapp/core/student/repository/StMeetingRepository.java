@@ -31,6 +31,7 @@ public interface StMeetingRepository extends JpaRepository<Meeting , String> {
             FROM meeting m
             JOIN class c ON c.id = m.class_id
             WHERE m.class_id = :#{#req.idClass}
+            AND m.meeting_date < :#{#req.currentTime}
             ORDER BY m.meeting_date DESC
                      """, nativeQuery = true)
     List<StMeetingResponse> findMeetingByIdClass(@Param("req") StFindMeetingRequest req);
@@ -66,12 +67,11 @@ public interface StMeetingRepository extends JpaRepository<Meeting , String> {
                       """, nativeQuery = true)
     Optional<StHomeWordAndNoteResponse> searchDetailMeetingTeamByIdMeIdTeam(@Param("req") StFindMeetingRequest req);
 
-
     @Query(value = """
             SELECT a.id, a.code , a.name , a.subject_name , a.class_id FROM team a
             JOIN student_classes b ON b.team_id = a.id
              WHERE
-             a.class_id = :#{#req.idClass} AND b.id = :#{#req.idStudent}
+             a.class_id = :#{#req.idClass} AND b.student_id = :#{#req.idStudent}
             """, nativeQuery = true)
     List<StMyTeamInClassResponse> getTeamInClass(@Param("req") StFindMeetingRequest req);
 }

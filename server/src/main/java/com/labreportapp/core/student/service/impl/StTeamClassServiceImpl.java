@@ -121,10 +121,10 @@ public class StTeamClassServiceImpl implements StTeamClassService {
 
     @Override
     public List<SimpleResponse> test() {
-        List<String> listId =new ArrayList<>();
-        listId.add("99b84d22-2edb-4ede-a5c4-ec78f4791fee");
-        listId.add("6f0e60a6-a3a8-45d3-b6e6-d7632eb64c1a");
-        String url = ConvertListIdToString.convert(listId);
+        List<String> listStudentId =new ArrayList<>();
+        listStudentId.add("99b84d22-2edb-4ede-a5c4-ec78f4791fee");
+        listStudentId.add("6f0e60a6-a3a8-45d3-b6e6-d7632eb64c1a");
+        String url = ConvertListIdToString.convert(listStudentId);
         String apiUrl = ApiConstants.API_LIST_TEACHER;
 
         ResponseEntity<List<SimpleResponse>> responseEntity =
@@ -166,7 +166,6 @@ public class StTeamClassServiceImpl implements StTeamClassService {
         stDetailClassCustomResponse.setClassPeriod(classFind.getClassPeriod());
         stDetailClassCustomResponse.setDescriptions(classFind.getDescriptions());
         stDetailClassCustomResponse.setActivityId(classFind.getActivityId());
-        stDetailClassCustomResponse.setName(classFind.getName());
         stDetailClassCustomResponse.setNameTeacher(response.getName());
         stDetailClassCustomResponse.setStartTime(classFind.getStartTime());
         stDetailClassCustomResponse.setTeacherId(classFind.getTeacherId());

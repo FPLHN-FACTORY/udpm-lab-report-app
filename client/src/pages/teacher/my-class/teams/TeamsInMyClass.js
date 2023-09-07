@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import "./styleTeamsInMyClass.css";
 import { Row, Table, Button, Tooltip, Col, Modal } from "antd";
 import { Link } from "react-router-dom";
-import { UnorderedListOutlined } from "@ant-design/icons";
+import { ControlOutlined, UnorderedListOutlined } from "@ant-design/icons";
 import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/TeacherStudentClasses.api";
 import {
   SetStudentClasses,
@@ -20,10 +20,12 @@ import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import LoadingIndicator from "../../../../helper/loading";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faDownload,
   faEye,
   faHome,
   faPenToSquare,
   faTrashCan,
+  faUpload,
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import ModalDetailTeam from "./modal-detail/ModalDetailTeam";
@@ -44,7 +46,7 @@ const TeamsInMyClass = () => {
   const { idClass } = useParams();
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = "Bảng điều khiển - nhóm";
+    document.title = "Bảng điều khiển - Quản lý nhóm";
     featchTeams(idClass);
     featchClass(idClass);
   }, []);
@@ -235,10 +237,7 @@ const TeamsInMyClass = () => {
       <div className="box-one">
         <Link to="/teacher/my-class" style={{ color: "black" }}>
           <span style={{ fontSize: "18px", paddingLeft: "20px" }}>
-            <FontAwesomeIcon
-              icon={faHome}
-              style={{ color: "#00000", fontSize: "23px" }}
-            />
+            <ControlOutlined style={{ fontSize: "22px" }} />
             <span style={{ marginLeft: "10px", fontWeight: "500" }}>
               Bảng điều khiển
             </span>{" "}
@@ -265,7 +264,7 @@ const TeamsInMyClass = () => {
                   fontWeight: "bold",
                 }}
               >
-              BÀI ĐĂNG &nbsp;
+                BÀI ĐĂNG &nbsp;
               </Link>
               <Link
                 to={`/teacher/my-class/students/${idClass}`}
@@ -312,7 +311,7 @@ const TeamsInMyClass = () => {
                 ĐIỂM DANH &nbsp;
               </Link>
               <Link
-                to=""
+                to={`/teacher/my-class/point/${idClass}`}
                 className="custom-link"
                 style={{
                   fontSize: "16px",
@@ -342,7 +341,7 @@ const TeamsInMyClass = () => {
             </div>
           </div>
           <Row style={{ margin: "25px 0px 20px 10px" }}>
-            <Col span={22}>
+            <Col span={17}>
               <div style={{ marginLeft: "0px" }}>
                 {" "}
                 <span style={{ fontSize: "17px", fontWeight: "500" }}>
@@ -355,19 +354,47 @@ const TeamsInMyClass = () => {
                 </span>
               </div>
             </Col>
-            <Col span={2}>
-              <Button
-                className="btn_clear"
-                style={{
-                  color: "white",
-                  backgroundColor: "#007bff",
-                }}
-                onClick={() => {
-                  setShowCreateModal(true);
-                }}
-              >
-                Tạo nhóm
-              </Button>
+            <Col span={7}>
+              <div style={{ float: "right" }}>
+                <Button
+                  className="btn_clear"
+                  style={{
+                    color: "white",
+                    backgroundColor: "#007bff",
+                  }}
+                >
+                  <FontAwesomeIcon
+                    icon={faDownload}
+                    style={{ marginRight: "7px" }}
+                  />{" "}
+                  Export
+                </Button>
+                <Button
+                  className="btn_clear"
+                  style={{
+                    color: "white",
+                    backgroundColor: "#007bff",
+                  }}
+                >
+                  <FontAwesomeIcon
+                    icon={faUpload}
+                    style={{ marginRight: "7px" }}
+                  />{" "}
+                  Import
+                </Button>
+                <Button
+                  className="btn_clear"
+                  style={{
+                    color: "white",
+                    backgroundColor: "#007bff",
+                  }}
+                  onClick={() => {
+                    setShowCreateModal(true);
+                  }}
+                >
+                  Tạo nhóm
+                </Button>
+              </div>
             </Col>
           </Row>
           <div>

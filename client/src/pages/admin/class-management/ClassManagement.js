@@ -6,6 +6,8 @@ import {
   faPlus,
   faEye,
   faTags,
+  faDownload,
+  faUpload,
 } from "@fortawesome/free-solid-svg-icons";
 import { useAppDispatch, useAppSelector } from "../../../app/hook";
 import {
@@ -94,7 +96,6 @@ const ClassManagement = () => {
   };
   useEffect(() => {
     featchAllMyClass();
-    setClear(false);
   }, [clear]);
 
   useEffect(() => {
@@ -113,7 +114,6 @@ const ClassManagement = () => {
       await ClassAPI.getAllActivityByIdSemester(idSemesterSeach).then(
         (respone) => {
           setActivityDataAll(respone.data.data);
-          setLoading(true);
         }
       );
     };
@@ -123,7 +123,6 @@ const ClassManagement = () => {
   useEffect(() => {
     const featchDataSemester = async () => {
       try {
-        setLoading(false);
         const responseClassAll = await ClassAPI.fetchAllSemester();
         const listClassAll = responseClassAll.data;
         dispatch(SetTeacherSemester(listClassAll.data));
@@ -133,7 +132,6 @@ const ClassManagement = () => {
           setIdSemesterSearch("null");
         }
         setSemesterDataAll(listClassAll.data);
-        setLoading(true);
       } catch (error) {
         alert("Vui lòng F5 lại trang !");
       }
@@ -163,12 +161,6 @@ const ClassManagement = () => {
       sorter: (a, b) => a.code.localeCompare(b.code),
     },
     {
-      title: "Tên Lớp",
-      dataIndex: "name",
-      key: "name",
-      sorter: (a, b) => a.username.localeCompare(b.username),
-    },
-    {
       title: "Thời gian bắt đầu",
       dataIndex: "startTime",
       key: "startTime",
@@ -186,25 +178,22 @@ const ClassManagement = () => {
       title: "Ca học",
       dataIndex: "classPeriod",
       key: "classPeriod",
-      sorter: (a, b) => a.classPeriod.localeCompare(b.classPeriod),
+      sorter: (a, b) => a.classPeriod - b.classPeriod,
+      render: (text, record) => {
+        return <span>{record.classPeriod + 1}</span>;
+      },
     },
     {
       title: "Sĩ số",
       dataIndex: "classSize",
       key: "classSize",
-      sorter: (a, b) => a.classSize.localeCompare(b.classSize),
+      sorter: (a, b) => a.classSize - b.classSize,
     },
     {
       title: "Giảng viên",
-      dataIndex: "teacherId",
-      key: "teacherId",
-      sorter: (a, b) => a.teacherId.localeCompare(b.teacherId),
-      render: (text, record) => {
-        const teacher = teacherDataAll.find(
-          (item) => item.id === record.teacherId
-        );
-        return teacher ? teacher.username : "";
-      },
+      dataIndex: "userNameTeacher",
+      key: "userNameTeacher",
+      sorter: (a, b) => a.userNameTeacher.localeCompare(b.userNameTeacher),
     },
     {
       title: "Hoạt động",
@@ -219,9 +208,7 @@ const ClassManagement = () => {
       render: (text, record) => (
         <div>
           <Tooltip title="Xem chi tiết">
-            <Link
-              to={`/admin/class-management/meeting-management/${record.id}`}
-            >
+            <Link to={`/admin/class-management/information-class/${record.id}`}>
               <FontAwesomeIcon
                 style={{ marginRight: "15px", cursor: "pointer" }}
                 icon={faEye}
@@ -266,7 +253,6 @@ const ClassManagement = () => {
   const handleModalCreateCancel = async () => {
     document.querySelector("body").style.overflowX = "auto";
     setShowCreateModal(false);
-    await featchAllMyClass();
   };
 
   const filterOptions = (input, option) => {
@@ -390,7 +376,7 @@ const ClassManagement = () => {
             Tìm kiếm
           </Button>
           <Button className="btn_clear" onClick={handleClear}>
-            Làm mới
+            Làm mới bộ lọc
           </Button>
         </div>
       </div>
@@ -413,6 +399,40 @@ const ClassManagement = () => {
             </span>{" "}
           </div>
           <div className="createButton">
+            <Button
+              style={{
+                color: "white",
+                backgroundColor: "rgb(55, 137, 220)",
+                marginRight: "5px",
+              }}
+            >
+              <FontAwesomeIcon
+                icon={faDownload}
+                size="1x"
+                style={{
+                  backgroundColor: "rgb(55, 137, 220)",
+                  marginRight: "7px",
+                }}
+              />{" "}
+              Export
+            </Button>
+            <Button
+              style={{
+                color: "white",
+                backgroundColor: "rgb(55, 137, 220)",
+                marginRight: "5px",
+              }}
+            >
+              <FontAwesomeIcon
+                icon={faUpload}
+                size="1x"
+                style={{
+                  backgroundColor: "rgb(55, 137, 220)",
+                  marginRight: "7px",
+                }}
+              />{" "}
+              Import
+            </Button>
             <Button
               style={{
                 color: "white",

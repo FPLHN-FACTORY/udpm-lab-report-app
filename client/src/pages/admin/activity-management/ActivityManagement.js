@@ -11,19 +11,29 @@ import {
   faPlus,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
-import { Button, Input, Pagination, Popconfirm, Select, Table, Tooltip } from "antd";
+import {
+  Button,
+  Input,
+  Pagination,
+  Popconfirm,
+  Select,
+  Table,
+  Tooltip,
+} from "antd";
 import { useAppDispatch, useAppSelector } from "../../../app/hook";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ActivityManagementAPI } from "../../../api/admin/activity-management/activityManagement.api";
 import { Option } from "antd/es/mentions";
-import { DeleteActivityManagement, GetActivityManagement, SetActivityManagement } from "../../../app/admin/activity-management/activityManagementSlice.reducer";
+import {
+  DeleteActivityManagement,
+  GetActivityManagement,
+  SetActivityManagement,
+} from "../../../app/admin/activity-management/activityManagementSlice.reducer";
 import LoadingIndicator from "../../../helper/loading";
 import ModalCreateActivity from "./modal-create/ModalCreateActivity";
 import ModalUpdateActivity from "./modal-update/ModalUpdateActivity";
 import { toast } from "react-toastify";
-
-
 
 const ActivityManagement = () => {
   const dispatch = useAppDispatch();
@@ -46,7 +56,6 @@ const ActivityManagement = () => {
   const [activity, setActivity] = useState({});
   const [listSemester, setListSemester] = useState([]);
 
-
   useEffect(() => {
     fetchData();
     return () => {
@@ -60,10 +69,9 @@ const ActivityManagement = () => {
 
   const fetchData = async () => {
     let filter = {
-      nameActivity: name,
       name: searchName,
       level: levelSearch,
-      status: status === "" ? null : parseInt(status),
+      semesterId: semesterSearch,
       page: current - 1,
     };
     setLoading(true);
@@ -83,8 +91,9 @@ const ActivityManagement = () => {
       const response = await ActivityManagementAPI.semester();
       const semesterData = response.data.data;
       setListSemester(semesterData);
+      setSemesterSearch(semesterData[0].id);
     } catch (error) {
-      console.error('Error fetching semester data:', error);
+      console.error("Error fetching semester data:", error);
     }
   };
 
@@ -111,10 +120,12 @@ const ActivityManagement = () => {
         const startTime = new Date(record.startTime);
         const endTime = new Date(record.endTime);
 
-        const formattedStartTime = `${startTime.getDate()}/${startTime.getMonth() + 1
-          }/${startTime.getFullYear()}`;
-        const formattedEndTime = `${endTime.getDate()}/${endTime.getMonth() + 1
-          }/${endTime.getFullYear()}`;
+        const formattedStartTime = `${startTime.getDate()}/${
+          startTime.getMonth() + 1
+        }/${startTime.getFullYear()}`;
+        const formattedEndTime = `${endTime.getDate()}/${
+          endTime.getMonth() + 1
+        }/${endTime.getFullYear()}`;
 
         return (
           <span>
@@ -125,18 +136,18 @@ const ActivityManagement = () => {
       width: "175px",
     },
     {
-      title: 'Cấp độ',
-      dataIndex: 'level',
-      key: 'level',
+      title: "Cấp độ",
+      dataIndex: "level",
+      key: "level",
       sorter: (a, b) => a.level - b.level,
       render: (text) => {
-        let displayText = '';
+        let displayText = "";
         if (text === 0) {
-          displayText = 'Level 1';
+          displayText = "Level 1";
         } else if (text === 1) {
-          displayText = 'Level 2';
+          displayText = "Level 2";
         } else if (text === 2) {
-          displayText = 'Level 3';
+          displayText = "Level 3";
         } else {
           displayText = text;
         }
@@ -187,7 +198,6 @@ const ActivityManagement = () => {
         </div>
       ),
     },
-
   ];
 
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -205,7 +215,7 @@ const ActivityManagement = () => {
   const handleModalCreateCancel = () => {
     document.querySelector("body").style.overflowX = "auto";
     setShowCreateModal(false);
-    setActivity({})
+    setActivity({});
   };
 
   const handleUpdateActivity = (item) => {
@@ -217,11 +227,9 @@ const ActivityManagement = () => {
   const handleModalUpdateCancel = () => {
     document.querySelector("body").style.overflowX = "auto";
     setShowUpdateModal(false);
-
   };
   const handleSearch = async () => {
     await fetchData();
-    toast.success("Tìm kiếm thành công!");
   };
 
   const handleClear = () => {
@@ -234,33 +242,33 @@ const ActivityManagement = () => {
 
   const handleSemesterSearch = (value) => {
     setSemesterSearch(value);
-    searchActivitiesBySemester(value);
   };
 
   const handleLevelSearch = (value) => {
     setLevelSearch(value);
-    searchActivitiesByLevel(value);
   };
 
   const searchActivitiesByLevel = (level) => {
-    const filteredActivities = data.filter((activity) => activity.level === level);
+    const filteredActivities = data.filter(
+      (activity) => activity.level === level
+    );
     dispatch(SetActivityManagement(filteredActivities));
     setCurrent(1);
   };
 
   const handleDeleteActivity = async (id) => {
     try {
-      await ActivityManagementAPI.delete(id).then((response)=>{
+      await ActivityManagementAPI.delete(id).then((response) => {
         toast.success("Xóa thành công!");
         dispatch(DeleteActivityManagement(id));
       });
-    } catch (error) {
-      toast.error("Xóa không thành công. Vui lòng thử lại!");
-    }
+    } catch (error) {}
   };
 
   const searchActivitiesBySemester = (semesterId) => {
-    const filteredActivities = data.filter(activity => activity.semesterId === semesterId);
+    const filteredActivities = data.filter(
+      (activity) => activity.semesterId === semesterId
+    );
     dispatch(SetActivityManagement(filteredActivities));
     setCurrent(1);
   };
@@ -297,10 +305,10 @@ const ActivityManagement = () => {
                 value={levelSearch}
                 onChange={handleLevelSearch}
               >
-                <Option value=" ">Tất cả</Option>
-                <Option value="1">Level 1</Option>
-                <Option value="2">Level 2</Option>
-                <Option value="3">Level 3</Option>
+                <Option value="">Tất cả</Option>
+                <Option value="0">Level 1</Option>
+                <Option value="1">Level 2</Option>
+                <Option value="2">Level 3</Option>
               </Select>
             </div>
           </div>

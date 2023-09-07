@@ -4,6 +4,7 @@ import com.labreportapp.core.admin.model.request.AdCreateClassRequest;
 import com.labreportapp.core.admin.model.request.AdFindClassRequest;
 import com.labreportapp.core.admin.model.response.AdActivityClassResponse;
 import com.labreportapp.core.admin.model.response.AdClassResponse;
+import com.labreportapp.core.admin.model.response.AdListClassCustomResponse;
 import com.labreportapp.core.admin.model.response.AdSemesterAcResponse;
 import com.labreportapp.core.common.base.PageableObject;
 import com.labreportapp.entity.Class;
@@ -28,6 +29,6 @@ public interface AdClassService {
 
     Class createClass(@Valid final AdCreateClassRequest request);
 
-    PageableObject<AdClassResponse> searchClass(final AdFindClassRequest teFindClass);
+    PageableObject<AdListClassCustomResponse> searchClass(final AdFindClassRequest teFindClass);
 
 }

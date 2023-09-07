@@ -43,7 +43,7 @@ const SidebarStudentComponent = ({ collapsed, toggleCollapsed }) => {
             />
           }
         >
-          <Link to="/student/schedule">Đăng ký lớp học</Link>
+          <Link to="/student/register-class">Đăng ký lớp học</Link>
         </Menu.Item>
         <Menu.Item
           key="1"
@@ -79,7 +79,7 @@ const SidebarStudentComponent = ({ collapsed, toggleCollapsed }) => {
             />
           }
         >
-          <Link to="/student/my-class">Điểm danh</Link>
+          <Link to="/student/attendance">Điểm danh</Link>
         </Menu.Item>
         <Menu.Item
           key="4"
@@ -91,7 +91,7 @@ const SidebarStudentComponent = ({ collapsed, toggleCollapsed }) => {
             />
           }
         >
-          <Link to="/student/my-class">Điểm</Link>
+          <Link to="/student/point">Điểm</Link>
         </Menu.Item>
       </Menu>
     </Sider>

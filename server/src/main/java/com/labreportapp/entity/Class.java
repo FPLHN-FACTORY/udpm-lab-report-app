@@ -28,10 +28,6 @@ public class Class extends PrimaryEntity {
     @Column(length = EntityProperties.LENGTH_CODE)
     private String code;
 
-    @Column(length = EntityProperties.LENGTH_NAME)
-    @Nationalized
-    private String name;
-
     @Column
     private Long startTime;
 
@@ -54,6 +50,6 @@ public class Class extends PrimaryEntity {
     @Column(length = EntityProperties.LENGTH_ID)
     private String activityId;
 
-//    @Column
-//    private Boolean statusClass;
+    @Column
+    private Boolean statusClass;
 }

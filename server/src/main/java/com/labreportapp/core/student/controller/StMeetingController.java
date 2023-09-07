@@ -21,6 +21,7 @@ import java.util.List;
 @RequestMapping("/student/meeting")
 @CrossOrigin("*")
 public class StMeetingController {
+
     @Autowired
     private StMeetingService service;
 
@@ -49,8 +50,8 @@ public class StMeetingController {
     }
 
     @GetMapping("/get-team-meeting")
-    public ResponseObject getTeTeamsClass(final StFindMeetingRequest idClass) {
-        List<StMyTeamInClassResponse> pageList = service.getAllTeams(idClass);
+    public ResponseObject getTeTeamsClass(final StFindMeetingRequest request) {
+        List<StMyTeamInClassResponse> pageList = service.getAllTeams(request);
         return new ResponseObject(pageList);
     }
 }

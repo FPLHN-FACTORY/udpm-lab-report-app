@@ -20,8 +20,6 @@ public class TeFindClassRequest extends PageableRequest {
 
     private String code;
 
-    private String name;
-
     private String classPeriod;
 
     private String level;

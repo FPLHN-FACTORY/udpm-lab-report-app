@@ -22,6 +22,7 @@ import {
 import { toast } from "react-toastify";
 import JoditEditor from "jodit-react";
 import ViewEditorJodit from "../../../../helper/editor/ViewEditorJodit";
+import { ControlOutlined } from "@ant-design/icons";
 const TeacherPostMyClass = () => {
   const dispatch = useAppDispatch();
   const { idClass } = useParams();
@@ -37,7 +38,7 @@ const TeacherPostMyClass = () => {
   const [visibleDelete, setVisibleDelete] = useState(false);
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = "Bảng điều khiển - bài viết";
+    document.title = "Bảng điều khiển - Bài đăng";
     featchClass(idClass);
     featchPost(idClass);
   }, []);
@@ -168,10 +169,7 @@ const TeacherPostMyClass = () => {
       <div className="box-one">
         <Link to="/teacher/my-class" style={{ color: "black" }}>
           <span style={{ fontSize: "18px", paddingLeft: "20px" }}>
-            <FontAwesomeIcon
-              icon={faHome}
-              style={{ color: "#00000", fontSize: "23px" }}
-            />
+            <ControlOutlined style={{ fontSize: "22px" }} />
             <span style={{ marginLeft: "10px", fontWeight: "500" }}>
               Bảng điều khiển
             </span>{" "}
@@ -242,7 +240,7 @@ const TeacherPostMyClass = () => {
                 ĐIỂM DANH &nbsp;
               </Link>
               <Link
-                to=""
+                to={`/teacher/my-class/point/${idClass}`}
                 className="custom-link"
                 style={{
                   fontSize: "16px",

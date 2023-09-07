@@ -97,7 +97,7 @@ const MeetingManagment = () => {
           >
             Bảng điều khiển
           </span>
-          <span style={{ color: "gray" }}> - Quản lý lớp học</span>
+          <span style={{ color: "gray" }}> - Quản lý lịch học</span>
         </span>
       </div>
       <div className="box-filter-meeting-management">
@@ -105,14 +105,23 @@ const MeetingManagment = () => {
           <div className="button-menu-teacher">
             <div>
               <Link
+                to={`/admin/class-management/information-class/${id}`}
                 className="custom-link"
-                style={{ fontSize: "16px", paddingLeft: "10px" }}
+                style={{
+                  fontSize: "16px",
+                  paddingLeft: "10px",
+                  fontWeight: "bold",
+                }}
               >
                 THÔNG TIN LỚP HỌC &nbsp;
               </Link>
               <Link
                 id="menu-checked"
-                style={{ fontSize: "16px", paddingLeft: "10px" }}
+                style={{
+                  fontSize: "16px",
+                  paddingLeft: "10px",
+                  fontWeight: "bold",
+                }}
               >
                 QUẢN LÝ LỊCH HỌC &nbsp;
               </Link>
@@ -164,6 +173,12 @@ const MeetingManagment = () => {
                     {data != null ? data.length : 0} buổi học{" "}
                   </span>
                 </div>
+                <Button
+                  style={{ marginLeft: "10px" }}
+                  className="btn-create-meeting"
+                >
+                  Tạo buổi học tự động
+                </Button>
                 <Button
                   style={{ marginLeft: "10px" }}
                   className="btn-create-meeting"

@@ -195,14 +195,25 @@ const DetailMyClassTeam = () => {
           >
             Bảng điều khiển
           </span>
-          <span style={{ color: "gray" }}> - Lớp của tôi</span>
+          <span style={{ color: "gray" }}> - Thông tin lớp học</span>
         </span>
       </div>
       <div className="box-students-detail-my-class" style={{ padding: "20px" }}>
         <div className="button-menu-student-detail-my-class">
           <div>
             <Link
-              to={`/student/my-class/team/${id}`}
+              to={`/student/my-class/post/${id}`}
+              className="custom-link"
+              style={{
+                fontSize: "16px",
+                paddingLeft: "10px",
+                paddingRight: "10px",
+                fontWeight: "bold",
+              }}
+            >
+              BÀI ĐĂNG
+            </Link>
+            <Link
               id="menu-checked"
               style={{
                 fontSize: "16px",
@@ -227,6 +238,7 @@ const DetailMyClassTeam = () => {
             </Link>
             <Link
               className="custom-link"
+              to={`/student/my-class/attendance/${id}`}
               style={{
                 fontSize: "16px",
                 paddingLeft: "10px",
@@ -238,6 +250,7 @@ const DetailMyClassTeam = () => {
             </Link>
             <Link
               className="custom-link"
+              to={`/student/my-class/point/${id}`}
               style={{
                 fontSize: "16px",
                 fontWeight: "bold",

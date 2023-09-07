@@ -11,7 +11,7 @@ const ModalCreateActivity = ({ visible, onCancel, listSemester }) => {
     const [name, setName] = useState("");
     const [startTime, setStartTime] = useState("");
     const [endTime, setEndTime] = useState("");
-    const [level, setLevel] = useState("");
+    const [level, setLevel] = useState("0");
     const [semesterId, setSemesterId] = useState("");
     const [errorName, setErrorName] = useState("");
     const [errorStartTime, setErrorStartTime] = useState("");

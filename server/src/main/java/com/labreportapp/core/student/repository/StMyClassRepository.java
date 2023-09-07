@@ -22,12 +22,11 @@ public interface StMyClassRepository extends ClassRepository {
 
     @Query(value = """
             SELECT a.id, ROW_NUMBER() OVER(ORDER BY c.created_date DESC) AS stt,
-            a.code, a.name, a.start_time, a.class_period, a.teacher_id, b.level
+            a.code, a.start_time, a.class_period, a.teacher_id, b.level
             FROM class a JOIN activity b ON a.activity_id = b.id 
             JOIN semester d ON b.semester_id = d.id
             JOIN student_classes c ON a.id = c.class_id
             WHERE (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR a.code LIKE %:#{#req.code}%) 
-            AND (:#{#req.name} IS NULL OR :#{#req.name} LIKE '' OR a.name LIKE %:#{#req.name}%) 
             AND (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR a.class_period = :#{#req.classPeriod}) 
             AND (:#{#req.level} IS NULL OR :#{#req.level} LIKE '' OR b.level = :#{#req.level}) 
             AND (:#{#req.activityId} IS NULL OR :#{#req.activityId} LIKE '' OR b.id = :#{#req.activityId}) 
@@ -67,4 +66,5 @@ public interface StMyClassRepository extends ClassRepository {
             SELECT COUNT(a.id) FROM student_classes a WHERE a.class_id = :idClass AND a.team_id = :idTeam
             """, nativeQuery = true)
     Integer countMemberInTeam(@Param("idClass") String idClass, @Param("idTeam") String idTeam);
+
 }

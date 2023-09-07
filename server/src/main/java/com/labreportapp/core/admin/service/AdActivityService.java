@@ -8,7 +8,6 @@ import com.labreportapp.core.common.base.PageableObject;
 import com.labreportapp.entity.Activity;
 import com.labreportapp.entity.Semester;
 import jakarta.validation.Valid;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -16,15 +15,15 @@ public interface AdActivityService {
 
     PageableObject<AdActivityResponse> searchActivity(final AdFindActivityRequest rep);
 
-    Activity creatActivity(@Valid final AdCreatActivityRequest command);
+    Activity creatActivity(@Valid AdCreatActivityRequest command);
 
-    Activity updateActivity(@Valid final AdUpdateActivityRequest command);
+    Activity updateActivity(@Valid AdUpdateActivityRequest command);
 
-    boolean deleteActivity(final String id);
+    String deleteActivity(String id);
 
-    Activity getOneByIdActivity(final String id);
+    Activity getOneByIdActivity(String id);
 
-    List<String> getAllIdByStatus(final String status);
+    List<String> getAllIdByStatus(String status);
 
     List<Semester> getSemester();
 

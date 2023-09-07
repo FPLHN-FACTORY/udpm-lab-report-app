@@ -53,7 +53,7 @@ const ModalCreateProject = ({ visible, onCancel }) => {
 
   const listClassPeriod = [];
 
-  for (let i = 1; i <= 10; i++) {
+  for (let i = 0; i <= 9; i++) {
     listClassPeriod.push("" + i);
   }
 
@@ -117,12 +117,6 @@ const ModalCreateProject = ({ visible, onCancel }) => {
 
   const create = () => {
     let check = 0;
-    if (name.trim() === "") {
-      setErrorName("Tên Lớp không được để trống");
-      check++;
-    } else {
-      setErrorName("");
-    }
 
     if (code.trim() === "") {
       setErrorCode("Mã Lớp không để trống");
@@ -152,9 +146,7 @@ const ModalCreateProject = ({ visible, onCancel }) => {
 
     if (check === 0) {
       let obj = {
-        name: name,
         code: code,
-        classSize: classSize,
         classPeriod: classPeriod,
         startTime: moment(startTime, "YYYY-MM-DD").valueOf(),
         teacherId: selectedItemsPerson,
@@ -296,25 +288,12 @@ const ModalCreateProject = ({ visible, onCancel }) => {
                   {listClassPeriod.map((value) => {
                     return (
                       <Option value={value} key={value}>
-                        {value}
+                        {parseInt(value) + 1}
                       </Option>
                     );
                   })}
                 </Select>
                 <span className="error">{errorClassPeriod}</span>
-              </Col>
-            </Row>
-            <Row gutter={16} style={{ marginBottom: "15px" }}>
-              <Col span={12} style={{ paddingRight: "10px" }}>
-                <span>Tên lớp:</span> <br />
-                <Input
-                  value={name}
-                  onChange={(e) => {
-                    setName(e.target.value);
-                  }}
-                  type="text"
-                />
-                <span className="error">{errorName}</span>
               </Col>
             </Row>
           </div>

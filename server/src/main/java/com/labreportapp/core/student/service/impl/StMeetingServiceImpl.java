@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +22,7 @@ import java.util.Optional;
  */
 @Service
 public class StMeetingServiceImpl implements StMeetingService {
+
     @Autowired
     private StMeetingRepository stMeetingrepository;
 
@@ -30,7 +32,6 @@ public class StMeetingServiceImpl implements StMeetingService {
     }
 
     @Override
-    @CacheEvict(value = {"countMeeting"}, allEntries = true)
     public Integer countMeetingByClassId(String idClass) {
         return stMeetingrepository.countMeetingByClassId(idClass);
     }
@@ -40,6 +41,9 @@ public class StMeetingServiceImpl implements StMeetingService {
         Optional<StMeetingResponse> meeting = stMeetingrepository.searchMeetingByIdMeeting(request);
         if (!meeting.isPresent()) {
             throw new RestApiException(Message.MEETING_NOT_EXISTS);
+        }
+        if(meeting.get().getMeetingDate() > new Date().getTime()) {
+            throw new RestApiException(Message.CHUA_DEN_THOI_GIAN_CUA_BUOI_HOC);
         }
         return meeting.get();
     }

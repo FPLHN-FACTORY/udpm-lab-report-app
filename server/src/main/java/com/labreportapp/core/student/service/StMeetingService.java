@@ -12,6 +12,7 @@ import java.util.List;
  * @author quynhncph26201
  */
 public interface StMeetingService {
+
     List<StMeetingResponse> searchMeetingByIdClass(final StFindMeetingRequest request);
 
     Integer countMeetingByClassId(String idClass);

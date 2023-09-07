@@ -168,9 +168,9 @@ const ModalUpdateActivity = ({ visible, onCancel, listSemester, activity }) => {
                                 setLevel(value);
                             }}
                         >
-                            <Option value="0">level 1</Option>
-                            <Option value="1">level 2</Option>
-                            <Option value="2">level 3</Option>
+                            <Option value="0">Level 1</Option>
+                            <Option value="1">Level 2</Option>
+                            <Option value="2">Level 3</Option>
                         </Select>
                         <span className="error">{errorLevel}</span>
                     </Col>

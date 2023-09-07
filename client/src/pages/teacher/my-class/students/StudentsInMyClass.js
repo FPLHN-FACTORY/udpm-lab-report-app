@@ -14,6 +14,7 @@ import LoadingIndicator from "../../../../helper/loading";
 import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHome } from "@fortawesome/free-solid-svg-icons";
+import { ControlOutlined } from "@ant-design/icons";
 
 const StudentsInMyClass = () => {
   const dispatch = useAppDispatch();
@@ -23,7 +24,7 @@ const StudentsInMyClass = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = "Bảng điều khiển - thành viên";
+    document.title = "Bảng điều khiển - Thông tin lớp học";
     featchClass(idClass);
   }, []);
 
@@ -124,16 +125,13 @@ const StudentsInMyClass = () => {
       <div className="box-one">
         <Link to="/teacher/my-class" style={{ color: "black" }}>
           <span style={{ fontSize: "18px", paddingLeft: "20px" }}>
-            <FontAwesomeIcon
-              icon={faHome}
-              style={{ color: "#00000", fontSize: "23px" }}
-            />
+          <ControlOutlined style={{ fontSize: "22px" }} />
             <span style={{ marginLeft: "10px", fontWeight: "500" }}>
               Bảng điều khiển
             </span>{" "}
             <span style={{ color: "gray", fontSize: "14px" }}>
               {" "}
-              - Thành viên
+              - Thông tin lớp học
             </span>
           </span>
         </Link>
@@ -198,7 +196,7 @@ const StudentsInMyClass = () => {
                 ĐIỂM DANH &nbsp;
               </Link>
               <Link
-                to=""
+                to={`/teacher/my-class/point/${idClass}`}
                 className="custom-link"
                 style={{
                   fontSize: "16px",
@@ -251,12 +249,6 @@ const StudentsInMyClass = () => {
                 style={{ marginTop: "13px", marginBottom: "15px" }}
               >
                 Mã lớp: &nbsp;{classDetail.code}
-              </span>
-              <span
-                className="group-info-item"
-                style={{ marginTop: "13px", marginBottom: "15px" }}
-              >
-                Tên lớp: &nbsp;{classDetail.name}
               </span>
               <span
                 className="group-info-item"
