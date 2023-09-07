@@ -383,9 +383,19 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses16.setClassId(class2.getId());
         studentClasses16.setTeamId(team1.getId());
         studentClasses16.setEmail("qndph24011@fpt.edu.vn");
-        studentClasses16.setRole(RoleTeam.LEADER);
+        studentClasses16.setRole(RoleTeam.MEMBER);
         studentClasses16.setStatus(StatusTeam.ACTIVE);
         studentClasses16.setId(studentClassesRepository.save(studentClasses16).getId());
+
+        // class 3
+        StudentClasses studentClassesTestSendMailTeacher = new StudentClasses();
+        studentClassesTestSendMailTeacher.setStudentId("de60e713-56cc-4964-ac6c-f58dcee3dcab");
+        studentClassesTestSendMailTeacher.setClassId(class3.getId());
+        studentClassesTestSendMailTeacher.setTeamId(team1.getId());
+        studentClassesTestSendMailTeacher.setEmail("hieundph25894@fpt.edu.vn");
+        studentClassesTestSendMailTeacher.setRole(RoleTeam.LEADER);
+        studentClassesTestSendMailTeacher.setStatus(StatusTeam.ACTIVE);
+        studentClassesTestSendMailTeacher.setId(studentClassesRepository.save(studentClassesTestSendMailTeacher).getId());
 
 // Meeting
         Meeting meeting1 = new Meeting();

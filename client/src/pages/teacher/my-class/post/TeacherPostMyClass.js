@@ -20,7 +20,6 @@ import {
   SetPost,
 } from "../../../../app/teacher/post/tePostSlice.reduce";
 import { toast } from "react-toastify";
-import JoditEditor from "jodit-react";
 import ViewEditorJodit from "../../../../helper/editor/ViewEditorJodit";
 const TeacherPostMyClass = () => {
   const dispatch = useAppDispatch();
