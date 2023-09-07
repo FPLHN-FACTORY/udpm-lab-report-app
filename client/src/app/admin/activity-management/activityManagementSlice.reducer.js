@@ -19,7 +19,7 @@ const ActivityManagementSlice = createSlice({
                 startTime: data.startTime,
                 endTime: data.endTime,
                 level: parseInt(data.levelText),
-                semesterId: data.semesterId, 
+                semesterId: data.semesterId,
                 nameSemester: data.nameSemester,
             };
             state.unshift(newActivity);
@@ -30,23 +30,22 @@ const ActivityManagementSlice = createSlice({
             const index = state.findIndex(
                 (activity) => activity.id === updateActivity.id
             );
-            if (index !== - 1){
+            if (index !== - 1) {
                 state[index].name = updateActivity.name;
                 state[index].startTime = updateActivity.startTime;
                 state[index].endTime = updateActivity.endTime;
-                state[index].level = parseInt(updateActivity.level);
+                state[index].level = parseInt(updateActivity.levelText);
                 state[index].semesterId = updateActivity.semesterId;
                 state[index].nameSemester = updateActivity.nameSemester;
             }
         },
         DeleteActivityManagement: (state, action) => {
-            const idActivity = action.payload;
-            const index = state.findIndex((activity) => activity.id === idActivity);
-            state.splice(index, 1);
+            const deletedId = action.payload;
+            return state.filter(activity => activity.id !== deletedId);
         }
     },
 });
 
-export const {SetActivityManagement, CreateActivityManagement, UpdateActivityManagement, DeleteActivityManagement} = ActivityManagementSlice.actions;
+export const { SetActivityManagement, CreateActivityManagement, UpdateActivityManagement, DeleteActivityManagement } = ActivityManagementSlice.actions;
 export const GetActivityManagement = (state) => state.activityManagement;
 export default ActivityManagementSlice.reducer;

@@ -27,4 +27,5 @@ public interface AdActivityService {
     List<String> getAllIdByStatus(final String status);
 
     List<Semester> getSemester();
+
 }

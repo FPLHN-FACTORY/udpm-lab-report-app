@@ -6,9 +6,6 @@ import { toast } from "react-toastify";
 import { ActivityManagementAPI } from "../../../../api/admin/activity-management/activityManagement.api";
 import { CreateActivityManagement } from "../../../../app/admin/activity-management/activityManagementSlice.reducer";
 import { Option } from "antd/es/mentions";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import axios from "axios";
 
 const ModalCreateActivity = ({ visible, onCancel, listSemester }) => {
     const [name, setName] = useState("");
@@ -46,38 +43,33 @@ const ModalCreateActivity = ({ visible, onCancel, listSemester }) => {
 
     const create = () => {
         let check = 0;
-
+        let checkDate =0;
         if (name.trim() === "") {
             setErrorName("Tên không được để trống");
             check++;
         } else {
             setErrorName("");
         }
-        if (startTime === "") {
+        if (startTime === "" || startTime === null) {
             setErrorStartTime("Hãy chọn thời gian bắt đầu");
+            checkDate++;
             check++;
         } else {
             setErrorStartTime("");
         }
-        if (endTime === "") {
+        if (endTime === "" || endTime === null) {
             setErrorEndTime("Hãy chọn thời gian kết thúc");
+            checkDate++;
             check++;
         } else {
             setErrorEndTime("");
         }
-        if (new Date(startTime) > new Date(endTime)) {
-            setErrorStartTime(
-                "Thời gian bắt đầu không được lớn hơn thời gian kết thúc"
-            );
-            check++;
-        } else {
-            if (startTime === "") {
-                setErrorStartTime("Thời gian bắt đầu không được để trống");
+        if(checkDate===0){
+            if (new Date(startTime) > new Date(endTime)) {
+                toast.error("Thời gian bắt đầu không được lớn hơn thời gian kết thúc")
                 check++;
-            } else {
-                setErrorStartTime("");
-            }
-        }
+            } 
+        } 
         if (level === "") {
             setErrorLevel("Hãy chọn cấp độ");
             check++;
@@ -136,21 +128,23 @@ const ModalCreateActivity = ({ visible, onCancel, listSemester }) => {
                 <Row gutter={16} style={{ marginTop: "15px" }}>
                     <Col span={12}>
                         <span>Thời gian bắt đầu:</span> <br />
-                        <DatePicker style={{ width: "100%" }}
+                        <Input
                             value={startTime}
-                            onChange={(date) => {
-                                setStartTime(date);
+                            onChange={(e) => {
+                                setStartTime(e.target.value);
                             }}
+                            type="date"
                         />
                         <span className="error">{errorStartTime}</span>
                     </Col>
                     <Col span={12}>
                         <span>Thời gian kết thúc:</span> <br />
-                        <DatePicker style={{ width: "100%" }}
+                        <Input
                             value={endTime}
-                            onChange={(date) => {
-                                setEndTime(date);
+                            onChange={(e) => {
+                                setEndTime(e.target.value);
                             }}
+                            type="date"
                         />
                         <span className="error">{errorEndTime}</span>
                     </Col>
@@ -164,9 +158,9 @@ const ModalCreateActivity = ({ visible, onCancel, listSemester }) => {
                                 setLevel(value);
                             }}
                         >
-                            <Option value="0">level 1</Option>
-                            <Option value="1">level 2</Option>
-                            <Option value="2">level 3</Option>
+                            <Option value="0">Level 1</Option>
+                            <Option value="1">Level 2</Option>
+                            <Option value="2">Level 3</Option>
                         </Select>
                         <span className="error">{errorLevel}</span>
                     </Col>
