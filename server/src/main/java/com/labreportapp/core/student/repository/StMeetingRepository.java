@@ -1,8 +1,10 @@
 package com.labreportapp.core.student.repository;
 
+import com.labreportapp.core.student.model.request.FindTeamByIdClass;
 import com.labreportapp.core.student.model.request.StFindMeetingRequest;
 import com.labreportapp.core.student.model.response.StHomeWordAndNoteResponse;
 import com.labreportapp.core.student.model.response.StMeetingResponse;
+import com.labreportapp.core.student.model.response.StMyTeamInClassResponse;
 import com.labreportapp.entity.Meeting;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -29,6 +31,7 @@ public interface StMeetingRepository extends JpaRepository<Meeting , String> {
             FROM meeting m
             JOIN class c ON c.id = m.class_id
             WHERE m.class_id = :#{#req.idClass}
+            AND m.meeting_date < :#{#req.currentTime}
             ORDER BY m.meeting_date DESC
                      """, nativeQuery = true)
     List<StMeetingResponse> findMeetingByIdClass(@Param("req") StFindMeetingRequest req);
@@ -63,4 +66,12 @@ public interface StMeetingRepository extends JpaRepository<Meeting , String> {
              WHERE m.id = :#{#req.idMeeting} and h.team_id = :#{#req.idTeam} and n.team_id= :#{#req.idTeam}
                       """, nativeQuery = true)
     Optional<StHomeWordAndNoteResponse> searchDetailMeetingTeamByIdMeIdTeam(@Param("req") StFindMeetingRequest req);
+
+    @Query(value = """
+            SELECT a.id, a.code , a.name , a.subject_name , a.class_id FROM team a
+            JOIN student_classes b ON b.team_id = a.id
+             WHERE
+             a.class_id = :#{#req.idClass} AND b.student_id = :#{#req.idStudent}
+            """, nativeQuery = true)
+    List<StMyTeamInClassResponse> getTeamInClass(@Param("req") StFindMeetingRequest req);
 }

@@ -8,13 +8,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AdFindActivityRequest extends PageableRequest {
+
     private String name;
 
-    private Long startTime;
-
-    private Long endTime;
-
-    private Level level;
+    private String level;
 
     private String semesterId;
 }

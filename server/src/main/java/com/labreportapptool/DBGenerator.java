@@ -111,7 +111,6 @@ public class DBGenerator implements CommandLineRunner {
 
         Class class1 = new Class();
         class1.setCode("J6_NGUYENVV4_123");
-        class1.setName("Lớp Java 6 thầy Nguyên");
         class1.setClassPeriod(ClassPeriod.CA_3);
         class1.setStartTime(new Date().getTime() + 50000);
         class1.setClassSize(19);
@@ -123,7 +122,6 @@ public class DBGenerator implements CommandLineRunner {
 
         Class class3 = new Class();
         class3.setCode("J5_NGUYENVV4_001");
-        class3.setName("Lớp Java 5 thầy Nguyên VV4");
         class3.setClassPeriod(ClassPeriod.CA_5);
         class3.setStartTime(new Date().getTime() + 50000);
         class3.setClassSize(0);
@@ -135,7 +133,6 @@ public class DBGenerator implements CommandLineRunner {
 
         Class class2 = new Class();
         class2.setCode("J3_HANGNT169_123");
-        class2.setName("Lớp Java 3 cô Hằng");
         class2.setClassPeriod(ClassPeriod.CA_5);
         class2.setStartTime(new Date().getTime() + 50000);
         class2.setClassSize(0);

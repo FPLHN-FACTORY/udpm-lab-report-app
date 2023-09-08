@@ -13,7 +13,7 @@ import DashBoardStudent from "./layout/student/DashBoardStudent";
 import SemesterManagement from "./pages/admin/semester-management/SemesterManagement";
 import ActivityManagement from "./pages/admin/activity-management/ActivityManagement";
 import ClassManagement from "./pages/admin/class-management/ClassManagement";
-import AdminDashboard from "./pages/admin/admin-dashboard/AdminDashboard";
+import AdminDashboard from "./pages/admin/admin-factory-deployment-statistics/AdFactoryDeploymentStatistics";
 import TeacherScheduleToday from "./pages/teacher/schedule-today/TeacherScheduleToday";
 import TeacherAttendanceMeeting from "./pages/teacher/schedule-today/attendance-meeting/TeacherAttendanceMeeting";
 import TeacherMyClass from "./pages/teacher/TeacherMyClass";
@@ -29,6 +29,18 @@ import MeetingManagment from "./pages/admin/detail-class/meeting-management/Meet
 import TeamInMeeting from "./pages/teacher/my-class/meeting/team/TeamInMeeting";
 import StMeetingMyClass from "./pages/student/detail-my-class/meeting/StudentMeeting";
 import StTeamMeeting from "./pages/student/detail-my-class/meeting/detail-meeting/DetailMyClassMeeting";
+import AdFactoryDeploymentStatistics from "./pages/admin/admin-factory-deployment-statistics/AdFactoryDeploymentStatistics";
+import AdminTrackActivityMetrics from "./pages/admin/admin-track-activity-metrics/AdminTrackActivityMetrics";
+import ClassConfiguration from "./pages/admin/class-configuration/ClassConfiguration";
+import InformationClass from "./pages/admin/detail-class/information-class/InformationClass";
+import PointManagement from "./pages/teacher/my-class/point/PointManagement";
+import StRegisterClass from "./pages/student/register-class/StRegisterClass";
+import StAttendance from "./pages/student/attendance/StAttendance";
+import StPoint from "./pages/student/point/StPoint";
+import StPostDetailClass from "./pages/student/detail-my-class/post/StPostDetailClass";
+import StAttendanceDetailClass from "./pages/student/detail-my-class/attendance/StAttendanceDetailClass";
+import StPointDetailClass from "./pages/student/detail-my-class/point/StPointDetailClass";
+import TeacherDashboard from "./pages/teacher/dashboard/TeacherDashboard";
 
 function App() {
   return (
@@ -39,6 +51,9 @@ function App() {
           <Routes>
             <Route path="*" element={<NotFound />} />
             <Route path="/layout-guard-roles" element={<NotAuthorized />} />
+
+            <Route path="/not-found" element={<NotFound />} />
+            <Route path="/not-authorization" element={<NotFound />} />
 
             <Route
               path="/"
@@ -101,11 +116,41 @@ function App() {
               }
             />
             <Route
-              path="/admin/dashboard"
+              path="/admin/class-management/information-class/:id"
               element={
                 <AuthGuard>
                   <DashBoardAdmin>
-                    <AdminDashboard />
+                    <InformationClass />
+                  </DashBoardAdmin>
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/admin/factory-deployment-statistics"
+              element={
+                <AuthGuard>
+                  <DashBoardAdmin>
+                    <AdFactoryDeploymentStatistics />
+                  </DashBoardAdmin>
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/admin/track-activity-metrics"
+              element={
+                <AuthGuard>
+                  <DashBoardAdmin>
+                    <AdminTrackActivityMetrics />
+                  </DashBoardAdmin>
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/admin/class-configuration"
+              element={
+                <AuthGuard>
+                  <DashBoardAdmin>
+                    <ClassConfiguration />
                   </DashBoardAdmin>
                 </AuthGuard>
               }
@@ -117,6 +162,16 @@ function App() {
                 <AuthGuard>
                   <DashBoardTeacher>
                     <TeacherScheduleToday />
+                  </DashBoardTeacher>
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/teacher/dashboard"
+              element={
+                <AuthGuard>
+                  <DashBoardTeacher>
+                    <TeacherDashboard />
                   </DashBoardTeacher>
                 </AuthGuard>
               }
@@ -187,6 +242,16 @@ function App() {
                 </AuthGuard>
               }
             />
+            <Route
+              path="/teacher/my-class/point/:idClass"
+              element={
+                <AuthGuard>
+                  <DashBoardTeacher>
+                    <PointManagement />
+                  </DashBoardTeacher>
+                </AuthGuard>
+              }
+            />
             {/* router của Hiệu trang nhỏ meeting*/}
             <Route
               path="/teacher/my-class/meeting/:idClass"
@@ -210,6 +275,36 @@ function App() {
               }
             />
 
+            <Route
+              path="/student/register-class"
+              element={
+                <AuthGuard>
+                  <DashBoardStudent>
+                    <StRegisterClass />
+                  </DashBoardStudent>
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/student/attendance"
+              element={
+                <AuthGuard>
+                  <DashBoardStudent>
+                    <StAttendance />
+                  </DashBoardStudent>
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/student/point"
+              element={
+                <AuthGuard>
+                  <DashBoardStudent>
+                    <StPoint />
+                  </DashBoardStudent>
+                </AuthGuard>
+              }
+            />
             <Route
               path="/student/my-class"
               element={
@@ -240,8 +335,8 @@ function App() {
                 </AuthGuard>
               }
             />
-             {/* router student meeting*/}
-             <Route
+            {/* router student meeting*/}
+            <Route
               path="/student/my-class/meeting/:id"
               element={
                 <AuthGuard>
@@ -251,13 +346,43 @@ function App() {
                 </AuthGuard>
               }
             />
-             {/* router detail  meeting task student*/}
-             <Route
+            <Route
+              path="/student/my-class/post/:id"
+              element={
+                <AuthGuard>
+                  <DashBoardStudent>
+                    <StPostDetailClass />
+                  </DashBoardStudent>
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/student/my-class/attendance/:id"
+              element={
+                <AuthGuard>
+                  <DashBoardStudent>
+                    <StAttendanceDetailClass />
+                  </DashBoardStudent>
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/student/my-class/point/:id"
+              element={
+                <AuthGuard>
+                  <DashBoardStudent>
+                    <StPointDetailClass />
+                  </DashBoardStudent>
+                </AuthGuard>
+              }
+            />
+            {/* router detail  meeting task student*/}
+            <Route
               path="/student/my-class/meeting/detail/:idMeeting"
               element={
                 <AuthGuard>
                   <DashBoardStudent>
-                    <StTeamMeeting/>
+                    <StTeamMeeting />
                   </DashBoardStudent>
                 </AuthGuard>
               }

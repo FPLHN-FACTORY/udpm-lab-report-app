@@ -11,165 +11,131 @@ import { faUsersRectangle } from "@fortawesome/free-solid-svg-icons";
 const { Panel } = Collapse;
 
 const CollapseMeeting = ({ items }) => {
-    const [activePanel, setActivePanel] = useState(null);
-    const [edit, setEdit] = useState(false);
-    const { idMeeting } = useParams();
-    const [idTeamDetail, setIdTeamDetail] = useState("");
-    const [objDetail, setObjDetail] = useState({});
-    const [loading, setLoading] = useState(true);
-    const [descriptionsHomeWork, setDescriptionsHomeWork] = useState("");
-    const [descriptionsNote, setDescriptionsNote] = useState("");
+  const [activePanel, setActivePanel] = useState(null);
+  const [edit, setEdit] = useState(false);
+  const { idMeeting } = useParams();
+  const [idTeamDetail, setIdTeamDetail] = useState("");
+  const [objDetail, setObjDetail] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [descriptionsHomeWork, setDescriptionsHomeWork] = useState("");
+  const [descriptionsNote, setDescriptionsNote] = useState("");
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    document.title = "Bảng điều khiển - chi tiết buổi học";
+    setDescriptionsHomeWork("");
+    setDescriptionsNote("");
+    setLoading(true);
+  }, [items]);
 
-    useEffect(() => {
-        window.scrollTo(0, 0);
-        document.title = "Bảng điều khiển - chi tiết buổi học";
-        setDescriptionsHomeWork("");
-        setDescriptionsNote("");
-        setLoading(true);
-        // console.log(items);
-       
-      }, []);
+  const clear = () => {
+    setEdit(false);
+    setActivePanel(null);
+  };
+  useEffect(() => {
+    featchHomeWorkNote(idTeamDetail);
+  }, [idTeamDetail, activePanel]);
 
-    const clear = () => {
-        setEdit(false);
-        setActivePanel(null);
-        // setObjDetail({});
+  const toggleCard = (index, item) => {
+    setEdit(false);
+    setActivePanel(index);
+    setIdTeamDetail(item.id);
+  };
+
+  const callToggleCardForAllItems = () => {
+    items.forEach((item, index) => toggleCard(index, item));
+  };
+
+  useEffect(() => {
+    callToggleCardForAllItems();
+  }, [items]);
+
+  const featchHomeWorkNote = async (idTeam) => {
+    setLoading(false);
+    try {
+      let data = {
+        idTeam: idTeam,
+        idMeeting: idMeeting,
       };
-    //   useEffect(() => {
-    //     featchHomeWorkNote(idTeamDetail);
-    //   }, [idTeamDetail, activePanel]);
-
-    const toggleCard = (index, item) => {
-        setEdit(false);
-        setActivePanel(index);
-        setIdTeamDetail(item.id);
-
-      };
-
-    const featchHomeWorkNote = async (idTeam) => {
-        setLoading(false);
-        try {
-          let data = {
-            idTeam: idTeam,
-            idMeeting: idMeeting,
+      await StudentMeetingAPI.getDetailHomeWorkAndNoteByIdMeetingandIdTeam(
+        data
+      ).then((response) => {
+        if (response.data.data === null) {
+          let dataNew = {
+            idHomeWork: "",
+            idNote: "",
           };
-          await StudentMeetingAPI.getDetailHomeWorkAndNoteByIdMeetingandIdTeam(
-            data
-          ).then((response) => {
-            if (response.data.data === null) {
-              let dataNew = {
-                idHomeWork: "",
-                idNote: "",
-              };
-            //   setObjDetail(dataNew);
-              setDescriptionsHomeWork("");
-              setDescriptionsNote("");
-            } else {
-              setDescriptionsHomeWork(response.data.data.descriptionsHomeWork);
-              setDescriptionsNote(response.data.data.descriptionsNote);
-            //   setObjDetail(response.data.data);
-            }
-            setLoading(true);
-          });
-          console.log(data.idMeeting);
-
-
-        } catch (error) {
-          alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+          setDescriptionsHomeWork("");
+          setDescriptionsNote("");
+        } else {
+          setDescriptionsHomeWork(response.data.data.descriptionsHomeWork);
+          setDescriptionsNote(response.data.data.descriptionsNote);
         }
-      };
-    <div
-      className="centered-collapse"
-    //   onClick={(e) => {
-    //     e.stopPropagation();
-    //     clear();
-    //   }} 
-    >
-      <Collapse bordered={false} accordion={true} ghost showArrow={true}>
-        {items.map((item, index) => (
-          <Panel
-            style={{
-              minWidth: "900px",
-              boxShadow:
-                activePanel === index
-                  ? "0px 0px 10px rgba(0, 0, 0, 0.2)"
-                  : "none",
-              border: "none",
-              borderBottom: "1px solid #ccc",
-              borderRadius: activePanel === index ? "8px" : "",
-            }}
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleCard(index, item);
-            }}
-            className={`box-title ${activePanel === index ? "active" : ""}`}
-            header={
-              <div
-                className={`custom-collapse-header ${
-                  activePanel === index ? "active" : ""
-                }`}
-                name="box-card"
-              >
-                <div className="title-left">
-                  <div className="box-icon">
-                    <FontAwesomeIcon
-                      icon={faUsersRectangle}
-                      style={{ color: "white", fontSize: 21 }}
-                    />
-                  </div>
-                  <span
-                    style={{
-                      fontSize: "16px",
-                      color: "black",
-                    }}
-                  >
-                    {item.name}
-                  </span>
-                </div>
-              </div>
-            }
-            key={index}
+        setLoading(true);
+      });
+    } catch (error) {
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+    }
+  };
+
+  return (
+    <div className="lesson-information">
+      {items.map((item, index) => (
+        <div className="info-team">
+          <span className="info-heading" style={{ marginLeft: "40px" }}>
+            Thông tin nhóm:
+          </span>
+          <div
+            className="group-info"
+            style={{ marginLeft: "40px", marginRight: "40px" }}
           >
-            <div className="info-content" >
-              <Row gutter={16}>
-                <Col span={12}>
-                  {" "}
-                  <span style={{ color: "black" }}>Nhận xét:</span>
-                  <TextArea
-                    rows={4}
-                    placeholder="Nhập nhận xét"
-                    value={descriptionsNote}
-                    onChange={(e) => setDescriptionsNote(e.target.value)}
-                    // onClick={(e) => {
-                    //   e.stopPropagation();
-                    //   setEdit(true);
-                    // }}
-                  />
-                </Col>
-                <Col span={12}>
-                  {" "}
-                  <span style={{ color: "black", fontFamily: "unset" }}>
-                    Bài tập về nhà:
-                  </span>
-                  <TextArea
-                    rows={4}
-                    placeholder="Nhập bài tập"
-                    value={descriptionsHomeWork}
-                    style={{ readOnly: edit && "false" }}
-                    onChange={(e) => setDescriptionsHomeWork(e.target.value)}
-                    // onClick={(e) => {
-                    //   e.stopPropagation();
-                    //   setEdit(true);
-                    // }}
-                  />
-                </Col>
-              </Row>
-            </div>
-            
-          </Panel>
-        ))}
-      </Collapse>
-     </div>
-}
+            <span className="group-info-item">
+              Tên nhóm: {item != null ? item.name : ""}
+            </span>
+            <span className="group-info-item">
+              Tên đề tài: {item != null ? item.subjectName : ""}
+            </span>
+          </div>
+        </div>
+      ))}
+      <div
+        className="info-content"
+        style={{ marginLeft: "40px", marginRight: "40px" }}
+      >
+        <Row gutter={16}>
+          <Col span={12}>
+            {" "}
+            <span style={{ color: "black", fontWeight: "bold" }}>
+              Nhận xét:
+            </span>
+            <TextArea
+              style={{ marginTop: "10px" }}
+              rows={4}
+              value={descriptionsNote}
+              readOnly
+            />
+          </Col>
+          <Col span={12}>
+            {" "}
+            <span
+              style={{
+                color: "black",
+                fontFamily: "unset",
+                fontWeight: "bold",
+              }}
+            >
+              Bài tập về nhà:
+            </span>
+            <TextArea
+              style={{ marginTop: "10px" }}
+              rows={4}
+              value={descriptionsHomeWork}
+              readOnly
+            />
+          </Col>
+        </Row>
+      </div>
+    </div>
+  );
+};
 export default CollapseMeeting;

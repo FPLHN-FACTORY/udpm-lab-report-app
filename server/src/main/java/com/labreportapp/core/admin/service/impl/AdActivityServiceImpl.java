@@ -13,12 +13,13 @@ import com.labreportapp.entity.Semester;
 import com.labreportapp.infrastructure.constant.Level;
 import com.labreportapp.infrastructure.constant.Message;
 import com.labreportapp.infrastructure.exception.rest.RestApiException;
-import com.labreportapp.util.FormUtils;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -27,33 +28,32 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Validated
 public class AdActivityServiceImpl implements AdActivityService {
 
     @Autowired
     private AdActivityRepository adActivityRepository;
 
-    private FormUtils formUtils = new FormUtils();
-
-    private List<AdActivityResponse> listActivity;
-
     @Autowired
     private AdSemesterRepository adSemesterRepository;
 
     @Override
-    public PageableObject<AdActivityResponse> searchActivity(AdFindActivityRequest rep) {
+    public PageableObject<AdActivityResponse> searchActivity(final AdFindActivityRequest rep) {
         Pageable pageable = PageRequest.of(rep.getPage(), rep.getSize());
+        if (rep.getSemesterId().equals("")) {
+            List<Semester> listSemester = adSemesterRepository.findAllSemester();
+            rep.setSemesterId(listSemester.get(0).getId());
+        }
         Page<AdActivityResponse> responses = adActivityRepository.findByNameActivity(rep, pageable);
-        listActivity = responses.stream().toList();
         return new PageableObject<>(responses);
     }
 
     @Override
-    public Activity creatActivity(AdCreatActivityRequest command) {
+    public Activity creatActivity(@Valid AdCreatActivityRequest command) {
         String name = adActivityRepository.getMaActivity(command.getName());
         if (name != null) {
             throw new RestApiException(Message.ACTIVITY_NOT_EXISTS);
         }
-//        Activity activity = formUtils.convertToObject(Activity.class, command);
         Activity activity = new Activity();
         activity.setName(command.getName());
         if (command.getLevel().equals("0")) {
@@ -77,7 +77,7 @@ public class AdActivityServiceImpl implements AdActivityService {
     }
 
     @Override
-    public Activity updateActivity(AdUpdateActivityRequest command) {
+    public Activity updateActivity(@Valid AdUpdateActivityRequest command) {
         Optional<Activity> optional = adActivityRepository.findById(command.getId());
         if (!optional.isPresent()) {
             throw new RestApiException(Message.ACTIVITY_NOT_EXISTS);
@@ -106,13 +106,17 @@ public class AdActivityServiceImpl implements AdActivityService {
     }
 
     @Override
-    public boolean deleteActivity(String id) {
+    public String deleteActivity(String id) {
         Optional<Activity> optional = adActivityRepository.findById(id);
         if (!optional.isPresent()) {
             throw new RestApiException(Message.ACTIVITY_NOT_EXISTS);
         }
+        Integer countClass = adActivityRepository.countClassInActivity(id);
+        if (countClass != null && countClass > 0) {
+            throw new RestApiException(Message.ACTIVITY_HAVE_CLASS);
+        }
         adActivityRepository.delete(optional.get());
-        return true;
+        return id;
     }
 
     @Override
@@ -132,7 +136,7 @@ public class AdActivityServiceImpl implements AdActivityService {
 
     @Override
     public List<Semester> getSemester() {
-        return adSemesterRepository.findAll();
+        return adSemesterRepository.findAllSemester();
     }
 
     public Long convertDateToString(String dateStringToLong) {

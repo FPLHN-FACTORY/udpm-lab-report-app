@@ -16,18 +16,19 @@ import java.util.List;
 @Setter
 public class AdCreateClassRequest {
 
+    @NotBlank
     private String code;
 
-    private String name;
-
+    @NotNull
     private Long classPeriod;
 
-    private Integer classSize;
-
+    @NotNull
     private Long startTime;
 
+    @NotBlank
     private String teacherId;
 
+    @NotBlank
     private String activityId;
 
 }

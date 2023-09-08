@@ -20,13 +20,13 @@ import java.util.List;
 public interface AdClassRepository extends ClassRepository {
 
     @Query(value = """ 
-            select a.code, a.name,a.start_time
+            select a.code,a.start_time
             ,a.class_period,a.class_size,a.teacher_id,b.name as nameActivity 
               from class a join activity b on a.activity_id=b.id""", nativeQuery = true)
     List<AdClassResponse> getAllClass();
 
     @Query(value = """ 
-              select a.code, a.name,a.start_time
+              select a.code,a.start_time
               ,a.class_period,a.class_size,a.teacher_id,b.name as nameActivity ,b.semester_id as semesterId
                 from class a join activity b join semester s 
                 on s.id = b.semester_id 
@@ -39,7 +39,7 @@ public interface AdClassRepository extends ClassRepository {
     List<AdClassResponse> getAllClassBySemester(@Param("req") AdFindClassRequest req);
 
     @Query(value = """ 
-            sSELECT a.code, a.name, a.start_time, a.class_period
+            sSELECT a.code, a.start_time, a.class_period
             , a.class_size, a.teacher_id, b.name AS nameActivity
                 FROM class a
                 JOIN activity b ON a.activity_id = b.id
@@ -71,7 +71,7 @@ public interface AdClassRepository extends ClassRepository {
     @Query(value = """
             SELECT ROW_NUMBER() OVER(ORDER BY c.last_modified_date DESC ) AS stt,
             c.id,
-            c.code, c.name,c.start_time
+            c.code,c.start_time
             ,c.class_period,c.class_size,c.teacher_id,a.name as nameActivity 
             FROM activity a
             JOIN class c ON c.activity_id = a.id

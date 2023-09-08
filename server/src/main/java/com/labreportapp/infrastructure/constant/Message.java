@@ -32,7 +32,9 @@ public enum Message {
     ACTIVITY_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeys.ACTIVITY_NOT_EXISTS)),
     STUDENT_CLASSES_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeys.STUDENT_CLASSES_NOT_EXISTS)),
     STUDENT_HAD_TEAM(PropertiesReader.getProperty(PropertyKeys.STUDENT_HAD_TEAM)),
-    STUDENT_HAD_NOT_TEAM(PropertiesReader.getProperty(PropertyKeys.STUDENT_HAD_NOT_TEAM));
+    STUDENT_HAD_NOT_TEAM(PropertiesReader.getProperty(PropertyKeys.STUDENT_HAD_NOT_TEAM)),
+    CHUA_DEN_THOI_GIAN_CUA_BUOI_HOC(PropertiesReader.getProperty(PropertyKeys.CHUA_DEN_THOI_GIAN_CUA_BUOI_HOC)),
+    ACTIVITY_HAVE_CLASS(PropertiesReader.getProperty(PropertyKeys.ACTIVITY_HAVE_CLASS));
 
     private String message;
 

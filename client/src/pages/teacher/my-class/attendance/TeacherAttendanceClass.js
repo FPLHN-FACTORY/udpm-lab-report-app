@@ -1,5 +1,5 @@
 import { useParams } from "react-router";
-import { UnorderedListOutlined } from "@ant-design/icons";
+import { ControlOutlined, UnorderedListOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHome } from "@fortawesome/free-solid-svg-icons";
@@ -10,10 +10,7 @@ const TeacherAttendanceClass = () => {
       <div className="box-one">
         <Link to="/teacher/my-class" style={{ color: "black" }}>
           <span style={{ fontSize: "18px", paddingLeft: "20px" }}>
-            <FontAwesomeIcon
-              icon={faHome}
-              style={{ color: "#00000", fontSize: "23px" }}
-            />
+            <ControlOutlined style={{ fontSize: "22px" }} />
             <span style={{ marginLeft: "10px", fontWeight: "500" }}>
               Bảng điều khiển
             </span>{" "}
@@ -89,7 +86,7 @@ const TeacherAttendanceClass = () => {
                 ĐIỂM DANH &nbsp;
               </Link>
               <Link
-                to=""
+                to={`/teacher/my-class/point/${idClass}`}
                 className="custom-link"
                 style={{
                   fontSize: "16px",
@@ -120,7 +117,7 @@ const TeacherAttendanceClass = () => {
           </div>
           <div className="menu-teacher-search">
             <div>
-              <div style={{ margin: "30px 0px 20px 0px" }}>
+              <div style={{ margin: "15px 0px 15px 0px" }}>
                 {" "}
                 <span style={{ fontSize: "17px", fontWeight: "500" }}>
                   {" "}

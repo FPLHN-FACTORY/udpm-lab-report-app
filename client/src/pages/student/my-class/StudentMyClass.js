@@ -29,7 +29,6 @@ const StudentMyClass = () => {
   const [semester, setSemester] = useState("");
   const [activity, setActivity] = useState("Không có hoạt động");
   const [code, setCode] = useState("");
-  const [name, setName] = useState("");
   const [classPeriod, setClassPeriod] = useState("");
   const [level, setLevel] = useState("");
   const [listSemester, setListSemester] = useState([]);
@@ -39,6 +38,7 @@ const StudentMyClass = () => {
   const loadDataSemester = () => {
     StMyClassAPI.getAllSemesters().then((response) => {
       setListSemester(response.data.data);
+      setSemester(response.data.data[0].id);
       setLoading(false);
     });
   };
@@ -60,12 +60,6 @@ const StudentMyClass = () => {
       dataIndex: "code",
       sorter: (a, b) => a.code.localeCompare(b.code),
       key: "code",
-    },
-    {
-      title: "Tên lớp",
-      dataIndex: "name",
-      sorter: (a, b) => a.name.localeCompare(b.name),
-      key: "name",
     },
     {
       title: "Thời gian bắt đầu",
@@ -150,17 +144,24 @@ const StudentMyClass = () => {
     },
   ];
 
-  const handleChangeSemester = (e) => {
-    setSemester(e);
-    if (e === "") {
+  const loadDataActivity = () => {
+    StMyClassAPI.getAllActivityByIdSemester(semester).then((response) => {
+      setListActivity(response.data.data);
+      setActivity("");
+    });
+  };
+
+  useEffect(() => {
+    if (semester === "") {
       setListActivity([]);
       setActivity("Không có hoạt động");
     } else {
-      StMyClassAPI.getAllActivityByIdSemester(e).then((response) => {
-        setListActivity(response.data.data);
-        setActivity("");
-      });
+      loadDataActivity();
     }
+  }, [semester]);
+
+  const handleChangeSemester = (e) => {
+    setSemester(e);
   };
 
   const handleClickFilter = () => {
@@ -171,14 +172,12 @@ const StudentMyClass = () => {
     return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
   };
 
-
   const loadDataClass = () => {
     setLoading(true);
     let filter = {
       semesterId: semester,
       activityId: activity,
       code: code,
-      name: name,
       classPeriod: classPeriod === "" ? null : parseInt(classPeriod),
       level: level === "" ? null : parseInt(level),
       studentId: sinhVienCurrent.id,
@@ -193,7 +192,6 @@ const StudentMyClass = () => {
     setSemester("");
     setActivity("Không có hoạt động");
     setCode("");
-    setName("");
     setClassPeriod("");
     setLevel("");
   };
@@ -219,8 +217,8 @@ const StudentMyClass = () => {
               />
               <br />
               <Select
-              showSearch
-                  filterOption={filterOptions}
+                showSearch
+                filterOption={filterOptions}
                 style={{
                   width: "263px",
                   minWidth: "120px",
@@ -248,8 +246,8 @@ const StudentMyClass = () => {
               />{" "}
               <br />
               <Select
-              showSearch
-                  filterOption={filterOptions}
+                showSearch
+                filterOption={filterOptions}
                 style={{
                   width: "868px",
                   margin: "6px 0 10px 0",
@@ -286,22 +284,7 @@ const StudentMyClass = () => {
                 placeholder="Nhập mã lớp"
               />
             </Col>
-            <Col span={6}>
-              <span>Tên lớp:</span>{" "}
-              <QuestionCircleFilled
-                style={{ paddingLeft: "12px", fontSize: "15px" }}
-              />
-              {""} <br />
-              <Input
-                onChange={(e) => {
-                  setName(e.target.value);
-                }}
-                value={name}
-                style={{ width: "94%", marginTop: "6px" }}
-                placeholder="Nhập tên lớp"
-                type="text"
-              />
-            </Col>
+
             <Col span={6}>
               <span>Ca học:</span>
               <QuestionCircleFilled
@@ -314,7 +297,7 @@ const StudentMyClass = () => {
                   setClassPeriod(e);
                 }}
                 showSearch
-                  filterOption={filterOptions}
+                filterOption={filterOptions}
                 value={classPeriod}
               >
                 <Option value="">Tất cả</Option>
@@ -342,7 +325,7 @@ const StudentMyClass = () => {
                   setLevel(e);
                 }}
                 showSearch
-                  filterOption={filterOptions}
+                filterOption={filterOptions}
                 value={level}
               >
                 <Option value="">Tất cả</Option>

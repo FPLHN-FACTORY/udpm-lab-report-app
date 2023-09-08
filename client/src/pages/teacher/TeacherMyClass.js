@@ -85,7 +85,6 @@ const TeacherMyClass = () => {
       idActivity: idActivitiSearch,
       idSemester: idSemesterSeach,
       code: codeSearch,
-      name: nameSearch,
       classPeriod: classPeriodSearch,
       level: levelSearch,
       page: current,
@@ -158,7 +157,6 @@ const TeacherMyClass = () => {
       dataIndex: "stt",
       key: "stt",
       sorter: (a, b) => a.stt - b.stt,
-      width: "3%",
     },
 
     {
@@ -166,16 +164,9 @@ const TeacherMyClass = () => {
       dataIndex: "code",
       key: "code",
       sorter: (a, b) => a.code.localeCompare(b.code),
-      width: "7%",
     },
     {
-      title: "Tên lớp",
-      dataIndex: "name",
-      key: "name",
-      sorter: (a, b) => a.name.localeCompare(b.name),
-    },
-    {
-      title: "Thời gian",
+      title: "Thời gian bắt đầu",
       dataIndex: "startTime",
       key: "startTime",
       sorter: (a, b) => a.startTime - b.startTime,
@@ -186,7 +177,6 @@ const TeacherMyClass = () => {
         }/${startTime.getFullYear()}`;
         return <span>{formattedStartTime}</span>;
       },
-      width: "120px",
     },
     {
       title: "Ca học",
@@ -194,7 +184,6 @@ const TeacherMyClass = () => {
       key: "classPeriod",
       render: (text) => <span>{text + 1}</span>,
       sorter: (a, b) => a.classPeriod - b.classPeriod,
-      width: "9%",
     },
     {
       title: "Level",
@@ -202,7 +191,6 @@ const TeacherMyClass = () => {
       key: "level",
       render: (text) => <span>{text + 1}</span>,
       sorter: (a, b) => a.level - b.level,
-      width: "7%",
     },
     {
       title: "Hành động",
@@ -222,7 +210,6 @@ const TeacherMyClass = () => {
           </div>
         </>
       ),
-      width: "105px",
     },
   ];
 
@@ -357,22 +344,7 @@ const TeacherMyClass = () => {
                   }}
                 />
               </Col>
-              <Col span={6}>
-                <span>Tên lớp</span>{" "}
-                <QuestionCircleFilled
-                  style={{ paddingLeft: "12px", fontSize: "15px" }}
-                />
-                {""} <br />
-                <Input
-                  style={{ width: "92%", marginTop: "6px" }}
-                  placeholder="Nhập tên lớp"
-                  type="text"
-                  value={nameSearch}
-                  onChange={(e) => {
-                    setNameSearch(e.target.value);
-                  }}
-                />
-              </Col>
+
               <Col span={6}>
                 <span>Ca học</span>
                 <QuestionCircleFilled

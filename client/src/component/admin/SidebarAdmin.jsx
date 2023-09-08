@@ -84,7 +84,9 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             />
           }
         >
-          <Link to="/admin/dashboard">Thống kê triển khai xưởng</Link>
+          <Link to="/admin/factory-deployment-statistics">
+            Thống kê triển khai xưởng
+          </Link>
         </Menu.Item>
         <Menu.Item
           key="5"
@@ -96,7 +98,9 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             />
           }
         >
-          <Link to="/admin/dashboard">Theo dõi chỉ số hoạt động</Link>
+          <Link to="/admin/track-activity-metrics">
+            Theo dõi chỉ số hoạt động
+          </Link>
         </Menu.Item>
         <Menu.Item
           key="6"
@@ -108,7 +112,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             />
           }
         >
-          <Link to="/admin/semester-management">Cấu hình lớp học</Link>
+          <Link to="/admin/class-configuration">Cấu hình lớp học</Link>
         </Menu.Item>
       </Menu>
     </Sider>

@@ -23,6 +23,7 @@ public class PropertyKeys {
     public static final String STUDENT_CLASSES_NOT_EXISTS = "student.classes.not.exists";
     public static final String STUDENT_HAD_TEAM = "student.had.team";
     public static final String STUDENT_HAD_NOT_TEAM = "student.had.not.team";
-
     public static final String ACTIVITY_NOT_EXISTS = "activity.not.exist";
+    public static final String CHUA_DEN_THOI_GIAN_CUA_BUOI_HOC = "chua.den.thoi.gian.cua.buoi.hoc";
+    public static final String ACTIVITY_HAVE_CLASS = "hoat.dong.dang.co.lop.hoc";
 }

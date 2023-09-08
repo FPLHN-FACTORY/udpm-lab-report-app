@@ -169,13 +169,11 @@ const SemesterManagement = () => {
         toast.success("Xóa thành công!");
         dispatch(DeleteSemester(response.data.data));
         fetchData();
-        console.log(response.data.data);
       },
-      (error) => {
-        toast.error(error.response.data.message);
-      }
+      (error) => {}
     );
   };
+  
   return (
     <div className="semester">
       {loading && <LoadingIndicator />}

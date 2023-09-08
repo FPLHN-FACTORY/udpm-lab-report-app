@@ -19,6 +19,11 @@ public interface AdSemesterRepository extends SemesterRepository {
     @Query(" SELECT obj FROM Semester obj")
     List<Semester> getAllSemester(Pageable pageable);
 
+    @Query(value = """
+            SELECT * FROM semester a ORDER BY a.start_time DESC
+            """, nativeQuery = true)
+    List<Semester> findAllSemester();
+
     @Query("SELECT COUNT(obj) FROM Activity obj WHERE obj.semesterId = :id")
     Integer countActivitiesBySemesterId(@Param("id") String id);
 

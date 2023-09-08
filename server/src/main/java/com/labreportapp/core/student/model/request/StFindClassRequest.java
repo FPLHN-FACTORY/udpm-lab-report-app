@@ -2,12 +2,14 @@ package com.labreportapp.core.student.model.request;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * @author thangncph26123
  */
 @Getter
 @Setter
+@ToString
 public class StFindClassRequest {
 
     private String semesterId;
@@ -15,8 +17,6 @@ public class StFindClassRequest {
     private String activityId;
 
     private String code;
-
-    private String name;
 
     private Short classPeriod;
 

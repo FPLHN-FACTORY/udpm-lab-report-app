@@ -1,0 +1,13 @@
+.box-general {
+  width: 100%;
+  padding: 25px;
+  padding-top: 55px;
+}
+
+.box-son-general {
+  min-height: 600px;
+  margin-top: 20px;
+  border-radius: 5px;
+  background-color: rgb(255, 255, 255);
+  box-shadow: 0px 0px 20px 1px rgba(148, 148, 148, 0.3);
+}

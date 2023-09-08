@@ -11,21 +11,29 @@ import {
   faPlus,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
-import { Button, Input, Pagination, Popconfirm, Select, Table, Tooltip } from "antd";
+import {
+  Button,
+  Input,
+  Pagination,
+  Popconfirm,
+  Select,
+  Table,
+  Tooltip,
+} from "antd";
 import { useAppDispatch, useAppSelector } from "../../../app/hook";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ActivityManagementAPI } from "../../../api/admin/activity-management/activityManagement.api";
 import { Option } from "antd/es/mentions";
-import { DeleteActivityManagement, GetActivityManagement, SetActivityManagement } from "../../../app/admin/activity-management/activityManagementSlice.reducer";
+import {
+  DeleteActivityManagement,
+  GetActivityManagement,
+  SetActivityManagement,
+} from "../../../app/admin/activity-management/activityManagementSlice.reducer";
 import LoadingIndicator from "../../../helper/loading";
 import ModalCreateActivity from "./modal-create/ModalCreateActivity";
 import ModalUpdateActivity from "./modal-update/ModalUpdateActivity";
 import { toast } from "react-toastify";
-import axios from "axios";
-import { Center } from "@chakra-ui/react";
-
-
 
 const ActivityManagement = () => {
   const dispatch = useAppDispatch();
@@ -45,30 +53,25 @@ const ActivityManagement = () => {
   const [loading, setLoading] = useState(true);
 
   const { id } = useParams();
-  const [activity, setActivity] = useState(null);
-  const [idActivity, setIdActivity] = useState("");
+  const [activity, setActivity] = useState({});
   const [listSemester, setListSemester] = useState([]);
-
 
   useEffect(() => {
     fetchData();
-
     return () => {
       dispatch(SetActivityManagement([]));
     };
   }, [current]);
 
   useEffect(() => {
-    // Gọi hàm để tải dữ liệu học kỳ từ API
     fetchSemesterData();
   }, []);
 
   const fetchData = async () => {
     let filter = {
-      nameActivity: name,
       name: searchName,
       level: levelSearch,
-      status: status === "" ? null : parseInt(status),
+      semesterId: semesterSearch,
       page: current - 1,
     };
     setLoading(true);
@@ -78,7 +81,6 @@ const ActivityManagement = () => {
       dispatch(SetActivityManagement(listAcivityManagement));
       setTotal(response.data.data.totalPages);
       setLoading(false);
-      console.log(response.data.data.data);
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng ấn F5 để tải lại trang");
     }
@@ -87,11 +89,11 @@ const ActivityManagement = () => {
   const fetchSemesterData = async () => {
     try {
       const response = await ActivityManagementAPI.semester();
-      const semesterData = response.data.data; // Dữ liệu học kỳ từ API
-      // Cập nhật state hoặc Redux store với dữ liệu học kỳ
+      const semesterData = response.data.data;
       setListSemester(semesterData);
+      setSemesterSearch(semesterData[0].id);
     } catch (error) {
-      console.error('Error fetching semester data:', error);
+      console.error("Error fetching semester data:", error);
     }
   };
 
@@ -118,10 +120,12 @@ const ActivityManagement = () => {
         const startTime = new Date(record.startTime);
         const endTime = new Date(record.endTime);
 
-        const formattedStartTime = `${startTime.getDate()}/${startTime.getMonth() + 1
-          }/${startTime.getFullYear()}`;
-        const formattedEndTime = `${endTime.getDate()}/${endTime.getMonth() + 1
-          }/${endTime.getFullYear()}`;
+        const formattedStartTime = `${startTime.getDate()}/${
+          startTime.getMonth() + 1
+        }/${startTime.getFullYear()}`;
+        const formattedEndTime = `${endTime.getDate()}/${
+          endTime.getMonth() + 1
+        }/${endTime.getFullYear()}`;
 
         return (
           <span>
@@ -132,18 +136,18 @@ const ActivityManagement = () => {
       width: "175px",
     },
     {
-      title: 'Cấp độ',
-      dataIndex: 'level',
-      key: 'level',
+      title: "Cấp độ",
+      dataIndex: "level",
+      key: "level",
       sorter: (a, b) => a.level - b.level,
       render: (text) => {
-        let displayText = '';
+        let displayText = "";
         if (text === 0) {
-          displayText = 'Level 1';
+          displayText = "Level 1";
         } else if (text === 1) {
-          displayText = 'Level 2';
+          displayText = "Level 2";
         } else if (text === 2) {
-          displayText = 'Level 3';
+          displayText = "Level 3";
         } else {
           displayText = text;
         }
@@ -169,7 +173,7 @@ const ActivityManagement = () => {
                 icon={faEdit}
                 size="1x"
                 onClick={() => {
-                  handleUpdateActivity(record.id, record);
+                  handleUpdateActivity(record);
                 }}
               />
             </Tooltip>
@@ -194,7 +198,6 @@ const ActivityManagement = () => {
         </div>
       ),
     },
-
   ];
 
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -212,23 +215,21 @@ const ActivityManagement = () => {
   const handleModalCreateCancel = () => {
     document.querySelector("body").style.overflowX = "auto";
     setShowCreateModal(false);
+    setActivity({});
   };
 
-  const handleUpdateActivity = (id, activity) => {
+  const handleUpdateActivity = (item) => {
     document.querySelector("body").style.overflowX = "hidden";
     setShowUpdateModal(true);
-    setIdActivity(id);
-    setActivity(activity);
+    setActivity(item);
   };
 
   const handleModalUpdateCancel = () => {
     document.querySelector("body").style.overflowX = "auto";
     setShowUpdateModal(false);
-
   };
   const handleSearch = async () => {
     await fetchData();
-    toast.success("Tìm kiếm thành công!");
   };
 
   const handleClear = () => {
@@ -241,45 +242,40 @@ const ActivityManagement = () => {
 
   const handleSemesterSearch = (value) => {
     setSemesterSearch(value);
-    searchActivitiesBySemester(value);
   };
 
   const handleLevelSearch = (value) => {
     setLevelSearch(value);
-    searchActivitiesByLevel(value);
   };
 
   const searchActivitiesByLevel = (level) => {
-    const filteredActivities = data.filter(activity => activity.level === level);
+    const filteredActivities = data.filter(
+      (activity) => activity.level === level
+    );
     dispatch(SetActivityManagement(filteredActivities));
     setCurrent(1);
   };
 
   const handleDeleteActivity = async (id) => {
     try {
-      await ActivityManagementAPI.deleteActivity(id);
-      toast.success("Xóa thành công!");
-      fetchData(); // Gọi lại hàm fetchData để cập nhật danh sách hoạt động sau khi xóa
-    } catch (error) {
-      toast.error("Xóa không thành công. Vui lòng thử lại!");
-    }
+      await ActivityManagementAPI.delete(id).then((response) => {
+        toast.success("Xóa thành công!");
+        dispatch(DeleteActivityManagement(id));
+      });
+    } catch (error) {}
   };
 
   const searchActivitiesBySemester = (semesterId) => {
-    // Thực hiện tìm kiếm hoạt động dựa trên học kỳ ở đây
-    const filteredActivities = data.filter(activity => activity.semesterId === semesterId);
-
-    // Cập nhật dữ liệu hiển thị hoạt động theo kết quả tìm kiếm
+    const filteredActivities = data.filter(
+      (activity) => activity.semesterId === semesterId
+    );
     dispatch(SetActivityManagement(filteredActivities));
-
-    // Cập nhật giá trị trang hiện tại nếu cần
     setCurrent(1);
   };
 
   return (
     <div className="activity_management">
-      {/* {loading && <LoadingIndicator />} */}
-
+      {loading && <LoadingIndicator />}
       <div className="title_activity_management">
         {" "}
         <FontAwesomeIcon icon={faTags} size="1x" />
@@ -309,10 +305,10 @@ const ActivityManagement = () => {
                 value={levelSearch}
                 onChange={handleLevelSearch}
               >
-                <Option value=" ">Tất cả</Option>
-                <Option value="1">Level 1</Option>
-                <Option value="2">Level 2</Option>
-                <Option value="3">Level 3</Option>
+                <Option value="">Tất cả</Option>
+                <Option value="0">Level 1</Option>
+                <Option value="1">Level 2</Option>
+                <Option value="2">Level 3</Option>
               </Select>
             </div>
           </div>
@@ -322,9 +318,8 @@ const ActivityManagement = () => {
               <Select
                 style={{ width: "50%", marginLeft: "10px" }}
                 value={semesterSearch}
-                onChange={handleSemesterSearch} // Gọi hàm khi có thay đổi học kỳ
+                onChange={handleSemesterSearch}
               >
-                {/* Render danh sách học kỳ */}
                 {listSemester.map((semester) => (
                   <Option key={semester.id} value={semester.id}>
                     {semester.name}
@@ -401,6 +396,7 @@ const ActivityManagement = () => {
         visible={showUpdateModal}
         onCancel={handleModalUpdateCancel}
         listSemester={listSemester}
+        activity={activity}
       />
     </div>
   );

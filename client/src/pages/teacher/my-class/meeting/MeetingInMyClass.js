@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import "./styleMeetingInMyClass.css";
 import { Link } from "react-router-dom";
-import { BookOutlined, UnorderedListOutlined } from "@ant-design/icons";
+import { BookOutlined, ControlOutlined, UnorderedListOutlined } from "@ant-design/icons";
 import { TeacherMeetingAPI } from "../../../../api/teacher/meeting/TeacherMeeting.api";
 import {
   SetMeeting,
@@ -24,7 +24,7 @@ const MeetingInMyClass = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = "Bảng điều khiển - buổi học";
+    document.title = "Bảng điều khiển - Buổi học";
     featchCountMeeting(idClass);
     featchMeeting(idClass);
     featchClass(idClass);
@@ -79,10 +79,7 @@ const MeetingInMyClass = () => {
       <div className="box-one">
         <Link to="/teacher/my-class" style={{ color: "black" }}>
           <span style={{ fontSize: "18px", paddingLeft: "20px" }}>
-            <FontAwesomeIcon
-              icon={faHome}
-              style={{ color: "#00000", fontSize: "23px" }}
-            />
+            <ControlOutlined style={{ fontSize: "22px" }} />
             <span style={{ marginLeft: "10px", fontWeight: "500" }}>
               Bảng điều khiển
             </span>{" "}
@@ -154,7 +151,7 @@ const MeetingInMyClass = () => {
               </Link>
 
               <Link
-                to=""
+                to={`/teacher/my-class/point/${idClass}`}
                 className="custom-link"
                 style={{
                   fontSize: "16px",
@@ -185,7 +182,7 @@ const MeetingInMyClass = () => {
           </div>
           <div className="menu-teacher-search">
             <div>
-              <div style={{ margin: "25px 0px 20px 16px" }}>
+              <div style={{ margin: "15px 0px 15px 15px" }}>
                 {" "}
                 <span style={{ fontSize: "17px", fontWeight: "500" }}>
                   {" "}
@@ -223,9 +220,9 @@ const MeetingInMyClass = () => {
                               >
                                 {record.name} {" - "}
                                 {record.typeMeeting === 0 ? (
-                                  <span>online</span>
+                                  <span>Online</span>
                                 ) : (
-                                  <span>offline</span>
+                                  <span>Offline</span>
                                 )}
                               </p>
                             </div>

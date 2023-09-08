@@ -15,8 +15,6 @@ public class StDetailClassCustomResponse {
 
     private String code;
 
-    private String name;
-
     private Long startTime;
 
     private ClassPeriod classPeriod;

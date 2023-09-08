@@ -25,7 +25,6 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
             SELECT ROW_NUMBER() OVER(ORDER BY c.last_modified_date DESC ) AS stt,
             c.code as code,
             c.id as id,
-            c.name as name,
             c.start_time as start_time,
             c.password as password,
             c.class_period as class_period,
@@ -42,7 +41,6 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
             and (:#{#req.idSemester} IS NULL OR :#{#req.idSemester} LIKE '' OR :#{#req.idSemester} LIKE s.id)
             and (:#{#req.idActivity} IS NULL OR :#{#req.idActivity} LIKE '' OR :#{#req.idActivity} LIKE a.id)
             and (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR c.code LIKE %:#{#req.code}%)
-            and (:#{#req.name} IS NULL OR :#{#req.name} LIKE '' OR c.name LIKE %:#{#req.name}%)
             and (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR  c.class_period = :#{#req.classPeriod})
             and (:#{#req.level} IS NULL OR :#{#req.level} LIKE '' OR a.level = :#{#req.level})
             ORDER BY c.last_modified_date DESC
@@ -55,7 +53,6 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
             and (:#{#req.idSemester} IS NULL OR :#{#req.idSemester} LIKE '' OR :#{#req.idSemester} LIKE s.id)
             and (:#{#req.idActivity} IS NULL OR :#{#req.idActivity} LIKE '' OR :#{#req.idActivity} LIKE a.id)
             and (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR c.code LIKE %:#{#req.code}%)
-            and (:#{#req.name} IS NULL OR :#{#req.name} LIKE '' OR c.name LIKE %:#{#req.name}%)
             and (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR  c.class_period = :#{#req.classPeriod})
             and (:#{#req.level} IS NULL OR :#{#req.level} LIKE '' OR a.level = :#{#req.level})
             """ ,nativeQuery = true)
@@ -64,7 +61,6 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
     @Query(value = """
             SELECT c.id as id,
             c.code as code,
-            c.name as name,
             c.start_time as start_time,
             c.password as password,
             c.class_period as class_period,
@@ -92,7 +88,6 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
             ROW_NUMBER() OVER(ORDER BY l.start_time DESC) AS stt,
             c.id AS id,
             c.code AS code,
-            c.name AS name,
             l.start_time as start_time,
             l.end_time as end_time,
             c.class_period as class_period,

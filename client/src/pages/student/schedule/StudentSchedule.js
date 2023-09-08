@@ -35,7 +35,7 @@ const StudentSchedule = () => {
   const fetchData = (sinhVienCurrent) => {
     const searchTimeAsNumber = parseInt(searchTime);
     console.log(searchTimeAsNumber);
-    setLoading(false);
+    setLoading(true);
     let filter = {
       idStudent: sinhVienCurrent.id,
       searchTime: searchTimeAsNumber,

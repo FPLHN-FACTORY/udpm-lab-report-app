@@ -3,14 +3,17 @@ package com.labreportapp.core.student.service.impl;
 import com.labreportapp.core.student.model.request.StFindMeetingRequest;
 import com.labreportapp.core.student.model.response.StHomeWordAndNoteResponse;
 import com.labreportapp.core.student.model.response.StMeetingResponse;
+import com.labreportapp.core.student.model.response.StMyTeamInClassResponse;
 import com.labreportapp.core.student.repository.StMeetingRepository;
 import com.labreportapp.core.student.service.StMeetingService;
+import com.labreportapp.core.teacher.model.request.TeFindStudentClasses;
 import com.labreportapp.infrastructure.constant.Message;
 import com.labreportapp.infrastructure.exception.rest.RestApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +22,7 @@ import java.util.Optional;
  */
 @Service
 public class StMeetingServiceImpl implements StMeetingService {
+
     @Autowired
     private StMeetingRepository stMeetingrepository;
 
@@ -28,7 +32,6 @@ public class StMeetingServiceImpl implements StMeetingService {
     }
 
     @Override
-    @CacheEvict(value = {"countMeeting"}, allEntries = true)
     public Integer countMeetingByClassId(String idClass) {
         return stMeetingrepository.countMeetingByClassId(idClass);
     }
@@ -38,6 +41,9 @@ public class StMeetingServiceImpl implements StMeetingService {
         Optional<StMeetingResponse> meeting = stMeetingrepository.searchMeetingByIdMeeting(request);
         if (!meeting.isPresent()) {
             throw new RestApiException(Message.MEETING_NOT_EXISTS);
+        }
+        if(meeting.get().getMeetingDate() > new Date().getTime()) {
+            throw new RestApiException(Message.CHUA_DEN_THOI_GIAN_CUA_BUOI_HOC);
         }
         return meeting.get();
     }
@@ -49,5 +55,10 @@ public class StMeetingServiceImpl implements StMeetingService {
             return null;
         }
         return object.get();
+    }
+
+    @Override
+    public List<StMyTeamInClassResponse> getAllTeams(StFindMeetingRequest stFindStudentClasses) {
+        return stMeetingrepository.getTeamInClass(stFindStudentClasses);
     }
 }

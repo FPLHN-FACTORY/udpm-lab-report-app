@@ -13,9 +13,6 @@ public interface TeDetailClassRespone {
     @Value("#{target.code}")
     String getCode();
 
-    @Value("#{target.name}")
-    String getName();
-
     @Value("#{target.start_time}")
     Long getStartTime();
 

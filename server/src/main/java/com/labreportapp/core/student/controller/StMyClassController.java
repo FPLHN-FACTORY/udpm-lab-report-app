@@ -22,6 +22,7 @@ public class StMyClassController {
 
     @GetMapping
     public ResponseObject getAllClass(final StFindClassRequest request) {
+        System.out.println(request);
         return new ResponseObject(stMyClassService.getAllClass(request));
     }
 }
