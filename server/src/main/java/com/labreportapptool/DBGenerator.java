@@ -5,6 +5,7 @@ import com.labreportapp.entity.Class;
 import com.labreportapp.entity.HomeWork;
 import com.labreportapp.entity.Meeting;
 import com.labreportapp.entity.Note;
+import com.labreportapp.entity.Point;
 import com.labreportapp.entity.Post;
 import com.labreportapp.entity.Semester;
 import com.labreportapp.entity.StudentClasses;
@@ -21,6 +22,7 @@ import com.labreportapp.repository.ClassRepository;
 import com.labreportapp.repository.HomeWorkRepository;
 import com.labreportapp.repository.MeetingRepository;
 import com.labreportapp.repository.NoteRepository;
+import com.labreportapp.repository.PointRepository;
 import com.labreportapp.repository.PostRepository;
 import com.labreportapp.repository.SemesterRepository;
 import com.labreportapp.repository.StudentClassesRepository;
@@ -78,6 +80,9 @@ public class DBGenerator implements CommandLineRunner {
 
     @Autowired
     private PostRepository postRepository;
+
+    @Autowired
+    private PointRepository pointRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -380,9 +385,19 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses16.setClassId(class2.getId());
         studentClasses16.setTeamId(team1.getId());
         studentClasses16.setEmail("qndph24011@fpt.edu.vn");
-        studentClasses16.setRole(RoleTeam.LEADER);
+        studentClasses16.setRole(RoleTeam.MEMBER);
         studentClasses16.setStatus(StatusTeam.ACTIVE);
         studentClasses16.setId(studentClassesRepository.save(studentClasses16).getId());
+
+        // class 3 - team 1
+        StudentClasses studentClasses21 = new StudentClasses();
+        studentClasses21.setStudentId("de60e713-56cc-4964-ac6c-f58dcee3dcab");
+        studentClasses21.setClassId(class3.getId());
+        studentClasses21.setTeamId(team1.getId());
+        studentClasses21.setEmail("hieundph25894@fpt.edu.vn");
+        studentClasses21.setRole(RoleTeam.LEADER);
+        studentClasses21.setStatus(StatusTeam.ACTIVE);
+        studentClasses21.setId(studentClassesRepository.save(studentClasses21).getId());
 
 // Meeting
         Meeting meeting1 = new Meeting();
@@ -671,7 +686,7 @@ public class DBGenerator implements CommandLineRunner {
         post7.setId(postRepository.save(post7).getId());
 
         Post post8 = new Post();
-        post8.setDescriptions("<p><span style=\"color: rgb(32, 33, 34); font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">Trong suốt quá trình thực dân Pháp cai trị, từ giữa thế kỷ XIX đến đầu thế kỷ XX, đã có nhiều cuộc khởi nghĩa nổi dậy chống<span>&nbsp;</span></span><a href=\"https://vi.wikipedia.org/wiki/Th%E1%BB%B1c_d%C3%A2n_Ph%C3%A1p\" class=\"mw-redirect\" title=\"Thực dân Pháp\" style=\"text-decoration: none; color: rgb(51, 102, 204); background: none rgb(255, 255, 255); overflow-wrap: break-word; font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal;\">thực dân Pháp</a><span style=\"color: rgb(32, 33, 34); font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">. Các cuộc khởi nghĩa vũ trang dưới khẩu hiệu \"Cần vương\" do các văn thân, sĩ phu lãnh đạo cuối cùng cũng thất bại. Các cuộc khởi nghĩa vũ trang này mang đậm tinh thần yêu nước và đầy dũng khí trước quân thù, nhưng đều dưới sự dẫn dắt của các tư tưởng phong kiến và tư sản và đều thất bại. Cách mạng Việt Nam lâm vào cuộc khủng khoảng sâu sắc về đường lối cứu nước.</span><sup id=\"cite_ref-9\" class=\"reference\" style=\"line-height: 1em; font-size: 11.2px; white-space: nowrap; unicode-bidi: isolate; font-weight: 400; font-style: normal; color: rgb(32, 33, 34); font-family: sans-serif; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\"><a href=\"https://vi.wikipedia.org/wiki/T%C6%B0_t%C6%B0%E1%BB%9Fng_H%E1%BB%93_Ch%C3%AD_Minh#cite_note-9\" style=\"text-decoration: none; color: rgb(51, 102, 204); background: none; overflow-wrap: break-word; white-space: nowrap;\">[9]</a></sup><br></p>");
+        post8.setDescriptions("<p><span style=\"color: rgb(32, 33, 34); font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">Trong suốt quá trình thực dân Pháp cai trị, từ giữa thế kỷ XIX đến đầu thế kỷ XX, đã có nhiều cuộc khởi nghĩa nổi dậy chống<span>&nbsp;</span></span><a href=\"https://vi.wikipedia.org/wiki/Th%E1%BB%B1c_d%C3%A2n_Ph%C3%A1p\" class=\"mw-redirect\" title=\"Thực dân Pháp\" style=\"text-decoration: none; color: rgb(51, 102, 204); background: none rgb(255, 255, 255); overflow-wrap: break-word; font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal;\">thực dân Pháp</a><span style=\"color: rgb(32, 33, 34); font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">. Các cuộc khởi nghĩa vũ trang dưới khẩu hiệu \"Cần vương\" do các văn thân, sĩ phu lãnh đạo cuối cùng cũng thất bại. Các cuộc khởi nghĩa vũ trang này mang đậm tinh thần yêu nước và đầy dũng khí trước quân thù, nhưng đều dưới sự dẫn dắt của các tư tưởng phong kiến và tư sản và đều thất bại. Cách mạng Việt Nam lâm vào cuộc khủng khoảng sâu sắc về đường lối cứu nước.</span><sup id=\"cite_ref-9\" class=\"reference\" style=\"line-height: 1em; font-size: 11.2px; white-space: nowrap; unicode-bidi: isolate; font-weight: 400; font-style: normal; color: rgb(32, 33, 34); font-family: sans-serif; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\"><a href=\"https://vi.wikipedia.org/wiki/T%C6%B0_t%C6%B0%E1%BB%9Fng_H%E1%BB%93_Ch%C3%AD_Minh1cite_note-9\" style=\"text-decoration: none; color: rgb(51, 102, 204); background: none; overflow-wrap: break-word; white-space: nowrap;\">[9]</a></sup><br></p>");
         post8.setTeacherId(class1.getTeacherId());
         post8.setClassId(class1.getId());
         post8.setCreatedDate(new Date().getTime() +  1 * 86400000);
@@ -719,6 +734,177 @@ public class DBGenerator implements CommandLineRunner {
         post11.setClassId(class1.getId());
         post11.setCreatedDate(new Date().getTime() +  3 * 86400300);
         post11.setId(postRepository.save(post11).getId());
+
+    // POINT - Class 1
+        Point point1 = new Point();
+        point1.setStudentId("cdc1629a-d9bd-4a5f-be12-8737ec26df8f");
+        point1.setClassId(class1.getId());
+        point1.setCheckPointPhase1(8.0);
+        point1.setCheckPointPhase2(5.0);
+        point1.setFinalPoint(9.0);
+        point1.setId(pointRepository.save(point1).getId());
+
+        Point point2 = new Point();
+        point2.setStudentId("874bffc6-38ce-467e-9458-47868e1e2f52");
+        point2.setClassId(class1.getId());
+        point2.setCheckPointPhase1(8.0);
+        point2.setCheckPointPhase2(6.0);
+        point2.setFinalPoint(7.0);
+        point2.setId(pointRepository.save(point2).getId());
+
+        Point point3 = new Point();
+        point3.setStudentId("f5d1e3ab-e544-4d77-8bd3-830c904f0e93");
+        point3.setClassId(class1.getId());
+        point3.setCheckPointPhase1(8.0);
+        point3.setCheckPointPhase2(5.0);
+        point3.setFinalPoint(9.0);
+        point3.setId(pointRepository.save(point3).getId());
+
+        Point point4 = new Point();
+        point4.setStudentId("aa47cd2b-ac99-4277-905b-ac2bb59886e9");
+        point4.setClassId(class1.getId());
+        point4.setCheckPointPhase1(8.0);
+        point4.setCheckPointPhase2(5.0);
+        point4.setFinalPoint(9.0);
+        point4.setId(pointRepository.save(point4).getId());
+
+        Point point5 = new Point();
+        point5.setStudentId("8559e6b3-8465-48e8-92a4-0f6147dc568d");
+        point5.setClassId(class1.getId());
+        point5.setCheckPointPhase1(8.0);
+        point5.setCheckPointPhase2(5.0);
+        point5.setFinalPoint(9.0);
+        point5.setId(pointRepository.save(point5).getId());
+
+        Point point6 = new Point();
+        point6.setStudentId("ad51426d-7545-4f31-896d-cad398cac2c5");
+        point6.setClassId(class1.getId());
+        point6.setCheckPointPhase1(8.0);
+        point6.setCheckPointPhase2(7.0);
+        point6.setFinalPoint(8.0);
+        point6.setId(pointRepository.save(point6).getId());
+
+        Point point7 = new Point();
+        point7.setStudentId("698b1fba-dffe-4a0d-884a-984b14d8dca7");
+        point7.setClassId(class1.getId());
+        point7.setCheckPointPhase1(5.0);
+        point7.setCheckPointPhase2(5.0);
+        point7.setFinalPoint(9.0);
+        point7.setId(pointRepository.save(point7).getId());
+
+        Point point8 = new Point();
+        point8.setStudentId("e015e9dc-b01a-4516-b9a9-70a09e0b5408");
+        point8.setClassId(class1.getId());
+        point8.setCheckPointPhase1(8.0);
+        point8.setCheckPointPhase2(5.0);
+        point8.setFinalPoint(4.0);
+        point8.setId(pointRepository.save(point8).getId());
+
+        Point point9 = new Point();
+        point9.setStudentId("732e7e24-6c0a-420f-96fc-31046410b057");
+        point9.setClassId(class1.getId());
+        point9.setCheckPointPhase1(6.0);
+        point9.setCheckPointPhase2(6.0);
+        point9.setFinalPoint(6.0);
+        point9.setId(pointRepository.save(point9).getId());
+
+        Point point10 = new Point();
+        point10.setStudentId("69308521-e690-4b5f-8756-52bedb630951");
+        point10.setClassId(class1.getId());
+        point10.setCheckPointPhase1(8.0);
+        point10.setCheckPointPhase2(2.0);
+        point10.setFinalPoint(3.0);
+        point10.setId(pointRepository.save(point10).getId());
+
+        Point point11 = new Point();
+        point11.setStudentId("01fefe14-dbf8-4275-99b3-04b4bd96a5bc");
+        point11.setClassId(class1.getId());
+        point11.setCheckPointPhase1(5.0);
+        point11.setCheckPointPhase2(5.0);
+        point11.setFinalPoint(5.0);
+        point11.setId(pointRepository.save(point11).getId());
+
+        Point point12 = new Point();
+        point12.setStudentId("0af2514a-ef53-48c5-945a-65248c890c7f");
+        point12.setClassId(class1.getId());
+        point12.setCheckPointPhase1(7.0);
+        point12.setCheckPointPhase2(7.0);
+        point12.setFinalPoint(7.0);
+        point12.setId(pointRepository.save(point12).getId());
+
+        Point point13 = new Point();
+        point13.setStudentId("941359a8-c58f-4355-ac0d-673cc78f0b32");
+        point13.setClassId(class1.getId());
+        point13.setCheckPointPhase1(5.0);
+        point13.setCheckPointPhase2(5.0);
+        point13.setFinalPoint(3.0);
+        point13.setId(pointRepository.save(point13).getId());
+
+        Point point14 = new Point();
+        point14.setStudentId("");
+        point14.setClassId(class1.getId());
+        point14.setCheckPointPhase1(8.0);
+        point14.setCheckPointPhase2(7.0);
+        point14.setFinalPoint(9.0);
+        point14.setId(pointRepository.save(point14).getId());
+
+        Point point15 = new Point();
+        point15.setStudentId("195d63ae-9de2-447d-9f62-54488070dd48");
+        point15.setClassId(class1.getId());
+        point15.setCheckPointPhase1(8.0);
+        point15.setCheckPointPhase2(10.0);
+        point15.setFinalPoint(9.0);
+        point15.setId(pointRepository.save(point15).getId());
+
+        Point point17 = new Point();
+        point17.setStudentId("5000cd3b-ad08-4abe-9b71-c85c98aa07ed");
+        point17.setClassId(class1.getId());
+        point17.setCheckPointPhase1(10.0);
+        point17.setCheckPointPhase2(5.0);
+        point17.setFinalPoint(9.0);
+        point17.setId(pointRepository.save(point17).getId());
+
+        Point point18 = new Point();
+        point18.setStudentId("dac59af0-6bdb-4b26-ad8a-b5effa44875d");
+        point18.setClassId(class1.getId());
+        point18.setCheckPointPhase1(3.0);
+        point18.setCheckPointPhase2(5.0);
+        point18.setFinalPoint(7.0);
+        point18.setId(pointRepository.save(point18).getId());
+
+        Point point19 = new Point();
+        point19.setStudentId("ad2a384f-f20f-430d-a378-e856018f3338");
+        point19.setClassId(class1.getId());
+        point19.setCheckPointPhase1(8.0);
+        point19.setCheckPointPhase2(5.0);
+        point19.setFinalPoint(10.0);
+        point19.setId(pointRepository.save(point19).getId());
+
+        Point point20 = new Point();
+        point20.setStudentId("c9c3ecbc-4dc1-46a3-9585-f3ee7550a97c");
+        point20.setClassId(class1.getId());
+        point20.setCheckPointPhase1(8.0);
+        point20.setCheckPointPhase2(5.0);
+        point20.setFinalPoint(2.0);
+        point20.setId(pointRepository.save(point20).getId());
+
+    // POINT - Class 2 - teacher HangNT
+        Point point21 = new Point();
+        point21.setStudentId("6178966a-c08b-45f6-98aa-35b8ac243ede");
+        point21.setClassId(class1.getId());
+        point21.setCheckPointPhase1(8.0);
+        point21.setCheckPointPhase2(5.0);
+        point21.setFinalPoint(7.0);
+        point21.setId(pointRepository.save(point21).getId());
+
+    // POINT - class 3 - teacher NguyenVV
+        Point point22 = new Point();
+        point22.setStudentId("de60e713-56cc-4964-ac6c-f58dcee3dcab");
+        point22.setClassId(class1.getId());
+        point22.setCheckPointPhase1(8.0);
+        point22.setCheckPointPhase2(8.0);
+        point22.setFinalPoint(9.0);
+        point22.setId(pointRepository.save(point22).getId());
 
     }
 
