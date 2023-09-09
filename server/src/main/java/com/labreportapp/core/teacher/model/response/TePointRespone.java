@@ -23,4 +23,7 @@ public interface TePointRespone {
      @Value("#{target.final_point}")
     String getFinalPoint();
 
+    @Value("#{target.class_id}")
+    String getIdClass();
+
 }

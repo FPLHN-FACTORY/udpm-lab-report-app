@@ -1,7 +1,8 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "./style-point-management.css";
+import "./style-poin-my-class.css";
 import {
   faDownload,
+  faFloppyDisk,
   faLineChart,
   faMarker,
   faUpload,
@@ -10,9 +11,68 @@ import { ControlOutlined } from "@ant-design/icons";
 import { Link, useParams } from "react-router-dom";
 import { Button, Row, Table } from "antd";
 import { Divider } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
+import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/TeacherStudentClasses.api";
+import { TeacherPointAPI } from "../../../../api/teacher/point/TeacherPoint.api";
 
 const PointManagement = () => {
   const { idClass } = useParams();
+  const [classDetail, setClassDetail] = useState({});
+  const [listStudentClassAPI, setListStudentClassAPI] = useState([]);
+  const [checkPoint, setCheckPoint] = useState(false);
+  const [listPoint, setListPoint] = useState([]);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    document.title = "Bảng điều khiển - Bảng điểm";
+    featchClass(idClass);
+    featchStudentClass(idClass);
+    featchPoint(idClass);
+  }, []);
+
+  const featchPoint = async (idClass) => {
+    try {
+      await TeacherPointAPI.getPointByIdClass(idClass).then((response) => {
+        console.log(response.data.data);
+        if (response.data.data.length >= 1) {
+          setCheckPoint(true);
+          setListPoint(response.data.data);
+          //featInforStudent(idClass);
+        } else {
+          setCheckPoint(false);
+          featchStudentClass(idClass);
+          //featInforStudent(idClass);
+        }
+      });
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
+  const featchStudentClass = async (idClass) => {
+    try {
+      await TeacherStudentClassesAPI.getStudentInClasses(idClass).then(
+        (responese) => {
+          const listAPI = responese.data.data.map((item) => {
+            return { ...item };
+          });
+          setListStudentClassAPI(listAPI);
+        }
+      );
+    } catch (error) {
+      alert("Lỗi hệ thống, vui lòng F5 lại trang");
+    }
+  };
+
+  const featchClass = async (idClass) => {
+    try {
+      await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
+        setClassDetail(responese.data.data);
+      });
+    } catch (error) {
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+    }
+  };
   const columns = [
     {
       title: "#",
@@ -22,47 +82,32 @@ const PointManagement = () => {
     },
     {
       title: "Tên sinh viên",
-      dataIndex: "age",
-      key: "age",
+      dataIndex: "name",
+      key: "name",
     },
     {
       title: "Email",
-      dataIndex: "age",
-      key: "age",
+      dataIndex: "email",
+      key: "email",
     },
     {
       title: "Điểm giai đoạn 1",
-      dataIndex: "age",
-      key: "age",
+      dataIndex: "checkPointPhase1",
+      key: "checkPointPhase1",
     },
     {
       title: "Điểm giai đoạn 2",
-      dataIndex: "address",
-      key: "address",
+      dataIndex: "checkPointPhase2",
+      key: "checkPointPhase2",
     },
     {
       title: "Điểm giai Final",
-      dataIndex: "address",
-      key: "address",
+      dataIndex: "finalPoint",
+      key: "finalPoint",
     },
-    // Thêm cột khác nếu cần
   ];
 
-  const dataSource = [
-    {
-      key: "1",
-      name: "John Doe",
-      age: 30,
-      address: "123 Main St",
-    },
-    {
-      key: "2",
-      name: "Jane Smith",
-      age: 25,
-      address: "456 Elm St",
-    },
-    // Thêm dữ liệu khác nếu cần
-  ];
+  const dataSource = listStudentClassAPI;
 
   return (
     <div className="box-general-custom">
@@ -169,7 +214,7 @@ const PointManagement = () => {
               >
                 {" "}
                 <span style={{ fontSize: "14px", padding: "10px" }}>
-                  aaaaaaa
+                  {classDetail.code}
                 </span>
               </div>
               <hr />
@@ -204,9 +249,24 @@ const PointManagement = () => {
                 />
                 Import điểm
               </Button>
+              <Button
+                style={{
+                  backgroundColor: "rgb(38, 144, 214)",
+                  color: "white",
+                  marginRight: "0px",
+                  marginLeft: "auto",
+                }}
+              >
+                <FontAwesomeIcon
+                  icon={faFloppyDisk}
+                  style={{ marginRight: "7px" }}
+                />
+                Lưu bảng điểm
+              </Button>
             </Row>
-            <div style={{ marginTop: 10 }}>
+            <div style={{ marginTop: 20 }}>
               <Table
+                rowKey="id"
                 columns={columns}
                 dataSource={dataSource}
                 pagination={false}
