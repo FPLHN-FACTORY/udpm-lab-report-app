@@ -14,9 +14,14 @@ import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyCla
 import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/TeacherStudentClasses.api";
 import { TeacherPointAPI } from "../../../../api/teacher/point/TeacherPoint.api";
 import { useAppDispatch, useAppSelector } from "../../../../app/hook";
-import { SetPoint } from "../../../../app/teacher/point/tePointSlice.reduce";
+import {
+  GetPoint,
+  SetPoint,
+  UpdatePoint,
+} from "../../../../app/teacher/point/tePointSlice.reduce";
 import TablePoint from "./table-point-student/TablePoint";
 import LoadingIndicator from "../../../../helper/loading";
+import { toast } from "react-toastify";
 
 const PointManagement = () => {
   const { idClass } = useParams();
@@ -46,8 +51,6 @@ const PointManagement = () => {
   const featchPoint = async (idClass) => {
     try {
       await TeacherPointAPI.getPointByIdClass(idClass).then((response) => {
-        console.log("list point api");
-        console.log(response.data.data);
         if (response.data.data.length >= 1) {
           setCheckPoint(true);
           setListPoint(response.data.data);
@@ -91,20 +94,17 @@ const PointManagement = () => {
             ...matchedObject,
           };
         });
-        console.log("db exist");
-        console.log(listShowTable);
         dispatch(SetPoint(listShowTable));
       } else {
         const listShowTable = listStudentClassAPI.map((item1) => {
           return {
             ...item1,
+            idClass: idClass,
             checkPointPhase1: "0.0",
             checkPointPhase2: "0.0",
             finalPoint: "0.0",
           };
         });
-        console.log("DB Null");
-        console.log(listShowTable);
         dispatch(SetPoint(listShowTable));
       }
       if (loadingData === true) {
@@ -130,6 +130,22 @@ const PointManagement = () => {
       fetchData(idClass);
     }
   }, [loadingData]);
+
+  const handleSave = async () => {
+    try {
+      let dataFind = {
+        listPoint: data,
+      };
+      await TeacherPointAPI.createOrUpdate(dataFind).then((respone) => {
+        dispatch(UpdatePoint(respone.data.data));
+        toast.success("Lưu bảng điểm thành công !");
+      });
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
+  const data = useAppSelector(GetPoint);
   return (
     <>
       {" "}
@@ -283,6 +299,7 @@ const PointManagement = () => {
                     marginRight: "0px",
                     marginLeft: "auto",
                   }}
+                  onClick={handleSave}
                 >
                   <FontAwesomeIcon
                     icon={faFloppyDisk}

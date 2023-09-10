@@ -14,6 +14,6 @@ public interface TeAttendanceSevice {
 
     List<TeAttendanceRespone> getListCustom(String idMeeting);
 
-    List<Attendance> getListAttendace(final TeFindListAttendanceRequest request);
+    List<Attendance> addOrUpdateAttendance(final TeFindListAttendanceRequest request);
 
 }

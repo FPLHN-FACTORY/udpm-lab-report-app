@@ -39,7 +39,7 @@ public class TeAttendanceController {
 
     @PostMapping("")
     public ResponseObject createOrUpdate(@RequestBody TeFindListAttendanceRequest request) {
-        List<Attendance> list = teAttendanceSevice.getListAttendace(request);
+        List<Attendance> list = teAttendanceSevice.addOrUpdateAttendance(request);
         return new ResponseObject(list);
     }
 

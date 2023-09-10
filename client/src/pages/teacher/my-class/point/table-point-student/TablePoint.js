@@ -1,9 +1,36 @@
 import { Input, Table } from "antd";
-import { useAppSelector } from "../../../../../app/hook";
-import { GetPoint } from "../../../../../app/teacher/point/tePointSlice.reduce";
+import { useAppDispatch, useAppSelector } from "../../../../../app/hook";
+import {
+  GetPoint,
+  SetPoint,
+} from "../../../../../app/teacher/point/tePointSlice.reduce";
+import { useState } from "react";
 
 const TablePoint = () => {
+  const [phase1, setPhase1] = useState(0);
+  const [phase2, setPhase2] = useState(0);
+  const [final, setFinal] = useState(0);
+  const dispatch = useAppDispatch();
   const dataSource = useAppSelector(GetPoint);
+
+  const handlePoint = (phase1, phase2, final, record) => {
+    const dataNew = dataSource.map((item1) => {
+      if (
+        item1.idClass === record.idClass &&
+        item1.idStudent === record.idStudent
+      ) {
+        return {
+          ...item1,
+          checkPointPhase1: `${phase1}`,
+          checkPointPhase2: `${phase2}`,
+          finalPoint: `${final}`,
+        };
+      }
+      return item1;
+    });
+    dispatch(SetPoint(dataNew));
+  };
+
   const columns = [
     {
       title: "#",
@@ -41,9 +68,13 @@ const TablePoint = () => {
                 e.target.readOnly = true;
               }}
               onChange={(e) => {
-                //  setName(e.target.value);
-                // onChange={(e) => {
-                //handleAddressChange(record.idMeeting, e.target.value);
+                setPhase1(e.target.value);
+                handlePoint(
+                  e.target.value,
+                  record.checkPointPhase2,
+                  record.finalPoint,
+                  record
+                );
               }}
               type="number"
             />
@@ -63,7 +94,13 @@ const TablePoint = () => {
               placeholder="Nhập điểm"
               value={text}
               onChange={(e) => {
-                //  setName(e.target.value);
+                setPhase2(e.target.value);
+                handlePoint(
+                  record.checkPointPhase1,
+                  e.target.value,
+                  record.finalPoint,
+                  record
+                );
               }}
               type="number"
             />
@@ -83,7 +120,13 @@ const TablePoint = () => {
               placeholder="Nhập điểm"
               value={text}
               onChange={(e) => {
-                //  setName(e.target.value);
+                setFinal(e.target.value);
+                handlePoint(
+                  record.checkPointPhase1,
+                  record.checkPointPhase2,
+                  e.target.value,
+                  record
+                );
               }}
               type="number"
             />

@@ -21,13 +21,14 @@ const tePointSlice = createSlice({
       return state;
     },
     UpdatePoint: (state, action) => {
-      const team = action.payload;
-      const index = state.findIndex((item) => item.id === team.id);
+      const point = action.payload;
+      const index = state.findIndex((item) => item.id === point.id);
       if (index !== -1) {
         let update = state[index];
-        update.id = team.id;
-        update.descriptions = team.descriptions;
-        update.createdDate = team.createdDate;
+        update.id = point.id;
+        update.checkPointPhase1 = point.checkPointPhase1;
+        update.checkPointPhase2 = point.checkPointPhase2;
+        update.finalPoint = point.finalPoint;
       }
       return state;
     },

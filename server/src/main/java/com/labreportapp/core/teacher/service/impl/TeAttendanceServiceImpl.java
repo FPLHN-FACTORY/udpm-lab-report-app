@@ -33,7 +33,7 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
     }
 
     @Override
-    public List<Attendance> getListAttendace(TeFindListAttendanceRequest request) {
+    public List<Attendance> addOrUpdateAttendance(TeFindListAttendanceRequest request) {
         List<TeFindAttendanceRequest> list = request.getListAttendance();
         List<Attendance> listNew = new ArrayList<>();
         list.forEach(item -> {

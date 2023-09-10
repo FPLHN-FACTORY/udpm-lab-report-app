@@ -8,11 +8,11 @@ export class TeacherPointAPI {
       url: url + `/get/` + idClas,
     });
   };
-  // static createOrUpdate = (data) => {
-  //   return request({
-  //     method: "POST",
-  //     url: url,
-  //     data: data,
-  //   });
-  // };
+  static createOrUpdate = (data) => {
+    return request({
+      method: "POST",
+      url: url,
+      data: data,
+    });
+  };
 }
