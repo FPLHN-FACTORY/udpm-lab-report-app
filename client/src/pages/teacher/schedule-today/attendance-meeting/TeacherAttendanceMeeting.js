@@ -80,7 +80,9 @@ const TeacherAttendanceMeeting = () => {
       if (checkAttendance) {
         const listShowTable = listStudentClassAPI.map((item1) => {
           const matchedObject = listAttendance.find(
-            (item2) => item2.idStudent === item1.idStudent
+            (item2) =>
+              item2.idStudent === item1.idStudent &&
+              item2.idMeeting === idMeeting
           );
           return {
             ...item1,

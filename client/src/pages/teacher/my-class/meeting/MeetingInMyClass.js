@@ -1,7 +1,11 @@
 import { useParams } from "react-router-dom";
 import "./styleMeetingInMyClass.css";
 import { Link } from "react-router-dom";
-import { BookOutlined, ControlOutlined, UnorderedListOutlined } from "@ant-design/icons";
+import {
+  BookOutlined,
+  ControlOutlined,
+  UnorderedListOutlined,
+} from "@ant-design/icons";
 import { TeacherMeetingAPI } from "../../../../api/teacher/meeting/TeacherMeeting.api";
 import {
   SetMeeting,
@@ -192,7 +196,7 @@ const MeetingInMyClass = () => {
                   Danh sách buổi học : {countMeeting} buổi học
                 </span>
               </div>
-              <div className="data-table">
+              <div className="data-table" style={{ minHeight: "380px" }}>
                 {dataMeeting.length > 0 ? (
                   <>
                     {dataMeeting.map((record) => (
