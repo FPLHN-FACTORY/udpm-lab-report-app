@@ -81,6 +81,7 @@ const TablePoint = () => {
           </>
         );
       },
+      sorter: (a, b) => a.checkPointPhase1 - b.checkPointPhase1,
     },
     {
       title: "Điểm giai đoạn 2",
@@ -107,6 +108,7 @@ const TablePoint = () => {
           </>
         );
       },
+      sorter: (a, b) => a.checkPointPhase2 - b.checkPointPhase2,
     },
     {
       title: "Điểm final",
@@ -133,6 +135,7 @@ const TablePoint = () => {
           </>
         );
       },
+      sorter: (a, b) => a.finalPoint - b.finalPoint,
     },
   ];
   return (
