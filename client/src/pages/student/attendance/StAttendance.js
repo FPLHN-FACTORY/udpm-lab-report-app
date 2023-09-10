@@ -143,7 +143,6 @@ const StAttendance = () => {
           <div className="select-semester" style={{ marginTop: "5px" }}>
             <Select
               showSearch
-              // filterOption={filterOptions}
               style={{
                 width: "100%",
                 margin: "6px 0 10px 0",
@@ -171,13 +170,16 @@ const StAttendance = () => {
           <>
             <div className="table-attendence">
               <div className="header" style={{
-                padding: "10px", fontSize: "18px", fontWeight: "500",
+                padding: "10px", fontSize: "18px", fontWeight: "500", display: "flex"
               }}>
                 <span className="header-icon">
                   <FontAwesomeIcon icon={faList} />
                 </span>
                 <span className="header-title" style={{ marginLeft: "12px" }}>
                   Lớp {item.classCode}
+                </span>
+                <span className="header-absent" style={{ marginLeft: "15px", color: "red", fontSize: "16.5px", fontWeight: "500" }}>
+                  (Vắng: {item.attendences.filter(i => i.status === 0).length}/{item.attendences.length})
                 </span>
               </div>
               <div style={{ borderBottom: "1px solid #ddd", marginTop: "10px" }}></div>
