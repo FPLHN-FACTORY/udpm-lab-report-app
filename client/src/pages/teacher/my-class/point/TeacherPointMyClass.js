@@ -1,7 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./style-poin-my-class.css";
 import {
-  faDownload,
   faFloppyDisk,
   faMarker,
   faUpload,
@@ -22,13 +21,13 @@ import {
 import TablePoint from "./table-point-student/TablePoint";
 import LoadingIndicator from "../../../../helper/loading";
 import { toast } from "react-toastify";
+import ButtonExportExcel from "./export-excel/ButtonExportExcel";
 
 const PointManagement = () => {
   const { idClass } = useParams();
   const dispatch = useAppDispatch();
   const [classDetail, setClassDetail] = useState({});
   const [listStudentClassAPI, setListStudentClassAPI] = useState([]);
-  const [listAll, setListAll] = useState([]);
   const [checkPoint, setCheckPoint] = useState(false);
   const [listPoint, setListPoint] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -62,7 +61,7 @@ const PointManagement = () => {
         }
       });
     } catch (error) {
-      alert(error.message);
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
 
@@ -112,7 +111,7 @@ const PointManagement = () => {
       }
       setLoadingData(true);
     } catch (error) {
-      alert(error.message);
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
 
@@ -141,7 +140,7 @@ const PointManagement = () => {
         toast.success("Lưu bảng điểm thành công !");
       });
     } catch (error) {
-      alert(error.message);
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
 
@@ -267,19 +266,7 @@ const PointManagement = () => {
                 </span>
               </Row>
               <Row style={{ marginTop: "10px" }}>
-                <Button
-                  style={{
-                    backgroundColor: "rgb(38, 144, 214)",
-                    color: "white",
-                    marginRight: "5px",
-                  }}
-                >
-                  <FontAwesomeIcon
-                    icon={faDownload}
-                    style={{ marginRight: "7px" }}
-                  />
-                  Export mẫu điểm
-                </Button>
+                <ButtonExportExcel />
                 <Button
                   style={{
                     backgroundColor: "rgb(38, 144, 214)",
