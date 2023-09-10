@@ -21,27 +21,45 @@ const StAttendanceDetailClass = () => {
 
   const columns = [
     {
-      title: "Bài học",
+      title: "STT",
+      dataIndex: "stt",
+      key: "stt",
+      render: (text, record, index) => <>{index + 1}</>,
+    },
+    {
+      title: "Buổi học",
       dataIndex: "name",
       key: "name",
     },
     {
-      title: "Ngày",
+      title: "Ngày học",
       dataIndex: "meetingDate",
       key: "meetingDate",
-      render: (meetingDate) => convertLongToDate(meetingDate),
+      render: (meetingDate) => <span>{convertLongToDate(meetingDate)}</span>,
     },
     {
       title: "Ca",
       dataIndex: "meetingPeriod",
       key: "meetingPeriod",
-      render: (meetingPeriod) => meetingPeriod + 1,
+      render: (meetingPeriod) => <span>{meetingPeriod + 1}</span>,
+    },
+    {
+      title: "Hình thức",
+      dataIndex: "typeMeeting",
+      key: "typeMeeting",
+      render: (typeMeeting) =>
+        typeMeeting === 0 ? <span>Online</span> : <span>Offline</span>,
     },
     {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
-      render: (status) => (status === 0 ? "Có mặt" : "Vắng mặt"),
+      render: (status) =>
+        status === 0 ? (
+          <span style={{ color: "green" }}>Có mặt</span>
+        ) : (
+          <span style={{ color: "red" }}>Vắng mặt</span>
+        ),
     },
   ];
 

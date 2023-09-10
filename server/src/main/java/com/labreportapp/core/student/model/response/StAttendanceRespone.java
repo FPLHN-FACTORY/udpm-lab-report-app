@@ -7,5 +7,7 @@ public interface StAttendanceRespone {
 
     Long getMeetingPeriod();
 
+    Long getTypeMeeting();
+
     Long getStatus();
 }
