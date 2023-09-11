@@ -103,6 +103,8 @@ const TablePoint = () => {
                   record
                 );
               }}
+              min={0}
+              max={10}
               type="number"
             />
           </>
@@ -120,7 +122,12 @@ const TablePoint = () => {
             {" "}
             <Input
               placeholder="Nhập điểm"
-              value={text}
+              value={
+                (parseFloat(record.checkPointPhase1) +
+                  parseFloat(record.checkPointPhase2)) /
+                2
+              }
+              readOnly={true}
               onChange={(e) => {
                 setFinal(e.target.value);
                 handlePoint(

@@ -20,4 +20,5 @@ public interface TePostService {
     Post update(@Valid TeUpdatePostRequest request);
 
     Post deleteById(String idPost);
+
 }

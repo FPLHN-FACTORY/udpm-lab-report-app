@@ -1,4 +1,4 @@
-package com.labreportapp.infrastructure.configexcel.Base;
+package com.labreportapp.core.teacher.model.request.Base;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +10,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class Excel {
+public class TePointExcel {
 
     private String name;
 

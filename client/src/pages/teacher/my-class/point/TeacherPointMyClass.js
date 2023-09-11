@@ -266,7 +266,7 @@ const PointManagement = () => {
                 </span>
               </Row>
               <Row style={{ marginTop: "10px" }}>
-                <ButtonExportExcel />
+                <ButtonExportExcel idClass={idClass} />
                 <Button
                   style={{
                     backgroundColor: "rgb(38, 144, 214)",

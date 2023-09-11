@@ -1,4 +1,4 @@
-import { Button } from "antd";
+import { Button, message } from "antd";
 import { useState } from "react";
 import { TeacherExcelAPI } from "../../../../../api/teacher/point/excel/TeacherExcel.api";
 import { toast } from "react-toastify";
@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload } from "@fortawesome/free-solid-svg-icons";
 import LoadingIndicatorNoOverlay from "../../../../../helper/loadingNoOverlay";
 
-const ButtonExportExcel = () => {
+const ButtonExportExcel = ({ idClass }) => {
   const [downloading, setDownloading] = useState(false);
   const handleExport = async () => {
     try {
@@ -22,20 +22,29 @@ const ButtonExportExcel = () => {
         };
       });
       let dataExport = {
-        listExcel: listDataFind,
+        listTePointExcel: listDataFind,
       };
-      await TeacherExcelAPI.export(dataExport)
+      await TeacherExcelAPI.export(idClass)
         .then((respone) => {
+          window.open(
+            `http://localhost:2509/teacher/point/export-excel?idClass=` +
+              idClass,
+            "_self"
+          );
           setDownloading(true);
           setTimeout(() => {
             setDownloading(false);
-            toast.success(
+            // toast.success(
+            //   "Export thành công, file đã được lưu vào mục Downloads !"
+            // );
+            message.success(
               "Export thành công, file đã được lưu vào mục Downloads !"
             );
           }, 1500);
         })
         .catch((err) => {
           toast.error("Export thất bại !");
+          console.log(err);
         });
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
