@@ -3,10 +3,36 @@ import "./style-point-detail-class.css";
 import { Link } from "react-router-dom";
 import { ControlOutlined } from "@ant-design/icons";
 import { useAppDispatch } from "../../../../app/hook";
+import { useState, useEffect } from "react"; // Import useState và useEffect
+import { StPointDetailAPI } from "../../../../api/student/StPointDetailAPI";
+import { sinhVienCurrent } from "../../../../helper/inForUser";
 
 const StPointDetailClass = () => {
   const dispatch = useAppDispatch();
   const { id } = useParams();
+  const [pointStudent, setPointStudent] = useState([]);
+  const [noPointMessage, setNoPointMessage] = useState(""); // Thêm state để lưu thông báo khi không có điểm
+
+  useEffect(() => {
+    LoadPointData();
+  }, []);
+
+  const LoadPointData = () => {
+    StPointDetailAPI.getPointDetail(id)
+      .then((response) => {
+        if (response.data.data) {
+          // Kiểm tra nếu có dữ liệu điểm
+          setPointStudent(response.data.data);
+        } else {
+          // Nếu không có điểm, cập nhật thông báo
+          setNoPointMessage("Bạn chưa có điểm.");
+        }
+      })
+      .catch((error) => {
+        // Xử lý lỗi nếu có
+        console.error("Lỗi khi tải dữ liệu điểm:", error);
+      });
+  };
 
   return (
     <div style={{ paddingTop: "35px" }}>
@@ -87,6 +113,49 @@ const StPointDetailClass = () => {
               ĐIỂM
             </Link>
             <hr />
+          </div>
+          <div>
+            <>
+              <div className="info-team">
+                <span className="info-heading">Thông tin đầu điểm:</span>
+                <div className="group-info">
+                  <span
+                    className="group-info-item"
+                    style={{ marginTop: "10px", marginBottom: "15px" }}
+                  >
+                    Họ và Tên:{" "}
+                    {sinhVienCurrent.name != null ? sinhVienCurrent.name : ""}
+                  </span>
+                  {noPointMessage ? (
+                    // Hiển thị thông báo nếu không có điểm
+                    <span className="group-info-item" style={{ color: "red" }}>
+                      {noPointMessage}
+                    </span>
+                  ) : (
+                    <>
+                      <span className="group-info-item">
+                        Điểm giai đoạn 1:{" "}
+                        {pointStudent.checkPointPhase1 != null
+                          ? pointStudent.checkPointPhase1
+                          : ""}
+                      </span>
+                      <span className="group-info-item">
+                        Điểm giai đoạn 2:{" "}
+                        {pointStudent.checkPointPhase2 != null
+                          ? pointStudent.checkPointPhase2
+                          : ""}
+                      </span>
+                      <span className="group-info-item">
+                        Điểm final:{" "}
+                        {pointStudent.finalPoint != null
+                          ? pointStudent.finalPoint
+                          : ""}
+                      </span>
+                    </>
+                  )}
+                </div>
+              </div>
+            </>
           </div>
         </div>
       </div>
