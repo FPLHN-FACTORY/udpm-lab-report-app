@@ -14,17 +14,18 @@ import java.util.List;
 public interface StAttendenceAllRepository extends JpaRepository<Attendance, String> {
 
   @Query(value = """
-          SELECT DISTINCT m.id, DENSE_RANK() OVER(ORDER BY m.meeting_date asc) as stt,  m.name, m.meeting_date, m.meeting_period, m.type_meeting, a.status
-          FROM  meeting m
-          LEFT JOIN attendance a ON m.id = a.meeting_id
-          JOIN student_classes sc ON m.class_id = sc.class_id
-          JOIN class c ON sc.class_id = c.id
+          SELECT DISTINCT m.id, ROW_NUMBER() OVER(ORDER BY m.meeting_date ASC) AS stt, m.name, m.meeting_date, m.meeting_period, m.type_meeting, max(a.status) AS status
+          FROM attendance a
+          RIGHT JOIN meeting m ON a.meeting_id = m.id
+          JOIN student_classes st ON m.class_id = st.class_id
+          JOIN class c ON st.class_id = c.id
           JOIN activity ac ON c.activity_id = ac.id
           JOIN semester s ON ac.semester_id = s.id
-          WHERE sc.student_id = :#{#req.idStudent}
-          AND sc.class_id = :#{#req.idClass}
+          WHERE st.student_id = :#{#req.idStudent}
+          AND st.class_id = :#{#req.idClass}
           AND s.id = :#{#req.idSemester}
-          ORDER BY m.meeting_date asc
+          GROUP BY m.id
+          ORDER BY m.meeting_date ASC 
           """, nativeQuery = true)
   List<StAttendenceAllResponse> getAttendenceListByStudentInClassAndSemester(@Param("req") StFindAttendenceAllRequest req);
 
