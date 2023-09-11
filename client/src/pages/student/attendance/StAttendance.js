@@ -98,15 +98,6 @@ const StAttendance = () => {
       },
     },
     {
-      title: "Người điểm danh",
-      dataIndex: "teacher",
-      key: "teacher",
-      sorter: (a, b) => a.teacher - b.teacher,
-      render: (text, record) => {
-        <span>Teacher</span>
-      },
-    },
-    {
       title: "Hình thức",
       dataIndex: "typeMeeting",
       key: "typeMeeting",
@@ -121,9 +112,9 @@ const StAttendance = () => {
       key: "status",
       sorter: (a, b) => a.status - b.status,
       render: (text, record) => (
-        <span>{record.status === 0 ?
+        <span>{record.status === 1 ?
           <span style={{ color: "red" }}>Absent</span>
-          : record.status === 1 ?
+          : record.status === 0 ?
             <span style={{ color: "green" }}>Present</span>
             : ""}</span>
       ),
@@ -179,7 +170,7 @@ const StAttendance = () => {
                   Lớp {item.classCode}
                 </span>
                 <span className="header-absent" style={{ marginLeft: "15px", color: "red", fontSize: "16.5px", fontWeight: "500" }}>
-                  (Vắng: {item.attendences.filter(i => i.status === 0).length}/{item.attendences.length})
+                  (Vắng: {item.attendences.filter(i => i.status === 1).length}/{item.attendences.length})
                 </span>
               </div>
               <div style={{ borderBottom: "1px solid #ddd", marginTop: "10px" }}></div>
