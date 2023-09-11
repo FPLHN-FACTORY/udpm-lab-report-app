@@ -5,7 +5,6 @@ export class TeacherExcelAPI {
     return request({
       method: "GET",
       url: url + `/export-excel` + `?idClass=` + data.idClass,
-      // data: data,
     });
   };
   // static import = (data) => {

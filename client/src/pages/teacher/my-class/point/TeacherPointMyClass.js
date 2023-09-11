@@ -91,6 +91,11 @@ const PointManagement = () => {
           return {
             ...item1,
             ...matchedObject,
+            finalPoint:
+              parseFloat(
+                parseFloat(matchedObject.checkPointPhase1) +
+                  parseFloat(matchedObject.checkPointPhase2)
+              ) / 2,
           };
         });
         dispatch(SetPoint(listShowTable));
@@ -101,7 +106,7 @@ const PointManagement = () => {
             idClass: idClass,
             checkPointPhase1: "0.0",
             checkPointPhase2: "0.0",
-            finalPoint: "0.0",
+            finalPoint: parseFloat("0"),
           };
         });
         dispatch(SetPoint(listShowTable));

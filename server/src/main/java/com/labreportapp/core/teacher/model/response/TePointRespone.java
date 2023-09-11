@@ -15,13 +15,13 @@ public interface TePointRespone {
     String getIdStudent();
 
     @Value("#{target.check_point_phase1}")
-    String getCheckPointPhase1();
+    Double getCheckPointPhase1();
 
     @Value("#{target.check_point_phase2}")
-    String getCheckPointPhase2();
+    Double getCheckPointPhase2();
 
-     @Value("#{target.final_point}")
-    String getFinalPoint();
+    @Value("#{target.final_point}")
+    Double getFinalPoint();
 
     @Value("#{target.class_id}")
     String getIdClass();

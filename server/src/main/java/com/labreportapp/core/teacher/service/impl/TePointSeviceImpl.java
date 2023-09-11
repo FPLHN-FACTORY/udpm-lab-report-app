@@ -1,5 +1,7 @@
 package com.labreportapp.core.teacher.service.impl;
 
+import com.labreportapp.ServerApplication;
+import com.labreportapp.core.teacher.model.request.Base.TePointExcel;
 import com.labreportapp.core.teacher.model.request.TeFindListPointRequest;
 import com.labreportapp.core.teacher.model.request.TeFindPointRequest;
 import com.labreportapp.core.teacher.model.request.TeFindStudentClasses;
@@ -10,19 +12,26 @@ import com.labreportapp.core.teacher.service.TePointSevice;
 import com.labreportapp.core.teacher.service.TeStudentClassesService;
 import com.labreportapp.entity.Point;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.Synchronized;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.ClientAnchor;
+import org.apache.poi.ss.usermodel.Drawing;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Picture;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.util.IOUtils;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -52,6 +61,7 @@ public class TePointSeviceImpl implements TePointSevice {
     }
 
     @Override
+    @Synchronized
     public List<Point> addOrUpdatePoint(TeFindListPointRequest request) {
         List<TeFindPointRequest> list = request.getListPoint();
         List<Point> listNew = new ArrayList<>();
@@ -64,7 +74,7 @@ public class TePointSeviceImpl implements TePointSevice {
                 point.setClassId(obj.get().getIdClass());
                 point.setCheckPointPhase1(item.getCheckPointPhase1());
                 point.setCheckPointPhase2(item.getCheckPointPhase2());
-                point.setFinalPoint(item.getFinalPoint());
+                point.setFinalPoint((item.getCheckPointPhase1() + item.getCheckPointPhase2()) / 2);
                 listNew.add(point);
             } else {
                 Point point = new Point();
@@ -72,7 +82,7 @@ public class TePointSeviceImpl implements TePointSevice {
                 point.setClassId(item.getIdClass());
                 point.setCheckPointPhase1(item.getCheckPointPhase1());
                 point.setCheckPointPhase2(item.getCheckPointPhase2());
-                point.setFinalPoint(item.getFinalPoint());
+                point.setFinalPoint((item.getCheckPointPhase1() + item.getCheckPointPhase2()) / 2);
                 listNew.add(point);
             }
         });
@@ -80,6 +90,7 @@ public class TePointSeviceImpl implements TePointSevice {
     }
 
     @Override
+    @Synchronized
     public void exportExcel(HttpServletResponse response, String idClass) {
         try (Workbook workbook = new XSSFWorkbook()) {
             response.setContentType("application/octet-stream");
@@ -88,12 +99,26 @@ public class TePointSeviceImpl implements TePointSevice {
             String headerKey = "Content-Disposition";
             String headerValue = "attachment; filename=BangDiem" + currentDateTime + ".xlsx";
             response.setHeader(headerKey, headerValue);
-
-            List<TePointRespone> list = getPointStudentById(idClass);
+            List<TePointRespone> listPointIdClass = getPointStudentById(idClass);
             TeFindStudentClasses teFindStudentClasses = new TeFindStudentClasses();
             teFindStudentClasses.setIdClass(idClass);
             List<TeStudentCallApiResponse> listStudent = teStudentClassesService.searchStudentClassesByIdClass(teFindStudentClasses);
-            System.err.println();
+            List<TePointExcel> listExcel = new ArrayList<>();
+            listPointIdClass.forEach((item1) -> {
+                listStudent.forEach((item2) -> {
+                    if (item2.getIdStudent().equals(item1.getIdStudent())) {
+                        TePointExcel point = new TePointExcel();
+                        point.setIdPoint(item1.getId());
+                        point.setIdStudent(item1.getIdStudent());
+                        point.setName(item2.getName());
+                        point.setEmail(item2.getEmail());
+                        point.setCheckPointPhase1(item1.getCheckPointPhase1());
+                        point.setCheckPointPhase2(item1.getCheckPointPhase2());
+                        point.setFinalPoint(item1.getFinalPoint());
+                        listExcel.add(point);
+                    }
+                });
+            });
             Sheet sheet = workbook.createSheet("Bảng điểm");
             CellStyle headerStyle = workbook.createCellStyle();
             Font font = workbook.createFont();
@@ -130,21 +155,18 @@ public class TePointSeviceImpl implements TePointSevice {
             cell5.setCellValue("Điểm giai đoạn cuối");
             cell5.setCellStyle(headerStyle);
             int rowIndex = 1;
-//            for (TePointRespone data : list) {
-//                Row dataRow = sheet.createRow(rowIndex++);
-//                dataRow.createCell(0).setCellValue(rowIndex - 1);
-//                dataRow.createCell(1).setCellValue(data.getName());
-//                dataRow.createCell(2).setCellValue(data.getEmail());
-//                dataRow.createCell(3).setCellValue(data.getCheckPointPhase1());
-//                dataRow.createCell(4).setCellValue(data.getCheckPointPhase2());
-//                dataRow.createCell(5).setCellValue(data.getFinalPoint());
-//            }
-//        File file = new File(System.getProperty("user.home") + "/Downloads/bang_diem.xlsx");
-//        FileOutputStream out = new FileOutputStream(file);
-//        workbook.write(out);
-//        out.close();
+            int index = 1;
+            for (TePointExcel data : listExcel) {
+                Row dataRow = sheet.createRow(rowIndex++);
+                dataRow.createCell(0).setCellValue(index++);
+                dataRow.createCell(1).setCellValue(data.getName());
+                dataRow.createCell(2).setCellValue(data.getEmail());
+                dataRow.createCell(3).setCellValue(data.getCheckPointPhase1());
+                dataRow.createCell(4).setCellValue(data.getCheckPointPhase2());
+                dataRow.createCell(5).setCellValue(data.getFinalPoint());
+            }
             workbook.write(response.getOutputStream());
-            // workbook.close();
+            workbook.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

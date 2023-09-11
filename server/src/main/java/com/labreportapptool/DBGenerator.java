@@ -741,7 +741,7 @@ public class DBGenerator implements CommandLineRunner {
         point1.setClassId(class1.getId());
         point1.setCheckPointPhase1(8.0);
         point1.setCheckPointPhase2(5.0);
-        point1.setFinalPoint(9.0);
+        point1.setFinalPoint(6.5);
         point1.setId(pointRepository.save(point1).getId());
 
         Point point2 = new Point();

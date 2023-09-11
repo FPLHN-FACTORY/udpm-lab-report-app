@@ -12,6 +12,10 @@ import lombok.ToString;
 @ToString
 public class TePointExcel {
 
+    private String idPoint;
+
+    private String idStudent;
+
     private String name;
 
     private String email;

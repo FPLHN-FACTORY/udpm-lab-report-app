@@ -83,6 +83,9 @@ const TeacherPostMyClass = () => {
       await TeacherPostAPI.getPagePost(data).then((responese) => {
         dispatch(SetPost(responese.data.data.data));
         setTotalPage(responese.data.data.totalPages);
+        if (responese.data.data.totalPages === 0) {
+          setSeeMore(false);
+        }
         setLoading(true);
       });
     } catch (error) {

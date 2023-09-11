@@ -13,17 +13,44 @@ const TablePoint = () => {
   const dispatch = useAppDispatch();
   const dataSource = useAppSelector(GetPoint);
 
-  const handlePoint = (phase1, phase2, final, record) => {
+  const handlePoint = (phase1, phase2, record) => {
     const dataNew = dataSource.map((item1) => {
       if (
         item1.idClass === record.idClass &&
         item1.idStudent === record.idStudent
       ) {
+        if (phase1 === "") {
+          return {
+            ...item1,
+            checkPointPhase1: 0.0,
+            checkPointPhase2: parseFloat(phase2),
+          };
+        }
+        if (phase1 === parseFloat(phase1)) {
+          return {
+            ...item1,
+            checkPointPhase1: parseFloat(phase1),
+            checkPointPhase2: parseFloat(phase2),
+          };
+        }
+        if (phase2 === "") {
+          return {
+            ...item1,
+            checkPointPhase1: parseFloat(phase1),
+            checkPointPhase2: 0.0,
+          };
+        }
+        if (phase2 === parseFloat(phase2)) {
+          return {
+            ...item1,
+            checkPointPhase1: parseFloat(phase1),
+            checkPointPhase2: parseFloat(phase2),
+          };
+        }
         return {
           ...item1,
-          checkPointPhase1: `${phase1}`,
-          checkPointPhase2: `${phase2}`,
-          finalPoint: `${final}`,
+          checkPointPhase1: parseFloat(phase1),
+          checkPointPhase2: parseFloat(phase2),
         };
       }
       return item1;
@@ -59,24 +86,25 @@ const TablePoint = () => {
             <Input
               placeholder="Nhập điểm"
               value={text}
-              readOnly
-              onDoubleClick={(e) => {
-                e.target.readOnly = false;
-                e.target.select();
-              }}
-              onBlur={(e) => {
-                e.target.readOnly = true;
-              }}
+              defaultValue={0}
+              // readOnly
+              // onDoubleClick={(e) => {
+              //   e.target.readOnly = false;
+              //   e.target.select();
+              // }}
+              // onBlur={(e) => {
+              //   e.target.readOnly = true;
+              // }}
+
               onChange={(e) => {
                 setPhase1(e.target.value);
-                handlePoint(
-                  e.target.value,
-                  record.checkPointPhase2,
-                  record.finalPoint,
-                  record
-                );
+                handlePoint(e.target.value, record.checkPointPhase2, record);
               }}
+              min={0}
+              max={10}
+              step={0.01}
               type="number"
+              pattern="^[0-9]+(\.[0-9]{1,2})?$"
             />
           </>
         );
@@ -90,21 +118,17 @@ const TablePoint = () => {
       render: (text, record) => {
         return (
           <>
-            {" "}
             <Input
               placeholder="Nhập điểm"
               value={text}
+              defaultValue={0}
               onChange={(e) => {
                 setPhase2(e.target.value);
-                handlePoint(
-                  record.checkPointPhase1,
-                  e.target.value,
-                  record.finalPoint,
-                  record
-                );
+                handlePoint(record.checkPointPhase1, e.target.value, record);
               }}
               min={0}
               max={10}
+              step={0.01}
               type="number"
             />
           </>
@@ -118,28 +142,13 @@ const TablePoint = () => {
       key: "finalPoint",
       render: (text, record) => {
         return (
-          <>
-            {" "}
-            <Input
-              placeholder="Nhập điểm"
-              value={
-                (parseFloat(record.checkPointPhase1) +
-                  parseFloat(record.checkPointPhase2)) /
+          <span>
+            {parseFloat(
+              (parseFloat(record.checkPointPhase1) +
+                parseFloat(record.checkPointPhase2)) /
                 2
-              }
-              readOnly={true}
-              onChange={(e) => {
-                setFinal(e.target.value);
-                handlePoint(
-                  record.checkPointPhase1,
-                  record.checkPointPhase2,
-                  e.target.value,
-                  record
-                );
-              }}
-              type="number"
-            />
-          </>
+            ).toLocaleString("de-DE")}
+          </span>
         );
       },
       sorter: (a, b) => a.finalPoint - b.finalPoint,
@@ -147,12 +156,24 @@ const TablePoint = () => {
   ];
   return (
     <>
-      <Table
-        rowKey="id"
-        columns={columns}
-        dataSource={dataSource}
-        pagination={false}
-      />
+      {dataSource.length > 0 ? (
+        <Table
+          rowKey="id"
+          columns={columns}
+          dataSource={dataSource}
+          pagination={false}
+        />
+      ) : (
+        <p
+          style={{
+            textAlign: "center",
+            marginTop: "100px",
+            fontSize: "15px",
+          }}
+        >
+          Lớp học chưa có học sinh nào
+        </p>
+      )}
     </>
   );
 };
