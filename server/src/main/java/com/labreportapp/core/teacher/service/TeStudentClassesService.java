@@ -3,7 +3,6 @@ package com.labreportapp.core.teacher.service;
 import com.labreportapp.core.teacher.model.request.TeFindStudentApiRequest;
 import com.labreportapp.core.teacher.model.request.TeFindStudentClasses;
 import com.labreportapp.core.teacher.model.response.TeStudentCallApiResponse;
-import com.labreportapp.core.teacher.model.response.TeStudentClassesRespone;
 
 import java.util.List;
 

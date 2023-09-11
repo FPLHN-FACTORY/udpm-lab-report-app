@@ -26,13 +26,6 @@ const TablePoint = () => {
             checkPointPhase2: parseFloat(phase2),
           };
         }
-        if (phase1 === parseFloat(phase1)) {
-          return {
-            ...item1,
-            checkPointPhase1: parseFloat(phase1),
-            checkPointPhase2: parseFloat(phase2),
-          };
-        }
         if (phase2 === "") {
           return {
             ...item1,
@@ -40,6 +33,14 @@ const TablePoint = () => {
             checkPointPhase2: 0.0,
           };
         }
+        if (phase1 === parseFloat(phase1)) {
+          return {
+            ...item1,
+            checkPointPhase1: parseFloat(phase1),
+            checkPointPhase2: parseFloat(phase2),
+          };
+        }
+
         if (phase2 === parseFloat(phase2)) {
           return {
             ...item1,
@@ -130,6 +131,7 @@ const TablePoint = () => {
               max={10}
               step={0.01}
               type="number"
+              pattern="^[0-9]+(\.[0-9]{1,2})?$"
             />
           </>
         );
