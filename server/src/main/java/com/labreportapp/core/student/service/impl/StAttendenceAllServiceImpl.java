@@ -17,33 +17,33 @@ import java.util.List;
 @Service
 public class StAttendenceAllServiceImpl implements StAttendenceAllService {
 
-  @Autowired
-  private StMyClassRepository stMyClassRepository;
+    @Autowired
+    private StMyClassRepository stMyClassRepository;
 
-  @Autowired
-  private StAttendenceAllRepository stAttendenceAllRepository;
+    @Autowired
+    private StAttendenceAllRepository stAttendenceAllRepository;
 
-  @Override
-  public List<StAttendenceAllCustomResponse> getClassAttendenceListByStudentInClassAndSemester(StFindAttendenceAllRequest req) {
-    StFindClassRequest stFindClassRequest = new StFindClassRequest();
-    stFindClassRequest.setSemesterId(req.getIdSemester());
-    stFindClassRequest.setStudentId(req.getIdStudent());
-    List<StMyClassResponse> getClassListByStudentInSemester = stMyClassRepository.getAllClass(stFindClassRequest);
+    @Override
+    public List<StAttendenceAllCustomResponse> getClassAttendenceListByStudentInClassAndSemester(StFindAttendenceAllRequest req) {
+        StFindClassRequest stFindClassRequest = new StFindClassRequest();
+        stFindClassRequest.setSemesterId(req.getIdSemester());
+        stFindClassRequest.setStudentId(req.getIdStudent());
+        List<StMyClassResponse> getClassListByStudentInSemester = stMyClassRepository.getAllClass(stFindClassRequest);
 
-    List<StAttendenceAllCustomResponse> attendencesResponse = new ArrayList<>();
+        List<StAttendenceAllCustomResponse> attendencesResponse = new ArrayList<>();
 
-    for (StMyClassResponse classResponse : getClassListByStudentInSemester) {
-      StAttendenceAllCustomResponse attendenceResponse = new StAttendenceAllCustomResponse();
-      attendenceResponse.setId(classResponse.getId());
-      attendenceResponse.setClassCode(classResponse.getCode());
+        for (StMyClassResponse classResponse : getClassListByStudentInSemester) {
+            StAttendenceAllCustomResponse attendenceResponse = new StAttendenceAllCustomResponse();
+            attendenceResponse.setId(classResponse.getId());
+            attendenceResponse.setClassCode(classResponse.getCode());
 
-      req.setIdClass(attendenceResponse.getId());
-      List<StAttendenceAllResponse> getAttendenceListByStudentInClassAndSemester = stAttendenceAllRepository.getAttendenceListByStudentInClassAndSemester(req);
-      attendenceResponse.setAttendences(getAttendenceListByStudentInClassAndSemester);
+            req.setIdClass(attendenceResponse.getId());
+            List<StAttendenceAllResponse> getAttendenceListByStudentInClassAndSemester = stAttendenceAllRepository.getAttendenceListByStudentInClassAndSemester(req);
+            attendenceResponse.setAttendences(getAttendenceListByStudentInClassAndSemester);
 
-      attendencesResponse.add(attendenceResponse);
+            attendencesResponse.add(attendenceResponse);
+        }
+
+        return attendencesResponse;
     }
-
-    return attendencesResponse;
-  }
 }

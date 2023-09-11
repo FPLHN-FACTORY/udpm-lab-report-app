@@ -134,7 +134,7 @@ const StudentMyClass = () => {
       key: "action",
       render: (text, record) => (
         <>
-          <Link to={`/student/my-class/team/${record.id}`}>
+          <Link to={`/student/my-class/post/${record.id}`}>
             <Tooltip title="Xem chi tiết lớp học">
               <FontAwesomeIcon icon={faEye} className="icon" />
             </Tooltip>

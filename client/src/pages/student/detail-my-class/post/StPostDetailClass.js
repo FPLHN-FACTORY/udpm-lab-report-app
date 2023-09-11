@@ -30,7 +30,6 @@ const StPostDetailClass = () => {
   const [totalPage, setTotalPage] = useState(0);
   const [seeMore, setSeeMore] = useState(true);
 
-
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Bảng điều khiển - Bài đăng";
@@ -49,7 +48,7 @@ const StPostDetailClass = () => {
       };
       await StudentPostAPI.getPagePost(data).then((responese) => {
         dispatch(SetPost(responese.data.data.data));
-  
+
         setTotalPage(responese.data.data.totalPages);
         setLoading(true);
       });
@@ -80,7 +79,6 @@ const StPostDetailClass = () => {
       await StudentPostAPI.getPagePost(data).then((responese) => {
         dispatch(NextPagePost(responese.data.data.data));
         setTotalPage(responese.data.data.totalPages);
-        
       });
     } catch (error) {
       alert(error.message);
@@ -114,98 +112,104 @@ const StPostDetailClass = () => {
 
   const data = useAppSelector(GetPost);
   return (
-  <>
-    {!loading && <LoadingIndicator />}
-    <div style={{ paddingTop: "35px" }}>
-      <div className="title-student-my-class">
-        <span style={{ paddingLeft: "20px" }}>
-          <ControlOutlined style={{ fontSize: "22px" }} />
-          <span
-            style={{ fontSize: "18px", marginLeft: "10px", fontWeight: "500" }}
-          >
-            Bảng điều khiển
+    <>
+      {!loading && <LoadingIndicator />}
+      <div style={{ paddingTop: "35px" }}>
+        <div className="title-student-my-class">
+          <span style={{ paddingLeft: "20px" }}>
+            <ControlOutlined style={{ fontSize: "22px" }} />
+            <span
+              style={{
+                fontSize: "18px",
+                marginLeft: "10px",
+                fontWeight: "500",
+              }}
+            >
+              Bảng điều khiển
+            </span>
+            <span style={{ color: "gray" }}> - Bài đăng</span>
           </span>
-          <span style={{ color: "gray" }}> - Bài Đăng</span>
-        </span>
-      </div>
-      <div className="box-students-detail-my-class" style={{ padding: "20px" }}>
+        </div>
         <div
-          className="button-menu-student-detail-my-class"
-          style={{ minHeight: "600px" }}
+          className="box-students-detail-my-class"
+          style={{ padding: "20px" }}
         >
-          <div>
-            <Link
-             id="menu-checked"
-              to={`/student/my-class/post/${id}`}
-              style={{
-                fontSize: "16px",
-                paddingLeft: "10px",
-                paddingRight: "10px",
-                fontWeight: "bold",
-              }}
-            >
-              BÀI ĐĂNG
-            </Link>
-            <Link
-              to={`/student/my-class/team/${id}`}
-              className="custom-link"
-              style={{
-                fontSize: "16px",
-                paddingLeft: "10px",
-                paddingRight: "10px",
-                fontWeight: "bold",
-              }}
-            >
-              THÔNG TIN LỚP HỌC
-            </Link>
-            <Link
-              className="custom-link"
-              to={`/student/my-class/meeting/${id}`}
-              style={{
-                fontSize: "16px",
-                paddingLeft: "10px",
-                paddingRight: "10px",
-                fontWeight: "bold",
-              }}
-            >
-              DANH SÁCH BUỔI HỌC
-            </Link>
-            <Link
-              className="custom-link"
-              to={`/student/my-class/attendance/${id}`}
-              style={{
-                fontSize: "16px",
-                paddingLeft: "10px",
-                paddingRight: "10px",
-                fontWeight: "bold",
-              }}
-            >
-              ĐIỂM DANH
-            </Link>
-            <Link
-              
-              style={{
-                fontSize: "16px",
-                fontWeight: "bold",
-                paddingLeft: "10px",
-                paddingRight: "10px",
-              }}
-            >
-              ĐIỂM
-            </Link>
-            <hr />
-          </div>
-          <div className="box-image">
-            <h1 className="textCode"> {classDetail.code}</h1>
-          </div>
-          <div className="box-post">
+          <div
+            className="button-menu-student-detail-my-class"
+            style={{ minHeight: "600px" }}
+          >
+            <div>
+              <Link
+                id="menu-checked"
+                to={`/student/my-class/post/${id}`}
+                style={{
+                  fontSize: "16px",
+                  paddingLeft: "10px",
+                  paddingRight: "10px",
+                  fontWeight: "bold",
+                }}
+              >
+                BÀI ĐĂNG
+              </Link>
+              <Link
+                to={`/student/my-class/team/${id}`}
+                className="custom-link"
+                style={{
+                  fontSize: "16px",
+                  paddingLeft: "10px",
+                  paddingRight: "10px",
+                  fontWeight: "bold",
+                }}
+              >
+                THÔNG TIN LỚP HỌC
+              </Link>
+              <Link
+                className="custom-link"
+                to={`/student/my-class/meeting/${id}`}
+                style={{
+                  fontSize: "16px",
+                  paddingLeft: "10px",
+                  paddingRight: "10px",
+                  fontWeight: "bold",
+                }}
+              >
+                DANH SÁCH BUỔI HỌC
+              </Link>
+              <Link
+                className="custom-link"
+                to={`/student/my-class/attendance/${id}`}
+                style={{
+                  fontSize: "16px",
+                  paddingLeft: "10px",
+                  paddingRight: "10px",
+                  fontWeight: "bold",
+                }}
+              >
+                ĐIỂM DANH
+              </Link>
+              <Link
+                className="custom-link"
+                style={{
+                  fontSize: "16px",
+                  fontWeight: "bold",
+                  paddingLeft: "10px",
+                  paddingRight: "10px",
+                }}
+              >
+                ĐIỂM
+              </Link>
+              <hr />
+            </div>
+            <div className="box-image">
+              <h1 className="textCode"> {classDetail.code}</h1>
+            </div>
             <div className="box-post">
-              <div style={{ height: "auto", margin: "20px 0 20px 0" }}>
-                {data.length > 0 ? (
-                  data.map((item) => {
-                    return (
-                      <div key={item.id} style={{ marginBottom: "20px" }}>
-                       
+              <div className="box-post">
+                <div style={{ height: "auto", margin: "20px 0 20px 0" }}>
+                  {data.length > 0 ? (
+                    data.map((item) => {
+                      return (
+                        <div key={item.id} style={{ marginBottom: "20px" }}>
                           <Card
                             className="box-card-one"
                             style={{
@@ -235,48 +239,46 @@ const StPostDetailClass = () => {
                                   <div
                                     style={{ float: "left" }}
                                     className="title-icon-drop"
-                                  >
-                                    
-                                  </div>
+                                  ></div>
                                 </div>
                               </>
                             }
                           >
                             <ViewEditorJodit value={item.descriptions} />
                           </Card>
-                      </div>
-                    );
-                  })
-                ) : (
-                  <p
-                    style={{
-                      textAlign: "center",
-                      marginTop: "100px",
-                      fontSize: "15px",
-                    }}
-                  >
-                    Chưa đăng bài viết nào được đăng!
-                  </p>
-                )}
-                {seeMore && (
-                  <Button
-                    style={{ float: "right" }}
-                    type="primary"
-                    icon={<i className="fas fa-arrow-down" />}
-                    onClick={() => {
-                      handleSeeMore();
-                    }}
-                  >
-                    Xem thêm
-                  </Button>
-                )}
-              </div>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <p
+                      style={{
+                        textAlign: "center",
+                        marginTop: "100px",
+                        fontSize: "15px",
+                      }}
+                    >
+                      Chưa đăng bài viết nào được đăng!
+                    </p>
+                  )}
+                  {seeMore && (
+                    <Button
+                      style={{ float: "right" }}
+                      type="primary"
+                      icon={<i className="fas fa-arrow-down" />}
+                      onClick={() => {
+                        handleSeeMore();
+                      }}
+                    >
+                      Xem thêm
+                    </Button>
+                  )}
+                </div>
+              </div>{" "}
             </div>{" "}
-          </div>{" "}
+          </div>
         </div>
       </div>
-    </div>
- </>
+    </>
   );
 };
 

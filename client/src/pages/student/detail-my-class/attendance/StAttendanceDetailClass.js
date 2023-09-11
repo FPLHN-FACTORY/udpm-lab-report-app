@@ -59,16 +59,17 @@ const StAttendanceDetailClass = () => {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
-      render: (status) =>
-        status != null ? (
-          status === 0 ? (
+      render: (text, record) => (
+        <span>
+          {record.status === 1 ? (
+            <span style={{ color: "red" }}>Vắng mặt</span>
+          ) : record.status === 0 ? (
             <span style={{ color: "green" }}>Có mặt</span>
           ) : (
-            <span style={{ color: "red" }}>Vắng mặt</span>
-          )
-        ) : (
-          ""
-        ),
+            ""
+          )}
+        </span>
+      ),
     },
   ];
 

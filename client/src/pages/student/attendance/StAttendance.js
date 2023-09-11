@@ -15,10 +15,10 @@ import {
   faAtlas,
   faLineChart,
   faRegistered,
-  faList
+  faList,
 } from "@fortawesome/free-solid-svg-icons";
 import { StMyClassAPI } from "../../../api/student/StMyClassAPI";
-import { StAttendenceAPI } from "../../../api/student/StAttendenceAllAPI"
+import { StAttendenceAPI } from "../../../api/student/StAttendenceAllAPI";
 import { sinhVienCurrent } from "../../../helper/inForUser";
 import axios from "axios";
 import { green } from "@ant-design/colors";
@@ -34,14 +34,15 @@ const StAttendance = () => {
     const filter = {
       idStudent: sinhVienCurrent.id,
       idSemester: semester,
-    }
-    StAttendenceAPI.getClassAttendenceListByStudentInClassAndSemester(filter)
-      .then((response) => {
-        setListClass(response.data.data);
-        setListAttendece(response.data.data.attendences);
-        console.log(response.data.data)
-      })
-  }
+    };
+    StAttendenceAPI.getClassAttendenceListByStudentInClassAndSemester(
+      filter
+    ).then((response) => {
+      setListClass(response.data.data);
+      setListAttendece(response.data.data.attendences);
+      console.log(response.data.data);
+    });
+  };
 
   const loadDataSemester = () => {
     StMyClassAPI.getAllSemesters().then((response) => {
@@ -82,8 +83,9 @@ const StAttendance = () => {
       sorter: (a, b) => a.meetingDate - b.meetingDate,
       render: (text, record) => {
         const time = new Date(record.meetingDate);
-        const formattedTime = `${time.getDate()}/${time.getMonth() + 1
-          }/${time.getFullYear()}`;
+        const formattedTime = `${time.getDate()}/${
+          time.getMonth() + 1
+        }/${time.getFullYear()}`;
 
         return <span>{formattedTime}</span>;
       },
@@ -112,11 +114,15 @@ const StAttendance = () => {
       key: "status",
       sorter: (a, b) => a.status - b.status,
       render: (text, record) => (
-        <span>{record.status === 1 ?
-          <span style={{ color: "red" }}>Absent</span>
-          : record.status === 0 ?
-            <span style={{ color: "green" }}>Present</span>
-            : ""}</span>
+        <span>
+          {record.status === 1 ? (
+            <span style={{ color: "red" }}>Vắng mặt</span>
+          ) : record.status === 0 ? (
+            <span style={{ color: "green" }}>Có mặt</span>
+          ) : (
+            ""
+          )}
+        </span>
       ),
     },
   ];
@@ -152,34 +158,56 @@ const StAttendance = () => {
                 ))}
             </Select>
           </div>
-          <span style={{ marginLeft: "3px", fontSize: "13.5px" }}>Lựa chọn học kỳ để hiện thị chi tiết điểm danh</span>
+          <span style={{ marginLeft: "3px", fontSize: "13.5px" }}>
+            Lựa chọn học kỳ để hiện thị chi tiết điểm danh
+          </span>
         </div>
-
       </div>
       {listClass.map((item, index) => {
         return (
           <>
             <div className="table-attendence">
-              <div className="header" style={{
-                padding: "10px", fontSize: "18px", fontWeight: "500", display: "flex"
-              }}>
+              <div
+                className="header"
+                style={{
+                  padding: "10px",
+                  fontSize: "18px",
+                  fontWeight: "500",
+                  display: "flex",
+                }}
+              >
                 <span className="header-icon">
                   <FontAwesomeIcon icon={faList} />
                 </span>
                 <span className="header-title" style={{ marginLeft: "12px" }}>
                   Lớp {item.classCode}
                 </span>
-                <span className="header-absent" style={{ marginLeft: "15px", color: "red", fontSize: "16.5px", fontWeight: "500" }}>
-                  (Vắng: {item.attendences.filter(i => i.status === 1).length}/{item.attendences.length})
+                <span
+                  className="header-absent"
+                  style={{
+                    marginLeft: "15px",
+                    color: "red",
+                    fontSize: "16.5px",
+                    fontWeight: "500",
+                  }}
+                >
+                  (Vắng: {item.attendences.filter((i) => i.status === 1).length}
+                  /{item.attendences.length})
                 </span>
               </div>
-              <div style={{ borderBottom: "1px solid #ddd", marginTop: "10px" }}></div>
+              <div
+                style={{ borderBottom: "1px solid #ddd", marginTop: "10px" }}
+              ></div>
               <div className="" style={{ marginTop: "30px" }}>
-                <Table dataSource={item.attendences} columns={columns} pagination={{ pageSize: 8 }} />
+                <Table
+                  dataSource={item.attendences}
+                  columns={columns}
+                  pagination={{ pageSize: 8 }}
+                />
               </div>
             </div>
           </>
-        )
+        );
       })}
     </div>
   );

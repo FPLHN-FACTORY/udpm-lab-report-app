@@ -1,13 +1,25 @@
 package com.labreportapp.core.student.model.response;
 
-public interface StAttendanceRespone {
+import com.labreportapp.entity.base.IsIdentified;
+import org.springframework.beans.factory.annotation.Value;
+
+public interface StAttendanceRespone extends IsIdentified {
+
+    @Value("#{target.stt}")
+    Integer getStt();
+
+    @Value("#{target.name}")
     String getName();
 
+    @Value("#{target.meeting_date}")
     Long getMeetingDate();
 
-    Long getMeetingPeriod();
+    @Value("#{target.meeting_period}")
+    Integer getMeetingPeriod();
 
-    Long getTypeMeeting();
+    @Value("#{target.type_meeting}")
+    Integer getTypeMeeting();
 
-    Long getStatus();
+    @Value("#{target.status}")
+    Integer getStatus();
 }

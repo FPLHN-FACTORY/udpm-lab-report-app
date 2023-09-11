@@ -12,13 +12,18 @@ import java.util.List;
 
 @Repository
 public interface StAttendanceRepository extends AttendanceRepository {
-    @Query(value = """
-             SELECT  m.name as name, m.meeting_date as meetingDate, m.meeting_period as meetingPeriod, m.type_meeting as typeMeeting, a.status as status
-                        from meeting m\s
-                        left join attendance a on a.meeting_id = m.id
-                        where a.student_id = :#{#req.idStudent} and m.class_id=:#{#req.idClass}
-                        group by m.name , m.meeting_date , m.meeting_period, m.type_meeting, a.status
-                        order by m.meeting_date asc
+
+    @Query(value = """                        
+          SELECT DISTINCT m.id, ROW_NUMBER() OVER(ORDER BY m.meeting_date ASC) AS stt, 
+          m.name, m.meeting_date, m.meeting_period, 
+          m.type_meeting, a.status
+          FROM attendance a RIGHT JOIN meeting m ON a.meeting_id = m.id
+          JOIN student_classes st ON m.class_id = st.class_id
+          JOIN class c ON st.class_id = c.id
+          WHERE st.student_id = :#{#req.idStudent}
+          AND st.class_id = :#{#req.idClass}
+          GROUP BY m.id
+          ORDER BY m.meeting_date ASC 
             """, nativeQuery = true)
     List<StAttendanceRespone> getAllAttendanceById(@Param("req") StFindAttendanceRequest req);
 }
