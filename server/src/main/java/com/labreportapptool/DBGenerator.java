@@ -343,51 +343,51 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses15.setStatus(StatusTeam.ACTIVE);
         studentClasses15.setId(studentClassesRepository.save(studentClasses15).getId());
 
+        StudentClasses studentClasses16 = new StudentClasses();
+        studentClasses16.setStudentId("5000cd3b-ad08-4abe-9b71-c85c98aa07ed");
+        studentClasses16.setClassId(class1.getId());
+        studentClasses16.setTeamId(null);
+        studentClasses16.setEmail("undph24012@fpt.edu.vn");
+        studentClasses16.setRole(RoleTeam.MEMBER);
+        studentClasses16.setStatus(StatusTeam.ACTIVE);
+        studentClasses16.setId(studentClassesRepository.save(studentClasses16).getId());
+
         StudentClasses studentClasses17 = new StudentClasses();
-        studentClasses17.setStudentId("5000cd3b-ad08-4abe-9b71-c85c98aa07ed");
+        studentClasses17.setStudentId("dac59af0-6bdb-4b26-ad8a-b5effa44875d");
         studentClasses17.setClassId(class1.getId());
         studentClasses17.setTeamId(null);
-        studentClasses17.setEmail("undph24012@fpt.edu.vn");
+        studentClasses17.setEmail("endph24013@fpt.edu.vn");
         studentClasses17.setRole(RoleTeam.MEMBER);
         studentClasses17.setStatus(StatusTeam.ACTIVE);
         studentClasses17.setId(studentClassesRepository.save(studentClasses17).getId());
 
         StudentClasses studentClasses18 = new StudentClasses();
-        studentClasses18.setStudentId("dac59af0-6bdb-4b26-ad8a-b5effa44875d");
+        studentClasses18.setStudentId("ad2a384f-f20f-430d-a378-e856018f3338");
         studentClasses18.setClassId(class1.getId());
         studentClasses18.setTeamId(null);
-        studentClasses18.setEmail("endph24013@fpt.edu.vn");
+        studentClasses18.setEmail("rndph24014@fpt.edu.vn");
         studentClasses18.setRole(RoleTeam.MEMBER);
         studentClasses18.setStatus(StatusTeam.ACTIVE);
         studentClasses18.setId(studentClassesRepository.save(studentClasses18).getId());
 
         StudentClasses studentClasses19 = new StudentClasses();
-        studentClasses19.setStudentId("ad2a384f-f20f-430d-a378-e856018f3338");
+        studentClasses19.setStudentId("c9c3ecbc-4dc1-46a3-9585-f3ee7550a97c");
         studentClasses19.setClassId(class1.getId());
         studentClasses19.setTeamId(null);
-        studentClasses19.setEmail("rndph24014@fpt.edu.vn");
+        studentClasses19.setEmail("tndph24015@fpt.edu.vn");
         studentClasses19.setRole(RoleTeam.MEMBER);
         studentClasses19.setStatus(StatusTeam.ACTIVE);
         studentClasses19.setId(studentClassesRepository.save(studentClasses19).getId());
 
+        // class 2 - team 1
         StudentClasses studentClasses20 = new StudentClasses();
-        studentClasses20.setStudentId("c9c3ecbc-4dc1-46a3-9585-f3ee7550a97c");
-        studentClasses20.setClassId(class1.getId());
-        studentClasses20.setTeamId(null);
-        studentClasses20.setEmail("tndph24015@fpt.edu.vn");
+        studentClasses20.setStudentId("6178966a-c08b-45f6-98aa-35b8ac243ede");
+        studentClasses20.setClassId(class2.getId());
+        studentClasses20.setTeamId(team1.getId());
+        studentClasses20.setEmail("qndph24011@fpt.edu.vn");
         studentClasses20.setRole(RoleTeam.MEMBER);
         studentClasses20.setStatus(StatusTeam.ACTIVE);
         studentClasses20.setId(studentClassesRepository.save(studentClasses20).getId());
-
-        // class 2 - team 1
-        StudentClasses studentClasses16 = new StudentClasses();
-        studentClasses16.setStudentId("6178966a-c08b-45f6-98aa-35b8ac243ede");
-        studentClasses16.setClassId(class2.getId());
-        studentClasses16.setTeamId(team1.getId());
-        studentClasses16.setEmail("qndph24011@fpt.edu.vn");
-        studentClasses16.setRole(RoleTeam.MEMBER);
-        studentClasses16.setStatus(StatusTeam.ACTIVE);
-        studentClasses16.setId(studentClassesRepository.save(studentClasses16).getId());
 
         // class 3 - team 1
         StudentClasses studentClasses21 = new StudentClasses();
@@ -735,7 +735,7 @@ public class DBGenerator implements CommandLineRunner {
         post11.setCreatedDate(new Date().getTime() +  3 * 86400300);
         post11.setId(postRepository.save(post11).getId());
 
-    // POINT - Class 1
+        // POINT - Class 1
         Point point1 = new Point();
         point1.setStudentId("cdc1629a-d9bd-4a5f-be12-8737ec26df8f");
         point1.setClassId(class1.getId());
@@ -841,70 +841,70 @@ public class DBGenerator implements CommandLineRunner {
         point13.setId(pointRepository.save(point13).getId());
 
         Point point14 = new Point();
-        point14.setStudentId("");
+        point14.setStudentId("195d63ae-9de2-447d-9f62-54488070dd48");
         point14.setClassId(class1.getId());
         point14.setCheckPointPhase1(8.0);
-        point14.setCheckPointPhase2(7.0);
+        point14.setCheckPointPhase2(10.0);
         point14.setFinalPoint(9.0);
         point14.setId(pointRepository.save(point14).getId());
 
         Point point15 = new Point();
-        point15.setStudentId("195d63ae-9de2-447d-9f62-54488070dd48");
+        point15.setStudentId("7749a5e9-b674-4aca-9e2d-cd36535de3fa");
         point15.setClassId(class1.getId());
         point15.setCheckPointPhase1(8.0);
         point15.setCheckPointPhase2(10.0);
         point15.setFinalPoint(9.0);
         point15.setId(pointRepository.save(point15).getId());
 
+        Point point16 = new Point();
+        point16.setStudentId("5000cd3b-ad08-4abe-9b71-c85c98aa07ed");
+        point16.setClassId(class1.getId());
+        point16.setCheckPointPhase1(10.0);
+        point16.setCheckPointPhase2(5.0);
+        point16.setFinalPoint(9.0);
+        point16.setId(pointRepository.save(point16).getId());
+
         Point point17 = new Point();
-        point17.setStudentId("5000cd3b-ad08-4abe-9b71-c85c98aa07ed");
+        point17.setStudentId("dac59af0-6bdb-4b26-ad8a-b5effa44875d");
         point17.setClassId(class1.getId());
-        point17.setCheckPointPhase1(10.0);
+        point17.setCheckPointPhase1(3.0);
         point17.setCheckPointPhase2(5.0);
-        point17.setFinalPoint(9.0);
+        point17.setFinalPoint(7.0);
         point17.setId(pointRepository.save(point17).getId());
 
         Point point18 = new Point();
-        point18.setStudentId("dac59af0-6bdb-4b26-ad8a-b5effa44875d");
+        point18.setStudentId("ad2a384f-f20f-430d-a378-e856018f3338");
         point18.setClassId(class1.getId());
-        point18.setCheckPointPhase1(3.0);
+        point18.setCheckPointPhase1(8.0);
         point18.setCheckPointPhase2(5.0);
-        point18.setFinalPoint(7.0);
+        point18.setFinalPoint(10.0);
         point18.setId(pointRepository.save(point18).getId());
 
         Point point19 = new Point();
-        point19.setStudentId("ad2a384f-f20f-430d-a378-e856018f3338");
+        point19.setStudentId("c9c3ecbc-4dc1-46a3-9585-f3ee7550a97c");
         point19.setClassId(class1.getId());
         point19.setCheckPointPhase1(8.0);
         point19.setCheckPointPhase2(5.0);
-        point19.setFinalPoint(10.0);
+        point19.setFinalPoint(2.0);
         point19.setId(pointRepository.save(point19).getId());
 
+        // POINT - Class 2 - teacher HangNT
         Point point20 = new Point();
-        point20.setStudentId("c9c3ecbc-4dc1-46a3-9585-f3ee7550a97c");
-        point20.setClassId(class1.getId());
+        point20.setStudentId("6178966a-c08b-45f6-98aa-35b8ac243ede");
+        point20.setClassId(class2.getId());
         point20.setCheckPointPhase1(8.0);
         point20.setCheckPointPhase2(5.0);
-        point20.setFinalPoint(2.0);
+        point20.setFinalPoint(7.0);
         point20.setId(pointRepository.save(point20).getId());
 
-    // POINT - Class 2 - teacher HangNT
+        // POINT - class 3 - teacher NguyenVV
         Point point21 = new Point();
-        point21.setStudentId("6178966a-c08b-45f6-98aa-35b8ac243ede");
-        point21.setClassId(class1.getId());
+        point21.setStudentId("de60e713-56cc-4964-ac6c-f58dcee3dcab");
+        point21.setClassId(class3.getId());
         point21.setCheckPointPhase1(8.0);
-        point21.setCheckPointPhase2(5.0);
-        point21.setFinalPoint(7.0);
+        point21.setCheckPointPhase2(8.0);
+        point21.setFinalPoint(9.0);
         point21.setId(pointRepository.save(point21).getId());
-
-    // POINT - class 3 - teacher NguyenVV
-        Point point22 = new Point();
-        point22.setStudentId("de60e713-56cc-4964-ac6c-f58dcee3dcab");
-        point22.setClassId(class1.getId());
-        point22.setCheckPointPhase1(8.0);
-        point22.setCheckPointPhase2(8.0);
-        point22.setFinalPoint(9.0);
-        point22.setId(pointRepository.save(point22).getId());
 
     }
 

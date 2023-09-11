@@ -6,11 +6,16 @@ import { useAppDispatch } from "../../../../app/hook";
 import { Table } from "antd";
 import { useEffect, useState } from "react";
 import { StAttendanceAPI } from "../../../../api/student/StAttendanceAPI";
+import { sinhVienCurrent } from "../../../../helper/inForUser";
 
 const StAttendanceDetailClass = () => {
   const dispatch = useAppDispatch();
   const { id } = useParams();
-  const [attendanceDetail, setAttendanceDetail] = useState([]);
+  const [listAttendance, setListAttendance] = useState([]);
+  const [attendanceRequest, setAttendanceRequest] = useState({
+    idStudent: sinhVienCurrent.id,
+    idClass: id,
+  });
   const convertLongToDate = (dateLong) => {
     const date = new Date(dateLong);
     const format = `${date.getDate()}/${
@@ -55,24 +60,31 @@ const StAttendanceDetailClass = () => {
       dataIndex: "status",
       key: "status",
       render: (status) =>
-        status === 0 ? (
-          <span style={{ color: "green" }}>Có mặt</span>
+        status != null ? (
+          status === 0 ? (
+            <span style={{ color: "green" }}>Có mặt</span>
+          ) : (
+            <span style={{ color: "red" }}>Vắng mặt</span>
+          )
         ) : (
-          <span style={{ color: "red" }}>Vắng mặt</span>
+          ""
         ),
     },
   ];
 
   useEffect(() => {
     fetchData(id);
+    console.log(id);
   }, [id]);
 
   const fetchData = async (id) => {
     try {
-      await StAttendanceAPI.getAllAttendanceById(id).then((respone) => {
-        setAttendanceDetail(respone.data);
-        console.log(respone.data);
-      });
+      await StAttendanceAPI.getAllAttendanceById(attendanceRequest).then(
+        (respone) => {
+          setListAttendance(respone.data);
+          console.log(respone.data);
+        }
+      );
     } catch {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
@@ -159,7 +171,7 @@ const StAttendanceDetailClass = () => {
             </Link>
             <hr />
           </div>
-          <Table dataSource={attendanceDetail} columns={columns} key={"key"} />
+          <Table dataSource={listAttendance} columns={columns} key={"key"} />
         </div>
       </div>
     </div>

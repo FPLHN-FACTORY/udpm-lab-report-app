@@ -1,5 +1,6 @@
 package com.labreportapp.core.student.service.impl;
 
+import com.labreportapp.core.student.model.request.StFindAttendanceRequest;
 import com.labreportapp.core.student.model.response.StAttendanceRespone;
 import com.labreportapp.core.student.repository.StAttendanceRepository;
 import com.labreportapp.core.student.service.StAttendanceService;
@@ -14,7 +15,7 @@ public class StAttendanceServiceImpl implements StAttendanceService {
     private StAttendanceRepository stAttendanceRepository;
 
     @Override
-    public List<StAttendanceRespone> getAllAttendanceById(String id) {
-        return stAttendanceRepository.getAllAttendanceById(id);
+    public List<StAttendanceRespone> getAllAttendanceById(StFindAttendanceRequest req) {
+        return stAttendanceRepository.getAllAttendanceById(req);
     }
 }

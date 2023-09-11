@@ -3,10 +3,11 @@ import { request } from "../../helper/request.helper";
 const url = `/student/my-class`;
 
 export class StAttendanceAPI {
-  static getAllAttendanceById = (id) => {
+  static getAllAttendanceById = (req) => {
     return request({
       method: "GET",
-      url: url + `/attendance?id=${id}`,
+      url:
+        url + `/attendance?idStudent=${req.idStudent}&idClass=${req.idClass}`,
     });
   };
 }

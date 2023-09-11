@@ -1,5 +1,6 @@
 package com.labreportapp.core.student.controller;
 
+import com.labreportapp.core.student.model.request.StFindAttendanceRequest;
 import com.labreportapp.core.student.model.response.StAttendanceRespone;
 import com.labreportapp.core.student.service.StAttendanceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class StAttendanceController {
     private StAttendanceService stAttendanceService;
 
     @GetMapping("/attendance")
-    public List<StAttendanceRespone> getAllAttendanceByID(@RequestParam(name = "id") String id) {
-        return stAttendanceService.getAllAttendanceById(id);
+    public List<StAttendanceRespone> getAllAttendanceByID(final StFindAttendanceRequest req) {
+        return stAttendanceService.getAllAttendanceById(req);
     }
 }
