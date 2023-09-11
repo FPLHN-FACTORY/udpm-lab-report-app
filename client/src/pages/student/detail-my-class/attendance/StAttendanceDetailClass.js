@@ -171,7 +171,14 @@ const StAttendanceDetailClass = () => {
             </Link>
             <hr />
           </div>
-          <Table dataSource={listAttendance} columns={columns} key={"key"} />
+          <div
+            style={{ fontSize: "16px", marginTop: "15px", marginBottom: "8px" }}
+          >
+            Danh sách điểm danh:
+          </div>
+          <div>
+            <Table dataSource={listAttendance} columns={columns} key={"key"} />
+          </div>
         </div>
       </div>
     </div>
