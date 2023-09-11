@@ -439,6 +439,7 @@ const TeacherPostMyClass = () => {
                       textAlign: "center",
                       marginTop: "100px",
                       fontSize: "15px",
+                      color: "red",
                     }}
                   >
                     Chưa đăng bài viết nào được đăng!
