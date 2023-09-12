@@ -22,6 +22,8 @@ import { StAttendenceAPI } from "../../../api/student/StAttendenceAllAPI";
 import { sinhVienCurrent } from "../../../helper/inForUser";
 import axios from "axios";
 import { green } from "@ant-design/colors";
+import { convertMeetingPeriodToTime } from "../../../helper/util.helper";
+import LoadingIndicator from "../../../helper/loading";
 
 const StAttendance = () => {
   const { Option } = Select;
@@ -29,6 +31,7 @@ const StAttendance = () => {
   const [semester, setSemester] = useState("");
   const [listClass, setListClass] = useState([]);
   const [listAttendence, setListAttendece] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getClassAttendenceListByStudentInClassAndSemester = (semester) => {
     const filter = {
@@ -40,7 +43,7 @@ const StAttendance = () => {
     ).then((response) => {
       setListClass(response.data.data);
       setListAttendece(response.data.data.attendences);
-      console.log(response.data.data);
+      setIsLoading(false);
     });
   };
 
@@ -56,6 +59,7 @@ const StAttendance = () => {
   }, []);
 
   useEffect(() => {
+    setIsLoading(true);
     getClassAttendenceListByStudentInClassAndSemester(semester);
   }, [semester]);
 
@@ -100,6 +104,14 @@ const StAttendance = () => {
       },
     },
     {
+      title: "Thời gian",
+      dataIndex: "timePeriod",
+      key: "timePeriod",
+      render: (text, record) => {
+        return <span>{convertMeetingPeriodToTime(record.meetingPeriod)}</span>;
+      },
+    },
+    {
       title: "Hình thức",
       dataIndex: "typeMeeting",
       key: "typeMeeting",
@@ -120,7 +132,7 @@ const StAttendance = () => {
           ) : record.status === 0 ? (
             <span style={{ color: "green" }}>Có mặt</span>
           ) : (
-            ""
+            <span style={{ color: "orange" }}>Not yet</span>
           )}
         </span>
       ),
@@ -128,6 +140,7 @@ const StAttendance = () => {
   ];
   return (
     <div className="box-general">
+      {isLoading && <LoadingIndicator />}
       <div className="heading-box">
         <span style={{ fontSize: "20px", fontWeight: "500" }}>
           <FontAwesomeIcon icon={faAtlas} style={{ marginRight: "8px" }} /> Điểm

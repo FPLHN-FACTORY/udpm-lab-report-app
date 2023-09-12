@@ -1,5 +1,5 @@
 import "./styleTeacherPostMyClass.css";
-import { Button, Card, Dropdown, Menu, Modal, Row } from "antd";
+import { Button, Card, Dropdown, Menu, Popconfirm } from "antd";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useParams } from "react-router";
@@ -9,7 +9,7 @@ import { TeacherPostAPI } from "../../../../api/teacher/post/TeacherPost.api";
 import LoadingIndicator from "../../../../helper/loading";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsisVertical, faHome } from "@fortawesome/free-solid-svg-icons";
+import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import { giangVienCurrent } from "../../../../helper/inForUser";
 import Editor from "./form-editor-create/FormEditor";
 import EditorUpdate from "./form-editor-update/FormEditorUpdate";
@@ -20,11 +20,13 @@ import {
   SetPost,
 } from "../../../../app/teacher/post/tePostSlice.reduce";
 import { toast } from "react-toastify";
-import JoditEditor from "jodit-react";
 import ViewEditorJodit from "../../../../helper/editor/ViewEditorJodit";
 import { ControlOutlined } from "@ant-design/icons";
+import { SetTTrueToggle } from "../../../../app/teacher/TeCollapsedSlice.reducer";
+
 const TeacherPostMyClass = () => {
   const dispatch = useAppDispatch();
+  dispatch(SetTTrueToggle());
   const { idClass } = useParams();
   const [classDetail, setClassDetail] = useState({});
   const [loading, setLoading] = useState(false);
@@ -34,8 +36,6 @@ const TeacherPostMyClass = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
   const [seeMore, setSeeMore] = useState(true);
-  const [idDelete, setIdDelete] = useState("");
-  const [visibleDelete, setVisibleDelete] = useState(false);
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Bảng điều khiển - Bài đăng";
@@ -86,6 +86,9 @@ const TeacherPostMyClass = () => {
       await TeacherPostAPI.getPagePost(data).then((responese) => {
         dispatch(SetPost(responese.data.data.data));
         setTotalPage(responese.data.data.totalPages);
+        if (responese.data.data.totalPages === 0) {
+          setSeeMore(false);
+        }
         setLoading(true);
       });
     } catch (error) {
@@ -118,19 +121,6 @@ const TeacherPostMyClass = () => {
     }
   };
 
-  const showModal = (id) => {
-    setVisibleDelete(true);
-    setIdDelete(id);
-  };
-  const handleOkDelete = () => {
-    clickDelete(idDelete);
-    setVisibleDelete(false);
-    setIdDelete("");
-  };
-  const handleCancelDelete = () => {
-    setVisibleDelete(false);
-    setIdDelete("");
-  };
   const clickDelete = async (id) => {
     try {
       await TeacherPostAPI.delete(id).then((respone) => {
@@ -142,9 +132,6 @@ const TeacherPostMyClass = () => {
     }
   };
 
-  const parsedHTML = (content) => {
-    return { __html: content };
-  };
   const convertLongToDate = (longValue) => {
     const date = new Date(longValue);
     const format = `${date.getDate()}/${
@@ -155,16 +142,6 @@ const TeacherPostMyClass = () => {
   const data = useAppSelector(GetPost);
   return (
     <>
-      <Modal
-        title="Xác nhận xóa"
-        visible={visibleDelete}
-        onOk={handleOkDelete}
-        onCancel={handleCancelDelete}
-        okText="Xóa"
-        cancelText="Hủy"
-      >
-        <p>Bạn có chắc chắn muốn xóa bài viết?</p>
-      </Modal>
       {!loading && <LoadingIndicator />}
       <div className="box-one">
         <Link to="/teacher/my-class" style={{ color: "black" }}>
@@ -253,7 +230,7 @@ const TeacherPostMyClass = () => {
               <hr />
             </div>
           </div>
-          <div className="box-image"></div>
+          <div className="box-image" style={{ marginBottom: "20px" }}></div>
           <div className="box-post">
             <div className="box-post-left">
               <div className="box-infor" style={{ height: "140px" }}>
@@ -422,13 +399,18 @@ const TeacherPostMyClass = () => {
                                             onClick={() => handleUpdate(index)}
                                           >
                                             Chỉnh sửa
-                                          </Menu.Item>
-                                          <Menu.Item
-                                            key="2"
-                                            onClick={() => showModal(item.id)}
+                                          </Menu.Item>{" "}
+                                          <Popconfirm
+                                            title="Xóa học kỳ"
+                                            description="Bạn có chắc chắn muốn xóa bài viết này không ?"
+                                            onConfirm={() => {
+                                              clickDelete(item.id);
+                                            }}
+                                            okText="Có"
+                                            cancelText="Không"
                                           >
-                                            Xóa
-                                          </Menu.Item>
+                                            <Menu.Item key="2">Xóa</Menu.Item>
+                                          </Popconfirm>
                                         </Menu>
                                       }
                                       trigger={["click"]}
@@ -460,6 +442,7 @@ const TeacherPostMyClass = () => {
                       textAlign: "center",
                       marginTop: "100px",
                       fontSize: "15px",
+                      color: "red",
                     }}
                   >
                     Chưa đăng bài viết nào được đăng!

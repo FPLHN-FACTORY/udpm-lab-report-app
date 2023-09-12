@@ -8,7 +8,6 @@ import com.labreportapp.core.teacher.service.TeAttendanceSevice;
 import com.labreportapp.entity.Attendance;
 import com.labreportapp.infrastructure.constant.StatusAttendance;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -34,7 +33,7 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
     }
 
     @Override
-    public List<Attendance> getListAttendace(TeFindListAttendanceRequest request) {
+    public List<Attendance> addOrUpdateAttendance(TeFindListAttendanceRequest request) {
         List<TeFindAttendanceRequest> list = request.getListAttendance();
         List<Attendance> listNew = new ArrayList<>();
         list.forEach(item -> {

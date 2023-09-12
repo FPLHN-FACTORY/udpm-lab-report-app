@@ -6,14 +6,20 @@ import { useAppDispatch } from "../../../../app/hook";
 import { useState, useEffect } from "react"; // Import useState và useEffect
 import { StPointDetailAPI } from "../../../../api/student/StPointDetailAPI";
 import { sinhVienCurrent } from "../../../../helper/inForUser";
+import { Table } from "antd";
+import LoadingIndicator from "../../../../helper/loading";
+import { SetTTrueToggle } from "../../../../app/student/StCollapsedSlice.reducer";
 
 const StPointDetailClass = () => {
   const dispatch = useAppDispatch();
+  dispatch(SetTTrueToggle());
   const { id } = useParams();
   const [pointStudent, setPointStudent] = useState([]);
   const [noPointMessage, setNoPointMessage] = useState(""); // Thêm state để lưu thông báo khi không có điểm
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
     LoadPointData();
   }, []);
 
@@ -23,6 +29,7 @@ const StPointDetailClass = () => {
         if (response.data.data) {
           // Kiểm tra nếu có dữ liệu điểm
           setPointStudent(response.data.data);
+          setIsLoading(false);
         } else {
           // Nếu không có điểm, cập nhật thông báo
           setNoPointMessage("Bạn chưa có điểm.");
@@ -34,8 +41,37 @@ const StPointDetailClass = () => {
       });
   };
 
+  const columns = [
+    {
+      title: "#",
+      dataIndex: "stt",
+      key: "stt",
+    },
+    {
+      title: "Tên đầu điểm",
+      dataIndex: "tenDauDiem",
+      key: "tenDauDiem",
+    },
+    {
+      title: "Trọng số",
+      dataIndex: "trongSo",
+      key: "trongSo",
+    },
+    {
+      title: "Điểm",
+      dataIndex: "diem",
+      key: "diem",
+    },
+    {
+      title: "Ghi chú",
+      dataIndex: "ghiChu",
+      key: "ghiChu",
+    },
+  ];
+
   return (
     <div style={{ paddingTop: "35px" }}>
+      {isLoading && <LoadingIndicator />}
       <div className="title-student-my-class">
         <span style={{ paddingLeft: "20px" }}>
           <ControlOutlined style={{ fontSize: "22px" }} />
@@ -117,44 +153,14 @@ const StPointDetailClass = () => {
           <div>
             <>
               <div className="info-team">
-                <span className="info-heading">Thông tin đầu điểm:</span>
-                <div className="group-info">
-                  <span
-                    className="group-info-item"
-                    style={{ marginTop: "10px", marginBottom: "15px" }}
-                  >
-                    Họ và Tên:{" "}
-                    {sinhVienCurrent.name != null ? sinhVienCurrent.name : ""}
-                  </span>
-                  {noPointMessage ? (
-                    // Hiển thị thông báo nếu không có điểm
-                    <span className="group-info-item" style={{ color: "red" }}>
-                      {noPointMessage}
-                    </span>
-                  ) : (
-                    <>
-                      <span className="group-info-item">
-                        Điểm giai đoạn 1:{" "}
-                        {pointStudent.checkPointPhase1 != null
-                          ? pointStudent.checkPointPhase1
-                          : ""}
-                      </span>
-                      <span className="group-info-item">
-                        Điểm giai đoạn 2:{" "}
-                        {pointStudent.checkPointPhase2 != null
-                          ? pointStudent.checkPointPhase2
-                          : ""}
-                      </span>
-                      <span className="group-info-item">
-                        Điểm final:{" "}
-                        {pointStudent.finalPoint != null
-                          ? pointStudent.finalPoint
-                          : ""}
-                      </span>
-                    </>
-                  )}
-                </div>
+                <span className="info-heading">Danh sách đầu điểm:</span>
               </div>
+              <Table
+                columns={columns}
+                dataSource={pointStudent}
+                key="stt"
+                pagination={false}
+              />
             </>
           </div>
         </div>

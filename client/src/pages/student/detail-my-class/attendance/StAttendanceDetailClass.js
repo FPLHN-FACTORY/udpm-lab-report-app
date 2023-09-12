@@ -7,15 +7,21 @@ import { Table } from "antd";
 import { useEffect, useState } from "react";
 import { StAttendanceAPI } from "../../../../api/student/StAttendanceAPI";
 import { sinhVienCurrent } from "../../../../helper/inForUser";
+import { convertMeetingPeriodToTime } from "../../../../helper/util.helper";
+import LoadingIndicator from "../../../../helper/loading";
+import { SetTTrueToggle } from "../../../../app/student/StCollapsedSlice.reducer";
 
 const StAttendanceDetailClass = () => {
   const dispatch = useAppDispatch();
+  dispatch(SetTTrueToggle());
   const { id } = useParams();
   const [listAttendance, setListAttendance] = useState([]);
   const [attendanceRequest, setAttendanceRequest] = useState({
     idStudent: sinhVienCurrent.id,
     idClass: id,
   });
+  const [isLoading, setIsLoading] = useState(false);
+
   const convertLongToDate = (dateLong) => {
     const date = new Date(dateLong);
     const format = `${date.getDate()}/${
@@ -49,6 +55,14 @@ const StAttendanceDetailClass = () => {
       render: (meetingPeriod) => <span>{meetingPeriod + 1}</span>,
     },
     {
+      title: "Thời gian",
+      dataIndex: "timePeriod",
+      key: "timePeriod",
+      render: (text, record) => {
+        return <span>{convertMeetingPeriodToTime(record.meetingPeriod)}</span>;
+      },
+    },
+    {
       title: "Hình thức",
       dataIndex: "typeMeeting",
       key: "typeMeeting",
@@ -66,7 +80,7 @@ const StAttendanceDetailClass = () => {
           ) : record.status === 0 ? (
             <span style={{ color: "green" }}>Có mặt</span>
           ) : (
-            ""
+            <span style={{ color: "orange" }}>Not yet</span>
           )}
         </span>
       ),
@@ -74,8 +88,8 @@ const StAttendanceDetailClass = () => {
   ];
 
   useEffect(() => {
+    setIsLoading(true);
     fetchData(id);
-    console.log(id);
   }, [id]);
 
   const fetchData = async (id) => {
@@ -83,7 +97,7 @@ const StAttendanceDetailClass = () => {
       await StAttendanceAPI.getAllAttendanceById(attendanceRequest).then(
         (respone) => {
           setListAttendance(respone.data);
-          console.log(respone.data);
+          setIsLoading(false);
         }
       );
     } catch {
@@ -93,6 +107,7 @@ const StAttendanceDetailClass = () => {
 
   return (
     <div style={{ paddingTop: "35px" }}>
+      {isLoading && <LoadingIndicator />}
       <div className="title-student-my-class">
         <span style={{ paddingLeft: "20px" }}>
           <ControlOutlined style={{ fontSize: "22px" }} />
@@ -178,7 +193,12 @@ const StAttendanceDetailClass = () => {
             Danh sách điểm danh:
           </div>
           <div>
-            <Table dataSource={listAttendance} columns={columns} key={"key"} />
+            <Table
+              dataSource={listAttendance}
+              columns={columns}
+              key={"key"}
+              pagination={{ pageSize: 8 }}
+            />
           </div>
         </div>
       </div>

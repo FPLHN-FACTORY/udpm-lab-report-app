@@ -1,4 +1,4 @@
-import { apiDanhSachSinhVien, request } from "../../../helper/request.helper";
+import { request } from "../../../helper/request.helper";
 
 const url = `/teacher/teams`;
 

@@ -32,6 +32,8 @@ const TeacherAttendanceMeeting = () => {
   const [checkAttendance, setCheckAttendance] = useState(false);
   const [listAttendance, setListAttendance] = useState([]);
   useEffect(() => {
+    window.scrollTo(0, 0);
+    document.title = "Bảng điều khiển - điểm danh";
     featchMeetingCheckDate(idMeeting);
   }, []);
 
@@ -72,12 +74,15 @@ const TeacherAttendanceMeeting = () => {
       alert(error.message);
     }
   };
+
   const featInforStudent = async (idClass) => {
     try {
       if (checkAttendance) {
         const listShowTable = listStudentClassAPI.map((item1) => {
           const matchedObject = listAttendance.find(
-            (item2) => item2.idStudent === item1.idStudent
+            (item2) =>
+              item2.idStudent === item1.idStudent &&
+              item2.idMeeting === idMeeting
           );
           return {
             ...item1,
@@ -131,7 +136,6 @@ const TeacherAttendanceMeeting = () => {
         (response) => {
           setMeeting(response.data.data);
           setIdClass(response.data.data.idClass);
-
           fetchData(response.data.data.idClass);
         },
         (error) => {

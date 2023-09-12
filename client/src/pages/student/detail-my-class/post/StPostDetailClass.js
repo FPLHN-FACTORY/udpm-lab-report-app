@@ -20,9 +20,11 @@ import JoditEditor from "jodit-react";
 import ViewEditorJodit from "../../../../helper/editor/ViewEditorJodit";
 import { ControlOutlined } from "@ant-design/icons";
 import { giangVienCurrent } from "../../../../helper/inForUser";
+import { SetTTrueToggle } from "../../../../app/student/StCollapsedSlice.reducer";
 
 const StPostDetailClass = () => {
   const dispatch = useAppDispatch();
+  dispatch(SetTTrueToggle());
   const { id } = useParams();
   const [classDetail, setClassDetail] = useState({});
   const [loading, setLoading] = useState(false);
@@ -189,6 +191,7 @@ const StPostDetailClass = () => {
               </Link>
               <Link
                 className="custom-link"
+                to={`/student/my-class/point/${id}`}
                 style={{
                   fontSize: "16px",
                   fontWeight: "bold",

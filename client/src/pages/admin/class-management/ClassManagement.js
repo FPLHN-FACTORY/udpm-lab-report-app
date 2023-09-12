@@ -58,7 +58,7 @@ const ClassManagement = () => {
   const dispatch = useAppDispatch();
   const listClassPeriod = [];
 
-  for (let i = 1; i <= 10; i++) {
+  for (let i = 0; i <= 9; i++) {
     listClassPeriod.push("" + i);
   }
 
@@ -334,7 +334,7 @@ const ClassManagement = () => {
                 {listClassPeriod.map((value) => {
                   return (
                     <Option value={value} key={value}>
-                      {value}
+                      {parseInt(value) + 1}
                     </Option>
                   );
                 })}
@@ -484,6 +484,7 @@ const ClassManagement = () => {
                     textAlign: "center",
                     marginTop: "100px",
                     fontSize: "15px",
+                    color: "red"
                   }}
                 >
                   Không có lớp học

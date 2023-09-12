@@ -69,32 +69,6 @@ function EditorUpdate({ obj, showUpdate }) {
       );
     }
   };
-  // const handleEditorBlur = (value) => {
-  //   const regexEmptyTags = /<[^>]*>(\s|&nbsp;)*<\/[^>]*>/g;
-  //   if (value.trim() === " ") {
-  //     setIsEmpty(true);
-  //     setCheck((pr) => pr + 2);
-  //   } else {
-  //     setIsEmpty(false);
-  //   }
-  //   if (value.trim() === "") {
-  //     setIsEmpty(true);
-  //     setCheck((pr) => pr + 2);
-  //   } else {
-  //     setIsEmpty(false);
-  //   }
-  // if (regexEmptyTags.test(value.trim())) {
-  //   setIsEmpty(true);
-  //   setCheck((pr) => pr + 2);
-  // } else {
-  //   setIsEmpty(false);
-  // }
-  // };
-
-  // useEffect(() => {
-  //   setDescriptions(descriptions);
-  // }, [check]);
-
   return (
     <div>
       <JoditEditor

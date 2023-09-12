@@ -21,6 +21,7 @@ import {
 import { StMyClassAPI } from "../../../api/student/StMyClassAPI";
 import { sinhVienCurrent } from "../../../helper/inForUser";
 import { Link } from "react-router-dom";
+import { convertMeetingPeriodToTime } from "../../../helper/util.helper";
 
 const { Option } = Select;
 
@@ -106,6 +107,14 @@ const StudentMyClass = () => {
         }
 
         return <span>{displayText}</span>;
+      },
+    },
+    {
+      title: "Thời gian",
+      dataIndex: "timePeriod",
+      key: "timePeriod",
+      render: (text, record) => {
+        return <span>{convertMeetingPeriodToTime(record.classPeriod)}</span>;
       },
     },
     {

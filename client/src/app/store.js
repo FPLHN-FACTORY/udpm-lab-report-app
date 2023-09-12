@@ -8,16 +8,20 @@ import teTeamsSliceReduce from "./teacher/teams/teamsSlice.reduce";
 import teMeetingSliceReduce from "./teacher/meeting/teacherMeetingSlice.reduce";
 import teacherSemesterSliceReduce from "./admin/ClassManager.reducer";
 import teStudentClassesSliceReduce from "./teacher/student-class/studentClassesSlice.reduce";
+import tePointSliceReduce from "./teacher/point/tePointSlice.reduce";
 import AdMeetingManagementReducer from "./admin/AdMeetingManagement.reducer";
 import teacherAttendanceMeetingSliceReduce from "./teacher/attendance-meeting-today/teacherAttendanceMeetingSlice.reduce";
 import stScheduleSliceReducer from "./student/StSchedule.reduce";
 import stMeetingSliceReduce from "./student/StTeacherMeetingSlice.reduce";
 import AdTeacherSliceReducer from "./admin/AdTeacherSlice.reducer";
 import StPostSliceReducer from "./student/StPost.reduce";
-
+import AdCollapsedSliceReducer from "./admin/AdCollapsedSlice.reducer";
+import StCollapsedSliceReducer from "./student/StCollapsedSlice.reducer";
+import TeCollapsedSliceReducer from "./teacher/TeCollapsedSlice.reducer";
 
 export const store = configureStore({
   reducer: {
+    tePoint: tePointSliceReduce,
     tePost: tePostSliceReduce,
     teMyClass: teMyClassSliceReduce,
     teSemester: teSemesterSliceReduce,
@@ -32,7 +36,10 @@ export const store = configureStore({
     stSchedule: stScheduleSliceReducer,
     stMeetingClass: stMeetingSliceReduce,
     adTeacher: AdTeacherSliceReducer,
-    stPost: StPostSliceReducer
+    stPost: StPostSliceReducer,
+    adCollapsed: AdCollapsedSliceReducer,
+    stCollapsed: StCollapsedSliceReducer,
+    teCollapsed: TeCollapsedSliceReducer,
   },
 });
 

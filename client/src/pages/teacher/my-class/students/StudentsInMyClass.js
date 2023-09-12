@@ -15,9 +15,11 @@ import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHome } from "@fortawesome/free-solid-svg-icons";
 import { ControlOutlined } from "@ant-design/icons";
+import { SetTTrueToggle } from "../../../../app/teacher/TeCollapsedSlice.reducer";
 
 const StudentsInMyClass = () => {
   const dispatch = useAppDispatch();
+  dispatch(SetTTrueToggle());
   const [classDetail, setClassDetail] = useState({});
   const [loading, setLoading] = useState(false);
   const { idClass } = useParams();

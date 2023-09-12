@@ -29,7 +29,6 @@ public class Attendance extends PrimaryEntity {
     @Nationalized
     private String name;
 
-    @Column(nullable = false)
     private StatusAttendance status;
 
     @Column(length = EntityProperties.LENGTH_ID)

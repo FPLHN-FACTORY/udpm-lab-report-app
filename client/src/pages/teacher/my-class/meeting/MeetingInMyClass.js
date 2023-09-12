@@ -1,7 +1,11 @@
 import { useParams } from "react-router-dom";
 import "./styleMeetingInMyClass.css";
 import { Link } from "react-router-dom";
-import { BookOutlined, ControlOutlined, UnorderedListOutlined } from "@ant-design/icons";
+import {
+  BookOutlined,
+  ControlOutlined,
+  UnorderedListOutlined,
+} from "@ant-design/icons";
 import { TeacherMeetingAPI } from "../../../../api/teacher/meeting/TeacherMeeting.api";
 import {
   SetMeeting,
@@ -14,9 +18,11 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHome } from "@fortawesome/free-solid-svg-icons";
 import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
+import { SetTTrueToggle } from "../../../../app/teacher/TeCollapsedSlice.reducer";
 
 const MeetingInMyClass = () => {
   const dispatch = useAppDispatch();
+  dispatch(SetTTrueToggle());
   const [loading, setLoading] = useState(false);
   const { idClass } = useParams();
   const [countMeeting, setCountMeeting] = useState(0);
@@ -192,7 +198,7 @@ const MeetingInMyClass = () => {
                   Danh sách buổi học : {countMeeting} buổi học
                 </span>
               </div>
-              <div className="data-table">
+              <div className="data-table" style={{ minHeight: "380px" }}>
                 {dataMeeting.length > 0 ? (
                   <>
                     {dataMeeting.map((record) => (
@@ -231,13 +237,32 @@ const MeetingInMyClass = () => {
                             <div>
                               {" "}
                               <span>
+                                {" "}
+                                Time:{" "}
+                                <span
+                                  style={{
+                                    color: "red",
+                                    fontWeight: "500",
+                                  }}
+                                >
+                                  {convertLongToDate(record.meetingDate)} -{" "}
+                                  <span>Ca </span>
+                                  {record.meetingPeriod + 1}
+                                </span>
+                              </span>
+                            </div>
+                          </div>
+                          {/* <div className="title-right">
+                            <div>
+                              {" "}
+                              <span>
                                 Thời gian:{" "}
                                 {convertLongToDate(record.meetingDate)} - Ca{" "}
                                 {record.meetingPeriod + 1}
                               </span>
                             </div>
-                          </div>
-                        </div>{" "}
+                          </div> */}
+                        </div>
                       </Link>
                     ))}
                   </>

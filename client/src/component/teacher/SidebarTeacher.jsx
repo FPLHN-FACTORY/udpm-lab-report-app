@@ -10,6 +10,7 @@ import {
   faCogs,
   faBook,
   faLineChart,
+  faHome,
 } from "@fortawesome/free-solid-svg-icons";
 
 import "./style-sidebar.css";
@@ -50,7 +51,7 @@ const SidebarTeacherComponent = ({ collapsed, toggleCollapsed }) => {
           className="menu_custom"
           icon={
             <FontAwesomeIcon
-              icon={faBook}
+              icon={faHome}
               style={{ color: "rgb(226, 179, 87)" }}
             />
           }

@@ -3,8 +3,36 @@ import { ControlOutlined, UnorderedListOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHome } from "@fortawesome/free-solid-svg-icons";
+import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/TeacherStudentClasses.api";
+import { useEffect, useState } from "react";
+import { Table } from "antd";
+import { useAppDispatch } from "../../../../app/hook";
+import { SetTTrueToggle } from "../../../../app/teacher/TeCollapsedSlice.reducer";
 const TeacherAttendanceClass = () => {
   const { idClass } = useParams();
+  const dispatch = useAppDispatch();
+  dispatch(SetTTrueToggle());
+  const [listStudentClassAPI, setListStudentClassAPI] = useState([]);
+
+  useEffect(() => {
+    featchStudentClass(idClass);
+  }, []);
+
+  const featchStudentClass = async (idClass) => {
+    try {
+      await TeacherStudentClassesAPI.getStudentInClasses(idClass).then(
+        (responese) => {
+          const listAPI = responese.data.data.map((item) => {
+            return { ...item };
+          });
+          setListStudentClassAPI(listAPI);
+        }
+      );
+    } catch (error) {
+      alert("Lỗi hệ thống, vui lòng F5 lại trang");
+    }
+  };
+
   return (
     <>
       <div className="box-one">
@@ -127,7 +155,14 @@ const TeacherAttendanceClass = () => {
                   Chi tiết điểm danh
                 </span>
               </div>
-              <div className="data-table"></div>
+              <div className="data-table">
+                <Table
+                  rowKey="id"
+                  // columns={columns}
+                  // dataSource={dataSource}
+                  pagination={false}
+                />
+              </div>
             </div>
           </div>
         </div>
