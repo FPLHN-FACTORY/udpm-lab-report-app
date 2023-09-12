@@ -10,6 +10,9 @@ import {
   faCogs,
   faCalendar,
   faHome,
+  faCheckCircle,
+  faMarker,
+  faRegistered,
 } from "@fortawesome/free-solid-svg-icons";
 
 import "./style-sidebar.css";
@@ -38,7 +41,7 @@ const SidebarStudentComponent = ({ collapsed, toggleCollapsed }) => {
           className="menu_custom"
           icon={
             <FontAwesomeIcon
-              icon={faCalendar}
+              icon={faRegistered}
               style={{ color: "rgb(226, 179, 87)" }}
             />
           }
@@ -74,7 +77,7 @@ const SidebarStudentComponent = ({ collapsed, toggleCollapsed }) => {
           className="menu_custom"
           icon={
             <FontAwesomeIcon
-              icon={faHome}
+              icon={faCheckCircle}
               style={{ color: "rgb(226, 179, 87)" }}
             />
           }
@@ -86,7 +89,7 @@ const SidebarStudentComponent = ({ collapsed, toggleCollapsed }) => {
           className="menu_custom"
           icon={
             <FontAwesomeIcon
-              icon={faHome}
+              icon={faMarker}
               style={{ color: "rgb(226, 179, 87)" }}
             />
           }

@@ -3,9 +3,13 @@ import "./style-information-class.css";
 import { faLineChart } from "@fortawesome/free-solid-svg-icons";
 import { ControlOutlined } from "@ant-design/icons";
 import { Link, useParams } from "react-router-dom";
+import { useAppDispatch } from "../../../../app/hook";
+import { SetTTrueToggle } from "../../../../app/admin/AdCollapsedSlice.reducer";
 
 const InformationClass = () => {
   const { id } = useParams();
+  const dispatch = useAppDispatch();
+  dispatch(SetTTrueToggle());
   return (
     <div className="box-general-custom">
       <div className="title-meeting-managemnt-my-class">

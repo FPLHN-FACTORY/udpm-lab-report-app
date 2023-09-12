@@ -20,6 +20,7 @@ import { sinhVienCurrent } from "../../../helper/inForUser";
 import moment from "moment";
 import React, { useCallback } from "react";
 import LoadingIndicator from "../../../helper/loading";
+import { convertMeetingPeriodToTime } from "../../../helper/util.helper";
 
 const StudentSchedule = () => {
   const [current, setCurrent] = useState(1);
@@ -87,6 +88,14 @@ const StudentSchedule = () => {
       sorter: (a, b) => a.meetingPeriod.localeCompare(b.meetingPeriod),
       render: (text, record) => {
         return <span>{parseInt(record.meetingPeriod) + 1}</span>;
+      },
+    },
+    {
+      title: "Thời gian",
+      dataIndex: "timePeriod",
+      key: "timePeriod",
+      render: (text, record) => {
+        return <span>{convertMeetingPeriodToTime(record.meetingPeriod)}</span>;
       },
     },
     {

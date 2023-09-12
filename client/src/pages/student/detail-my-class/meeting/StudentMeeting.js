@@ -17,8 +17,10 @@ import LoadingIndicator from "../../../../helper/loading";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHome } from "@fortawesome/free-solid-svg-icons";
+import { SetTTrueToggle } from "../../../../app/student/StCollapsedSlice.reducer";
 const StMeetingMyClass = () => {
   const dispatch = useAppDispatch();
+  dispatch(SetTTrueToggle());
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
   const [countMeeting, setCountMeeting] = useState(0);

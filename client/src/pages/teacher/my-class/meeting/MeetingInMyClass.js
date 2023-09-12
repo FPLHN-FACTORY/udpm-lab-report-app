@@ -18,9 +18,11 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHome } from "@fortawesome/free-solid-svg-icons";
 import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
+import { SetTTrueToggle } from "../../../../app/teacher/TeCollapsedSlice.reducer";
 
 const MeetingInMyClass = () => {
   const dispatch = useAppDispatch();
+  dispatch(SetTTrueToggle());
   const [loading, setLoading] = useState(false);
   const { idClass } = useParams();
   const [countMeeting, setCountMeeting] = useState(0);

@@ -22,8 +22,11 @@ import {
 import { toast } from "react-toastify";
 import ViewEditorJodit from "../../../../helper/editor/ViewEditorJodit";
 import { ControlOutlined } from "@ant-design/icons";
+import { SetTTrueToggle } from "../../../../app/teacher/TeCollapsedSlice.reducer";
+
 const TeacherPostMyClass = () => {
   const dispatch = useAppDispatch();
+  dispatch(SetTTrueToggle());
   const { idClass } = useParams();
   const [classDetail, setClassDetail] = useState({});
   const [loading, setLoading] = useState(false);
@@ -227,7 +230,7 @@ const TeacherPostMyClass = () => {
               <hr />
             </div>
           </div>
-          <div className="box-image"></div>
+          <div className="box-image" style={{ marginBottom: "20px" }}></div>
           <div className="box-post">
             <div className="box-post-left">
               <div className="box-infor" style={{ height: "140px" }}>

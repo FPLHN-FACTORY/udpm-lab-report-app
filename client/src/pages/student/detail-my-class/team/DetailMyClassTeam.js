@@ -18,9 +18,11 @@ import { convertLongToDate } from "../../../../helper/convertDate";
 import { EyeOutlined, UserAddOutlined } from "@ant-design/icons";
 import ModalDetailTeam from "./modal-detail-team/ModalDetailTeam";
 import LoadingIndicatorNoOverlay from "../../../../helper/loadingNoOverlay";
+import { SetTTrueToggle } from "../../../../app/student/StCollapsedSlice.reducer";
 
 const DetailMyClassTeam = () => {
   const dispatch = useAppDispatch();
+  dispatch(SetTTrueToggle());
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingOverlay, setIsLoadingOverlay] = useState(false);

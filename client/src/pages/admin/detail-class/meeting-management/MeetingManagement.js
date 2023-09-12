@@ -22,10 +22,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencilAlt, faTrash } from "@fortawesome/free-solid-svg-icons";
 import ModalUpdateMeeting from "./modal-update-meeting/ModalUpdateMeeting";
 import { toast } from "react-toastify";
+import { SetTTrueToggle } from "../../../../app/admin/AdCollapsedSlice.reducer";
 
 const MeetingManagment = () => {
   const { id } = useParams();
+
   const dispatch = useAppDispatch();
+  dispatch(SetTTrueToggle());
   const [isLoading, setIsLoading] = useState(false);
 
   const loadDataMeeting = () => {
@@ -101,7 +104,10 @@ const MeetingManagment = () => {
         </span>
       </div>
       <div className="box-filter-meeting-management">
-        <div className="box-filter-meeting-management-son">
+        <div
+          className="box-filter-meeting-management-son"
+          style={{ minHeight: "600px" }}
+        >
           <div className="button-menu-teacher">
             <div>
               <Link
@@ -265,6 +271,13 @@ const MeetingManagment = () => {
                     </div>{" "}
                   </div>
                 ))}
+              {(data == null || data.length === 0) && (
+                <div style={{ textAlign: "center", marginTop: "15px" }}>
+                  <span style={{ color: "red" }}>
+                    Không có buổi học nào !!!
+                  </span>
+                </div>
+              )}
             </div>
           </div>
         </div>

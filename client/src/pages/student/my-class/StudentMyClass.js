@@ -21,6 +21,7 @@ import {
 import { StMyClassAPI } from "../../../api/student/StMyClassAPI";
 import { sinhVienCurrent } from "../../../helper/inForUser";
 import { Link } from "react-router-dom";
+import { convertMeetingPeriodToTime } from "../../../helper/util.helper";
 
 const { Option } = Select;
 
@@ -109,6 +110,14 @@ const StudentMyClass = () => {
       },
     },
     {
+      title: "Thời gian",
+      dataIndex: "timePeriod",
+      key: "timePeriod",
+      render: (text, record) => {
+        return <span>{convertMeetingPeriodToTime(record.classPeriod)}</span>;
+      },
+    },
+    {
       title: "Cấp độ",
       dataIndex: "level",
       key: "level",
@@ -134,7 +143,7 @@ const StudentMyClass = () => {
       key: "action",
       render: (text, record) => (
         <>
-          <Link to={`/student/my-class/team/${record.id}`}>
+          <Link to={`/student/my-class/post/${record.id}`}>
             <Tooltip title="Xem chi tiết lớp học">
               <FontAwesomeIcon icon={faEye} className="icon" />
             </Tooltip>

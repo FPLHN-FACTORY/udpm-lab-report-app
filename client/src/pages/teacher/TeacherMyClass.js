@@ -26,6 +26,7 @@ import {
   GetTeacherMyClass,
   SetTeacherMyClass,
 } from "../../app/teacher/my-class/teacherMyClassSlice.reduce";
+import { convertMeetingPeriodToTime } from "../../helper/util.helper";
 
 const { Option } = Select;
 
@@ -184,6 +185,14 @@ const TeacherMyClass = () => {
       key: "classPeriod",
       render: (text) => <span>{text + 1}</span>,
       sorter: (a, b) => a.classPeriod - b.classPeriod,
+    },
+    {
+      title: "Thời gian",
+      dataIndex: "timePeriod",
+      key: "timePeriod",
+      render: (text, record) => {
+        return <span>{convertMeetingPeriodToTime(record.classPeriod)}</span>;
+      },
     },
     {
       title: "Level",

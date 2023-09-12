@@ -1,7 +1,7 @@
 import { Row, Col } from "antd";
 import { useParams } from "react-router";
 import "./styleTeamInMeeting.css";
-import { BookOutlined, UnorderedListOutlined } from "@ant-design/icons";
+import { BookOutlined, ControlOutlined, UnorderedListOutlined } from "@ant-design/icons";
 import LoadingIndicator from "../../../../../helper/loading";
 import { useEffect, useState } from "react";
 import { TeacherMeetingAPI } from "../../../../../api/teacher/meeting/TeacherMeeting.api";
@@ -58,10 +58,7 @@ const TeamInMeeting = () => {
       <div className="box-one">
         <Link to="/teacher/my-class" style={{ color: "black" }}>
           <span style={{ fontSize: "18px", paddingLeft: "20px" }}>
-            <FontAwesomeIcon
-              icon={faHome}
-              style={{ color: "#00000", fontSize: "23px" }}
-            />
+          <ControlOutlined style={{ fontSize: "23px" }} />
             <span style={{ marginLeft: "10px", fontWeight: "500" }}>
               Bảng điều khiển
             </span>{" "}

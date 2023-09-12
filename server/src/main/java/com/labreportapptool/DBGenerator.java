@@ -2,6 +2,7 @@ package com.labreportapptool;
 
 import com.labreportapp.entity.Activity;
 import com.labreportapp.entity.Class;
+import com.labreportapp.entity.ClassConfiguration;
 import com.labreportapp.entity.HomeWork;
 import com.labreportapp.entity.Meeting;
 import com.labreportapp.entity.Note;
@@ -18,6 +19,7 @@ import com.labreportapp.infrastructure.constant.StatusTeam;
 import com.labreportapp.infrastructure.constant.TypeMeeting;
 import com.labreportapp.repository.ActivityRepository;
 import com.labreportapp.repository.AttendanceRepository;
+import com.labreportapp.repository.ClassConfigurationRepository;
 import com.labreportapp.repository.ClassRepository;
 import com.labreportapp.repository.HomeWorkRepository;
 import com.labreportapp.repository.MeetingRepository;
@@ -83,6 +85,9 @@ public class DBGenerator implements CommandLineRunner {
 
     @Autowired
     private PointRepository pointRepository;
+
+    @Autowired
+    private ClassConfigurationRepository classConfigurationRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -735,7 +740,7 @@ public class DBGenerator implements CommandLineRunner {
         post11.setCreatedDate(new Date().getTime() +  3 * 86400300);
         post11.setId(postRepository.save(post11).getId());
 
-    // POINT - Class 1
+        // POINT - Class 1
         Point point1 = new Point();
         point1.setStudentId("cdc1629a-d9bd-4a5f-be12-8737ec26df8f");
         point1.setClassId(class1.getId());
@@ -888,7 +893,7 @@ public class DBGenerator implements CommandLineRunner {
         point19.setFinalPoint(7.5);
         point19.setId(pointRepository.save(point19).getId());
 
-    // POINT - Class 2 - teacher HangNT
+        // POINT - Class 2 - teacher HangNT
         Point point20 = new Point();
         point20.setStudentId("6178966a-c08b-45f6-98aa-35b8ac243ede");
         point20.setClassId(class2.getId());
@@ -897,7 +902,7 @@ public class DBGenerator implements CommandLineRunner {
         point20.setFinalPoint(8.0);
         point20.setId(pointRepository.save(point20).getId());
 
-    // POINT - class 3 - teacher NguyenVV
+        // POINT - class 3 - teacher NguyenVV
         Point point21 = new Point();
         point21.setStudentId("de60e713-56cc-4964-ac6c-f58dcee3dcab");
         point21.setClassId(class3.getId());
@@ -905,6 +910,10 @@ public class DBGenerator implements CommandLineRunner {
         point21.setCheckPointPhase2(9.0);
         point21.setFinalPoint(9.0);
         point21.setId(pointRepository.save(point21).getId());
+
+        ClassConfiguration classConfiguration = new ClassConfiguration();
+        classConfiguration.setClassSizeMax(30);
+        classConfigurationRepository.save(classConfiguration);
 
     }
 

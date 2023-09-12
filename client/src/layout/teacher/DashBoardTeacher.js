@@ -3,14 +3,20 @@ import { Layout, Space } from "antd";
 import SidebarTeacherComponent from "../../component/teacher/SidebarTeacher";
 import HeaderTeacherComponent from "../../component/teacher/HeaderTeacher";
 import "./style.css";
+import { useAppDispatch, useAppSelector } from "../../app/hook";
+import {
+  GetTeCollapsed,
+  Toggle,
+} from "../../app/teacher/TeCollapsedSlice.reducer";
 
 const { Content, Sider, Footer } = Layout;
 
 const DashBoardTeacher = ({ children }) => {
-  const [collapsed, setCollapsed] = useState(false);
+  const collapsed = useAppSelector(GetTeCollapsed);
+  const dispatch = useAppDispatch();  
 
   const toggleCollapsed = () => {
-    setCollapsed(!collapsed);
+    dispatch(Toggle(!collapsed));
   };
 
   document.querySelector("body").style.backgroundImage = "url()";

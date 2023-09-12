@@ -1,10 +1,11 @@
-import { Input, Table, message } from "antd";
+import { Button, Input, Table, message } from "antd";
 import { useAppDispatch, useAppSelector } from "../../../../../app/hook";
 import {
   GetPoint,
   SetPoint,
 } from "../../../../../app/teacher/point/tePointSlice.reduce";
 import { useState } from "react";
+import { SearchOutlined } from "@ant-design/icons";
 
 const TablePoint = () => {
   const [phase1, setPhase1] = useState(0);
@@ -70,11 +71,83 @@ const TablePoint = () => {
       title: "Tên sinh viên",
       dataIndex: "name",
       key: "name",
+      filterDropdown: ({
+        setSelectedKeys,
+        selectedKeys,
+        confirm,
+        clearFilters,
+      }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="Tìm kiếm"
+            value={selectedKeys[0]}
+            onChange={(e) =>
+              setSelectedKeys(e.target.value ? [e.target.value] : [])
+            }
+            onPressEnter={confirm}
+            style={{ width: 188, marginBottom: 8, display: "block" }}
+          />
+          <Button
+            type="primary"
+            className="btn_search_member"
+            onClick={confirm}
+            size="small"
+            style={{ width: 90, marginRight: 8 }}
+          >
+            Tìm
+          </Button>
+          <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
+            Đặt lại
+          </Button>
+        </div>
+      ),
+      filterIcon: (filtered) => (
+        <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+      ),
+      onFilter: (value, record) =>
+        record.name.toLowerCase().includes(value.toLowerCase()),
+      sorter: (a, b) => a.name.localeCompare(b.name),
     },
     {
       title: "Email",
       dataIndex: "email",
       key: "email",
+      filterDropdown: ({
+        setSelectedKeys,
+        selectedKeys,
+        confirm,
+        clearFilters,
+      }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="Tìm kiếm"
+            value={selectedKeys[0]}
+            onChange={(e) =>
+              setSelectedKeys(e.target.value ? [e.target.value] : [])
+            }
+            onPressEnter={confirm}
+            style={{ width: 188, marginBottom: 8, display: "block" }}
+          />
+          <Button
+            type="primary"
+            className="btn_search_member"
+            onClick={confirm}
+            size="small"
+            style={{ width: 90, marginRight: 8 }}
+          >
+            Tìm
+          </Button>
+          <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
+            Đặt lại
+          </Button>
+        </div>
+      ),
+      filterIcon: (filtered) => (
+        <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+      ),
+      onFilter: (value, record) =>
+        record.email.toLowerCase().includes(value.toLowerCase()),
+      sorter: (a, b) => a.email.localeCompare(b.email),
     },
     {
       title: "Điểm giai đoạn 1",

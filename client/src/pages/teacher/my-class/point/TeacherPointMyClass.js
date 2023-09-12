@@ -22,6 +22,7 @@ import TablePoint from "./table-point-student/TablePoint";
 import LoadingIndicator from "../../../../helper/loading";
 import { toast } from "react-toastify";
 import ButtonExportExcel from "./export-excel/ButtonExportExcel";
+import { SetTTrueToggle } from "../../../../app/teacher/TeCollapsedSlice.reducer";
 
 const PointManagement = () => {
   const { idClass } = useParams();
@@ -32,6 +33,8 @@ const PointManagement = () => {
   const [listPoint, setListPoint] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingData, setLoadingData] = useState(false);
+
+  dispatch(SetTTrueToggle());
 
   useEffect(() => {
     window.scrollTo(0, 0);

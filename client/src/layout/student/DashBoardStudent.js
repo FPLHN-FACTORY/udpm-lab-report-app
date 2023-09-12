@@ -3,14 +3,17 @@ import { Layout, Space } from "antd";
 import SidebarStudentComponent from "../../component/student/SidebarStudent";
 import HeaderStudentComponent from "../../component/student/HeaderStudent";
 import "./style.css";
+import { useAppDispatch, useAppSelector } from "../../app/hook";
+import { GetStCollapsed, Toggle } from "../../app/student/StCollapsedSlice.reducer";
 
 const { Content, Sider } = Layout;
 
 const DashBoardStudent = ({ children }) => {
-  const [collapsed, setCollapsed] = useState(false);
+  const collapsed = useAppSelector(GetStCollapsed);
+  const dispatch = useAppDispatch();
 
   const toggleCollapsed = () => {
-    setCollapsed(!collapsed);
+    dispatch(Toggle(!collapsed));
   };
 
   document.querySelector("body").style.backgroundImage = "url()";

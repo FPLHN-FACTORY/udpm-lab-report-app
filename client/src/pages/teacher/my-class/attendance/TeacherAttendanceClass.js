@@ -6,8 +6,12 @@ import { faHome } from "@fortawesome/free-solid-svg-icons";
 import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/TeacherStudentClasses.api";
 import { useEffect, useState } from "react";
 import { Table } from "antd";
+import { useAppDispatch } from "../../../../app/hook";
+import { SetTTrueToggle } from "../../../../app/teacher/TeCollapsedSlice.reducer";
 const TeacherAttendanceClass = () => {
   const { idClass } = useParams();
+  const dispatch = useAppDispatch();
+  dispatch(SetTTrueToggle());
   const [listStudentClassAPI, setListStudentClassAPI] = useState([]);
 
   useEffect(() => {

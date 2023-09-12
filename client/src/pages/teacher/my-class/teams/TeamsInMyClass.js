@@ -33,6 +33,7 @@ import ModalCreateTeam from "./modal-create/ModalCreateTeam";
 import ModalUpdateTeam from "./modal-update/ModalUpdateTeam";
 import { toast } from "react-toastify";
 import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
+import { SetTTrueToggle } from "../../../../app/teacher/TeCollapsedSlice.reducer";
 
 const TeamsInMyClass = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -43,6 +44,7 @@ const TeamsInMyClass = () => {
   const [objeactTeam, setObjeactTeam] = useState({});
   const [classDetail, setClassDetail] = useState({});
   const dispatch = useAppDispatch();
+  dispatch(SetTTrueToggle());
   const { idClass } = useParams();
   useEffect(() => {
     window.scrollTo(0, 0);

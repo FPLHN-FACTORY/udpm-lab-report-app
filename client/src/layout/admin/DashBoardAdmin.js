@@ -3,14 +3,20 @@ import { Layout, Space } from "antd";
 import SidebarAdminComponent from "../../component/admin/SidebarAdmin";
 import HeaderAdminComponent from "../../component/admin/HeaderAdmin";
 import "./style.css";
+import { useAppDispatch, useAppSelector } from "../../app/hook";
+import {
+  GetAdCollapsed,
+  Toggle,
+} from "../../app/admin/AdCollapsedSlice.reducer";
 
 const { Content, Sider } = Layout;
 
 const DashBoardAdmin = ({ children }) => {
-  const [collapsed, setCollapsed] = useState(false);
+  const collapsed = useAppSelector(GetAdCollapsed);
+  const dispatch = useAppDispatch();
 
   const toggleCollapsed = () => {
-    setCollapsed(!collapsed);
+    dispatch(Toggle(!collapsed));
   };
 
   document.querySelector("body").style.backgroundImage = "url()";
