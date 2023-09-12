@@ -15,8 +15,6 @@ import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import { useEffect, useState } from "react";
 import LoadingIndicator from "../../../../helper/loading";
 import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome } from "@fortawesome/free-solid-svg-icons";
 import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
 import { SetTTrueToggle } from "../../../../app/teacher/TeCollapsedSlice.reducer";
 
@@ -252,16 +250,6 @@ const MeetingInMyClass = () => {
                               </span>
                             </div>
                           </div>
-                          {/* <div className="title-right">
-                            <div>
-                              {" "}
-                              <span>
-                                Thời gian:{" "}
-                                {convertLongToDate(record.meetingDate)} - Ca{" "}
-                                {record.meetingPeriod + 1}
-                              </span>
-                            </div>
-                          </div> */}
                         </div>
                       </Link>
                     ))}

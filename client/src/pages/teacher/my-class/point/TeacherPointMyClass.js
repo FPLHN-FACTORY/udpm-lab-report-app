@@ -107,8 +107,8 @@ const PointManagement = () => {
           return {
             ...item1,
             idClass: idClass,
-            checkPointPhase1: "0.0",
-            checkPointPhase2: "0.0",
+            checkPointPhase1: "0",
+            checkPointPhase2: "0",
             finalPoint: parseFloat("0"),
           };
         });

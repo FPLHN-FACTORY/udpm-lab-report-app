@@ -41,10 +41,6 @@ public class TeTeamsServiceImpl implements TeTeamsService {
 
     @Override
     public Team createTeam(@Valid TeCreateTeamsRequest request) {
-//        String checkCode = teTeamsRepositoty.getTeamByCode(request.getCode());
-//        if (checkCode != null) {
-//            throw new RestApiException(Message.CODE_TEAM_EXISTS);
-//        }
         List<TeTeamUpdateStudentClassRequest> studentClassesRequest = request.getListStudentClasses();
         int checkLeader = 0;
         for (int i = 0; i < studentClassesRequest.size(); i++) {
@@ -86,10 +82,6 @@ public class TeTeamsServiceImpl implements TeTeamsService {
             throw new RestApiException(Message.TEAM_NOT_EXISTS);
         }
         Team team = teamFilter.get();
-//        String checkCode = teTeamsRepositoty.getTeamByCode(request.getCode());
-//        if (checkCode != null && !team.getCode().equals(request.getCode())) {
-//            throw new RestApiException(Message.CODE_TEAM_EXISTS);
-//        }
         List<TeTeamUpdateStudentClassRequest> studentClassesRequest = request.getListStudentClasses();
         int checkLeader = 0;
         for (int i = 0; i < studentClassesRequest.size(); i++) {

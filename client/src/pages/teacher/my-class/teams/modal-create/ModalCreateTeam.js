@@ -49,6 +49,9 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
 
   useEffect(() => {
     if (visible === true) {
+      setErrorMembers("");
+      setSubjectName("");
+      setErrorName("");
       setVisitedCreate(true);
       setSubjectName("");
       setCode("");
@@ -154,13 +157,6 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
     } else {
       setErrorName("");
     }
-    if (listStudentsChange.length <= 0) {
-      setErrorMembers("Nhóm phải có ít nhất 1 thành viên");
-      check++;
-    } else {
-      setErrorMembers("");
-    }
-
     if (check === 0) {
       featchDataTable();
       let teamNew = {
@@ -262,7 +258,7 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
         width={850}
         footer={null}
         bodyStyle={{ overflow: "hidden" }}
-        style={{ top: "8px" }}
+        style={{ top: "53px" }}
       >
         {" "}
         <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
@@ -307,7 +303,6 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
               <Row style={{ marginBottom: "15px" }}>
                 <div style={{ width: "100%" }}>
                   {" "}
-                  <span className="notBlank">*</span>
                   <span>Thành viên:</span>
                   <Select
                     mode="multiple"
@@ -374,7 +369,7 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
             marginTop: "20px",
           }}
         >
-          {listStudentClass.length >= 1 ? (
+          {listStudentClass.length > 0 ? (
             <>
               <div style={{ paddingTop: "15px" }}>
                 <Button

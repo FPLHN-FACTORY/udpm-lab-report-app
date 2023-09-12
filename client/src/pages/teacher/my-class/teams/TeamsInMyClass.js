@@ -175,6 +175,17 @@ const TeamsInMyClass = () => {
       dataIndex: "subjectName",
       key: "subjectName",
       sorter: (a, b) => a.subjectName.localeCompare(b.subjectName),
+      render: (text, record) => {
+        return (
+          <>
+            {text === "" ? (
+              <span style={{ color: "blue" }}>Chưa có chủ đề</span>
+            ) : (
+              <span>{text}</span>
+            )}
+          </>
+        );
+      },
       width: "40%",
     },
 
