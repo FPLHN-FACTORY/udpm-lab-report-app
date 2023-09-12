@@ -97,7 +97,7 @@ public class TePointSeviceImpl implements TePointSevice {
             DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
             String currentDateTime = dateFormatter.format(new Date());
             String headerKey = "Content-Disposition";
-            String headerValue = "attachment; filename=BangDiem" + currentDateTime + ".xlsx";
+            String headerValue = "attachment; filename=BangDiem_" + currentDateTime + ".xlsx";
             response.setHeader(headerKey, headerValue);
             List<TePointRespone> listPointIdClass = getPointStudentById(idClass);
             TeFindStudentClasses teFindStudentClasses = new TeFindStudentClasses();

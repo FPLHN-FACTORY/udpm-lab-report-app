@@ -1,4 +1,4 @@
-import { Input, Table } from "antd";
+import { Input, Table, message } from "antd";
 import { useAppDispatch, useAppSelector } from "../../../../../app/hook";
 import {
   GetPoint,
@@ -82,32 +82,27 @@ const TablePoint = () => {
       key: "checkPointPhase1",
       render: (text, record) => {
         return (
-          <>
-            {" "}
-            <Input
-              placeholder="Nhập điểm"
-              value={text}
-              defaultValue={0}
-              // readOnly
-              // onDoubleClick={(e) => {
-              //   e.target.readOnly = false;
-              //   e.target.select();
-              // }}
-              // onBlur={(e) => {
-              //   e.target.readOnly = true;
-              // }}
-
-              onChange={(e) => {
+          <Input
+            placeholder="Nhập điểm"
+            value={text}
+            min={0.0}
+            max={10.0}
+            step={0.1}
+            defaultValue={0.0}
+            onChange={(e) => {
+              const newValue = parseFloat(e.target.value);
+              if ((newValue >= 0 && newValue <= 10) || e.target.value === "") {
                 setPhase1(e.target.value);
                 handlePoint(e.target.value, record.checkPointPhase2, record);
-              }}
-              min={0}
-              max={10}
-              step={0.01}
-              type="number"
-              pattern="^[0-9]+(\.[0-9]{1,2})?$"
-            />
-          </>
+              } else {
+                message.warning(
+                  "Điểm phải là một số dương lớn hơn 0 và nhỏ hơn 10 !"
+                );
+              }
+            }}
+            type="number"
+            pattern="^[0-9]+(\.[0-9]{1,2})?$"
+          />
         );
       },
       sorter: (a, b) => a.checkPointPhase1 - b.checkPointPhase1,
@@ -118,22 +113,27 @@ const TablePoint = () => {
       key: "checkPointPhase2",
       render: (text, record) => {
         return (
-          <>
-            <Input
-              placeholder="Nhập điểm"
-              value={text}
-              defaultValue={0}
-              onChange={(e) => {
+          <Input
+            placeholder="Nhập điểm"
+            value={text}
+            min={0.0}
+            max={10.0}
+            step={0.1}
+            defaultValue={0.0}
+            onChange={(e) => {
+              const newValue = parseFloat(e.target.value);
+              if ((newValue >= 0 && newValue <= 10) || e.target.value === "") {
                 setPhase2(e.target.value);
                 handlePoint(record.checkPointPhase1, e.target.value, record);
-              }}
-              min={0}
-              max={10}
-              step={0.01}
-              type="number"
-              pattern="^[0-9]+(\.[0-9]{1,2})?$"
-            />
-          </>
+              } else {
+                message.warning(
+                  "Điểm phải là một số dương lớn hơn 0 và nhỏ hơn 10 !"
+                );
+              }
+            }}
+            type="number"
+            pattern="^[0-9]+(\.[0-9]{1,2})?$"
+          />
         );
       },
       sorter: (a, b) => a.checkPointPhase2 - b.checkPointPhase2,
@@ -153,7 +153,26 @@ const TablePoint = () => {
           </span>
         );
       },
-      sorter: (a, b) => a.finalPoint - b.finalPoint,
+    },
+    {
+      title: "Trạng thái",
+      dataIndex: "statusCustome",
+      key: "statusCustome",
+      render: (text, record) => {
+        return (
+          <span>
+            {parseFloat(
+              (parseFloat(record.checkPointPhase1) +
+                parseFloat(record.checkPointPhase2)) /
+                2
+            ) >= 5 ? (
+              <p style={{ color: "green" }}>Đạt</p>
+            ) : (
+              <p style={{ color: "red" }}>Trượt</p>
+            )}
+          </span>
+        );
+      },
     },
   ];
   return (
