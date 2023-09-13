@@ -36,10 +36,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @author thangncph26123
@@ -252,7 +249,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses5.setStudentId("8559e6b3-8465-48e8-92a4-0f6147dc568d");
         studentClasses5.setClassId(class1.getId());
         studentClasses5.setTeamId(team2.getId());
-        studentClasses5.setEmail("hanhlt27000@fpt.edu.vn");
+        studentClasses5.setEmail("hanhltph27000@fpt.edu.vn");
         studentClasses5.setRole(RoleTeam.MEMBER);
         studentClasses5.setStatus(StatusTeam.ACTIVE);
         studentClasses5.setId(studentClassesRepository.save(studentClasses5).getId());
@@ -262,7 +259,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses6.setStudentId("ad51426d-7545-4f31-896d-cad398cac2c5");
         studentClasses6.setClassId(class1.getId());
         studentClasses6.setTeamId(team1.getId());
-        studentClasses6.setEmail("bndph24003@fpt.edu.vn");
+        studentClasses6.setEmail("thundvbph24003@fpt.edu.vn");
         studentClasses6.setRole(RoleTeam.LEADER);
         studentClasses6.setStatus(StatusTeam.ACTIVE);
         studentClasses6.setId(studentClassesRepository.save(studentClasses6).getId());
@@ -361,7 +358,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses17.setStudentId("dac59af0-6bdb-4b26-ad8a-b5effa44875d");
         studentClasses17.setClassId(class1.getId());
         studentClasses17.setTeamId(null);
-        studentClasses17.setEmail("endph24013@fpt.edu.vn");
+        studentClasses17.setEmail("emndph24013@fpt.edu.vn");
         studentClasses17.setRole(RoleTeam.MEMBER);
         studentClasses17.setStatus(StatusTeam.ACTIVE);
         studentClasses17.setId(studentClassesRepository.save(studentClasses17).getId());
@@ -399,7 +396,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses21.setStudentId("de60e713-56cc-4964-ac6c-f58dcee3dcab");
         studentClasses21.setClassId(class3.getId());
         studentClasses21.setTeamId(team1.getId());
-        studentClasses21.setEmail("hieundph25894@fpt.edu.vn");
+        studentClasses21.setEmail("hieundph2589499@fpt.edu.vn");
         studentClasses21.setRole(RoleTeam.LEADER);
         studentClasses21.setStatus(StatusTeam.ACTIVE);
         studentClasses21.setId(studentClassesRepository.save(studentClasses21).getId());
@@ -694,21 +691,21 @@ public class DBGenerator implements CommandLineRunner {
         post8.setDescriptions("<p><span style=\"color: rgb(32, 33, 34); font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">Trong suốt quá trình thực dân Pháp cai trị, từ giữa thế kỷ XIX đến đầu thế kỷ XX, đã có nhiều cuộc khởi nghĩa nổi dậy chống<span>&nbsp;</span></span><a href=\"https://vi.wikipedia.org/wiki/Th%E1%BB%B1c_d%C3%A2n_Ph%C3%A1p\" class=\"mw-redirect\" title=\"Thực dân Pháp\" style=\"text-decoration: none; color: rgb(51, 102, 204); background: none rgb(255, 255, 255); overflow-wrap: break-word; font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal;\">thực dân Pháp</a><span style=\"color: rgb(32, 33, 34); font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">. Các cuộc khởi nghĩa vũ trang dưới khẩu hiệu \"Cần vương\" do các văn thân, sĩ phu lãnh đạo cuối cùng cũng thất bại. Các cuộc khởi nghĩa vũ trang này mang đậm tinh thần yêu nước và đầy dũng khí trước quân thù, nhưng đều dưới sự dẫn dắt của các tư tưởng phong kiến và tư sản và đều thất bại. Cách mạng Việt Nam lâm vào cuộc khủng khoảng sâu sắc về đường lối cứu nước.</span><sup id=\"cite_ref-9\" class=\"reference\" style=\"line-height: 1em; font-size: 11.2px; white-space: nowrap; unicode-bidi: isolate; font-weight: 400; font-style: normal; color: rgb(32, 33, 34); font-family: sans-serif; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\"><a href=\"https://vi.wikipedia.org/wiki/T%C6%B0_t%C6%B0%E1%BB%9Fng_H%E1%BB%93_Ch%C3%AD_Minh1cite_note-9\" style=\"text-decoration: none; color: rgb(51, 102, 204); background: none; overflow-wrap: break-word; white-space: nowrap;\">[9]</a></sup><br></p>");
         post8.setTeacherId(class1.getTeacherId());
         post8.setClassId(class1.getId());
-        post8.setCreatedDate(new Date().getTime() +  1 * 86400000);
+        post8.setCreatedDate(new Date().getTime() + 1 * 86400000);
         post8.setId(postRepository.save(post8).getId());
 
         Post post9 = new Post();
         post9.setDescriptions("<p><span style=\"color: rgb(32, 33, 34); font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">Tư tưởng Hồ Chí Minh chỉ chính thức đưa vào Cương lĩnh của Đảng Cộng sản Việt Nam năm 1991, sau khi công cuộc Đổi mới phát động, chấp thuận phân hóa giai cấp, nhiều lý luận của chủ nghĩa Mác - Lênin không có tính khả thi trong cơ chế thị trường phải gác lại như đạo đức xã hội chủ nghĩa, xây dựng con người xã hội chủ nghĩa, làm theo năng lực hưởng theo lao động trên toàn xã hội... (</span><a href=\"https://vi.wikipedia.org/wiki/Ch%E1%BB%A7_ngh%C4%A9a_c%E1%BB%99ng_s%E1%BA%A3n\" title=\"Chủ nghĩa cộng sản\" style=\"text-decoration: none; color: rgb(51, 102, 204); background: none rgb(255, 255, 255); overflow-wrap: break-word; font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal;\">chủ nghĩa cộng sản</a><span style=\"color: rgb(32, 33, 34); font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\"><span>&nbsp;</span>đặt ra mục tiêu cuối cùng là xóa bỏ giai cấp, bóc lột, xóa bỏ giàu - nghèo, làm theo năng lực hưởng theo nhu cầu, công hữu trên nền tảng dân chủ, xóa bỏ giáo điều tôn giáo được xem là mị dân, xóa bỏ nhà nước đi đến dân chủ trực tiếp và bình đẳng, xóa bỏ các đường biên giới quốc gia, đưa các dân tộc đến cùng một lợi ích, xóa bỏ bất bình đẳng giữa các dân tộc trên phạm vi thế giới...). Các giáo trình của Việt Nam thường khai thác tư tưởng Hồ Chí Minh theo chiều hướng trên.</span><br></p>");
         post9.setTeacherId(class1.getTeacherId());
         post9.setClassId(class1.getId());
-        post9.setCreatedDate(new Date().getTime() +  2 * 86400000);
+        post9.setCreatedDate(new Date().getTime() + 2 * 86400000);
         post9.setId(postRepository.save(post9).getId());
 
         Post post10 = new Post();
         post10.setDescriptions("<p><strong style=\"color: rgb(32, 33, 34); font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\">Tư tưởng Hồ Chí Minh</strong><span style=\"color: rgb(32, 33, 34); font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\"><span>&nbsp;</span>là một hệ thống quan điểm và<span>&nbsp;</span></span><a href=\"https://vi.wikipedia.org/wiki/T%C6%B0_t%C6%B0%E1%BB%9Fng\" class=\"mw-redirect\" title=\"Tư tưởng\" style=\"text-decoration: none; color: rgb(51, 102, 204); background: none rgb(255, 255, 255); overflow-wrap: break-word; font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal;\">tư tưởng</a><span style=\"color: rgb(32, 33, 34); font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\"><span>&nbsp;</span>của<span>&nbsp;</span></span><a href=\"https://vi.wikipedia.org/wiki/H%E1%BB%93_Ch%C3%AD_Minh\" title=\"Hồ Chí Minh\" style=\"text-decoration: none; color: rgb(51, 102, 204); background: none rgb(255, 255, 255); overflow-wrap: break-word; font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal;\">Hồ Chí Minh</a><span style=\"color: rgb(32, 33, 34); font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\"><span>&nbsp;</span>trong sự nghiệp cách mạng của ông được<span>&nbsp;</span></span><a href=\"https://vi.wikipedia.org/wiki/%C4%90%E1%BA%A3ng_C%E1%BB%99ng_s%E1%BA%A3n_Vi%E1%BB%87t_Nam\" title=\"Đảng Cộng sản Việt Nam\" style=\"text-decoration: none; color: rgb(51, 102, 204); background: none rgb(255, 255, 255); overflow-wrap: break-word; font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal;\">Đảng Cộng sản Việt Nam</a><span style=\"color: rgb(32, 33, 34); font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\"><span>&nbsp;</span>tổng kết, hệ thống hóa.&nbsp;</span><br></p>");
         post10.setTeacherId(class1.getTeacherId());
         post10.setClassId(class1.getId());
-        post10.setCreatedDate(new Date().getTime() +  3 * 86400000);
+        post10.setCreatedDate(new Date().getTime() + 3 * 86400000);
         post10.setId(postRepository.save(post10).getId());
 
         Post post11 = new Post();
@@ -737,7 +734,7 @@ public class DBGenerator implements CommandLineRunner {
                 """);
         post11.setTeacherId(class1.getTeacherId());
         post11.setClassId(class1.getId());
-        post11.setCreatedDate(new Date().getTime() +  3 * 86400300);
+        post11.setCreatedDate(new Date().getTime() + 3 * 86400300);
         post11.setId(postRepository.save(post11).getId());
 
         // POINT - Class 1

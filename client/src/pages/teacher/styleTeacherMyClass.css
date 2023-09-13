@@ -148,7 +148,6 @@
   height: 2px;
   background: linear-gradient(to right, #d2b156 0%, #d2b156 100%);
 }
-
 .ant-table-wrapper .ant-table-thead > tr > th {
   background-color: #d2b156;
   color: white;

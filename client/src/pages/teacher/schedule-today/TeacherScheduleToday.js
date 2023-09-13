@@ -10,17 +10,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHome, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { TeacherScheduleTodayAPI } from "../../../api/teacher/meeting/schedule-today/TeacherScheduleToday.api";
 import { toast } from "react-toastify";
-import { convertMeetingPeriodToTime } from "../../../helper/util.helper";
 const TeacherScheduleToday = () => {
   const [loading, setLoading] = useState(false);
   const [dataToday, setDataToday] = useState([]);
-
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Bảng điều khiển - lịch dạy hôm nay";
     featchData(giangVienCurrent.id);
   }, []);
-
   const featchData = async (idTeacher) => {
     setLoading(false);
     try {
@@ -32,7 +29,6 @@ const TeacherScheduleToday = () => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-
   const handleAddressChange = (idMeeting, value) => {
     const listNew = dataToday.map((item) => {
       if (item.idMeeting === idMeeting) {
@@ -45,7 +41,6 @@ const TeacherScheduleToday = () => {
     });
     setDataToday(listNew);
   };
-
   const updateAddress = async () => {
     try {
       let dataUp = {
@@ -62,7 +57,6 @@ const TeacherScheduleToday = () => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-
   const convertLongToDate = (dateLong) => {
     const date = new Date(dateLong);
     const format = `${date.getDate()}/${
@@ -70,7 +64,6 @@ const TeacherScheduleToday = () => {
     }/${date.getFullYear()}`;
     return format;
   };
-
   const data = dataToday;
   const columns = [
     {
@@ -162,7 +155,6 @@ const TeacherScheduleToday = () => {
       },
       width: "28%",
     },
-
     {
       title: "Điểm danh",
       dataIndex: "actions",
@@ -185,7 +177,6 @@ const TeacherScheduleToday = () => {
                     borderRadius: "5px",
                   }}
                 >
-                  {" "}
                   <span style={{ fontSize: "14px" }}> Xem - chỉnh sửa </span>
                 </div>
               </Tooltip>

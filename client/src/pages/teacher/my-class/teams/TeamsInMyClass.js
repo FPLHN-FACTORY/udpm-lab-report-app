@@ -2,14 +2,13 @@ import { useParams } from "react-router-dom";
 import "./styleTeamsInMyClass.css";
 import { Row, Table, Button, Tooltip, Col, Modal } from "antd";
 import { Link } from "react-router-dom";
-import { ControlOutlined, UnorderedListOutlined } from "@ant-design/icons";
+import { ControlOutlined } from "@ant-design/icons";
 import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/TeacherStudentClasses.api";
 import {
   SetStudentClasses,
   GetStudentClasses,
 } from "../../../../app/teacher/student-class/studentClassesSlice.reduce";
 import { useEffect, useState } from "react";
-
 import { TeacherTeamsAPI } from "../../../../api/teacher/teams-class/TeacherTeams.api";
 import {
   SetTeams,
@@ -22,7 +21,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faDownload,
   faEye,
-  faHome,
   faPenToSquare,
   faTrashCan,
   faUpload,
@@ -52,7 +50,6 @@ const TeamsInMyClass = () => {
     featchTeams(idClass);
     featchClass(idClass);
   }, []);
-
   const fetchData = async (idClass) => {
     await featchStudentClass(idClass);
   };
@@ -89,9 +86,7 @@ const TeamsInMyClass = () => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-
   const [teamDelete, setTeamDelete] = useState({});
-
   const handleShowDeleteTeam = (team) => {
     setShowDeleteModal(true);
     setTeamDelete(team);
@@ -134,25 +129,21 @@ const TeamsInMyClass = () => {
     handleCancelModalCreateSusscess,
     handleCancelModalCreateFaild,
   };
-
   const handleUpdateTeam = (objectTeam) => {
     document.querySelector("body").style.overflowX = "hidden";
     setObjeactTeam(objectTeam);
     setShowUpdateModal(true);
   };
-
   const handleDetailTeam = (objectTeam) => {
     document.querySelector("body").style.overflowX = "hidden";
     setObjeactTeam(objectTeam);
     setShowDetailModal(true);
   };
-
   const handleModalDetailCancel = () => {
     document.querySelector("body").style.overflowX = "hidden";
     setObjeactTeam({});
     setShowDetailModal(false);
   };
-
   const dataStudentClasses = useAppSelector(GetStudentClasses);
   const data = useAppSelector(GetTeams);
   const columns = [

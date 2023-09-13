@@ -62,7 +62,6 @@ const TeacherPostMyClass = () => {
     }
     featchNextPost(idClass);
   }, [currentPage]);
-
   const showHandleCreate = (value) => {
     setShowCreate(value);
   };
@@ -73,7 +72,6 @@ const TeacherPostMyClass = () => {
     setShowUpdate(value);
     setShowUpdateIndex(null);
   };
-
   const featchPost = async (idClass) => {
     setLoading(false);
     try {
@@ -120,7 +118,6 @@ const TeacherPostMyClass = () => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-
   const clickDelete = async (id) => {
     try {
       await TeacherPostAPI.delete(id).then((respone) => {
@@ -131,7 +128,6 @@ const TeacherPostMyClass = () => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-
   const convertLongToDate = (longValue) => {
     const date = new Date(longValue);
     const format = `${date.getDate()}/${
@@ -461,8 +457,8 @@ const TeacherPostMyClass = () => {
                   </Button>
                 )}
               </div>
-            </div>{" "}
-          </div>{" "}
+            </div>
+          </div>
         </div>
       </div>
     </>

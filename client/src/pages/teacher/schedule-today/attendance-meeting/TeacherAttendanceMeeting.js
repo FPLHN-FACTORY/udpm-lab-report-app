@@ -36,7 +36,6 @@ const TeacherAttendanceMeeting = () => {
     document.title = "Bảng điều khiển - điểm danh";
     featchMeetingCheckDate(idMeeting);
   }, []);
-
   const fetchData = async (idClass) => {
     await Promise.all([
       await featchStudentClass(idClass),
@@ -44,7 +43,6 @@ const TeacherAttendanceMeeting = () => {
       await featchAttendance(idClass),
     ]);
   };
-
   const featchClass = async (idClass) => {
     try {
       await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
@@ -54,7 +52,6 @@ const TeacherAttendanceMeeting = () => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang");
     }
   };
-
   const featchAttendance = async (idClass) => {
     try {
       await TeacherAttendanceAPI.getAttendanceByIdMeeting(idMeeting).then(
@@ -71,10 +68,9 @@ const TeacherAttendanceMeeting = () => {
         }
       );
     } catch (error) {
-      alert(error.message);
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-
   const featInforStudent = async (idClass) => {
     try {
       if (checkAttendance) {
@@ -113,7 +109,6 @@ const TeacherAttendanceMeeting = () => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-
   const featchStudentClass = async (idClass) => {
     try {
       await TeacherStudentClassesAPI.getStudentInClasses(idClass).then(
@@ -125,10 +120,9 @@ const TeacherAttendanceMeeting = () => {
         }
       );
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang");
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-
   const featchMeetingCheckDate = async (id) => {
     setLoading(false);
     try {
@@ -139,12 +133,12 @@ const TeacherAttendanceMeeting = () => {
           fetchData(response.data.data.idClass);
         },
         (error) => {
-          setLoading(true);
           toast.error(error.response.data.message);
+          setLoading(true);
         }
       );
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang");
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
   useEffect(() => {
@@ -152,7 +146,6 @@ const TeacherAttendanceMeeting = () => {
       fetchData(idClass);
     }
   }, [loadingData]);
-
   const handleSave = async () => {
     try {
       let dataFind = { listAttendance: data };
@@ -164,7 +157,6 @@ const TeacherAttendanceMeeting = () => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-
   const data = useAppSelector(GetAttendanceMeeting);
   const columns = [
     {
@@ -314,7 +306,8 @@ const TeacherAttendanceMeeting = () => {
               >
                 Mặc định trạng thái điểm danh của sinh viên là "Có mặt". Giảng
                 viên chuyển từ "Có mặt" thành "Vắng mặt" nếu sinh viên vi phạm
-                một trong những nội quy như ra ngoài không lý do, mất trật tự,..
+                một trong những nội quy như ra ngoài không lý do, mất trật
+                tự,...
               </span>
             </div>
           </div>

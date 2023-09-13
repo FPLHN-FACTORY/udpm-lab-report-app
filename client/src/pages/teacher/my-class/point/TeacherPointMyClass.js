@@ -1,10 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./style-poin-my-class.css";
-import {
-  faFloppyDisk,
-  faMarker,
-  faUpload,
-} from "@fortawesome/free-solid-svg-icons";
+import { faFloppyDisk, faMarker } from "@fortawesome/free-solid-svg-icons";
 import { ControlOutlined } from "@ant-design/icons";
 import { Link, useParams } from "react-router-dom";
 import { Button, Row } from "antd";
@@ -22,9 +18,9 @@ import TablePoint from "./table-point-student/TablePoint";
 import LoadingIndicator from "../../../../helper/loading";
 import { toast } from "react-toastify";
 import ButtonExportExcel from "./export-excel/ButtonExportExcel";
+import ButtonImportExcel from "./import-excel/ButtonImportExcel";
 import { SetTTrueToggle } from "../../../../app/teacher/TeCollapsedSlice.reducer";
-
-const PointManagement = () => {
+const TeacherPointMyClass = () => {
   const { idClass } = useParams();
   const dispatch = useAppDispatch();
   const [classDetail, setClassDetail] = useState({});
@@ -33,15 +29,12 @@ const PointManagement = () => {
   const [listPoint, setListPoint] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingData, setLoadingData] = useState(false);
-
   dispatch(SetTTrueToggle());
-
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Bảng điều khiển - Bảng điểm";
     fetchData(idClass);
   }, []);
-
   const fetchData = async (idClass) => {
     await Promise.all([
       await featchStudentClass(idClass),
@@ -49,7 +42,6 @@ const PointManagement = () => {
       await featchPoint(idClass),
     ]);
   };
-
   const featchPoint = async (idClass) => {
     try {
       await TeacherPointAPI.getPointByIdClass(idClass).then((response) => {
@@ -67,7 +59,6 @@ const PointManagement = () => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-
   const featchStudentClass = async (idClass) => {
     try {
       await TeacherStudentClassesAPI.getStudentInClasses(idClass).then(
@@ -82,7 +73,6 @@ const PointManagement = () => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang");
     }
   };
-
   const featchStudentPoint = async (idClass) => {
     try {
       if (checkPoint) {
@@ -107,8 +97,8 @@ const PointManagement = () => {
           return {
             ...item1,
             idClass: idClass,
-            checkPointPhase1: "0",
-            checkPointPhase2: "0",
+            checkPointPhase1: parseFloat("0"),
+            checkPointPhase2: parseFloat("0"),
             finalPoint: parseFloat("0"),
           };
         });
@@ -122,7 +112,6 @@ const PointManagement = () => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-
   const featchClass = async (idClass) => {
     try {
       await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
@@ -137,7 +126,6 @@ const PointManagement = () => {
       fetchData(idClass);
     }
   }, [loadingData]);
-
   const handleSave = async () => {
     try {
       let dataFind = {
@@ -151,11 +139,9 @@ const PointManagement = () => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-
   const data = useAppSelector(GetPoint);
   return (
     <>
-      {" "}
       {!loading && <LoadingIndicator />}
       <div className="box-general-custom">
         <div className="title-meeting-managemnt-my-class">
@@ -239,6 +225,7 @@ const PointManagement = () => {
                   ĐIỂM DANH &nbsp;
                 </Link>
                 <Link
+                  to={`/teacher/my-class/point/${idClass}`}
                   id="menu-checked"
                   style={{
                     fontSize: "16px",
@@ -275,18 +262,7 @@ const PointManagement = () => {
               </Row>
               <Row style={{ marginTop: "10px" }}>
                 <ButtonExportExcel idClass={idClass} />
-                <Button
-                  style={{
-                    backgroundColor: "rgb(38, 144, 214)",
-                    color: "white",
-                  }}
-                >
-                  <FontAwesomeIcon
-                    icon={faUpload}
-                    style={{ marginRight: "7px" }}
-                  />
-                  Import điểm
-                </Button>
+                <ButtonImportExcel idClass={idClass} />
                 <Button
                   style={{
                     backgroundColor: "rgb(38, 144, 214)",
@@ -304,7 +280,7 @@ const PointManagement = () => {
                 </Button>
               </Row>
               <div style={{ marginTop: 20 }}>
-                <TablePoint></TablePoint>
+                <TablePoint />
               </div>
             </div>
           </div>
@@ -314,4 +290,4 @@ const PointManagement = () => {
   );
 };
 
-export default PointManagement;
+export default TeacherPointMyClass;

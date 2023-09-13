@@ -27,23 +27,19 @@ const CollapseTeam = ({ items }) => {
     setDescriptionsNote("");
     setLoading(true);
   }, []);
-
   useEffect(() => {
     featchHomeWorkNote(idTeamDetail);
   }, [idTeamDetail, activePanel]);
-
   const toggleCard = (index, item) => {
     setEdit(false);
     setActivePanel(index);
     setIdTeamDetail(item.id);
   };
-
   const handleCancel = () => {
     setEdit(false);
     toast.success("Hủy thành công");
     featchHomeWorkNote(idTeamDetail);
   };
-
   const clear = () => {
     setEdit(false);
     setActivePanel(null);
@@ -78,7 +74,6 @@ const CollapseTeam = ({ items }) => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-
   const update = async () => {
     try {
       let data = {
@@ -98,7 +93,6 @@ const CollapseTeam = ({ items }) => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-
   return (
     <div
       className="centered-collapse"

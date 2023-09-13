@@ -25,7 +25,6 @@ const MeetingInMyClass = () => {
   const { idClass } = useParams();
   const [countMeeting, setCountMeeting] = useState(0);
   const [classDetail, setClassDetail] = useState({});
-
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Bảng điều khiển - Buổi học";
@@ -67,7 +66,6 @@ const MeetingInMyClass = () => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-
   const convertLongToDate = (dateLong) => {
     const date = new Date(dateLong);
     const format = `${date.getDate()}/${
@@ -75,7 +73,6 @@ const MeetingInMyClass = () => {
     }/${date.getFullYear()}`;
     return format;
   };
-
   const dataMeeting = useAppSelector(GetMeeting);
   return (
     <div>

@@ -1,10 +1,13 @@
 package com.labreportapp.core.teacher.service.impl;
 
-import com.labreportapp.ServerApplication;
+import com.labreportapp.core.common.response.SimpleResponse;
+import com.labreportapp.core.teacher.excel.TeExcelImportPoint;
+import com.labreportapp.core.teacher.excel.TeExcelImportPointService;
 import com.labreportapp.core.teacher.model.request.Base.TePointExcel;
 import com.labreportapp.core.teacher.model.request.TeFindListPointRequest;
 import com.labreportapp.core.teacher.model.request.TeFindPointRequest;
 import com.labreportapp.core.teacher.model.request.TeFindStudentClasses;
+import com.labreportapp.core.teacher.model.response.TeExcelResponseMessage;
 import com.labreportapp.core.teacher.model.response.TePointRespone;
 import com.labreportapp.core.teacher.model.response.TeStudentCallApiResponse;
 import com.labreportapp.core.teacher.repository.TePointRepository;
@@ -15,29 +18,25 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.Synchronized;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.ClientAnchor;
-import org.apache.poi.ss.usermodel.Drawing;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.ss.usermodel.Picture;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.util.IOUtils;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author hieundph25894
@@ -50,6 +49,9 @@ public class TePointSeviceImpl implements TePointSevice {
 
     @Autowired
     private TeStudentClassesService teStudentClassesService;
+
+    @Autowired
+    private TeExcelImportPointService tePointImportService;
 
     @Override
     public List<TePointRespone> getPointStudentById(String idClass) {
@@ -169,6 +171,108 @@ public class TePointSeviceImpl implements TePointSevice {
             workbook.close();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public TeExcelResponseMessage importExcel(MultipartFile file, String idClass) {
+        TeExcelResponseMessage teExcelResponseMessage = new TeExcelResponseMessage();
+        try {
+            List<TeExcelImportPoint> list = tePointImportService.importData(file, idClass);
+            if (list.size() == 0) {
+                teExcelResponseMessage.setStatus(false);
+                teExcelResponseMessage.setMessage("file excel trống !");
+                return teExcelResponseMessage;
+            }
+            ConcurrentHashMap<String, SimpleResponse> mapPointStudent = new ConcurrentHashMap<>();
+            addDataMapsPointStudent(mapPointStudent, idClass);
+            ConcurrentHashMap<String, Point> mapPointStudentDB = new ConcurrentHashMap<>();
+            addDataMapsPointStudentDB(mapPointStudentDB, idClass);
+            ConcurrentHashMap<String, Point> pointUpdate = new ConcurrentHashMap<>();
+            teExcelResponseMessage.setStatus(true);
+            list.parallelStream().forEach(point -> {
+                String regexName = "^[^0-9!@#$%^&*()_+|~=`{}\\[\\]:\";'<>?,.\\/\\\\]*$";
+                String regexEmail = "^[a-zA-Z0-9._%+-]+@fpt.edu.vn$";
+                String regexDouble = "^(?:[0-9](?:\\.\\d*)?|10(?:\\.0*)?)$";
+                if (point.getName().isEmpty()) {
+                    teExcelResponseMessage.setStatus(false);
+                    teExcelResponseMessage.setMessage("tên sinh viên không được để trống !");
+                    return;
+                }
+                if (!point.getName().matches(regexName)) {
+                    teExcelResponseMessage.setStatus(false);
+                    teExcelResponseMessage.setMessage("tên sinh viên sai định dạng !");
+                    return;
+                }
+                if (point.getEmail().isEmpty()) {
+                    teExcelResponseMessage.setStatus(false);
+                    teExcelResponseMessage.setMessage("email không được để trống !");
+                    return;
+                }
+                if (point.getCheckPointPhase1().isEmpty()) {
+                    teExcelResponseMessage.setStatus(false);
+                    teExcelResponseMessage.setMessage("điểm giai đoạn 1 không được để trống !");
+                    return;
+                }
+                if (point.getCheckPointPhase2().isEmpty()) {
+                    teExcelResponseMessage.setStatus(false);
+                    teExcelResponseMessage.setMessage("điểm giai đoạn 2 không được để trống !");
+                    return;
+                }
+                if (!point.getCheckPointPhase1().matches(regexDouble)) {
+                    teExcelResponseMessage.setStatus(false);
+                    teExcelResponseMessage.setMessage("điểm giai đoạn 1 và giai đoạn 2 phải là số từ 0 -> 10 !");
+                    return;
+                }
+                if (!point.getCheckPointPhase2().matches(regexDouble)) {
+                    teExcelResponseMessage.setStatus(false);
+                    teExcelResponseMessage.setMessage("điểm giai đoạn 1 và giai đoạn 2 phải là số từ 0 -> 10 !");
+                    return;
+                }
+                SimpleResponse simpleResponse = mapPointStudent.get(point.getEmail());
+                if (simpleResponse == null) {
+                    teExcelResponseMessage.setStatus(false);
+                    teExcelResponseMessage.setMessage("email của sinh viên không tồn tại !");
+                    return;
+                }
+                Point pointUpd = mapPointStudentDB.get(simpleResponse.getId());
+                pointUpd.setCheckPointPhase1(Double.parseDouble((point.getCheckPointPhase1())));
+                pointUpd.setCheckPointPhase2(Double.parseDouble((point.getCheckPointPhase2())));
+                pointUpd.setFinalPoint(Double.parseDouble(String.valueOf((Double.parseDouble((point.getCheckPointPhase1())) + Double.parseDouble((point.getCheckPointPhase2()))) / 2)));
+                pointUpdate.put(pointUpd.getStudentId(), pointUpd);
+            });
+            if (teExcelResponseMessage.getStatus() == true) {
+                tePointRepository.saveAll(pointUpdate.values());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            teExcelResponseMessage.setStatus(false);
+            teExcelResponseMessage.setMessage("lỗi hệ thống !");
+            return teExcelResponseMessage;
+        }
+        return teExcelResponseMessage;
+    }
+
+    public void addDataMapsPointStudent(ConcurrentHashMap<String, SimpleResponse> mapAll, String idClass) {
+        List<SimpleResponse> listStudent = teStudentClassesService.searchAllStudentByIdClass(idClass);
+        getAllPutMapPoint(mapAll, listStudent);
+    }
+
+    public void getAllPutMapPoint
+            (ConcurrentHashMap<String, SimpleResponse> mapSimple, List<SimpleResponse> listStudent) {
+        for (SimpleResponse student : listStudent) {
+            mapSimple.put(student.getEmail().toLowerCase(), student);
+        }
+    }
+
+    public void addDataMapsPointStudentDB(ConcurrentHashMap<String, Point> mapPointDB, String idClass) {
+        List<Point> listPoint = tePointRepository.getAllPointByIdClassImport(idClass);
+        getAllPutMapPointDB(mapPointDB, listPoint);
+    }
+
+    public void getAllPutMapPointDB(ConcurrentHashMap<String, Point> mapPoint, List<Point> listPointDB) {
+        for (Point point : listPointDB) {
+            mapPoint.put(point.getStudentId(), point);
         }
     }
 

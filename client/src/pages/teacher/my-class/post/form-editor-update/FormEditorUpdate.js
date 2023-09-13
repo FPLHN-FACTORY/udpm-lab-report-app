@@ -13,7 +13,6 @@ function EditorUpdate({ obj, showUpdate }) {
   useEffect(() => {
     setDescriptions(obj.descriptions);
   }, []);
-
   const config = {
     readonly: false,
     showCharsCounter: false,
@@ -22,9 +21,7 @@ function EditorUpdate({ obj, showUpdate }) {
     placeholder: "Chỉnh sửa bài viết...",
     showFullscreen: false,
     showAbout: false,
-    // enter: "Br",
   };
-
   const update = () => {
     let empty = 0;
     if (descriptions.trim() === "<p><br></p>") {
@@ -76,7 +73,6 @@ function EditorUpdate({ obj, showUpdate }) {
         config={config}
         onBlur={(value) => {
           setDescriptions(value);
-          // handleEditorBlur(value);
         }}
       />
       <div style={{ paddingTop: "15px", float: "right" }}>
@@ -104,5 +100,4 @@ function EditorUpdate({ obj, showUpdate }) {
     </div>
   );
 }
-
 export default EditorUpdate;

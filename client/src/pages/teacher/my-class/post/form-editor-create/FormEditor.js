@@ -12,11 +12,9 @@ function Editor({ idTeacher, idClass, showCreate }) {
   const [descriptionss, setDescriptionss] = useState("<p><br></p>");
   const dispatch = useAppDispatch();
   const [listMail, setListMail] = useState([]);
-
   useEffect(() => {
     featchStudentClass(idClass);
   }, []);
-
   const config = {
     readonly: false,
     showCharsCounter: false,
@@ -25,9 +23,7 @@ function Editor({ idTeacher, idClass, showCreate }) {
     placeholder: "Nhập bài viết mới...",
     showFullscreen: false,
     showAbout: false,
-    // enter: "Row",
   };
-
   const create = () => {
     let empty = 0;
     if (descriptionss.trim() === "<p><br></p>") {
@@ -75,7 +71,6 @@ function Editor({ idTeacher, idClass, showCreate }) {
       );
     }
   };
-
   const featchStudentClass = async (idClass) => {
     try {
       await TeacherStudentClassesAPI.getStudentInClasses(idClass).then(
@@ -88,7 +83,6 @@ function Editor({ idTeacher, idClass, showCreate }) {
       alert(error.message);
     }
   };
-
   const featchSentMaillToStudent = async (body) => {
     try {
       let data = {
@@ -108,7 +102,6 @@ function Editor({ idTeacher, idClass, showCreate }) {
       alert(error.message);
     }
   };
-
   return (
     <div>
       <JoditEditor

@@ -13,7 +13,6 @@ const TablePoint = () => {
   const [final, setFinal] = useState(0);
   const dispatch = useAppDispatch();
   const dataSource = useAppSelector(GetPoint);
-
   const handlePoint = (phase1, phase2, record) => {
     const dataNew = dataSource.map((item1) => {
       if (
@@ -59,7 +58,6 @@ const TablePoint = () => {
     });
     dispatch(SetPoint(dataNew));
   };
-
   const columns = [
     {
       title: "#",
@@ -174,7 +172,6 @@ const TablePoint = () => {
               }
             }}
             type="number"
-            pattern="^[0-9]+(\.[0-9]{1,2})?$"
           />
         );
       },
@@ -205,7 +202,6 @@ const TablePoint = () => {
               }
             }}
             type="number"
-            pattern="^[0-9]+(\.[0-9]{1,2})?$"
           />
         );
       },
@@ -263,6 +259,7 @@ const TablePoint = () => {
             textAlign: "center",
             marginTop: "100px",
             fontSize: "15px",
+            color: "red",
           }}
         >
           Lớp học chưa có học sinh nào
