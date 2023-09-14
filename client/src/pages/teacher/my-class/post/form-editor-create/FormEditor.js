@@ -87,7 +87,7 @@ function Editor({ idTeacher, idClass, showCreate }) {
     try {
       let data = {
         titleEmail:
-          "Giảng viên " + giangVienCurrent.name + " đã thêm một thông báo mới",
+          "Giảng viên " + giangVienCurrent.name + " đã thêm một thông báo mới.",
         subject: "Thông báo test post của Hiệu đẹp dai",
         toEmail: listMail,
         body: body,

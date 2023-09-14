@@ -19,6 +19,16 @@
   padding: 20px;
   box-shadow: 0 0 10px rgb(228, 227, 227);
 }
+.box-attendance {
+  margin: 15px 10px 15px 13px;
+  background-color: rgb(255, 255, 255);
+  width: 98%;
+  min-height: 575px;
+  height: 1200px;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgb(228, 227, 227);
+}
 .box-four {
   padding: 25px;
   padding-top: 5px;
@@ -149,6 +159,10 @@
   background: linear-gradient(to right, #d2b156 0%, #d2b156 100%);
 }
 .ant-table-wrapper .ant-table-thead > tr > th {
+  background-color: #d2b156;
+  color: white;
+}
+.ant-table-wrapper .ant-table-thead > tr > td {
   background-color: #d2b156;
   color: white;
 }

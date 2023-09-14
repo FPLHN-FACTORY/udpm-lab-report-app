@@ -22,4 +22,7 @@ public interface TeAttendanceRespone {
     @Value("#{target.meeting_id}")
     String getIdMeeting();
 
+    @Value("#{target.meeting_date}")
+    Long getMeetingDate();
+
 }

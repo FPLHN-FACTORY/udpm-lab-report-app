@@ -1,6 +1,7 @@
 package com.labreportapptool;
 
 import com.labreportapp.entity.Activity;
+import com.labreportapp.entity.Attendance;
 import com.labreportapp.entity.Class;
 import com.labreportapp.entity.ClassConfiguration;
 import com.labreportapp.entity.HomeWork;
@@ -15,6 +16,7 @@ import com.labreportapp.infrastructure.constant.ClassPeriod;
 import com.labreportapp.infrastructure.constant.Level;
 import com.labreportapp.infrastructure.constant.MeetingPeriod;
 import com.labreportapp.infrastructure.constant.RoleTeam;
+import com.labreportapp.infrastructure.constant.StatusAttendance;
 import com.labreportapp.infrastructure.constant.StatusTeam;
 import com.labreportapp.infrastructure.constant.TypeMeeting;
 import com.labreportapp.repository.ActivityRepository;
@@ -421,6 +423,33 @@ public class DBGenerator implements CommandLineRunner {
         meeting2.setTypeMeeting(TypeMeeting.OFFLINE);
         meeting2.setAddress("");
         meeting2.setId(meetingRepository.save(meeting2).getId());
+
+        Meeting meeting1Class = new Meeting();
+        meeting1Class.setName("Buổi 1");
+        meeting1Class.setMeetingDate(new Date().getTime()- 86400000);
+        meeting1Class.setMeetingPeriod(MeetingPeriod.CA_2);
+        meeting1Class.setDescriptions("Buổi 1 lớp thầy Nguyên VV4 _ 001 J5_NGUYENVV4_001");
+        meeting1Class.setClassId(class3.getId());
+        meeting1Class.setTypeMeeting(TypeMeeting.ONLINE);
+        meeting1Class.setAddress("https://meet.google.com/kea-hhgi-yix");
+        meeting1Class.setId(meetingRepository.save(meeting1Class).getId());
+
+        Attendance attendanceMeeting1 = new Attendance();
+        attendanceMeeting1.setMeetingId(meeting1Class.getId());
+        attendanceMeeting1.setName(meeting1Class.getName());
+        attendanceMeeting1.setStudentId(studentClasses21.getStudentId());
+        attendanceMeeting1.setStatus(StatusAttendance.YES);
+        attendanceMeeting1.setId(attendanceRepository.save(attendanceMeeting1).getId());
+
+        Meeting meeting2Class = new Meeting();
+        meeting2Class.setName("Buổi 2");
+        meeting2Class.setMeetingDate(new Date().getTime());
+        meeting2Class.setMeetingPeriod(MeetingPeriod.CA_2);
+        meeting2Class.setDescriptions("Kỷ luật tốt Giữ gìn vệ sinh thật tốt Khiêm tốn, thật thà, dũng cảm");
+        meeting2Class.setClassId(class3.getId());
+        meeting2Class.setTypeMeeting(TypeMeeting.OFFLINE);
+        meeting2Class.setAddress("");
+        meeting2Class.setId(meetingRepository.save(meeting2Class).getId());
 
         Meeting meeting3 = new Meeting();
         meeting3.setName("Buổi 3");

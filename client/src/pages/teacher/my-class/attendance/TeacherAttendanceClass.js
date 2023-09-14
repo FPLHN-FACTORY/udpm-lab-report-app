@@ -1,40 +1,72 @@
 import { useParams } from "react-router";
 import { ControlOutlined, UnorderedListOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome } from "@fortawesome/free-solid-svg-icons";
-import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/TeacherStudentClasses.api";
 import { useEffect, useState } from "react";
-import { Table } from "antd";
 import { useAppDispatch } from "../../../../app/hook";
 import { SetTTrueToggle } from "../../../../app/teacher/TeCollapsedSlice.reducer";
+import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
+import { toast } from "react-toastify";
+import { TeacherMeetingAPI } from "../../../../api/teacher/meeting/TeacherMeeting.api";
+import { TeacherAttendanceAPI } from "../../../../api/teacher/attendance/TeacherAttendance.api";
+import LoadingIndicator from "../../../../helper/loading";
 const TeacherAttendanceClass = () => {
   const { idClass } = useParams();
   const dispatch = useAppDispatch();
   dispatch(SetTTrueToggle());
-  const [listStudentClassAPI, setListStudentClassAPI] = useState([]);
-
+  const [data, setData] = useState([]);
+  const [column, setColumn] = useState([]);
+  const [classDetail, setClassDetail] = useState({});
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
-    featchStudentClass(idClass);
+    featchClass(idClass);
+    featchColumn(idClass);
+    featchTable(idClass);
   }, []);
-
-  const featchStudentClass = async (idClass) => {
+  const featchColumn = async (idClass) => {
     try {
-      await TeacherStudentClassesAPI.getStudentInClasses(idClass).then(
-        (responese) => {
-          const listAPI = responese.data.data.map((item) => {
-            return { ...item };
-          });
-          setListStudentClassAPI(listAPI);
+      await TeacherMeetingAPI.getColumnMeetingByIdClass(idClass).then(
+        (response) => {
+          setColumn(response.data.data);
         }
       );
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang");
+      toast.error(error.data.message);
     }
   };
-
+  const featchTable = async (idClass) => {
+    try {
+      await TeacherAttendanceAPI.getAllAttendanceByIdClass(idClass)
+        .then((responese) => {
+          setData(responese.data.data);
+          setLoading(true);
+        })
+        .catch((err) => {
+          toast.error(err.data.message);
+        });
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+  const featchClass = async (idClass) => {
+    try {
+      await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
+        setClassDetail(responese.data.data);
+      });
+    } catch (error) {
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+    }
+  };
+  const convertLongToDate = (dateLong) => {
+    const date = new Date(dateLong);
+    const format = `${date.getDate()}/${
+      date.getMonth() + 1
+    }/${date.getFullYear()}`;
+    return format;
+  };
   return (
     <>
+      {" "}
+      {!loading && <LoadingIndicator />}
       <div className="box-one">
         <Link to="/teacher/my-class" style={{ color: "black" }}>
           <span style={{ fontSize: "18px", paddingLeft: "20px" }}>
@@ -49,11 +81,10 @@ const TeacherAttendanceClass = () => {
           </span>
         </Link>
       </div>
-
       <div className="box-two-student-in-my-class">
         <div
           className="box-two-student-in-my-class-son"
-          style={{ height: "580px" }}
+          style={{ height: "auto" }}
         >
           <div className="button-menu">
             <div>
@@ -137,13 +168,29 @@ const TeacherAttendanceClass = () => {
               >
                 {" "}
                 <span style={{ fontSize: "14px", padding: "10px" }}>
-                  aaaaaaa
+                  {classDetail.code}
                 </span>
               </div>
               <hr />
             </div>
           </div>
-          <div className="menu-teacher-search">
+          <div className="info-team">
+            <div className="group-info">
+              <span
+                className="group-info-item"
+                style={{ marginTop: "13px", marginBottom: "15px" }}
+              >
+                Mã lớp: &nbsp;{classDetail.code}
+              </span>
+              <span
+                className="group-info-item"
+                style={{ marginTop: "13px", marginBottom: "15px" }}
+              >
+                Mô tả: &nbsp;{classDetail.descriptions}
+              </span>
+            </div>
+          </div>
+          <div className="">
             <div>
               <div style={{ margin: "15px 0px 15px 0px" }}>
                 {" "}
@@ -155,13 +202,74 @@ const TeacherAttendanceClass = () => {
                   Chi tiết điểm danh
                 </span>
               </div>
-              <div className="data-table">
-                <Table
-                  rowKey="id"
-                  // columns={columns}
-                  // dataSource={dataSource}
-                  pagination={false}
-                />
+              <div style={{ height: "auto" }}>
+                <table className="ant-table-wrapper">
+                  <thead className="ant-table-thead">
+                    <tr>
+                      <th>#</th>
+                      <th>Tên sinh viên</th>
+                      <th>Email</th>
+                      {column.map((item, index) => (
+                        <th
+                          key={index}
+                          style={{
+                            maxWidth: "100px",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                        >
+                          {convertLongToDate(item.meetingDate)}
+                          <br></br> {item.nameMeeting}
+                        </th>
+                      ))}
+                      <th>Vắng</th>
+                      <th>Tỷ lệ</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.map((item, rowIndex) => {
+                      let countAbsent = 0;
+                      let countMeeting = 0;
+                      return (
+                        <tr key={rowIndex}>
+                          <td>{rowIndex + 1}</td>
+                          <td>{item.name}</td>
+                          <td>{item.email}</td>
+                          {item.listAttendance.map((column, colIndex) => {
+                            let text = "";
+                            countMeeting++;
+                            if (column.statusAttendance === "1") {
+                              countAbsent++;
+                              text = "A";
+                            } else {
+                              text = "P";
+                            }
+                            return (
+                              <>
+                                <td key={colIndex}>
+                                  {column.statusAttendance === "0" ? (
+                                    <span style={{ color: "green" }}>
+                                      {text}
+                                    </span>
+                                  ) : column.statusAttendance === "1" ? (
+                                    <span style={{ color: "red" }}>{text}</span>
+                                  ) : (
+                                    <span>-</span>
+                                  )}
+                                </td>
+                              </>
+                            );
+                          })}
+                          <td>
+                            {parseFloat(countAbsent / countMeeting) * 100}%
+                          </td>
+                          <td>{countAbsent + `/` + countMeeting}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>

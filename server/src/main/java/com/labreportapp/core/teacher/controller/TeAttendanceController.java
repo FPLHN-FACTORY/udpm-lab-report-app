@@ -5,6 +5,7 @@ import com.labreportapp.core.teacher.model.request.TeFindAttendanceRequest;
 import com.labreportapp.core.teacher.model.request.TeFindListAttendanceRequest;
 import com.labreportapp.core.teacher.model.request.TeFindMeetingRequest;
 import com.labreportapp.core.teacher.model.response.TeAttendanceRespone;
+import com.labreportapp.core.teacher.model.response.TeAttendanceStudentAllRespone;
 import com.labreportapp.core.teacher.model.response.TeMeetingRespone;
 import com.labreportapp.core.teacher.service.TeAttendanceSevice;
 import com.labreportapp.entity.Attendance;
@@ -41,6 +42,12 @@ public class TeAttendanceController {
     public ResponseObject createOrUpdate(@RequestBody TeFindListAttendanceRequest request) {
         List<Attendance> list = teAttendanceSevice.addOrUpdateAttendance(request);
         return new ResponseObject(list);
+    }
+
+    @GetMapping("/attendance-all/{idClass}")
+    public ResponseObject getAllAttendanceByIdClass(@PathVariable("idClass") String idClass) {
+        List<TeAttendanceStudentAllRespone> listMeger = teAttendanceSevice.getListAttendanceStudentAllMeeting(idClass);
+        return new ResponseObject(listMeger);
     }
 
 }

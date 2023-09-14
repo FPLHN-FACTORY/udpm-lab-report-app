@@ -2,6 +2,7 @@ package com.labreportapp.core.teacher.service;
 
 import com.labreportapp.core.teacher.model.request.TeFindListAttendanceRequest;
 import com.labreportapp.core.teacher.model.response.TeAttendanceRespone;
+import com.labreportapp.core.teacher.model.response.TeAttendanceStudentAllRespone;
 import com.labreportapp.entity.Attendance;
 
 import java.util.List;
@@ -15,4 +16,6 @@ public interface TeAttendanceSevice {
 
     List<Attendance> addOrUpdateAttendance(final TeFindListAttendanceRequest request);
 
+    List<TeAttendanceStudentAllRespone> getListAttendanceStudentAllMeeting(String idClass);
+    
 }

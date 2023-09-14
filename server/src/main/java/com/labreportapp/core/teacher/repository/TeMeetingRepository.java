@@ -3,6 +3,7 @@ package com.labreportapp.core.teacher.repository;
 import com.labreportapp.core.teacher.model.request.TeFindMeetingRequest;
 import com.labreportapp.core.teacher.model.request.TeFindScheduleMeetingClassRequest;
 import com.labreportapp.core.teacher.model.response.TeHomeWorkAndNoteMeetingRespone;
+import com.labreportapp.core.teacher.model.response.TeMeetingCustomToAttendanceRespone;
 import com.labreportapp.core.teacher.model.response.TeMeetingRespone;
 import com.labreportapp.core.teacher.model.response.TeScheduleMeetingClassRespone;
 import com.labreportapp.entity.Meeting;
@@ -84,5 +85,18 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
              ORDER BY  m.meeting_date DESC
             """, nativeQuery = true)
     List<TeScheduleMeetingClassRespone> searchScheduleToDayByIdTeacherAndMeetingDate(@Param("req") TeFindScheduleMeetingClassRequest req);
+
+    @Query(value = """
+            SELECT  
+            m.id as id,
+            m.name as name,
+            m.class_id as class_id,
+            m.meeting_date as meeting_date
+            FROM meeting m
+            JOIN class c ON c.id = m.class_id
+            WHERE m.class_id = :#{#idClass}
+            ORDER BY m.meeting_date ASC
+                     """, nativeQuery = true)
+    List<TeMeetingCustomToAttendanceRespone> findMeetingCustomToAttendanceByIdClass(@Param("idClass") String idClass);
 
 }

@@ -133,7 +133,6 @@ const TeacherAttendanceMeeting = () => {
           fetchData(response.data.data.idClass);
         },
         (error) => {
-          toast.error(error.response.data.message);
           setLoading(true);
         }
       );

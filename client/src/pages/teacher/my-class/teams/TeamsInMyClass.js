@@ -179,7 +179,6 @@ const TeamsInMyClass = () => {
       },
       width: "40%",
     },
-
     {
       title: "Ngày tạo",
       dataIndex: "createdDate",
