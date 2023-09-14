@@ -37,4 +37,7 @@ public interface TeDetailClassRespone {
     @Value("#{target.semesterName}")
     String getSemesterName();
 
+    @Value("#{target.status_class}")
+    Integer getStatusClass();
+
 }

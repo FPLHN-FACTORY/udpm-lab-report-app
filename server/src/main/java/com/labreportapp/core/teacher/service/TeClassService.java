@@ -4,6 +4,8 @@ import com.labreportapp.core.common.base.PageableObject;
 import com.labreportapp.core.teacher.model.request.TeFindClassRequest;
 import com.labreportapp.core.teacher.model.response.TeClassResponse;
 import com.labreportapp.core.teacher.model.response.TeDetailClassRespone;
+import com.labreportapp.core.teacher.model.response.TeFindUpdateStatusClassRequest;
+import com.labreportapp.entity.Class;
 
 import java.util.List;
 
@@ -18,4 +20,7 @@ public interface TeClassService {
 
     List<TeClassResponse> getClassClosestToTheDateToSemester(String idTeacher);
 
+    Class updateStatusClass(final TeFindUpdateStatusClassRequest request);
+
+    Class randomPassword(String idClass);
 }

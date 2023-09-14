@@ -44,7 +44,6 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
     setCheckDataStudent(false);
     onCancel.handleCancelModalCreateSusscess();
   };
-
   const cancelFaild = () => {
     setErrorName("");
     const objFilter = dataStudentClasses.map((item2) => {
@@ -57,7 +56,6 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
     featchDataStudent();
     onCancel.handleCancelModalCreateFaild();
   };
-
   useEffect(() => {
     if (visible === true) {
       setSubjectName(team.subjectName);
@@ -69,21 +67,23 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
       setListDeleteTemp([]);
       setListShowTable([]);
       featchDataStudent();
+    } else {
+      setSubjectName("");
+      setCode("");
+      setName("");
+      setErrorName("");
     }
   }, [visible]);
-
   useEffect(() => {
     if (visible === true) {
       featchDataStudentChange();
     }
   }, [listStudentsChange]);
-
   useEffect(() => {
     if (checkDataStudent === true) {
       featchDataStudent();
     }
   }, [checkDataStudent]);
-
   const featchDataStudentChange = () => {
     const listMulty = listStudentNotJoin
       .filter((item1) =>
@@ -199,13 +199,10 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
           setCheckDataStudent(true);
           cancelSuccess();
         },
-        (error) => {
-          toast.error(error.response.data.message);
-        }
+        (error) => {}
       );
     }
   };
-
   const dataStudentClasses = useAppSelector(GetStudentClasses);
   const columns = [
     {

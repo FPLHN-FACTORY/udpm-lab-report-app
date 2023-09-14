@@ -149,7 +149,6 @@ const CollapseTeam = ({ items }) => {
             <div className="info-content" onClick={() => setEdit(true)}>
               <Row gutter={16}>
                 <Col span={12}>
-                  {" "}
                   <span style={{ color: "black" }}>Nhận xét:</span>
                   <TextArea
                     rows={4}
@@ -163,7 +162,6 @@ const CollapseTeam = ({ items }) => {
                   />
                 </Col>
                 <Col span={12}>
-                  {" "}
                   <span style={{ color: "black", fontFamily: "unset" }}>
                     Bài tập về nhà:
                   </span>
@@ -207,6 +205,18 @@ const CollapseTeam = ({ items }) => {
             )}
           </Panel>
         ))}
+        {items.length === 0 && (
+          <p
+            style={{
+              textAlign: "center",
+              marginTop: "100px",
+              fontSize: "15px",
+              color: "red",
+            }}
+          >
+            Lớp học chưa có nhóm !
+          </p>
+        )}
       </Collapse>
     </div>
   );

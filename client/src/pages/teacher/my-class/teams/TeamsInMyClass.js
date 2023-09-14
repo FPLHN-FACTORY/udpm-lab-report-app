@@ -254,7 +254,7 @@ const TeamsInMyClass = () => {
       <div className="box-two-student-in-my-class">
         <div
           className="box-two-student-in-my-class-son"
-          style={{ height: "580px" }}
+          style={{ minHeight: "555px" }}
         >
           <div className="button-menu-teacher">
             <div>
@@ -335,8 +335,13 @@ const TeamsInMyClass = () => {
                   float: "right",
                 }}
               >
-                {" "}
-                <span style={{ fontSize: "14px", padding: "10px" }}>
+                <span
+                  style={{
+                    fontSize: "14px",
+                    padding: "15px",
+                    fontWeight: 500,
+                  }}
+                >
                   {classDetail.code}
                 </span>
               </div>

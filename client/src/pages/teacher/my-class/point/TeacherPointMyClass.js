@@ -164,11 +164,10 @@ const TeacherPointMyClass = () => {
         <div className="box-general" style={{ padding: 25, marginTop: 0 }}>
           <div
             className="box-son-general"
-            style={{ marginTop: 0, padding: "20px" }}
+            style={{ marginTop: 0, padding: "20px", minHeight: "555px" }}
           >
             <div className="button-menu">
               <div>
-                {" "}
                 <Link
                   to={`/teacher/my-class/post/${idClass}`}
                   className="custom-link"
@@ -246,8 +245,13 @@ const TeacherPointMyClass = () => {
                     float: "right",
                   }}
                 >
-                  {" "}
-                  <span style={{ fontSize: "14px", padding: "10px" }}>
+                  <span
+                    style={{
+                      fontSize: "14px",
+                      padding: "15px",
+                      fontWeight: 500,
+                    }}
+                  >
                     {classDetail.code}
                   </span>
                 </div>
@@ -279,7 +283,7 @@ const TeacherPointMyClass = () => {
                   Lưu bảng điểm
                 </Button>
               </Row>
-              <div style={{ marginTop: 20 }}>
+              <div style={{ margin: "20px 0px 10px 0px" }}>
                 <TablePoint />
               </div>
             </div>

@@ -19,14 +19,12 @@ const ModalDetailTeam = ({ visible, onCancel, team, idClass, click }) => {
       setListShowTable([]);
     }
   }, [visible]);
-
   const featchDataStudent = async () => {
     const listFilter = dataStudentClasses.filter(
       (item) => item.idTeam === team.id
     );
     setListShowTable(listFilter);
   };
-
   const columns = [
     {
       title: "#",

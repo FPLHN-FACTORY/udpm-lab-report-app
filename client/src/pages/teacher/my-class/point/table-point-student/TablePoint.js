@@ -1,3 +1,4 @@
+import "./styletablePoint.css";
 import { Button, Input, Table, message } from "antd";
 import { useAppDispatch, useAppSelector } from "../../../../../app/hook";
 import {
@@ -171,6 +172,14 @@ const TablePoint = () => {
                 );
               }
             }}
+            readOnly
+            onDoubleClick={(e) => {
+              e.target.readOnly = false;
+              e.target.select();
+            }}
+            onBlur={(e) => {
+              e.target.readOnly = true;
+            }}
             type="number"
           />
         );
@@ -200,6 +209,14 @@ const TablePoint = () => {
                   "Điểm phải là một số dương lớn hơn 0 và nhỏ hơn 10 !"
                 );
               }
+            }}
+            readOnly
+            onDoubleClick={(e) => {
+              e.target.readOnly = false;
+              e.target.select();
+            }}
+            onBlur={(e) => {
+              e.target.readOnly = true;
             }}
             type="number"
           />

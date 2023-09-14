@@ -87,16 +87,15 @@ const TeamInMeeting = () => {
               style={{ color: "black", fontSize: 18, marginRight: "5px" }}
             />
             {meeting.name}
-          </span>{" "}
+          </span>
         </div>
         <div
           className="box-two-student-in-my-class-son"
-          style={{ minHeight: "580px", marginTop: "25px" }}
+          style={{ minHeight: "505px", marginTop: "25px" }}
         >
           <div style={{ marginLeft: "30px" }}>
             <Row gutter={16}>
               <Col span={20}>
-                {" "}
                 <div className="title-left-meeting">
                   <div className="box-icon-detail">
                     <BookOutlined style={{ color: "white", fontSize: 21 }} />

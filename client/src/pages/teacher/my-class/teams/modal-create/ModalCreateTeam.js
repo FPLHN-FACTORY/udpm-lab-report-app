@@ -46,7 +46,6 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
   const cancelFaild = () => {
     onCancel.handleCancelModalCreateFaild();
   };
-
   useEffect(() => {
     if (visible === true) {
       setErrorMembers("");
@@ -63,7 +62,6 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
       fetchData(idClass);
     }
   }, [visible]);
-
   useEffect(() => {
     if (visitedCreate === false) {
       fetchData(idClass);
@@ -118,7 +116,6 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-
   const featchDataTable = () => {
     const list = dataStudentClasses
       .filter((item1) => {
@@ -129,11 +126,9 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
       });
     setDataTable(list);
   };
-
   const handleChangeStudents = (idStudent) => {
     setListStudentsChange(idStudent);
   };
-
   const handleRoleChange = (id, value) => {
     let updatedListInfo = dataTable.map((record) => {
       if (record.idStudent === id) {
@@ -148,7 +143,6 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
     });
     setDataTable(updatedListInfo);
   };
-
   const create = () => {
     let check = 0;
     if (name.trim() === "") {
@@ -192,13 +186,10 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
           setCheckDataStudent(true);
           cancelSuccess();
         },
-        (error) => {
-          toast.error(error.response.data.message);
-        }
+        (error) => {}
       );
     }
   };
-
   const columns = [
     {
       title: "#",

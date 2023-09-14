@@ -17,6 +17,7 @@ import com.labreportapp.infrastructure.constant.Level;
 import com.labreportapp.infrastructure.constant.MeetingPeriod;
 import com.labreportapp.infrastructure.constant.RoleTeam;
 import com.labreportapp.infrastructure.constant.StatusAttendance;
+import com.labreportapp.infrastructure.constant.StatusClass;
 import com.labreportapp.infrastructure.constant.StatusTeam;
 import com.labreportapp.infrastructure.constant.TypeMeeting;
 import com.labreportapp.repository.ActivityRepository;
@@ -119,7 +120,7 @@ public class DBGenerator implements CommandLineRunner {
         activity2.setId(activityRepository.save(activity2).getId());
 
         Class class1 = new Class();
-        class1.setCode("J6_NGUYENVV4_123");
+        class1.setCode("IT17325");
         class1.setClassPeriod(ClassPeriod.CA_3);
         class1.setStartTime(new Date().getTime() + 50000);
         class1.setClassSize(19);
@@ -127,24 +128,27 @@ public class DBGenerator implements CommandLineRunner {
         class1.setActivityId(activity1.getId());
         class1.setTeacherId("6f0e60a6-a3a8-45d3-b6e6-d7632eb64c1a");
         class1.setDescriptions("Lớp làm trước đồ án tốt nghiệp bán hàng");
+        class1.setStatusClass(StatusClass.OPEN);
         class1.setId(classRepository.save(class1).getId());
 
         Class class3 = new Class();
-        class3.setCode("J5_NGUYENVV4_001");
+        class3.setCode("IT17326");
         class3.setClassPeriod(ClassPeriod.CA_5);
         class3.setStartTime(new Date().getTime() + 50000);
         class3.setClassSize(0);
         class3.setPassword("000000");
+        class3.setStatusClass(StatusClass.OPEN);
         class3.setActivityId(activity2.getId());
         class3.setTeacherId("6f0e60a6-a3a8-45d3-b6e6-d7632eb64c1a");
         class3.setDescriptions("Lớp làm đồ án tốt nghiệp web bán hàng");
         class3.setId(classRepository.save(class3).getId());
 
         Class class2 = new Class();
-        class2.setCode("J3_HANGNT169_123");
+        class2.setCode("IT17317");
         class2.setClassPeriod(ClassPeriod.CA_5);
         class2.setStartTime(new Date().getTime() + 50000);
         class2.setClassSize(0);
+        class2.setStatusClass(StatusClass.OPEN);
         class2.setPassword("123456");
         class2.setActivityId(activity1.getId());
         class2.setTeacherId("99b84d22-2edb-4ede-a5c4-ec78f4791fee");
@@ -405,7 +409,7 @@ public class DBGenerator implements CommandLineRunner {
 
 // Meeting
         Meeting meeting1 = new Meeting();
-        meeting1.setName("Buổi 1 buổi đầu làm quen giới thiệu bản thân");
+        meeting1.setName("Buổi 1");
         meeting1.setMeetingDate(new Date().getTime() - 86400000);
         meeting1.setMeetingPeriod(MeetingPeriod.CA_1);
         meeting1.setDescriptions("Học tập và làm theo tấm gương đạo đức HỒ CHÍ MINH");
@@ -418,7 +422,7 @@ public class DBGenerator implements CommandLineRunner {
         meeting2.setName("Buổi 2");
         meeting2.setMeetingDate(new Date().getTime());
         meeting2.setMeetingPeriod(MeetingPeriod.CA_2);
-        meeting2.setDescriptions("Yêu Tổ quốc, yêu đồng bào Học tập tốt, lao động tốt Đoàn kết tốt, kỷ luật tốt Giữ gìn vệ sinh thật tốt Khiêm tốn, thật thà, dũng cảm");
+        meeting2.setDescriptions("TÁC HẠI CỦA VIỆC THỨC KHUYA, NGỦ MUỘN");
         meeting2.setClassId(class1.getId());
         meeting2.setTypeMeeting(TypeMeeting.OFFLINE);
         meeting2.setAddress("");
@@ -522,7 +526,7 @@ public class DBGenerator implements CommandLineRunner {
         meeting9.setId(meetingRepository.save(meeting9).getId());
 
         Meeting meeting10 = new Meeting();
-        meeting10.setName("Buổi 10 ");
+        meeting10.setName("Buổi 10");
         meeting10.setMeetingDate(new Date().getTime() + 10 * 86400000);
         meeting10.setMeetingPeriod(MeetingPeriod.CA_1);
         meeting10.setDescriptions("Triết học là bộ phận lý luận nghiên cứu những quy luật vận động, phát triển chung nhất của tự nhiên, xã hội và tư duy");
@@ -530,6 +534,108 @@ public class DBGenerator implements CommandLineRunner {
         meeting10.setTypeMeeting(TypeMeeting.OFFLINE);
         meeting10.setAddress("");
         meeting10.setId(meetingRepository.save(meeting10).getId());
+
+        Meeting meeting11 = new Meeting();
+        meeting11.setName("Buổi 11");
+        meeting11.setMeetingDate(new Date().getTime() + 11 * 86400000);
+        meeting11.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting11.setDescriptions("Chủ nghĩa Mác-Lênin là hệ thống quan điểm và học thuyết khoa học của C.Mác, Ph.Ăngghen và sự phát triển của V.I.Lênin");
+        meeting11.setClassId(class1.getId());
+        meeting11.setTypeMeeting(TypeMeeting.OFFLINE);
+        meeting11.setAddress("");
+        meeting11.setId(meetingRepository.save(meeting11).getId());
+
+        Meeting meeting12 = new Meeting();
+        meeting12.setName("Buổi 12");
+        meeting12.setMeetingDate(new Date().getTime() + 12 * 86400000);
+        meeting12.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting12.setDescriptions("Chủ nghĩa cộng sản được xây dựng bởi các nhà sáng lập chủ nghĩa cộng sản Marx");
+        meeting12.setClassId(class1.getId());
+        meeting12.setTypeMeeting(TypeMeeting.OFFLINE);
+        meeting12.setAddress("");
+        meeting12.setId(meetingRepository.save(meeting12).getId());
+
+        Meeting meeting13 = new Meeting();
+        meeting13.setName("Buổi 13 ");
+        meeting13.setMeetingDate(new Date().getTime() + 13 * 86400000);
+        meeting13.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting13.setDescriptions("Nhà sử học Marx–Lenin đương đại Eric Hobsbawm");
+        meeting13.setClassId(class1.getId());
+        meeting13.setTypeMeeting(TypeMeeting.OFFLINE);
+        meeting13.setAddress("");
+        meeting13.setId(meetingRepository.save(meeting13).getId());
+
+        Meeting meeting14 = new Meeting();
+        meeting14.setName("Buổi 14 ");
+        meeting14.setMeetingDate(new Date().getTime() + 14 * 86400000);
+        meeting14.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting14.setDescriptions("Sau sự ly khai của những người vô chính phủ, quốc tế thứ nhất tan vỡ");
+        meeting14.setClassId(class1.getId());
+        meeting14.setTypeMeeting(TypeMeeting.OFFLINE);
+        meeting14.setAddress("");
+        meeting14.setId(meetingRepository.save(meeting14).getId());
+
+        Meeting meeting15 = new Meeting();
+        meeting15.setName("Buổi 15");
+        meeting15.setMeetingDate(new Date().getTime() + 15 * 86400000);
+       meeting15.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting15.setDescriptions("Không có giải pháp nào là vĩnh cửu");
+        meeting15.setClassId(class1.getId());
+        meeting15.setTypeMeeting(TypeMeeting.OFFLINE);
+        meeting15.setAddress("");
+        meeting15.setId(meetingRepository.save(meeting15).getId());
+
+        Meeting meeting16 = new Meeting();
+        meeting16.setName("Buổi 16");
+        meeting16.setMeetingDate(new Date().getTime() + 16 * 86400000);
+        meeting16.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting16.setDescriptions("Sự sụp đổ của Liên Xô và Đông Âu (do kinh tế gặp nhiều khó khăn, trong khi nhà nước không có dấu hiệu tự triệt tiêu như ý tưởng của Marx)");
+        meeting16.setClassId(class1.getId());
+        meeting16.setTypeMeeting(TypeMeeting.OFFLINE);
+        meeting16.setAddress("");
+        meeting16.setId(meetingRepository.save(meeting16).getId());
+
+        Meeting meeting17 = new Meeting();
+        meeting17.setName("Buổi 17");
+        meeting17.setMeetingDate(new Date().getTime() + 17 * 86400000);
+        meeting17.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting17.setDescriptions("Lời kêu gọi này được phát ra vào sáng ngày 20 tháng 12 năm 1946");
+        meeting17.setClassId(class1.getId());
+        meeting17.setTypeMeeting(TypeMeeting.OFFLINE);
+        meeting17.setAddress("");
+        meeting17.setId(meetingRepository.save( meeting17).getId());
+
+        Meeting meeting18 = new Meeting();
+        meeting18.setName("Buổi 18");
+        meeting18.setMeetingDate(new Date().getTime() + 18 * 86400000);
+        meeting18.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting18.setDescriptions("Ngày 19 tháng 12, khi chiến sự bùng nổ - là ngày được gọi là Toàn quốc kháng chiến");
+        meeting18.setClassId(class1.getId());
+        meeting18.setTypeMeeting(TypeMeeting.OFFLINE);
+        meeting18.setAddress("");
+        meeting18.setId(meetingRepository.save( meeting18).getId());
+
+        Meeting meeting19 = new Meeting();
+        meeting19.setName("Buổi 19");
+        meeting19.setMeetingDate(new Date().getTime() + 19 * 86400000);
+        meeting19.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting19.setDescriptions("Thức khuya hay ngủ ít có thể dẫn tới nguy cơ tăng cân theo chiều hướng tiêu cực, có thể gây thêm các tác dụng khác là nguy cơ mắc bệnh tiểu đường, tăng huyết áp…");
+        meeting19.setClassId(class1.getId());
+        meeting19.setTypeMeeting(TypeMeeting.OFFLINE);
+        meeting19.setAddress("");
+        meeting19.setId(meetingRepository.save( meeting19).getId());
+
+        Meeting meeting20 = new Meeting();
+        meeting20.setName("Buổi 20");
+        meeting20.setMeetingDate(new Date().getTime() + 20 * 86400000);
+        meeting20.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting20.setDescriptions("75 năm trôi qua, nhưng khí thế hào hùng của Lời kêu gọi toàn quốc kháng chiến đã trở thành ngày lịch sử, là dấu son chói lọi trong cuộc đấu tranh bảo vệ độc lập, chủ quyền, thống nhất và toàn vẹn lãnh thổ.");
+        meeting20.setClassId(class1.getId());
+        meeting20.setTypeMeeting(TypeMeeting.OFFLINE);
+        meeting20.setAddress("");
+        meeting20.setId(meetingRepository.save( meeting20).getId());
+
+
 // homework
         //class 1- team 2
         HomeWork homeWork1 = new HomeWork();

@@ -15,4 +15,5 @@ public interface TePointImportRespone {
 
     @Value("#{target.emailStudent}")
     String getEmailStudent();
+
 }

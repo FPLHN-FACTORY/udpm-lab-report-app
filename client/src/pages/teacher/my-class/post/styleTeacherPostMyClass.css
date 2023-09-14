@@ -38,6 +38,11 @@
   color: rgb(35, 35, 35);
   box-shadow: 0 0 10px rgb(225, 224, 224);
   cursor: pointer;
+  height: 140px;
+  padding: 5px 0px 0px 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .box-post {
   margin: 20px 0px 0px 0px;
@@ -89,10 +94,37 @@
 .box-create-post:hover div > .link-create {
   color: #0b6cd3;
 }
-
 .ant-card-body {
   padding-left: 7px !important;
   padding-right: 7px !important;
   padding-top: 0 !important;
   padding-bottom: 0 !important;
+}
+.box-infor > p {
+  text-align: center;
+}
+.box-infor span,
+.box-infor p {
+  font-weight: 500;
+  font-size: 17px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media screen and (max-width: 100%) {
+  .box-infor span,
+  .box-infor p {
+    font-size: 14px;
+  }
+}
+.title-main {
+  padding: 8px 0px 0px 15px;
+  font-weight: 500;
+  font-size: 17px;
+}
+.infor-main {
+  font-size: 25px !important;
+  padding: 1px;
+  font-weight: bold !important;
+  color: #b78e3d;
 }

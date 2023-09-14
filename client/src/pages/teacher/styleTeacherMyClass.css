@@ -162,6 +162,12 @@
   background-color: #d2b156;
   color: white;
 }
+.ant-table-wrapper {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .ant-table-wrapper .ant-table-thead > tr > td {
   background-color: #d2b156;
   color: white;

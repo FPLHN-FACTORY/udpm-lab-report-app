@@ -88,11 +88,11 @@ const MeetingInMyClass = () => {
           </span>
         </Link>
       </div>
-      <div
-        className="box-two-student-in-my-class"
-        style={{ minHeight: "580px" }}
-      >
-        <div className="box-two-student-in-my-class-son">
+      <div className="box-two-student-in-my-class">
+        <div
+          className="box-two-student-in-my-class-son"
+          style={{ minHeight: "555px" }}
+        >
           <div className="button-menu">
             <div>
               <Link
@@ -173,8 +173,13 @@ const MeetingInMyClass = () => {
                   float: "right",
                 }}
               >
-                {" "}
-                <span style={{ fontSize: "14px", padding: "10px" }}>
+                <span
+                  style={{
+                    fontSize: "14px",
+                    padding: "15px",
+                    fontWeight: 500,
+                  }}
+                >
                   {classDetail.code}
                 </span>
               </div>
@@ -201,10 +206,9 @@ const MeetingInMyClass = () => {
                         to={`/teacher/my-class/meeting/detail/${record.id}`}
                         key={record.id}
                       >
-                        <div role="button" className="box-card">
+                        <div className="box-card">
                           <div className="title-left">
                             <div className="flex-container">
-                              {" "}
                               <div className="title-icon">
                                 <div className="box-icon">
                                   <BookOutlined
@@ -230,10 +234,8 @@ const MeetingInMyClass = () => {
                           </div>
                           <div className="title-right">
                             <div>
-                              {" "}
                               <span>
-                                {" "}
-                                Time:{" "}
+                                Time:
                                 <span
                                   style={{
                                     color: "red",
