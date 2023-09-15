@@ -72,9 +72,8 @@ const TeacherAttendanceClass = () => {
               <ControlOutlined style={{ fontSize: "22px" }} />
               <span style={{ marginLeft: "10px", fontWeight: "500" }}>
                 Bảng điều khiển
-              </span>{" "}
+              </span>
               <span style={{ color: "gray", fontSize: "14px" }}>
-                {" "}
                 - Điểm danh
               </span>
             </span>

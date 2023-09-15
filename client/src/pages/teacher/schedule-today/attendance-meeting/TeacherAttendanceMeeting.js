@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import "./styleTeacherAttendance.css";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/TeacherStudentClasses.api";
 import { TeacherAttendanceAPI } from "../../../../api/teacher/attendance/TeacherAttendance.api";
 import { useState } from "react";
@@ -22,6 +22,7 @@ import { faBook, faHome } from "@fortawesome/free-solid-svg-icons";
 
 const TeacherAttendanceMeeting = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { idMeeting } = useParams();
   const [meeting, setMeeting] = useState({});
   const [classFind, setClassFind] = useState({});
@@ -134,6 +135,7 @@ const TeacherAttendanceMeeting = () => {
         },
         (error) => {
           setLoading(true);
+          navigate("/teacher/schedule-today");
         }
       );
     } catch (error) {
@@ -241,7 +243,7 @@ const TeacherAttendanceMeeting = () => {
                 style={{ fontSize: 19, marginRight: 6 }}
               />
               Lịch dạy
-            </span>{" "}
+            </span>
           </Link>
           <span style={{ fontSize: "18px" }}> / </span>{" "}
           <span style={{ fontSize: "18px" }}>
@@ -280,8 +282,13 @@ const TeacherAttendanceMeeting = () => {
                     float: "right",
                   }}
                 >
-                  {" "}
-                  <span style={{ fontSize: "14px", padding: "10px" }}>
+                  <span
+                    style={{
+                      fontSize: "14px",
+                      padding: "15px",
+                      fontWeight: 500,
+                    }}
+                  >
                     {classFind.code}
                   </span>
                 </div>

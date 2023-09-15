@@ -18,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -80,12 +81,13 @@ public class TeClassServiceImpl implements TeClassService {
     }
 
     public String generateRandomPassword() {
-        int length = 6;
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        SecureRandom random = new SecureRandom();
         StringBuilder password = new StringBuilder();
-        Random random = new Random();
-        for (int i = 0; i < length; i++) {
-            int randomNumber = random.nextInt(10);
-            password.append(randomNumber);
+        for (int i = 0; i < 7; i++) {
+            int randomIndex = random.nextInt(characters.length());
+            char randomChar = characters.charAt(randomIndex);
+            password.append(randomChar);
         }
         return password.toString();
     }
