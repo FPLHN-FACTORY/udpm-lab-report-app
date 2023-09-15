@@ -159,7 +159,7 @@ const StPointDetailClass = () => {
                 columns={columns}
                 dataSource={pointStudent}
                 key="stt"
-                pagination={false}
+                pagination={{ pageSize: 8 }}
               />
             </>
           </div>
