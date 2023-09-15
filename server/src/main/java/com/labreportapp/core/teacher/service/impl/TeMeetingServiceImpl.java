@@ -53,7 +53,6 @@ public class TeMeetingServiceImpl implements TeMeetingService {
     }
 
     @Override
-    @CacheEvict(value = {"countMeeting"}, allEntries = true)
     public Integer countMeetingByClassId(String idClass) {
         return teMeetingRepository.countMeetingByClassId(idClass);
     }
@@ -141,9 +140,9 @@ public class TeMeetingServiceImpl implements TeMeetingService {
     @Override
     public List<TeScheduleMeetingClassRespone> searchScheduleToDayByIdTeacherAndMeetingDate(TeFindScheduleMeetingClassRequest request) {
         List<TeScheduleMeetingClassRespone> list = teMeetingRepository.searchScheduleToDayByIdTeacherAndMeetingDate(request);
-        if (list.size() == 0) {
-            throw new RestApiException(Message.SCHEDULE_TODAY_IS_EMPTY);
-        }
+//        if (list.size() == 0) {
+//            throw new RestApiException(Message.SCHEDULE_TODAY_IS_EMPTY);
+//        }
         return list;
     }
 

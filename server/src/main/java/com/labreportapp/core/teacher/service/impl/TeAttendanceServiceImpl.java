@@ -108,12 +108,12 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
             listMeeting.forEach(meeting -> {
                 TeAttendanceStudentMeetingRespone attendanceObj = new TeAttendanceStudentMeetingRespone();
                 attendanceObj.setIdAttendance(null);
-                attendanceObj.setMeetingDate(new Date().getTime());
+                attendanceObj.setMeetingDate(meeting.getMeetingDate());
                 attendanceObj.setStatusAttendance(null);
+                attendanceObj.setMeetingPeriod(attendanceObj.getMeetingPeriod());
                 listAttendance.forEach(attendance -> {
                             if (student.getId().equals(attendance.getIdStudent()) && meeting.getIdMeeting().equals(attendance.getIdMeeting())) {
                                 attendanceObj.setIdAttendance(attendance.getIdAttendance());
-                                attendanceObj.setMeetingDate(attendance.getMeetingDate());
                                 attendanceObj.setStatusAttendance(attendance.getStatusAttendance());
                             }
                         }
@@ -129,7 +129,8 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
     private List<TeAttendanceStudentMeetingRespone> sortASCListAttendanceObj(List<TeAttendanceStudentMeetingRespone> list) {
         List<TeAttendanceStudentMeetingRespone> sortedList = list.stream()
                 .sorted(Comparator.comparing(TeAttendanceStudentMeetingRespone::getMeetingDate,
-                        Comparator.nullsLast(Comparator.naturalOrder())))
+                        Comparator.nullsLast(Comparator.naturalOrder()))
+                        .thenComparing(TeAttendanceStudentMeetingRespone::getMeetingPeriod))
                 .collect(Collectors.toList());
         return sortedList;
     }

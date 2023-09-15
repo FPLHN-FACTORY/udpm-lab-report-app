@@ -145,9 +145,6 @@ const TeacherPostMyClass = () => {
   const handleRandomPass = async () => {
     try {
       await TeacherMyClassAPI.randomPass(idClass).then((respone) => {
-        toast.success(
-          "Mật khẩu đã được đặt thành " + respone.data.data.password
-        );
         dispatch(UpdateClass(respone.data.data));
       });
     } catch (error) {

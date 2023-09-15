@@ -20,4 +20,6 @@ public class TeAttendanceStudentMeetingRespone {
 
     private Long meetingDate;
 
+    private Integer meetingPeriod;
+
 }

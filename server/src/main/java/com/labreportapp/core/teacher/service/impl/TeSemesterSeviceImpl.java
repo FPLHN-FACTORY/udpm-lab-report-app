@@ -19,7 +19,6 @@ public class TeSemesterSeviceImpl implements TeSemesterService {
     private TeSemesterRepository teSemesterRepository;
 
     @Override
-    @CacheEvict(value = {"getAllSemester"}, allEntries = true)
     public List<TeSemesterRespone> getAllSemester() {
         return teSemesterRepository.getAllSemesters();
     }
