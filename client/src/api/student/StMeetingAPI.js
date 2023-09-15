@@ -28,6 +28,13 @@ export class StudentMeetingAPI {
           url + `/homeword-and-note?idMeeting=` + data.idMeeting + `&idTeam=` + data.idTeam,
       });
     }
+    static updateHomeWorkAndNote = (data) => {
+      return request({
+        method: "PUT",
+        url: url + `/homeword-and-note`,
+        data: data,
+      });
+    };
     static getTeamInMeeting(idClass, idStudent) {
       return request({
         method: "GET",
@@ -38,6 +45,12 @@ export class StudentMeetingAPI {
           idClass +
         `&idStudent=` +
         sinhVienCurrent.id,
+      });
+    }
+    static getRoleByIdStudent(idStudent) {
+      return request({
+        method: "GET",
+        url: url + `/get-role?idStudent=` + idStudent,
       });
     }
 }

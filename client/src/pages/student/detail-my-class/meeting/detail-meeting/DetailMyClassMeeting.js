@@ -45,6 +45,7 @@ const StTeamMeeting = () => {
     featchTeams(meeting.idClass);
   }, [meeting]);
   const featchTeams = async (id) => {
+    
     try {
       await StudentMeetingAPI.getTeamInMeeting(id).then((responese) => {
         // console.log(responese.data.data);

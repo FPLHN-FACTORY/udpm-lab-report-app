@@ -1,10 +1,12 @@
 package com.labreportapp.core.student.service;
 
 import com.labreportapp.core.student.model.request.StFindMeetingRequest;
+import com.labreportapp.core.student.model.request.StUpdateHomeWorkAndNotebyLeadTeamRequest;
 import com.labreportapp.core.student.model.response.StHomeWordAndNoteResponse;
 import com.labreportapp.core.student.model.response.StMeetingResponse;
+import com.labreportapp.core.student.model.response.StMyStudentTeamResponse;
 import com.labreportapp.core.student.model.response.StMyTeamInClassResponse;
-import com.labreportapp.core.teacher.model.request.TeFindStudentClasses;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -22,4 +24,10 @@ public interface StMeetingService {
     StHomeWordAndNoteResponse searchDetailMeetingTeamById(final StFindMeetingRequest request);
 
     List<StMyTeamInClassResponse> getAllTeams(final StFindMeetingRequest stFindStudentClasses);
+
+    StHomeWordAndNoteResponse updateDetailMeetingTeamByLeadTeam(@Valid StUpdateHomeWorkAndNotebyLeadTeamRequest request);
+
+    List<StMyStudentTeamResponse> getRoleByIdStudent(final StFindMeetingRequest stFindStudentClasses);
+
+
 }
