@@ -186,6 +186,11 @@ public class TePointSeviceImpl implements TePointSevice {
             }
             ConcurrentHashMap<String, SimpleResponse> mapPointStudent = new ConcurrentHashMap<>();
             addDataMapsPointStudent(mapPointStudent, idClass);
+            if(list.size() != mapPointStudent.size()){
+                teExcelResponseMessage.setStatus(false);
+                teExcelResponseMessage.setMessage("số lượng sinh viên trong file excel phải bằng với số lượng sinh viên trong lớp !");
+                return teExcelResponseMessage;
+            }
             ConcurrentHashMap<String, Point> mapPointStudentDB = new ConcurrentHashMap<>();
             addDataMapsPointStudentDB(mapPointStudentDB, idClass);
             ConcurrentHashMap<String, Point> pointUpdate = new ConcurrentHashMap<>();
@@ -243,6 +248,7 @@ public class TePointSeviceImpl implements TePointSevice {
             });
             if (teExcelResponseMessage.getStatus() == true) {
                 tePointRepository.saveAll(pointUpdate.values());
+                return teExcelResponseMessage;
             }
         } catch (Exception e) {
             e.printStackTrace();

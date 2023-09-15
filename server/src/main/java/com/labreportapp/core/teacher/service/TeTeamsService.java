@@ -5,6 +5,7 @@ import com.labreportapp.core.teacher.model.request.TeFindStudentClasses;
 import com.labreportapp.core.teacher.model.request.TeUpdateTeamsRequest;
 import com.labreportapp.core.teacher.model.response.TeTeamsRespone;
 import com.labreportapp.entity.Team;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 import java.util.List;
@@ -21,5 +22,7 @@ public interface TeTeamsService {
     Team updateTeam(@Valid TeUpdateTeamsRequest request);
 
     String deleteTeamById(String idTeam);
+
+    void exportExcelTeam(HttpServletResponse response, String idClass);
 
 }
