@@ -22,4 +22,12 @@ export class StMyClassAPI {
       params: filter,
     });
   }
+  static leaveClass(obj) {
+    return request({
+      method: "DELETE",
+      url: "/student/my-class/leave",
+      params: obj,
+    });
+  }
+
 }
