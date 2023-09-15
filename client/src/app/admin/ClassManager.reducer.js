@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { convertMeetingPeriodToNumber } from "../../helper/util.helper";
 
 const initialState = [];
 
@@ -28,10 +29,28 @@ const teacherSemesterSlice = createSlice({
       state.unshift(newCategory);
       return state;
     },
+    UpdateClass: (state, action) => {
+      const data = action.payload;
+      console.log(data);
+      state.forEach((item) => {
+        if (item.id === data.id) {
+          item.code = data.code;
+          item.classPeriod = convertMeetingPeriodToNumber(data.classPeriod);
+          item.classSize = data.classSize;
+          item.startTime = data.startTime;
+          item.teacherId = data.teacherId;
+          item.activityId = data.activityId;
+        }
+      });
+
+      state.forEach((item, index) => {
+        item.stt = index + 1;
+      });
+    },
   },
 });
 
-export const { SetTeacherSemester, CreateClass, SetMyClass } =
+export const { SetTeacherSemester, CreateClass, UpdateClass, SetMyClass } =
   teacherSemesterSlice.actions;
 export const GetTeacherSemester = (state) => state.teacherSemester;
 

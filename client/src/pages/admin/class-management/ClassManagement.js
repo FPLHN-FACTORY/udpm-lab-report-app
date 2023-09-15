@@ -37,6 +37,7 @@ import {
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { SetAdTeacher } from "../../../app/admin/AdTeacherSlice.reducer";
+import ModalUpdateClass from "./update-class/ModalUpdateClass";
 
 const ClassManagement = () => {
   const { Option } = Select;
@@ -216,6 +217,21 @@ const ClassManagement = () => {
               />
             </Link>
           </Tooltip>
+          <Tooltip
+            title="Cập nhật"
+            onClick={() => {
+              setShowUpdateModal(true);
+              setIDClassUpdate(record.id);
+            }}
+          >
+            <FontAwesomeIcon
+              icon={faPencil}
+              size="1x"
+              style={{
+                color: "rgb(55, 137, 220)",
+              }}
+            />
+          </Tooltip>
         </div>
       ),
     },
@@ -249,10 +265,17 @@ const ClassManagement = () => {
   };
 
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [idClassUpdate, setIDClassUpdate] = useState("");
 
   const handleModalCreateCancel = async () => {
     document.querySelector("body").style.overflowX = "auto";
     setShowCreateModal(false);
+  };
+
+  const handleModalUpdateCancel = async () => {
+    document.querySelector("body").style.overflowX = "auto";
+    setShowUpdateModal(false);
   };
 
   const filterOptions = (input, option) => {
@@ -484,7 +507,7 @@ const ClassManagement = () => {
                     textAlign: "center",
                     marginTop: "100px",
                     fontSize: "15px",
-                    color: "red"
+                    color: "red",
                   }}
                 >
                   Không có lớp học
@@ -497,6 +520,11 @@ const ClassManagement = () => {
       <ModalCreateProject
         visible={showCreateModal}
         onCancel={handleModalCreateCancel}
+      />
+      <ModalUpdateClass
+        visible={showUpdateModal}
+        onCancel={handleModalUpdateCancel}
+        id={idClassUpdate}
       />
     </div>
   );

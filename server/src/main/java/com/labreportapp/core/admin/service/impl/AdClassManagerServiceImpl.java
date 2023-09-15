@@ -2,10 +2,7 @@ package com.labreportapp.core.admin.service.impl;
 
 import com.labreportapp.core.admin.model.request.AdCreateClassRequest;
 import com.labreportapp.core.admin.model.request.AdFindClassRequest;
-import com.labreportapp.core.admin.model.response.AdActivityClassResponse;
-import com.labreportapp.core.admin.model.response.AdClassResponse;
-import com.labreportapp.core.admin.model.response.AdListClassCustomResponse;
-import com.labreportapp.core.admin.model.response.AdSemesterAcResponse;
+import com.labreportapp.core.admin.model.response.*;
 import com.labreportapp.core.admin.repository.AdClassRepository;
 import com.labreportapp.core.admin.service.AdClassService;
 import com.labreportapp.core.common.base.PageableObject;
@@ -13,8 +10,10 @@ import com.labreportapp.core.common.response.SimpleResponse;
 import com.labreportapp.entity.Class;
 import com.labreportapp.infrastructure.apiconstant.ApiConstants;
 import com.labreportapp.infrastructure.constant.ClassPeriod;
-import com.labreportapp.util.FormUtils;
+import com.labreportapp.infrastructure.constant.Message;
+import com.labreportapp.infrastructure.exception.rest.RestApiException;
 import com.labreportapp.util.ConvertListIdToString;
+import com.labreportapp.util.FormUtils;
 import com.labreportapp.util.RandomString;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +29,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -81,7 +81,20 @@ public class AdClassManagerServiceImpl implements AdClassService {
         classNew.setPassword(RandomString.random());
         classNew.setActivityId(request.getActivityId());
         classNew.setStartTime(request.getStartTime());
-        if(!request.getTeacherId().equals("")){
+        if (!request.getTeacherId().equals("")) {
+            classNew.setTeacherId(request.getTeacherId());
+        }
+        return repository.save(classNew);
+    }
+
+    @Override
+    public Class updateClass(AdCreateClassRequest request, String id) {
+        Class classNew = repository.findById(id).get();
+        classNew.setCode(request.getCode());
+        classNew.setStartTime(request.getStartTime());
+        classNew.setClassPeriod(ClassPeriod.values()[Math.toIntExact(request.getClassPeriod())]);
+        classNew.setActivityId(request.getActivityId());
+        if (!request.getTeacherId().equals("")) {
             classNew.setTeacherId(request.getTeacherId());
         }
         return repository.save(classNew);
@@ -129,5 +142,14 @@ public class AdClassManagerServiceImpl implements AdClassService {
         pageableObject.setCurrentPage(pageList.getNumber());
         pageableObject.setTotalPages(pageList.getTotalPages());
         return pageableObject;
+    }
+
+    @Override
+    public AdDetailClassRespone adFindClassById(String id) {
+        Optional<AdDetailClassRespone> adDetailClassRespone = repository.adfindClassById(id);
+        if (!adDetailClassRespone.isPresent()) {
+            throw new RestApiException(Message.CLASS_NOT_EXISTS);
+        }
+        return adDetailClassRespone.get();
     }
 }
