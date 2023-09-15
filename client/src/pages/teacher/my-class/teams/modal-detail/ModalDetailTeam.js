@@ -11,7 +11,7 @@ const ModalDetailTeam = ({ visible, onCancel, team, idClass, click }) => {
   const [listShowTable, setListShowTable] = useState([]);
   const dataStudentClasses = useAppSelector(GetStudentClasses);
   useEffect(() => {
-    if (visible === true && team !== {} && idClass !== "") {
+    if (visible === true && team != {} && idClass !== "") {
       setTeamDetail(team);
       featchDataStudent();
     } else {
@@ -19,14 +19,12 @@ const ModalDetailTeam = ({ visible, onCancel, team, idClass, click }) => {
       setListShowTable([]);
     }
   }, [visible]);
-
   const featchDataStudent = async () => {
     const listFilter = dataStudentClasses.filter(
       (item) => item.idTeam === team.id
     );
     setListShowTable(listFilter);
   };
-
   const columns = [
     {
       title: "#",
@@ -77,7 +75,7 @@ const ModalDetailTeam = ({ visible, onCancel, team, idClass, click }) => {
         open={visible}
         width={850}
         footer={null}
-        style={{ top: "8px" }}
+        style={{ top: "53px" }}
       >
         <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
           <span style={{ fontSize: "18px" }}>Chi tiết nhóm</span>
@@ -113,7 +111,7 @@ const ModalDetailTeam = ({ visible, onCancel, team, idClass, click }) => {
               <span>Thành viên:</span>
             </Col>
           </Row>
-          {listShowTable.length >= 0 ? (
+          {listShowTable.length > 0 ? (
             <>
               <Table
                 dataSource={listShowTable}
@@ -127,7 +125,7 @@ const ModalDetailTeam = ({ visible, onCancel, team, idClass, click }) => {
               <p
                 style={{
                   textAlign: "center",
-                  marginTop: "100px",
+                  marginTop: "90px",
                   fontSize: "15px",
                   color: "red",
                 }}

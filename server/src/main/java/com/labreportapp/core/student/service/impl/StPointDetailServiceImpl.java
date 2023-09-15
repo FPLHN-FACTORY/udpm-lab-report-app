@@ -20,9 +20,11 @@ public class StPointDetailServiceImpl implements StPointDetailService {
     public List<StPointCustomResponse> getMyPointClass(String idClass, String studentId) {
         StPointDetailRespone stPointDetailRespone = stMyPointClassRepository.getPointMyClass(idClass, studentId);
         List<StPointCustomResponse> customResponseList = new ArrayList<>();
-        customResponseList.add(new StPointCustomResponse(1, "Điểm giai đoạn 1", 0, stPointDetailRespone.getCheckPointPhase1(), ""));
-        customResponseList.add(new StPointCustomResponse(2, "Điểm giai đoạn 2", 0, stPointDetailRespone.getCheckPointPhase2(), ""));
-        customResponseList.add(new StPointCustomResponse(3, "Điểm final", 0, stPointDetailRespone.getFinalPoint(), ""));
+        if (stPointDetailRespone != null) {
+            customResponseList.add(new StPointCustomResponse(1, "Điểm giai đoạn 1", 0, stPointDetailRespone.getCheckPointPhase1(), ""));
+            customResponseList.add(new StPointCustomResponse(2, "Điểm giai đoạn 2", 0, stPointDetailRespone.getCheckPointPhase2(), ""));
+            customResponseList.add(new StPointCustomResponse(3, "Điểm final", 0, stPointDetailRespone.getFinalPoint(), ""));
+        }
         return customResponseList;
     }
 

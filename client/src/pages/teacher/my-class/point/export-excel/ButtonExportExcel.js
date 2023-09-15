@@ -1,4 +1,4 @@
-import { Button, message } from "antd";
+import { Button } from "antd";
 import { useState } from "react";
 import { TeacherExcelAPI } from "../../../../../api/teacher/point/excel/TeacherExcel.api";
 import { toast } from "react-toastify";
@@ -20,7 +20,7 @@ const ButtonExportExcel = ({ idClass }) => {
           setDownloading(true);
           setTimeout(() => {
             setDownloading(false);
-            message.success("Export thành công !");
+            toast.success("Export bảng điểm thành công !");
           }, 1000);
         })
         .catch((err) => {
@@ -40,7 +40,7 @@ const ButtonExportExcel = ({ idClass }) => {
       onClick={handleExport}
     >
       <FontAwesomeIcon icon={faDownload} style={{ marginRight: "7px" }} />
-      {downloading ? "Đang tải xuống..." : "Export mẫu điểm"}
+      {downloading ? "Đang tải xuống..." : "Export bảng điểm"}
       {downloading && <LoadingIndicatorNoOverlay />}
     </Button>
   );

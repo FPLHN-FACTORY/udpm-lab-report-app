@@ -33,4 +33,10 @@ export class TeacherMeetingAPI {
         url + `/hw-note?idMeeting=` + data.idMeeting + `&idTeam=` + data.idTeam,
     });
   }
+  static getColumnMeetingByIdClass(idClass) {
+    return request({
+      method: "GET",
+      url: url + `/column-attendance/` + idClass,
+    });
+  }
 }

@@ -15,7 +15,10 @@ import {
   SetMeeting,
 } from "../../../../app/admin/AdMeetingManagement.reducer";
 import { convertLongToDate } from "../../../../helper/convertDate";
-import { convertMeetingPeriod } from "../../../../helper/util.helper";
+import {
+  convertMeetingPeriod,
+  convertMeetingPeriodToTime,
+} from "../../../../helper/util.helper";
 import LoadingIndicator from "../../../../helper/loading";
 import ModalCreateMeeting from "./modal-create-meeting/ModalCreateMeeting";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -223,7 +226,7 @@ const MeetingManagment = () => {
                           {" "}
                           <span>
                             {" "}
-                            Time:{" "}
+                            Ngày dạy:{" "}
                             <span
                               style={{
                                 color: "red",
@@ -231,7 +234,10 @@ const MeetingManagment = () => {
                               }}
                             >
                               {convertLongToDate(item.meetingDate)} -{" "}
-                              {convertMeetingPeriod(item.meetingPeriod)}
+                              {convertMeetingPeriod(item.meetingPeriod) + " "}(
+                              {"" +
+                                convertMeetingPeriodToTime(item.meetingPeriod)}
+                              )
                             </span>
                           </span>
                         </div>

@@ -41,4 +41,7 @@ public interface AdDetailClassRespone {
 
     @Value("#{target.semesterName}")
     String getSemesterName();
+
+    @Value("#{target.status_class}")
+    Integer getStatusClass();
 }

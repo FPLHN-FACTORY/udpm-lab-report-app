@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
  */
 @Getter
 @Setter
-@ToString
 public class TeStudentCallApiResponse {
 
     private String id;

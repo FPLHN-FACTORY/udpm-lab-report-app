@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import "./styleStudentsInMyClass.css";
-import { Row, Col, Table } from "antd";
+import { Table } from "antd";
 import { Link } from "react-router-dom";
 import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
 import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/TeacherStudentClasses.api";
@@ -12,8 +12,6 @@ import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import { useEffect, useState } from "react";
 import LoadingIndicator from "../../../../helper/loading";
 import moment from "moment";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome } from "@fortawesome/free-solid-svg-icons";
 import { ControlOutlined } from "@ant-design/icons";
 import { SetTTrueToggle } from "../../../../app/teacher/TeCollapsedSlice.reducer";
 
@@ -127,7 +125,7 @@ const StudentsInMyClass = () => {
       <div className="box-one">
         <Link to="/teacher/my-class" style={{ color: "black" }}>
           <span style={{ fontSize: "18px", paddingLeft: "20px" }}>
-          <ControlOutlined style={{ fontSize: "22px" }} />
+            <ControlOutlined style={{ fontSize: "22px" }} />
             <span style={{ marginLeft: "10px", fontWeight: "500" }}>
               Bảng điều khiển
             </span>{" "}
@@ -219,8 +217,13 @@ const StudentsInMyClass = () => {
                   float: "right",
                 }}
               >
-                {" "}
-                <span style={{ fontSize: "14px", padding: "10px" }}>
+                <span
+                  style={{
+                    fontSize: "14px",
+                    padding: "15px",
+                    fontWeight: 500,
+                  }}
+                >
                   {classDetail.code}
                 </span>
               </div>
@@ -250,7 +253,14 @@ const StudentsInMyClass = () => {
                 className="group-info-item"
                 style={{ marginTop: "13px", marginBottom: "15px" }}
               >
-                Mã lớp: &nbsp;{classDetail.code}
+                Tên lớp: &nbsp;{classDetail.code}
+              </span>
+              <span
+                className="group-info-item"
+                style={{ marginTop: "13px", marginBottom: "15px" }}
+              >
+                Tình trạng: &nbsp;
+                {classDetail.statusClass === 0 ? "Đã mở" : "Đã khóa"}
               </span>
               <span
                 className="group-info-item"

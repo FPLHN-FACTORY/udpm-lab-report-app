@@ -15,10 +15,9 @@ import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import { useEffect, useState } from "react";
 import LoadingIndicator from "../../../../helper/loading";
 import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome } from "@fortawesome/free-solid-svg-icons";
 import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
 import { SetTTrueToggle } from "../../../../app/teacher/TeCollapsedSlice.reducer";
+import { convertMeetingPeriodToTime } from "../../../../helper/util.helper";
 
 const MeetingInMyClass = () => {
   const dispatch = useAppDispatch();
@@ -27,7 +26,6 @@ const MeetingInMyClass = () => {
   const { idClass } = useParams();
   const [countMeeting, setCountMeeting] = useState(0);
   const [classDetail, setClassDetail] = useState({});
-
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Bảng điều khiển - Buổi học";
@@ -69,7 +67,6 @@ const MeetingInMyClass = () => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-
   const convertLongToDate = (dateLong) => {
     const date = new Date(dateLong);
     const format = `${date.getDate()}/${
@@ -77,7 +74,6 @@ const MeetingInMyClass = () => {
     }/${date.getFullYear()}`;
     return format;
   };
-
   const dataMeeting = useAppSelector(GetMeeting);
   return (
     <div>
@@ -93,11 +89,11 @@ const MeetingInMyClass = () => {
           </span>
         </Link>
       </div>
-      <div
-        className="box-two-student-in-my-class"
-        style={{ minHeight: "580px" }}
-      >
-        <div className="box-two-student-in-my-class-son">
+      <div className="box-two-student-in-my-class">
+        <div
+          className="box-two-student-in-my-class-son"
+          style={{ minHeight: "555px" }}
+        >
           <div className="button-menu">
             <div>
               <Link
@@ -178,8 +174,13 @@ const MeetingInMyClass = () => {
                   float: "right",
                 }}
               >
-                {" "}
-                <span style={{ fontSize: "14px", padding: "10px" }}>
+                <span
+                  style={{
+                    fontSize: "14px",
+                    padding: "15px",
+                    fontWeight: 500,
+                  }}
+                >
                   {classDetail.code}
                 </span>
               </div>
@@ -206,10 +207,9 @@ const MeetingInMyClass = () => {
                         to={`/teacher/my-class/meeting/detail/${record.id}`}
                         key={record.id}
                       >
-                        <div role="button" className="box-card">
+                        <div className="box-card">
                           <div className="title-left">
                             <div className="flex-container">
-                              {" "}
                               <div className="title-icon">
                                 <div className="box-icon">
                                   <BookOutlined
@@ -235,33 +235,29 @@ const MeetingInMyClass = () => {
                           </div>
                           <div className="title-right">
                             <div>
-                              {" "}
                               <span>
-                                {" "}
-                                Time:{" "}
+                                Ngày dạy:
                                 <span
                                   style={{
                                     color: "red",
                                     fontWeight: "500",
                                   }}
                                 >
-                                  {convertLongToDate(record.meetingDate)} -{" "}
-                                  <span>Ca </span>
+                                  {" " + convertLongToDate(record.meetingDate)}{" "}
+                                  - <span>Ca </span>
                                   {record.meetingPeriod + 1}
+                                  <span>
+                                    {" "}
+                                    (
+                                    {convertMeetingPeriodToTime(
+                                      record.meetingPeriod
+                                    )}
+                                    )
+                                  </span>
                                 </span>
                               </span>
                             </div>
                           </div>
-                          {/* <div className="title-right">
-                            <div>
-                              {" "}
-                              <span>
-                                Thời gian:{" "}
-                                {convertLongToDate(record.meetingDate)} - Ca{" "}
-                                {record.meetingPeriod + 1}
-                              </span>
-                            </div>
-                          </div> */}
                         </div>
                       </Link>
                     ))}

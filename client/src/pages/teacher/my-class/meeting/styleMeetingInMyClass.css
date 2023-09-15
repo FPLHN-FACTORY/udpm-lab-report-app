@@ -38,6 +38,13 @@
   display: flex;
   align-items: center;
 }
+.title-text {
+  font-size: 16px;
+  color: black;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .title-icon {
   height: auto;
 }

@@ -253,15 +253,18 @@ const StPostDetailClass = () => {
                       );
                     })
                   ) : (
-                    <p
-                      style={{
-                        textAlign: "center",
-                        marginTop: "100px",
-                        fontSize: "15px",
-                      }}
-                    >
-                      Chưa đăng bài viết nào được đăng!
-                    </p>
+                    <div style={{ width: "100%", textAlign: "center" }}>
+                      <p
+                        style={{
+                          textAlign: "center",
+                          marginTop: "100px",
+                          fontSize: "15px",
+                          color: "red",
+                        }}
+                      >
+                        Chưa đăng bài viết nào được đăng!
+                      </p>
+                    </div>
                   )}
                   {seeMore && (
                     <Button

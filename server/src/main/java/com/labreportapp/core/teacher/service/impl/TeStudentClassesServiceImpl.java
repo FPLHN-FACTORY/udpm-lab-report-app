@@ -1,14 +1,15 @@
 package com.labreportapp.core.teacher.service.impl;
 
+import com.labreportapp.core.common.response.SimpleResponse;
 import com.labreportapp.core.teacher.model.request.TeFindStudentApiRequest;
 import com.labreportapp.core.teacher.model.request.TeFindStudentClasses;
+import com.labreportapp.core.teacher.model.response.TePointImportRespone;
 import com.labreportapp.core.teacher.model.response.TeStudentCallApiResponse;
 import com.labreportapp.core.teacher.model.response.TeStudentClassesRespone;
 import com.labreportapp.core.teacher.repository.TeStudentClassesRepository;
 import com.labreportapp.core.teacher.service.TeStudentClassesService;
 import com.labreportapp.infrastructure.apiconstant.ApiConstants;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -74,6 +75,32 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
             });
         });
         return listReturn;
+    }
+
+    @Override
+    public List<SimpleResponse> searchAllStudentByIdClass(String idClass) {
+        List<TePointImportRespone> listRepository = teStudentClassesRepository
+                .findAllStudentClassForPointByIdClass(idClass);
+        StringBuilder queryParams = new StringBuilder();
+        queryParams.append("?id=");
+        int sizeRepo = listRepository.size();
+        for (int i = 0; i < sizeRepo; i++) {
+            TePointImportRespone item = listRepository.get(i);
+            if (item.getIdStudent() != null) {
+                if (i > 0) {
+                    queryParams.append("|");
+                }
+                queryParams.append(item.getIdStudent());
+            }
+        }
+        String result = queryParams.toString();
+        String apiUrl = ApiConstants.API_LIST_STUDENT;
+        ResponseEntity<List<SimpleResponse>> responseEntity =
+                restTemplate.exchange(apiUrl + result, HttpMethod.GET, null,
+                        new ParameterizedTypeReference<List<SimpleResponse>>() {
+                        });
+        List<SimpleResponse> listRespone = responseEntity.getBody();
+        return listRespone;
     }
 
     @Override

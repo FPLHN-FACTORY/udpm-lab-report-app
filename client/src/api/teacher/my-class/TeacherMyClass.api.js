@@ -33,4 +33,20 @@ export class TeacherMyClassAPI {
       url: url + `/` + idClass,
     });
   }
+  static randomPass(idClass) {
+    return request({
+      method: "POST",
+      url: url + `/pass-random`,
+      params: {
+        idClass: idClass,
+      },
+    });
+  }
+  static updateStatusClass(data) {
+    return request({
+      method: "POST",
+      url: url + `/pass`,
+      data: data,
+    });
+  }
 }

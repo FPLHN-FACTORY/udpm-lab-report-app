@@ -1,15 +1,17 @@
 import { Row, Col } from "antd";
 import { useParams } from "react-router";
 import "./styleTeamInMeeting.css";
-import { BookOutlined, ControlOutlined, UnorderedListOutlined } from "@ant-design/icons";
+import {
+  BookOutlined,
+  ControlOutlined,
+  UnorderedListOutlined,
+} from "@ant-design/icons";
 import LoadingIndicator from "../../../../../helper/loading";
 import { useEffect, useState } from "react";
 import { TeacherMeetingAPI } from "../../../../../api/teacher/meeting/TeacherMeeting.api";
 import { TeacherTeamsAPI } from "../../../../../api/teacher/teams-class/TeacherTeams.api";
 import CollapseTeam from "../team/collapse-team/CollapseTeam";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
-import { faHome } from "@fortawesome/free-solid-svg-icons";
 
 const TeamInMeeting = () => {
   const { idMeeting } = useParams();
@@ -21,7 +23,6 @@ const TeamInMeeting = () => {
     document.title = "Bảng điều khiển - buổi học";
     featchMeeting(idMeeting);
   }, []);
-
   const featchMeeting = async (id) => {
     setLoading(false);
     try {
@@ -33,11 +34,9 @@ const TeamInMeeting = () => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-
   const featchTeams = async (id) => {
     try {
       await TeacherTeamsAPI.getTeamsByIdClass(id).then((responese) => {
-    
         setTeam(responese.data.data);
         setLoading(true);
       });
@@ -58,7 +57,7 @@ const TeamInMeeting = () => {
       <div className="box-one">
         <Link to="/teacher/my-class" style={{ color: "black" }}>
           <span style={{ fontSize: "18px", paddingLeft: "20px" }}>
-          <ControlOutlined style={{ fontSize: "23px" }} />
+            <ControlOutlined style={{ fontSize: "23px" }} />
             <span style={{ marginLeft: "10px", fontWeight: "500" }}>
               Bảng điều khiển
             </span>{" "}
@@ -88,16 +87,15 @@ const TeamInMeeting = () => {
               style={{ color: "black", fontSize: 18, marginRight: "5px" }}
             />
             {meeting.name}
-          </span>{" "}
+          </span>
         </div>
         <div
           className="box-two-student-in-my-class-son"
-          style={{ minHeight: "580px", marginTop: "25px" }}
+          style={{ minHeight: "505px", marginTop: "25px" }}
         >
           <div style={{ marginLeft: "30px" }}>
             <Row gutter={16}>
               <Col span={20}>
-                {" "}
                 <div className="title-left-meeting">
                   <div className="box-icon-detail">
                     <BookOutlined style={{ color: "white", fontSize: 21 }} />

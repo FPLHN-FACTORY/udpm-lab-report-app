@@ -167,7 +167,10 @@ const StMeetingMyClass = () => {
                       <UnorderedListOutlined
                         style={{ marginRight: "10px", fontSize: "20px" }}
                       />
-                      Danh sách buổi học : {countMeeting} buổi học
+                      Danh sách các buổi đã học:{" "}
+                      <span style={{ color: "red" }}>
+                        {dataMeeting.length} / {countMeeting}
+                      </span>
                     </span>
                   </div>
                   <div className="data-table">
@@ -229,7 +232,7 @@ const StMeetingMyClass = () => {
                             color: "red",
                           }}
                         >
-                          Không có buổi học
+                          Chưa có buổi học nào đã học !
                         </p>
                       </>
                     )}

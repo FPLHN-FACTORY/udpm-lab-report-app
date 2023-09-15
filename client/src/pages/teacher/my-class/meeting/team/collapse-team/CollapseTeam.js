@@ -27,23 +27,18 @@ const CollapseTeam = ({ items }) => {
     setDescriptionsNote("");
     setLoading(true);
   }, []);
-
   useEffect(() => {
     featchHomeWorkNote(idTeamDetail);
   }, [idTeamDetail, activePanel]);
-
   const toggleCard = (index, item) => {
     setEdit(false);
     setActivePanel(index);
     setIdTeamDetail(item.id);
   };
-
   const handleCancel = () => {
     setEdit(false);
-    toast.success("Hủy thành công");
     featchHomeWorkNote(idTeamDetail);
   };
-
   const clear = () => {
     setEdit(false);
     setActivePanel(null);
@@ -78,7 +73,6 @@ const CollapseTeam = ({ items }) => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-
   const update = async () => {
     try {
       let data = {
@@ -98,7 +92,6 @@ const CollapseTeam = ({ items }) => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-
   return (
     <div
       className="centered-collapse"
@@ -155,7 +148,6 @@ const CollapseTeam = ({ items }) => {
             <div className="info-content" onClick={() => setEdit(true)}>
               <Row gutter={16}>
                 <Col span={12}>
-                  {" "}
                   <span style={{ color: "black" }}>Nhận xét:</span>
                   <TextArea
                     rows={4}
@@ -169,7 +161,6 @@ const CollapseTeam = ({ items }) => {
                   />
                 </Col>
                 <Col span={12}>
-                  {" "}
                   <span style={{ color: "black", fontFamily: "unset" }}>
                     Bài tập về nhà:
                   </span>
@@ -213,6 +204,18 @@ const CollapseTeam = ({ items }) => {
             )}
           </Panel>
         ))}
+        {items.length === 0 && (
+          <p
+            style={{
+              textAlign: "center",
+              marginTop: "100px",
+              fontSize: "15px",
+              color: "red",
+            }}
+          >
+            Lớp học chưa có nhóm !
+          </p>
+        )}
       </Collapse>
     </div>
   );

@@ -13,6 +13,7 @@ public enum Message {
     ERROR_UNKNOWN("Error Unknown"),
 
     // CLASS_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeyss.CLASS_NOT_EXISTS));
+    CLASS_STUDENT_IS_EMPTY(PropertiesReader.getProperty(PropertyKeys.CLASS_STUDENT_IS_EMPTY)),
     DESCRIPTIONS_IS_EMPTY(PropertiesReader.getProperty(PropertyKeys.DESCRIPTIONS_IS_EMPTY)),
     CLASS_IS_EMPTY(PropertiesReader.getProperty(PropertyKeys.CLASS_IS_EMPTY)),
     POST_IS_EXIST(PropertiesReader.getProperty(PropertyKeys.POST_IS_EXIST)),

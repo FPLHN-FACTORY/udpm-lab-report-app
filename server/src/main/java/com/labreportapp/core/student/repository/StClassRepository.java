@@ -18,19 +18,18 @@ public interface StClassRepository extends ClassRepository {
           FROM class c
           JOIN activity ac ON c.activity_id = ac.id
           JOIN semester s ON ac.semester_id = s.id
-          JOIN (SELECT m.class_id, m.name, m.meeting_date
-          FROM meeting m
+          LEFT JOIN (SELECT m.class_id, m.name, m.meeting_date
+          FROM meeting m RIGHT JOIN class cl ON cl.id = m.class_id
           WHERE m.meeting_date IN (SELECT MIN(meeting_date)
           FROM meeting
           GROUP BY class_id)) 
           m ON m.class_id = c.id
-          WHERE DATE(FROM_UNIXTIME(m.meeting_date / 1000)) > CURDATE()
+          WHERE (m.name IS NULL OR DATE(FROM_UNIXTIME(m.meeting_date / 1000)) > CURDATE())
           AND (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR c.code LIKE %:#{#req.code}%) 
           AND (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR c.class_period = :#{#req.classPeriod}) 
           AND (:#{#req.level} IS NULL OR :#{#req.level} LIKE '' OR ac.level = :#{#req.level}) 
           AND (:#{#req.activityId} IS NULL OR :#{#req.activityId} LIKE '' OR ac.id = :#{#req.activityId}) 
           AND s.id = :#{#req.semesterId}
-          AND c.class_size between 0 and 29
           ORDER BY c.created_date DESC
           """, nativeQuery = true)
   List<StClassResponse> getAllClassByCriteriaAndIsActive(@Param("req") StFindClassRequest req);

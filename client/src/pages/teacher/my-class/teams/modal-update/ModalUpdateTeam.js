@@ -31,7 +31,6 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
   const [name, setName] = useState("");
   const [errorName, setErrorName] = useState("");
   const [subjectName, setSubjectName] = useState("");
-  const [errorStudent, setErrorStudent] = useState("");
   const [listStudentNotJoin, setListStudentNotJoin] = useState([]);
   const [listStudentsChange, setListStudentsChange] = useState([]);
   const [listStudentDetail, setListStudentDetail] = useState([]);
@@ -45,10 +44,8 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
     setCheckDataStudent(false);
     onCancel.handleCancelModalCreateSusscess();
   };
-
   const cancelFaild = () => {
     setErrorName("");
-    setErrorStudent("");
     const objFilter = dataStudentClasses.map((item2) => {
       const matchedItem = listDetelteTemp.find(
         (item3) => item3.idStudentClass === item2.idStudentClass
@@ -59,7 +56,6 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
     featchDataStudent();
     onCancel.handleCancelModalCreateFaild();
   };
-
   useEffect(() => {
     if (visible === true) {
       setSubjectName(team.subjectName);
@@ -71,21 +67,23 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
       setListDeleteTemp([]);
       setListShowTable([]);
       featchDataStudent();
+    } else {
+      setSubjectName("");
+      setCode("");
+      setName("");
+      setErrorName("");
     }
   }, [visible]);
-
   useEffect(() => {
     if (visible === true) {
       featchDataStudentChange();
     }
   }, [listStudentsChange]);
-
   useEffect(() => {
     if (checkDataStudent === true) {
       featchDataStudent();
     }
   }, [checkDataStudent]);
-
   const featchDataStudentChange = () => {
     const listMulty = listStudentNotJoin
       .filter((item1) =>
@@ -170,13 +168,6 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
     } else {
       setErrorName("");
     }
-    if (listShowTable.length <= 0) {
-      setErrorStudent("Nhóm phải có ít nhất 1 thành viên");
-      check++;
-    } else {
-      setErrorStudent("");
-    }
-
     if (check === 0) {
       let teamUpdate = {
         id: team.id,
@@ -208,13 +199,10 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
           setCheckDataStudent(true);
           cancelSuccess();
         },
-        (error) => {
-          toast.error(error.response.data.message);
-        }
+        (error) => {}
       );
     }
   };
-
   const dataStudentClasses = useAppSelector(GetStudentClasses);
   const columns = [
     {
@@ -293,7 +281,7 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
         width={850}
         footer={null}
         bodyStyle={{ overflow: "hidden" }}
-        style={{ top: "8px" }}
+        style={{ top: "53px" }}
       >
         {" "}
         <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
@@ -316,7 +304,6 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
               <span className="error">{errorName}</span>
             </Col>
             <Col span={12}>
-              {" "}
               <span>Chủ đề:</span> <br />
               <Input
                 placeholder="Nhập chủ đề"
@@ -330,8 +317,6 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
           </Row>
           <Row style={{ marginBottom: "15px" }}>
             <div style={{ width: "100%" }}>
-              {" "}
-              <span className="notBlank">*</span>
               <span>
                 Thành viên:{" "}
                 {listShowTable.length <= 0 ? (
@@ -377,12 +362,6 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
                   </Option>
                 ))}{" "}
               </Select>
-              <span
-                className="error"
-                style={{ display: "block", marginTop: "2px" }}
-              >
-                {errorStudent}
-              </span>
             </div>
           </Row>
           {listShowTable.length > 0 ? (

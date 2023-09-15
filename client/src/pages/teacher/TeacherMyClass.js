@@ -43,14 +43,12 @@ const TeacherMyClass = () => {
   const [levelSearch, setLevelSearch] = useState("");
   const [clear, setClear] = useState(false);
   const listClassPeriod = [];
-
   for (let i = 1; i <= 10; i++) {
     listClassPeriod.push("" + i);
   }
   const [current, setCurrent] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(false);
-
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Bảng điều khiển - Lớp của tôi";
@@ -64,21 +62,17 @@ const TeacherMyClass = () => {
     featchDataSemester();
     featchAllMyClass(giangVienCurrent);
   }, []);
-
   useEffect(() => {
     featchDataActivity(idSemesterSeach);
     setIdActivitiSearch("");
   }, [idSemesterSeach]);
-
   useEffect(() => {
     featchAllMyClass(giangVienCurrent);
   }, [current]);
-
   useEffect(() => {
     featchAllMyClass(giangVienCurrent);
     setClear(false);
   }, [clear]);
-
   const featchAllMyClass = async (giangVienCurrent) => {
     setLoading(false);
     let filter = {
@@ -119,7 +113,6 @@ const TeacherMyClass = () => {
       alert("Vui lòng F5 lại trang !");
     }
   };
-
   const featchDataActivity = async (idSemesterSeach) => {
     try {
       await TeacherActivityAPI.getAllActivityByIdSemester(idSemesterSeach).then(
@@ -132,11 +125,9 @@ const TeacherMyClass = () => {
       alert("Vui lòng F5 lại trang !");
     }
   };
-
   const handleSearch = async () => {
     await featchAllMyClass(giangVienCurrent);
   };
-
   const handleClear = () => {
     if (listSemester.length > 0) {
       setIdSemesterSearch(listSemester[0].id);
@@ -221,11 +212,9 @@ const TeacherMyClass = () => {
       ),
     },
   ];
-
   const filterOptions = (input, option) => {
     return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
   };
-
   return (
     <div>
       {!loading && <LoadingIndicator />}
@@ -455,6 +444,7 @@ const TeacherMyClass = () => {
                     textAlign: "center",
                     marginTop: "100px",
                     fontSize: "15px",
+                    color: "red",
                   }}
                 >
                   Không có lớp học

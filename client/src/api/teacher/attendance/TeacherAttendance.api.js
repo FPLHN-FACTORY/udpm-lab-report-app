@@ -15,4 +15,10 @@ export class TeacherAttendanceAPI {
       data: data,
     });
   };
+  static getAllAttendanceByIdClass = (idClass) => {
+    return request({
+      method: "GET",
+      url: url + `/attendance-all/` + idClass,
+    });
+  };
 }

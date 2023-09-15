@@ -8,6 +8,7 @@ import {
   faTags,
   faDownload,
   faUpload,
+  faPencilAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { useAppDispatch, useAppSelector } from "../../../app/hook";
 import {
@@ -38,6 +39,7 @@ import {
 import { Link } from "react-router-dom";
 import { SetAdTeacher } from "../../../app/admin/AdTeacherSlice.reducer";
 import ModalUpdateClass from "./update-class/ModalUpdateClass";
+import { convertMeetingPeriodToTime } from "../../../helper/util.helper";
 
 const ClassManagement = () => {
   const { Option } = Select;
@@ -185,6 +187,14 @@ const ClassManagement = () => {
       },
     },
     {
+      title: "Thời gian",
+      dataIndex: "timePeriod",
+      key: "timePeriod",
+      render: (text, record) => {
+        return <span>{convertMeetingPeriodToTime(record.classPeriod)}</span>;
+      },
+    },
+    {
       title: "Sĩ số",
       dataIndex: "classSize",
       key: "classSize",
@@ -195,12 +205,6 @@ const ClassManagement = () => {
       dataIndex: "userNameTeacher",
       key: "userNameTeacher",
       sorter: (a, b) => a.userNameTeacher.localeCompare(b.userNameTeacher),
-    },
-    {
-      title: "Hoạt động",
-      dataIndex: "activityName",
-      key: "activityName",
-      sorter: (a, b) => a.activityName.localeCompare(b.activityName),
     },
     {
       title: "Hành động",
@@ -225,7 +229,7 @@ const ClassManagement = () => {
             }}
           >
             <FontAwesomeIcon
-              icon={faPencil}
+              icon={faPencilAlt}
               size="1x"
               style={{
                 color: "rgb(55, 137, 220)",
@@ -455,6 +459,23 @@ const ClassManagement = () => {
                 }}
               />{" "}
               Import
+            </Button>
+            <Button
+              style={{
+                color: "white",
+                backgroundColor: "rgb(55, 137, 220)",
+                marginRight: "5px",
+              }}
+            >
+              <FontAwesomeIcon
+                icon={faDownload}
+                size="1x"
+                style={{
+                  backgroundColor: "rgb(55, 137, 220)",
+                  marginRight: "7px",
+                }}
+              />{" "}
+              Tải mẫu
             </Button>
             <Button
               style={{

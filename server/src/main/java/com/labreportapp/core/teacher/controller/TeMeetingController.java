@@ -6,12 +6,14 @@ import com.labreportapp.core.teacher.model.request.TeFindScheduleMeetingClassReq
 import com.labreportapp.core.teacher.model.request.TeScheduleUpdateMeetingRequest;
 import com.labreportapp.core.teacher.model.request.TeUpdateHomeWorkAndNoteInMeetingRequest;
 import com.labreportapp.core.teacher.model.response.TeHomeWorkAndNoteMeetingRespone;
+import com.labreportapp.core.teacher.model.response.TeMeetingCustomToAttendanceRespone;
 import com.labreportapp.core.teacher.model.response.TeMeetingRespone;
 import com.labreportapp.core.teacher.model.response.TeScheduleMeetingClassRespone;
 import com.labreportapp.core.teacher.service.TeMeetingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -75,6 +77,12 @@ public class TeMeetingController {
     @PutMapping("/schedule")
     public ResponseObject updateScheduleTodayTeacher(@RequestBody TeScheduleUpdateMeetingRequest request) {
         List<TeScheduleMeetingClassRespone> list = teMeetingService.updateAddressMeeting(request);
+        return new ResponseObject(list);
+    }
+
+    @GetMapping("/column-attendance/{idClass}")
+    public ResponseObject getColumnMeetingByIdClass(@PathVariable("idClass") String idClass) {
+        List<TeMeetingCustomToAttendanceRespone> list = teMeetingService.listMeetingAttendanceAllByIdClass(idClass);
         return new ResponseObject(list);
     }
 

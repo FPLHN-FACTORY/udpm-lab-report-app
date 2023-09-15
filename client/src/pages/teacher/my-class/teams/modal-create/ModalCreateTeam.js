@@ -46,9 +46,11 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
   const cancelFaild = () => {
     onCancel.handleCancelModalCreateFaild();
   };
-
   useEffect(() => {
     if (visible === true) {
+      setErrorMembers("");
+      setSubjectName("");
+      setErrorName("");
       setVisitedCreate(true);
       setSubjectName("");
       setCode("");
@@ -60,7 +62,6 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
       fetchData(idClass);
     }
   }, [visible]);
-
   useEffect(() => {
     if (visitedCreate === false) {
       fetchData(idClass);
@@ -115,7 +116,6 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-
   const featchDataTable = () => {
     const list = dataStudentClasses
       .filter((item1) => {
@@ -126,11 +126,9 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
       });
     setDataTable(list);
   };
-
   const handleChangeStudents = (idStudent) => {
     setListStudentsChange(idStudent);
   };
-
   const handleRoleChange = (id, value) => {
     let updatedListInfo = dataTable.map((record) => {
       if (record.idStudent === id) {
@@ -145,7 +143,6 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
     });
     setDataTable(updatedListInfo);
   };
-
   const create = () => {
     let check = 0;
     if (name.trim() === "") {
@@ -154,13 +151,6 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
     } else {
       setErrorName("");
     }
-    if (listStudentsChange.length <= 0) {
-      setErrorMembers("Nhóm phải có ít nhất 1 thành viên");
-      check++;
-    } else {
-      setErrorMembers("");
-    }
-
     if (check === 0) {
       featchDataTable();
       let teamNew = {
@@ -196,13 +186,10 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
           setCheckDataStudent(true);
           cancelSuccess();
         },
-        (error) => {
-          toast.error(error.response.data.message);
-        }
+        (error) => {}
       );
     }
   };
-
   const columns = [
     {
       title: "#",
@@ -262,7 +249,7 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
         width={850}
         footer={null}
         bodyStyle={{ overflow: "hidden" }}
-        style={{ top: "8px" }}
+        style={{ top: "53px" }}
       >
         {" "}
         <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
@@ -307,7 +294,6 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
               <Row style={{ marginBottom: "15px" }}>
                 <div style={{ width: "100%" }}>
                   {" "}
-                  <span className="notBlank">*</span>
                   <span>Thành viên:</span>
                   <Select
                     mode="multiple"
@@ -374,7 +360,7 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
             marginTop: "20px",
           }}
         >
-          {listStudentClass.length >= 1 ? (
+          {listStudentClass.length > 0 ? (
             <>
               <div style={{ paddingTop: "15px" }}>
                 <Button

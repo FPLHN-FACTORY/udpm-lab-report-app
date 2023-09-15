@@ -23,8 +23,10 @@ public interface TeAttendanceRepository extends JpaRepository<Attendance, String
             a.name as name_meeting,
             a.status as status,
             a.student_id as student_id,
-            a.meeting_id as meeting_id
+            a.meeting_id as meeting_id,
+            m.meeting_date as meeting_date
             FROM attendance a
+            JOIN meeting m ON m.id = a.meeting_id
             WHERE a.meeting_id = :#{#idMeeting}
             """, nativeQuery = true)
     List<TeAttendanceRespone> findAttendanceByIdMeetgId(@Param("idMeeting") String idMeeting);
@@ -34,11 +36,26 @@ public interface TeAttendanceRepository extends JpaRepository<Attendance, String
             a.name as name_meeting,
             a.status as status,
             a.student_id as student_id,
-            a.meeting_id as meeting_id
+            a.meeting_id as meeting_id,
+            m.meeting_date as meeting_date
             FROM attendance a
+            JOIN meeting m ON m.id = a.meeting_id
             WHERE a.meeting_id = :#{#req.idMeeting} and a.student_id = :#{#req.idStudent}
             """, nativeQuery = true)
     Optional<TeAttendanceRespone> findAttendanceByStudentIdAndMeetgId(@Param("req") TeFindAttendanceRequest req);
 
+    @Query(value = """
+            SELECT a.id as idAttendance,
+            a.name as name_meeting,
+            a.status as status,
+            a.student_id as student_id,
+            a.meeting_id as meeting_id,
+            m.meeting_date as meeting_date
+            FROM attendance a
+            RIGHT JOIN meeting m ON m.id = a.meeting_id
+            JOIN class c on c.id = m.class_id
+            WHERE c.id = :#{#idClass}
+            """, nativeQuery = true)
+    List<TeAttendanceRespone> findAttendanceByIdClass(@Param("idClass") String idClass);
 
 }

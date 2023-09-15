@@ -31,6 +31,12 @@ public interface TePointRepository extends JpaRepository<Point, String> {
     List<TePointRespone> getAllPointByIdClass(@Param("idClass") String idClass);
 
     @Query(value = """
+            SELECT * FROM point p
+            WHERE p.class_id = :#{#idClass}
+            """, nativeQuery = true)
+    List<Point> getAllPointByIdClassImport(@Param("idClass") String idClass);
+
+    @Query(value = """
             SELECT 
                 p.id as id,
                 p.student_id as idStudent,

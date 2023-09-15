@@ -18,9 +18,10 @@ import StPostSliceReducer from "./student/StPost.reduce";
 import AdCollapsedSliceReducer from "./admin/AdCollapsedSlice.reducer";
 import StCollapsedSliceReducer from "./student/StCollapsedSlice.reducer";
 import TeCollapsedSliceReducer from "./teacher/TeCollapsedSlice.reducer";
-
+import teClassSliceReduce from "./teacher/my-class/teClassSlice.reduce";
 export const store = configureStore({
   reducer: {
+    teClass: teClassSliceReduce,
     tePoint: tePointSliceReduce,
     tePost: tePostSliceReduce,
     teMyClass: teMyClassSliceReduce,

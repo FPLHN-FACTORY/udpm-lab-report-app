@@ -409,8 +409,7 @@ const DetailMyClassTeam = () => {
               </div>
             )}
           </div>
-        </div>
-        <div className="button-leave" style={{ marginTop: "11px", textAlign: "right" }}>
+          <div className="button-leave" style={{ marginTop: "11px", textAlign: "right" }}>
           <Popconfirm
             description="Bạn có chắc chắn muốn rời lớp học này chứ?"
             okText="Có"
@@ -424,6 +423,8 @@ const DetailMyClassTeam = () => {
             </Button>
           </Popconfirm>
         </div>
+        </div>
+        
       </div>
       <ModalDetailTeam
         id={idSelected}

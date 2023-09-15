@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import "./styleTeacherAttendance.css";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/TeacherStudentClasses.api";
 import { TeacherAttendanceAPI } from "../../../../api/teacher/attendance/TeacherAttendance.api";
 import { useState } from "react";
@@ -22,6 +22,7 @@ import { faBook, faHome } from "@fortawesome/free-solid-svg-icons";
 
 const TeacherAttendanceMeeting = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { idMeeting } = useParams();
   const [meeting, setMeeting] = useState({});
   const [classFind, setClassFind] = useState({});
@@ -36,7 +37,6 @@ const TeacherAttendanceMeeting = () => {
     document.title = "Bảng điều khiển - điểm danh";
     featchMeetingCheckDate(idMeeting);
   }, []);
-
   const fetchData = async (idClass) => {
     await Promise.all([
       await featchStudentClass(idClass),
@@ -44,7 +44,6 @@ const TeacherAttendanceMeeting = () => {
       await featchAttendance(idClass),
     ]);
   };
-
   const featchClass = async (idClass) => {
     try {
       await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
@@ -54,7 +53,6 @@ const TeacherAttendanceMeeting = () => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang");
     }
   };
-
   const featchAttendance = async (idClass) => {
     try {
       await TeacherAttendanceAPI.getAttendanceByIdMeeting(idMeeting).then(
@@ -71,10 +69,9 @@ const TeacherAttendanceMeeting = () => {
         }
       );
     } catch (error) {
-      alert(error.message);
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-
   const featInforStudent = async (idClass) => {
     try {
       if (checkAttendance) {
@@ -113,7 +110,6 @@ const TeacherAttendanceMeeting = () => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-
   const featchStudentClass = async (idClass) => {
     try {
       await TeacherStudentClassesAPI.getStudentInClasses(idClass).then(
@@ -125,10 +121,9 @@ const TeacherAttendanceMeeting = () => {
         }
       );
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang");
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-
   const featchMeetingCheckDate = async (id) => {
     setLoading(false);
     try {
@@ -140,11 +135,11 @@ const TeacherAttendanceMeeting = () => {
         },
         (error) => {
           setLoading(true);
-          toast.error(error.response.data.message);
+          navigate("/teacher/schedule-today");
         }
       );
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang");
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
   useEffect(() => {
@@ -152,7 +147,6 @@ const TeacherAttendanceMeeting = () => {
       fetchData(idClass);
     }
   }, [loadingData]);
-
   const handleSave = async () => {
     try {
       let dataFind = { listAttendance: data };
@@ -164,7 +158,6 @@ const TeacherAttendanceMeeting = () => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-
   const data = useAppSelector(GetAttendanceMeeting);
   const columns = [
     {
@@ -250,7 +243,7 @@ const TeacherAttendanceMeeting = () => {
                 style={{ fontSize: 19, marginRight: 6 }}
               />
               Lịch dạy
-            </span>{" "}
+            </span>
           </Link>
           <span style={{ fontSize: "18px" }}> / </span>{" "}
           <span style={{ fontSize: "18px" }}>
@@ -289,8 +282,13 @@ const TeacherAttendanceMeeting = () => {
                     float: "right",
                   }}
                 >
-                  {" "}
-                  <span style={{ fontSize: "14px", padding: "10px" }}>
+                  <span
+                    style={{
+                      fontSize: "14px",
+                      padding: "15px",
+                      fontWeight: 500,
+                    }}
+                  >
                     {classFind.code}
                   </span>
                 </div>
@@ -314,7 +312,8 @@ const TeacherAttendanceMeeting = () => {
               >
                 Mặc định trạng thái điểm danh của sinh viên là "Có mặt". Giảng
                 viên chuyển từ "Có mặt" thành "Vắng mặt" nếu sinh viên vi phạm
-                một trong những nội quy như ra ngoài không lý do, mất trật tự,..
+                một trong những nội quy như ra ngoài không lý do, mất trật
+                tự,...
               </span>
             </div>
           </div>

@@ -1,6 +1,7 @@
 package com.labreportapp.core.teacher.repository;
 
 import com.labreportapp.core.teacher.model.request.TeFindStudentClasses;
+import com.labreportapp.core.teacher.model.response.TePointImportRespone;
 import com.labreportapp.core.teacher.model.response.TeStudentClassesRespone;
 import com.labreportapp.entity.StudentClasses;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,6 +16,17 @@ import java.util.List;
  */
 @Repository
 public interface TeStudentClassesRepository extends JpaRepository<StudentClasses, String> {
+
+    @Query(value = """
+            SELECT 
+            sc.id as id, 
+            sc.student_id as idStudent,
+            sc.email as emailStudent,
+            sc.class_id
+            FROM student_classes sc
+            WHERE sc.class_id = :#{#idClass}
+                     """, nativeQuery = true)
+    List<TePointImportRespone> findAllStudentClassForPointByIdClass(@Param("idClass") String idClass);
 
     @Query(value = """
             SELECT DISTINCT 

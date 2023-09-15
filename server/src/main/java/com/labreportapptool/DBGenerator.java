@@ -1,6 +1,7 @@
 package com.labreportapptool;
 
 import com.labreportapp.entity.Activity;
+import com.labreportapp.entity.Attendance;
 import com.labreportapp.entity.Class;
 import com.labreportapp.entity.ClassConfiguration;
 import com.labreportapp.entity.HomeWork;
@@ -15,6 +16,8 @@ import com.labreportapp.infrastructure.constant.ClassPeriod;
 import com.labreportapp.infrastructure.constant.Level;
 import com.labreportapp.infrastructure.constant.MeetingPeriod;
 import com.labreportapp.infrastructure.constant.RoleTeam;
+import com.labreportapp.infrastructure.constant.StatusAttendance;
+import com.labreportapp.infrastructure.constant.StatusClass;
 import com.labreportapp.infrastructure.constant.StatusTeam;
 import com.labreportapp.infrastructure.constant.TypeMeeting;
 import com.labreportapp.repository.ActivityRepository;
@@ -36,10 +39,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @author thangncph26123
@@ -120,7 +120,7 @@ public class DBGenerator implements CommandLineRunner {
         activity2.setId(activityRepository.save(activity2).getId());
 
         Class class1 = new Class();
-        class1.setCode("J6_NGUYENVV4_123");
+        class1.setCode("IT17325");
         class1.setClassPeriod(ClassPeriod.CA_3);
         class1.setStartTime(new Date().getTime() + 50000);
         class1.setClassSize(19);
@@ -128,24 +128,27 @@ public class DBGenerator implements CommandLineRunner {
         class1.setActivityId(activity1.getId());
         class1.setTeacherId("6f0e60a6-a3a8-45d3-b6e6-d7632eb64c1a");
         class1.setDescriptions("Lớp làm trước đồ án tốt nghiệp bán hàng");
+        class1.setStatusClass(StatusClass.OPEN);
         class1.setId(classRepository.save(class1).getId());
 
         Class class3 = new Class();
-        class3.setCode("J5_NGUYENVV4_001");
+        class3.setCode("IT17326");
         class3.setClassPeriod(ClassPeriod.CA_5);
         class3.setStartTime(new Date().getTime() + 50000);
         class3.setClassSize(0);
         class3.setPassword("000000");
+        class3.setStatusClass(StatusClass.OPEN);
         class3.setActivityId(activity2.getId());
         class3.setTeacherId("6f0e60a6-a3a8-45d3-b6e6-d7632eb64c1a");
         class3.setDescriptions("Lớp làm đồ án tốt nghiệp web bán hàng");
         class3.setId(classRepository.save(class3).getId());
 
         Class class2 = new Class();
-        class2.setCode("J3_HANGNT169_123");
+        class2.setCode("IT17317");
         class2.setClassPeriod(ClassPeriod.CA_5);
         class2.setStartTime(new Date().getTime() + 50000);
         class2.setClassSize(0);
+        class2.setStatusClass(StatusClass.OPEN);
         class2.setPassword("123456");
         class2.setActivityId(activity1.getId());
         class2.setTeacherId("99b84d22-2edb-4ede-a5c4-ec78f4791fee");
@@ -252,7 +255,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses5.setStudentId("8559e6b3-8465-48e8-92a4-0f6147dc568d");
         studentClasses5.setClassId(class1.getId());
         studentClasses5.setTeamId(team2.getId());
-        studentClasses5.setEmail("hanhlt27000@fpt.edu.vn");
+        studentClasses5.setEmail("hanhltph27000@fpt.edu.vn");
         studentClasses5.setRole(RoleTeam.MEMBER);
         studentClasses5.setStatus(StatusTeam.ACTIVE);
         studentClasses5.setId(studentClassesRepository.save(studentClasses5).getId());
@@ -262,7 +265,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses6.setStudentId("ad51426d-7545-4f31-896d-cad398cac2c5");
         studentClasses6.setClassId(class1.getId());
         studentClasses6.setTeamId(team1.getId());
-        studentClasses6.setEmail("bndph24003@fpt.edu.vn");
+        studentClasses6.setEmail("thundvbph24003@fpt.edu.vn");
         studentClasses6.setRole(RoleTeam.LEADER);
         studentClasses6.setStatus(StatusTeam.ACTIVE);
         studentClasses6.setId(studentClassesRepository.save(studentClasses6).getId());
@@ -361,7 +364,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses17.setStudentId("dac59af0-6bdb-4b26-ad8a-b5effa44875d");
         studentClasses17.setClassId(class1.getId());
         studentClasses17.setTeamId(null);
-        studentClasses17.setEmail("endph24013@fpt.edu.vn");
+        studentClasses17.setEmail("emndph24013@fpt.edu.vn");
         studentClasses17.setRole(RoleTeam.MEMBER);
         studentClasses17.setStatus(StatusTeam.ACTIVE);
         studentClasses17.setId(studentClassesRepository.save(studentClasses17).getId());
@@ -399,14 +402,14 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses21.setStudentId("de60e713-56cc-4964-ac6c-f58dcee3dcab");
         studentClasses21.setClassId(class3.getId());
         studentClasses21.setTeamId(team1.getId());
-        studentClasses21.setEmail("hieundph25894@fpt.edu.vn");
+        studentClasses21.setEmail("hieundph2589499@fpt.edu.vn");
         studentClasses21.setRole(RoleTeam.LEADER);
         studentClasses21.setStatus(StatusTeam.ACTIVE);
         studentClasses21.setId(studentClassesRepository.save(studentClasses21).getId());
 
 // Meeting
         Meeting meeting1 = new Meeting();
-        meeting1.setName("Buổi 1 buổi đầu làm quen giới thiệu bản thân");
+        meeting1.setName("Buổi 1");
         meeting1.setMeetingDate(new Date().getTime() - 86400000);
         meeting1.setMeetingPeriod(MeetingPeriod.CA_1);
         meeting1.setDescriptions("Học tập và làm theo tấm gương đạo đức HỒ CHÍ MINH");
@@ -419,11 +422,38 @@ public class DBGenerator implements CommandLineRunner {
         meeting2.setName("Buổi 2");
         meeting2.setMeetingDate(new Date().getTime());
         meeting2.setMeetingPeriod(MeetingPeriod.CA_2);
-        meeting2.setDescriptions("Yêu Tổ quốc, yêu đồng bào Học tập tốt, lao động tốt Đoàn kết tốt, kỷ luật tốt Giữ gìn vệ sinh thật tốt Khiêm tốn, thật thà, dũng cảm");
+        meeting2.setDescriptions("TÁC HẠI CỦA VIỆC THỨC KHUYA, NGỦ MUỘN");
         meeting2.setClassId(class1.getId());
         meeting2.setTypeMeeting(TypeMeeting.OFFLINE);
         meeting2.setAddress("");
         meeting2.setId(meetingRepository.save(meeting2).getId());
+
+        Meeting meeting1Class = new Meeting();
+        meeting1Class.setName("Buổi 1");
+        meeting1Class.setMeetingDate(new Date().getTime()- 86400000);
+        meeting1Class.setMeetingPeriod(MeetingPeriod.CA_2);
+        meeting1Class.setDescriptions("Buổi 1 lớp thầy Nguyên VV4 _ 001 J5_NGUYENVV4_001");
+        meeting1Class.setClassId(class3.getId());
+        meeting1Class.setTypeMeeting(TypeMeeting.ONLINE);
+        meeting1Class.setAddress("https://meet.google.com/kea-hhgi-yix");
+        meeting1Class.setId(meetingRepository.save(meeting1Class).getId());
+
+        Attendance attendanceMeeting1 = new Attendance();
+        attendanceMeeting1.setMeetingId(meeting1Class.getId());
+        attendanceMeeting1.setName(meeting1Class.getName());
+        attendanceMeeting1.setStudentId(studentClasses21.getStudentId());
+        attendanceMeeting1.setStatus(StatusAttendance.YES);
+        attendanceMeeting1.setId(attendanceRepository.save(attendanceMeeting1).getId());
+
+        Meeting meeting2Class = new Meeting();
+        meeting2Class.setName("Buổi 2");
+        meeting2Class.setMeetingDate(new Date().getTime());
+        meeting2Class.setMeetingPeriod(MeetingPeriod.CA_2);
+        meeting2Class.setDescriptions("Kỷ luật tốt Giữ gìn vệ sinh thật tốt Khiêm tốn, thật thà, dũng cảm");
+        meeting2Class.setClassId(class3.getId());
+        meeting2Class.setTypeMeeting(TypeMeeting.OFFLINE);
+        meeting2Class.setAddress("");
+        meeting2Class.setId(meetingRepository.save(meeting2Class).getId());
 
         Meeting meeting3 = new Meeting();
         meeting3.setName("Buổi 3");
@@ -496,7 +526,7 @@ public class DBGenerator implements CommandLineRunner {
         meeting9.setId(meetingRepository.save(meeting9).getId());
 
         Meeting meeting10 = new Meeting();
-        meeting10.setName("Buổi 10 ");
+        meeting10.setName("Buổi 10");
         meeting10.setMeetingDate(new Date().getTime() + 10 * 86400000);
         meeting10.setMeetingPeriod(MeetingPeriod.CA_1);
         meeting10.setDescriptions("Triết học là bộ phận lý luận nghiên cứu những quy luật vận động, phát triển chung nhất của tự nhiên, xã hội và tư duy");
@@ -504,6 +534,108 @@ public class DBGenerator implements CommandLineRunner {
         meeting10.setTypeMeeting(TypeMeeting.OFFLINE);
         meeting10.setAddress("");
         meeting10.setId(meetingRepository.save(meeting10).getId());
+
+        Meeting meeting11 = new Meeting();
+        meeting11.setName("Buổi 11");
+        meeting11.setMeetingDate(new Date().getTime() + 11 * 86400000);
+        meeting11.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting11.setDescriptions("Chủ nghĩa Mác-Lênin là hệ thống quan điểm và học thuyết khoa học của C.Mác, Ph.Ăngghen và sự phát triển của V.I.Lênin");
+        meeting11.setClassId(class1.getId());
+        meeting11.setTypeMeeting(TypeMeeting.OFFLINE);
+        meeting11.setAddress("");
+        meeting11.setId(meetingRepository.save(meeting11).getId());
+
+        Meeting meeting12 = new Meeting();
+        meeting12.setName("Buổi 12");
+        meeting12.setMeetingDate(new Date().getTime() + 12 * 86400000);
+        meeting12.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting12.setDescriptions("Chủ nghĩa cộng sản được xây dựng bởi các nhà sáng lập chủ nghĩa cộng sản Marx");
+        meeting12.setClassId(class1.getId());
+        meeting12.setTypeMeeting(TypeMeeting.OFFLINE);
+        meeting12.setAddress("");
+        meeting12.setId(meetingRepository.save(meeting12).getId());
+
+        Meeting meeting13 = new Meeting();
+        meeting13.setName("Buổi 13 ");
+        meeting13.setMeetingDate(new Date().getTime() + 13 * 86400000);
+        meeting13.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting13.setDescriptions("Nhà sử học Marx–Lenin đương đại Eric Hobsbawm");
+        meeting13.setClassId(class1.getId());
+        meeting13.setTypeMeeting(TypeMeeting.OFFLINE);
+        meeting13.setAddress("");
+        meeting13.setId(meetingRepository.save(meeting13).getId());
+
+        Meeting meeting14 = new Meeting();
+        meeting14.setName("Buổi 14 ");
+        meeting14.setMeetingDate(new Date().getTime() + 14 * 86400000);
+        meeting14.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting14.setDescriptions("Sau sự ly khai của những người vô chính phủ, quốc tế thứ nhất tan vỡ");
+        meeting14.setClassId(class1.getId());
+        meeting14.setTypeMeeting(TypeMeeting.OFFLINE);
+        meeting14.setAddress("");
+        meeting14.setId(meetingRepository.save(meeting14).getId());
+
+        Meeting meeting15 = new Meeting();
+        meeting15.setName("Buổi 15");
+        meeting15.setMeetingDate(new Date().getTime() + 15 * 86400000);
+       meeting15.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting15.setDescriptions("Không có giải pháp nào là vĩnh cửu");
+        meeting15.setClassId(class1.getId());
+        meeting15.setTypeMeeting(TypeMeeting.OFFLINE);
+        meeting15.setAddress("");
+        meeting15.setId(meetingRepository.save(meeting15).getId());
+
+        Meeting meeting16 = new Meeting();
+        meeting16.setName("Buổi 16");
+        meeting16.setMeetingDate(new Date().getTime() + 16 * 86400000);
+        meeting16.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting16.setDescriptions("Sự sụp đổ của Liên Xô và Đông Âu (do kinh tế gặp nhiều khó khăn, trong khi nhà nước không có dấu hiệu tự triệt tiêu như ý tưởng của Marx)");
+        meeting16.setClassId(class1.getId());
+        meeting16.setTypeMeeting(TypeMeeting.OFFLINE);
+        meeting16.setAddress("");
+        meeting16.setId(meetingRepository.save(meeting16).getId());
+
+        Meeting meeting17 = new Meeting();
+        meeting17.setName("Buổi 17");
+        meeting17.setMeetingDate(new Date().getTime() + 17 * 86400000);
+        meeting17.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting17.setDescriptions("Lời kêu gọi này được phát ra vào sáng ngày 20 tháng 12 năm 1946");
+        meeting17.setClassId(class1.getId());
+        meeting17.setTypeMeeting(TypeMeeting.OFFLINE);
+        meeting17.setAddress("");
+        meeting17.setId(meetingRepository.save( meeting17).getId());
+
+        Meeting meeting18 = new Meeting();
+        meeting18.setName("Buổi 18");
+        meeting18.setMeetingDate(new Date().getTime() + 18 * 86400000);
+        meeting18.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting18.setDescriptions("Ngày 19 tháng 12, khi chiến sự bùng nổ - là ngày được gọi là Toàn quốc kháng chiến");
+        meeting18.setClassId(class1.getId());
+        meeting18.setTypeMeeting(TypeMeeting.OFFLINE);
+        meeting18.setAddress("");
+        meeting18.setId(meetingRepository.save( meeting18).getId());
+
+        Meeting meeting19 = new Meeting();
+        meeting19.setName("Buổi 19");
+        meeting19.setMeetingDate(new Date().getTime() + 19 * 86400000);
+        meeting19.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting19.setDescriptions("Thức khuya hay ngủ ít có thể dẫn tới nguy cơ tăng cân theo chiều hướng tiêu cực, có thể gây thêm các tác dụng khác là nguy cơ mắc bệnh tiểu đường, tăng huyết áp…");
+        meeting19.setClassId(class1.getId());
+        meeting19.setTypeMeeting(TypeMeeting.OFFLINE);
+        meeting19.setAddress("");
+        meeting19.setId(meetingRepository.save( meeting19).getId());
+
+        Meeting meeting20 = new Meeting();
+        meeting20.setName("Buổi 20");
+        meeting20.setMeetingDate(new Date().getTime() + 20 * 86400000);
+        meeting20.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting20.setDescriptions("75 năm trôi qua, nhưng khí thế hào hùng của Lời kêu gọi toàn quốc kháng chiến đã trở thành ngày lịch sử, là dấu son chói lọi trong cuộc đấu tranh bảo vệ độc lập, chủ quyền, thống nhất và toàn vẹn lãnh thổ.");
+        meeting20.setClassId(class1.getId());
+        meeting20.setTypeMeeting(TypeMeeting.OFFLINE);
+        meeting20.setAddress("");
+        meeting20.setId(meetingRepository.save( meeting20).getId());
+
+
 // homework
         //class 1- team 2
         HomeWork homeWork1 = new HomeWork();
@@ -694,21 +826,21 @@ public class DBGenerator implements CommandLineRunner {
         post8.setDescriptions("<p><span style=\"color: rgb(32, 33, 34); font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">Trong suốt quá trình thực dân Pháp cai trị, từ giữa thế kỷ XIX đến đầu thế kỷ XX, đã có nhiều cuộc khởi nghĩa nổi dậy chống<span>&nbsp;</span></span><a href=\"https://vi.wikipedia.org/wiki/Th%E1%BB%B1c_d%C3%A2n_Ph%C3%A1p\" class=\"mw-redirect\" title=\"Thực dân Pháp\" style=\"text-decoration: none; color: rgb(51, 102, 204); background: none rgb(255, 255, 255); overflow-wrap: break-word; font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal;\">thực dân Pháp</a><span style=\"color: rgb(32, 33, 34); font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">. Các cuộc khởi nghĩa vũ trang dưới khẩu hiệu \"Cần vương\" do các văn thân, sĩ phu lãnh đạo cuối cùng cũng thất bại. Các cuộc khởi nghĩa vũ trang này mang đậm tinh thần yêu nước và đầy dũng khí trước quân thù, nhưng đều dưới sự dẫn dắt của các tư tưởng phong kiến và tư sản và đều thất bại. Cách mạng Việt Nam lâm vào cuộc khủng khoảng sâu sắc về đường lối cứu nước.</span><sup id=\"cite_ref-9\" class=\"reference\" style=\"line-height: 1em; font-size: 11.2px; white-space: nowrap; unicode-bidi: isolate; font-weight: 400; font-style: normal; color: rgb(32, 33, 34); font-family: sans-serif; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\"><a href=\"https://vi.wikipedia.org/wiki/T%C6%B0_t%C6%B0%E1%BB%9Fng_H%E1%BB%93_Ch%C3%AD_Minh1cite_note-9\" style=\"text-decoration: none; color: rgb(51, 102, 204); background: none; overflow-wrap: break-word; white-space: nowrap;\">[9]</a></sup><br></p>");
         post8.setTeacherId(class1.getTeacherId());
         post8.setClassId(class1.getId());
-        post8.setCreatedDate(new Date().getTime() +  1 * 86400000);
+        post8.setCreatedDate(new Date().getTime() + 1 * 86400000);
         post8.setId(postRepository.save(post8).getId());
 
         Post post9 = new Post();
         post9.setDescriptions("<p><span style=\"color: rgb(32, 33, 34); font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">Tư tưởng Hồ Chí Minh chỉ chính thức đưa vào Cương lĩnh của Đảng Cộng sản Việt Nam năm 1991, sau khi công cuộc Đổi mới phát động, chấp thuận phân hóa giai cấp, nhiều lý luận của chủ nghĩa Mác - Lênin không có tính khả thi trong cơ chế thị trường phải gác lại như đạo đức xã hội chủ nghĩa, xây dựng con người xã hội chủ nghĩa, làm theo năng lực hưởng theo lao động trên toàn xã hội... (</span><a href=\"https://vi.wikipedia.org/wiki/Ch%E1%BB%A7_ngh%C4%A9a_c%E1%BB%99ng_s%E1%BA%A3n\" title=\"Chủ nghĩa cộng sản\" style=\"text-decoration: none; color: rgb(51, 102, 204); background: none rgb(255, 255, 255); overflow-wrap: break-word; font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal;\">chủ nghĩa cộng sản</a><span style=\"color: rgb(32, 33, 34); font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\"><span>&nbsp;</span>đặt ra mục tiêu cuối cùng là xóa bỏ giai cấp, bóc lột, xóa bỏ giàu - nghèo, làm theo năng lực hưởng theo nhu cầu, công hữu trên nền tảng dân chủ, xóa bỏ giáo điều tôn giáo được xem là mị dân, xóa bỏ nhà nước đi đến dân chủ trực tiếp và bình đẳng, xóa bỏ các đường biên giới quốc gia, đưa các dân tộc đến cùng một lợi ích, xóa bỏ bất bình đẳng giữa các dân tộc trên phạm vi thế giới...). Các giáo trình của Việt Nam thường khai thác tư tưởng Hồ Chí Minh theo chiều hướng trên.</span><br></p>");
         post9.setTeacherId(class1.getTeacherId());
         post9.setClassId(class1.getId());
-        post9.setCreatedDate(new Date().getTime() +  2 * 86400000);
+        post9.setCreatedDate(new Date().getTime() + 2 * 86400000);
         post9.setId(postRepository.save(post9).getId());
 
         Post post10 = new Post();
         post10.setDescriptions("<p><strong style=\"color: rgb(32, 33, 34); font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\">Tư tưởng Hồ Chí Minh</strong><span style=\"color: rgb(32, 33, 34); font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\"><span>&nbsp;</span>là một hệ thống quan điểm và<span>&nbsp;</span></span><a href=\"https://vi.wikipedia.org/wiki/T%C6%B0_t%C6%B0%E1%BB%9Fng\" class=\"mw-redirect\" title=\"Tư tưởng\" style=\"text-decoration: none; color: rgb(51, 102, 204); background: none rgb(255, 255, 255); overflow-wrap: break-word; font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal;\">tư tưởng</a><span style=\"color: rgb(32, 33, 34); font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\"><span>&nbsp;</span>của<span>&nbsp;</span></span><a href=\"https://vi.wikipedia.org/wiki/H%E1%BB%93_Ch%C3%AD_Minh\" title=\"Hồ Chí Minh\" style=\"text-decoration: none; color: rgb(51, 102, 204); background: none rgb(255, 255, 255); overflow-wrap: break-word; font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal;\">Hồ Chí Minh</a><span style=\"color: rgb(32, 33, 34); font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\"><span>&nbsp;</span>trong sự nghiệp cách mạng của ông được<span>&nbsp;</span></span><a href=\"https://vi.wikipedia.org/wiki/%C4%90%E1%BA%A3ng_C%E1%BB%99ng_s%E1%BA%A3n_Vi%E1%BB%87t_Nam\" title=\"Đảng Cộng sản Việt Nam\" style=\"text-decoration: none; color: rgb(51, 102, 204); background: none rgb(255, 255, 255); overflow-wrap: break-word; font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal;\">Đảng Cộng sản Việt Nam</a><span style=\"color: rgb(32, 33, 34); font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\"><span>&nbsp;</span>tổng kết, hệ thống hóa.&nbsp;</span><br></p>");
         post10.setTeacherId(class1.getTeacherId());
         post10.setClassId(class1.getId());
-        post10.setCreatedDate(new Date().getTime() +  3 * 86400000);
+        post10.setCreatedDate(new Date().getTime() + 3 * 86400000);
         post10.setId(postRepository.save(post10).getId());
 
         Post post11 = new Post();
@@ -737,7 +869,7 @@ public class DBGenerator implements CommandLineRunner {
                 """);
         post11.setTeacherId(class1.getTeacherId());
         post11.setClassId(class1.getId());
-        post11.setCreatedDate(new Date().getTime() +  3 * 86400300);
+        post11.setCreatedDate(new Date().getTime() + 3 * 86400300);
         post11.setId(postRepository.save(post11).getId());
 
         // POINT - Class 1

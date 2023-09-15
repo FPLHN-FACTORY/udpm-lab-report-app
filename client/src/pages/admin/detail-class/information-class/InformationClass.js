@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./style-information-class.css";
-import { faLineChart } from "@fortawesome/free-solid-svg-icons";
+import { faDownload, faLineChart, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { ControlOutlined } from "@ant-design/icons";
 import { Link, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../../app/hook";
@@ -8,17 +8,20 @@ import { SetTTrueToggle } from "../../../../app/admin/AdCollapsedSlice.reducer";
 import { useEffect, useState } from "react";
 import { ClassAPI } from "../../../../api/admin/class-manager/ClassAPI.api";
 import moment from "moment";
-import { Table } from "antd";
+import { Button, Table } from "antd";
 import { GetStudentClasses } from "../../../../app/teacher/student-class/studentClassesSlice.reduce";
+import LoadingIndicator from "../../../../helper/loading";
 
 const InformationClass = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const [classDetail, setClassDetail] = useState({});
   const [students, setStudents] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
   dispatch(SetTTrueToggle());
 
   useEffect(() => {
+    setIsLoading(true);
     featchClass(id);
     fetchStudent(id);
   }, [id]);
@@ -27,6 +30,7 @@ const InformationClass = () => {
     try {
       await ClassAPI.getAdClassDetailById(idClass).then((responese) => {
         setClassDetail(responese.data.data);
+        console.log(responese.data.data);
       });
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
@@ -37,6 +41,7 @@ const InformationClass = () => {
     try {
       await ClassAPI.getAdStudentClassByIdClass(idClass).then((respone) => {
         setStudents(respone.data.data);
+        setIsLoading(false);
       });
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
@@ -110,6 +115,7 @@ const InformationClass = () => {
 
   return (
     <div className="box-general-custom">
+      {isLoading && <LoadingIndicator />}
       <div className="title-meeting-managemnt-my-class">
         <span style={{ paddingLeft: "20px" }}>
           <ControlOutlined style={{ fontSize: "22px" }} />
@@ -215,11 +221,77 @@ const InformationClass = () => {
               >
                 Mã tham gia: &nbsp;{classDetail.passWord}
               </span>
+              <span
+                className="group-info-item"
+                style={{ marginTop: "13px", marginBottom: "15px" }}
+              >
+                Trạng thái: &nbsp;
+                {classDetail.statusClass === 0 ? "Mở" : "Đóng"}
+              </span>
             </div>
             <div style={{ marginTop: "10px" }}>
-              <span style={{ fontSize: "16px" }}>
-                Danh sách sinh viên trong lớp:
-              </span>
+              <br />
+              <div style={{ marginBottom: "10px" }}>
+                <div style={{ float: "left" }}>
+                  <span style={{ fontSize: "16px" }}>
+                    Danh sách sinh viên trong lớp:
+                  </span>
+                </div>
+                <div style={{ float: "right" }}>
+                  <Button
+                    style={{
+                      color: "white",
+                      backgroundColor: "rgb(55, 137, 220)",
+                      marginRight: "5px",
+                    }}
+                  >
+                    <FontAwesomeIcon
+                      icon={faDownload}
+                      size="1x"
+                      style={{
+                        backgroundColor: "rgb(55, 137, 220)",
+                        marginRight: "7px",
+                      }}
+                    />{" "}
+                    Export
+                  </Button>
+                  <Button
+                    style={{
+                      color: "white",
+                      backgroundColor: "rgb(55, 137, 220)",
+                      marginRight: "5px",
+                    }}
+                  >
+                    <FontAwesomeIcon
+                      icon={faUpload}
+                      size="1x"
+                      style={{
+                        backgroundColor: "rgb(55, 137, 220)",
+                        marginRight: "7px",
+                      }}
+                    />{" "}
+                    Import
+                  </Button>
+                  <Button
+                    style={{
+                      color: "white",
+                      backgroundColor: "rgb(55, 137, 220)",
+                      marginRight: "5px",
+                    }}
+                  >
+                    <FontAwesomeIcon
+                      icon={faDownload}
+                      size="1x"
+                      style={{
+                        backgroundColor: "rgb(55, 137, 220)",
+                        marginRight: "7px",
+                      }}
+                    />{" "}
+                    Tải mẫu
+                  </Button>
+                </div>
+              </div>
+              <br />
               <div style={{ minHeight: "140px", marginTop: "-8px" }}>
                 {students.length > 0 ? (
                   <>

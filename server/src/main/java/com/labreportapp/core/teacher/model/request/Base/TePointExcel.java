@@ -9,7 +9,6 @@ import lombok.ToString;
  */
 @Getter
 @Setter
-@ToString
 public class TePointExcel {
 
     private String idPoint;
