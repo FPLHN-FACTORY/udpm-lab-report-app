@@ -8,7 +8,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import LoadingIndicator from "../../../../helper/loading";
 import { ClassAPI } from "../../../../api/admin/class-manager/ClassAPI.api";
-import { SetTeacherSemester } from "../../../../app/admin/ClassManager.reducer";
 import { CreateClass } from "../../../../app/admin/ClassManager.reducer";
 import { GetAdTeacher } from "../../../../app/admin/AdTeacherSlice.reducer";
 
@@ -83,7 +82,6 @@ const ModalCreateProject = ({ visible, onCancel }) => {
         setLoading(false);
         const responseClassAll = await ClassAPI.fetchAllSemester();
         const listClassAll = responseClassAll.data;
-        dispatch(SetTeacherSemester(listClassAll.data));
         if (listClassAll.data.length > 0) {
           setIdSemesterSearch(listClassAll.data[0].id);
         } else {
@@ -159,9 +157,7 @@ const ModalCreateProject = ({ visible, onCancel }) => {
           dispatch(CreateClass(response.data.data));
           cancelSuccess();
         },
-        (error) => {
-          toast.error(error.response.data.message);
-        }
+        (error) => {}
       );
     }
   };

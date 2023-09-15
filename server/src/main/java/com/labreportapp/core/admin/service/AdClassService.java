@@ -24,9 +24,9 @@ public interface AdClassService {
 
     List<AdActivityClassResponse> getAllByIdSemester(final AdFindClassRequest adFindClass);
 
-    Class createClass(@Valid final AdCreateClassRequest request);
+    AdClassCustomResponse createClass(@Valid final AdCreateClassRequest request);
 
-    Class updateClass(@Valid final AdCreateClassRequest request, String id);
+    AdClassCustomResponse updateClass(@Valid final AdCreateClassRequest request, String id);
 
     PageableObject<AdListClassCustomResponse> searchClass(final AdFindClassRequest teFindClass);
 

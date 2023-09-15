@@ -3,11 +3,11 @@ import { convertMeetingPeriodToNumber } from "../../helper/util.helper";
 
 const initialState = [];
 
-const teacherSemesterSlice = createSlice({
-  name: "teacherSemester",
+const adClassManagementSlice = createSlice({
+  name: "adClassManagement",
   initialState,
   reducers: {
-    SetTeacherSemester: (state, action) => {
+    SetMyClass: (state, action) => {
       state = action.payload;
       return state;
     },
@@ -21,6 +21,7 @@ const teacherSemesterSlice = createSlice({
         classSize: data.classSize,
         startTime: data.startTime,
         teacherId: data.teacherId,
+        userNameTeacher: data.userNameTeacher,
         activityId: data.activityId,
       };
       state.forEach((item, index) => {
@@ -31,14 +32,15 @@ const teacherSemesterSlice = createSlice({
     },
     UpdateClass: (state, action) => {
       const data = action.payload;
-      console.log(data);
+
       state.forEach((item) => {
         if (item.id === data.id) {
           item.code = data.code;
-          item.classPeriod = convertMeetingPeriodToNumber(data.classPeriod);
+          item.classPeriod = data.classPeriod;
           item.classSize = data.classSize;
           item.startTime = data.startTime;
           item.teacherId = data.teacherId;
+          item.userNameTeacher = data.userNameTeacher;
           item.activityId = data.activityId;
         }
       });
@@ -50,8 +52,8 @@ const teacherSemesterSlice = createSlice({
   },
 });
 
-export const { SetTeacherSemester, CreateClass, UpdateClass, SetMyClass } =
-  teacherSemesterSlice.actions;
-export const GetTeacherSemester = (state) => state.teacherSemester;
+export const { CreateClass, UpdateClass, SetMyClass } =
+  adClassManagementSlice.actions;
+export const GetAdClassManagement = (state) => state.adClassManagement;
 
-export default teacherSemesterSlice.reducer;
+export default adClassManagementSlice.reducer;

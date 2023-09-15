@@ -12,6 +12,7 @@ import com.labreportapp.core.student.service.StMyClassService;
 import com.labreportapp.entity.Class;
 import com.labreportapp.entity.Semester;
 import com.labreportapp.entity.StudentClasses;
+import com.labreportapp.infrastructure.constant.Message;
 import com.labreportapp.infrastructure.exception.rest.RestApiException;
 import com.labreportapp.repository.SemesterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,17 +55,16 @@ public class StMyClassServiceImpl implements StMyClassService {
         Optional<Class> findCurrentMyClass = stClassRepository.findById(req.getIdClass());
         Optional<StudentClasses> findStudentInClass = stStudentClassesRepository.
                 findStudentClassesByClassIdAndStudentId(req.getIdClass(), req.getIdStudent());
-        Optional<StClassResponse> checkTheFirstMeetingDate = stMyClassRepository.checkTheFirstMeetingDateByClass(req);
+        StClassResponse checkTheFirstMeetingDate = stMyClassRepository.checkTheFirstMeetingDateByClass(req);
 
-        if (findStudentInClass.isPresent()){
-            if (checkTheFirstMeetingDate.isPresent()){
+        if (findStudentInClass.isPresent()) {
+            if (checkTheFirstMeetingDate == null) {
                 stStudentClassesRepository.delete(findStudentInClass.get());
                 findCurrentMyClass.get().setClassSize(findCurrentMyClass.get().getClassSize() - 1);
                 stClassRepository.save(findCurrentMyClass.get());
-            } else{
-                throw new RestApiException("Bạn không thể rời lớp học này");
+            } else {
+                throw new RestApiException(Message.YOU_DONT_LEAVE_CLASS);
             }
         }
-
     }
 }

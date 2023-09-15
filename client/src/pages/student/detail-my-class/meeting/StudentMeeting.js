@@ -43,6 +43,7 @@ const StMeetingMyClass = () => {
         }
       );
     } catch (error) {
+      console.log(error);
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };

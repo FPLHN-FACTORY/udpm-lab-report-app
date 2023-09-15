@@ -204,11 +204,16 @@ const StPostDetailClass = () => {
               <hr />
             </div>
             <div className="box-image">
-              <h1 className="textCode"> {classDetail.code}</h1>
+              <span className="textCode"> {classDetail.code}</span>
             </div>
             <div className="box-post">
               <div className="box-post">
-                <div style={{ height: "auto", margin: "20px 0 20px 0" }}>
+                <div
+                  style={{
+                    height: "auto",
+                    margin: "20px 0 20px 0",
+                  }}
+                >
                   {data.length > 0 ? (
                     data.map((item) => {
                       return (
@@ -253,7 +258,14 @@ const StPostDetailClass = () => {
                       );
                     })
                   ) : (
-                    <div style={{ width: "100%", textAlign: "center" }}>
+                    <div
+                      style={{
+                        width: "100%",
+                        textAlign: "center",
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    >
                       <p
                         style={{
                           textAlign: "center",
@@ -262,11 +274,11 @@ const StPostDetailClass = () => {
                           color: "red",
                         }}
                       >
-                        Chưa đăng bài viết nào được đăng!
+                        Chưa có bài đăng nào !
                       </p>
                     </div>
                   )}
-                  {seeMore && (
+                  {seeMore && totalPage > 1 && (
                     <Button
                       style={{ float: "right" }}
                       type="primary"

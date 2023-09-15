@@ -19,19 +19,19 @@ import java.util.List;
 @CrossOrigin("*")
 public class StClassController {
 
-  @Autowired
-  private StClassService stClassService;
+    @Autowired
+    private StClassService stClassService;
 
-  @GetMapping("")
-  public ResponseObject getClassByCriteriaAndIsActive(final StFindClassRequest req) {
-    List<StClassCustomResponse> response = stClassService.getAllClassByCriteriaAndIsActive(req);
-    return new ResponseObject(response);
-  }
+    @GetMapping("")
+    public ResponseObject getClassByCriteriaAndIsActive(final StFindClassRequest req) {
+        List<StClassCustomResponse> response = stClassService.getAllClassByCriteriaAndIsActive(req);
+        return new ResponseObject(response);
+    }
 
-  @PostMapping("/join")
-  public ResponseObject studentJoinClass(final StClassRequest req) {
-    StClassCustomResponse response = stClassService.joinClass(req);
-    return new ResponseObject(response);
-  }
+    @PostMapping("/join")
+    public ResponseObject studentJoinClass(final StClassRequest req) {
+        StClassCustomResponse response = stClassService.joinClass(req);
+        return new ResponseObject(response);
+    }
 
 }

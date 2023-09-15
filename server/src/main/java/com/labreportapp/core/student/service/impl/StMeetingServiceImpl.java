@@ -131,7 +131,7 @@ public class StMeetingServiceImpl implements StMeetingService {
     }
 
     @Override
-    public List<StMyStudentTeamResponse> getRoleByIdStudent(final StFindMeetingRequest request) {
+    public Integer getRoleByIdStudent(final StFindMeetingRequest request) {
         return stMeetingrepository.getRoleByIdStudent(request);
     }
 

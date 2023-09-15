@@ -1,8 +1,8 @@
 export const sinhVienCurrent = {
   id: "874bffc6-38ce-467e-9458-47868e1e2f52",
-  name: "Nguyễn Đức Ư",
-  username: "undph24012",
-  email: "undph24012@fpt.edu.vn",
+  name: "Nguyễn Công Thắng",
+  username: "thangncph26123",
+  email: "thangncph26123@fpt.edu.vn",
 };
 
 export const giangVienCurrent = {

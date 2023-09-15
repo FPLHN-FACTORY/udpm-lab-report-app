@@ -291,7 +291,10 @@ const TeacherPostMyClass = () => {
               <hr />
             </div>
           </div>
-          <div className="box-image" style={{ marginBottom: "20px" }}></div>
+          <div className="box-image" style={{ marginBottom: "20px" }}>
+            {" "}
+            <span className="textCode"> {classDetail.code}</span>
+          </div>
           <div className="box-post">
             <div className="box-post-left">
               <div className="box-infor" style={{ height: "140px" }}>

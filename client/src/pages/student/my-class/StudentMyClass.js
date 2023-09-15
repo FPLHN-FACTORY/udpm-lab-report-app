@@ -45,7 +45,6 @@ const StudentMyClass = () => {
   };
 
   useEffect(() => {
-    setLoading(true);
     loadDataSemester();
   }, []);
 
@@ -157,6 +156,7 @@ const StudentMyClass = () => {
     StMyClassAPI.getAllActivityByIdSemester(semester).then((response) => {
       setListActivity(response.data.data);
       setActivity("");
+      loadDataClass("");
     });
   };
 
@@ -181,11 +181,11 @@ const StudentMyClass = () => {
     return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
   };
 
-  const loadDataClass = () => {
+  const loadDataClass = (activityParams) => {
     setLoading(true);
     let filter = {
       semesterId: semester,
-      activityId: activity,
+      activityId: activityParams !== "" ? activity : activityParams,
       code: code,
       classPeriod: classPeriod === "" ? null : parseInt(classPeriod),
       level: level === "" ? null : parseInt(level),

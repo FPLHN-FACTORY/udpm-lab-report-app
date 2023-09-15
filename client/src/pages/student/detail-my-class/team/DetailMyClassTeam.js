@@ -70,14 +70,16 @@ const DetailMyClassTeam = () => {
     const obj = {
       idClass: id,
       idStudent: sinhVienCurrent.id,
-    }
-    StMyClassAPI.leaveClass(obj).then((response) => {
-      toast.success("Rời lớp học thành công!");
-      navigate(`/student/my-class`);
-    }).catch(error => {
-      toast.error(error.response.data);
-    })
-  }
+    };
+    StMyClassAPI.leaveClass(obj)
+      .then((response) => {
+        toast.success("Rời lớp học thành công!");
+        navigate(`/student/my-class`);
+      })
+      .catch((error) => {
+        toast.error(error.response.data);
+      });
+  };
 
   const columns = [
     {
@@ -107,11 +109,6 @@ const DetailMyClassTeam = () => {
       dataIndex: "stt",
       key: "stt",
       render: (text, record, index) => <>{index + 1}</>,
-    },
-    {
-      title: "Mã nhóm",
-      dataIndex: "code",
-      key: "code",
     },
     {
       title: "Tên nhóm",
@@ -288,9 +285,7 @@ const DetailMyClassTeam = () => {
                 >
                   Mã lớp: {detailClass != null ? detailClass.code : ""}
                 </span>
-                <span className="group-info-item">
-                  Tên lớp: {detailClass != null ? detailClass.name : ""}
-                </span>
+
                 <span
                   className="group-info-item"
                   style={{ marginTop: "13px", marginBottom: "15px" }}
@@ -307,10 +302,10 @@ const DetailMyClassTeam = () => {
                   Ca học:{" "}
                   {detailClass != null
                     ? "Ca " +
-                    parseInt(
-                      convertMeetingPeriodToNumber(detailClass.classPeriod) +
-                      1
-                    )
+                      parseInt(
+                        convertMeetingPeriodToNumber(detailClass.classPeriod) +
+                          1
+                      )
                     : ""}
                 </span>
                 <span
@@ -327,8 +322,8 @@ const DetailMyClassTeam = () => {
                   Giảng viên:{" "}
                   {detailClass != null
                     ? detailClass.nameTeacher +
-                    " - " +
-                    detailClass.usernameTeacher
+                      " - " +
+                      detailClass.usernameTeacher
                     : ""}
                 </span>
               </div>
@@ -405,26 +400,30 @@ const DetailMyClassTeam = () => {
                     pagination={false}
                     rowKey="id"
                   />
+                  <div
+                    className="button-leave"
+                    style={{ marginTop: "11px", textAlign: "right" }}
+                  >
+                    <Popconfirm
+                      description="Bạn có chắc chắn muốn rời lớp học này chứ?"
+                      okText="Có"
+                      cancelText="Không"
+                      onConfirm={() => {
+                        handleLeaveClass();
+                      }}
+                    >
+                      <Button
+                        style={{ backgroundColor: "red", color: "white" }}
+                      >
+                        Rời khỏi lớp học
+                      </Button>
+                    </Popconfirm>
+                  </div>
                 </>
               </div>
             )}
           </div>
-          <div className="button-leave" style={{ marginTop: "11px", textAlign: "right" }}>
-          <Popconfirm
-            description="Bạn có chắc chắn muốn rời lớp học này chứ?"
-            okText="Có"
-            cancelText="Không"
-            onConfirm={() => {
-              handleLeaveClass();
-            }}
-          >
-            <Button style={{ backgroundColor: "red", color: "white" }}>
-              Rời khỏi lớp học
-            </Button>
-          </Popconfirm>
         </div>
-        </div>
-        
       </div>
       <ModalDetailTeam
         id={idSelected}

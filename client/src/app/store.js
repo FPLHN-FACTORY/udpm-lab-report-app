@@ -6,7 +6,7 @@ import teMyClassSliceReduce from "./teacher/my-class/teacherMyClassSlice.reduce"
 import teSemesterSliceReduce from "./teacher/semester/teacherSemesterSlice.reduce";
 import teTeamsSliceReduce from "./teacher/teams/teamsSlice.reduce";
 import teMeetingSliceReduce from "./teacher/meeting/teacherMeetingSlice.reduce";
-import teacherSemesterSliceReduce from "./admin/ClassManager.reducer";
+import adClassManagement from "./admin/ClassManager.reducer";
 import teStudentClassesSliceReduce from "./teacher/student-class/studentClassesSlice.reduce";
 import tePointSliceReduce from "./teacher/point/tePointSlice.reduce";
 import AdMeetingManagementReducer from "./admin/AdMeetingManagement.reducer";
@@ -19,6 +19,7 @@ import AdCollapsedSliceReducer from "./admin/AdCollapsedSlice.reducer";
 import StCollapsedSliceReducer from "./student/StCollapsedSlice.reducer";
 import TeCollapsedSliceReducer from "./teacher/TeCollapsedSlice.reducer";
 import teClassSliceReduce from "./teacher/my-class/teClassSlice.reduce";
+
 export const store = configureStore({
   reducer: {
     teClass: teClassSliceReduce,
@@ -27,7 +28,7 @@ export const store = configureStore({
     teMyClass: teMyClassSliceReduce,
     teSemester: teSemesterSliceReduce,
     teTeams: teTeamsSliceReduce,
-    teacherSemester: teacherSemesterSliceReduce,
+    adClassManagement: adClassManagement,
     teStudentClasses: teStudentClassesSliceReduce,
     teMeetingClass: teMeetingSliceReduce,
     teAttendanceMeeting: teacherAttendanceMeetingSliceReduce,

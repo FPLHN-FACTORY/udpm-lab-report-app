@@ -71,16 +71,16 @@ public interface StMyClassRepository extends ClassRepository {
     Integer countMemberInTeam(@Param("idClass") String idClass, @Param("idTeam") String idTeam);
 
     @Query(value = """
-       SELECT c.id, c.code, c.class_size, c.class_period,
-       m.name AS meeting_name, m.meeting_date
-       FROM class c
-       JOIN (SELECT m.class_id, m.name, m.meeting_date
-       FROM meeting m
-       WHERE m.meeting_date IN (SELECT MIN(meeting_date)
-       FROM meeting
-       GROUP BY class_id)) m ON m.class_id = c.id
-       WHERE DATE(FROM_UNIXTIME(m.meeting_date / 1000)) > CURDATE()
-       AND c.id = :#{#req.idClass}
-       """,nativeQuery = true)
-    Optional<StClassResponse> checkTheFirstMeetingDateByClass(final StClassRequest req);
+            SELECT c.id, c.code, c.class_size, c.class_period,
+            m.name AS meeting_name, m.meeting_date
+            FROM class c
+            JOIN (SELECT m.class_id, m.name, m.meeting_date
+            FROM meeting m
+            WHERE m.meeting_date IN (SELECT MIN(meeting_date)
+            FROM meeting
+            GROUP BY class_id)) m ON m.class_id = c.id
+            WHERE DATE(FROM_UNIXTIME(m.meeting_date / 1000)) > CURDATE()
+            AND c.id = :#{#req.idClass}
+            """, nativeQuery = true)
+    StClassResponse checkTheFirstMeetingDateByClass(final StClassRequest req);
 }

@@ -35,7 +35,11 @@ public enum Message {
     STUDENT_HAD_TEAM(PropertiesReader.getProperty(PropertyKeys.STUDENT_HAD_TEAM)),
     STUDENT_HAD_NOT_TEAM(PropertiesReader.getProperty(PropertyKeys.STUDENT_HAD_NOT_TEAM)),
     CHUA_DEN_THOI_GIAN_CUA_BUOI_HOC(PropertiesReader.getProperty(PropertyKeys.CHUA_DEN_THOI_GIAN_CUA_BUOI_HOC)),
-    ACTIVITY_HAVE_CLASS(PropertiesReader.getProperty(PropertyKeys.ACTIVITY_HAVE_CLASS));
+    ACTIVITY_HAVE_CLASS(PropertiesReader.getProperty(PropertyKeys.ACTIVITY_HAVE_CLASS)),
+    YOU_HAD_IN_CLASS(PropertiesReader.getProperty(PropertyKeys.YOU_HAD_IN_CLASS)),
+    CLASS_DID_FULL_CLASS_SIZE(PropertiesReader.getProperty(PropertyKeys.CLASS_DID_FULL_CLASS_SIZE)),
+    YOU_DONT_LEAVE_CLASS(PropertiesReader.getProperty(PropertyKeys.YOU_DONT_LEAVE_CLASS)),
+    CODE_CLASS_EXISTS(PropertiesReader.getProperty(PropertyKeys.CODE_CLASS_EXISTS));
 
     private String message;
 

@@ -22,24 +22,20 @@ import {
   Col,
 } from "antd";
 import LoadingIndicator from "../../../helper/loading";
-import { SetTeacherSemester } from "../../../app/admin/ClassManager.reducer";
 
 import { useEffect, useState } from "react";
 import { ClassAPI } from "../../../api/admin/class-manager/ClassAPI.api";
 import "./style-class-management.css";
-import { list } from "@chakra-ui/react";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ModalCreateProject from "../../admin/class-management/create-class/ModalCreateClass";
-import {
-  ControlOutlined,
-  QuestionCircleFilled,
-  ProjectOutlined,
-} from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { SetAdTeacher } from "../../../app/admin/AdTeacherSlice.reducer";
 import ModalUpdateClass from "./update-class/ModalUpdateClass";
 import { convertMeetingPeriodToTime } from "../../../helper/util.helper";
+import {
+  GetAdClassManagement,
+  SetMyClass,
+} from "../../../app/admin/ClassManager.reducer";
 
 const ClassManagement = () => {
   const { Option } = Select;
@@ -89,7 +85,7 @@ const ClassManagement = () => {
       await ClassAPI.getAllMyClass(filter).then((respone) => {
         setTotalPages(parseInt(respone.data.data.totalPages));
         setlistClassAll(respone.data.data.data);
-        console.log(respone.data.data.data);
+        dispatch(SetMyClass(respone.data.data.data));
 
         setLoading(true);
       });
@@ -128,7 +124,6 @@ const ClassManagement = () => {
       try {
         const responseClassAll = await ClassAPI.fetchAllSemester();
         const listClassAll = responseClassAll.data;
-        dispatch(SetTeacherSemester(listClassAll.data));
         if (listClassAll.data.length > 0) {
           setIdSemesterSearch(listClassAll.data[0].id);
         } else {
@@ -232,7 +227,9 @@ const ClassManagement = () => {
               icon={faPencilAlt}
               size="1x"
               style={{
+                marginLeft: 7,
                 color: "rgb(55, 137, 220)",
+                cursor: "pointer",
               }}
             />
           </Tooltip>
@@ -240,6 +237,7 @@ const ClassManagement = () => {
       ),
     },
   ];
+  const dataClass = useAppSelector(GetAdClassManagement);
 
   const handleSearchAllByFilter = async () => {
     await featchAllMyClass();
@@ -504,7 +502,7 @@ const ClassManagement = () => {
               <>
                 <div className="table">
                   <Table
-                    dataSource={listClassAll}
+                    dataSource={dataClass}
                     rowKey="id"
                     columns={columns}
                     pagination={false}

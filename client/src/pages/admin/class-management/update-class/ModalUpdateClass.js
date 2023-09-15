@@ -8,10 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import LoadingIndicator from "../../../../helper/loading";
 import { ClassAPI } from "../../../../api/admin/class-manager/ClassAPI.api";
-import {
-  SetTeacherSemester,
-  UpdateClass,
-} from "../../../../app/admin/ClassManager.reducer";
+import { UpdateClass } from "../../../../app/admin/ClassManager.reducer";
 import { CreateClass } from "../../../../app/admin/ClassManager.reducer";
 import { GetAdTeacher } from "../../../../app/admin/AdTeacherSlice.reducer";
 import { parseInt } from "lodash";
@@ -100,7 +97,7 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
       );
     };
     fetchDetail(id);
-  }, [id]);
+  }, [id, visible]);
 
   useEffect(() => {
     const featchDataSemester = async () => {
@@ -108,7 +105,6 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
         setLoading(false);
         const responseClassAll = await ClassAPI.fetchAllSemester();
         const listClassAll = responseClassAll.data;
-        dispatch(SetTeacherSemester(listClassAll.data));
         setSemesterDataAll(listClassAll.data);
         setLoading(true);
       } catch (error) {

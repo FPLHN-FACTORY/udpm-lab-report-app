@@ -62,7 +62,7 @@ public class StMeetingController {
 
     @GetMapping("/get-role")
     public ResponseObject getRoleByIdStudent(final StFindMeetingRequest request) {
-        List<StMyStudentTeamResponse> list = service.getRoleByIdStudent(request);
-        return new ResponseObject(list);
+        Integer role = service.getRoleByIdStudent(request);
+        return new ResponseObject(role);
     }
 }

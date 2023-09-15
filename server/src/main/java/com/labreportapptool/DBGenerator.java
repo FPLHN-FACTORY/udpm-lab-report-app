@@ -135,7 +135,7 @@ public class DBGenerator implements CommandLineRunner {
         class3.setCode("IT17326");
         class3.setClassPeriod(ClassPeriod.CA_5);
         class3.setStartTime(new Date().getTime() + 50000);
-        class3.setClassSize(0);
+        class3.setClassSize(1);
         class3.setPassword("000000");
         class3.setStatusClass(StatusClass.OPEN);
         class3.setActivityId(activity2.getId());
@@ -147,7 +147,7 @@ public class DBGenerator implements CommandLineRunner {
         class2.setCode("IT17317");
         class2.setClassPeriod(ClassPeriod.CA_5);
         class2.setStartTime(new Date().getTime() + 50000);
-        class2.setClassSize(0);
+        class2.setClassSize(1);
         class2.setStatusClass(StatusClass.OPEN);
         class2.setPassword("123456");
         class2.setActivityId(activity1.getId());

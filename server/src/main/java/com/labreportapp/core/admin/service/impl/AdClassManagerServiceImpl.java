@@ -3,10 +3,12 @@ package com.labreportapp.core.admin.service.impl;
 import com.labreportapp.core.admin.model.request.AdCreateClassRequest;
 import com.labreportapp.core.admin.model.request.AdFindClassRequest;
 import com.labreportapp.core.admin.model.response.*;
+import com.labreportapp.core.admin.repository.AdActivityRepository;
 import com.labreportapp.core.admin.repository.AdClassRepository;
 import com.labreportapp.core.admin.service.AdClassService;
 import com.labreportapp.core.common.base.PageableObject;
 import com.labreportapp.core.common.response.SimpleResponse;
+import com.labreportapp.entity.Activity;
 import com.labreportapp.entity.Class;
 import com.labreportapp.infrastructure.apiconstant.ApiConstants;
 import com.labreportapp.infrastructure.constant.ClassPeriod;
@@ -45,6 +47,9 @@ public class AdClassManagerServiceImpl implements AdClassService {
     private AdClassRepository repository;
 
     @Autowired
+    private AdActivityRepository adActivityRepository;
+
+    @Autowired
     private RestTemplate restTemplate;
 
     @Override
@@ -73,31 +78,84 @@ public class AdClassManagerServiceImpl implements AdClassService {
     }
 
     @Override
-    public Class createClass(@Valid AdCreateClassRequest request) {
+    public AdClassCustomResponse createClass(@Valid AdCreateClassRequest request) {
         Class classNew = new Class();
+        String codeCheck = repository.checkCodeExist(request.getCode(), request.getActivityId());
+        if (codeCheck != null) {
+            throw new RestApiException(Message.CODE_CLASS_EXISTS);
+        }
         classNew.setCode(request.getCode());
         classNew.setClassSize(0);
         classNew.setClassPeriod(ClassPeriod.values()[Math.toIntExact(request.getClassPeriod())]);
         classNew.setPassword(RandomString.random());
+        Optional<Activity> activityFind = adActivityRepository.findById(request.getActivityId());
+        if (!activityFind.isPresent()) {
+            throw new RestApiException(Message.ACTIVITY_NOT_EXISTS);
+        }
         classNew.setActivityId(request.getActivityId());
         classNew.setStartTime(request.getStartTime());
         if (!request.getTeacherId().equals("")) {
             classNew.setTeacherId(request.getTeacherId());
         }
-        return repository.save(classNew);
+        repository.save(classNew);
+        AdClassCustomResponse adClassCustomResponse = new AdClassCustomResponse();
+        adClassCustomResponse.setId(classNew.getId());
+        adClassCustomResponse.setClassSize(classNew.getClassSize());
+        adClassCustomResponse.setClassPeriod(request.getClassPeriod());
+        adClassCustomResponse.setCode(classNew.getCode());
+        adClassCustomResponse.setActivityName(activityFind.get().getName());
+        adClassCustomResponse.setStartTime(classNew.getStartTime());
+        if (!request.getTeacherId().equals("")) {
+            adClassCustomResponse.setTeacherId(request.getTeacherId());
+            String apiUrl = ApiConstants.API_LIST_TEACHER;
+
+            ResponseEntity<SimpleResponse> responseEntity =
+                    restTemplate.exchange(apiUrl + "/" + request.getTeacherId(), HttpMethod.GET, null,
+                            new ParameterizedTypeReference<SimpleResponse>() {
+                            });
+
+            SimpleResponse response = responseEntity.getBody();
+            adClassCustomResponse.setUserNameTeacher(response.getUsername());
+        }
+
+        return adClassCustomResponse;
     }
 
     @Override
-    public Class updateClass(AdCreateClassRequest request, String id) {
+    public AdClassCustomResponse updateClass(AdCreateClassRequest request, String id) {
         Class classNew = repository.findById(id).get();
         classNew.setCode(request.getCode());
         classNew.setStartTime(request.getStartTime());
         classNew.setClassPeriod(ClassPeriod.values()[Math.toIntExact(request.getClassPeriod())]);
+        Optional<Activity> activityFind = adActivityRepository.findById(request.getActivityId());
+        if (!activityFind.isPresent()) {
+            throw new RestApiException(Message.ACTIVITY_NOT_EXISTS);
+        }
         classNew.setActivityId(request.getActivityId());
         if (!request.getTeacherId().equals("")) {
             classNew.setTeacherId(request.getTeacherId());
         }
-        return repository.save(classNew);
+        repository.save(classNew);
+        AdClassCustomResponse adClassCustomResponse = new AdClassCustomResponse();
+        adClassCustomResponse.setId(classNew.getId());
+        adClassCustomResponse.setClassSize(classNew.getClassSize());
+        adClassCustomResponse.setClassPeriod(request.getClassPeriod());
+        adClassCustomResponse.setCode(classNew.getCode());
+        adClassCustomResponse.setActivityName(activityFind.get().getName());
+        adClassCustomResponse.setStartTime(classNew.getStartTime());
+        if (!request.getTeacherId().equals("")) {
+            adClassCustomResponse.setTeacherId(request.getTeacherId());
+            String apiUrl = ApiConstants.API_LIST_TEACHER;
+
+            ResponseEntity<SimpleResponse> responseEntity =
+                    restTemplate.exchange(apiUrl + "/" + request.getTeacherId(), HttpMethod.GET, null,
+                            new ParameterizedTypeReference<SimpleResponse>() {
+                            });
+
+            SimpleResponse response = responseEntity.getBody();
+            adClassCustomResponse.setUserNameTeacher(response.getUsername());
+        }
+        return adClassCustomResponse;
     }
 
     @Override

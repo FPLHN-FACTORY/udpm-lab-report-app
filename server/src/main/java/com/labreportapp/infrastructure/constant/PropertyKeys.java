@@ -28,4 +28,8 @@ public class PropertyKeys {
     public static final String ACTIVITY_NOT_EXISTS = "activity.not.exist";
     public static final String CHUA_DEN_THOI_GIAN_CUA_BUOI_HOC = "chua.den.thoi.gian.cua.buoi.hoc";
     public static final String ACTIVITY_HAVE_CLASS = "hoat.dong.dang.co.lop.hoc";
+    public static final String YOU_HAD_IN_CLASS = "ban.da.o.trong.lop.nay";
+    public static final String CLASS_DID_FULL_CLASS_SIZE = "class.did.full.class.size";
+    public static final String YOU_DONT_LEAVE_CLASS = "you.dont.leave.class";
+    public static final String CODE_CLASS_EXISTS = "code.class.exists";
 }

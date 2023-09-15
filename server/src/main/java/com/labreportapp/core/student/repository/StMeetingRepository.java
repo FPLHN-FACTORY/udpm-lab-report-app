@@ -77,8 +77,8 @@ public interface StMeetingRepository extends JpaRepository<Meeting , String> {
     List<StMyTeamInClassResponse> getTeamInClass(@Param("req") StFindMeetingRequest req);
 
     @Query(value = """
-            SELECT a.id, a.student_id , a.class_id , a.team_id , a.email , a.role ,a.status FROM student_classes a
-            WHERE a.student_id = :#{#req.idStudent}
+            SELECT a.role FROM student_classes a
+            WHERE a.student_id = :#{#req.idStudent} AND a.class_id = :#{#req.idClass}
             """, nativeQuery = true)
-    List<StMyStudentTeamResponse> getRoleByIdStudent(@Param("req") StFindMeetingRequest req);
+    Integer getRoleByIdStudent(@Param("req") StFindMeetingRequest req);
 }

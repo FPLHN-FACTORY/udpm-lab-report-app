@@ -117,4 +117,9 @@ public interface AdClassRepository extends ClassRepository {
              """, nativeQuery = true)
     Optional<AdDetailClassRespone> adfindClassById(@Param("id") String id);
 
+    @Query(value = """
+            SELECT a.id FROM class a WHERE a.activity_id = :activityId AND a.code = :code
+            """, nativeQuery = true)
+    String checkCodeExist(@Param("code") String code, @Param("activityId") String activityId);
+
 }

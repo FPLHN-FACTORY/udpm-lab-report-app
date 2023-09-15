@@ -27,7 +27,6 @@ public interface StMeetingService {
 
     StHomeWordAndNoteResponse updateDetailMeetingTeamByLeadTeam(@Valid StUpdateHomeWorkAndNotebyLeadTeamRequest request);
 
-    List<StMyStudentTeamResponse> getRoleByIdStudent(final StFindMeetingRequest stFindStudentClasses);
-
+    Integer getRoleByIdStudent(final StFindMeetingRequest stFindStudentClasses);
 
 }
