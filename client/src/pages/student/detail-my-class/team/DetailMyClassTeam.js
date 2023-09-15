@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import "./style-detail-my-class-team.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ControlOutlined } from "@ant-design/icons";
 import { useAppDispatch } from "../../../../app/hook";
 import { useEffect, useState } from "react";
@@ -19,6 +19,8 @@ import { EyeOutlined, UserAddOutlined } from "@ant-design/icons";
 import ModalDetailTeam from "./modal-detail-team/ModalDetailTeam";
 import LoadingIndicatorNoOverlay from "../../../../helper/loadingNoOverlay";
 import { SetTTrueToggle } from "../../../../app/student/StCollapsedSlice.reducer";
+import { StMyClassAPI } from "../../../../api/student/StMyClassAPI";
+import { toast } from "react-toastify";
 
 const DetailMyClassTeam = () => {
   const dispatch = useAppDispatch();
@@ -31,6 +33,7 @@ const DetailMyClassTeam = () => {
   const [listStudentMyTeam, setStudentMyTeam] = useState([]);
   const [listTeam, setListTeam] = useState([]);
   const [detailTeam, setDetailTeam] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setIsLoading(true);
@@ -62,6 +65,19 @@ const DetailMyClassTeam = () => {
       }
     });
   };
+
+  const handleLeaveClass = () => {
+    const obj = {
+      idClass: id,
+      idStudent: sinhVienCurrent.id,
+    }
+    StMyClassAPI.leaveClass(obj).then((response) => {
+      toast.success("Rời lớp học thành công!");
+      navigate(`/student/my-class`);
+    }).catch(error => {
+      toast.error(error.response.data);
+    })
+  }
 
   const columns = [
     {
@@ -291,10 +307,10 @@ const DetailMyClassTeam = () => {
                   Ca học:{" "}
                   {detailClass != null
                     ? "Ca " +
-                      parseInt(
-                        convertMeetingPeriodToNumber(detailClass.classPeriod) +
-                          1
-                      )
+                    parseInt(
+                      convertMeetingPeriodToNumber(detailClass.classPeriod) +
+                      1
+                    )
                     : ""}
                 </span>
                 <span
@@ -311,8 +327,8 @@ const DetailMyClassTeam = () => {
                   Giảng viên:{" "}
                   {detailClass != null
                     ? detailClass.nameTeacher +
-                      " - " +
-                      detailClass.usernameTeacher
+                    " - " +
+                    detailClass.usernameTeacher
                     : ""}
                 </span>
               </div>
@@ -393,6 +409,20 @@ const DetailMyClassTeam = () => {
               </div>
             )}
           </div>
+        </div>
+        <div className="button-leave" style={{ marginTop: "11px", textAlign: "right" }}>
+          <Popconfirm
+            description="Bạn có chắc chắn muốn rời lớp học này chứ?"
+            okText="Có"
+            cancelText="Không"
+            onConfirm={() => {
+              handleLeaveClass();
+            }}
+          >
+            <Button style={{ backgroundColor: "red", color: "white" }}>
+              Rời khỏi lớp học
+            </Button>
+          </Popconfirm>
         </div>
       </div>
       <ModalDetailTeam
