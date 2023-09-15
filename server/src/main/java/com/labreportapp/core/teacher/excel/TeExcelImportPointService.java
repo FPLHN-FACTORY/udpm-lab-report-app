@@ -29,6 +29,9 @@ public class TeExcelImportPointService {
             if (row.getRowNum() == 0) {
                 continue;
             }
+            if (row.getRowNum() == 1) {
+                continue;
+            }
             TeExcelImportPoint object = new TeExcelImportPoint();
             object.setName(String.valueOf(getCellValue(row.getCell(1))).trim());
             object.setEmail(String.valueOf(getCellValue(row.getCell(2))).trim());

@@ -10,12 +10,15 @@ import com.labreportapp.core.teacher.model.request.TeFindStudentClasses;
 import com.labreportapp.core.teacher.model.response.TeExcelResponseMessage;
 import com.labreportapp.core.teacher.model.response.TePointRespone;
 import com.labreportapp.core.teacher.model.response.TeStudentCallApiResponse;
+import com.labreportapp.core.teacher.repository.TeClassRepository;
 import com.labreportapp.core.teacher.repository.TePointRepository;
 import com.labreportapp.core.teacher.service.TePointSevice;
 import com.labreportapp.core.teacher.service.TeStudentClassesService;
+import com.labreportapp.entity.Class;
 import com.labreportapp.entity.Point;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Synchronized;
+import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
@@ -24,7 +27,9 @@ import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,6 +57,9 @@ public class TePointSeviceImpl implements TePointSevice {
 
     @Autowired
     private TeExcelImportPointService tePointImportService;
+
+    @Autowired
+    private TeClassRepository teClassRepository;
 
     @Override
     public List<TePointRespone> getPointStudentById(String idClass) {
@@ -121,8 +129,35 @@ public class TePointSeviceImpl implements TePointSevice {
                     }
                 });
             });
+            Class objClass = teClassRepository.findById(idClass).get();
+            Font fontTitle = workbook.createFont();
             Sheet sheet = workbook.createSheet("Bảng điểm");
+            fontTitle.setBold(true);
+            fontTitle.setFontHeightInPoints((short) 20);
+            CellStyle titleStyle = workbook.createCellStyle();
+            titleStyle.setAlignment(HorizontalAlignment.CENTER);
+            titleStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+            titleStyle.setFont(fontTitle);
+            Row titleRow = sheet.createRow(0);
+            Cell cellTitle = titleRow.createCell(0);
+            cellTitle.setCellValue("DANH SÁCH ĐIỂM SINH VIÊN LỚP " + objClass.getCode());
+            cellTitle.setCellStyle(titleStyle);
+            sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 5));
+
+            Font fontHeader = workbook.createFont();
+            fontHeader.setBold(true);
+            fontHeader.setColor(IndexedColors.WHITE.getIndex());
+            fontHeader.setFontHeightInPoints((short) 13);
             CellStyle headerStyle = workbook.createCellStyle();
+            headerStyle.setAlignment(HorizontalAlignment.CENTER);
+            headerStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+            headerStyle.setFont(fontHeader);
+            headerStyle.setFillForegroundColor(IndexedColors.LIGHT_BLUE.getIndex());
+            headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            headerStyle.setBorderTop(BorderStyle.THIN);
+            headerStyle.setBorderBottom(BorderStyle.THIN);
+            headerStyle.setBorderLeft(BorderStyle.THIN);
+            headerStyle.setBorderRight(BorderStyle.THIN);
             Font font = workbook.createFont();
             font.setBold(true);
             font.setColor(IndexedColors.WHITE.getIndex());
@@ -137,7 +172,7 @@ public class TePointSeviceImpl implements TePointSevice {
             sheet.setColumnWidth(3, 7000);
             sheet.setColumnWidth(4, 7000);
             sheet.setColumnWidth(5, 7000);
-            Row headerRow = sheet.createRow(0);
+            Row headerRow = sheet.createRow(1);
             Cell cell0 = headerRow.createCell(0);
             cell0.setCellValue("STT");
             cell0.setCellStyle(headerStyle);
@@ -156,16 +191,33 @@ public class TePointSeviceImpl implements TePointSevice {
             Cell cell5 = headerRow.createCell(5);
             cell5.setCellValue("Điểm giai đoạn cuối");
             cell5.setCellStyle(headerStyle);
-            int rowIndex = 1;
+            CellStyle boderStyle = workbook.createCellStyle();
+            boderStyle.setBorderTop(BorderStyle.THIN);
+            boderStyle.setBorderBottom(BorderStyle.THIN);
+            boderStyle.setBorderLeft(BorderStyle.THIN);
+            boderStyle.setBorderRight(BorderStyle.THIN);
+            CellStyle dataStyleCenter = workbook.createCellStyle();
+            dataStyleCenter.setAlignment(HorizontalAlignment.CENTER);
+            dataStyleCenter.setBorderTop(BorderStyle.THIN);
+            dataStyleCenter.setBorderBottom(BorderStyle.THIN);
+            dataStyleCenter.setBorderLeft(BorderStyle.THIN);
+            dataStyleCenter.setBorderRight(BorderStyle.THIN);
+            int rowIndex = 2;
             int index = 1;
             for (TePointExcel data : listExcel) {
                 Row dataRow = sheet.createRow(rowIndex++);
                 dataRow.createCell(0).setCellValue(index++);
+                dataRow.getCell(0).setCellStyle(dataStyleCenter);
                 dataRow.createCell(1).setCellValue(data.getName());
+                dataRow.getCell(1).setCellStyle(boderStyle);
                 dataRow.createCell(2).setCellValue(data.getEmail());
+                dataRow.getCell(2).setCellStyle(boderStyle);
                 dataRow.createCell(3).setCellValue(data.getCheckPointPhase1());
+                dataRow.getCell(3).setCellStyle(dataStyleCenter);
                 dataRow.createCell(4).setCellValue(data.getCheckPointPhase2());
+                dataRow.getCell(4).setCellStyle(dataStyleCenter);
                 dataRow.createCell(5).setCellValue(data.getFinalPoint());
+                dataRow.getCell(5).setCellStyle(dataStyleCenter);
             }
             workbook.write(response.getOutputStream());
             workbook.close();
@@ -181,14 +233,14 @@ public class TePointSeviceImpl implements TePointSevice {
             List<TeExcelImportPoint> list = tePointImportService.importData(file, idClass);
             if (list.size() == 0) {
                 teExcelResponseMessage.setStatus(false);
-                teExcelResponseMessage.setMessage("file excel trống !");
+                teExcelResponseMessage.setMessage("file excel trống");
                 return teExcelResponseMessage;
             }
             ConcurrentHashMap<String, SimpleResponse> mapPointStudent = new ConcurrentHashMap<>();
             addDataMapsPointStudent(mapPointStudent, idClass);
-            if(list.size() != mapPointStudent.size()){
+            if (list.size() != mapPointStudent.size()) {
                 teExcelResponseMessage.setStatus(false);
-                teExcelResponseMessage.setMessage("số lượng sinh viên trong file excel phải bằng với số lượng sinh viên trong lớp !");
+                teExcelResponseMessage.setMessage("số lượng sinh viên trong file excel phải bằng với số lượng sinh viên trong lớp");
                 return teExcelResponseMessage;
             }
             ConcurrentHashMap<String, Point> mapPointStudentDB = new ConcurrentHashMap<>();
@@ -201,43 +253,43 @@ public class TePointSeviceImpl implements TePointSevice {
                 String regexDouble = "^(?:[0-9](?:\\.\\d*)?|10(?:\\.0*)?)$";
                 if (point.getName().isEmpty()) {
                     teExcelResponseMessage.setStatus(false);
-                    teExcelResponseMessage.setMessage("tên sinh viên không được để trống !");
+                    teExcelResponseMessage.setMessage("tên sinh viên không được để trống");
                     return;
                 }
                 if (!point.getName().matches(regexName)) {
                     teExcelResponseMessage.setStatus(false);
-                    teExcelResponseMessage.setMessage("tên sinh viên sai định dạng !");
+                    teExcelResponseMessage.setMessage("tên sinh viên sai định dạng");
                     return;
                 }
                 if (point.getEmail().isEmpty()) {
                     teExcelResponseMessage.setStatus(false);
-                    teExcelResponseMessage.setMessage("email không được để trống !");
+                    teExcelResponseMessage.setMessage("email không được để trống");
                     return;
                 }
                 if (point.getCheckPointPhase1().isEmpty()) {
                     teExcelResponseMessage.setStatus(false);
-                    teExcelResponseMessage.setMessage("điểm giai đoạn 1 không được để trống !");
+                    teExcelResponseMessage.setMessage("điểm giai đoạn 1 không được để trống");
                     return;
                 }
                 if (point.getCheckPointPhase2().isEmpty()) {
                     teExcelResponseMessage.setStatus(false);
-                    teExcelResponseMessage.setMessage("điểm giai đoạn 2 không được để trống !");
+                    teExcelResponseMessage.setMessage("điểm giai đoạn 2 không được để trống");
                     return;
                 }
                 if (!point.getCheckPointPhase1().matches(regexDouble)) {
                     teExcelResponseMessage.setStatus(false);
-                    teExcelResponseMessage.setMessage("điểm giai đoạn 1 và giai đoạn 2 phải là số từ 0 -> 10 !");
+                    teExcelResponseMessage.setMessage("điểm giai đoạn 1 và giai đoạn 2 phải là số từ 0 -> 10");
                     return;
                 }
                 if (!point.getCheckPointPhase2().matches(regexDouble)) {
                     teExcelResponseMessage.setStatus(false);
-                    teExcelResponseMessage.setMessage("điểm giai đoạn 1 và giai đoạn 2 phải là số từ 0 -> 10 !");
+                    teExcelResponseMessage.setMessage("điểm giai đoạn 1 và giai đoạn 2 phải là số từ 0 -> 10");
                     return;
                 }
                 SimpleResponse simpleResponse = mapPointStudent.get(point.getEmail());
                 if (simpleResponse == null) {
                     teExcelResponseMessage.setStatus(false);
-                    teExcelResponseMessage.setMessage("email của sinh viên không tồn tại !");
+                    teExcelResponseMessage.setMessage("email của sinh viên không tồn tại");
                     return;
                 }
                 Point pointUpd = mapPointStudentDB.get(simpleResponse.getId());
@@ -253,7 +305,7 @@ public class TePointSeviceImpl implements TePointSevice {
         } catch (Exception e) {
             e.printStackTrace();
             teExcelResponseMessage.setStatus(false);
-            teExcelResponseMessage.setMessage("lỗi hệ thống !");
+            teExcelResponseMessage.setMessage("lỗi hệ thống");
             return teExcelResponseMessage;
         }
         return teExcelResponseMessage;

@@ -31,4 +31,7 @@ public interface TeStudentClassesRespone {
     @Value("#{target.nameTeam}")
     String getNameTeam();
 
+    @Value("#{target.subject_name}")
+    String getSubjectName();
+
 }

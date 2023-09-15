@@ -14,6 +14,8 @@ import LoadingIndicator from "../../../../helper/loading";
 import moment from "moment";
 import { ControlOutlined } from "@ant-design/icons";
 import { SetTTrueToggle } from "../../../../app/teacher/TeCollapsedSlice.reducer";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleInfo, faTableList } from "@fortawesome/free-solid-svg-icons";
 
 const StudentsInMyClass = () => {
   const dispatch = useAppDispatch();
@@ -21,13 +23,11 @@ const StudentsInMyClass = () => {
   const [classDetail, setClassDetail] = useState({});
   const [loading, setLoading] = useState(false);
   const { idClass } = useParams();
-
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Bảng điều khiển - Thông tin lớp học";
     featchClass(idClass);
   }, []);
-
   const featchClass = async (idClass) => {
     try {
       await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
@@ -51,7 +51,6 @@ const StudentsInMyClass = () => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-
   const data = useAppSelector(GetStudentClasses);
   const columns = [
     {
@@ -231,7 +230,18 @@ const StudentsInMyClass = () => {
             </div>
           </div>
           <div className="info-team">
-            <span className="info-heading">Thông tin lớp học:</span>
+            <div style={{ margin: "15px 0px 15px 15px" }}>
+              <span style={{ fontSize: "17px", fontWeight: 500 }}>
+                <FontAwesomeIcon
+                  icon={faCircleInfo}
+                  style={{
+                    marginRight: "10px",
+                    fontSize: "20px",
+                  }}
+                />
+                Thông tin lớp học :
+              </span>
+            </div>
             <div className="group-info">
               <span
                 className="group-info-item"
@@ -288,8 +298,17 @@ const StudentsInMyClass = () => {
               </span>
             </div>
           </div>
-          <span style={{ fontSize: "16px" }}>
-            Danh sách sinh viên trong lớp:
+          <span style={{ fontSize: "17px", fontWeight: 500 }}>
+            <div style={{ margin: "18px 0px 15px 15px" }}>
+              <FontAwesomeIcon
+                icon={faTableList}
+                style={{
+                  marginRight: "10px",
+                  fontSize: "20px",
+                }}
+              />
+              Danh sách sinh viên :
+            </div>
           </span>
           <div style={{ minHeight: "140px", marginTop: "-8px" }}>
             {data.length > 0 ? (

@@ -18,6 +18,8 @@ import React from "react";
 import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
 import { SetTTrueToggle } from "../../../../app/teacher/TeCollapsedSlice.reducer";
 import { convertMeetingPeriodToTime } from "../../../../helper/util.helper";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTableList } from "@fortawesome/free-solid-svg-icons";
 
 const MeetingInMyClass = () => {
   const dispatch = useAppDispatch();
@@ -190,11 +192,13 @@ const MeetingInMyClass = () => {
           <div className="menu-teacher-search">
             <div>
               <div style={{ margin: "15px 0px 15px 15px" }}>
-                {" "}
-                <span style={{ fontSize: "17px", fontWeight: "500" }}>
-                  {" "}
-                  <UnorderedListOutlined
-                    style={{ marginRight: "10px", fontSize: "20px" }}
+                <span style={{ fontSize: "17px", fontWeight: 500 }}>
+                  <FontAwesomeIcon
+                    icon={faTableList}
+                    style={{
+                      marginRight: "10px",
+                      fontSize: "20px",
+                    }}
                   />
                   Danh sách buổi học : {countMeeting} buổi học
                 </span>

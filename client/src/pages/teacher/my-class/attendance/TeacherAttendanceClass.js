@@ -10,6 +10,8 @@ import { toast } from "react-toastify";
 import { TeacherMeetingAPI } from "../../../../api/teacher/meeting/TeacherMeeting.api";
 import { TeacherAttendanceAPI } from "../../../../api/teacher/attendance/TeacherAttendance.api";
 import LoadingIndicator from "../../../../helper/loading";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTableList } from "@fortawesome/free-solid-svg-icons";
 const TeacherAttendanceClass = () => {
   const { idClass } = useParams();
   const dispatch = useAppDispatch();
@@ -193,12 +195,16 @@ const TeacherAttendanceClass = () => {
               </div>
             </div>
             <div style={{ overflowX: "auto" }}>
-              <div style={{ margin: "15px 0px 15px 0px" }}>
-                <span style={{ fontSize: "17px", fontWeight: "500" }}>
-                  <UnorderedListOutlined
-                    style={{ marginRight: "10px", fontSize: "20px" }}
+              <div style={{ margin: "15px 0px 15px 15px" }}>
+                <span style={{ fontSize: "17px", fontWeight: 500 }}>
+                  <FontAwesomeIcon
+                    icon={faTableList}
+                    style={{
+                      marginRight: "10px",
+                      fontSize: "20px",
+                    }}
                   />
-                  Chi tiết điểm danh
+                  Chi tiết điểm danh :
                 </span>
               </div>
               <table
