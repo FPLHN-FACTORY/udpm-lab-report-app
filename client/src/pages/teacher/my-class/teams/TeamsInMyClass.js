@@ -32,6 +32,7 @@ import ModalUpdateTeam from "./modal-update/ModalUpdateTeam";
 import { toast } from "react-toastify";
 import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
 import { SetTTrueToggle } from "../../../../app/teacher/TeCollapsedSlice.reducer";
+import ButtonExportExcelTeam from "./export-excel/ButtonExportExcelTeam";
 
 const TeamsInMyClass = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -348,63 +349,47 @@ const TeamsInMyClass = () => {
               <hr />
             </div>
           </div>
-          <Row style={{ margin: "25px 0px 20px 10px" }}>
-            <Col span={17}>
-              <div style={{ marginLeft: "0px" }}>
-                {" "}
-                <span style={{ fontSize: "17px", fontWeight: "500" }}>
-                  {" "}
-                  <FontAwesomeIcon
-                    icon={faUsers}
-                    style={{ marginRight: "10px", fontSize: "20px" }}
-                  />
-                  Danh sách nhóm
-                </span>
-              </div>
-            </Col>
-            <Col span={7}>
-              <div style={{ float: "right" }}>
-                <Button
-                  className="btn_clear"
-                  style={{
-                    color: "white",
-                    backgroundColor: "#007bff",
-                  }}
-                >
-                  <FontAwesomeIcon
-                    icon={faDownload}
-                    style={{ marginRight: "7px" }}
-                  />{" "}
-                  Export
-                </Button>
-                <Button
-                  className="btn_clear"
-                  style={{
-                    color: "white",
-                    backgroundColor: "#007bff",
-                  }}
-                >
-                  <FontAwesomeIcon
-                    icon={faUpload}
-                    style={{ marginRight: "7px" }}
-                  />{" "}
-                  Import
-                </Button>
-                <Button
-                  className="btn_clear"
-                  style={{
-                    color: "white",
-                    backgroundColor: "#007bff",
-                  }}
-                  onClick={() => {
-                    setShowCreateModal(true);
-                  }}
-                >
-                  Tạo nhóm
-                </Button>
-              </div>
-            </Col>
-          </Row>
+          <div style={{ marginTop: "15px" }}>
+            <Row style={{ margin: "15px 0px 15px 15px" }}>
+              <span style={{ fontSize: "17px", fontWeight: 500 }}>
+                <FontAwesomeIcon
+                  icon={faUsers}
+                  style={{ marginRight: "10px", fontSize: "20px" }}
+                />
+                Danh sách nhóm :
+              </span>
+            </Row>
+            <Row style={{ marginTop: "10px" }}>
+              <ButtonExportExcelTeam idClass={idClass} />
+              <Button
+                className="btn_clear"
+                style={{
+                  backgroundColor: "rgb(38, 144, 214)",
+                  color: "white",
+                }}
+              >
+                <FontAwesomeIcon
+                  icon={faUpload}
+                  style={{ marginRight: "7px" }}
+                />
+                Import nhóm
+              </Button>
+              <Button
+                className="btn_clear"
+                style={{
+                  backgroundColor: "rgb(38, 144, 214)",
+                  color: "white",
+                  marginRight: "0px",
+                  marginLeft: "auto",
+                }}
+                onClick={() => {
+                  setShowCreateModal(true);
+                }}
+              >
+                Tạo nhóm
+              </Button>
+            </Row>
+          </div>
           <div>
             {data.length > 0 ? (
               <>

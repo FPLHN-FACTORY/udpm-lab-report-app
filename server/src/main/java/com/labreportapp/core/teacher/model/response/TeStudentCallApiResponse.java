@@ -34,4 +34,6 @@ public class TeStudentCallApiResponse {
 
     private String nameTeam;
 
+    private String subjectName;
+
 }

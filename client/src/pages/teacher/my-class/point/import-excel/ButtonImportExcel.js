@@ -1,9 +1,10 @@
 import { Button, Spin } from "antd";
 import { useState } from "react";
-import { TeacherExcelAPI } from "../../../../../api/teacher/point/excel/TeacherExcel.api";
+import { TeacherExcelAPI } from "../../../../../api/teacher/point/excel/TeacherExcelPoint.api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
+
 const ButtonImportExcel = ({ idClass }) => {
   const [downloading, setDownloading] = useState(false);
   const [inputFile, setInputFile] = useState("");

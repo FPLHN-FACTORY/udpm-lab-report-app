@@ -258,10 +258,16 @@ const TeacherPointMyClass = () => {
                 <hr />
               </div>
             </div>
-            <div style={{ marginTop: "10px" }}>
-              <Row>
-                <span style={{ fontSize: "17px", fontWeight: 500 }}>
-                  <FontAwesomeIcon icon={faMarker} /> Điểm sinh viên:
+            <div style={{ marginTop: "15px" }}>
+              <Row style={{ margin: "15px 0px 15px 15px" }}>
+                <span
+                  style={{
+                    fontSize: "17px",
+                    fontWeight: 500,
+                    marginRight: "10px",
+                  }}
+                >
+                  <FontAwesomeIcon icon={faMarker} /> Điểm sinh viên :
                 </span>
               </Row>
               <Row style={{ marginTop: "10px" }}>

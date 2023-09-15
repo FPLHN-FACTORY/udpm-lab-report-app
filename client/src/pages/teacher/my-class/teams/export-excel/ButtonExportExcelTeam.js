@@ -1,25 +1,25 @@
 import { Button, Spin } from "antd";
 import { useState } from "react";
-import { TeacherExcelAPI } from "../../../../../api/teacher/point/excel/TeacherExcelPoint.api";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload } from "@fortawesome/free-solid-svg-icons";
+import { TeacherExcelTeamAPI } from "../../../../../api/teacher/teams-class/excel/TeacherExcelTeam.api";
 
-const ButtonExportExcel = ({ idClass }) => {
+const ButtonExportExcelTeam = ({ idClass }) => {
   const [downloading, setDownloading] = useState(false);
   const handleExport = async () => {
     try {
-      await TeacherExcelAPI.export(idClass)
+      await TeacherExcelTeamAPI.export(idClass)
         .then((respone) => {
+          setDownloading(true);
           window.open(
-            `http://localhost:2509/teacher/point/export-excel?idClass=` +
+            `http://localhost:2509/teacher/teams/export-excel?idClass=` +
               idClass,
             "_self"
           );
-          setDownloading(true);
           setTimeout(() => {
             setDownloading(false);
-            toast.success("Export bảng điểm thành công !");
+            toast.success("Export thành công !");
           }, 1000);
         })
         .catch((err) => {
@@ -32,17 +32,17 @@ const ButtonExportExcel = ({ idClass }) => {
   return (
     <Spin spinning={downloading}>
       <Button
+        className="btn_clear"
         style={{
           backgroundColor: "rgb(38, 144, 214)",
           color: "white",
-          marginRight: "5px",
         }}
         onClick={handleExport}
       >
         <FontAwesomeIcon icon={faDownload} style={{ marginRight: "7px" }} />
-        {downloading ? "Đang tải xuống..." : "Export bảng điểm"}
+        {downloading ? "Đang tải xuống..." : "Export nhóm"}
       </Button>
     </Spin>
   );
 };
-export default ButtonExportExcel;
+export default ButtonExportExcelTeam;

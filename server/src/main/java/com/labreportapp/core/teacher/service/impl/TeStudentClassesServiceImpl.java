@@ -70,6 +70,7 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
                     obj.setIdTeam(reposi.getIdTeam());
                     obj.setCodeTeam(reposi.getCodeTeam());
                     obj.setNameTeam(reposi.getNameTeam());
+                    obj.setSubjectName(reposi.getSubjectName());
                     listReturn.add(obj);
                 }
             });

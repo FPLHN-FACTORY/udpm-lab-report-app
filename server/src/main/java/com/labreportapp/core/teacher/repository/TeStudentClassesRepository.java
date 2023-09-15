@@ -37,7 +37,8 @@ public interface TeStudentClassesRepository extends JpaRepository<StudentClasses
             sc.status as statusStudent,
             t.id as idTeam,
             t.code as codeTeam,
-            t.name as nameTeam
+            t.name as nameTeam,
+            t.subject_name as subject_name
             FROM student_classes sc
             LEFT JOIN team t on t.id = sc.team_id
             WHERE sc.class_id = :#{#req.idClass}
@@ -60,7 +61,8 @@ public interface TeStudentClassesRepository extends JpaRepository<StudentClasses
             sc.status as statusStudent,
             t.id as idTeam,
             t.code as codeTeam,
-            t.name as nameTeam
+            t.name as nameTeam,
+             t.subject_name as subject_name
             FROM student_classes sc
             JOIN team t on t.id = sc.team_id
             WHERE sc.class_id = :#{#req.idClass} and sc.team_id =:#{#req.idTeam}
