@@ -1,9 +1,8 @@
 package com.labreportapp.core.admin.repository;
 
 import com.labreportapp.core.admin.model.request.AdFindClassRequest;
-import com.labreportapp.core.admin.model.response.AdActivityClassResponse;
-import com.labreportapp.core.admin.model.response.AdClassResponse;
-import com.labreportapp.core.admin.model.response.AdSemesterAcResponse;
+import com.labreportapp.core.admin.model.response.*;
+import com.labreportapp.core.teacher.model.request.TeFindStudentClasses;
 import com.labreportapp.repository.ClassRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author quynhncph26201
@@ -94,4 +94,26 @@ public interface AdClassRepository extends ClassRepository {
             and (:#{#req.idTeacher} IS NULL OR :#{#req.idTeacher} LIKE '' OR :#{#req.idTeacher} LIKE c.teacher_id)
             """, nativeQuery = true)
     Page<AdClassResponse> findClassBySemesterAndActivity(@Param("req") AdFindClassRequest req, Pageable pageable);
+
+    @Query(value = """
+            SELECT c.id as id,
+            c.code as code,
+            c.start_time as start_time,
+            c.password as password,
+            c.class_period as class_period,
+            c.class_size as class_size,
+            c.descriptions as descriptions,
+            c.teacher_id as teacherId,
+            a.id as activityId,
+            a.name as activityName,
+            a.level as activityLevel,
+            s.id as semesterId,
+            s.name as semesterName
+            FROM activity a
+            JOIN class c ON c.activity_id = a.id
+            JOIN semester s ON s.id = a.semester_id
+            where c.id = :#{#id}
+             """, nativeQuery = true)
+    Optional<AdDetailClassRespone> adfindClassById(@Param("id") String id);
+
 }

@@ -2,10 +2,7 @@ package com.labreportapp.core.admin.service;
 
 import com.labreportapp.core.admin.model.request.AdCreateClassRequest;
 import com.labreportapp.core.admin.model.request.AdFindClassRequest;
-import com.labreportapp.core.admin.model.response.AdActivityClassResponse;
-import com.labreportapp.core.admin.model.response.AdClassResponse;
-import com.labreportapp.core.admin.model.response.AdListClassCustomResponse;
-import com.labreportapp.core.admin.model.response.AdSemesterAcResponse;
+import com.labreportapp.core.admin.model.response.*;
 import com.labreportapp.core.common.base.PageableObject;
 import com.labreportapp.entity.Class;
 import jakarta.validation.Valid;
@@ -29,6 +26,10 @@ public interface AdClassService {
 
     Class createClass(@Valid final AdCreateClassRequest request);
 
+    Class updateClass(@Valid final AdCreateClassRequest request, String id);
+
     PageableObject<AdListClassCustomResponse> searchClass(final AdFindClassRequest teFindClass);
+
+    AdDetailClassRespone adFindClassById(final String id);
 
 }

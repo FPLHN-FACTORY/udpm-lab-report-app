@@ -43,11 +43,19 @@ export class ClassAPI {
       data: data,
     });
   };
+
+  static update = (id, data) => {
+    return request({
+      method: "PUT",
+      url: `/admin/class-managerment/update/${id}`,
+      data: data,
+    });
+  };
   static getAllMyClass(filter) {
     return request({
       method: "GET",
       url:
-      `/admin/class-managerment/getAllSearch` +
+        `/admin/class-managerment/getAllSearch` +
         `?idTeacher=` +
         filter.idTeacher +
         `&idSemester=` +
@@ -62,6 +70,18 @@ export class ClassAPI {
         filter.page +
         `&size=` +
         filter.size,
+    });
+  }
+  static getAdClassDetailById(id) {
+    return request({
+      method: "GET",
+      url: `/admin/class-managerment/information-class/${id}`,
+    });
+  }
+  static getAdStudentClassByIdClass(id) {
+    return request({
+      method: "GET",
+      url: `/admin/student-classes/${id}`,
     });
   }
 }
