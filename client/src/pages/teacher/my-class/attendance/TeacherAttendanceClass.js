@@ -220,48 +220,56 @@ const TeacherAttendanceClass = () => {
                     <th>#</th>
                     <th>Họ và tên</th>
                     <th>Email</th>
-                    {column.map((item, index) => (
-                      <th className="column-AP" key={index} style={{}}>
-                        {convertLongToDate(item.meetingDate)}
-                        <br />
-                        <span>{item.nameMeeting}</span>
-                      </th>
-                    ))}
+                    {column != null &&
+                      column.length > 0 &&
+                      column.map((item, index) => (
+                        <th className="column-AP" key={index} style={{}}>
+                          {convertLongToDate(item.meetingDate)}
+                          <br />
+                          <span>{item.nameMeeting}</span>
+                        </th>
+                      ))}
                     <th>Vắng</th>
                     <th>Tỷ lệ</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {data.map((item, rowIndex) => {
-                    let countAbsent = 0;
-                    let countMeeting = 0;
-                    return (
-                      <tr key={rowIndex}>
-                        <td style={{ padding: "4px" }}>{rowIndex + 1}</td>
-                        <td style={{ textAlign: "left" }}>{item.name}</td>
-                        <td style={{ textAlign: "left" }}>{item.email}</td>
-                        {item.listAttendance.map((column, colIndex) => {
-                          countMeeting++;
-                          if (column.statusAttendance === "1") {
-                            countAbsent++;
-                          }
-                          return (
-                            <td key={colIndex}>
-                              {column.statusAttendance === "0" ? (
-                                <span style={{ color: "green" }}>A</span>
-                              ) : column.statusAttendance === "1" ? (
-                                <span style={{ color: "red" }}>P</span>
-                              ) : (
-                                <span>-</span>
-                              )}
-                            </td>
-                          );
-                        })}
-                        <td>{parseFloat(countAbsent / countMeeting) * 100}%</td>
-                        <td>{countAbsent + `/` + countMeeting}</td>
-                      </tr>
-                    );
-                  })}
+                  {data != null &&
+                    data.length > 0 &&
+                    data.map((item, rowIndex) => {
+                      let countAbsent = 0;
+                      let countMeeting = 0;
+                      return (
+                        <tr key={rowIndex}>
+                          <td style={{ padding: "4px" }}>{rowIndex + 1}</td>
+                          <td style={{ textAlign: "left" }}>{item.name}</td>
+                          <td style={{ textAlign: "left" }}>{item.email}</td>
+                          {item.listAttendance != null &&
+                            item.listAttendance.length > 0 &&
+                            item.listAttendance.map((column, colIndex) => {
+                              countMeeting++;
+                              if (column.statusAttendance === "1") {
+                                countAbsent++;
+                              }
+                              return (
+                                <td key={colIndex}>
+                                  {column.statusAttendance === "0" ? (
+                                    <span style={{ color: "green" }}>A</span>
+                                  ) : column.statusAttendance === "1" ? (
+                                    <span style={{ color: "red" }}>P</span>
+                                  ) : (
+                                    <span>-</span>
+                                  )}
+                                </td>
+                              );
+                            })}
+                          <td>
+                            {parseFloat(countAbsent / countMeeting) * 100}%
+                          </td>
+                          <td>{countAbsent + `/` + countMeeting}</td>
+                        </tr>
+                      );
+                    })}
                 </tbody>
               </table>
             </div>

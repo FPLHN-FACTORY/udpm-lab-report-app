@@ -91,7 +91,7 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
                 if (i > 0) {
                     queryParams.append("|");
                 }
-                queryParams.append(item.getIdStudent());
+                queryParams.append(item.getIdStudent());     
             }
         }
         String result = queryParams.toString();

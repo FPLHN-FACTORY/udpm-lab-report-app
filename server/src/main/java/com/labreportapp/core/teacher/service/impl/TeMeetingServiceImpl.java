@@ -20,7 +20,6 @@ import com.labreportapp.entity.Note;
 import com.labreportapp.infrastructure.constant.Message;
 import com.labreportapp.infrastructure.exception.rest.RestApiException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -140,9 +139,6 @@ public class TeMeetingServiceImpl implements TeMeetingService {
     @Override
     public List<TeScheduleMeetingClassRespone> searchScheduleToDayByIdTeacherAndMeetingDate(TeFindScheduleMeetingClassRequest request) {
         List<TeScheduleMeetingClassRespone> list = teMeetingRepository.searchScheduleToDayByIdTeacherAndMeetingDate(request);
-//        if (list.size() == 0) {
-//            throw new RestApiException(Message.SCHEDULE_TODAY_IS_EMPTY);
-//        }
         return list;
     }
 
@@ -167,9 +163,6 @@ public class TeMeetingServiceImpl implements TeMeetingService {
     @Override
     public List<TeMeetingCustomToAttendanceRespone> listMeetingAttendanceAllByIdClass(String idClass) {
         List<TeMeetingCustomToAttendanceRespone> listMeeting = teMeetingRepository.findMeetingCustomToAttendanceByIdClass(idClass);
-        if (listMeeting.size() == 0) {
-            throw new RestApiException(Message.MEETING_NOT_EXISTS);
-        }
         return listMeeting;
     }
 

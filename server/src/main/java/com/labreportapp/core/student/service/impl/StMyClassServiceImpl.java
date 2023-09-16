@@ -10,7 +10,6 @@ import com.labreportapp.core.student.repository.StMyClassRepository;
 import com.labreportapp.core.student.repository.StStudentClassesRepository;
 import com.labreportapp.core.student.service.StMyClassService;
 import com.labreportapp.entity.Class;
-import com.labreportapp.entity.Semester;
 import com.labreportapp.entity.StudentClasses;
 import com.labreportapp.infrastructure.constant.Message;
 import com.labreportapp.infrastructure.exception.rest.RestApiException;

@@ -38,13 +38,14 @@ public interface AdSemesterRepository extends SemesterRepository {
             WHERE  ( :#{#req.name} IS NULL 
                    OR :#{#req.name} LIKE '' 
                    OR obj.name LIKE %:#{#req.name}% )
-                    ORDER BY obj.last_modified_date DESC         
+                    ORDER BY obj.start_time DESC         
                     """, countQuery = """    
             SELECT COUNT(obj.id) 
             FROM semester obj 
-            WHERE   ( :#{#req.name} IS NULL 
+            WHERE ( :#{#req.name} IS NULL 
                     OR :#{#req.name} LIKE '' 
                     OR obj.name LIKE %:#{#req.name}% )     
+                    ORDER BY obj.start_time DESC       
             """, nativeQuery = true)
     Page<AdSemesterResponse> searchSemester(@Param("req") AdFindSemesterRequest req, Pageable page);
 }

@@ -32,4 +32,5 @@ public class PropertyKeys {
     public static final String CLASS_DID_FULL_CLASS_SIZE = "class.did.full.class.size";
     public static final String YOU_DONT_LEAVE_CLASS = "you.dont.leave.class";
     public static final String CODE_CLASS_EXISTS = "code.class.exists";
+    public static final String YOU_MUST_LEADER = "you.must.leader";
 }

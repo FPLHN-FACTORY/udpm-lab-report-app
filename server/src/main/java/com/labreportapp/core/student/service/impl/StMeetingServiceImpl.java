@@ -4,7 +4,6 @@ import com.labreportapp.core.student.model.request.StFindMeetingRequest;
 import com.labreportapp.core.student.model.request.StUpdateHomeWorkAndNotebyLeadTeamRequest;
 import com.labreportapp.core.student.model.response.StHomeWordAndNoteResponse;
 import com.labreportapp.core.student.model.response.StMeetingResponse;
-import com.labreportapp.core.student.model.response.StMyStudentTeamResponse;
 import com.labreportapp.core.student.model.response.StMyTeamInClassResponse;
 import com.labreportapp.core.student.repository.StHomeWorkRepository;
 import com.labreportapp.core.student.repository.StLeadTeamRepository;
@@ -20,7 +19,6 @@ import com.labreportapp.infrastructure.exception.rest.RestApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -59,7 +57,7 @@ public class StMeetingServiceImpl implements StMeetingService {
         if (!meeting.isPresent()) {
             throw new RestApiException(Message.MEETING_NOT_EXISTS);
         }
-        if(meeting.get().getMeetingDate() > new Date().getTime()) {
+        if (meeting.get().getMeetingDate() > new Date().getTime()) {
             throw new RestApiException(Message.CHUA_DEN_THOI_GIAN_CUA_BUOI_HOC);
         }
         return meeting.get();
@@ -85,7 +83,7 @@ public class StMeetingServiceImpl implements StMeetingService {
 
         if (optionalStudentClasses.isPresent()) {
             StudentClasses studentClasses = optionalStudentClasses.get();
-            if(studentClasses.getRole().equals(RoleTeam.LEADER)) {
+            if (studentClasses.getRole().equals(RoleTeam.LEADER)) {
                 Optional<HomeWork> objectHW = stHomeWorkRepository.findById(request.getIdHomeWork());
                 if (!objectHW.isPresent()) {
                     HomeWork homeWorkNew = new HomeWork();
@@ -117,6 +115,8 @@ public class StMeetingServiceImpl implements StMeetingService {
                     st.setIdMeeting(note.getMeetingId());
                     st.setIdTeam(note.getTeamId());
                 }
+            } else {
+                throw new RestApiException(Message.YOU_MUST_LEADER);
             }
         }
         StFindMeetingRequest stFind = new StFindMeetingRequest();

@@ -6,7 +6,11 @@ import { useAppDispatch } from "../../../../app/hook";
 import { useEffect, useState } from "react";
 import LoadingIndicator from "../../../../helper/loading";
 import { StMyTeamClassAPI } from "../../../../api/student/StTeamClass";
-import { faEye, faUserPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEye,
+  faSignOut,
+  faUserPlus,
+} from "@fortawesome/free-solid-svg-icons";
 import { Table, Button, Tooltip, Space, Popconfirm } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { sinhVienCurrent } from "../../../../helper/inForUser";
@@ -413,8 +417,15 @@ const DetailMyClassTeam = () => {
                       }}
                     >
                       <Button
-                        style={{ backgroundColor: "red", color: "white" }}
+                        style={{
+                          backgroundColor: "rgb(231, 68, 68)",
+                          color: "white",
+                        }}
                       >
+                        <FontAwesomeIcon
+                          icon={faSignOut}
+                          style={{ marginRight: "7px" }}
+                        />{" "}
                         Rời khỏi lớp học
                       </Button>
                     </Popconfirm>

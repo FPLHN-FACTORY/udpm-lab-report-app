@@ -89,15 +89,15 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
         List<TeAttendanceStudentAllRespone> listMeger = new ArrayList<>();
         List<TeMeetingCustomToAttendanceRespone> listMeeting = teMeetingRepository.findMeetingCustomToAttendanceByIdClass(idClass);
         if (listMeeting.size() == 0) {
-            throw new RestApiException(Message.MEETING_NOT_EXISTS);
+            return null;
         }
         List<SimpleResponse> listStudent = teStudentClassesService.searchAllStudentByIdClass(idClass);
         if (listStudent.size() == 0) {
-            throw new RestApiException(Message.CLASS_STUDENT_IS_EMPTY);
+            return null;
         }
         List<TeAttendanceRespone> listAttendance = teAttendanceRepo.findAttendanceByIdClass(idClass);
         if (listAttendance.size() == 0) {
-            throw new RestApiException(Message.CLASS_STUDENT_IS_EMPTY);
+            return null;
         }
         listStudent.forEach(student -> {
             TeAttendanceStudentAllRespone obj = new TeAttendanceStudentAllRespone();
