@@ -15,6 +15,7 @@ import com.labreportapp.infrastructure.constant.ClassPeriod;
 import com.labreportapp.infrastructure.constant.Message;
 import com.labreportapp.infrastructure.exception.rest.RestApiException;
 import com.labreportapp.util.ConvertListIdToString;
+import com.labreportapp.util.ConvertRequestCallApiIdentity;
 import com.labreportapp.util.FormUtils;
 import com.labreportapp.util.RandomString;
 import jakarta.validation.Valid;
@@ -51,6 +52,9 @@ public class AdClassManagerServiceImpl implements AdClassService {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
 
     @Override
     public List<AdClassResponse> getAllClass() {
@@ -107,15 +111,9 @@ public class AdClassManagerServiceImpl implements AdClassService {
         adClassCustomResponse.setStartTime(classNew.getStartTime());
         if (!request.getTeacherId().equals("")) {
             adClassCustomResponse.setTeacherId(request.getTeacherId());
-            String apiUrl = ApiConstants.API_LIST_TEACHER;
 
-            ResponseEntity<SimpleResponse> responseEntity =
-                    restTemplate.exchange(apiUrl + "/" + request.getTeacherId(), HttpMethod.GET, null,
-                            new ParameterizedTypeReference<SimpleResponse>() {
-                            });
-
-            SimpleResponse response = responseEntity.getBody();
-            adClassCustomResponse.setUserNameTeacher(response.getUsername());
+            SimpleResponse response = convertRequestCallApiIdentity.handleCallApiGetUserById(request.getTeacherId());
+            adClassCustomResponse.setUserNameTeacher(response.getUserName());
         }
 
         return adClassCustomResponse;
@@ -145,15 +143,9 @@ public class AdClassManagerServiceImpl implements AdClassService {
         adClassCustomResponse.setStartTime(classNew.getStartTime());
         if (!request.getTeacherId().equals("")) {
             adClassCustomResponse.setTeacherId(request.getTeacherId());
-            String apiUrl = ApiConstants.API_LIST_TEACHER;
 
-            ResponseEntity<SimpleResponse> responseEntity =
-                    restTemplate.exchange(apiUrl + "/" + request.getTeacherId(), HttpMethod.GET, null,
-                            new ParameterizedTypeReference<SimpleResponse>() {
-                            });
-
-            SimpleResponse response = responseEntity.getBody();
-            adClassCustomResponse.setUserNameTeacher(response.getUsername());
+            SimpleResponse response = convertRequestCallApiIdentity.handleCallApiGetUserById(request.getTeacherId());
+            adClassCustomResponse.setUserNameTeacher(response.getUserName());
         }
         return adClassCustomResponse;
     }
@@ -166,15 +158,8 @@ public class AdClassManagerServiceImpl implements AdClassService {
         List<String> idList = listResponse.stream()
                 .map(AdClassResponse::getTeacherId)
                 .collect(Collectors.toList());
-        String urlParams = ConvertListIdToString.convert(idList);
-        String apiUrl = ApiConstants.API_LIST_TEACHER;
 
-        ResponseEntity<List<SimpleResponse>> responseEntity =
-                restTemplate.exchange(apiUrl + "?id=" + urlParams, HttpMethod.GET, null,
-                        new ParameterizedTypeReference<List<SimpleResponse>>() {
-                        });
-
-        List<SimpleResponse> response = responseEntity.getBody();
+        List<SimpleResponse> response = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idList);
         List<AdListClassCustomResponse> listClassCustomResponses = new ArrayList<>();
         for (AdClassResponse adClassResponse : listResponse) {
             AdListClassCustomResponse adListClassCustomResponse = new AdListClassCustomResponse();
@@ -188,7 +173,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
             adListClassCustomResponse.setActivityName(adClassResponse.getActivityName());
             for (SimpleResponse simpleResponse : response) {
                 if (adClassResponse.getTeacherId().equals(simpleResponse.getId())) {
-                    adListClassCustomResponse.setUserNameTeacher(simpleResponse.getUsername());
+                    adListClassCustomResponse.setUserNameTeacher(simpleResponse.getUserName());
                     break;
                 }
             }

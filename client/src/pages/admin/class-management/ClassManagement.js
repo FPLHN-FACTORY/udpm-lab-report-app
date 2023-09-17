@@ -380,7 +380,7 @@ const ClassManagement = () => {
                 <Option value="">Tất cả</Option>
                 {teacherDataAll.map((teacher) => (
                   <Option key={teacher.id} value={teacher.id}>
-                    {teacher.username}
+                    {teacher.userName}
                   </Option>
                 ))}
               </Select>

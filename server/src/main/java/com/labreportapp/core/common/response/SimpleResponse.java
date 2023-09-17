@@ -16,7 +16,7 @@ public class SimpleResponse {
 
     private String name;
 
-    private String username;
+    private String userName;
 
     private String email;
 }

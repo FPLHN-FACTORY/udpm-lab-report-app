@@ -1,13 +1,13 @@
 export const sinhVienCurrent = {
-  id: "874bffc6-38ce-467e-9458-47868e1e2f52",
+  id: "2435c7d5-9bec-45ac-9bfe-08dba87523fe",
   name: "Nguyễn Công Thắng",
   username: "thangncph26123",
   email: "thangncph26123@fpt.edu.vn",
 };
 
 export const giangVienCurrent = {
-  id: "6f0e60a6-a3a8-45d3-b6e6-d7632eb64c1a",
+  id: "fa2bad81-93a5-4f02-b1b7-08dbb743dd7d",
   name: "Vũ Văn Nguyên",
-  username: "nguyenvvph2582",
-  email: "nguyenvvph2582@fpt.edu.vn",
+  username: "nguyenvv4",
+  email: "nguyenvv4@fpt.edu.vn",
 };

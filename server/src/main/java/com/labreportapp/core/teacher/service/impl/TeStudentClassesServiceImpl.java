@@ -9,6 +9,7 @@ import com.labreportapp.core.teacher.model.response.TeStudentClassesRespone;
 import com.labreportapp.core.teacher.repository.TeStudentClassesRepository;
 import com.labreportapp.core.teacher.service.TeStudentClassesService;
 import com.labreportapp.infrastructure.apiconstant.ApiConstants;
+import com.labreportapp.util.ConvertRequestCallApiIdentity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -18,6 +19,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author hieundph25894
@@ -31,37 +33,28 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Autowired
+    private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
+
     @Override
     public List<TeStudentCallApiResponse> searchStudentClassesByIdClass(TeFindStudentClasses teFindStudentClasses) {
         List<TeStudentClassesRespone> listRepository = teStudentClassesRepository
                 .findStudentClassByIdClass(teFindStudentClasses);
-        StringBuilder queryParams = new StringBuilder();
-        queryParams.append("?id=");
-        int sizeRepo = listRepository.size();
-        for (int i = 0; i < sizeRepo; i++) {
-            TeStudentClassesRespone item = listRepository.get(i);
-            if (item.getIdStudent() != null) {
-                if (i > 0) {
-                    queryParams.append("|");
-                }
-                queryParams.append(item.getIdStudent());
-            }
-        }
-        String result = queryParams.toString();
-        String apiUrl = ApiConstants.API_LIST_STUDENT;
-        ResponseEntity<List<TeStudentCallApiResponse>> responseEntity =
-                restTemplate.exchange(apiUrl + result, HttpMethod.GET, null,
-                        new ParameterizedTypeReference<List<TeStudentCallApiResponse>>() {
-                        });
-        List<TeStudentCallApiResponse> listRespone = responseEntity.getBody();
+        List<String> idStudentList = listRepository.stream()
+                .map(TeStudentClassesRespone::getIdStudent)
+                .collect(Collectors.toList());
+
+        List<SimpleResponse> listRespone = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idStudentList);
         List<TeStudentCallApiResponse> listReturn = new ArrayList<>();
         listRepository.forEach(reposi -> {
             listRespone.forEach(respone -> {
+                System.out.println(reposi.getIdStudent());
+                System.out.println(respone.getId());
                 if (reposi.getIdStudent().equals(respone.getId())) {
                     TeStudentCallApiResponse obj = new TeStudentCallApiResponse();
                     obj.setId(respone.getId());
                     obj.setName(respone.getName());
-                    obj.setUsername(respone.getUsername());
+                    obj.setUsername(respone.getUserName());
                     obj.setEmail(reposi.getEmailStudentClass());
                     obj.setIdStudent(respone.getId());
                     obj.setIdStudentClass(reposi.getIdStudentClass());
@@ -82,25 +75,11 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
     public List<SimpleResponse> searchAllStudentByIdClass(String idClass) {
         List<TePointImportRespone> listRepository = teStudentClassesRepository
                 .findAllStudentClassForPointByIdClass(idClass);
-        StringBuilder queryParams = new StringBuilder();
-        queryParams.append("?id=");
-        int sizeRepo = listRepository.size();
-        for (int i = 0; i < sizeRepo; i++) {
-            TePointImportRespone item = listRepository.get(i);
-            if (item.getIdStudent() != null) {
-                if (i > 0) {
-                    queryParams.append("|");
-                }
-                queryParams.append(item.getIdStudent());     
-            }
-        }
-        String result = queryParams.toString();
-        String apiUrl = ApiConstants.API_LIST_STUDENT;
-        ResponseEntity<List<SimpleResponse>> responseEntity =
-                restTemplate.exchange(apiUrl + result, HttpMethod.GET, null,
-                        new ParameterizedTypeReference<List<SimpleResponse>>() {
-                        });
-        List<SimpleResponse> listRespone = responseEntity.getBody();
+        List<String> idStudentList = listRepository.stream()
+                .map(TePointImportRespone::getIdStudent)
+                .collect(Collectors.toList());
+
+        List<SimpleResponse> listRespone = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idStudentList);
         return listRespone;
     }
 
@@ -108,25 +87,11 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
     public List<TeStudentCallApiResponse> searchStudentClassesByIdClassAndIdTeam(TeFindStudentClasses teFindStudentClasses) {
         List<TeStudentClassesRespone> listRepository = teStudentClassesRepository
                 .findStudentClassByIdClassAndIdTeam(teFindStudentClasses);
-        StringBuilder queryParams = new StringBuilder();
-        queryParams.append("?id=");
-        int sizeRepo = listRepository.size();
-        for (int i = 0; i < sizeRepo; i++) {
-            TeStudentClassesRespone item = listRepository.get(i);
-            if (item.getIdStudent() != null) {
-                if (i > 0) {
-                    queryParams.append("|");
-                }
-                queryParams.append(item.getIdStudent());
-            }
-        }
-        String result = queryParams.toString();
-        String apiUrl = ApiConstants.API_LIST_STUDENT;
-        ResponseEntity<List<TeStudentCallApiResponse>> responseEntity =
-                restTemplate.exchange(apiUrl + result, HttpMethod.GET, null,
-                        new ParameterizedTypeReference<List<TeStudentCallApiResponse>>() {
-                        });
-        List<TeStudentCallApiResponse> listRespone = responseEntity.getBody();
+        List<String> idStudentList = listRepository.stream()
+                .map(TeStudentClassesRespone::getIdStudent)
+                .collect(Collectors.toList());
+
+        List<SimpleResponse> listRespone = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idStudentList);
         List<TeStudentCallApiResponse> listReturn = new ArrayList<>();
         listRepository.forEach(reposi -> {
             listRespone.forEach(respone -> {
@@ -134,7 +99,7 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
                     TeStudentCallApiResponse obj = new TeStudentCallApiResponse();
                     obj.setId(respone.getId());
                     obj.setName(respone.getName());
-                    obj.setUsername(respone.getUsername());
+                    obj.setUsername(respone.getUserName());
                     obj.setEmail(reposi.getEmailStudentClass());
                     obj.setIdStudent(respone.getId());
                     obj.setIdStudentClass(reposi.getIdStudentClass());
@@ -152,7 +117,7 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
 
     @Override
     public List<TeStudentCallApiResponse> callApiStudent(TeFindStudentApiRequest teFindStudentApiRequest) {
-        String apiUrl = ApiConstants.API_LIST_STUDENT;
+        String apiUrl = ApiConstants.API_GET_USER_BY_LIST_ID;
 
         ResponseEntity<List<TeStudentCallApiResponse>> responseEntity =
                 restTemplate.exchange(apiUrl + "?id=" + teFindStudentApiRequest.getListId(), HttpMethod.GET, null,

@@ -43,6 +43,7 @@ const StudentsInMyClass = () => {
     try {
       await TeacherStudentClassesAPI.getStudentInClasses(id).then(
         (responese) => {
+          console.log(responese.data.data);
           dispatch(SetStudentClasses(responese.data.data));
           setLoading(true);
         }

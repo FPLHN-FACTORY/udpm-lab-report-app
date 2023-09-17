@@ -258,7 +258,7 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
 
                   {teacherDataAll.map((teacher) => (
                     <Option key={teacher.id} value={teacher.id}>
-                      {teacher.username}
+                      {teacher.userName}
                     </Option>
                   ))}
                 </Select>

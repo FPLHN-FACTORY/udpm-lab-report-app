@@ -240,7 +240,7 @@ const ModalCreateProject = ({ visible, onCancel }) => {
 
                   {teacherDataAll.map((teacher) => (
                     <Option key={teacher.id} value={teacher.id}>
-                      {teacher.username}
+                      {teacher.userName}
                     </Option>
                   ))}
                 </Select>

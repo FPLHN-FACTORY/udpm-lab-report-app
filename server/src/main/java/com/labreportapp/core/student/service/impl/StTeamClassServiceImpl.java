@@ -1,5 +1,7 @@
 package com.labreportapp.core.student.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.labreportapp.core.common.response.SimpleResponse;
 import com.labreportapp.core.student.model.request.FindTeamByIdClass;
 import com.labreportapp.core.student.model.request.FindTeamClassRequest;
@@ -23,12 +25,16 @@ import com.labreportapp.infrastructure.exception.rest.RestApiException;
 import com.labreportapp.repository.StudentClassesRepository;
 import com.labreportapp.repository.TeamRepository;
 import com.labreportapp.util.ConvertListIdToString;
+import com.labreportapp.util.ConvertRequestCallApiIdentity;
 import jakarta.validation.Valid;
 import lombok.Synchronized;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -61,8 +67,11 @@ public class StTeamClassServiceImpl implements StTeamClassService {
     @Qualifier(StudentClassesRepository.NAME)
     private StudentClassesRepository studentClassesRepository;
 
+    @Autowired
+    private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
+
     public List<StStudentCallApiResponse> callApi() {
-        String apiUrl = ApiConstants.API_LIST_STUDENT;
+        String apiUrl = ApiConstants.API_GET_USER_BY_ID;
 
         ResponseEntity<List<StStudentCallApiResponse>> responseEntity =
                 restTemplate.exchange(apiUrl, HttpMethod.GET, null,
@@ -121,14 +130,28 @@ public class StTeamClassServiceImpl implements StTeamClassService {
 
     @Override
     public List<SimpleResponse> test() {
-        List<String> listStudentId =new ArrayList<>();
-        listStudentId.add("99b84d22-2edb-4ede-a5c4-ec78f4791fee");
-        listStudentId.add("6f0e60a6-a3a8-45d3-b6e6-d7632eb64c1a");
+        List<String> listStudentId = new ArrayList<>();
+        listStudentId.add("2435c7d5-9bec-45ac-9bfe-08dba87523fe");
         String url = ConvertListIdToString.convert(listStudentId);
-        String apiUrl = ApiConstants.API_LIST_TEACHER;
+        String apiUrl = ApiConstants.API_GET_USER_BY_LIST_ID;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        String accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjI0MzVjN2Q1LTliZWMtNDVhYy05YmZlLTA4ZGJhODc1MjNmZSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJOZ3V54buFbiBDw7RuZyBUaOG6r25nIFAgSCAyIDYgMSAyIDMiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJ0aGFuZ25jcGgyNjEyM0BmcHQuZWR1LnZuIiwidXNlcm5hbWUiOiJ0aGFuZ25jcGgyNjEyMyIsInBpY3R1cmUiOiJodHRwczovL2xoMy5nb29nbGV1c2VyY29udGVudC5jb20vYS9BQ2c4b2NMdEFxX2pGQm5ieUZUdUlCdllPbkdnS1ktTVQ5MEFvNkt0ZER6ZTY4Q1JQWW89czk2LWMiLCJpZHRyYWluaW5nZmFjaWxpdHkiOiI3OTZhNGZhNC04YWFiLTQyYzQtOWYzNS04NzBiYjAwMDVhZjEiLCJsb2NhbGhvc3QiOiJodHRwOi8vbG9jYWxob3N0OjMwMDAiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsiTUVNQkVSIiwiQURNSU4iXSwicm9sZW5hbWVzIjpbIlRow6BuaCB2acOqbiIsIlF14bqjbiB0cuG7iyB2acOqbiJdLCJleHAiOjE2OTQ4NzA4NzAsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjQ5MDUzIiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NDkwNTMifQ.XCLRZGch-k2i6l9O8rW8erLU2ct9L42mzZcwai-Kq2U";
+        headers.set("Authorization", "Bearer " + accessToken);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonList = null;
+        try {
+            jsonList = objectMapper.writeValueAsString(listStudentId);
+        } catch (JsonProcessingException e) {
+        }
+
+        HttpEntity<String> httpEntity = new HttpEntity<>(jsonList, headers);
 
         ResponseEntity<List<SimpleResponse>> responseEntity =
-                restTemplate.exchange(apiUrl + "?id=" + url, HttpMethod.GET, null,
+                restTemplate.exchange(apiUrl, HttpMethod.POST, httpEntity,
                         new ParameterizedTypeReference<List<SimpleResponse>>() {
                         });
 
@@ -150,14 +173,8 @@ public class StTeamClassServiceImpl implements StTeamClassService {
     // detail class có idTeacher, call api identity để lấy thêm name, username của teacher
     public StDetailClassCustomResponse detailClass(String idClass) {
         Class classFind = repository.findById(idClass).get();
-        String apiUrl = ApiConstants.API_LIST_TEACHER;
 
-        ResponseEntity<SimpleResponse> responseEntity =
-                restTemplate.exchange(apiUrl + "/" + classFind.getTeacherId(), HttpMethod.GET, null,
-                        new ParameterizedTypeReference<SimpleResponse>() {
-                        });
-
-        SimpleResponse response = responseEntity.getBody();
+        SimpleResponse response = convertRequestCallApiIdentity.handleCallApiGetUserById(classFind.getTeacherId());
 
         StDetailClassCustomResponse stDetailClassCustomResponse = new StDetailClassCustomResponse();
         stDetailClassCustomResponse.setId(classFind.getId());
@@ -169,7 +186,7 @@ public class StTeamClassServiceImpl implements StTeamClassService {
         stDetailClassCustomResponse.setNameTeacher(response.getName());
         stDetailClassCustomResponse.setStartTime(classFind.getStartTime());
         stDetailClassCustomResponse.setTeacherId(classFind.getTeacherId());
-        stDetailClassCustomResponse.setUsernameTeacher(response.getUsername());
+        stDetailClassCustomResponse.setUsernameTeacher(response.getUserName());
         return stDetailClassCustomResponse;
     }
 

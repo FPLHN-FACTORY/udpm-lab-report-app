@@ -5,7 +5,10 @@ package com.labreportapp.infrastructure.apiconstant;
  */
 public class ApiConstants {
 
-    public static final String API_LIST_STUDENT = "https://63ddb6cff1af41051b085b6d.mockapi.io/sinh-vien";
+    public static final String API_GET_USER_BY_LIST_ID = DomainIdentityConstants.DOMAIN + "/api/UserSigns/GetDetailUsers";
 
-    public static final String API_LIST_TEACHER = "https://63ddb6cff1af41051b085b6d.mockapi.io/giang-vien";
+    public static final String API_GET_USER_BY_ID =  DomainIdentityConstants.DOMAIN +  "/api/UserSigns/FindById";
+
+    public static final String API_GET_ALL_USER_BY_ROLE_AND_MODULE =  DomainIdentityConstants.DOMAIN +  "/api/UserSigns/GetUserFromRoleModuleAsync";
+
 }

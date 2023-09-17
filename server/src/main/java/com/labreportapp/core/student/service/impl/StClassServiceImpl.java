@@ -12,12 +12,13 @@ import com.labreportapp.core.student.repository.StStudentClassesRepository;
 import com.labreportapp.core.student.service.StClassService;
 import com.labreportapp.entity.Class;
 import com.labreportapp.entity.StudentClasses;
+import com.labreportapp.infrastructure.apiconstant.ActorConstants;
 import com.labreportapp.infrastructure.apiconstant.ApiConstants;
 import com.labreportapp.infrastructure.constant.Message;
 import com.labreportapp.infrastructure.exception.rest.RestApiException;
+import com.labreportapp.util.ConvertRequestCallApiIdentity;
 import lombok.Synchronized;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -46,17 +47,15 @@ public class StClassServiceImpl implements StClassService {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Autowired
+    private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
+
     @Override
     public List<StClassCustomResponse> getAllClassByCriteriaAndIsActive(final StFindClassRequest req) {
         List<StClassResponse> getAllClassByCriteria = stClassRepository.getAllClassByCriteriaAndIsActive(req);
         List<StClassCustomResponse> responseClassCustom = new ArrayList<>();
 
-        String apiTeacher = ApiConstants.API_LIST_TEACHER;
-        ResponseEntity<List<SimpleResponse>> responseEntity = restTemplate.exchange(apiTeacher, HttpMethod.GET,
-                null, new ParameterizedTypeReference<List<SimpleResponse>>() {
-                });
-
-        List<SimpleResponse> simplesResponse = responseEntity.getBody();
+        List<SimpleResponse> simplesResponse = convertRequestCallApiIdentity.handleCallApiGetUserByRoleAndModule(ActorConstants.ACTOR_TEACHER);
         Map<String, SimpleResponse> simpleMap = simplesResponse.stream()
                 .collect(Collectors.toMap(SimpleResponse::getId, Function.identity()));
 
@@ -69,7 +68,7 @@ public class StClassServiceImpl implements StClassService {
                 stClassCustomResponse.setStt(stClassResponse.getStt());
                 stClassCustomResponse.setClassCode(stClassResponse.getCode());
                 stClassCustomResponse.setTeacherUsername(stClassResponse.getTeacherId().
-                        equals(simpleResponse.getId()) ? simpleResponse.getUsername() : null);
+                        equals(simpleResponse.getId()) ? simpleResponse.getUserName() : null);
                 stClassCustomResponse.setClassSize(stClassResponse.getClassSize());
                 stClassCustomResponse.setClassPeriod(stClassResponse.getClassPeriod());
                 stClassCustomResponse.setLevel(stClassResponse.getLevel());
@@ -105,10 +104,7 @@ public class StClassServiceImpl implements StClassService {
             throw new RestApiException(Message.CLASS_DID_FULL_CLASS_SIZE);
         }
 
-        String apiStudent = ApiConstants.API_LIST_STUDENT;
-        ResponseEntity<SimpleResponse> response = restTemplate.exchange(apiStudent + "/" +
-                req.getIdStudent(), HttpMethod.GET, null, SimpleResponse.class);
-        SimpleResponse responseStudent = response.getBody();
+        SimpleResponse responseStudent = convertRequestCallApiIdentity.handleCallApiGetUserById(req.getIdStudent());
 
         StudentClasses studentJoinClass = new StudentClasses();
         StClassCustomResponse customResponse = new StClassCustomResponse();

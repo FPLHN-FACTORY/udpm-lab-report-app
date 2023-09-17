@@ -56,7 +56,7 @@ const TeacherPointMyClass = () => {
         }
       });
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   const featchStudentClass = async (idClass) => {
@@ -70,7 +70,7 @@ const TeacherPointMyClass = () => {
         }
       );
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang");
+      console.log(error);
     }
   };
   const featchStudentPoint = async (idClass) => {
@@ -109,7 +109,7 @@ const TeacherPointMyClass = () => {
       }
       setLoadingData(true);
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   const featchClass = async (idClass) => {
@@ -118,7 +118,7 @@ const TeacherPointMyClass = () => {
         setClassDetail(responese.data.data);
       });
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   useEffect(() => {
@@ -136,7 +136,7 @@ const TeacherPointMyClass = () => {
         toast.success("Lưu bảng điểm thành công !");
       });
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   const data = useAppSelector(GetPoint);
