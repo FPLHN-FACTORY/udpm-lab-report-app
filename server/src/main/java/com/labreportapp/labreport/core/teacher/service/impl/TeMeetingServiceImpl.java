@@ -17,7 +17,7 @@ import com.labreportapp.labreport.core.teacher.service.TeStudentClassesService;
 import com.labreportapp.labreport.entity.HomeWork;
 import com.labreportapp.labreport.entity.Meeting;
 import com.labreportapp.labreport.entity.Note;
-import com.labreportapp.labreport.infrastructure.constant.Message;
+import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

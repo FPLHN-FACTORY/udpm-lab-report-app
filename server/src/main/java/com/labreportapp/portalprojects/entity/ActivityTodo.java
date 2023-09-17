@@ -1,6 +1,6 @@
 package com.labreportapp.portalprojects.entity;
 
-import com.labreportapp.portalprojects.entity.base.PrimaryEntity;
+import com.labreportapp.labreport.entity.base.PrimaryEntity;
 import com.labreportapp.portalprojects.infrastructure.constant.EntityProperties;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,10 +20,10 @@ import org.hibernate.annotations.Index;
 @Getter
 @Setter
 @ToString
-@Table(name = "activity")
+@Table(name = "activity_todo")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Activity extends PrimaryEntity {
+public class ActivityTodo extends PrimaryEntity {
 
     @Column(length = EntityProperties.LENGTH_ID)
     private String memberCreatedId;

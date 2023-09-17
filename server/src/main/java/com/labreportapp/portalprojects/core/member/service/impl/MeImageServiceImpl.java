@@ -10,7 +10,7 @@ import com.labreportapp.portalprojects.core.member.repository.MeActivityReposito
 import com.labreportapp.portalprojects.core.member.repository.MeImageRepository;
 import com.labreportapp.portalprojects.core.member.repository.MeTodoRepository;
 import com.labreportapp.portalprojects.core.member.service.MeImageService;
-import com.labreportapp.portalprojects.entity.Activity;
+import com.labreportapp.portalprojects.entity.ActivityTodo;
 import com.labreportapp.portalprojects.entity.Image;
 import com.labreportapp.portalprojects.entity.Todo;
 import com.labreportapp.portalprojects.infrastructure.cloudinary.CloudinaryUploadImages;
@@ -80,18 +80,18 @@ public class MeImageServiceImpl implements MeImageService {
             todoFind.get().setNameFile(request.getUrlImage());
             meTodoRepository.save(todoFind.get());
         }
-        Activity activity = new Activity();
-        activity.setProjectId(request.getProjectId());
-        activity.setTodoListId(request.getIdTodoList());
-        activity.setTodoId(request.getIdTodo());
-        activity.setImageId(newImage.getId());
-        activity.setMemberCreatedId(request.getIdUser());
-        activity.setContentAction("đã thêm " + request.getNameFileOld() + " vào thẻ này");
-        activity.setUrlImage(request.getUrlImage());
+        ActivityTodo activityTodo = new ActivityTodo();
+        activityTodo.setProjectId(request.getProjectId());
+        activityTodo.setTodoListId(request.getIdTodoList());
+        activityTodo.setTodoId(request.getIdTodo());
+        activityTodo.setImageId(newImage.getId());
+        activityTodo.setMemberCreatedId(request.getIdUser());
+        activityTodo.setContentAction("đã thêm " + request.getNameFileOld() + " vào thẻ này");
+        activityTodo.setUrlImage(request.getUrlImage());
 
         successNotificationSender.senderNotification(ConstantMessageSuccess.TAI_ANH_LEN_THANH_CONG, headerAccessor);
         TodoObject todoObject = TodoObject.builder().data(newImage)
-                .dataActivity(meActivityRepository.save(activity))
+                .dataActivity(meActivityRepository.save(activityTodo))
                 .idTodoList(request.getIdTodoList())
                 .idTodo(request.getIdTodo()).build();
         return todoObject;
@@ -149,24 +149,24 @@ public class MeImageServiceImpl implements MeImageService {
         String publicId = CloundinaryUtils.extractPublicId(request.getNameFile());
         cloudinaryUploadImages.deleteImage(publicId);
 
-        Activity activityFind = meActivityRepository.findActivityByIdImage(request.getId());
-        activityFind.setUrlImage(null);
-        activityFind.setImageId(null);
-        meActivityRepository.save(activityFind);
+        ActivityTodo activityTodoFind = meActivityRepository.findActivityByIdImage(request.getId());
+        activityTodoFind.setUrlImage(null);
+        activityTodoFind.setImageId(null);
+        meActivityRepository.save(activityTodoFind);
 
-        Activity activity = new Activity();
-        activity.setProjectId(request.getProjectId());
-        activity.setTodoListId(request.getIdTodoList());
-        activity.setTodoId(request.getIdTodo());
-        activity.setMemberCreatedId(request.getIdUser());
-        activity.setContentAction("đã xóa " + request.getNameImage() + " khỏi thẻ này");
-        Activity newActivity = meActivityRepository.save(activity);
+        ActivityTodo activityTodo = new ActivityTodo();
+        activityTodo.setProjectId(request.getProjectId());
+        activityTodo.setTodoListId(request.getIdTodoList());
+        activityTodo.setTodoId(request.getIdTodo());
+        activityTodo.setMemberCreatedId(request.getIdUser());
+        activityTodo.setContentAction("đã xóa " + request.getNameImage() + " khỏi thẻ này");
+        ActivityTodo newActivityTodo = meActivityRepository.save(activityTodo);
 
         meImageRepository.deleteById(request.getId());
         successNotificationSender.senderNotification(ConstantMessageSuccess.XOA_THANH_CONG, headerAccessor);
         TodoObject todoObject = TodoObject.builder().data(meTodoRepository.save(todoFind.get()))
                 .dataImage(request.getId())
-                .dataActivity(newActivity)
+                .dataActivity(newActivityTodo)
                 .idTodoList(request.getIdTodoList()).
                         idTodo(request.getIdTodo()).build();
         return todoObject;

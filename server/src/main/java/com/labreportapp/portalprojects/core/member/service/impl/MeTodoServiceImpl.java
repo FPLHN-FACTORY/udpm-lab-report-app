@@ -45,7 +45,7 @@ import com.labreportapp.portalprojects.core.member.repository.MeReourceRepositor
 import com.labreportapp.portalprojects.core.member.repository.MeTodoListRepository;
 import com.labreportapp.portalprojects.core.member.repository.MeTodoRepository;
 import com.labreportapp.portalprojects.core.member.service.MeTodoService;
-import com.labreportapp.portalprojects.entity.Activity;
+import com.labreportapp.portalprojects.entity.ActivityTodo;
 import com.labreportapp.portalprojects.entity.Period;
 import com.labreportapp.portalprojects.entity.PeriodTodo;
 import com.labreportapp.portalprojects.entity.Project;
@@ -362,15 +362,15 @@ public class MeTodoServiceImpl implements MeTodoService {
         if (request.getProgress() == 100 && todoFindById.get().getDeadline() == null) {
             todoFindById.get().setStatusTodo(StatusTodo.HOAN_THANH_SOM);
         }
-        Activity activity = new Activity();
-        activity.setTodoId(request.getIdTodo());
-        activity.setTodoListId(request.getIdTodoList());
-        activity.setProjectId(request.getProjectId());
-        activity.setContentAction("đã cập nhật phần trăm tiến độ của đầu việc thành " + request.getProgress() + "%");
-        activity.setMemberCreatedId(request.getIdUser());
+        ActivityTodo activityTodo = new ActivityTodo();
+        activityTodo.setTodoId(request.getIdTodo());
+        activityTodo.setTodoListId(request.getIdTodoList());
+        activityTodo.setProjectId(request.getProjectId());
+        activityTodo.setContentAction("đã cập nhật phần trăm tiến độ của đầu việc thành " + request.getProgress() + "%");
+        activityTodo.setMemberCreatedId(request.getIdUser());
         TodoObject todoObject = TodoObject.builder()
                 .data(meTodoRepository.save(todoFindById.get()))
-                .dataActivity(meActivityRepository.save(activity))
+                .dataActivity(meActivityRepository.save(activityTodo))
                 .idTodoList(request.getIdTodoList())
                 .idTodo(request.getIdTodo()).build();
         return todoObject;
@@ -483,14 +483,14 @@ public class MeTodoServiceImpl implements MeTodoService {
             todoFind.get().setStatusReminder(StatusReminder.CHUA_GUI);
         }
 
-        Activity activity = new Activity();
-        activity.setMemberCreatedId(request.getIdUser());
-        activity.setProjectId(request.getProjectId());
-        activity.setTodoListId(request.getIdTodoList());
-        activity.setTodoId(request.getIdTodo());
-        activity.setContentAction("đã cập nhật ngày hạn của thẻ này thành " + DateConverter.convertDateToString(deadline.getTime()));
+        ActivityTodo activityTodo = new ActivityTodo();
+        activityTodo.setMemberCreatedId(request.getIdUser());
+        activityTodo.setProjectId(request.getProjectId());
+        activityTodo.setTodoListId(request.getIdTodoList());
+        activityTodo.setTodoId(request.getIdTodo());
+        activityTodo.setContentAction("đã cập nhật ngày hạn của thẻ này thành " + DateConverter.convertDateToString(deadline.getTime()));
         TodoObject todoObject = TodoObject.builder().data(meTodoRepository.save(todoFind.get()))
-                .dataActivity(meActivityRepository.save(activity))
+                .dataActivity(meActivityRepository.save(activityTodo))
                 .idTodoList(request.getIdTodoList()).idTodo(request.getIdTodo()).build();
         successNotificationSender.senderNotification(ConstantMessageSuccess.CAP_NHAT_THANH_CONG, headerAccessor);
         return todoObject;
@@ -509,14 +509,14 @@ public class MeTodoServiceImpl implements MeTodoService {
         todoFind.get().setCompletionTime(null);
         todoFind.get().setReminderTime(null);
         todoFind.get().setStatusReminder(StatusReminder.CHUA_GUI);
-        Activity activity = new Activity();
-        activity.setMemberCreatedId(request.getIdUser());
-        activity.setProjectId(request.getProjectId());
-        activity.setTodoListId(request.getIdTodoList());
-        activity.setTodoId(request.getIdTodo());
-        activity.setContentAction("đã xóa ngày hạn của thẻ này");
+        ActivityTodo activityTodo = new ActivityTodo();
+        activityTodo.setMemberCreatedId(request.getIdUser());
+        activityTodo.setProjectId(request.getProjectId());
+        activityTodo.setTodoListId(request.getIdTodoList());
+        activityTodo.setTodoId(request.getIdTodo());
+        activityTodo.setContentAction("đã xóa ngày hạn của thẻ này");
         TodoObject todoObject = TodoObject.builder().data(meTodoRepository.save(todoFind.get())).
-                dataActivity(meActivityRepository.save(activity)).
+                dataActivity(meActivityRepository.save(activityTodo)).
                 idTodoList(request.getIdTodoList()).idTodo(request.getIdTodo()).build();
         successNotificationSender.senderNotification(ConstantMessageSuccess.XOA_THANH_CONG, headerAccessor);
         return todoObject;
@@ -544,13 +544,13 @@ public class MeTodoServiceImpl implements MeTodoService {
         periodTodo.setPeriodId(request.getPeriodId());
         periodTodoRepository.save(periodTodo);
 
-        Activity activity = new Activity();
-        activity.setTodoId(newTodo.getId());
-        activity.setTodoListId(request.getTodoListId());
-        activity.setProjectId(request.getProjectId());
-        activity.setMemberCreatedId(request.getIdUser());
-        activity.setContentAction("đã thêm thẻ này vào " + request.getNameTodoList());
-        meActivityRepository.save(activity);
+        ActivityTodo activityTodo = new ActivityTodo();
+        activityTodo.setTodoId(newTodo.getId());
+        activityTodo.setTodoListId(request.getTodoListId());
+        activityTodo.setProjectId(request.getProjectId());
+        activityTodo.setMemberCreatedId(request.getIdUser());
+        activityTodo.setContentAction("đã thêm thẻ này vào " + request.getNameTodoList());
+        meActivityRepository.save(activityTodo);
 
         updateProgressPeriod(request.getPeriodId());
         successNotificationSender.senderNotification(ConstantMessageSuccess.THEM_THANH_CONG, headerAccessor);
@@ -582,12 +582,12 @@ public class MeTodoServiceImpl implements MeTodoService {
                     .sessionId(request.getSessionId())
                     .build();
         } else {
-            Activity activity = new Activity();
-            activity.setTodoId(request.getIdTodo());
-            activity.setTodoListId(request.getIdTodoListNew());
-            activity.setProjectId(request.getProjectId());
-            activity.setMemberCreatedId(request.getIdUser());
-            activity.setContentAction("đã kéo thẻ này từ " + request.getNameTodoListOld() + " tới " + request.getNameTodoListNew());
+            ActivityTodo activityTodo = new ActivityTodo();
+            activityTodo.setTodoId(request.getIdTodo());
+            activityTodo.setTodoListId(request.getIdTodoListNew());
+            activityTodo.setProjectId(request.getProjectId());
+            activityTodo.setMemberCreatedId(request.getIdUser());
+            activityTodo.setContentAction("đã kéo thẻ này từ " + request.getNameTodoListOld() + " tới " + request.getNameTodoListNew());
             Short countTodo = meTodoRepository.countTodoInTodoList(request.getIdTodoListNew(), request.getPeriodId());
             todoFind.get().setIndexTodo(request.getIndexAfter());
             todoFind.get().setTodoListId(request.getIdTodoListNew());
@@ -599,7 +599,7 @@ public class MeTodoServiceImpl implements MeTodoService {
             }
             Todo newTodo = meTodoRepository.save(todoFind.get());
             return TodoAndTodoListObject.builder().data(newTodo)
-                    .dataActivity(meActivityRepository.save(activity))
+                    .dataActivity(meActivityRepository.save(activityTodo))
                     .idTodoListOld(request.getIdTodoListOld())
                     .indexBefore((int) request.getIndexBefore())
                     .indexAfter((int) request.getIndexAfter())
@@ -617,15 +617,15 @@ public class MeTodoServiceImpl implements MeTodoService {
         if (!todoFind.isPresent()) {
             throw new MessageHandlingException(Message.TO_DO_NOT_EXISTS);
         }
-        Activity activity = new Activity();
-        activity.setTodoListId(request.getIdTodoList());
-        activity.setTodoId(request.getIdTodo());
-        activity.setProjectId(request.getProjectId());
-        activity.setMemberCreatedId(request.getIdUser());
+        ActivityTodo activityTodo = new ActivityTodo();
+        activityTodo.setTodoListId(request.getIdTodoList());
+        activityTodo.setTodoId(request.getIdTodo());
+        activityTodo.setProjectId(request.getProjectId());
+        activityTodo.setMemberCreatedId(request.getIdUser());
         Short countTodo = meTodoRepository.countTodoInCheckList(request.getIdTodo());
         if (request.getStatus() == 0) {
             todoFind.get().setCompletionTime(new Date().getTime());
-            activity.setContentAction("đã đánh dấu hoàn thành công việc");
+            activityTodo.setContentAction("đã đánh dấu hoàn thành công việc");
             if (new Date().getTime() > todoFind.get().getDeadline()) {
                 todoFind.get().setStatusTodo(StatusTodo.HOAN_THANH_MUON);
             } else {
@@ -637,7 +637,7 @@ public class MeTodoServiceImpl implements MeTodoService {
             }
         } else {
             todoFind.get().setCompletionTime(null);
-            activity.setContentAction("đã đánh dấu chưa hoàn thành công việc");
+            activityTodo.setContentAction("đã đánh dấu chưa hoàn thành công việc");
             todoFind.get().setStatusTodo(StatusTodo.CHUA_HOAN_THANH);
             if (countTodo == 0) {
                 todoFind.get().setProgress((short) 0);
@@ -645,7 +645,7 @@ public class MeTodoServiceImpl implements MeTodoService {
             }
         }
         TodoObject todoObject = TodoObject.builder().data(meTodoRepository.save(todoFind.get()))
-                .dataActivity(meActivityRepository.save(activity))
+                .dataActivity(meActivityRepository.save(activityTodo))
                 .idTodoList(request.getIdTodoList()).idTodo(request.getIdTodo()).build();
         return todoObject;
     }
@@ -664,15 +664,15 @@ public class MeTodoServiceImpl implements MeTodoService {
         todoFind.get().setIndexTodo((short) 0);
         todoFind.get().setTodoListId(request.getIdTodoListNew());
 
-        Activity activity = new Activity();
-        activity.setTodoId(request.getIdTodo());
-        activity.setTodoListId(request.getIdTodoListNew());
-        activity.setProjectId(request.getProjectId());
-        activity.setMemberCreatedId(request.getIdUser());
-        activity.setContentAction("đã kéo thẻ này từ " + request.getNameTodoListOld() + " tới " + request.getNameTodoListNew());
+        ActivityTodo activityTodo = new ActivityTodo();
+        activityTodo.setTodoId(request.getIdTodo());
+        activityTodo.setTodoListId(request.getIdTodoListNew());
+        activityTodo.setProjectId(request.getProjectId());
+        activityTodo.setMemberCreatedId(request.getIdUser());
+        activityTodo.setContentAction("đã kéo thẻ này từ " + request.getNameTodoListOld() + " tới " + request.getNameTodoListNew());
 
         TodoAndTodoListObject todoAndTodoListObject = TodoAndTodoListObject.builder().data(meTodoRepository.save(todoFind.get())).
-                dataActivity(meActivityRepository.save(activity)).
+                dataActivity(meActivityRepository.save(activityTodo)).
                 idTodoListOld(request.getIdTodoListOld()).
                 indexBefore((int) request.getIndexBefore()).
                 indexAfter(Integer.valueOf(0)).

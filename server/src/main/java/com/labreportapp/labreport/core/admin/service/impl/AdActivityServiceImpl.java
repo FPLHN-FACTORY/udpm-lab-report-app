@@ -11,7 +11,7 @@ import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.entity.Activity;
 import com.labreportapp.labreport.entity.Semester;
 import com.labreportapp.labreport.infrastructure.constant.Level;
-import com.labreportapp.labreport.infrastructure.constant.Message;
+import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

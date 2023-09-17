@@ -8,8 +8,8 @@ import com.labreportapp.labreport.core.teacher.model.response.TeFindUpdateStatus
 import com.labreportapp.labreport.core.teacher.repository.TeClassRepository;
 import com.labreportapp.labreport.core.teacher.service.TeClassService;
 import com.labreportapp.labreport.entity.Class;
-import com.labreportapp.labreport.infrastructure.constant.Message;
 import com.labreportapp.labreport.infrastructure.constant.StatusClass;
+import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;

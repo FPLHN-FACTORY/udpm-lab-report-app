@@ -79,7 +79,8 @@ import java.util.Date;
 
 @SpringBootApplication
 @EnableJpaRepositories(
-        basePackages = "com.labreportapp.labreport.repository"
+        basePackages = {"com.labreportapp.labreport.repository",
+                "com.labreportapp.portalprojects.repository"}
 )
 public class DBGenerator implements CommandLineRunner {
 
@@ -501,7 +502,7 @@ public class DBGenerator implements CommandLineRunner {
 
         Meeting meeting1Class = new Meeting();
         meeting1Class.setName("Buổi 1");
-        meeting1Class.setMeetingDate(new Date().getTime()- 86400000);
+        meeting1Class.setMeetingDate(new Date().getTime() - 86400000);
         meeting1Class.setMeetingPeriod(MeetingPeriod.CA_2);
         meeting1Class.setDescriptions("Buổi 1 lớp thầy Nguyên VV4 _ 001 J5_NGUYENVV4_001");
         meeting1Class.setClassId(class3.getId());
@@ -649,7 +650,7 @@ public class DBGenerator implements CommandLineRunner {
         Meeting meeting15 = new Meeting();
         meeting15.setName("Buổi 15");
         meeting15.setMeetingDate(new Date().getTime() + 15 * 86400000);
-       meeting15.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting15.setMeetingPeriod(MeetingPeriod.CA_1);
         meeting15.setDescriptions("Không có giải pháp nào là vĩnh cửu");
         meeting15.setClassId(class1.getId());
         meeting15.setTypeMeeting(TypeMeeting.OFFLINE);
@@ -674,7 +675,7 @@ public class DBGenerator implements CommandLineRunner {
         meeting17.setClassId(class1.getId());
         meeting17.setTypeMeeting(TypeMeeting.OFFLINE);
         meeting17.setAddress("");
-        meeting17.setId(meetingRepository.save( meeting17).getId());
+        meeting17.setId(meetingRepository.save(meeting17).getId());
 
         Meeting meeting18 = new Meeting();
         meeting18.setName("Buổi 18");
@@ -684,7 +685,7 @@ public class DBGenerator implements CommandLineRunner {
         meeting18.setClassId(class1.getId());
         meeting18.setTypeMeeting(TypeMeeting.OFFLINE);
         meeting18.setAddress("");
-        meeting18.setId(meetingRepository.save( meeting18).getId());
+        meeting18.setId(meetingRepository.save(meeting18).getId());
 
         Meeting meeting19 = new Meeting();
         meeting19.setName("Buổi 19");
@@ -694,7 +695,7 @@ public class DBGenerator implements CommandLineRunner {
         meeting19.setClassId(class1.getId());
         meeting19.setTypeMeeting(TypeMeeting.OFFLINE);
         meeting19.setAddress("");
-        meeting19.setId(meetingRepository.save( meeting19).getId());
+        meeting19.setId(meetingRepository.save(meeting19).getId());
 
         Meeting meeting20 = new Meeting();
         meeting20.setName("Buổi 20");
@@ -704,7 +705,7 @@ public class DBGenerator implements CommandLineRunner {
         meeting20.setClassId(class1.getId());
         meeting20.setTypeMeeting(TypeMeeting.OFFLINE);
         meeting20.setAddress("");
-        meeting20.setId(meetingRepository.save( meeting20).getId());
+        meeting20.setId(meetingRepository.save(meeting20).getId());
 
 
 // homework

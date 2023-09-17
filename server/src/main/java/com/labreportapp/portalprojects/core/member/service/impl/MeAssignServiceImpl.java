@@ -5,7 +5,7 @@ import com.labreportapp.portalprojects.core.member.model.request.MeCreateOrDelet
 import com.labreportapp.portalprojects.core.member.repository.MeActivityRepository;
 import com.labreportapp.portalprojects.core.member.repository.MeAssignRepository;
 import com.labreportapp.portalprojects.core.member.service.MeAssignService;
-import com.labreportapp.portalprojects.entity.Activity;
+import com.labreportapp.portalprojects.entity.ActivityTodo;
 import com.labreportapp.portalprojects.entity.Assign;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.MessageHandlingException;
@@ -47,24 +47,24 @@ public class MeAssignServiceImpl implements MeAssignService {
             throw new MessageHandlingException(Message.ASSIGN_NOT_EXISTS);
         }
         meAssignRepository.delete(request.getIdMember(), request.getIdTodo());
-        Activity activity = new Activity();
+        ActivityTodo activityTodo = new ActivityTodo();
 
         if (request.getIdMember().equals(request.getIdUser())) {
-            activity.setProjectId(request.getProjectId());
-            activity.setTodoId(request.getIdTodo());
-            activity.setTodoListId(request.getIdTodoList());
-            activity.setMemberCreatedId(request.getIdUser());
-            activity.setContentAction("đã rời khỏi thẻ này");
+            activityTodo.setProjectId(request.getProjectId());
+            activityTodo.setTodoId(request.getIdTodo());
+            activityTodo.setTodoListId(request.getIdTodoList());
+            activityTodo.setMemberCreatedId(request.getIdUser());
+            activityTodo.setContentAction("đã rời khỏi thẻ này");
         } else {
-            activity.setProjectId(request.getProjectId());
-            activity.setTodoId(request.getIdTodo());
-            activity.setTodoListId(request.getIdTodoList());
-            activity.setMemberCreatedId(request.getIdUser());
-            activity.setMemberId(request.getIdMember());
-            activity.setContentAction("đã xóa " + request.getNameMember() + " khỏi thẻ này");
+            activityTodo.setProjectId(request.getProjectId());
+            activityTodo.setTodoId(request.getIdTodo());
+            activityTodo.setTodoListId(request.getIdTodoList());
+            activityTodo.setMemberCreatedId(request.getIdUser());
+            activityTodo.setMemberId(request.getIdMember());
+            activityTodo.setContentAction("đã xóa " + request.getNameMember() + " khỏi thẻ này");
         }
         TodoObject todoObject = TodoObject.builder().data(request.getIdMember())
-                .dataActivity(meActivityRepository.save(activity)).idTodoList(request.getIdTodoList())
+                .dataActivity(meActivityRepository.save(activityTodo)).idTodoList(request.getIdTodoList())
                 .idTodo(request.getIdTodo()).build();
         return todoObject;
     }
@@ -82,24 +82,24 @@ public class MeAssignServiceImpl implements MeAssignService {
         assign.setEmail(request.getEmail());
         assign.setMemberId(request.getIdMember());
 
-        Activity activity = new Activity();
+        ActivityTodo activityTodo = new ActivityTodo();
         if (request.getIdMember().equals(request.getIdUser())) {
-            activity.setProjectId(request.getProjectId());
-            activity.setTodoId(request.getIdTodo());
-            activity.setTodoListId(request.getIdTodoList());
-            activity.setMemberCreatedId(request.getIdUser());
-            activity.setContentAction("đã tham gia thẻ này");
+            activityTodo.setProjectId(request.getProjectId());
+            activityTodo.setTodoId(request.getIdTodo());
+            activityTodo.setTodoListId(request.getIdTodoList());
+            activityTodo.setMemberCreatedId(request.getIdUser());
+            activityTodo.setContentAction("đã tham gia thẻ này");
         } else {
-            activity.setProjectId(request.getProjectId());
-            activity.setTodoId(request.getIdTodo());
-            activity.setTodoListId(request.getIdTodoList());
-            activity.setMemberCreatedId(request.getIdUser());
-            activity.setMemberId(request.getIdMember());
-            activity.setContentAction("đã thêm " + request.getNameMember() + " vào thẻ này");
+            activityTodo.setProjectId(request.getProjectId());
+            activityTodo.setTodoId(request.getIdTodo());
+            activityTodo.setTodoListId(request.getIdTodoList());
+            activityTodo.setMemberCreatedId(request.getIdUser());
+            activityTodo.setMemberId(request.getIdMember());
+            activityTodo.setContentAction("đã thêm " + request.getNameMember() + " vào thẻ này");
         }
 
         TodoObject todoObject = TodoObject.builder().data(meAssignRepository.save(assign)).
-                dataActivity(meActivityRepository.save(activity)).
+                dataActivity(meActivityRepository.save(activityTodo)).
                 idTodoList(request.getIdTodoList()).idTodo(request.getIdTodo()).build();
         return todoObject;
     }

@@ -1,6 +1,6 @@
 package com.labreportapp.portalprojects.core.member.model.response;
 
-import com.labreportapp.portalprojects.entity.Activity;
+import com.labreportapp.portalprojects.entity.ActivityTodo;
 import com.labreportapp.portalprojects.entity.base.IsIdentified;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.rest.core.config.Projection;
@@ -8,7 +8,7 @@ import org.springframework.data.rest.core.config.Projection;
 /**
  * @author thangncph26123
  */
-@Projection(types = {Activity.class})
+@Projection(types = {ActivityTodo.class})
 public interface MeActivityResponse extends IsIdentified {
 
     @Value("#{target.member_created_id}")

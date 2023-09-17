@@ -23,7 +23,7 @@ public interface AdSemesterRepository extends SemesterRepository {
             """, nativeQuery = true)
     List<Semester> findAllSemester();
 
-    @Query("SELECT COUNT(obj) FROM Activity obj WHERE obj.semesterId = :id")
+    @Query(value = "SELECT COUNT(obj) FROM activity obj WHERE obj.semesterId = :id", nativeQuery = true)
     Integer countActivitiesBySemesterId(@Param("id") String id);
 
     @Query(value = """

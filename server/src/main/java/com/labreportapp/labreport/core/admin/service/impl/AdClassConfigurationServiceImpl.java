@@ -5,7 +5,7 @@ import com.labreportapp.labreport.core.admin.model.response.AdClassConfiguration
 import com.labreportapp.labreport.core.admin.repository.AdClassConfigurationRepository;
 import com.labreportapp.labreport.core.admin.service.AdCLassConfigurationService;
 import com.labreportapp.labreport.entity.ClassConfiguration;
-import com.labreportapp.labreport.infrastructure.constant.Message;
+import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +15,7 @@ import java.util.Optional;
 
 @Service
 public class AdClassConfigurationServiceImpl implements AdCLassConfigurationService {
+
     @Autowired
     private AdClassConfigurationRepository adClassConfigurationRepository;
     @Override

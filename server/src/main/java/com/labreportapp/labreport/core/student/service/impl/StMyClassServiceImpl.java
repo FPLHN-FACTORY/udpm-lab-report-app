@@ -11,8 +11,8 @@ import com.labreportapp.labreport.core.student.repository.StStudentClassesReposi
 import com.labreportapp.labreport.core.student.service.StMyClassService;
 import com.labreportapp.labreport.entity.Class;
 import com.labreportapp.labreport.entity.StudentClasses;
-import com.labreportapp.labreport.infrastructure.constant.Message;
 import com.labreportapp.labreport.repository.SemesterRepository;
+import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

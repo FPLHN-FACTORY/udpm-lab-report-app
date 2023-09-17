@@ -1,6 +1,6 @@
 package com.labreportapp.portalprojects.entity;
 
-import com.labreportapp.portalprojects.entity.base.PrimaryEntity;
+import com.labreportapp.labreport.entity.base.PrimaryEntity;
 import com.labreportapp.portalprojects.infrastructure.constant.EntityProperties;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

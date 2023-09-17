@@ -20,7 +20,7 @@ public class RestApiException extends RuntimeException {
         this.message = statusCode.getMessage();
     }
 
-    public RestApiException(com.labreportapp.labreport.infrastructure.constant.Message message) {
+    public RestApiException(String message) {
         this.message = message;
     }
 

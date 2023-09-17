@@ -1,6 +1,6 @@
 package com.labreportapp.portalprojects.repository;
 
-import com.labreportapp.portalprojects.entity.Activity;
+import com.labreportapp.portalprojects.entity.ActivityTodo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
  * @author thangncph26123
  */
 @Repository(ActivityRepository.NAME)
-public interface ActivityRepository extends JpaRepository<Activity, String> {
+public interface ActivityRepository extends JpaRepository<ActivityTodo, String> {
 
-    public static final String NAME = "BaseActivityRepository";
+    public static final String NAME = "BaseActivityTodoRepository";
 }

@@ -229,7 +229,7 @@ public interface MeTodoRepository extends TodoRepository {
     @Modifying
     @Transactional
     @Query(value = """
-            DELETE FROM activity WHERE todo_id = :idTodo AND project_id = :idProject
+            DELETE FROM activity_todo WHERE todo_id = :idTodo AND project_id = :idProject
             """, nativeQuery = true)
     void deleteActivityTodo(@Param("idTodo") String idTodo, @Param("idProject") String idProject);
 

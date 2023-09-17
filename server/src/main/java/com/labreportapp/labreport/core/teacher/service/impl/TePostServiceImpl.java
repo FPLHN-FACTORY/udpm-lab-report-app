@@ -8,7 +8,7 @@ import com.labreportapp.labreport.core.teacher.model.response.TePostRespone;
 import com.labreportapp.labreport.core.teacher.repository.TePostRepository;
 import com.labreportapp.labreport.core.teacher.service.TePostService;
 import com.labreportapp.labreport.entity.Post;
-import com.labreportapp.labreport.infrastructure.constant.Message;
+import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

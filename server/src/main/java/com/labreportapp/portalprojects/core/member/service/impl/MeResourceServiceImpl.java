@@ -8,7 +8,7 @@ import com.labreportapp.portalprojects.core.member.model.response.MeResourceResp
 import com.labreportapp.portalprojects.core.member.repository.MeActivityRepository;
 import com.labreportapp.portalprojects.core.member.repository.MeReourceRepository;
 import com.labreportapp.portalprojects.core.member.service.MeResourceService;
-import com.labreportapp.portalprojects.entity.Activity;
+import com.labreportapp.portalprojects.entity.ActivityTodo;
 import com.labreportapp.portalprojects.entity.Resource;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.MessageHandlingException;
@@ -64,19 +64,19 @@ public class MeResourceServiceImpl implements MeResourceService {
         }
         resource.setTodoId(request.getIdTodo());
 
-        Activity activity = new Activity();
-        activity.setMemberCreatedId(request.getIdUser());
-        activity.setTodoId(request.getIdTodo());
-        activity.setTodoListId(request.getIdTodoList());
-        activity.setProjectId(request.getProjectId());
+        ActivityTodo activityTodo = new ActivityTodo();
+        activityTodo.setMemberCreatedId(request.getIdUser());
+        activityTodo.setTodoId(request.getIdTodo());
+        activityTodo.setTodoListId(request.getIdTodoList());
+        activityTodo.setProjectId(request.getProjectId());
         if (request.getName() != null && !request.getName().isEmpty()) {
-            activity.setContentAction("đã đính kèm " + request.getName() + " vào thẻ này");
+            activityTodo.setContentAction("đã đính kèm " + request.getName() + " vào thẻ này");
         } else {
-            activity.setContentAction("đã đính kèm " + "http://" + request.getUrl() + " vào thẻ này");
+            activityTodo.setContentAction("đã đính kèm " + "http://" + request.getUrl() + " vào thẻ này");
         }
         successNotificationSender.senderNotification(ConstantMessageSuccess.THEM_THANH_CONG, headerAccessor);
         TodoObject todoObject = TodoObject.builder().data(meReourceRepository.save(resource))
-                .dataActivity(meActivityRepository.save(activity))
+                .dataActivity(meActivityRepository.save(activityTodo))
                 .idTodo(request.getIdTodo()).idTodoList(request.getIdTodoList()).build();
         return todoObject;
     }
@@ -102,20 +102,20 @@ public class MeResourceServiceImpl implements MeResourceService {
     @CacheEvict(value = {"todosByPeriodAndTodoList"}, allEntries = true)
     @Transactional
     public TodoObject delete(@Valid MeDeleteResourceRequest request, StompHeaderAccessor headerAccessor) {
-        Activity activity = new Activity();
-        activity.setProjectId(request.getProjectId());
-        activity.setTodoId(request.getIdTodo());
-        activity.setTodoListId(request.getIdTodoList());
-        activity.setMemberCreatedId(request.getIdUser());
+        ActivityTodo activityTodo = new ActivityTodo();
+        activityTodo.setProjectId(request.getProjectId());
+        activityTodo.setTodoId(request.getIdTodo());
+        activityTodo.setTodoListId(request.getIdTodoList());
+        activityTodo.setMemberCreatedId(request.getIdUser());
         if (!request.getName().isEmpty() && request.getName() != null) {
-            activity.setContentAction("đã xóa link đính kèm " + request.getName() + " khỏi thẻ này");
+            activityTodo.setContentAction("đã xóa link đính kèm " + request.getName() + " khỏi thẻ này");
         } else {
-            activity.setContentAction("đã xóa link đính kèm " + request.getUrl() + " khỏi thẻ này");
+            activityTodo.setContentAction("đã xóa link đính kèm " + request.getUrl() + " khỏi thẻ này");
         }
         successNotificationSender.senderNotification(ConstantMessageSuccess.XOA_THANH_CONG, headerAccessor);
         meReourceRepository.deleteById(request.getId());
         TodoObject todoObject = TodoObject.builder().data(request.getId())
-                .dataActivity(meActivityRepository.save(activity))
+                .dataActivity(meActivityRepository.save(activityTodo))
                 .idTodo(request.getIdTodo())
                 .idTodoList(request.getIdTodoList()).build();
         return todoObject;
