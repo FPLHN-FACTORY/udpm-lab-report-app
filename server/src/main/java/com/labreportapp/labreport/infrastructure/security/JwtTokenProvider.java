@@ -1,5 +1,6 @@
 package com.labreportapp.labreport.infrastructure.security;
 
+import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -24,7 +25,7 @@ public class JwtTokenProvider {
 
     public Authentication getAuthentication(String token) {
         Claims claims = Jwts.parserBuilder()
-                .setSigningKey(secretKey)
+                .setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes()))
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
@@ -32,27 +33,17 @@ public class JwtTokenProvider {
         String name = claims.get("name", String.class);
         String userName = claims.get("userName", String.class);
         String email = claims.get("email", String.class);
-        System.out.println(name + " aaaaaaaaaa");
-        System.out.println(userName);
-        System.out.println(email);
+
         System.out.println(role);
 
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role);
-//        User principal = new User();
-//        principal.setId(UUID.fromString(idUser));
-//        principal.setPhoneNumber(phoneNumber);
-//        principal.setGender(gender);
-//        principal.setAddress(address);
-//        principal.setEmail(email);
-//        principal.setFullName(fullName);
-//        principal.setRole(Role.valueOf(authority.getAuthority()));
         return new UsernamePasswordAuthenticationToken(null, token, Collections.singletonList(authority));
     }
 
     public boolean validateToken(String token) {
         try {
             Jws<Claims> claims = Jwts.parserBuilder()
-                    .setSigningKey(secretKey)
+                    .setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes()))
                     .build()
                     .parseClaimsJws(token);
 

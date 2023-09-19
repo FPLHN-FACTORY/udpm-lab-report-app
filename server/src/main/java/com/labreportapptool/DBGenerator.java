@@ -4,6 +4,7 @@ import com.labreportapp.labreport.entity.Activity;
 import com.labreportapp.labreport.entity.Attendance;
 import com.labreportapp.labreport.entity.Class;
 import com.labreportapp.labreport.entity.ClassConfiguration;
+import com.labreportapp.labreport.entity.FeedBack;
 import com.labreportapp.labreport.entity.HomeWork;
 import com.labreportapp.labreport.entity.Meeting;
 import com.labreportapp.labreport.entity.Note;
@@ -11,27 +12,36 @@ import com.labreportapp.labreport.entity.Point;
 import com.labreportapp.labreport.entity.Post;
 import com.labreportapp.labreport.entity.Semester;
 import com.labreportapp.labreport.entity.StudentClasses;
+import com.labreportapp.labreport.entity.Syllabus;
 import com.labreportapp.labreport.entity.Team;
+import com.labreportapp.labreport.infrastructure.constant.AllowUseTrello;
 import com.labreportapp.labreport.infrastructure.constant.ClassPeriod;
 import com.labreportapp.labreport.infrastructure.constant.Level;
 import com.labreportapp.labreport.infrastructure.constant.MeetingPeriod;
 import com.labreportapp.labreport.infrastructure.constant.RoleTeam;
 import com.labreportapp.labreport.infrastructure.constant.StatusAttendance;
 import com.labreportapp.labreport.infrastructure.constant.StatusClass;
+import com.labreportapp.labreport.infrastructure.constant.StatusFeedBack;
+import com.labreportapp.labreport.infrastructure.constant.StatusStudentFeedBack;
 import com.labreportapp.labreport.infrastructure.constant.StatusTeam;
 import com.labreportapp.labreport.infrastructure.constant.TypeMeeting;
 import com.labreportapp.labreport.repository.ActivityRepository;
 import com.labreportapp.labreport.repository.AttendanceRepository;
 import com.labreportapp.labreport.repository.ClassConfigurationRepository;
 import com.labreportapp.labreport.repository.ClassRepository;
+import com.labreportapp.labreport.repository.FeedBackRepository;
 import com.labreportapp.labreport.repository.HomeWorkRepository;
+import com.labreportapp.labreport.repository.LevelRepository;
 import com.labreportapp.labreport.repository.MeetingRepository;
 import com.labreportapp.labreport.repository.NoteRepository;
 import com.labreportapp.labreport.repository.PointRepository;
 import com.labreportapp.labreport.repository.PostRepository;
+import com.labreportapp.labreport.repository.ReportRepository;
 import com.labreportapp.labreport.repository.SemesterRepository;
 import com.labreportapp.labreport.repository.StudentClassesRepository;
+import com.labreportapp.labreport.repository.SyllabusRepository;
 import com.labreportapp.labreport.repository.TeamRepository;
+import com.labreportapp.labreport.repository.TemplateReportRepository;
 import com.labreportapp.portalprojects.entity.Category;
 import com.labreportapp.portalprojects.entity.Label;
 import com.labreportapp.portalprojects.entity.LabelProject;
@@ -88,6 +98,15 @@ public class DBGenerator implements CommandLineRunner {
 
     @Autowired
     private ActivityRepository activityRepository;
+
+    @Autowired
+    private LevelRepository levelRepository;
+
+    @Autowired
+    private ReportRepository reportRepository;
+
+    @Autowired
+    private FeedBackRepository feedBackRepository;
 
     @Autowired
     private AttendanceRepository attendanceRepository;
@@ -161,26 +180,67 @@ public class DBGenerator implements CommandLineRunner {
     @Autowired
     private TodoListRepository todoListRepository;
 
+    @Autowired
+    private TemplateReportRepository templateReportRepository;
+
+    @Autowired
+    private SyllabusRepository syllabusRepository;
+
     @Override
     public void run(String... args) throws Exception {
+
         Semester semester = new Semester();
         semester.setName("FALL 2023");
         semester.setStartTime(new Date().getTime());
         semester.setEndTime(new Date().getTime() + 2678400000L);
+        semester.setStartTimeStudent(new Date().getTime());
+        semester.setStatusFeedBack(StatusFeedBack.DA_FEEDBACK);
+        semester.setEndTimeStudent(new Date().getTime() + 86400000L * 7);
         semester.setId(semesterRepository.save(semester).getId());
 
         Semester semester2 = new Semester();
         semester2.setName("SPRING 2023");
         semester2.setStartTime(1682874000000L);
+        semester2.setStartTimeStudent(1682874000000L);
         semester2.setEndTime(1682874000000L + 2678400000L);
+        semester.setStatusFeedBack(StatusFeedBack.DA_FEEDBACK);
+        semester2.setEndTimeStudent(1682874000000L + 86400000L * 7);
         semester2.setId(semesterRepository.save(semester2).getId());
+
+        com.labreportapp.labreport.entity.Level level1 = new com.labreportapp.labreport.entity.Level();
+        level1.setName("Level 1");
+        level1.setId(levelRepository.save(level1).getId());
+
+        com.labreportapp.labreport.entity.Level level2 = new com.labreportapp.labreport.entity.Level();
+        level2.setName("Level 2");
+        level2.setId(levelRepository.save(level2).getId());
+
+        com.labreportapp.labreport.entity.Level level3 = new com.labreportapp.labreport.entity.Level();
+        level3.setName("Level 3");
+        level3.setId(levelRepository.save(level3).getId());
+
+        Syllabus syllabus1 = new Syllabus();
+        syllabus1.setDescriptions("https://docs.google.com/spreadsheets/d/1Gop11N-inh_I-TegG3OyGZpfKu4Ls1-qTY1IAMHSCY4/edit#gid=1799431034");
+        syllabus1.setLevelId(level1.getId());
+        syllabus1.setId(syllabusRepository.save(syllabus1).getId());
+
+        Syllabus syllabus2 = new Syllabus();
+        syllabus2.setDescriptions("https://docs.google.com/spreadsheets/d/1Gop11N-inh_I-TegG3OyGZpfKu4Ls1-qTY1IAMHSCY4/edit#gid=1799431034");
+        syllabus2.setLevelId(level2.getId());
+        syllabus2.setId(syllabusRepository.save(syllabus2).getId());
+
+        Syllabus syllabus3 = new Syllabus();
+        syllabus3.setDescriptions("https://docs.google.com/spreadsheets/d/1Gop11N-inh_I-TegG3OyGZpfKu4Ls1-qTY1IAMHSCY4/edit#gid=1799431034");
+        syllabus3.setLevelId(level3.getId());
+        syllabus3.setId(syllabusRepository.save(syllabus3).getId());
 
         Activity activity1 = new Activity();
         activity1.setName("Xây dựng cho sinh viên quy trình làm việc với dự án, thực hành làm việc với website");
         activity1.setStartTime(new Date().getTime() + 10000);
         activity1.setEndTime(new Date().getTime() + 10000 + 2678400000L);
         activity1.setSemesterId(semester.getId());
-        activity1.setLevel(Level.LEVEL_3);
+        activity1.setAllowUseTrello(AllowUseTrello.KHONG_CHO_PHEP);
+        activity1.setLevelId(level3.getId());
         activity1.setId(activityRepository.save(activity1).getId());
 
         Activity activity2 = new Activity();
@@ -188,7 +248,8 @@ public class DBGenerator implements CommandLineRunner {
         activity2.setStartTime(new Date().getTime() + 10000);
         activity2.setEndTime(new Date().getTime() + 10000 + 2678400000L);
         activity2.setSemesterId(semester.getId());
-        activity2.setLevel(Level.LEVEL_2);
+        activity2.setLevelId(level2.getId());
+        activity1.setAllowUseTrello(AllowUseTrello.CHO_PHEP);
         activity2.setId(activityRepository.save(activity2).getId());
 
         Class class1 = new Class();
@@ -294,6 +355,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses1.setEmail("hieundph25894@fpt.edu.vn");
         studentClasses1.setRole(RoleTeam.MEMBER);
         studentClasses1.setStatus(StatusTeam.ACTIVE);
+        studentClasses1.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
         studentClasses1.setId(studentClassesRepository.save(studentClasses1).getId());
 
         StudentClasses studentClasses2 = new StudentClasses();
@@ -303,6 +365,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses2.setEmail("thangncph26123@fpt.edu.vn");
         studentClasses2.setRole(RoleTeam.LEADER);
         studentClasses2.setStatus(StatusTeam.ACTIVE);
+        studentClasses2.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
         studentClasses2.setId(studentClassesRepository.save(studentClasses2).getId());
 
         StudentClasses studentClasses3 = new StudentClasses();
@@ -312,6 +375,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses3.setEmail("vanntph19604@fpt.edu.vn");
         studentClasses3.setRole(RoleTeam.MEMBER);
         studentClasses3.setStatus(StatusTeam.ACTIVE);
+        studentClasses3.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
         studentClasses3.setId(studentClassesRepository.save(studentClasses3).getId());
 
         StudentClasses studentClasses4 = new StudentClasses();
@@ -321,6 +385,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses4.setEmail("quynhncph26201@fpt.edu.vn");
         studentClasses4.setRole(RoleTeam.MEMBER);
         studentClasses4.setStatus(StatusTeam.ACTIVE);
+        studentClasses4.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
         studentClasses4.setId(studentClassesRepository.save(studentClasses4).getId());
 
         StudentClasses studentClasses5 = new StudentClasses();
@@ -330,6 +395,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses5.setEmail("hieundph26058@fpt.edu.vn");
         studentClasses5.setRole(RoleTeam.MEMBER);
         studentClasses5.setStatus(StatusTeam.ACTIVE);
+        studentClasses5.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
         studentClasses5.setId(studentClassesRepository.save(studentClasses5).getId());
 
 //class 1 - team 1 ( 6-10)
@@ -340,6 +406,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses6.setEmail("vinhnvph23845@fpt.edu.vn");
         studentClasses6.setRole(RoleTeam.LEADER);
         studentClasses6.setStatus(StatusTeam.ACTIVE);
+        studentClasses6.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
         studentClasses6.setId(studentClassesRepository.save(studentClasses6).getId());
 
         StudentClasses studentClasses7 = new StudentClasses();
@@ -348,6 +415,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses7.setTeamId(team1.getId());
         studentClasses7.setEmail("huynqph26772@fpt.edu.vn");
         studentClasses7.setRole(RoleTeam.MEMBER);
+        studentClasses7.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
         studentClasses7.setStatus(StatusTeam.ACTIVE);
         studentClasses7.setId(studentClassesRepository.save(studentClasses7).getId());
 
@@ -357,6 +425,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses8.setTeamId(team1.getId());
         studentClasses8.setEmail("hatqph21186@fpt.edu.vn");
         studentClasses8.setRole(RoleTeam.MEMBER);
+        studentClasses8.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
         studentClasses8.setStatus(StatusTeam.ACTIVE);
         studentClasses8.setId(studentClassesRepository.save(studentClasses8).getId());
 
@@ -367,6 +436,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses9.setEmail("nhatnvph26159@fpt.edu.vn");
         studentClasses9.setRole(RoleTeam.MEMBER);
         studentClasses9.setStatus(StatusTeam.ACTIVE);
+        studentClasses9.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
         studentClasses9.setId(studentClassesRepository.save(studentClasses9).getId());
 
         StudentClasses studentClasses10 = new StudentClasses();
@@ -376,6 +446,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses10.setEmail("tuannvph25577@fpt.edu.vn");
         studentClasses10.setRole(RoleTeam.MEMBER);
         studentClasses10.setStatus(StatusTeam.ACTIVE);
+        studentClasses10.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
         studentClasses10.setId(studentClassesRepository.save(studentClasses10).getId());
         // class 1- team 3 (11-15)
         StudentClasses studentClasses11 = new StudentClasses();
@@ -384,6 +455,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses11.setTeamId(team3.getId());
         studentClasses11.setEmail("anhdtnph25326@fpt.edu.vn");
         studentClasses11.setRole(RoleTeam.LEADER);
+        studentClasses11.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
         studentClasses11.setStatus(StatusTeam.ACTIVE);
         studentClasses11.setId(studentClassesRepository.save(studentClasses11).getId());
 
@@ -392,6 +464,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses12.setClassId(class1.getId());
         studentClasses12.setTeamId(team3.getId());
         studentClasses12.setEmail("trangntph19494@fpt.edu.vn");
+        studentClasses12.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
         studentClasses12.setRole(RoleTeam.MEMBER);
         studentClasses12.setStatus(StatusTeam.ACTIVE);
         studentClasses12.setId(studentClassesRepository.save(studentClasses12).getId());
@@ -402,6 +475,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses13.setTeamId(team3.getId());
         studentClasses13.setEmail("huyvqph25924@fpt.edu.vn");
         studentClasses13.setRole(RoleTeam.MEMBER);
+        studentClasses13.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
         studentClasses13.setStatus(StatusTeam.ACTIVE);
         studentClasses13.setId(studentClassesRepository.save(studentClasses13).getId());
 
@@ -411,6 +485,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses14.setTeamId(team3.getId());
         studentClasses14.setEmail("hungpvph25929@fpt.edu.vn");
         studentClasses14.setRole(RoleTeam.MEMBER);
+        studentClasses14.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
         studentClasses14.setStatus(StatusTeam.ACTIVE);
         studentClasses14.setId(studentClassesRepository.save(studentClasses14).getId());
 
@@ -421,6 +496,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses15.setEmail("hoangdvph25902@fpt.edu.vn");
         studentClasses15.setRole(RoleTeam.MEMBER);
         studentClasses15.setStatus(StatusTeam.ACTIVE);
+        studentClasses15.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
         studentClasses15.setId(studentClassesRepository.save(studentClasses15).getId());
 
         StudentClasses studentClasses16 = new StudentClasses();
@@ -428,6 +504,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses16.setClassId(class1.getId());
         studentClasses16.setTeamId(null);
         studentClasses16.setEmail("sonhnph19532@fpt.edu.vn");
+        studentClasses16.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
         studentClasses16.setRole(RoleTeam.MEMBER);
         studentClasses16.setStatus(StatusTeam.ACTIVE);
         studentClasses16.setId(studentClassesRepository.save(studentClasses16).getId());
@@ -438,6 +515,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses17.setTeamId(null);
         studentClasses17.setEmail("trangdttph27721@fpt.edu.vn");
         studentClasses17.setRole(RoleTeam.MEMBER);
+        studentClasses17.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
         studentClasses17.setStatus(StatusTeam.ACTIVE);
         studentClasses17.setId(studentClassesRepository.save(studentClasses17).getId());
 
@@ -447,6 +525,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses18.setTeamId(null);
         studentClasses18.setEmail("cuongnqph26071@fpt.edu.vn");
         studentClasses18.setRole(RoleTeam.MEMBER);
+        studentClasses18.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
         studentClasses18.setStatus(StatusTeam.ACTIVE);
         studentClasses18.setId(studentClassesRepository.save(studentClasses18).getId());
 
@@ -455,9 +534,124 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses19.setClassId(class1.getId());
         studentClasses19.setTeamId(null);
         studentClasses19.setEmail("dungnpph25823@fpt.edu.vn");
+        studentClasses19.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
         studentClasses19.setRole(RoleTeam.MEMBER);
         studentClasses19.setStatus(StatusTeam.ACTIVE);
         studentClasses19.setId(studentClassesRepository.save(studentClasses19).getId());
+
+        FeedBack feedBack1 = new FeedBack();
+        feedBack1.setDescriptions("Day ok #");
+        feedBack1.setClassId(class1.getId());
+        feedBack1.setStudentId(studentClasses1.getStudentId());
+        feedBack1.setId(feedBackRepository.save(feedBack1).getId());
+
+        FeedBack feedBack2 = new FeedBack();
+        feedBack2.setDescriptions("Day ok #");
+        feedBack2.setClassId(class1.getId());
+        feedBack2.setStudentId(studentClasses2.getStudentId());
+        feedBack2.setId(feedBackRepository.save(feedBack2).getId());
+
+        FeedBack feedBack3 = new FeedBack();
+        feedBack3.setDescriptions("Day ok #");
+        feedBack3.setClassId(class1.getId());
+        feedBack3.setStudentId(studentClasses3.getStudentId());
+        feedBack3.setId(feedBackRepository.save(feedBack3).getId());
+
+        FeedBack feedBack4 = new FeedBack();
+        feedBack4.setDescriptions("Day ok #");
+        feedBack4.setClassId(class1.getId());
+        feedBack4.setStudentId(studentClasses4.getStudentId());
+        feedBack4.setId(feedBackRepository.save(feedBack4).getId());
+
+        FeedBack feedBack5 = new FeedBack();
+        feedBack5.setDescriptions("Day ok #");
+        feedBack5.setClassId(class1.getId());
+        feedBack5.setStudentId(studentClasses5.getStudentId());
+        feedBack5.setId(feedBackRepository.save(feedBack5).getId());
+
+        FeedBack feedBack6 = new FeedBack();
+        feedBack6.setDescriptions("Day ok #");
+        feedBack6.setClassId(class1.getId());
+        feedBack6.setStudentId(studentClasses6.getStudentId());
+        feedBack6.setId(feedBackRepository.save(feedBack6).getId());
+
+        FeedBack feedBack7 = new FeedBack();
+        feedBack7.setDescriptions("Day ok #");
+        feedBack7.setClassId(class1.getId());
+        feedBack7.setStudentId(studentClasses7.getStudentId());
+        feedBack7.setId(feedBackRepository.save(feedBack7).getId());
+
+        FeedBack feedBack8 = new FeedBack();
+        feedBack8.setDescriptions("Day ok #");
+        feedBack8.setClassId(class1.getId());
+        feedBack8.setStudentId(studentClasses8.getStudentId());
+        feedBack8.setId(feedBackRepository.save(feedBack8).getId());
+
+        FeedBack feedBack9 = new FeedBack();
+        feedBack9.setDescriptions("Day ok #");
+        feedBack9.setClassId(class1.getId());
+        feedBack9.setStudentId(studentClasses9.getStudentId());
+        feedBack9.setId(feedBackRepository.save(feedBack9).getId());
+
+        FeedBack feedBack10 = new FeedBack();
+        feedBack10.setDescriptions("Day ok #");
+        feedBack10.setClassId(class1.getId());
+        feedBack10.setStudentId(studentClasses10.getStudentId());
+        feedBack10.setId(feedBackRepository.save(feedBack10).getId());
+
+        FeedBack feedBack11 = new FeedBack();
+        feedBack11.setDescriptions("Day ok #");
+        feedBack11.setClassId(class1.getId());
+        feedBack11.setStudentId(studentClasses11.getStudentId());
+        feedBack11.setId(feedBackRepository.save(feedBack11).getId());
+
+        FeedBack feedBack12 = new FeedBack();
+        feedBack12.setDescriptions("Day ok #");
+        feedBack12.setClassId(class1.getId());
+        feedBack12.setStudentId(studentClasses12.getStudentId());
+        feedBack12.setId(feedBackRepository.save(feedBack12).getId());
+
+        FeedBack feedBack13 = new FeedBack();
+        feedBack13.setDescriptions("Day ok #");
+        feedBack13.setClassId(class1.getId());
+        feedBack13.setStudentId(studentClasses13.getStudentId());
+        feedBack13.setId(feedBackRepository.save(feedBack13).getId());
+
+        FeedBack feedBack14 = new FeedBack();
+        feedBack14.setDescriptions("Day ok #");
+        feedBack14.setClassId(class1.getId());
+        feedBack14.setStudentId(studentClasses14.getStudentId());
+        feedBack14.setId(feedBackRepository.save(feedBack14).getId());
+
+        FeedBack feedBack15 = new FeedBack();
+        feedBack15.setDescriptions("Day ok #");
+        feedBack15.setClassId(class1.getId());
+        feedBack15.setStudentId(studentClasses15.getStudentId());
+        feedBack15.setId(feedBackRepository.save(feedBack15).getId());
+
+        FeedBack feedBack16 = new FeedBack();
+        feedBack16.setDescriptions("Day ok #");
+        feedBack16.setClassId(class1.getId());
+        feedBack16.setStudentId(studentClasses16.getStudentId());
+        feedBack16.setId(feedBackRepository.save(feedBack16).getId());
+
+        FeedBack feedBack17 = new FeedBack();
+        feedBack17.setDescriptions("Day ok #");
+        feedBack17.setClassId(class1.getId());
+        feedBack17.setStudentId(studentClasses17.getStudentId());
+        feedBack17.setId(feedBackRepository.save(feedBack17).getId());
+
+        FeedBack feedBack18 = new FeedBack();
+        feedBack18.setDescriptions("Day ok #");
+        feedBack18.setClassId(class1.getId());
+        feedBack18.setStudentId(studentClasses18.getStudentId());
+        feedBack18.setId(feedBackRepository.save(feedBack18).getId());
+
+        FeedBack feedBack19 = new FeedBack();
+        feedBack19.setDescriptions("Day ok #");
+        feedBack19.setClassId(class1.getId());
+        feedBack19.setStudentId(studentClasses19.getStudentId());
+        feedBack19.setId(feedBackRepository.save(feedBack19).getId());
 
         // class 2 - team 1
         StudentClasses studentClasses20 = new StudentClasses();
@@ -487,6 +681,7 @@ public class DBGenerator implements CommandLineRunner {
         meeting1.setDescriptions("Học tập và làm theo tấm gương đạo đức HỒ CHÍ MINH");
         meeting1.setClassId(class1.getId());
         meeting1.setTypeMeeting(TypeMeeting.ONLINE);
+        meeting1.setTeacherId(class1.getTeacherId());
         meeting1.setAddress("https://meet.google.com/kea-hhgi-yix");
         meeting1.setId(meetingRepository.save(meeting1).getId());
 
@@ -496,6 +691,7 @@ public class DBGenerator implements CommandLineRunner {
         meeting2.setMeetingPeriod(MeetingPeriod.CA_2);
         meeting2.setDescriptions("TÁC HẠI CỦA VIỆC THỨC KHUYA, NGỦ MUỘN");
         meeting2.setClassId(class1.getId());
+        meeting2.setTeacherId(class1.getTeacherId());
         meeting2.setTypeMeeting(TypeMeeting.OFFLINE);
         meeting2.setAddress("");
         meeting2.setId(meetingRepository.save(meeting2).getId());
@@ -504,6 +700,7 @@ public class DBGenerator implements CommandLineRunner {
         meeting1Class.setName("Buổi 1");
         meeting1Class.setMeetingDate(new Date().getTime() - 86400000);
         meeting1Class.setMeetingPeriod(MeetingPeriod.CA_2);
+        meeting1Class.setTeacherId(class3.getTeacherId());
         meeting1Class.setDescriptions("Buổi 1 lớp thầy Nguyên VV4 _ 001 J5_NGUYENVV4_001");
         meeting1Class.setClassId(class3.getId());
         meeting1Class.setTypeMeeting(TypeMeeting.ONLINE);
@@ -523,6 +720,7 @@ public class DBGenerator implements CommandLineRunner {
         meeting2Class.setMeetingPeriod(MeetingPeriod.CA_2);
         meeting2Class.setDescriptions("Kỷ luật tốt Giữ gìn vệ sinh thật tốt Khiêm tốn, thật thà, dũng cảm");
         meeting2Class.setClassId(class3.getId());
+        meeting2Class.setTeacherId(class3.getTeacherId());
         meeting2Class.setTypeMeeting(TypeMeeting.OFFLINE);
         meeting2Class.setAddress("");
         meeting2Class.setId(meetingRepository.save(meeting2Class).getId());
@@ -533,6 +731,7 @@ public class DBGenerator implements CommandLineRunner {
         meeting3.setMeetingPeriod(MeetingPeriod.CA_6);
         meeting3.setDescriptions("Câu chuyện về 5 điều Bác Hồ dạy cũng nhắc nhở chúng ta, không chỉ các cơ quan báo chí mà nhiều ngành, nhiều lĩnh vực khác hiện nay cũng đang đơn giản, dễ dãi trong dùng từ ");
         meeting3.setClassId(class1.getId());
+        meeting3.setTeacherId(class1.getTeacherId());
         meeting3.setTypeMeeting(TypeMeeting.ONLINE);
         meeting3.setAddress("https://meet.google.com/kea-hhgi-yix");
         meeting3.setId(meetingRepository.save(meeting3).getId());
@@ -543,6 +742,7 @@ public class DBGenerator implements CommandLineRunner {
         meeting4.setMeetingPeriod(MeetingPeriod.CA_2);
         meeting4.setDescriptions("5 Điều Bác Hồ Dạy Thiếu niên, Nhi đồng");
         meeting4.setClassId(class1.getId());
+        meeting4.setTeacherId(class1.getTeacherId());
         meeting4.setTypeMeeting(TypeMeeting.ONLINE);
         meeting4.setAddress("https://meet.google.com/kea-hhgi-yix");
         meeting4.setId(meetingRepository.save(meeting4).getId());
@@ -553,6 +753,7 @@ public class DBGenerator implements CommandLineRunner {
         meeting5.setMeetingPeriod(MeetingPeriod.CA_3);
         meeting5.setDescriptions("");
         meeting5.setClassId(class1.getId());
+        meeting5.setTeacherId(class1.getTeacherId());
         meeting5.setTypeMeeting(TypeMeeting.OFFLINE);
         meeting5.setAddress("");
         meeting5.setId(meetingRepository.save(meeting5).getId());
@@ -563,6 +764,7 @@ public class DBGenerator implements CommandLineRunner {
         meeting6.setMeetingPeriod(MeetingPeriod.CA_4);
         meeting6.setDescriptions("Xét từ góc độ chủ thể sáng tạo và phát triển (ai làm nên nó): là hệ thống quan điểm và học thuyết đó được sáng lập bởi C. Mác, Ph. Ăngghen và sự phát triển, vận dụng vào thực tiễn của V.I. Lênin");
         meeting6.setClassId(class1.getId());
+        meeting6.setTeacherId(class1.getTeacherId());
         meeting6.setTypeMeeting(TypeMeeting.ONLINE);
         meeting6.setAddress("https://meet.google.com/kea-hhgi-yix");
         meeting6.setId(meetingRepository.save(meeting6).getId());
@@ -573,6 +775,7 @@ public class DBGenerator implements CommandLineRunner {
         meeting7.setMeetingPeriod(MeetingPeriod.CA_1);
         meeting7.setDescriptions("Xét từ góc độ cấu tạo (nó gồm có những cái gì): Chủ nghĩa Mác - Lênin có ba bộ phận lý luận cơ bản hợp thành");
         meeting7.setClassId(class1.getId());
+        meeting7.setTeacherId(class1.getTeacherId());
         meeting7.setTypeMeeting(TypeMeeting.ONLINE);
         meeting7.setAddress("https://meet.google.com/kea-hhgi-yix");
         meeting7.setId(meetingRepository.save(meeting7).getId());
@@ -583,6 +786,7 @@ public class DBGenerator implements CommandLineRunner {
         meeting8.setMeetingPeriod(MeetingPeriod.CA_1);
         meeting8.setDescriptions("Triết học là bộ phận lý luận nghiên cứu những quy luật vận động, phát triển chung nhất của tự nhiên, xã hội và tư duy");
         meeting8.setClassId(class1.getId());
+        meeting8.setTeacherId(class1.getTeacherId());
         meeting8.setTypeMeeting(TypeMeeting.OFFLINE);
         meeting8.setAddress("Xưởng");
         meeting8.setId(meetingRepository.save(meeting8).getId());
@@ -593,12 +797,14 @@ public class DBGenerator implements CommandLineRunner {
         meeting9.setMeetingPeriod(MeetingPeriod.CA_1);
         meeting9.setDescriptions("Triết học là bộ phận lý luận nghiên cứu những quy luật vận động, phát triển chung nhất của tự nhiên, xã hội và tư duy");
         meeting9.setClassId(class1.getId());
+        meeting9.setTeacherId(class1.getTeacherId());
         meeting9.setTypeMeeting(TypeMeeting.OFFLINE);
         meeting9.setAddress("");
         meeting9.setId(meetingRepository.save(meeting9).getId());
 
         Meeting meeting10 = new Meeting();
         meeting10.setName("Buổi 10");
+        meeting10.setTeacherId(class1.getTeacherId());
         meeting10.setMeetingDate(new Date().getTime() + 10 * 86400000);
         meeting10.setMeetingPeriod(MeetingPeriod.CA_1);
         meeting10.setDescriptions("Triết học là bộ phận lý luận nghiên cứu những quy luật vận động, phát triển chung nhất của tự nhiên, xã hội và tư duy");
@@ -613,6 +819,7 @@ public class DBGenerator implements CommandLineRunner {
         meeting11.setMeetingPeriod(MeetingPeriod.CA_1);
         meeting11.setDescriptions("Chủ nghĩa Mác-Lênin là hệ thống quan điểm và học thuyết khoa học của C.Mác, Ph.Ăngghen và sự phát triển của V.I.Lênin");
         meeting11.setClassId(class1.getId());
+        meeting11.setTeacherId(class1.getTeacherId());
         meeting11.setTypeMeeting(TypeMeeting.OFFLINE);
         meeting11.setAddress("");
         meeting11.setId(meetingRepository.save(meeting11).getId());
@@ -623,6 +830,7 @@ public class DBGenerator implements CommandLineRunner {
         meeting12.setMeetingPeriod(MeetingPeriod.CA_1);
         meeting12.setDescriptions("Chủ nghĩa cộng sản được xây dựng bởi các nhà sáng lập chủ nghĩa cộng sản Marx");
         meeting12.setClassId(class1.getId());
+        meeting12.setTeacherId(class1.getTeacherId());
         meeting12.setTypeMeeting(TypeMeeting.OFFLINE);
         meeting12.setAddress("");
         meeting12.setId(meetingRepository.save(meeting12).getId());
@@ -633,6 +841,7 @@ public class DBGenerator implements CommandLineRunner {
         meeting13.setMeetingPeriod(MeetingPeriod.CA_1);
         meeting13.setDescriptions("Nhà sử học Marx–Lenin đương đại Eric Hobsbawm");
         meeting13.setClassId(class1.getId());
+        meeting13.setTeacherId(class1.getTeacherId());
         meeting13.setTypeMeeting(TypeMeeting.OFFLINE);
         meeting13.setAddress("");
         meeting13.setId(meetingRepository.save(meeting13).getId());
@@ -643,6 +852,7 @@ public class DBGenerator implements CommandLineRunner {
         meeting14.setMeetingPeriod(MeetingPeriod.CA_1);
         meeting14.setDescriptions("Sau sự ly khai của những người vô chính phủ, quốc tế thứ nhất tan vỡ");
         meeting14.setClassId(class1.getId());
+        meeting14.setTeacherId(class1.getTeacherId());
         meeting14.setTypeMeeting(TypeMeeting.OFFLINE);
         meeting14.setAddress("");
         meeting14.setId(meetingRepository.save(meeting14).getId());
@@ -653,6 +863,7 @@ public class DBGenerator implements CommandLineRunner {
         meeting15.setMeetingPeriod(MeetingPeriod.CA_1);
         meeting15.setDescriptions("Không có giải pháp nào là vĩnh cửu");
         meeting15.setClassId(class1.getId());
+        meeting15.setTeacherId(class1.getTeacherId());
         meeting15.setTypeMeeting(TypeMeeting.OFFLINE);
         meeting15.setAddress("");
         meeting15.setId(meetingRepository.save(meeting15).getId());
@@ -663,6 +874,7 @@ public class DBGenerator implements CommandLineRunner {
         meeting16.setMeetingPeriod(MeetingPeriod.CA_1);
         meeting16.setDescriptions("Sự sụp đổ của Liên Xô và Đông Âu (do kinh tế gặp nhiều khó khăn, trong khi nhà nước không có dấu hiệu tự triệt tiêu như ý tưởng của Marx)");
         meeting16.setClassId(class1.getId());
+        meeting16.setTeacherId(class1.getTeacherId());
         meeting16.setTypeMeeting(TypeMeeting.OFFLINE);
         meeting16.setAddress("");
         meeting16.setId(meetingRepository.save(meeting16).getId());
@@ -673,6 +885,7 @@ public class DBGenerator implements CommandLineRunner {
         meeting17.setMeetingPeriod(MeetingPeriod.CA_1);
         meeting17.setDescriptions("Lời kêu gọi này được phát ra vào sáng ngày 20 tháng 12 năm 1946");
         meeting17.setClassId(class1.getId());
+        meeting17.setTeacherId(class1.getTeacherId());
         meeting17.setTypeMeeting(TypeMeeting.OFFLINE);
         meeting17.setAddress("");
         meeting17.setId(meetingRepository.save(meeting17).getId());
@@ -683,6 +896,7 @@ public class DBGenerator implements CommandLineRunner {
         meeting18.setMeetingPeriod(MeetingPeriod.CA_1);
         meeting18.setDescriptions("Ngày 19 tháng 12, khi chiến sự bùng nổ - là ngày được gọi là Toàn quốc kháng chiến");
         meeting18.setClassId(class1.getId());
+        meeting18.setTeacherId(class1.getTeacherId());
         meeting18.setTypeMeeting(TypeMeeting.OFFLINE);
         meeting18.setAddress("");
         meeting18.setId(meetingRepository.save(meeting18).getId());
@@ -693,6 +907,7 @@ public class DBGenerator implements CommandLineRunner {
         meeting19.setMeetingPeriod(MeetingPeriod.CA_1);
         meeting19.setDescriptions("Thức khuya hay ngủ ít có thể dẫn tới nguy cơ tăng cân theo chiều hướng tiêu cực, có thể gây thêm các tác dụng khác là nguy cơ mắc bệnh tiểu đường, tăng huyết áp…");
         meeting19.setClassId(class1.getId());
+        meeting19.setTeacherId(class1.getTeacherId());
         meeting19.setTypeMeeting(TypeMeeting.OFFLINE);
         meeting19.setAddress("");
         meeting19.setId(meetingRepository.save(meeting19).getId());
@@ -703,6 +918,7 @@ public class DBGenerator implements CommandLineRunner {
         meeting20.setMeetingPeriod(MeetingPeriod.CA_1);
         meeting20.setDescriptions("75 năm trôi qua, nhưng khí thế hào hùng của Lời kêu gọi toàn quốc kháng chiến đã trở thành ngày lịch sử, là dấu son chói lọi trong cuộc đấu tranh bảo vệ độc lập, chủ quyền, thống nhất và toàn vẹn lãnh thổ.");
         meeting20.setClassId(class1.getId());
+        meeting20.setTeacherId(class1.getTeacherId());
         meeting20.setTypeMeeting(TypeMeeting.OFFLINE);
         meeting20.setAddress("");
         meeting20.setId(meetingRepository.save(meeting20).getId());
@@ -1116,12 +1332,13 @@ public class DBGenerator implements CommandLineRunner {
         point21.setId(pointRepository.save(point21).getId());
 
         ClassConfiguration classConfiguration = new ClassConfiguration();
-        classConfiguration.setClassSizeMax(30);
+        classConfiguration.setClassSizeMax(25);
+        classConfiguration.setClassSizeMin(15);
+        classConfiguration.setPointMin(5D);
+        classConfiguration.setMaximumNumberOfBreaks(20D);
         classConfigurationRepository.save(classConfiguration);
 
-
         ////////////////////////////////////////
-
 
         Category category1 = new Category();
         category1.setCode("Cate_1");
@@ -1332,53 +1549,44 @@ public class DBGenerator implements CommandLineRunner {
         projectCategory2.setId(projectCategoryRepository.save(projectCategory2).getId());
 
         MemberProject memberProject1 = new MemberProject();
-        memberProject1.setMemberId("db39ebf0-bdd4-11ed-afa1-0242ac120002");
+        memberProject1.setMemberId("71090C89-F618-41AE-2A8D-08DBB201EFE8".toLowerCase());
         memberProject1.setProjectId(project1.getId());
+        memberProject1.setEmail("hieundph25894@fpt.edu.vn");
         memberProject1.setRole(RoleMemberProject.MANAGER);
         memberProject1.setStatusWork(StatusWork.DANG_LAM);
         memberProject1.setId(memberProjectRepository.save(memberProject1).getId());
 
         MemberProject memberProject2 = new MemberProject();
-        memberProject2.setMemberId("c5cf1e20-bdd4-11ed-afa1-0242ac120002");
+        memberProject2.setMemberId("2435C7D5-9BEC-45AC-9BFE-08DBA87523FE".toLowerCase());
         memberProject2.setProjectId(project1.getId());
+        memberProject2.setEmail("thangncph26123@fpt.edu.vn");
         memberProject2.setRole(RoleMemberProject.LEADER);
         memberProject2.setStatusWork(StatusWork.DANG_LAM);
         memberProject2.setId(memberProjectRepository.save(memberProject2).getId());
 
         MemberProject memberProject3 = new MemberProject();
-        memberProject3.setMemberId("d21b02c0-bdd4-11ed-afa1-0242ac120002");
+        memberProject3.setMemberId("59F0CB47-5BD4-4909-B1C4-08DBB743DD7D".toLowerCase());
         memberProject3.setProjectId(project1.getId());
+        memberProject3.setEmail("vanntph19604@fpt.edu.vn");
         memberProject3.setRole(RoleMemberProject.DEV);
         memberProject3.setStatusWork(StatusWork.DANG_LAM);
         memberProject3.setId(memberProjectRepository.save(memberProject3).getId());
 
         MemberProject memberProject4 = new MemberProject();
-        memberProject4.setMemberId("f01c9f36-bdd4-11ed-afa1-0242ac120002");
+        memberProject4.setMemberId("F5882312-81A5-4D44-8E44-08DBB2F9FEB4".toLowerCase());
         memberProject4.setProjectId(project1.getId());
+        memberProject4.setEmail("quynhncph26201@fpt.edu.vn");
         memberProject4.setRole(RoleMemberProject.TESTER);
         memberProject4.setStatusWork(StatusWork.DANG_LAM);
         memberProject4.setId(memberProjectRepository.save(memberProject4).getId());
 
         MemberProject memberProject5 = new MemberProject();
-        memberProject5.setMemberId("f6b388e6-bdd4-11ed-afa1-0242ac120002");
+        memberProject5.setMemberId("80DE791C-F32B-4E7D-8E46-08DBB2F9FEB4".toLowerCase());
         memberProject5.setProjectId(project1.getId());
+        memberProject5.setEmail("hieundph26058@fpt.edu.vn");
         memberProject5.setRole(RoleMemberProject.DEV);
         memberProject5.setStatusWork(StatusWork.DANG_LAM);
         memberProject5.setId(memberProjectRepository.save(memberProject5).getId());
-
-        MemberProject memberProject6 = new MemberProject();
-        memberProject6.setMemberId("02e78c02-bdd5-11ed-afa1-0242ac120002");
-        memberProject6.setProjectId(project1.getId());
-        memberProject6.setRole(RoleMemberProject.TESTER);
-        memberProject6.setStatusWork(StatusWork.DANG_LAM);
-        memberProject6.setId(memberProjectRepository.save(memberProject6).getId());
-
-        MemberProject memberProject7 = new MemberProject();
-        memberProject7.setMemberId("0791e31a-bdd5-11ed-afa1-0242ac120002");
-        memberProject7.setProjectId(project1.getId());
-        memberProject7.setRole(RoleMemberProject.DEV);
-        memberProject7.setStatusWork(StatusWork.DANG_LAM);
-        memberProject7.setId(memberProjectRepository.save(memberProject7).getId());
 
         Period period1 = new Period();
         period1.setCode("period_1");
@@ -1816,12 +2024,12 @@ public class DBGenerator implements CommandLineRunner {
         projectCategory1_1.setProjectId(project2.getId());
         projectCategory1_1.setId(projectCategoryRepository.save(projectCategory1_1).getId());
 
-        MemberProject memberProject1_2 = new MemberProject();
-        memberProject1_2.setMemberId("c5cf1e20-bdd4-11ed-afa1-0242ac120002");
-        memberProject1_2.setProjectId(project2.getId());
-        memberProject1_2.setRole(RoleMemberProject.MANAGER);
-        memberProject1_2.setStatusWork(StatusWork.DANG_LAM);
-        memberProject1_2.setId(memberProjectRepository.save(memberProject1_2).getId());
+//        MemberProject memberProject1_2 = new MemberProject();
+//        memberProject1_2.setMemberId("c5cf1e20-bdd4-11ed-afa1-0242ac120002");
+//        memberProject1_2.setProjectId(project2.getId());
+//        memberProject1_2.setRole(RoleMemberProject.MANAGER);
+//        memberProject1_2.setStatusWork(StatusWork.DANG_LAM);
+//        memberProject1_2.setId(memberProjectRepository.save(memberProject1_2).getId());
 
         Period period1_2 = new Period();
         period1_2.setCode("period_1");

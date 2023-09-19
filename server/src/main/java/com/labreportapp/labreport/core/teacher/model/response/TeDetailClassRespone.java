@@ -32,7 +32,7 @@ public interface TeDetailClassRespone {
     String getDescriptions();
 
     @Value("#{target.activityLevel}")
-    Integer getActivityLevel();
+    String getActivityLevel();
 
     @Value("#{target.semesterName}")
     String getSemesterName();

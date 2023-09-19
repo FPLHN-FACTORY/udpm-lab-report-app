@@ -29,8 +29,13 @@ public class StMyClassController {
     }
 
     @DeleteMapping("/leave")
-    public ResponseObject leaveClass(final StClassRequest req){
+    public ResponseObject leaveClass(final StClassRequest req) {
         stMyClassService.leaveClass(req);
         return new ResponseObject(null);
+    }
+
+    @GetMapping("/level")
+    public ResponseObject getAllSimpleEntityProj() {
+        return new ResponseObject(stMyClassService.getAllSimpleEntityProj());
     }
 }

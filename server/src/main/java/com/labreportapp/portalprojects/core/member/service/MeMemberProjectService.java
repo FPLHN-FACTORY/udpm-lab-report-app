@@ -1,6 +1,7 @@
 package com.labreportapp.portalprojects.core.member.service;
 
 import com.labreportapp.portalprojects.core.member.model.request.MeListMemberProjectRequest;
+import com.labreportapp.portalprojects.core.member.model.request.MeMemberProjectCustom;
 import com.labreportapp.portalprojects.core.member.model.request.MeUpdateMemberProjectRequest;
 import com.labreportapp.portalprojects.core.member.model.response.MeMemberProjectResponse;
 import com.labreportapp.portalprojects.entity.MemberProject;
@@ -14,7 +15,7 @@ import java.util.List;
  */
 public interface MeMemberProjectService {
 
-    List<MeMemberProjectResponse> getAllMemberProject(String idProject);
+    List<MeMemberProjectCustom> getAllMemberProject(String idProject);
 
     MemberProject update(@Valid MeUpdateMemberProjectRequest request, StompHeaderAccessor headerAccessor);
 

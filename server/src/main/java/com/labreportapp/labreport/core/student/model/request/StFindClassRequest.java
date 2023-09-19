@@ -20,7 +20,7 @@ public class StFindClassRequest {
 
     private Short classPeriod;
 
-    private Short level;
+    private String level;
 
     private String studentId;
 }

@@ -23,7 +23,7 @@ public interface StClassResponse extends IsIdentified {
   @Value("#{target.class_period}")
   Short getClassPeriod();
 
-  @Value("#{target.level}")
-  Short getLevel();
+  @Value("#{target.name}")
+  String getLevel();
 
 }

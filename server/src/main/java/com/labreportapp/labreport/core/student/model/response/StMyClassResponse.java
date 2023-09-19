@@ -23,6 +23,6 @@ public interface StMyClassResponse extends IsIdentified {
     @Value("#{target.teacher_id}")
     String getTeacherId();
 
-    @Value("#{target.level}")
-    Short getLevel();
+    @Value("#{target.name}")
+    String getLevel();
 }

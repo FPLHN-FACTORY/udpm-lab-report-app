@@ -1,5 +1,6 @@
 package com.labreportapp.labreport.core.student.service;
 
+import com.labreportapp.labreport.core.common.base.SimpleEntityProjection;
 import com.labreportapp.labreport.core.student.model.request.StClassRequest;
 import com.labreportapp.labreport.core.student.model.request.StFindClassRequest;
 import com.labreportapp.labreport.core.student.model.response.StMyClassResponse;
@@ -14,4 +15,6 @@ public interface StMyClassService {
     List<StMyClassResponse> getAllClass(final StFindClassRequest req);
 
     void leaveClass(final StClassRequest req);
+
+    List<SimpleEntityProjection> getAllSimpleEntityProj();
 }

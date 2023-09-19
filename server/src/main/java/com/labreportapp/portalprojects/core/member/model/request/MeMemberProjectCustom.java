@@ -1,16 +1,14 @@
-package com.labreportapp.labreport.core.common.response;
+package com.labreportapp.portalprojects.core.member.model.request;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 /**
  * @author thangncph26123
  */
 @Getter
 @Setter
-@ToString
-public class SimpleResponse {
+public class MeMemberProjectCustom {
 
     private String id;
 
@@ -21,4 +19,10 @@ public class SimpleResponse {
     private String email;
 
     private String picture;
+
+    private String memberId;
+
+    private String role;
+
+    private String statusWork;
 }

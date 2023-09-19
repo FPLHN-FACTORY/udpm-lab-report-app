@@ -56,15 +56,15 @@ public class AdActivityServiceImpl implements AdActivityService {
         }
         Activity activity = new Activity();
         activity.setName(command.getName());
-        if (command.getLevel().equals("0")) {
-            activity.setLevel(Level.LEVEL_1);
-        }
-        if (command.getLevel().equals("1")) {
-            activity.setLevel(Level.LEVEL_2);
-        }
-        if (command.getLevel().equals("2")) {
-            activity.setLevel(Level.LEVEL_3);
-        }
+//        if (command.getLevel().equals("0")) {
+//            activity.setLevel(Level.LEVEL_1);
+//        }
+//        if (command.getLevel().equals("1")) {
+//            activity.setLevel(Level.LEVEL_2);
+//        }
+//        if (command.getLevel().equals("2")) {
+//            activity.setLevel(Level.LEVEL_3);
+//        }
         if (!command.getStartTime().equals("") && !command.getEndTime().equals("")) {
             Long startTime = convertDateToString(command.getStartTime());
             Long endTime = convertDateToString(command.getEndTime());
@@ -85,15 +85,15 @@ public class AdActivityServiceImpl implements AdActivityService {
         Activity activity = optional.get();
         activity.setName(command.getName());
 
-        if (command.getLevel().equals("0")) {
-            activity.setLevel(Level.LEVEL_1);
-        }
-        if (command.getLevel().equals("1")) {
-            activity.setLevel(Level.LEVEL_2);
-        }
-        if (command.getLevel().equals("2")) {
-            activity.setLevel(Level.LEVEL_3);
-        }
+//        if (command.getLevel().equals("0")) {
+//            activity.setLevel(Level.LEVEL_1);
+//        }
+//        if (command.getLevel().equals("1")) {
+//            activity.setLevel(Level.LEVEL_2);
+//        }
+//        if (command.getLevel().equals("2")) {
+//            activity.setLevel(Level.LEVEL_3);
+//        }
         if (!command.getStartTime().equals("") && !command.getEndTime().equals("")) {
             Long startTime = convertDateToString(command.getStartTime());
             Long endTime = convertDateToString(command.getEndTime());

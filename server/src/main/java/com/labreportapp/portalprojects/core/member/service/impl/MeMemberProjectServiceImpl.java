@@ -1,7 +1,10 @@
 package com.labreportapp.portalprojects.core.member.service.impl;
 
+import com.labreportapp.labreport.core.common.response.SimpleResponse;
+import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
 import com.labreportapp.portalprojects.core.member.model.request.MeCreateMemberProjectRequest;
 import com.labreportapp.portalprojects.core.member.model.request.MeListMemberProjectRequest;
+import com.labreportapp.portalprojects.core.member.model.request.MeMemberProjectCustom;
 import com.labreportapp.portalprojects.core.member.model.request.MeUpdateMemberProjectRequest;
 import com.labreportapp.portalprojects.core.member.model.response.MeMemberProjectResponse;
 import com.labreportapp.portalprojects.core.member.repository.MeMemberProjectRepository;
@@ -31,6 +34,7 @@ import org.springframework.validation.annotation.Validated;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author thangncph26123
@@ -57,10 +61,35 @@ public class MeMemberProjectServiceImpl implements MeMemberProjectService {
     @Autowired
     private EmailSender emailSender;
 
+    @Autowired
+    private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
+
     @Override
     @Cacheable(value = "membersByProject", key = "#idProject")
-    public List<MeMemberProjectResponse> getAllMemberProject(String idProject) {
-        return meMemberProjectRepository.getAllMemberProject(idProject);
+    public List<MeMemberProjectCustom> getAllMemberProject(String idProject) {
+        List<MeMemberProjectResponse> listMemberProject = meMemberProjectRepository.getAllMemberProject(idProject);
+        List<String> memberIds = listMemberProject.stream()
+                .map(MeMemberProjectResponse::getMemberId)
+                .collect(Collectors.toList());
+        List<SimpleResponse> listResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(memberIds);
+        List<MeMemberProjectCustom> listCustom = new ArrayList<>();
+        listMemberProject.forEach(memberProject -> {
+            listResponse.forEach(response -> {
+                if (memberProject.getMemberId().equals(response.getId())) {
+                    MeMemberProjectCustom custom = new MeMemberProjectCustom();
+                    custom.setId(memberProject.getId());
+                    custom.setMemberId(response.getId());
+                    custom.setEmail(response.getEmail());
+                    custom.setName(response.getName());
+                    custom.setPicture(response.getPicture());
+                    custom.setUserName(response.getUserName());
+                    custom.setRole(memberProject.getRole());
+                    custom.setStatusWork(memberProject.getStatusWork());
+                    listCustom.add(custom);
+                }
+            });
+        });
+        return listCustom;
     }
 
     @Override

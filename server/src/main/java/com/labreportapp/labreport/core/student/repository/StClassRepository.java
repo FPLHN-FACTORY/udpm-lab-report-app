@@ -14,9 +14,10 @@ public interface StClassRepository extends ClassRepository {
 
   @Query(value = """
           SELECT c.id, ROW_NUMBER() OVER(ORDER BY c.created_date DESC) as stt, c.code,
-          c.teacher_id, c.class_size, c.start_time, c.class_period, ac.level
+          c.teacher_id, c.class_size, c.start_time, c.class_period, g.name
           FROM class c
           JOIN activity ac ON c.activity_id = ac.id
+          JOIN level g ON g.id = ac.level_id
           JOIN semester s ON ac.semester_id = s.id
           LEFT JOIN (SELECT m.class_id, m.name, m.meeting_date
           FROM meeting m RIGHT JOIN class cl ON cl.id = m.class_id
@@ -27,7 +28,7 @@ public interface StClassRepository extends ClassRepository {
           WHERE (m.name IS NULL OR DATE(FROM_UNIXTIME(m.meeting_date / 1000)) > CURDATE())
           AND (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR c.code LIKE %:#{#req.code}%) 
           AND (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR c.class_period = :#{#req.classPeriod}) 
-          AND (:#{#req.level} IS NULL OR :#{#req.level} LIKE '' OR ac.level = :#{#req.level}) 
+          AND (:#{#req.level} IS NULL OR :#{#req.level} LIKE '' OR g.id = :#{#req.level}) 
           AND (:#{#req.activityId} IS NULL OR :#{#req.activityId} LIKE '' OR ac.id = :#{#req.activityId}) 
           AND s.id = :#{#req.semesterId}
           ORDER BY c.created_date DESC

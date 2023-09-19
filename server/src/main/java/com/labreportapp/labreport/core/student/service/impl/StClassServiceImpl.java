@@ -83,20 +83,16 @@ public class StClassServiceImpl implements StClassService {
         //Note: Check student exists and conditions for entering class then =>
 
         Optional<Class> findClass = stClassRepository.findById(req.getIdClass());
-        Optional<StudentClasses> findStudentClasses = stStudentClassesRepository.
-                findStudentClassesByClassIdAndStudentId(req.getIdClass(), req.getIdStudent());
-
-        Integer configurationSizeMax = stClassConfigurationRepository.
-                getClassConfiguration().getClassSizeMax();
-
         if (!findClass.isPresent()) {
             throw new RestApiException(Message.CLASS_NOT_EXISTS);
         }
-
+        Optional<StudentClasses> findStudentClasses = stStudentClassesRepository.
+                findStudentClassesByClassIdAndStudentId(req.getIdClass(), req.getIdStudent());
         if (findStudentClasses.isPresent()) {
             throw new RestApiException(Message.YOU_HAD_IN_CLASS);
         }
-
+        Integer configurationSizeMax = stClassConfigurationRepository.
+                getClassConfiguration().getClassSizeMax();
         if (findClass.get().getClassSize() == configurationSizeMax) {
             throw new RestApiException(Message.CLASS_DID_FULL_CLASS_SIZE);
         }

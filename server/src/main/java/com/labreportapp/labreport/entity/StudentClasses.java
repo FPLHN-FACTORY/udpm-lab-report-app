@@ -3,6 +3,7 @@ package com.labreportapp.labreport.entity;
 import com.labreportapp.labreport.entity.base.PrimaryEntity;
 import com.labreportapp.labreport.infrastructure.constant.EntityProperties;
 import com.labreportapp.labreport.infrastructure.constant.RoleTeam;
+import com.labreportapp.labreport.infrastructure.constant.StatusStudentFeedBack;
 import com.labreportapp.labreport.infrastructure.constant.StatusTeam;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -40,7 +41,12 @@ public class StudentClasses extends PrimaryEntity {
     @Column(length = EntityProperties.LENGTH_EMAIL)
     private String email;
 
+    @Column
     private RoleTeam role;
 
+    @Column
     private StatusTeam status;
+
+    @Column
+    private StatusStudentFeedBack statusStudentFeedBack;
 }

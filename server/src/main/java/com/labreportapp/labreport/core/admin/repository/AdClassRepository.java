@@ -105,11 +105,12 @@ public interface AdClassRepository extends ClassRepository {
             c.teacher_id as teacherId,
             a.id as activityId,
             a.name as activityName,
-            a.level as activityLevel,
+            d.name as activityLevel,
             s.id as semesterId,
             s.name as semesterName,
             c.status_class
             FROM activity a
+            JOIN level d ON a.level_id = d.id
             JOIN class c ON c.activity_id = a.id
             JOIN semester s ON s.id = a.semester_id
             where c.id = :#{#id}

@@ -19,7 +19,7 @@ public interface AdMeetingRepository extends JpaRepository<Meeting, String> {
             SELECT a.id, a.name, a.meeting_date, a.meeting_period,
             a.type_meeting, a.address, a.descriptions
             FROM meeting a LEFT JOIN class b ON a.class_id = b.id
-            WHERE b.id = :idClass ORDER BY a.created_date DESC
+            WHERE b.id = :idClass ORDER BY a.meeting_date DESC, a.meeting_period DESC
             """, nativeQuery = true)
     List<AdMeetingResponse> getAllMeetingByIdClass(@Param("idClass") String idClass);
 

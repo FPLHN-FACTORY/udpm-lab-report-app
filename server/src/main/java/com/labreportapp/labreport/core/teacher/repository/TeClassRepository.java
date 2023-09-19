@@ -66,12 +66,13 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
             c.class_size as class_size,
             a.name as activityName,
             c.descriptions as descriptions,
-            a.level as activityLevel,
+            d.name as activityLevel,
             s.name as semesterName,
             c.status_class as status_class
             FROM activity a
             JOIN class c ON c.activity_id = a.id
             JOIN semester s ON s.id = a.semester_id
+            JOIN level d ON d.id = a.level_id
             where c.id = :#{#id}
              """,nativeQuery = true)
     Optional<TeDetailClassRespone> findClassById(@Param("id") String id);

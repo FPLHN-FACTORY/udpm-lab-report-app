@@ -21,6 +21,6 @@ public class StClassCustomResponse {
 
   private Short classPeriod;
 
-  private Short level;
+  private String level;
 
 }

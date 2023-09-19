@@ -10,7 +10,9 @@ import com.labreportapp.labreport.core.student.repository.StMyClassRepository;
 import com.labreportapp.labreport.core.student.repository.StStudentClassesRepository;
 import com.labreportapp.labreport.core.student.service.StMyClassService;
 import com.labreportapp.labreport.entity.Class;
+import com.labreportapp.labreport.entity.Level;
 import com.labreportapp.labreport.entity.StudentClasses;
+import com.labreportapp.labreport.repository.LevelRepository;
 import com.labreportapp.labreport.repository.SemesterRepository;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
@@ -40,6 +42,10 @@ public class StMyClassServiceImpl implements StMyClassService {
     @Qualifier(SemesterRepository.NAME)
     private SemesterRepository semesterRepository;
 
+    @Autowired
+    @Qualifier(LevelRepository.NAME)
+    private LevelRepository levelRepository;
+
     @Override
     public List<StMyClassResponse> getAllClass(final StFindClassRequest req) {
         if (req.getSemesterId().equals("")) {
@@ -65,5 +71,10 @@ public class StMyClassServiceImpl implements StMyClassService {
                 throw new RestApiException(Message.YOU_DONT_LEAVE_CLASS);
             }
         }
+    }
+
+    @Override
+    public List<SimpleEntityProjection> getAllSimpleEntityProj() {
+        return levelRepository.getAllSimpleEntityProjection();
     }
 }

@@ -24,13 +24,14 @@ public interface StMyClassRepository extends ClassRepository {
 
     @Query(value = """
             SELECT a.id, ROW_NUMBER() OVER(ORDER BY c.created_date DESC) AS stt,
-            a.code, a.start_time, a.class_period, a.teacher_id, b.level
+            a.code, a.start_time, a.class_period, a.teacher_id, e.name
             FROM class a JOIN activity b ON a.activity_id = b.id 
             JOIN semester d ON b.semester_id = d.id
             JOIN student_classes c ON a.id = c.class_id
+            JOIN level e ON e.id = b.level_id
             WHERE (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR a.code LIKE %:#{#req.code}%) 
             AND (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR a.class_period = :#{#req.classPeriod}) 
-            AND (:#{#req.level} IS NULL OR :#{#req.level} LIKE '' OR b.level = :#{#req.level}) 
+            AND (:#{#req.level} IS NULL OR :#{#req.level} LIKE '' OR e.id = :#{#req.level}) 
             AND (:#{#req.activityId} IS NULL OR :#{#req.activityId} LIKE '' OR b.id = :#{#req.activityId}) 
             AND d.id = :#{#req.semesterId}
             AND c.student_id = :#{#req.studentId}

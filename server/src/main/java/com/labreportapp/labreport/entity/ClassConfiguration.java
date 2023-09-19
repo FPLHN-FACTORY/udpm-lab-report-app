@@ -24,4 +24,14 @@ public class ClassConfiguration extends PrimaryEntity {
 
     @Column
     private Integer classSizeMax;
+
+    @Column
+    private Integer classSizeMin;
+
+    @Column
+    private Double pointMin;
+
+    @Column
+    private Double maximumNumberOfBreaks;
+
 }

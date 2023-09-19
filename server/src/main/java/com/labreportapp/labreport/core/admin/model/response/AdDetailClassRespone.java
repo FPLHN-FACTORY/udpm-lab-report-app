@@ -34,7 +34,7 @@ public interface AdDetailClassRespone {
     String getActivityName();
 
     @Value("#{target.activityLevel}")
-    Integer getActivityLevel();
+    String getActivityLevel();
 
     @Value("#{target.semesterId}")
     String getSemesterId();
