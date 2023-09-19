@@ -67,7 +67,6 @@ import PeriodProject from "./portalprojects/pages/member/period-project/PeriodPr
 import { sinhVienCurrent } from "./labreportapp/helper/inForUser";
 import Cookies from "js-cookie";
 import TemplateReport from "./labreportapp/pages/admin/template-report/TemplateReport";
-import SyllabusManagement from "./labreportapp/pages/admin/syllabus-management/SyllabusManagement";
 import AdFeedbackDetailClass from "./labreportapp/pages/admin/detail-class/feedback/AdFeedbackDetailClass";
 
 function App() {
