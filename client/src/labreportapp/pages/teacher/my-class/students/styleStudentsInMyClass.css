@@ -1,0 +1,50 @@
+.box-center {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.content-class {
+  margin: 0px 15px 0px 15px;
+}
+.content-class span {
+  font-size: 17px;
+  font-weight: 400;
+}
+
+.box-two-student-in-my-class-son {
+  background-color: white;
+  padding: 20px;
+  box-shadow: 0px 0px 20px 1px rgba(148, 148, 148, 0.3);
+  border-radius: 5px;
+}
+
+.box-two-student-in-my-class {
+  padding: 25px;
+}
+.info-team {
+  font-size: 16px;
+  margin-bottom: 10px;
+  margin-top: 20px;
+}
+.info-team-not-join {
+  margin-left: 10px;
+}
+.info-heading {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.group-info {
+  background-color: #f4f4f4;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 5px;
+}
+
+.group-info-item {
+  display: block;
+  margin-bottom: 10px;
+}

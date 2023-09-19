@@ -1,0 +1,74 @@
+.info-team {
+  font-size: 16px;
+  margin-bottom: 10px;
+  margin-top: 20px;
+}
+.info-team-not-join {
+  margin-left: 10px;
+}
+.info-heading {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.group-info {
+  background-color: #f4f4f4;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 5px;
+}
+
+.group-info-item {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.table-member-team {
+  margin-top: 20px;
+}
+
+.btnRoiNhom {
+  margin-top: 10px;
+  color: white !important;
+  background-color: #ebdf62;
+  float: right;
+  margin-bottom: 20px;
+}
+
+.btnRoiNhom {
+  margin-top: 10px;
+  color: white !important;
+  background-color: #d3c848;
+  float: right;
+}
+.table-not-join {
+  margin-top: 90px;
+}
+
+.box-students-in-class {
+  margin-top: 20px;
+  background-color: #333;
+}
+
+.button-menu-student {
+}
+
+.title-student-my-class {
+  background-color: white;
+  height: 55px;
+  align-items: center;
+  box-shadow: 0px 0px 20px 1px rgba(148, 148, 148, 0.3);
+  display: flex;
+}
+
+.box-students-detail-my-class {
+  padding: 25px !important;
+}
+
+.button-menu-student-detail-my-class {
+  background-color: white;
+  padding: 20px;
+  box-shadow: 0px 0px 20px 1px rgba(148, 148, 148, 0.3);
+  border-radius: 5px;
+}
