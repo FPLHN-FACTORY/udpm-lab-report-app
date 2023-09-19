@@ -209,16 +209,6 @@ function App() {
               }
             />
             <Route
-              path="/admin/syllabus-management"
-              element={
-                <AuthGuard>
-                  <DashBoardAdmin>
-                    <SyllabusManagement />
-                  </DashBoardAdmin>
-                </AuthGuard>
-              }
-            />
-            <Route
               path="/admin/class-management/feedback/:id"
               element={
                 <AuthGuard>

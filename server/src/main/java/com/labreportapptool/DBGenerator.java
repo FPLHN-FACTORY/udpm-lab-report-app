@@ -12,11 +12,9 @@ import com.labreportapp.labreport.entity.Point;
 import com.labreportapp.labreport.entity.Post;
 import com.labreportapp.labreport.entity.Semester;
 import com.labreportapp.labreport.entity.StudentClasses;
-import com.labreportapp.labreport.entity.Syllabus;
 import com.labreportapp.labreport.entity.Team;
 import com.labreportapp.labreport.infrastructure.constant.AllowUseTrello;
 import com.labreportapp.labreport.infrastructure.constant.ClassPeriod;
-import com.labreportapp.labreport.infrastructure.constant.Level;
 import com.labreportapp.labreport.infrastructure.constant.MeetingPeriod;
 import com.labreportapp.labreport.infrastructure.constant.RoleTeam;
 import com.labreportapp.labreport.infrastructure.constant.StatusAttendance;
@@ -39,7 +37,6 @@ import com.labreportapp.labreport.repository.PostRepository;
 import com.labreportapp.labreport.repository.ReportRepository;
 import com.labreportapp.labreport.repository.SemesterRepository;
 import com.labreportapp.labreport.repository.StudentClassesRepository;
-import com.labreportapp.labreport.repository.SyllabusRepository;
 import com.labreportapp.labreport.repository.TeamRepository;
 import com.labreportapp.labreport.repository.TemplateReportRepository;
 import com.labreportapp.portalprojects.entity.Category;
@@ -183,9 +180,6 @@ public class DBGenerator implements CommandLineRunner {
     @Autowired
     private TemplateReportRepository templateReportRepository;
 
-    @Autowired
-    private SyllabusRepository syllabusRepository;
-
     @Override
     public void run(String... args) throws Exception {
 
@@ -219,21 +213,6 @@ public class DBGenerator implements CommandLineRunner {
         level3.setName("Level 3");
         level3.setId(levelRepository.save(level3).getId());
 
-        Syllabus syllabus1 = new Syllabus();
-        syllabus1.setDescriptions("https://docs.google.com/spreadsheets/d/1Gop11N-inh_I-TegG3OyGZpfKu4Ls1-qTY1IAMHSCY4/edit#gid=1799431034");
-        syllabus1.setLevelId(level1.getId());
-        syllabus1.setId(syllabusRepository.save(syllabus1).getId());
-
-        Syllabus syllabus2 = new Syllabus();
-        syllabus2.setDescriptions("https://docs.google.com/spreadsheets/d/1Gop11N-inh_I-TegG3OyGZpfKu4Ls1-qTY1IAMHSCY4/edit#gid=1799431034");
-        syllabus2.setLevelId(level2.getId());
-        syllabus2.setId(syllabusRepository.save(syllabus2).getId());
-
-        Syllabus syllabus3 = new Syllabus();
-        syllabus3.setDescriptions("https://docs.google.com/spreadsheets/d/1Gop11N-inh_I-TegG3OyGZpfKu4Ls1-qTY1IAMHSCY4/edit#gid=1799431034");
-        syllabus3.setLevelId(level3.getId());
-        syllabus3.setId(syllabusRepository.save(syllabus3).getId());
-
         Activity activity1 = new Activity();
         activity1.setName("Xây dựng cho sinh viên quy trình làm việc với dự án, thực hành làm việc với website");
         activity1.setStartTime(new Date().getTime() + 10000);
@@ -241,6 +220,7 @@ public class DBGenerator implements CommandLineRunner {
         activity1.setSemesterId(semester.getId());
         activity1.setAllowUseTrello(AllowUseTrello.KHONG_CHO_PHEP);
         activity1.setLevelId(level3.getId());
+        activity1.setDescriptions("https://docs.google.com/spreadsheets/d/1Gop11N-inh_I-TegG3OyGZpfKu4Ls1-qTY1IAMHSCY4/edit#gid=1799431034");
         activity1.setId(activityRepository.save(activity1).getId());
 
         Activity activity2 = new Activity();
@@ -249,7 +229,8 @@ public class DBGenerator implements CommandLineRunner {
         activity2.setEndTime(new Date().getTime() + 10000 + 2678400000L);
         activity2.setSemesterId(semester.getId());
         activity2.setLevelId(level2.getId());
-        activity1.setAllowUseTrello(AllowUseTrello.CHO_PHEP);
+        activity2.setAllowUseTrello(AllowUseTrello.CHO_PHEP);
+        activity2.setDescriptions("https://docs.google.com/spreadsheets/d/1Gop11N-inh_I-TegG3OyGZpfKu4Ls1-qTY1IAMHSCY4/edit#gid=1799431034");
         activity2.setId(activityRepository.save(activity2).getId());
 
         Class class1 = new Class();

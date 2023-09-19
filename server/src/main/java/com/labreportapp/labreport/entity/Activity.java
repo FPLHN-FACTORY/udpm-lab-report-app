@@ -41,6 +41,10 @@ public class Activity extends PrimaryEntity {
     @Column(length = EntityProperties.LENGTH_ID)
     private String semesterId;
 
+    @Column(length = Integer.MAX_VALUE)
+    @Nationalized
+    private String descriptions;
+
     @Column
     private AllowUseTrello allowUseTrello;
 }
