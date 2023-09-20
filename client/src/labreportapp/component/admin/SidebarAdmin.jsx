@@ -15,6 +15,7 @@ import {
   faLineChart,
   faTemperature0,
   faSyncAlt,
+  faLevelUp,
 } from "@fortawesome/free-solid-svg-icons";
 
 import "./style-sidebar.css";
@@ -49,6 +50,18 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           }
         >
           <Link to="/admin/semester-management">Quản lý học kỳ</Link>
+        </Menu.Item>
+        <Menu.Item
+          key="0"
+          className="menu_custom"
+          icon={
+            <FontAwesomeIcon
+              icon={faLevelUp}
+              style={{ color: "rgb(226, 179, 87)" }}
+            />
+          }
+        >
+          <Link to="/admin/level-management">Quản lý level</Link>
         </Menu.Item>
         <Menu.Item
           key="2"
