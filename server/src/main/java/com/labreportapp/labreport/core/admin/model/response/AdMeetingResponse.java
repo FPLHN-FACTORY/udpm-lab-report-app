@@ -28,4 +28,7 @@ public interface AdMeetingResponse extends IsIdentified {
 
     @Value("#{target.descriptions}")
     String getDescriptions();
+
+    @Value("#{target.so_diem_danh}")
+    Integer getSoDiemDanh();
 }

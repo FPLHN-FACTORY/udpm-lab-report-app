@@ -15,9 +15,6 @@ public class AdUpdateMeetingRequest {
     @NotBlank
     private String id;
 
-    @NotBlank
-    private String name;
-
     @NotNull
     private Long meetingDate;
 
@@ -30,4 +27,7 @@ public class AdUpdateMeetingRequest {
     private String address;
 
     private String descriptions;
+
+    @NotBlank
+    private String teacherId;
 }

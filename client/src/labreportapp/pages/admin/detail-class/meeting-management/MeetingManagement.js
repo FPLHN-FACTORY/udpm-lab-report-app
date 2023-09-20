@@ -5,7 +5,7 @@ import {
   ControlOutlined,
   UnorderedListOutlined,
 } from "@ant-design/icons";
-import { Button, Empty, Popconfirm } from "antd";
+import { Button, Checkbox, Empty, Popconfirm, Tooltip } from "antd";
 import { MeetingManagementAPI } from "../../../../api/admin/meeting-management/MeetingManagementAPI";
 import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import { useEffect, useState } from "react";
@@ -32,6 +32,8 @@ import {
 import ModalUpdateMeeting from "./modal-update-meeting/ModalUpdateMeeting";
 import { toast } from "react-toastify";
 import { SetTTrueToggle } from "../../../../app/admin/AdCollapsedSlice.reducer";
+import { ClassAPI } from "../../../../api/admin/class-manager/ClassAPI.api";
+import { SetAdTeacher } from "../../../../app/admin/AdTeacherSlice.reducer";
 
 const MeetingManagment = () => {
   const { id } = useParams();
@@ -88,10 +90,44 @@ const MeetingManagment = () => {
         dispatch(DeleteMeeting(response.data.data));
         toast.success("Xóa thành công");
       },
-      (error) => {
-        toast.error(error.data.response.message);
-      }
+      (error) => {}
     );
+  };
+
+  const [classDetail, setClassDetail] = useState(null);
+
+  const featchClass = async () => {
+    try {
+      await ClassAPI.getAdClassDetailById(id).then((responese) => {
+        setClassDetail(responese.data.data);
+      });
+    } catch (error) {
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+    }
+  };
+
+  useEffect(() => {
+    featchClass();
+  }, []);
+
+  useEffect(() => {
+    const fetchTeacherData = async () => {
+      const responseTeacherData = await ClassAPI.fetchAllTeacher();
+      const teacherData = responseTeacherData.data.data;
+      dispatch(SetAdTeacher(teacherData));
+    };
+    fetchTeacherData();
+  }, []);
+
+  const [selectedIds, setSelectedIds] = useState([]);
+
+  const handleCheckboxChange = (id) => {
+    console.log(selectedIds.includes(id));
+    if (selectedIds.includes(id)) {
+      setSelectedIds(selectedIds.filter((selectedId) => selectedId !== id));
+    } else {
+      setSelectedIds([...selectedIds, id]);
+    }
   };
 
   return (
@@ -173,10 +209,11 @@ const MeetingManagment = () => {
                   <span
                     style={{
                       padding: "5px",
-                      backgroundColor: "#007bff",
+                      backgroundColor: "rgb(38, 144, 214)",
                       color: "white",
                       fontSize: "15px",
                       borderRadius: "5px",
+                      fontWeight: "400",
                     }}
                   >
                     {" "}
@@ -194,7 +231,10 @@ const MeetingManagment = () => {
               >
                 {" "}
                 <Button
-                  style={{ marginLeft: "10px" }}
+                  style={{
+                    marginLeft: "10px",
+                    backgroundColor: "rgb(38, 144, 214)",
+                  }}
                   className="btn-create-meeting"
                 >
                   {" "}
@@ -205,7 +245,10 @@ const MeetingManagment = () => {
                   Đổi giảng viên
                 </Button>
                 <Button
-                  style={{ marginLeft: "10px" }}
+                  style={{
+                    marginLeft: "10px",
+                    backgroundColor: "rgb(38, 144, 214)",
+                  }}
                   className="btn-create-meeting"
                 >
                   {" "}
@@ -216,7 +259,10 @@ const MeetingManagment = () => {
                   Tạo buổi học tự động
                 </Button>
                 <Button
-                  style={{ marginLeft: "10px" }}
+                  style={{
+                    marginLeft: "10px",
+                    backgroundColor: "rgb(38, 144, 214)",
+                  }}
                   className="btn-create-meeting"
                   onClick={openModalCreateMeeting}
                 >
@@ -234,30 +280,53 @@ const MeetingManagment = () => {
                 data.map((item) => (
                   <div>
                     <div tabIndex={0} role="button" className="box-card">
-                      <div className="title-left">
+                      <div className="title-left" style={{ paddingLeft: 0 }}>
                         <Link>
-                          <div className="box-icon">
-                            <BookOutlined
-                              style={{ color: "white", fontSize: 21 }}
-                            />
-                          </div>
-                          <span
-                            style={{
-                              fontSize: "16px",
-                              color: "black",
+                          <Checkbox
+                            style={{ marginRight: "15px" }}
+                            checked={selectedIds.includes(item.id)}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleCheckboxChange(item.id);
                             }}
+                          />
+                          <Link
+                            to={`/admin/class-management/meeting-management/attendance/${item.id}`}
                           >
-                            {item.name} -{" "}
-                            {item.typeMeeting === 0 ? "Online " : "Offline "} -{" "}
-                            <span style={{ color: "red" }}>
-                              {item.userNameTeacher}{" "}
-                            </span>{" "}
-                            -{" "}
-                            <span style={{ fontSize: "15px" }}>
-                              Sĩ số điểm danh:{" "}
-                              <span style={{ color: "red" }}>15/20</span>
+                            <div className="box-icon">
+                              <BookOutlined
+                                style={{ color: "white", fontSize: 21 }}
+                              />
+                            </div>
+                            <span
+                              style={{
+                                fontSize: "16px",
+                                color: "black",
+                              }}
+                            >
+                              {item.name} -{" "}
+                              {item.typeMeeting === 0 ? (
+                                <span style={{ color: "red" }}>Online </span>
+                              ) : (
+                                <span style={{ color: "black" }}>Offline </span>
+                              )}{" "}
+                              -{" "}
+                              <span style={{ color: "red" }}>
+                                {item.userNameTeacher}{" "}
+                              </span>{" "}
+                              {item.soDiemDanh != null && (
+                                <span style={{ fontSize: "15px" }}>
+                                  - Sĩ số điểm danh:{" "}
+                                  <span style={{ color: "red" }}>
+                                    {item.soDiemDanh + "/"}
+                                    {classDetail != null
+                                      ? classDetail.classSize
+                                      : ""}
+                                  </span>
+                                </span>
+                              )}
                             </span>
-                          </span>
+                          </Link>
                         </Link>
                       </div>
                       <div className="title-right">
@@ -282,36 +351,40 @@ const MeetingManagment = () => {
                         </div>
                       </div>
                       <div className="icon-right">
-                        <FontAwesomeIcon
-                          icon={faPencilAlt}
-                          style={{
-                            marginRight: "10px",
-                            cursor: "pointer",
-                            color: "#007bff",
-                          }}
-                          onClick={() => {
-                            openModalUpdateMeeting(item);
-                          }}
-                        />
-                        <Popconfirm
-                          title="Xóa buổi học"
-                          description="Bạn có chắc chắn muốn xóa buổi học này không?"
-                          onConfirm={() => {
-                            deleteMeeting(item.id);
-                          }}
-                          okText="Yes"
-                          cancelText="No"
-                        >
+                        <Tooltip title="Cập nhật buổi học">
                           <FontAwesomeIcon
-                            icon={faTrash}
+                            icon={faPencilAlt}
                             style={{
-                              marginRight: "10px",
-                              marginLeft: "5px",
+                              marginRight: "12px",
                               cursor: "pointer",
                               color: "#007bff",
                             }}
+                            onClick={() => {
+                              openModalUpdateMeeting(item);
+                            }}
                           />
-                        </Popconfirm>
+                        </Tooltip>
+                        <Tooltip title="Xóa buổi học">
+                          <Popconfirm
+                            title="Xóa buổi học"
+                            description="Bạn có chắc chắn muốn xóa buổi học này không?"
+                            onConfirm={() => {
+                              deleteMeeting(item.id);
+                            }}
+                            okText="Yes"
+                            cancelText="No"
+                          >
+                            <FontAwesomeIcon
+                              icon={faTrash}
+                              style={{
+                                marginRight: "10px",
+                                marginLeft: "5px",
+                                cursor: "pointer",
+                                color: "#007bff",
+                              }}
+                            />
+                          </Popconfirm>
+                        </Tooltip>
                       </div>
                     </div>{" "}
                   </div>

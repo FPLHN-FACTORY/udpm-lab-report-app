@@ -16,9 +16,9 @@ public interface AdMeetingService {
 
     List<AdMeetingCustom> getAllMeetingByIdClass(String idClass);
 
-    Meeting create(@Valid AdCreateMeetingRequest request);
+    AdMeetingCustom create(@Valid AdCreateMeetingRequest request);
 
-    Meeting update(@Valid AdUpdateMeetingRequest request);
+    AdMeetingCustom update(@Valid AdUpdateMeetingRequest request);
 
     String delete(String id);
 }

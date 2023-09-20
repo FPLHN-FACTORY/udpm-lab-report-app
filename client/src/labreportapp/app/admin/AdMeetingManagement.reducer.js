@@ -17,12 +17,25 @@ const adMeetingManagementSlice = createSlice({
         id: data.id,
         name: data.name,
         meetingDate: data.meetingDate,
-        meetingPeriod: convertMeetingPeriodToNumber(data.meetingPeriod),
-        typeMeeting: data.typeMeeting === "ONLINE" ? 0 : 1,
+        meetingPeriod: data.meetingPeriod,
+        typeMeeting: data.typeMeeting,
         address: data.address,
+        teacherId: data.teacherId,
+        userNameTeacher: data.userNameTeacher,
+        soDiemDanh: null,
         descriptions: data.descriptions,
       };
       state.unshift(obj);
+      state.sort((a, b) => {
+        if (a.meetingDate === b.meetingDate) {
+          return b.meetingPeriod - a.meetingPeriod;
+        }
+        return new Date(b.meetingDate) - new Date(a.meetingDate);
+      });
+      for (let index = 0; index < state.length; index++) {
+        let nameSuffix = state.length - index;
+        state[index].name = "Buổi " + nameSuffix;
+      }
       return state;
     },
     UpdateMeeting: (state, action) => {
@@ -31,10 +44,12 @@ const adMeetingManagementSlice = createSlice({
         if (item.id === data.id) {
           item.name = data.name;
           item.meetingDate = data.meetingDate;
-          item.meetingPeriod = convertMeetingPeriodToNumber(data.meetingPeriod);
-          item.typeMeeting = data.typeMeeting === "ONLINE" ? 0 : 1;
+          item.meetingPeriod = data.meetingPeriod;
+          item.typeMeeting = data.typeMeeting;
           item.address = data.address;
           item.descriptions = data.descriptions;
+          item.teacherId = data.teacherId;
+          item.userNameTeacher = data.userNameTeacher;
         }
       });
       return state;
@@ -46,6 +61,16 @@ const adMeetingManagementSlice = createSlice({
           state.splice(index, 1);
         }
       });
+      state.sort((a, b) => {
+        if (a.meetingDate === b.meetingDate) {
+          return b.meetingPeriod - a.meetingPeriod;
+        }
+        return new Date(b.meetingDate) - new Date(a.meetingDate);
+      });
+      for (let index = 0; index < state.length; index++) {
+        let nameSuffix = state.length - index;
+        state[index].name = "Buổi " + nameSuffix;
+      }
       return state;
     },
   },

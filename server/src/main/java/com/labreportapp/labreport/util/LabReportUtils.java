@@ -1,5 +1,7 @@
 package com.labreportapp.labreport.util;
 
+import com.labreportapp.labreport.infrastructure.constant.MeetingPeriod;
+
 /**
  * @author thangncph26123
  */
@@ -44,6 +46,45 @@ public class LabReportUtils {
         }
 
         return meetingPeriodStr;
+    }
+
+    public static Integer convertMeetingPeriodToInteger(MeetingPeriod meetingPeriod) {
+        Integer meetingPeriodInt = null;
+
+        switch (meetingPeriod) {
+            case CA_1:
+                meetingPeriodInt = 0;
+                break;
+            case CA_2:
+                meetingPeriodInt = 1;
+                break;
+            case CA_3:
+                meetingPeriodInt = 2;
+                break;
+            case CA_4:
+                meetingPeriodInt = 3;
+                break;
+            case CA_5:
+                meetingPeriodInt = 4;
+                break;
+            case CA_6:
+                meetingPeriodInt = 5;
+                break;
+            case CA_7:
+                meetingPeriodInt = 6;
+                break;
+            case CA_8:
+                meetingPeriodInt = 7;
+                break;
+            case CA_9:
+                meetingPeriodInt = 8;
+                break;
+            case CA_10:
+                meetingPeriodInt = 9;
+                break;
+        }
+
+        return meetingPeriodInt;
     }
 
 }

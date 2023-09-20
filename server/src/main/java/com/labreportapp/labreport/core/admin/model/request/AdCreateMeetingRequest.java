@@ -12,9 +12,6 @@ import lombok.Setter;
 @Setter
 public class AdCreateMeetingRequest {
 
-    @NotBlank
-    private String name;
-
     @NotNull
     private Long meetingDate;
 
@@ -30,4 +27,7 @@ public class AdCreateMeetingRequest {
 
     @NotBlank
     private String classId;
+
+    @NotBlank
+    private String teacherId;
 }

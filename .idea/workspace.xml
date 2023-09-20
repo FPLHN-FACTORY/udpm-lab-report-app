@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="fe93e581-5589-4bad-ba6a-389fa82a0816" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/infrastructure/constant/TypeMeeting.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/teacher/my-class/teams/modal-create/ModalCreateTeam.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/teacher/my-class/teams/modal-create/ModalCreateTeam.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/entity/Meeting.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/entity/Meeting.java" afterDir="false" />
-    </list>
+    <list default="true" id="fe93e581-5589-4bad-ba6a-389fa82a0816" name="Default Changelist" comment="update code FE level" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -24,7 +19,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/server" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -38,10 +33,34 @@
       <workItem from="1689935331793" duration="207000" />
       <workItem from="1692284603639" duration="47000" />
       <workItem from="1692333622067" duration="32000" />
+      <workItem from="1695236950584" duration="66000" />
     </task>
+    <task id="LOCAL-00001" summary="update code FE level">
+      <created>1695237007877</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1695237007877</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="update code FE level" />
+    <option name="LAST_COMMIT_MESSAGE" value="update code FE level" />
   </component>
 </project>

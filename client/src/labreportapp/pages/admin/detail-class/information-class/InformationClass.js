@@ -12,7 +12,7 @@ import { SetTTrueToggle } from "../../../../app/admin/AdCollapsedSlice.reducer";
 import { useEffect, useState } from "react";
 import { ClassAPI } from "../../../../api/admin/class-manager/ClassAPI.api";
 import moment from "moment";
-import { Button, Table } from "antd";
+import { Button, Empty, Table } from "antd";
 import { GetStudentClasses } from "../../../../app/teacher/student-class/studentClassesSlice.reduce";
 import LoadingIndicator from "../../../../helper/loading";
 
@@ -60,20 +60,9 @@ const InformationClass = () => {
       width: "12px",
     },
     {
-      title: "Mã sinh viên",
-      dataIndex: "code",
-      key: "code",
-      render: (text, record, index) => {
-        const countSpace = (record.name.match(/ /g) || []).length;
-        const lastSpaceIndex = record.name.lastIndexOf(" ");
-        const wordCount =
-          lastSpaceIndex >= 0
-            ? record.name.substring(lastSpaceIndex + 1).length
-            : 0;
-        const nameIndexCut = countSpace + wordCount;
-        const codeShow = record.username.substring(nameIndexCut).toUpperCase();
-        return <span style={{ color: "#007bff" }}>{codeShow}</span>;
-      },
+      title: "Tên tài khoản",
+      dataIndex: "username",
+      key: "username",
       width: "130px",
     },
     {
@@ -329,7 +318,13 @@ const InformationClass = () => {
                         color: "red",
                       }}
                     >
-                      Không có thành viên
+                      <Empty
+                        imageStyle={{ height: 60 }}
+                        style={{
+                          padding: "20px 0px 20px 0",
+                        }}
+                        description={<span>Không có sinh viên nào !</span>}
+                      />
                     </p>
                   </>
                 )}

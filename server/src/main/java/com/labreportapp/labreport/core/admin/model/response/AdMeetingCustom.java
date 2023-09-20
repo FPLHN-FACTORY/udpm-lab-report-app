@@ -31,5 +31,7 @@ public class AdMeetingCustom {
 
     private String userNameTeacher;
 
+    private Integer soDiemDanh;
+
     private String descriptions;
 }

@@ -365,7 +365,7 @@ const ClassManagement = () => {
       window.URL.revokeObjectURL(url);
     });
   };
-
+  
   return (
     <div className="class_management">
       {loading && <LoadingIndicator />}
