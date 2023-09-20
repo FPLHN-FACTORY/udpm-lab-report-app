@@ -7,6 +7,7 @@ import com.labreportapp.labreport.entity.Point;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 /**
@@ -18,7 +19,7 @@ public interface TePointSevice {
 
     List<Point> addOrUpdatePoint(final TeFindListPointRequest request);
 
-    void exportExcel(HttpServletResponse response, String idClass);
+    ByteArrayOutputStream exportExcel(HttpServletResponse response, String idClass);
 
     TeExcelResponseMessage importExcel(MultipartFile file, String idClass);
 

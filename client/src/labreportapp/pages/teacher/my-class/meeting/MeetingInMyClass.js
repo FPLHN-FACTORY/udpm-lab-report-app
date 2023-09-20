@@ -20,6 +20,7 @@ import { SetTTrueToggle } from "../../../../app/teacher/TeCollapsedSlice.reducer
 import { convertMeetingPeriodToTime } from "../../../../helper/util.helper";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTableList } from "@fortawesome/free-solid-svg-icons";
+import { Empty } from "antd";
 
 const MeetingInMyClass = () => {
   const dispatch = useAppDispatch();
@@ -234,6 +235,11 @@ const MeetingInMyClass = () => {
                                 ) : (
                                   <span>Offline</span>
                                 )}
+                                {" - "}
+                                <span style={{ color: "red" }}>
+                                  {" "}
+                                  {record.userNameTeacher}
+                                </span>
                               </p>
                             </div>
                           </div>
@@ -251,7 +257,6 @@ const MeetingInMyClass = () => {
                                   - <span>Ca </span>
                                   {record.meetingPeriod + 1}
                                   <span>
-                                    {" "}
                                     (
                                     {convertMeetingPeriodToTime(
                                       record.meetingPeriod
@@ -267,18 +272,10 @@ const MeetingInMyClass = () => {
                     ))}
                   </>
                 ) : (
-                  <>
-                    <p
-                      style={{
-                        textAlign: "center",
-                        marginTop: "100px",
-                        fontSize: "15px",
-                        color: "red",
-                      }}
-                    >
-                      Không có buổi học
-                    </p>
-                  </>
+                  <Empty
+                    imageStyle={{ height: 60 }}
+                    description={<span>Không có buổi học</span>}
+                  />
                 )}
               </div>
             </div>

@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, Collapse, Row } from "antd";
+import { Button, Col, Collapse, Empty, Row } from "antd";
 import "./styleCollapseTeam.css";
 import TextArea from "antd/es/input/TextArea";
 import { TeacherMeetingAPI } from "../../../../../../api/teacher/meeting/TeacherMeeting.api";
 import { TeacherMeetingHomeWorkNoteAPI } from "../../../../../../api/teacher/meeting/homework-note/TeacherMeetingHomeWorkNote.api";
 import { useParams } from "react-router";
 import { toast } from "react-toastify";
-import LoadingIndicator from "../../../../../../helper/loading";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUsersRectangle } from "@fortawesome/free-solid-svg-icons";
 const { Panel } = Collapse;
@@ -205,16 +204,10 @@ const CollapseTeam = ({ items }) => {
           </Panel>
         ))}
         {items.length === 0 && (
-          <p
-            style={{
-              textAlign: "center",
-              marginTop: "100px",
-              fontSize: "15px",
-              color: "red",
-            }}
-          >
-            Lớp học chưa có nhóm !
-          </p>
+          <Empty
+            imageStyle={{ height: 60 }}
+            description={<span>Lớp học chưa có nhóm</span>}
+          />
         )}
       </Collapse>
     </div>

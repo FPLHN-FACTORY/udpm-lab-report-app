@@ -32,28 +32,31 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
             c.activity_id as activity_id,
             c.created_date as created_date,
             c.descriptions as descriptions,
-            a.level as level
+            l.name as level,
+            a.name as activity
             FROM activity a
+            JOIN level l ON l.id = a.level_id
             JOIN class c ON c.activity_id = a.id
             JOIN semester s ON s.id = a.semester_id
             where c.teacher_id = :#{#req.idTeacher}
             and (:#{#req.idSemester} IS NULL OR :#{#req.idSemester} LIKE '' OR :#{#req.idSemester} LIKE s.id)
             and (:#{#req.idActivity} IS NULL OR :#{#req.idActivity} LIKE '' OR :#{#req.idActivity} LIKE a.id)
-            and (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR c.code LIKE %:#{#req.code}%)
+            and (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR :#{#req.code} = '_' AND c.code LIKE '%\\_%' ESCAPE '\\\\')
             and (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR  c.class_period = :#{#req.classPeriod})
-            and (:#{#req.level} IS NULL OR :#{#req.level} LIKE '' OR a.level = :#{#req.level})
+            and (:#{#req.level} IS NULL OR :#{#req.level} LIKE '' OR l.id = :#{#req.level})
             ORDER BY c.last_modified_date DESC
                      """,countQuery = """
             SELECT COUNT(c.id) 
-             FROM activity a
+              FROM activity a
+            JOIN level l ON l.id = a.level_id
             JOIN class c ON c.activity_id = a.id
             JOIN semester s ON s.id = a.semester_id
-             WHERE c.teacher_id = :#{#req.idTeacher}
+            where c.teacher_id = :#{#req.idTeacher}
             and (:#{#req.idSemester} IS NULL OR :#{#req.idSemester} LIKE '' OR :#{#req.idSemester} LIKE s.id)
             and (:#{#req.idActivity} IS NULL OR :#{#req.idActivity} LIKE '' OR :#{#req.idActivity} LIKE a.id)
-            and (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR c.code LIKE %:#{#req.code}%)
+            and (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR :#{#req.code} = '_' AND c.code LIKE '%\\_%' ESCAPE '\\\\')
             and (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR  c.class_period = :#{#req.classPeriod})
-            and (:#{#req.level} IS NULL OR :#{#req.level} LIKE '' OR a.level = :#{#req.level})
+            and (:#{#req.level} IS NULL OR :#{#req.level} LIKE '' OR l.id = :#{#req.level})
             """ ,nativeQuery = true)
     Page<TeClassResponse> findClassBySemesterAndActivity(@Param("req") TeFindClassRequest req, Pageable pageable);
 

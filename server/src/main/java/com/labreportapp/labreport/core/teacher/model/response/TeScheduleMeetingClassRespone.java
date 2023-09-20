@@ -34,4 +34,7 @@ public interface TeScheduleMeetingClassRespone {
     @Value("#{target.descriptions_meeting}")
     String getDescriptionsMeeting();
 
+    @Value("#{target.level}")
+    String getLevel();
+
 }

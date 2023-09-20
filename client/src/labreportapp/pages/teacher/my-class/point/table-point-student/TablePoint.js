@@ -1,5 +1,5 @@
 import "./styletablePoint.css";
-import { Button, Input, Table, message } from "antd";
+import { Button, Empty, Input, Table, message } from "antd";
 import { useAppDispatch, useAppSelector } from "../../../../../app/hook";
 import {
   GetPoint,
@@ -264,23 +264,19 @@ const TablePoint = () => {
   return (
     <>
       {dataSource.length > 0 ? (
-        <Table
-          rowKey="id"
-          columns={columns}
-          dataSource={dataSource}
-          pagination={false}
-        />
+        <div className="table-teacher">
+          <Table
+            rowKey="id"
+            columns={columns}
+            dataSource={dataSource}
+            pagination={false}
+          />
+        </div>
       ) : (
-        <p
-          style={{
-            textAlign: "center",
-            marginTop: "100px",
-            fontSize: "15px",
-            color: "red",
-          }}
-        >
-          Lớp học chưa có học sinh nào
-        </p>
+        <Empty
+          imageStyle={{ height: 60 }}
+          description={<span>Chưa có sinh viên nào trong lớp học</span>}
+        />
       )}
     </>
   );

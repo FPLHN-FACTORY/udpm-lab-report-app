@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import "./styleTeamsInMyClass.css";
-import { Row, Table, Button, Tooltip, Col, Modal } from "antd";
+import { Row, Table, Button, Tooltip, Col, Modal, Empty } from "antd";
 import { Link } from "react-router-dom";
 import { ControlOutlined } from "@ant-design/icons";
 import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/TeacherStudentClasses.api";
@@ -19,7 +19,6 @@ import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import LoadingIndicator from "../../../../helper/loading";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faDownload,
   faEye,
   faPenToSquare,
   faTrashCan,
@@ -390,32 +389,21 @@ const TeamsInMyClass = () => {
               </Button>
             </Row>
           </div>
-          <div>
+          <div style={{ marginTop: "20px" }}>
             {data.length > 0 ? (
-              <>
-                <div className="table">
-                  <Table
-                    style={{ marginTop: "150px" }}
-                    dataSource={data}
-                    rowKey="id"
-                    columns={columns}
-                    pagination={false}
-                  />
-                </div>
-              </>
+              <div className="table-teacher">
+                <Table
+                  dataSource={data}
+                  rowKey="id"
+                  columns={columns}
+                  pagination={false}
+                />
+              </div>
             ) : (
-              <>
-                <p
-                  style={{
-                    textAlign: "center",
-                    marginTop: "100px",
-                    fontSize: "15px",
-                    color: "red",
-                  }}
-                >
-                  Không có nhóm nào trong lớp
-                </p>
-              </>
+              <Empty
+                imageStyle={{ height: 60 }}
+                description={<span>Chưa có nhóm nào trong lớp</span>}
+              />
             )}
           </div>
           <ModalDetailTeam

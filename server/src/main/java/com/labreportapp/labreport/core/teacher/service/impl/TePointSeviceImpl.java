@@ -35,10 +35,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -64,9 +62,6 @@ public class TePointSeviceImpl implements TePointSevice {
     @Override
     public List<TePointRespone> getPointStudentById(String idClass) {
         List<TePointRespone> list = tePointRepository.getAllPointByIdClass(idClass);
-        if (list == null) {
-            return null;
-        }
         return list;
     }
 
@@ -101,14 +96,8 @@ public class TePointSeviceImpl implements TePointSevice {
 
     @Override
     @Synchronized
-    public void exportExcel(HttpServletResponse response, String idClass) {
-        try (Workbook workbook = new XSSFWorkbook()) {
-            response.setContentType("application/octet-stream");
-            DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-            String currentDateTime = dateFormatter.format(new Date());
-            String headerKey = "Content-Disposition";
-            String headerValue = "attachment; filename=BangDiem_" + currentDateTime + ".xlsx";
-            response.setHeader(headerKey, headerValue);
+    public ByteArrayOutputStream exportExcel(HttpServletResponse response, String idClass) {
+        try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             List<TePointRespone> listPointIdClass = getPointStudentById(idClass);
             TeFindStudentClasses teFindStudentClasses = new TeFindStudentClasses();
             teFindStudentClasses.setIdClass(idClass);
@@ -143,7 +132,6 @@ public class TePointSeviceImpl implements TePointSevice {
             cellTitle.setCellValue("DANH SÁCH ĐIỂM SINH VIÊN LỚP " + objClass.getCode());
             cellTitle.setCellStyle(titleStyle);
             sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 5));
-
             Font fontHeader = workbook.createFont();
             fontHeader.setBold(true);
             fontHeader.setColor(IndexedColors.WHITE.getIndex());
@@ -221,8 +209,10 @@ public class TePointSeviceImpl implements TePointSevice {
             }
             workbook.write(response.getOutputStream());
             workbook.close();
+            return outputStream;
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
     }
 

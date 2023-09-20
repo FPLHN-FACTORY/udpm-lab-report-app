@@ -9,7 +9,7 @@ import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyCla
 import { TeacherMeetingAPI } from "../../../../api/teacher/meeting/TeacherMeeting.api";
 import { Link } from "react-router-dom";
 import CustomSwitch from "./CustomSwitch";
-import { Table } from "antd";
+import { Empty, Table } from "antd";
 import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import {
@@ -320,7 +320,7 @@ const TeacherAttendanceMeeting = () => {
           <div style={{ minHeight: "200px" }}>
             {data.length > 0 ? (
               <>
-                <div className="table">
+                <div className="table-teacher">
                   <Table
                     dataSource={data}
                     rowKey="id"
@@ -330,18 +330,10 @@ const TeacherAttendanceMeeting = () => {
                 </div>
               </>
             ) : (
-              <>
-                <p
-                  style={{
-                    textAlign: "center",
-                    marginTop: "100px",
-                    fontSize: "15px",
-                    color: "red",
-                  }}
-                >
-                  Không có thông tin sinh viên
-                </p>
-              </>
+              <Empty
+                imageStyle={{ height: 60 }}
+                description={<span>Không có thông tin sinh viên</span>}
+              />
             )}
           </div>
           <div className="box-button-center">

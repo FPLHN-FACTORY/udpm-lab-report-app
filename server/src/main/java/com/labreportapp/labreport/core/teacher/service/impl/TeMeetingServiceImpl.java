@@ -1,14 +1,19 @@
 package com.labreportapp.labreport.core.teacher.service.impl;
 
+import com.labreportapp.labreport.core.common.response.SimpleResponse;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindMeetingRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindScheduleMeetingClassRequest;
+import com.labreportapp.labreport.core.teacher.model.request.TeFindScheduleNowToTime;
 import com.labreportapp.labreport.core.teacher.model.request.TeScheduleUpdateMeetingRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeUpdateHomeWorkAndNoteInMeetingRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeUpdateMeetingRequest;
 import com.labreportapp.labreport.core.teacher.model.response.TeHomeWorkAndNoteMeetingRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TeMeetingCustomRespone;
 import com.labreportapp.labreport.core.teacher.model.response.TeMeetingCustomToAttendanceRespone;
 import com.labreportapp.labreport.core.teacher.model.response.TeMeetingRespone;
 import com.labreportapp.labreport.core.teacher.model.response.TeScheduleMeetingClassRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TeStudentCallApiResponse;
+import com.labreportapp.labreport.core.teacher.model.response.TeStudentClassesRespone;
 import com.labreportapp.labreport.core.teacher.repository.TeHomeWorkRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeMeetingRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeNoteRepository;
@@ -17,6 +22,7 @@ import com.labreportapp.labreport.core.teacher.service.TeStudentClassesService;
 import com.labreportapp.labreport.entity.HomeWork;
 import com.labreportapp.labreport.entity.Meeting;
 import com.labreportapp.labreport.entity.Note;
+import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author hieundph25894
@@ -45,10 +52,36 @@ public class TeMeetingServiceImpl implements TeMeetingService {
     @Autowired
     private TeStudentClassesService teStudentClassesService;
 
+    @Autowired
+    private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
+
     @Override
-    public List<TeMeetingRespone> searchMeetingByIdClass(TeFindMeetingRequest request) {
+    public List<TeMeetingCustomRespone> searchMeetingByIdClass(TeFindMeetingRequest request) {
         List<TeMeetingRespone> list = teMeetingRepository.findMeetingByIdClass(request);
-        return list;
+        List<String> idTeacherList = list.stream()
+                .map(TeMeetingRespone::getIdTeacher)
+                .distinct()
+                .collect(Collectors.toList());
+        List<SimpleResponse> listRespone = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idTeacherList);
+        List<TeMeetingCustomRespone> listReturn = new ArrayList<>();
+        list.forEach(reposi -> {
+            listRespone.forEach(respone -> {
+                if (reposi.getIdTeacher().equals(respone.getId())) {
+                    TeMeetingCustomRespone obj = new TeMeetingCustomRespone();
+                    obj.setId(reposi.getId());
+                    obj.setName(reposi.getName());
+                    obj.setDescriptions(reposi.getDescriptions());
+                    obj.setMeetingDate(reposi.getMeetingDate());
+                    obj.setMeetingPeriod(reposi.getMeetingPeriod());
+                    obj.setId(reposi.getIdClass());
+                    obj.setTypeMeeting(reposi.getTypeMeeting());
+                    obj.setIdTeacher(reposi.getIdTeacher());
+                    obj.setUserNameTeacher(respone.getUserName());
+                    listReturn.add(obj);
+                }
+            });
+        });
+        return listReturn;
     }
 
     @Override
@@ -139,6 +172,18 @@ public class TeMeetingServiceImpl implements TeMeetingService {
     @Override
     public List<TeScheduleMeetingClassRespone> searchScheduleToDayByIdTeacherAndMeetingDate(TeFindScheduleMeetingClassRequest request) {
         List<TeScheduleMeetingClassRespone> list = teMeetingRepository.searchScheduleToDayByIdTeacherAndMeetingDate(request);
+        if (list.size() == 0) {
+            return null;
+        }
+        return list;
+    }
+
+    @Override
+    public List<TeScheduleMeetingClassRespone> searchScheduleNowToByIdTeacher(TeFindScheduleNowToTime request) {
+        List<TeScheduleMeetingClassRespone> list = teMeetingRepository.searchScheduleNowToTimeByIdTeacher(request);
+        if (list.size() == 0) {
+            return null;
+        }
         return list;
     }
 

@@ -17,5 +17,5 @@ public interface TeAttendanceSevice {
     List<Attendance> addOrUpdateAttendance(final TeFindListAttendanceRequest request);
 
     List<TeAttendanceStudentAllRespone> getListAttendanceStudentAllMeeting(String idClass);
-    
+
 }
