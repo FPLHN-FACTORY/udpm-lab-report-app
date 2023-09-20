@@ -74,7 +74,7 @@ const ModalCreateMeeting = ({ visible, onCancel }) => {
         onCancel={onCancel}
         width={650}
         footer={null}
-        className="modal_show_detail"
+        className="modal_show_detail_meeting"
       >
         <div>
           <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>

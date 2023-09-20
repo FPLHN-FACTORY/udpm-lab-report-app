@@ -198,7 +198,7 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
         onCancel={onCancel}
         width={800}
         footer={null}
-        className="modal_show_detail"
+        className="modal_show_detail_project"
       >
         <div>
           <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>

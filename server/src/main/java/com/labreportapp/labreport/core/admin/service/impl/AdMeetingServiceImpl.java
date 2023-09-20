@@ -2,12 +2,17 @@ package com.labreportapp.labreport.core.admin.service.impl;
 
 import com.labreportapp.labreport.core.admin.model.request.AdCreateMeetingRequest;
 import com.labreportapp.labreport.core.admin.model.request.AdUpdateMeetingRequest;
+import com.labreportapp.labreport.core.admin.model.response.AdExportExcelClassCustom;
+import com.labreportapp.labreport.core.admin.model.response.AdExportExcelClassResponse;
+import com.labreportapp.labreport.core.admin.model.response.AdMeetingCustom;
 import com.labreportapp.labreport.core.admin.model.response.AdMeetingResponse;
 import com.labreportapp.labreport.core.admin.repository.AdMeetingRepository;
 import com.labreportapp.labreport.core.admin.service.AdMeetingService;
+import com.labreportapp.labreport.core.common.response.SimpleResponse;
 import com.labreportapp.labreport.entity.Meeting;
 import com.labreportapp.labreport.infrastructure.constant.MeetingPeriod;
 import com.labreportapp.labreport.infrastructure.constant.TypeMeeting;
+import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import jakarta.validation.Valid;
@@ -15,8 +20,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author thangncph26123
@@ -28,9 +35,36 @@ public class AdMeetingServiceImpl implements AdMeetingService {
     @Autowired
     private AdMeetingRepository adMeetingRepository;
 
+    @Autowired
+    private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
+
     @Override
-    public List<AdMeetingResponse> getAllMeetingByIdClass(String idClass) {
-        return adMeetingRepository.getAllMeetingByIdClass(idClass);
+    public List<AdMeetingCustom> getAllMeetingByIdClass(String idClass) {
+        List<AdMeetingResponse> listMeeting = adMeetingRepository.getAllMeetingByIdClass(idClass);
+        List<String> distinctTeacherIds = listMeeting.stream()
+                .map(AdMeetingResponse::getTeacherId)
+                .distinct()
+                .collect(Collectors.toList());
+        List<SimpleResponse> listSimpleResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(distinctTeacherIds);
+        List<AdMeetingCustom> listCustom = new ArrayList<>();
+        listMeeting.forEach(res -> {
+            listSimpleResponse.forEach(simple -> {
+                if (res.getTeacherId().equals(simple.getId())) {
+                    AdMeetingCustom adMeetingCustom = new AdMeetingCustom();
+                    adMeetingCustom.setId(res.getId());
+                    adMeetingCustom.setMeetingDate(res.getMeetingDate());
+                    adMeetingCustom.setMeetingPeriod(res.getMeetingPeriod());
+                    adMeetingCustom.setTypeMeeting(res.getTypeMeeting());
+                    adMeetingCustom.setTeacherId(res.getTeacherId());
+                    adMeetingCustom.setUserNameTeacher(simple.getUserName());
+                    adMeetingCustom.setAddress(res.getAddress());
+                    adMeetingCustom.setDescriptions(res.getDescriptions());
+                    adMeetingCustom.setName(res.getName());
+                    listCustom.add(adMeetingCustom);
+                }
+            });
+        });
+        return listCustom;
     }
 
     @Override

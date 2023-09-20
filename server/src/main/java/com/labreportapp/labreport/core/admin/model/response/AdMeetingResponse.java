@@ -23,6 +23,9 @@ public interface AdMeetingResponse extends IsIdentified {
     @Value("#{target.address}")
     String getAddress();
 
+    @Value("#{target.teacher_id}")
+    String getTeacherId();
+
     @Value("#{target.descriptions}")
     String getDescriptions();
 }

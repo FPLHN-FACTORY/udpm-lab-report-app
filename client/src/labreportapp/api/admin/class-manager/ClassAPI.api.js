@@ -93,4 +93,29 @@ export class ClassAPI {
       url: `/admin/class-managerment/level`,
     });
   }
+
+  static exportExcel(filter) {
+    return request({
+      method: "GET",
+      url:
+        `/admin/class-managerment/export-excel` +
+        `?idTeacher=` +
+        filter.idTeacher +
+        `&idSemester=` +
+        filter.idSemester +
+        `&idActivity=` +
+        filter.idActivity +
+        `&code=` +
+        filter.code +
+        `&classPeriod=` +
+        filter.classPeriod +
+        `&page=` +
+        filter.page +
+        `&size=` +
+        filter.size +
+        "&levelId=" +
+        filter.levelId,
+      responseType: "blob",
+    });
+  }
 }

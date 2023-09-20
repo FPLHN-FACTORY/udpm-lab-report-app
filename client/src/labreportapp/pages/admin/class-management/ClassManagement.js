@@ -10,6 +10,7 @@ import {
   faUpload,
   faPencilAlt,
   faRandom,
+  faChainSlash,
 } from "@fortawesome/free-solid-svg-icons";
 import { useAppDispatch, useAppSelector } from "../../../app/hook";
 import {
@@ -21,6 +22,7 @@ import {
   Select,
   Row,
   Col,
+  Empty,
 } from "antd";
 import LoadingIndicator from "../../../helper/loading";
 
@@ -37,6 +39,7 @@ import {
   GetAdClassManagement,
   SetMyClass,
 } from "../../../app/admin/ClassManager.reducer";
+import LoadingIndicatorNoOverlay from "../../../helper/loadingNoOverlay";
 
 const ClassManagement = () => {
   const { Option } = Select;
@@ -50,7 +53,8 @@ const ClassManagement = () => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [code, setCode] = useState("");
   const [selectedItemsPerson, setSelectedItemsPerson] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [loadingOverLay, setLoadingOverLay] = useState(false);
   const [current, setCurrent] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [clear, setClear] = useState(false);
@@ -73,7 +77,7 @@ const ClassManagement = () => {
     featchAllMyClass();
   }, [current]);
   const featchAllMyClass = async () => {
-    setLoading(false);
+    setLoading(true);
     let filter = {
       idTeacher: selectedItemsPerson,
       idActivity: idActivitiSearch,
@@ -91,7 +95,7 @@ const ClassManagement = () => {
         setlistClassAll(respone.data.data.data);
         dispatch(SetMyClass(respone.data.data.data));
 
-        setLoading(true);
+        setLoading(false);
       });
     } catch (error) {
       alert("Vui lòng F5 lại trang !");
@@ -327,9 +331,45 @@ const ClassManagement = () => {
     return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
   };
 
+  const convertLongToDate = (dateLong) => {
+    const date = new Date(dateLong);
+    const format = `${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
+    return format;
+  };
+
+  const exportExcel = () => {
+    setLoadingOverLay(true);
+    let filter = {
+      idTeacher: selectedItemsPerson,
+      idActivity: idActivitiSearch,
+      idSemester: idSemesterSeach,
+      code: code,
+      classPeriod: selectedItems,
+      page: current,
+      size: 10,
+      levelId: level,
+    };
+    ClassAPI.exportExcel(filter).then((response) => {
+      setLoadingOverLay(false);
+      const blob = new Blob([response.data], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download =
+        "Danh sách lớp học_" +
+        convertLongToDate(new Date().getTime()) +
+        ".xlsx";
+      link.click();
+      window.URL.revokeObjectURL(url);
+    });
+  };
+
   return (
     <div className="class_management">
-      {!loading && <LoadingIndicator />}
+      {loading && <LoadingIndicator />}
+      {loadingOverLay && <LoadingIndicatorNoOverlay />}
 
       <div className="title_activity_management">
         {" "}
@@ -337,7 +377,7 @@ const ClassManagement = () => {
         <span style={{ marginLeft: "10px" }}>Quản lý lớp học</span>
       </div>
       <div className="filter_class_management">
-        <FontAwesomeIcon icon={faFilter} size="2x" />{" "}
+        <FontAwesomeIcon icon={faFilter} style={{ fontSize: "19px" }} />{" "}
         <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
         <hr />
         <Row>
@@ -484,7 +524,7 @@ const ClassManagement = () => {
         <div style={{ marginBottom: "8px" }}>
           <div className="table-class-management-info">
             {" "}
-            <FontAwesomeIcon icon={faCogs} size="1x" />
+            <FontAwesomeIcon icon={faChainSlash} style={{ fontSize: "18px" }} />
             <span
               style={{
                 fontSize: "18px",
@@ -503,6 +543,7 @@ const ClassManagement = () => {
                 backgroundColor: "rgb(55, 137, 220)",
                 marginRight: "5px",
               }}
+              onClick={exportExcel}
             >
               <FontAwesomeIcon
                 icon={faDownload}
@@ -603,7 +644,14 @@ const ClassManagement = () => {
                     color: "red",
                   }}
                 >
-                  Không có lớp học
+                  <Empty
+                    imageStyle={{ height: 60 }}
+                    description={
+                      <span style={{ color: "#007bff" }}>
+                        Không tìm thấy lớp học nào !
+                      </span>
+                    }
+                  />{" "}
                 </p>
               </>
             )}

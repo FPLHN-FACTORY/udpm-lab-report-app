@@ -1,11 +1,14 @@
 package com.labreportapp.labreport.core.admin.service.impl;
 
+import com.labreportapp.labreport.core.admin.excel.AdExportExcelClass;
 import com.labreportapp.labreport.core.admin.model.request.AdCreateClassRequest;
 import com.labreportapp.labreport.core.admin.model.request.AdFindClassRequest;
 import com.labreportapp.labreport.core.admin.model.response.AdActivityClassResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdClassCustomResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdClassResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdDetailClassRespone;
+import com.labreportapp.labreport.core.admin.model.response.AdExportExcelClassCustom;
+import com.labreportapp.labreport.core.admin.model.response.AdExportExcelClassResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdListClassCustomResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdSemesterAcResponse;
 import com.labreportapp.labreport.core.admin.repository.AdActivityRepository;
@@ -23,6 +26,7 @@ import com.labreportapp.labreport.util.FormUtils;
 import com.labreportapp.labreport.util.RandomString;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -33,7 +37,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.ByteArrayOutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -62,6 +70,9 @@ public class AdClassManagerServiceImpl implements AdClassService {
     @Autowired
     @Qualifier(LevelRepository.NAME)
     private LevelRepository levelRepository;
+
+    @Autowired
+    private AdExportExcelClass adExportExcelClass;
 
     @Override
     public List<AdClassResponse> getAllClass() {
@@ -171,6 +182,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
         List<AdClassResponse> listResponse = pageList.getContent();
         List<String> idList = listResponse.stream()
                 .map(AdClassResponse::getTeacherId)
+                .distinct()
                 .collect(Collectors.toList());
 
         List<SimpleResponse> response = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idList);
@@ -200,6 +212,35 @@ public class AdClassManagerServiceImpl implements AdClassService {
         pageableObject.setCurrentPage(pageList.getNumber());
         pageableObject.setTotalPages(pageList.getTotalPages());
         return pageableObject;
+    }
+
+    @Override
+    public ByteArrayOutputStream exportExcelClass(HttpServletResponse response, final AdFindClassRequest request) {
+        List<AdExportExcelClassResponse> listClassResponse = repository.findClassExportExcel(request);
+        List<String> distinctTeacherIds = listClassResponse.stream()
+                .map(AdExportExcelClassResponse::getTeacherId)
+                .distinct()
+                .collect(Collectors.toList());
+        List<SimpleResponse> listSimpleResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(distinctTeacherIds);
+        List<AdExportExcelClassCustom> listCustom = new ArrayList<>();
+        listClassResponse.forEach(res -> {
+            listSimpleResponse.forEach(simple -> {
+                if (res.getTeacherId().equals(simple.getId())) {
+                    AdExportExcelClassCustom adExportExcelClassCustom = new AdExportExcelClassCustom();
+                    adExportExcelClassCustom.setStt(res.getStt());
+                    adExportExcelClassCustom.setCode(res.getCode());
+                    adExportExcelClassCustom.setClassPeriod(res.getClassPeriod());
+                    adExportExcelClassCustom.setClassSize(res.getClassSize());
+                    adExportExcelClassCustom.setNameActivity(res.getNameActivity());
+                    adExportExcelClassCustom.setNameLevel(res.getNameLevel());
+                    adExportExcelClassCustom.setStartTime(res.getStartTime());
+                    adExportExcelClassCustom.setTeacherId(res.getTeacherId());
+                    adExportExcelClassCustom.setUserNameTeacher(simple.getUserName());
+                    listCustom.add(adExportExcelClassCustom);
+                }
+            });
+        });
+        return adExportExcelClass.export(response, listCustom);
     }
 
     @Override

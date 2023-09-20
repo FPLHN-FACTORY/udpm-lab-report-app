@@ -5,7 +5,7 @@ import {
   ControlOutlined,
   UnorderedListOutlined,
 } from "@ant-design/icons";
-import { Button, Popconfirm } from "antd";
+import { Button, Empty, Popconfirm } from "antd";
 import { MeetingManagementAPI } from "../../../../api/admin/meeting-management/MeetingManagementAPI";
 import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import { useEffect, useState } from "react";
@@ -22,7 +22,13 @@ import {
 import LoadingIndicator from "../../../../helper/loading";
 import ModalCreateMeeting from "./modal-create-meeting/ModalCreateMeeting";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPencilAlt, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faExchange,
+  faPencilAlt,
+  faPlus,
+  faPlusCircle,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 import ModalUpdateMeeting from "./modal-update-meeting/ModalUpdateMeeting";
 import { toast } from "react-toastify";
 import { SetTTrueToggle } from "../../../../app/admin/AdCollapsedSlice.reducer";
@@ -163,7 +169,19 @@ const MeetingManagment = () => {
                   <UnorderedListOutlined
                     style={{ marginRight: "10px", fontSize: "20px" }}
                   />
-                  Danh sách lịch học
+                  Danh sách lịch học:{" "}
+                  <span
+                    style={{
+                      padding: "5px",
+                      backgroundColor: "#007bff",
+                      color: "white",
+                      fontSize: "15px",
+                      borderRadius: "5px",
+                    }}
+                  >
+                    {" "}
+                    {data != null ? data.length : 0} buổi học{" "}
+                  </span>
                 </span>
               </div>{" "}
               <div
@@ -175,27 +193,26 @@ const MeetingManagment = () => {
                 }}
               >
                 {" "}
-                <div
-                  className="box-center"
-                  style={{
-                    height: "30px",
-                    width: "100px",
-                    backgroundColor: "#007bff",
-                    color: "white",
-                    borderRadius: "5px",
-                    marginLeft: "35px",
-                  }}
-                >
-                  {" "}
-                  <span style={{ fontSize: "14px" }}>
-                    {" "}
-                    {data != null ? data.length : 0} buổi học{" "}
-                  </span>
-                </div>
                 <Button
                   style={{ marginLeft: "10px" }}
                   className="btn-create-meeting"
                 >
+                  {" "}
+                  <FontAwesomeIcon
+                    icon={faExchange}
+                    style={{ marginRight: "5px" }}
+                  />
+                  Đổi giảng viên
+                </Button>
+                <Button
+                  style={{ marginLeft: "10px" }}
+                  className="btn-create-meeting"
+                >
+                  {" "}
+                  <FontAwesomeIcon
+                    icon={faPlusCircle}
+                    style={{ marginRight: "5px" }}
+                  />
                   Tạo buổi học tự động
                 </Button>
                 <Button
@@ -203,6 +220,10 @@ const MeetingManagment = () => {
                   className="btn-create-meeting"
                   onClick={openModalCreateMeeting}
                 >
+                  <FontAwesomeIcon
+                    icon={faPlus}
+                    style={{ marginRight: "5px" }}
+                  />
                   Thêm buổi học
                 </Button>
               </div>
@@ -227,7 +248,15 @@ const MeetingManagment = () => {
                             }}
                           >
                             {item.name} -{" "}
-                            {item.typeMeeting === 0 ? "Online" : "Offline"}
+                            {item.typeMeeting === 0 ? "Online " : "Offline "} -{" "}
+                            <span style={{ color: "red" }}>
+                              {item.userNameTeacher}{" "}
+                            </span>{" "}
+                            -{" "}
+                            <span style={{ fontSize: "15px" }}>
+                              Sĩ số điểm danh:{" "}
+                              <span style={{ color: "red" }}>15/20</span>
+                            </span>
                           </span>
                         </Link>
                       </div>
@@ -289,9 +318,13 @@ const MeetingManagment = () => {
                 ))}
               {(data == null || data.length === 0) && (
                 <div style={{ textAlign: "center", marginTop: "15px" }}>
-                  <span style={{ color: "red" }}>
-                    Không có buổi học nào !!!
-                  </span>
+                  <Empty
+                    imageStyle={{ height: 60 }}
+                    style={{
+                      padding: "20px 0px 20px 0",
+                    }}
+                    description={<span>Không có buổi học nào</span>}
+                  />
                 </div>
               )}
             </div>

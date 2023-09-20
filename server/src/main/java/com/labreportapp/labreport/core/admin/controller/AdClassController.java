@@ -8,9 +8,15 @@ import com.labreportapp.labreport.core.admin.model.response.AdSemesterAcResponse
 import com.labreportapp.labreport.core.admin.service.AdClassService;
 import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.core.common.base.ResponseObject;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 /**
@@ -72,6 +78,22 @@ public class AdClassController {
     public ResponseObject searchTeClass(final AdFindClassRequest adFindClass) {
         PageableObject<AdListClassCustomResponse> pageList = service.searchClass(adFindClass);
         return new ResponseObject(pageList);
+    }
+
+    @GetMapping("/export-excel")
+    public ResponseEntity<byte[]> exportExcel(HttpServletResponse response, final AdFindClassRequest request) {
+        try {
+            ByteArrayOutputStream file = service.exportExcelClass(response, request);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            headers.setContentDispositionFormData("attachment", "sample.xlsx");
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(file.toByteArray());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/information-class/{id}")
