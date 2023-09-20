@@ -163,7 +163,7 @@
   color: white;
 }
 .ant-table-wrapper {
-  white-space: nowrap;
+  /* white-space: nowrap; */
   overflow: hidden;
   text-overflow: ellipsis;
 }

@@ -4,6 +4,7 @@ import com.labreportapp.labreport.core.admin.model.request.AdCreateClassRequest;
 import com.labreportapp.labreport.core.admin.model.request.AdFindClassRequest;
 import com.labreportapp.labreport.core.admin.model.response.*;
 import com.labreportapp.labreport.core.common.base.PageableObject;
+import com.labreportapp.labreport.core.common.base.SimpleEntityProjection;
 import jakarta.validation.Valid;
 
 import java.util.List;
@@ -14,6 +15,8 @@ import java.util.List;
 public interface AdClassService {
 
     List<AdClassResponse> getAllClass();
+
+    List<SimpleEntityProjection> getAllLevel();
 
     List<AdClassResponse> getAllClassBySemester(final AdFindClassRequest adFindClass);
 

@@ -12,10 +12,12 @@ import com.labreportapp.labreport.core.admin.repository.AdActivityRepository;
 import com.labreportapp.labreport.core.admin.repository.AdClassRepository;
 import com.labreportapp.labreport.core.admin.service.AdClassService;
 import com.labreportapp.labreport.core.common.base.PageableObject;
+import com.labreportapp.labreport.core.common.base.SimpleEntityProjection;
 import com.labreportapp.labreport.core.common.response.SimpleResponse;
 import com.labreportapp.labreport.entity.Activity;
 import com.labreportapp.labreport.entity.Class;
 import com.labreportapp.labreport.infrastructure.constant.ClassPeriod;
+import com.labreportapp.labreport.repository.LevelRepository;
 import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
 import com.labreportapp.labreport.util.FormUtils;
 import com.labreportapp.labreport.util.RandomString;
@@ -23,6 +25,7 @@ import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -56,9 +59,18 @@ public class AdClassManagerServiceImpl implements AdClassService {
     @Autowired
     private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
 
+    @Autowired
+    @Qualifier(LevelRepository.NAME)
+    private LevelRepository levelRepository;
+
     @Override
     public List<AdClassResponse> getAllClass() {
         return repository.getAllClass();
+    }
+
+    @Override
+    public List<SimpleEntityProjection> getAllLevel() {
+        return levelRepository.getAllSimpleEntityProjection();
     }
 
     @Override
@@ -109,6 +121,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
         adClassCustomResponse.setCode(classNew.getCode());
         adClassCustomResponse.setActivityName(activityFind.get().getName());
         adClassCustomResponse.setStartTime(classNew.getStartTime());
+        adClassCustomResponse.setNameLevel(levelRepository.findById(activityFind.get().getLevelId()).get().getName());
         if (!request.getTeacherId().equals("")) {
             adClassCustomResponse.setTeacherId(request.getTeacherId());
 
@@ -141,6 +154,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
         adClassCustomResponse.setCode(classNew.getCode());
         adClassCustomResponse.setActivityName(activityFind.get().getName());
         adClassCustomResponse.setStartTime(classNew.getStartTime());
+        adClassCustomResponse.setNameLevel(levelRepository.findById(activityFind.get().getLevelId()).get().getName());
         if (!request.getTeacherId().equals("")) {
             adClassCustomResponse.setTeacherId(request.getTeacherId());
 
@@ -170,6 +184,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
             adListClassCustomResponse.setCode(adClassResponse.getCode());
             adListClassCustomResponse.setTeacherId(adClassResponse.getTeacherId());
             adListClassCustomResponse.setStt(adClassResponse.getStt());
+            adListClassCustomResponse.setNameLevel(adClassResponse.getNameLevel());
             adListClassCustomResponse.setActivityName(adClassResponse.getActivityName());
             for (SimpleResponse simpleResponse : response) {
                 if (adClassResponse.getTeacherId().equals(simpleResponse.getId())) {

@@ -9,6 +9,7 @@ import {
   faDownload,
   faUpload,
   faPencilAlt,
+  faRandom,
 } from "@fortawesome/free-solid-svg-icons";
 import { useAppDispatch, useAppSelector } from "../../../app/hook";
 import {
@@ -53,6 +54,8 @@ const ClassManagement = () => {
   const [current, setCurrent] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [clear, setClear] = useState(false);
+  const [level, setLevel] = useState("");
+  const [listLevel, setListLevel] = useState([]);
 
   const dispatch = useAppDispatch();
   const listClassPeriod = [];
@@ -79,6 +82,7 @@ const ClassManagement = () => {
       classPeriod: selectedItems,
       page: current,
       size: 10,
+      levelId: level,
     };
 
     try {
@@ -108,28 +112,47 @@ const ClassManagement = () => {
   }, []);
 
   useEffect(() => {
-    const featchDataActivity = async (idSemesterSeach) => {
-      console.log(idSemesterSeach);
-      await ClassAPI.getAllActivityByIdSemester(idSemesterSeach).then(
-        (respone) => {
-          setActivityDataAll(respone.data.data);
-        }
-      );
-    };
-    featchDataActivity(idSemesterSeach);
+    if (idSemesterSeach === "") {
+      setIdActivitiSearch("none");
+      setActivityDataAll([]);
+    } else {
+      const featchDataActivity = async (idSemesterSeach) => {
+        console.log(idSemesterSeach);
+        await ClassAPI.getAllActivityByIdSemester(idSemesterSeach).then(
+          (respone) => {
+            console.log(respone.data.data);
+            if (respone.data.data.length === 0) {
+              setIdActivitiSearch("none");
+              setActivityDataAll([]);
+            } else {
+              setIdActivitiSearch("");
+              setActivityDataAll(respone.data.data);
+            }
+          }
+        );
+      };
+      featchDataActivity(idSemesterSeach);
+    }
   }, [idSemesterSeach]);
 
   useEffect(() => {
     const featchDataSemester = async () => {
       try {
         const responseClassAll = await ClassAPI.fetchAllSemester();
-        const listClassAll = responseClassAll.data;
-        if (listClassAll.data.length > 0) {
-          setIdSemesterSearch(listClassAll.data[0].id);
+        const listSemester = responseClassAll.data;
+        if (listSemester.data.length > 0) {
+          listSemester.data.forEach((item) => {
+            if (
+              item.startTime <= new Date().getTime() &&
+              new Date().getTime() <= item.endTime
+            ) {
+              setIdSemesterSearch(item.id);
+            }
+          });
         } else {
-          setIdSemesterSearch("null");
+          setIdSemesterSearch(null);
         }
-        setSemesterDataAll(listClassAll.data);
+        setSemesterDataAll(listSemester.data);
       } catch (error) {
         alert("Vui lòng F5 lại trang !");
       }
@@ -137,10 +160,17 @@ const ClassManagement = () => {
     featchDataSemester();
   }, []);
 
+  const loadDataLevel = () => {
+    ClassAPI.getAllLevel().then((response) => {
+      setListLevel(response.data.data);
+    });
+  };
+
   useEffect(() => {
     document.title = "Quản lý lớp | Portal-Projects";
     setCode("");
     setSelectedItems("");
+    loadDataLevel();
     setSelectedItemsPerson("");
   }, []);
 
@@ -162,6 +192,7 @@ const ClassManagement = () => {
       title: "Thời gian bắt đầu",
       dataIndex: "startTime",
       key: "startTime",
+      sorter: (a, b) => a.startTime - b.startTime,
       render: (text, record) => {
         const startTime = new Date(record.startTime);
 
@@ -200,6 +231,18 @@ const ClassManagement = () => {
       dataIndex: "userNameTeacher",
       key: "userNameTeacher",
       sorter: (a, b) => a.userNameTeacher.localeCompare(b.userNameTeacher),
+    },
+    {
+      title: "Level",
+      dataIndex: "nameLevel",
+      key: "nameLevel",
+      sorter: (a, b) => a.nameLevel.localeCompare(b.nameLevel),
+    },
+    {
+      title: "Hoạt động",
+      dataIndex: "activityName",
+      key: "activityName",
+      sorter: (a, b) => a.activityName.localeCompare(b.activityName),
     },
     {
       title: "Hành động",
@@ -293,7 +336,7 @@ const ClassManagement = () => {
         <FontAwesomeIcon icon={faTags} size="1x" />
         <span style={{ marginLeft: "10px" }}>Quản lý lớp học</span>
       </div>
-      <div className="filter">
+      <div className="filter_class_management">
         <FontAwesomeIcon icon={faFilter} size="2x" />{" "}
         <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
         <hr />
@@ -311,7 +354,7 @@ const ClassManagement = () => {
                 }}
                 filterOption={filterOptions}
               >
-                <Option value="">Tất cả</Option>
+                <Option value="">Chọn 1 học kỳ</Option>
 
                 {semesterDataAll.map((semester) => (
                   <Option key={semester.id} value={semester.id}>
@@ -334,7 +377,10 @@ const ClassManagement = () => {
                 }}
                 filterOption={filterOptions}
               >
-                <Option value="">Tất cả</Option>
+                {activityDataAll.length > 0 && <Option value="">Tất cả</Option>}
+                {activityDataAll.length === 0 && (
+                  <Option value="none">Không có hoạt động</Option>
+                )}
                 {activityDataAll.map((activity) => (
                   <Option key={activity.id} value={activity.id}>
                     {activity.name}
@@ -393,6 +439,29 @@ const ClassManagement = () => {
               <span>Mã Lớp:</span>
               <br />
               <Input type="text" value={code} onChange={handleCodeChange} />
+            </div>
+          </Col>
+          <Col span={12} style={{ padding: "10px" }}>
+            <div className="inputCode">
+              <span>Level:</span>
+              <br />
+              <Select
+                onChange={(e) => {
+                  setLevel(e);
+                }}
+                style={{ width: "100%" }}
+                showSearch
+                filterOption={filterOptions}
+                value={level}
+              >
+                <Option value={""}>Tất cả</Option>
+                {listLevel.length > 0 &&
+                  listLevel.map((item) => (
+                    <Option value={item.id} key={item.id}>
+                      {item.name}
+                    </Option>
+                  ))}
+              </Select>
             </div>
           </Col>
         </Row>
@@ -470,14 +539,14 @@ const ClassManagement = () => {
               }}
             >
               <FontAwesomeIcon
-                icon={faDownload}
+                icon={faRandom}
                 size="1x"
                 style={{
                   backgroundColor: "rgb(55, 137, 220)",
                   marginRight: "7px",
                 }}
               />{" "}
-              Tải mẫu
+              Random lớp
             </Button>
             <Button
               style={{
@@ -493,6 +562,7 @@ const ClassManagement = () => {
                 size="1x"
                 style={{
                   backgroundColor: "rgb(55, 137, 220)",
+                  marginRight: "7px",
                 }}
               />{" "}
               Thêm Lớp

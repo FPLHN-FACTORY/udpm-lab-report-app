@@ -236,7 +236,7 @@ const ModalCreateProject = ({ visible, onCancel }) => {
                   style={{ width: "100%" }}
                   filterOption={filterTeacherOptions}
                 >
-                  <Option value="NULL">Chọn 1 giảng viên</Option>
+                  <Option value="">Chọn 1 giảng viên</Option>
 
                   {teacherDataAll.map((teacher) => (
                     <Option key={teacher.id} value={teacher.id}>

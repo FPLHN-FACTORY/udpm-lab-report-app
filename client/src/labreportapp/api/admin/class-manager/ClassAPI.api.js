@@ -69,7 +69,9 @@ export class ClassAPI {
         `&page=` +
         filter.page +
         `&size=` +
-        filter.size,
+        filter.size +
+        "&levelId=" +
+        filter.levelId,
     });
   }
   static getAdClassDetailById(id) {
@@ -82,6 +84,13 @@ export class ClassAPI {
     return request({
       method: "GET",
       url: `/admin/student-classes/${id}`,
+    });
+  }
+
+  static getAllLevel() {
+    return request({
+      method: "GET",
+      url: `/admin/class-managerment/level`,
     });
   }
 }

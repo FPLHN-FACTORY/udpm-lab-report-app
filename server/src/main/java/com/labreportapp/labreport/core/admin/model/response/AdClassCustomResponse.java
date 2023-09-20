@@ -25,4 +25,6 @@ public class AdClassCustomResponse {
     private String userNameTeacher;
 
     private String activityName;
+
+    private String nameLevel;
 }

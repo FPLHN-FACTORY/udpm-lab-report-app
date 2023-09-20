@@ -21,4 +21,6 @@ public class AdFindClassRequest extends PageableRequest {
 
     private String classPeriod;
 
+    private String levelId;
+
 }

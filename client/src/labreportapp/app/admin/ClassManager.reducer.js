@@ -13,7 +13,7 @@ const adClassManagementSlice = createSlice({
     },
     CreateClass: (state, action) => {
       const data = action.payload;
-      let newCategory = {
+      let newClass = {
         stt: 1,
         id: data.id,
         code: data.code,
@@ -23,11 +23,13 @@ const adClassManagementSlice = createSlice({
         teacherId: data.teacherId,
         userNameTeacher: data.userNameTeacher,
         activityId: data.activityId,
+        activityName: data.activityName,
+        nameLevel: data.nameLevel,
       };
       state.forEach((item, index) => {
         item.stt = index + 1;
       });
-      state.unshift(newCategory);
+      state.unshift(newClass);
       return state;
     },
     UpdateClass: (state, action) => {
@@ -42,6 +44,8 @@ const adClassManagementSlice = createSlice({
           item.teacherId = data.teacherId;
           item.userNameTeacher = data.userNameTeacher;
           item.activityId = data.activityId;
+          item.activityName = data.activityName;
+          item.nameLevel = data.nameLevel;
         }
       });
 

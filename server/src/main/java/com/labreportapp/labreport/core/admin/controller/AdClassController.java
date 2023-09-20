@@ -33,6 +33,11 @@ public class AdClassController {
         return new ResponseObject(service.getAllClassBySemester(adFindClass));
     }
 
+    @GetMapping("/level")
+    public ResponseObject getAllLevel() {
+        return new ResponseObject(service.getAllLevel());
+    }
+
     @GetMapping("/find-by-condition")
     public ResponseObject findAllByCondition(@RequestParam("codeClass") String code,
                                              @RequestParam("classPeriod") Long classPeriod,
@@ -54,12 +59,12 @@ public class AdClassController {
     }
 
     @PostMapping("/add")
-    public ResponseObject addCategory(@RequestBody AdCreateClassRequest request) {
+    public ResponseObject createClass(@RequestBody AdCreateClassRequest request) {
         return new ResponseObject(service.createClass(request));
     }
 
     @PutMapping("/update/{id}")
-    public ResponseObject updateCategory(@RequestBody AdCreateClassRequest request, @PathVariable String id) {
+    public ResponseObject updateClass(@RequestBody AdCreateClassRequest request, @PathVariable String id) {
         return new ResponseObject(service.updateClass(request, id));
     }
 
