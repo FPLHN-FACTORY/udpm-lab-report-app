@@ -3,13 +3,16 @@ import { useState } from "react";
 import { TeacherExcelAPI } from "../../../../../api/teacher/point/excel/TeacherExcelPoint.api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload } from "@fortawesome/free-solid-svg-icons";
+import { toast } from "react-toastify";
 
 const ButtonExportExcel = ({ idClass }) => {
   const [downloading, setDownloading] = useState(false);
 
   const convertLongToDate = (dateLong) => {
     const date = new Date(dateLong);
-    const format = `${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
+    const format = `${date.getFullYear()}-${
+      date.getMonth() + 1
+    }-${date.getDay()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
     return format;
   };
 
@@ -27,6 +30,7 @@ const ButtonExportExcel = ({ idClass }) => {
       console.log(link);
       link.click();
       window.URL.revokeObjectURL(url);
+      toast.success("Export thành công !");
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }

@@ -7,24 +7,30 @@ import { TeacherExcelTeamAPI } from "../../../../../api/teacher/teams-class/exce
 
 const ButtonExportExcelTeam = ({ idClass }) => {
   const [downloading, setDownloading] = useState(false);
+
+  const convertLongToDate = (dateLong) => {
+    const date = new Date(dateLong);
+    const format = `${date.getFullYear()}-${
+      date.getMonth() + 1
+    }-${date.getDay()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
+    return format;
+  };
+
   const handleExport = async () => {
     try {
-      await TeacherExcelTeamAPI.export(idClass)
-        .then((respone) => {
-          setDownloading(true);
-          window.open(
-            `http://localhost:2509/teacher/teams/export-excel?idClass=` +
-              idClass,
-            "_self"
-          );
-          setTimeout(() => {
-            setDownloading(false);
-            toast.success("Export thành công !");
-          }, 1000);
-        })
-        .catch((err) => {
-          toast.error("Export thất bại !");
-        });
+      const response = await TeacherExcelTeamAPI.export(idClass);
+      const blob = new Blob([response.data], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download =
+        "DanhSachNhom_" + convertLongToDate(new Date().getTime()) + ".xlsx";
+      console.log(link);
+      link.click();
+      window.URL.revokeObjectURL(url);
+      toast.success("Export thành công !");
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }

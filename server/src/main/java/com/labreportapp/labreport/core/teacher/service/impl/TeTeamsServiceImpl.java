@@ -36,10 +36,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -176,108 +174,102 @@ public class TeTeamsServiceImpl implements TeTeamsService {
 
     @Override
     @Synchronized
-    public void exportExcelTeam(HttpServletResponse response, String idClass) {
-        try (Workbook workbook = new XSSFWorkbook()) {
-            response.setContentType("application/octet-stream");
-            DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-            String currentDateTime = dateFormatter.format(new Date());
-            String headerKey = "Content-Disposition";
-            String headerValue = "attachment; filename=TeamClass_" + currentDateTime + ".xlsx";
-            response.setHeader(headerKey, headerValue);
-            TeFindStudentClasses requestSt = new TeFindStudentClasses();
-            requestSt.setIdClass(idClass);
-            List<TeStudentCallApiResponse> listStudent = teStudentClassesService.searchStudentClassesByIdClass(requestSt);
+    public ByteArrayOutputStream exportExcelTeam(HttpServletResponse response, String idClass) {
+        try (Workbook workbook = new XSSFWorkbook();
+             ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            List<TeStudentCallApiResponse> listStudent = teStudentClassesService.searchApiStudentClassesByIdClass(idClass);
             Class objClass = teClassRepository.findById(idClass).get();
             Sheet sheet = workbook.createSheet("Danh sách");
-            Font fontTitle = workbook.createFont();
-            fontTitle.setBold(true);
-            fontTitle.setFontHeightInPoints((short) 20);
-            CellStyle titleStyle = workbook.createCellStyle();
-            titleStyle.setAlignment(HorizontalAlignment.CENTER);
-            titleStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-            titleStyle.setFont(fontTitle);
             Row titleRow = sheet.createRow(0);
             Cell cellTitle = titleRow.createCell(0);
-            cellTitle.setCellValue("DANH SÁCH NHÓM LỚP " + objClass.getCode());
-            cellTitle.setCellStyle(titleStyle);
-            sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 6));
-            Font fontHeader = workbook.createFont();
-            fontHeader.setBold(true);
-            fontHeader.setColor(IndexedColors.WHITE.getIndex());
-            fontHeader.setFontHeightInPoints((short) 13);
-            CellStyle headerStyle = workbook.createCellStyle();
-            headerStyle.setAlignment(HorizontalAlignment.CENTER);
-            headerStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-            headerStyle.setFont(fontHeader);
-            headerStyle.setFillForegroundColor(IndexedColors.LIGHT_BLUE.getIndex());
-            headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-            headerStyle.setBorderTop(BorderStyle.THIN);
-            headerStyle.setBorderBottom(BorderStyle.THIN);
-            headerStyle.setBorderLeft(BorderStyle.THIN);
-            headerStyle.setBorderRight(BorderStyle.THIN);
-            CellStyle boderStyle = workbook.createCellStyle();
-            boderStyle.setBorderTop(BorderStyle.THIN);
-            boderStyle.setBorderBottom(BorderStyle.THIN);
-            boderStyle.setBorderLeft(BorderStyle.THIN);
-            boderStyle.setBorderRight(BorderStyle.THIN);
-            sheet.setColumnWidth(0, 3500);
-            sheet.setColumnWidth(1, 3000);
-            sheet.setColumnWidth(2, 8000);
-            sheet.setColumnWidth(3, 7000);
-            sheet.setColumnWidth(4, 3500);
-            sheet.setColumnWidth(5, 7000);
-            sheet.setColumnWidth(6, 7000);
+            cellTitle.setCellValue("DANH SÁCH NHÓM TRONG LỚP " + objClass.getCode());
+            cellTitle.setCellStyle(chooseCellStyle("title",workbook));
+            sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 5));
             Row headerRow = sheet.createRow(1);
             Cell cell0 = headerRow.createCell(0);
             cell0.setCellValue("STT");
-            cell0.setCellStyle(headerStyle);
-            Cell cell1 = headerRow.createCell(1);
-            cell1.setCellValue("Mã SV");
-            cell1.setCellStyle(headerStyle);
-            Cell cell2 = headerRow.createCell(2);
+            cell0.setCellStyle(chooseCellStyle("titleTable",workbook));
+            Cell cell2 = headerRow.createCell(1);
             cell2.setCellValue("Họ và tên");
-            cell2.setCellStyle(headerStyle);
-            Cell cell3 = headerRow.createCell(3);
+            cell2.setCellStyle(chooseCellStyle("titleTable",workbook));
+            Cell cell3 = headerRow.createCell(2);
             cell3.setCellValue("Email");
-            cell3.setCellStyle(headerStyle);
-            Cell cell4 = headerRow.createCell(4);
+            cell3.setCellStyle(chooseCellStyle("titleTable",workbook));
+            Cell cell4 = headerRow.createCell(3);
             cell4.setCellValue("Vai trò");
-            cell4.setCellStyle(headerStyle);
-            Cell cell5 = headerRow.createCell(5);
+            cell4.setCellStyle(chooseCellStyle("titleTable",workbook));
+            Cell cell5 = headerRow.createCell(4);
             cell5.setCellValue("Nhóm");
-            cell5.setCellStyle(headerStyle);
-            Cell cell6 = headerRow.createCell(6);
+            cell5.setCellStyle(chooseCellStyle("titleTable",workbook));
+            Cell cell6 = headerRow.createCell(5);
             cell6.setCellValue("Chủ đề");
-            cell6.setCellStyle(headerStyle);
-            CellStyle dataStyleCenter = workbook.createCellStyle();
-            dataStyleCenter.setAlignment(HorizontalAlignment.CENTER);
-            dataStyleCenter.setBorderTop(BorderStyle.THIN);
-            dataStyleCenter.setBorderBottom(BorderStyle.THIN);
-            dataStyleCenter.setBorderLeft(BorderStyle.THIN);
-            dataStyleCenter.setBorderRight(BorderStyle.THIN);
+            cell6.setCellStyle(chooseCellStyle("titleTable",workbook));
             int rowIndex = 2;
             int index = 1;
             for (TeStudentCallApiResponse data : listStudent) {
                 Row dataRow = sheet.createRow(rowIndex++);
                 dataRow.createCell(0).setCellValue(index++);
-                dataRow.getCell(0).setCellStyle(dataStyleCenter);
-                dataRow.createCell(1).setCellValue(codeSplit(data.getName(), data.getUsername()));
-                dataRow.getCell(1).setCellStyle(dataStyleCenter);
-                dataRow.createCell(2).setCellValue(data.getName());
-                dataRow.getCell(2).setCellStyle(boderStyle);
-                dataRow.createCell(3).setCellValue(data.getEmail());
-                dataRow.getCell(3).setCellStyle(boderStyle);
-                dataRow.createCell(4).setCellValue(data.getRole().equals("0") ? "X" : "");
-                dataRow.getCell(4).setCellStyle(dataStyleCenter);
-                dataRow.createCell(5).setCellValue(data.getNameTeam());
-                dataRow.getCell(5).setCellStyle(boderStyle);
-                dataRow.createCell(6).setCellValue(data.getSubjectName());
-                dataRow.getCell(6).setCellStyle(boderStyle);
+                dataRow.getCell(0).setCellStyle(chooseCellStyle("dataCenterTable",workbook));
+                dataRow.createCell(1).setCellValue(data.getName());
+                dataRow.getCell(1).setCellStyle(chooseCellStyle("dataTable",workbook));
+                dataRow.createCell(2).setCellValue(data.getEmail());
+                dataRow.getCell(2).setCellStyle(chooseCellStyle("dataTable",workbook));
+                dataRow.createCell(3).setCellValue(data.getRole().equals("0") ? "X" : "");
+                dataRow.getCell(3).setCellStyle(chooseCellStyle("dataCenterTable",workbook));
+                dataRow.createCell(4).setCellValue(data.getNameTeam());
+                dataRow.getCell(4).setCellStyle(chooseCellStyle("dataTable",workbook));
+                dataRow.createCell(5).setCellValue(data.getSubjectName());
+                dataRow.getCell(5).setCellStyle(chooseCellStyle("dataTable",workbook));
+            }
+            for (int i = 0; i < 6; i++) {
+                sheet.autoSizeColumn(i,true);
             }
             workbook.write(response.getOutputStream());
             workbook.close();
+            return outputStream;
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
+    }
+
+    private CellStyle chooseCellStyle(String type, Workbook workbook) {
+        CellStyle cellStyle = workbook.createCellStyle();
+        Font fontStyle = workbook.createFont();
+        if (type.equals("title")) {
+            fontStyle.setBold(true);
+            fontStyle.setFontHeightInPoints((short) 20);
+            cellStyle.setAlignment(HorizontalAlignment.CENTER);
+            cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+            cellStyle.setFont(fontStyle);
+        }
+        if (type.equals("titleTable")) {
+            fontStyle.setBold(true);
+            fontStyle.setColor(IndexedColors.WHITE.getIndex());
+            fontStyle.setFontHeightInPoints((short) 13);
+            cellStyle.setAlignment(HorizontalAlignment.CENTER);
+            cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+            cellStyle.setFont(fontStyle);
+            cellStyle.setFillForegroundColor(IndexedColors.LIGHT_BLUE.getIndex());
+            cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            cellStyle.setBorderTop(BorderStyle.THIN);
+            cellStyle.setBorderBottom(BorderStyle.THIN);
+            cellStyle.setBorderLeft(BorderStyle.THIN);
+            cellStyle.setBorderRight(BorderStyle.THIN);
+        }
+        if (type.equals("dataTable")) {
+            cellStyle.setBorderTop(BorderStyle.THIN);
+            cellStyle.setBorderBottom(BorderStyle.THIN);
+            cellStyle.setBorderLeft(BorderStyle.THIN);
+            cellStyle.setBorderRight(BorderStyle.THIN);
+        }
+        if (type.equals("dataCenterTable")) {
+            cellStyle.setAlignment(HorizontalAlignment.CENTER);
+            cellStyle.setBorderTop(BorderStyle.THIN);
+            cellStyle.setBorderBottom(BorderStyle.THIN);
+            cellStyle.setBorderLeft(BorderStyle.THIN);
+            cellStyle.setBorderRight(BorderStyle.THIN);
+        }
+        return cellStyle;
     }
 }

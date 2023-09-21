@@ -22,7 +22,7 @@ public class TeStudentCallApiResponse {
 
     private String idStudent;
 
-    private  String idStudentClass;
+    private String idStudentClass;
 
     private String role;
 

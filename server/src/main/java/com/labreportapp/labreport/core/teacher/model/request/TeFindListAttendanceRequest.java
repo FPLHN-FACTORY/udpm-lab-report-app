@@ -14,4 +14,5 @@ public class TeFindListAttendanceRequest {
 
     private List<TeFindAttendanceRequest> listAttendance;
 
+    private String idMeeting;
 }

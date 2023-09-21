@@ -108,6 +108,7 @@ public class TeMeetingServiceImpl implements TeMeetingService {
         Long dateNow = new Date().getTime();
         Long dateMeeting = meetingFind.getMeetingDate();
         Long check = dateNow - dateMeeting;
+        //thời gian hiện tại - thời gian cố định =  nếu
         if (check < 0) {
             throw new RestApiException(Message.MEETING_HAS_NOT_COME);
         }

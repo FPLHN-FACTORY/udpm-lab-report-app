@@ -48,7 +48,8 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
             m.meeting_date as meeting_date,
             m.type_meeting as type_meeting,
             m.meeting_period as meeting_period,
-             m.class_id as class_id
+            m.class_id as class_id,
+            m.teacher_id as teacher_id
             FROM meeting m
             WHERE m.id = :#{#req.idMeeting}
                      """, nativeQuery = true)
@@ -149,5 +150,7 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
              ORDER BY m.meeting_date ASC
             """, nativeQuery = true)
     List<TeScheduleMeetingClassRespone> searchScheduleNowToTimeByIdTeacher(@Param("req") TeFindScheduleNowToTime req);
+
+    Optional<Meeting> findMeetingById(String id);
 
 }

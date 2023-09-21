@@ -97,11 +97,10 @@ public class TePointSeviceImpl implements TePointSevice {
     @Override
     @Synchronized
     public ByteArrayOutputStream exportExcel(HttpServletResponse response, String idClass) {
-        try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+        try (Workbook workbook = new XSSFWorkbook();
+             ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             List<TePointRespone> listPointIdClass = getPointStudentById(idClass);
-            TeFindStudentClasses teFindStudentClasses = new TeFindStudentClasses();
-            teFindStudentClasses.setIdClass(idClass);
-            List<TeStudentCallApiResponse> listStudent = teStudentClassesService.searchStudentClassesByIdClass(teFindStudentClasses);
+            List<TeStudentCallApiResponse> listStudent = teStudentClassesService.searchApiStudentClassesByIdClass(idClass);
             List<TePointExcel> listExcel = new ArrayList<>();
             listPointIdClass.forEach((item1) -> {
                 listStudent.forEach((item2) -> {
@@ -238,7 +237,7 @@ public class TePointSeviceImpl implements TePointSevice {
             ConcurrentHashMap<String, Point> pointUpdate = new ConcurrentHashMap<>();
             teExcelResponseMessage.setStatus(true);
             list.parallelStream().forEach(point -> {
-                String regexName = "^[^0-9!@#$%^&*()_+|~=`{}\\[\\]:\";'<>?,.\\/\\\\]*$";
+                String regexName = "^[^!@#$%^&*()_+|~=`{}\\[\\]:\";'<>?,.\\/\\\\]*$";
                 String regexEmail = "^[a-zA-Z0-9._%+-]+@fpt.edu.vn$";
                 String regexDouble = "^(?:[0-9](?:\\.\\d*)?|10(?:\\.0*)?)$";
                 if (point.getName().isEmpty()) {

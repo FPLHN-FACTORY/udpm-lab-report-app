@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface TeStudentClassesService {
 
-    List<TeStudentCallApiResponse> searchStudentClassesByIdClass(final TeFindStudentClasses teFindStudentClasses);
+    List<TeStudentCallApiResponse> searchApiStudentClassesByIdClass(String idClass);
 
     List<SimpleResponse> searchAllStudentByIdClass(String idClass);
 

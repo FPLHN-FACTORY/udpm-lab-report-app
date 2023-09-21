@@ -54,10 +54,6 @@ const TeacherScheduleToday = () => {
       await TeacherScheduleTodayAPI.getAllNowToTimeByIdTeacher(dataFind).then(
         (response) => {
           setDataTime(response.data.data);
-          console.log(
-            "================================================================"
-          );
-          console.log(response.data.data);
         }
       );
       setLoading(true);
@@ -427,7 +423,7 @@ const TeacherScheduleToday = () => {
                     dataSource={dataTime}
                     rowKey="idMeeting"
                     columns={columnsTime}
-                    size="middle"
+                    size="large"
                     pagination={{
                       defaultPageSize: 6,
                     }}

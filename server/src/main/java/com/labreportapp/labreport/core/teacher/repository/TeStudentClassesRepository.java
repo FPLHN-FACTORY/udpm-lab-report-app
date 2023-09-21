@@ -41,16 +41,16 @@ public interface TeStudentClassesRepository extends JpaRepository<StudentClasses
             t.subject_name as subject_name
             FROM student_classes sc
             LEFT JOIN team t on t.id = sc.team_id
-            WHERE sc.class_id = :#{#req.idClass}
+            WHERE sc.class_id = :#{#idClass}
             ORDER BY t.code
                      """, countQuery = """
             SELECT COUNT(DISTINCT sc.id)
             FROM student_classes sc
             JOIN team t on t.id = sc.team_id
-            WHERE sc.class_id = :#{#req.idClass}
+            WHERE sc.class_id = :#{#idClass}
             ORDER BY t.code
             """, nativeQuery = true)
-    List<TeStudentClassesRespone> findStudentClassByIdClass(@Param("req") TeFindStudentClasses req);
+    List<TeStudentClassesRespone> findStudentClassByIdClass(@Param("idClass") String idClass);
 
     @Query(value = """
             SELECT DISTINCT 
@@ -83,5 +83,12 @@ public interface TeStudentClassesRepository extends JpaRepository<StudentClasses
                 SELECT * FROM student_classes sc WHERE sc.team_id = :#{#idTeam}
             """, nativeQuery = true)
     List<StudentClasses> findAllStudentClassesByIdTeam(@Param("idTeam") String idTeam);
+
+    @Query(value = """
+            SELECT *
+            FROM student_classes sc
+            WHERE sc.class_id = :#{#idClass}
+                 """, nativeQuery = true)
+    List<StudentClasses> findStudentClassesByIdClass(@Param("idClass") String idClass);
 
 }

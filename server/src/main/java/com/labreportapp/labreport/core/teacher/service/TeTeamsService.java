@@ -8,6 +8,7 @@ import com.labreportapp.labreport.entity.Team;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 /**
@@ -23,6 +24,6 @@ public interface TeTeamsService {
 
     String deleteTeamById(String idTeam);
 
-    void exportExcelTeam(HttpServletResponse response, String idClass);
+    ByteArrayOutputStream exportExcelTeam(HttpServletResponse response, String idClass);
 
 }

@@ -37,9 +37,9 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
     private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
 
     @Override
-    public List<TeStudentCallApiResponse> searchStudentClassesByIdClass(TeFindStudentClasses teFindStudentClasses) {
+    public List<TeStudentCallApiResponse> searchApiStudentClassesByIdClass(String idClass) {
         List<TeStudentClassesRespone> listRepository = teStudentClassesRepository
-                .findStudentClassByIdClass(teFindStudentClasses);
+                .findStudentClassByIdClass(idClass);
         List<String> idStudentList = listRepository.stream()
                 .map(TeStudentClassesRespone::getIdStudent)
                 .distinct()
