@@ -19,6 +19,8 @@ import AdCollapsedSliceReducer from "./admin/AdCollapsedSlice.reducer";
 import StCollapsedSliceReducer from "./student/StCollapsedSlice.reducer";
 import TeCollapsedSliceReducer from "./teacher/TeCollapsedSlice.reducer";
 import teClassSliceReduce from "./teacher/my-class/teClassSlice.reduce";
+import adLevelSliceReducer from "./admin/AdLevelManager.reducer";
+
 //
 import boardSliceReducer from "../../portalprojects/app/reducer/detail-project/DPBoardSlice.reducer";
 import myProjectSliceReducer from "../../portalprojects/app/reducer/my-project/myProjectSlice.reducer";
@@ -59,6 +61,7 @@ export const store = configureStore({
     adCollapsed: AdCollapsedSliceReducer,
     stCollapsed: StCollapsedSliceReducer,
     teCollapsed: TeCollapsedSliceReducer,
+    adLevel: adLevelSliceReducer,
     ////
     board: boardSliceReducer,
     myProject: myProjectSliceReducer,
