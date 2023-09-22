@@ -1,29 +1,32 @@
-.data-table {
-  margin: 100px 0px 0xp 0px;
-  height: auto;
-  width: "100%";
-}
-.centered-collapse {
+.teacher-collapse {
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.ant-collapse-header:hover {
-  background-color: rgb(240, 240, 240);
+.teacher-collapse .ant-collapse-header:hover {
+  /* background-color: rgb(221, 239, 249);
   border-radius: 8px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgb(199, 199, 199); */
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(115, 115, 114, 0.3);
+  transition: box-shadow 0.3s, background-color 0.3s;
+  background-color: rgb(238, 245, 249);
+  cursor: pointer;
 }
-.ant-collapse-header {
+
+.teacher-collapse .ant-collapse-header {
   border: none;
-  width: 900px;
+  width: 1000px;
   border-radius: 8px;
 }
-.box-title.active .ant-collapse-header {
+.teacher-collapse .box-title.active .ant-collapse-header {
   background-color: rgb(214, 236, 250);
   border-bottom: 1px solid rgb(240, 240, 240);
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
 }
-.box-title {
+.teacher-collapse .box-title {
   width: 70%;
   min-height: 68px;
   height: auto;
@@ -31,7 +34,7 @@
   place-items: center;
   border-bottom: 1px solid rgb(206, 206, 206);
 }
-.title-left {
+.teacher-collapse .title-left {
   min-height: 40px;
   line-height: auto;
   height: auto;
@@ -40,10 +43,20 @@
   width: 75%;
   margin-left: 20px;
 }
-
-.title-right {
+.teacher-collapse .title-right {
   float: right;
   width: 25%;
   font-size: 13px;
   color: grey;
+}
+
+.row-meeting {
+  display: flex;
+  flex-direction: column;
+}
+
+.teacher-collapse .row-meeting > div:last-child {
+  flex-grow: 1;
+  max-width: 100%;
+  overflow-x: auto;
 }

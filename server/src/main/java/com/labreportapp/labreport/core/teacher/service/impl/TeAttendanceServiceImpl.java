@@ -17,6 +17,7 @@ import com.labreportapp.labreport.core.teacher.repository.TeMeetingRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeStudentClassesRepository;
 import com.labreportapp.labreport.core.teacher.service.TeAttendanceSevice;
 import com.labreportapp.labreport.core.teacher.service.TeStudentClassesService;
+import com.labreportapp.labreport.core.teacher.service.TeTeamsService;
 import com.labreportapp.labreport.entity.Attendance;
 import com.labreportapp.labreport.entity.Meeting;
 import com.labreportapp.labreport.entity.StudentClasses;
@@ -29,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -52,7 +53,7 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
     private TeStudentClassesService teStudentClassesService;
 
     @Autowired
-    private TeTeamsServiceImpl teTeamsService;
+    private TeTeamsService teTeamsService;
 
     @Override
     public List<TeAttendanceRespone> getListCustom(String idMeeting) {
@@ -104,8 +105,6 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
         TeAttendanceMessageRespone objReturn = new TeAttendanceMessageRespone();
         Optional<Meeting> meeting = teMeetingRepository.findMeetingById(idMeeting);
         if (meeting.isPresent()) {
-            TeFindStudentClasses requestIdClass = new TeFindStudentClasses();
-            requestIdClass.setIdClass(meeting.get().getClassId());
             List<StudentClasses> listStudentClasses = teStudentClassesRepository.findStudentClassesByIdClass(meeting.get().getClassId());
             List<TeStudentCallApiResponse> listStudent = teStudentClassesService.searchApiStudentClassesByIdClass(meeting.get().getClassId());
             List<TeAttendanceStudentRespone> listStudentAttendance = new ArrayList<>();
@@ -127,26 +126,22 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
                     }
                 });
             });
+            TeFindStudentClasses requestIdClass = new TeFindStudentClasses();
+            requestIdClass.setIdClass(meeting.get().getClassId());
             List<TeTeamsRespone> listTeam = teTeamsService.getAllTeams(requestIdClass);
             AtomicInteger countLeaderAbsent = new AtomicInteger();
             if (listTeam != null) {
                 listTeam.forEach(team -> {
                     listStudentAttendance.forEach(student -> {
-                        if (student.getIdTeam() != null && student.getIdTeam().equalsIgnoreCase(team.getId()) && student.getRole().equals(RoleTeam.LEADER) && student.getStatusAttendance().equals(StatusAttendance.NO)) {
-                            Optional<StudentClasses> studentClassesFind = teStudentClassesRepository.findById(student.getIdStudentClass());
-                            if (studentClassesFind.isPresent() && checkAtLeastStudentOnTeam(listStudentAttendance, team.getId())) {
-                                StudentClasses studentClassesLead = new StudentClasses();
-                                studentClassesLead.setId(student.getIdStudentClass());
-                                studentClassesLead.setTeamId(studentClassesFind.get().getTeamId());
-                                studentClassesLead.setStudentId(student.getIdStudent());
-                                studentClassesLead.setEmail(student.getEmail());
-                                studentClassesLead.setClassId(meeting.get().getClassId());
-                                studentClassesLead.setRole(RoleTeam.MEMBER);
-                                studentClassesLead.setStatus(studentClassesFind.get().getStatus());
-                                studentClassesLead.setStatusStudentFeedBack(studentClassesFind.get().getStatusStudentFeedBack());
-                                teStudentClassesRepository.save(studentClassesLead);
-
-                                randomLead(listStudentAttendance, listTeam, listStudentClasses);
+                        if (checkAtLeastStudentOnTeam(listStudentAttendance, team.getId()) && student.getIdTeam() != null && student.getIdTeam().equalsIgnoreCase(team.getId()) && student.getRole().equals(RoleTeam.LEADER) && student.getStatusAttendance().equals(StatusAttendance.NO)) {
+                            StudentClasses studentClassesFind = listStudentClasses.stream()
+                                    .filter(a -> a.getStudentId().equals(student.getIdStudent()) && a.getId().equals(student.getIdStudentClass()))
+                                    .findFirst()
+                                    .orElse(null);
+                            if (studentClassesFind != null) {
+                                studentClassesFind.setRole(RoleTeam.MEMBER);
+                                teStudentClassesRepository.save(studentClassesFind);
+                                randomLead(listStudentAttendance, listTeam, listStudentClasses, team.getId());
                                 countLeaderAbsent.getAndIncrement();
                             }
                         }
@@ -169,31 +164,39 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
         long count = listStudentAttendance.stream()
                 .filter(a -> {
                     String teamId = a.getIdTeam();
-                    return teamId != null && teamId.equals(idTeam);
+                    return teamId != null && teamId.equals(idTeam) && a.getStatusAttendance().equals(StatusAttendance.YES);
                 })
                 .count();
-        return count >= 2;
+        return count >= 1;
     }
 
-    private void randomLead(List<TeAttendanceStudentRespone> listStudent, List<TeTeamsRespone> listTeam, List<StudentClasses> listStudentClasses) {
-        AtomicBoolean shouldContinue = new AtomicBoolean(true);
+    private void randomLead(List<TeAttendanceStudentRespone> listStudent, List<TeTeamsRespone> listTeam, List<StudentClasses> listStudentClasses, String idTeam) {
         if (listTeam != null && listStudent != null && listStudentClasses != null) {
-            listTeam.forEach(team -> {
-                shouldContinue.set(true);
-                listStudent.forEach(student -> {
-                    if (shouldContinue.get() && student.getIdTeam() != null && student.getIdTeam().equalsIgnoreCase(team.getId()) && student.getStatusAttendance().equals(StatusAttendance.YES) && student.getRole().equals(RoleTeam.MEMBER)) {
-                        StudentClasses find = listStudentClasses.stream()
-                                .filter(a -> a.getStudentId().equals(student.getIdStudent()))
-                                .findFirst()
-                                .orElse(null);
-                        if (find != null) {
-                            find.setRole(RoleTeam.LEADER);
-                            teStudentClassesRepository.save(find);
-                            shouldContinue.set(false);
-                        }
-                    }
-                });
-            });
+            List<TeAttendanceStudentRespone> members = listStudent.stream()
+                    .filter(student -> student.getIdTeam() != null && student.getIdTeam().equals(idTeam) && student.getStatusAttendance().equals(StatusAttendance.YES) && student.getRole().equals(RoleTeam.MEMBER))
+                    .collect(Collectors.toList());
+            if (members.size() >= 2) {
+                Random random = new Random();
+                int randomIndex = random.nextInt(members.size());
+                TeAttendanceStudentRespone selectedMember = members.get(randomIndex);
+                StudentClasses find = listStudentClasses.stream()
+                        .filter(a -> a.getId().equals(selectedMember.getIdStudentClass()))
+                        .findFirst()
+                        .orElse(null);
+                if (find != null) {
+                    find.setRole(RoleTeam.LEADER);
+                    teStudentClassesRepository.save(find);
+                }
+            } else if (members.size() == 1) {
+                StudentClasses find = listStudentClasses.stream()
+                        .filter(a -> a.getId().equals(members.get(0).getIdStudentClass()))
+                        .findFirst()
+                        .orElse(null);
+                if (find != null) {
+                    find.setRole(RoleTeam.LEADER);
+                    teStudentClassesRepository.save(find);
+                }
+            }
         }
     }
 

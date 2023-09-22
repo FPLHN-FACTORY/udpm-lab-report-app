@@ -56,19 +56,23 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
     Optional<TeMeetingRespone> searchMeetingByIdMeeting(@Param("req") TeFindMeetingRequest req);
 
     @Query(value = """
-            SELECT m.id AS idMeeting,
-            m.name AS nameMeeting,
-            m.descriptions AS descriptionsMeeting,
-            m.created_date AS createdDate,
-            h.id AS idHomeWork,
-            h.descriptions AS descriptionsHomeWork,
-            n.id AS idNote,
-            n.descriptions AS descriptionsNote
+             SELECT distinct 
+             m.id AS idMeeting,
+             m.name AS nameMeeting,
+             m.descriptions AS descriptionsMeeting,
+             m.created_date AS createdDate,
+             h.id AS idHomeWork,
+             h.descriptions AS descriptionsHomeWork,
+             n.id AS idNote,
+             n.descriptions AS descriptionsNote,
+             r.id as idReport,
+             r.descriptions AS descriptionsReport
              FROM meeting m
-             JOIN home_work h ON h.meeting_id = m.id
-             JOIN note n ON n.meeting_id = m.id
-             WHERE m.id = :#{#req.idMeeting} and h.team_id = :#{#req.idTeam} and n.team_id= :#{#req.idTeam}
-                      """, nativeQuery = true)
+             LEFT JOIN home_work h ON h.meeting_id = m.id AND h.team_id = :#{#req.idTeam}
+             LEFT JOIN note n ON n.meeting_id = m.id AND n.team_id = :#{#req.idTeam}
+             LEFT JOIN report r ON r.meeting_id = m.id AND r.team_id = :#{#req.idTeam}
+              WHERE m.id = :#{#req.idMeeting}
+                       """, nativeQuery = true)
     Optional<TeHomeWorkAndNoteMeetingRespone> searchDetailMeetingTeamByIdMeIdTeam(@Param("req") TeFindMeetingRequest req);
 
     @Query(value = """

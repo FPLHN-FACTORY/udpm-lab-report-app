@@ -1,6 +1,6 @@
 import { Button, Spin } from "antd";
 import { useState } from "react";
-import { TeacherExcelAPI } from "../../../../../api/teacher/point/excel/TeacherExcelPoint.api";
+import { TeacherExcelPointAPI } from "../../../../../api/teacher/point/excel/TeacherExcelPoint.api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
@@ -18,7 +18,7 @@ const ButtonExportExcel = ({ idClass }) => {
 
   const handleExport = async () => {
     try {
-      const response = await TeacherExcelAPI.export(idClass);
+      const response = await TeacherExcelPointAPI.export(idClass);
       const blob = new Blob([response.data], {
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       });

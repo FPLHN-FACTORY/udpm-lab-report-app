@@ -16,9 +16,9 @@ import java.util.List;
  * @author hieundph25894
  */
 @Component
-public class TeExcelImportPointService {
+public class TeExcelImportService {
 
-    public List<TeExcelImportPoint> importData(MultipartFile reapExcelDataFile, String idClass) throws IOException {
+    public List<TeExcelImportPoint> importDataPoint(MultipartFile reapExcelDataFile, String idClass) throws IOException {
         List<TeExcelImportPoint> listPoint = new ArrayList<>();
         Workbook workbook = StreamingReader.builder()
                 .bufferSize(4096)
@@ -26,10 +26,7 @@ public class TeExcelImportPointService {
                 .open(reapExcelDataFile.getInputStream());
         Sheet worksheet = workbook.getSheetAt(0);
         for (Row row : worksheet) {
-            if (row.getRowNum() == 0) {
-                continue;
-            }
-            if (row.getRowNum() == 1) {
+            if (row.getRowNum() == 0 || row.getRowNum() == 1 || row.getRowNum() == 2) {
                 continue;
             }
             TeExcelImportPoint object = new TeExcelImportPoint();
@@ -41,6 +38,28 @@ public class TeExcelImportPointService {
             listPoint.add(object);
         }
         return listPoint;
+    }
+
+    public List<TeExcelImportTeam> importDataTeam(MultipartFile reapExcelDataFile, String idClass) throws IOException {
+        List<TeExcelImportTeam> listTeam = new ArrayList<>();
+        Workbook workbook = StreamingReader.builder()
+                .bufferSize(4096)
+                .rowCacheSize(50)
+                .open(reapExcelDataFile.getInputStream());
+        Sheet worksheet = workbook.getSheetAt(0);
+        for (Row row : worksheet) {
+            if (row.getRowNum() == 0 || row.getRowNum() == 1 || row.getRowNum() == 2) {
+                continue;
+            }
+            TeExcelImportTeam object = new TeExcelImportTeam();
+            object.setName(String.valueOf(getCellValue(row.getCell(1))).trim());
+            object.setEmail(String.valueOf(getCellValue(row.getCell(2))).trim());
+            object.setRole(String.valueOf(getCellValue(row.getCell(3))).trim());
+            object.setNameTeam(String.valueOf(getCellValue(row.getCell(4))).trim());
+            object.setSubjectTeam(String.valueOf(getCellValue(row.getCell(5))).trim());
+            listTeam.add(object);
+        }
+        return listTeam;
     }
 
     private static Object getCellValue(Cell cell) {

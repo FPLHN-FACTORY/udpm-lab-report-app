@@ -161,8 +161,8 @@
 }
 .table-teacher .ant-table-wrapper {
   /* white-space: nowrap; */
-  overflow: hidden;
-  text-overflow: ellipsis;
+  /* overflow: hidden;
+  text-overflow: ellipsis; */
 }
 
 .table-teacher .ant-table-wrapper .ant-table-thead > tr > td {

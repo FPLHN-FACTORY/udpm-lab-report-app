@@ -6,7 +6,6 @@ import com.labreportapp.labreport.core.teacher.model.response.TeAttendanceMessag
 import com.labreportapp.labreport.core.teacher.model.response.TeAttendanceRespone;
 import com.labreportapp.labreport.core.teacher.model.response.TeAttendanceStudentAllRespone;
 import com.labreportapp.labreport.core.teacher.service.TeAttendanceSevice;
-import com.labreportapp.labreport.entity.Attendance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;

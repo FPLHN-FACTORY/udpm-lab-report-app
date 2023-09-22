@@ -1,11 +1,7 @@
 import { useParams } from "react-router-dom";
 import "./styleMeetingInMyClass.css";
 import { Link } from "react-router-dom";
-import {
-  BookOutlined,
-  ControlOutlined,
-  UnorderedListOutlined,
-} from "@ant-design/icons";
+import { BookOutlined, ControlOutlined } from "@ant-design/icons";
 import { TeacherMeetingAPI } from "../../../../api/teacher/meeting/TeacherMeeting.api";
 import {
   SetMeeting,
@@ -17,7 +13,10 @@ import LoadingIndicator from "../../../../helper/loading";
 import React from "react";
 import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
 import { SetTTrueToggle } from "../../../../app/teacher/TeCollapsedSlice.reducer";
-import { convertMeetingPeriodToTime } from "../../../../helper/util.helper";
+import {
+  convertMeetingPeriodToTime,
+  convertStatusMeetingByDateAndPeriod,
+} from "../../../../helper/util.helper";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTableList } from "@fortawesome/free-solid-svg-icons";
 import { Empty } from "antd";
@@ -79,7 +78,7 @@ const MeetingInMyClass = () => {
   };
   const dataMeeting = useAppSelector(GetMeeting);
   return (
-    <div>
+    <div className="teacher-meeting">
       {!loading && <LoadingIndicator />}
       <div className="box-one">
         <Link to="/teacher/my-class" style={{ color: "black" }}>
@@ -212,7 +211,16 @@ const MeetingInMyClass = () => {
                         to={`/teacher/my-class/meeting/detail/${record.id}`}
                         key={record.id}
                       >
-                        <div className="box-card">
+                        <div
+                          className="box-card"
+                          style={{
+                            backgroundColor:
+                              !convertStatusMeetingByDateAndPeriod(
+                                record.meetingDate,
+                                record.meetingPeriod
+                              ) && "rgb(242, 247, 250)",
+                          }}
+                        >
                           <div className="title-left">
                             <div className="flex-container">
                               <div className="title-icon">
@@ -237,7 +245,6 @@ const MeetingInMyClass = () => {
                                 )}
                                 {" - "}
                                 <span style={{ color: "red" }}>
-                                  {" "}
                                   {record.userNameTeacher}
                                 </span>
                               </p>

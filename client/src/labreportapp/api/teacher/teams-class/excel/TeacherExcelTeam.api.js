@@ -8,14 +8,14 @@ export class TeacherExcelTeamAPI {
       responseType: "blob",
     });
   };
-  // static import = (formData, idClass) => {
-  //   return request({
-  //     method: "POST",
-  //     url: url + `/import-excel/` + idClass,
-  //     data: formData,
-  //     headers: {
-  //       "Content-Type": "multipart/form-data",
-  //     },
-  //   });
-  // };
+  static import = (formData, idClass) => {
+    return request({
+      method: "POST",
+      url: url + `/import-excel/` + idClass,
+      data: formData,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  };
 }

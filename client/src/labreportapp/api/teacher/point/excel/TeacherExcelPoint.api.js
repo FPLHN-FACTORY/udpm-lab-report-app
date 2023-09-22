@@ -1,6 +1,6 @@
 import { request } from "../../../../helper/request.helper";
 const url = `/teacher/point`;
-export class TeacherExcelAPI {
+export class TeacherExcelPointAPI {
   static export = (idClass) => {
     return request({
       method: "GET",

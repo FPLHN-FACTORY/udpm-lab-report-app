@@ -14,6 +14,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { TeacherScheduleTodayAPI } from "../../../api/teacher/meeting/schedule-today/TeacherScheduleToday.api";
 import { toast } from "react-toastify";
+import { convertMeetingPeriodToTime } from "../../../helper/util.helper";
 
 const { Option } = Select;
 
@@ -109,7 +110,6 @@ const TeacherScheduleToday = () => {
       title: "Mã lớp",
       dataIndex: "codeClass",
       key: "codeClass",
-      width: "15%",
     },
     {
       title: "Ngày",
@@ -118,13 +118,11 @@ const TeacherScheduleToday = () => {
       render: (text, record) => {
         return <span>{convertLongToDate(text)}</span>;
       },
-      width: "5%",
     },
     {
       title: "Tên buổi học",
       dataIndex: "meetingName",
       key: "meetingName",
-      width: "25%",
     },
     {
       title: "Phòng",
@@ -133,7 +131,6 @@ const TeacherScheduleToday = () => {
       render: (text, record) => {
         return <span>{text === 0 ? "Online" : "Offline"}</span>;
       },
-      width: "5%",
     },
 
     {
@@ -145,7 +142,14 @@ const TeacherScheduleToday = () => {
           <span>{record.typeMeeting === 0 ? "Google Meet" : "Xưởng"}</span>
         );
       },
-      width: "13%",
+    },
+    {
+      title: "Thời gian",
+      dataIndex: "timePeriod",
+      key: "timePeriod",
+      render: (text, record) => {
+        return <span>{convertMeetingPeriodToTime(record.meetingPeriod)}</span>;
+      },
     },
     {
       title: "Ca học",
@@ -154,13 +158,11 @@ const TeacherScheduleToday = () => {
       render: (text, record) => {
         return <span>{text + 1}</span>;
       },
-      width: "8%",
     },
     {
       title: "Level",
       dataIndex: "level",
       key: "level",
-      width: "8%",
     },
     {
       title: "Link học trực tuyến",
@@ -198,7 +200,6 @@ const TeacherScheduleToday = () => {
           </div>
         );
       },
-      width: "28%",
     },
     {
       title: "Điểm danh",
@@ -252,13 +253,11 @@ const TeacherScheduleToday = () => {
       render: (text, record) => {
         return <span>{convertLongToDate(text)}</span>;
       },
-      width: "5%",
     },
     {
       title: "Tên buổi học",
       dataIndex: "meetingName",
       key: "meetingName",
-      width: "25%",
     },
     {
       title: "Phòng",
@@ -267,7 +266,6 @@ const TeacherScheduleToday = () => {
       render: (text, record) => {
         return <span>{text === 0 ? "Online" : "Offline"}</span>;
       },
-      width: "5%",
     },
 
     {
@@ -279,7 +277,14 @@ const TeacherScheduleToday = () => {
           <span>{record.typeMeeting === 0 ? "Google Meet" : "Xưởng"}</span>
         );
       },
-      width: "13%",
+    },
+    {
+      title: "Thời gian",
+      dataIndex: "timePeriod",
+      key: "timePeriod",
+      render: (text, record) => {
+        return <span>{convertMeetingPeriodToTime(record.meetingPeriod)}</span>;
+      },
     },
     {
       title: "Ca học",
@@ -289,6 +294,7 @@ const TeacherScheduleToday = () => {
         return <span>{text + 1}</span>;
       },
     },
+
     {
       title: "Level",
       dataIndex: "level",

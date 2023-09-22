@@ -1,7 +1,7 @@
 package com.labreportapp.labreport.core.teacher.controller;
 
 import com.labreportapp.labreport.core.common.base.ResponseObject;
-import com.labreportapp.labreport.core.teacher.excel.TeExcelImportPointService;
+import com.labreportapp.labreport.core.teacher.excel.TeExcelImportService;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindListPointRequest;
 import com.labreportapp.labreport.core.teacher.model.response.TeExcelResponseMessage;
 import com.labreportapp.labreport.core.teacher.model.response.TePointRespone;
@@ -25,9 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -42,7 +39,7 @@ public class TePointController {
     private TePointSevice tePointSevice;
 
     @Autowired
-    private TeExcelImportPointService tePointImportService;
+    private TeExcelImportService tePointImportService;
 
     @GetMapping("/get/{idClass}")
     public ResponseObject getPointByIdClass(@PathVariable("idClass") String idClass) {

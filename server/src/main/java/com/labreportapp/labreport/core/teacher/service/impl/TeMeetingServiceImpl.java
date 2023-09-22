@@ -12,8 +12,6 @@ import com.labreportapp.labreport.core.teacher.model.response.TeMeetingCustomRes
 import com.labreportapp.labreport.core.teacher.model.response.TeMeetingCustomToAttendanceRespone;
 import com.labreportapp.labreport.core.teacher.model.response.TeMeetingRespone;
 import com.labreportapp.labreport.core.teacher.model.response.TeScheduleMeetingClassRespone;
-import com.labreportapp.labreport.core.teacher.model.response.TeStudentCallApiResponse;
-import com.labreportapp.labreport.core.teacher.model.response.TeStudentClassesRespone;
 import com.labreportapp.labreport.core.teacher.repository.TeHomeWorkRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeMeetingRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeNoteRepository;
@@ -28,8 +26,11 @@ import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiExce
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -73,7 +74,7 @@ public class TeMeetingServiceImpl implements TeMeetingService {
                     obj.setDescriptions(reposi.getDescriptions());
                     obj.setMeetingDate(reposi.getMeetingDate());
                     obj.setMeetingPeriod(reposi.getMeetingPeriod());
-                    obj.setId(reposi.getIdClass());
+                    obj.setIdClass(reposi.getIdClass());
                     obj.setTypeMeeting(reposi.getTypeMeeting());
                     obj.setIdTeacher(reposi.getIdTeacher());
                     obj.setUserNameTeacher(respone.getUserName());
@@ -98,6 +99,107 @@ public class TeMeetingServiceImpl implements TeMeetingService {
         return meeting.get();
     }
 
+    private Integer checkPeriod(Integer meetingPeriod) {
+        LocalDateTime currentTime = LocalDateTime.now();
+        String meetingPeriodStr = "";
+        LocalDateTime startTime;
+        LocalDateTime endTime;
+        switch (meetingPeriod) {
+            case 0:
+                meetingPeriodStr = "7:15 - 9:15";
+                startTime = LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 7, 15);
+                endTime = LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 9, 15);
+                if (currentTime.isAfter(startTime) && currentTime.isBefore(endTime)) {
+                    return 0;
+                } else {
+                    return 1;
+                }
+            case 1:
+                meetingPeriodStr = "9:25 - 11:25";
+                startTime = LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 9, 25);
+                endTime = LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 11, 25);
+                if (currentTime.isAfter(startTime) && currentTime.isBefore(endTime)) {
+                    return 0;
+                } else {
+                    return 1;
+                }
+            case 2:
+                meetingPeriodStr = "12:00 - 14:00";
+                startTime = LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 12, 00);
+                endTime = LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 14, 00);
+                if (currentTime.isAfter(startTime) && currentTime.isBefore(endTime)) {
+                    return 0;
+                } else {
+                    return 1;
+                }
+            case 3:
+                meetingPeriodStr = "14:10 - 16:10";
+                startTime = LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 14, 10);
+                endTime = LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 16, 10);
+                if (currentTime.isAfter(startTime) && currentTime.isBefore(endTime)) {
+                    return 0;
+                } else {
+                    return 1;
+                }
+            case 4:
+                meetingPeriodStr = "16:20 - 18:20";
+                startTime = LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 16, 20);
+                endTime = LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 18, 20);
+                if (currentTime.isAfter(startTime) && currentTime.isBefore(endTime)) {
+                    return 0;
+                } else {
+                    return 1;
+                }
+            case 5:
+                meetingPeriodStr = "18:30 - 20:30";
+                startTime = LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 18, 30);
+                endTime = LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 20, 30);
+                if (currentTime.isAfter(startTime) && currentTime.isBefore(endTime)) {
+                    return 0;
+                } else {
+                    return 1;
+                }
+            case 6:
+                meetingPeriodStr = "20:40 - 22:40";
+                startTime = LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 20, 40);
+                endTime = LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 22, 40);
+                if (currentTime.isAfter(startTime) && currentTime.isBefore(endTime)) {
+                    return 0;
+                } else {
+                    return 1;
+                }
+            case 7:
+                meetingPeriodStr = "22:50 - 00:50";
+                startTime = LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 22, 50);
+                endTime = LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 0, 50);
+                if (currentTime.isAfter(startTime) && currentTime.isBefore(endTime)) {
+                    return 0;
+                } else {
+                    return 1;
+                }
+            case 8:
+                meetingPeriodStr = "01:00 - 3:00";
+                startTime = LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 1, 00);
+                endTime = LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 3, 00);
+                if (currentTime.isAfter(startTime) && currentTime.isBefore(endTime)) {
+                    return 0;
+                } else {
+                    return 1;
+                }
+            case 9:
+                meetingPeriodStr = "03:10 - 05:10";
+                startTime = LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 3, 10);
+                endTime = LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 5, 10);
+                if (currentTime.isAfter(startTime) && currentTime.isBefore(endTime)) {
+                    return 0;
+                } else {
+                    return 1;
+                }
+            default:
+                return 1;
+        }
+    }
+
     @Override
     public TeMeetingRespone searchMeetingAndCheckAttendanceByIdMeeting(TeFindMeetingRequest request) {
         Optional<TeMeetingRespone> meeting = teMeetingRepository.searchMeetingByIdMeeting(request);
@@ -105,17 +207,20 @@ public class TeMeetingServiceImpl implements TeMeetingService {
             throw new RestApiException(Message.MEETING_NOT_EXISTS);
         }
         TeMeetingRespone meetingFind = meeting.get();
-        Long dateNow = new Date().getTime();
-        Long dateMeeting = meetingFind.getMeetingDate();
-        Long check = dateNow - dateMeeting;
-        //thời gian hiện tại - thời gian cố định =  nếu
-        if (check < 0) {
+        LocalDate dateNow = LocalDate.now();
+        LocalDate dateMeeting = Instant.ofEpochMilli(meetingFind.getMeetingDate()).atZone(ZoneId.systemDefault()).toLocalDate();
+        if (dateNow.isBefore(dateMeeting)) {
             throw new RestApiException(Message.MEETING_HAS_NOT_COME);
-        }
-        if (check > 86400000) {
+        } else if (dateNow.isAfter(dateMeeting)) {
             throw new RestApiException(Message.MEETING_IS_OVER);
+        } else {
+            int checkPeriord = checkPeriod(meetingFind.getMeetingPeriod());
+            if (checkPeriord != 0) {
+                throw new RestApiException(Message.MEETING_EDIT_ATTENDANCE_FAILD);
+            } else {
+                return meetingFind;
+            }
         }
-        return meeting.get();
     }
 
     @Override

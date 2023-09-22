@@ -69,4 +69,6 @@ public class PropertyKeys {
     public static final String CODE_CLASS_EXISTS = "code.class.exists";
     public static final String YOU_MUST_LEADER = "you.must.leader";
 
+    public static final String MEETING_EDIT_ATTENDANCE_FAILD = "meeting.edit.attendance.faild";
+
 }

@@ -19,11 +19,13 @@ const CollapseTeam = ({ items }) => {
   const [loading, setLoading] = useState(true);
   const [descriptionsHomeWork, setDescriptionsHomeWork] = useState("");
   const [descriptionsNote, setDescriptionsNote] = useState("");
+  const [descriptionsReport, setDescriptionsReport] = useState("");
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Bảng điều khiển - chi tiết buổi học";
     setDescriptionsHomeWork("");
     setDescriptionsNote("");
+    setDescriptionsReport("");
     setLoading(true);
   }, []);
   useEffect(() => {
@@ -64,6 +66,7 @@ const CollapseTeam = ({ items }) => {
         } else {
           setDescriptionsHomeWork(response.data.data.descriptionsHomeWork);
           setDescriptionsNote(response.data.data.descriptionsNote);
+          setDescriptionsReport(response.data.data.descriptionsReport);
           setObjDetail(response.data.data);
         }
         setLoading(true);
@@ -93,7 +96,7 @@ const CollapseTeam = ({ items }) => {
   };
   return (
     <div
-      className="centered-collapse"
+      className="teacher-collapse"
       onClick={(e) => {
         e.stopPropagation();
         clear();
@@ -103,7 +106,7 @@ const CollapseTeam = ({ items }) => {
         {items.map((item, index) => (
           <Panel
             style={{
-              minWidth: "900px",
+              width: "100%",
               boxShadow:
                 activePanel === index
                   ? "0px 0px 10px rgba(0, 0, 0, 0.2)"
@@ -144,9 +147,13 @@ const CollapseTeam = ({ items }) => {
             }
             key={index}
           >
-            <div className="info-content" onClick={() => setEdit(true)}>
+            <div
+              className="info-content"
+              onClick={() => setEdit(true)}
+              style={{ minWidth: "80%" }}
+            >
               <Row gutter={16}>
-                <Col span={12}>
+                <Col span={8}>
                   <span style={{ color: "black" }}>Nhận xét:</span>
                   <TextArea
                     rows={4}
@@ -159,7 +166,7 @@ const CollapseTeam = ({ items }) => {
                     }}
                   />
                 </Col>
-                <Col span={12}>
+                <Col span={8}>
                   <span style={{ color: "black", fontFamily: "unset" }}>
                     Bài tập về nhà:
                   </span>
@@ -173,6 +180,19 @@ const CollapseTeam = ({ items }) => {
                       e.stopPropagation();
                       setEdit(true);
                     }}
+                  />
+                </Col>
+                <Col span={8}>
+                  <span style={{ color: "black", fontFamily: "unset" }}>
+                    Báo cáo:
+                  </span>
+                  <TextArea
+                    rows={4}
+                    placeholder="Báo cáo"
+                    value={descriptionsReport}
+                    style={{ readOnly: edit && "false" }}
+                    onChange={(e) => setDescriptionsReport(e.target.value)}
+                    readOnly
                   />
                 </Col>
               </Row>

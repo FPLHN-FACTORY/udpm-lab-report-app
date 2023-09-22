@@ -1,11 +1,11 @@
 import { Button, Spin } from "antd";
 import { useState } from "react";
-import { TeacherExcelPointAPI } from "../../../../../api/teacher/point/excel/TeacherExcelPoint.api";
+import { TeacherExcelTeamAPI } from "../../../../../api/teacher/teams-class/excel/TeacherExcelTeam.api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 
-const ButtonImportExcel = ({ idClass }) => {
+const ButtonImportExcelTeam = ({ idClass }) => {
   const [downloading, setDownloading] = useState(false);
   const [inputFile, setInputFile] = useState("");
   const handleFileChange = async (e) => {
@@ -14,13 +14,13 @@ const ButtonImportExcel = ({ idClass }) => {
       if (selectedFile) {
         const formData = new FormData();
         formData.append("multipartFile", selectedFile);
-        await TeacherExcelPointAPI.import(formData, idClass)
+        await TeacherExcelTeamAPI.import(formData, idClass)
           .then((response) => {
             setTimeout(() => {
               if (response.data.data.status === true) {
                 setInputFile("");
                 toast.success(
-                  "Import điểm sinh viên thành công, vui lòng chờ !",
+                  "Import nhóm thành công, vui lòng chờ giây lát !",
                   {
                     position: toast.POSITION.TOP_CENTER,
                   }
@@ -29,7 +29,7 @@ const ButtonImportExcel = ({ idClass }) => {
                 toast.error(
                   "Import thất bại, " +
                     response.data.data.message +
-                    ", vui lòng chờ giây lát !",
+                    ", vui lòng chờ !",
                   {
                     position: toast.POSITION.TOP_CENTER,
                   }
@@ -39,7 +39,7 @@ const ButtonImportExcel = ({ idClass }) => {
             setDownloading(true);
             setTimeout(() => {
               window.open(
-                `http://localhost:3000/teacher/my-class/point/` + idClass,
+                `http://localhost:3000/teacher/my-class/teams/` + idClass,
                 "_self"
               );
               setDownloading(false);
@@ -57,6 +57,7 @@ const ButtonImportExcel = ({ idClass }) => {
     <>
       <Spin spinning={downloading}>
         <Button
+          className="btn_clear"
           style={{
             backgroundColor: "rgb(38, 144, 214)",
             color: "white",
@@ -70,7 +71,7 @@ const ButtonImportExcel = ({ idClass }) => {
             "Đang tải lên..."
           ) : (
             <>
-              Import bảng điểm
+              Import nhóm
               <input
                 id="fileInput"
                 type="file"
@@ -87,4 +88,4 @@ const ButtonImportExcel = ({ idClass }) => {
     </>
   );
 };
-export default ButtonImportExcel;
+export default ButtonImportExcelTeam;

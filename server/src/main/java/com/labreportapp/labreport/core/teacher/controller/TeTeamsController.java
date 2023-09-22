@@ -4,6 +4,7 @@ import com.labreportapp.labreport.core.common.base.ResponseObject;
 import com.labreportapp.labreport.core.teacher.model.request.TeCreateTeamsRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindStudentClasses;
 import com.labreportapp.labreport.core.teacher.model.request.TeUpdateTeamsRequest;
+import com.labreportapp.labreport.core.teacher.model.response.TeExcelResponseMessage;
 import com.labreportapp.labreport.core.teacher.model.response.TeTeamsRespone;
 import com.labreportapp.labreport.core.teacher.service.TeTeamsService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,8 +23,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -72,6 +75,12 @@ public class TeTeamsController {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @PostMapping("/import-excel/{idClass}")
+    public ResponseObject importListExcel(@RequestParam("multipartFile") MultipartFile multipartFile, @PathVariable("idClass") String idClass) throws IOException {
+        TeExcelResponseMessage teExcelResponseMessage = teTeamsService.importExcelTeam(multipartFile, idClass);
+        return new ResponseObject(teExcelResponseMessage);
     }
 
 }

@@ -183,7 +183,7 @@ const TeacherAttendanceClass = () => {
                 <hr />
               </div>
             </div>
-            <div className="info-team">
+            {/* <div className="info-team">
               <div className="group-info">
                 <span
                   className="group-info-item"
@@ -198,7 +198,7 @@ const TeacherAttendanceClass = () => {
                   Mô tả: &nbsp;{classDetail.descriptions}
                 </span>
               </div>
-            </div>
+            </div> */}
             <div style={{ overflowX: "auto" }}>
               <div style={{ margin: "15px 0px 15px 15px" }}>
                 <span style={{ fontSize: "17px", fontWeight: 500 }}>
