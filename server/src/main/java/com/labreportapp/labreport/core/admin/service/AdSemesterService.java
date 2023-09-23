@@ -15,9 +15,9 @@ public interface AdSemesterService {
 
     List<Semester> findAllSermester(Pageable pageable);
 
-    Semester createSermester(@Valid final AdCreateSemesterRequest obj);
+    Semester createSermester(@Valid AdCreateSemesterRequest obj);
 
-    Semester updateSermester(final AdUpdateSemesterRequest obj);
+    Semester updateSermester(@Valid AdUpdateSemesterRequest obj);
 
     PageableObject<AdSemesterResponse> searchSemester(final AdFindSemesterRequest rep);
 

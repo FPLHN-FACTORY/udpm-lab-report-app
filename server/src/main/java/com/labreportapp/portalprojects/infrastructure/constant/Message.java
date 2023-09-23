@@ -57,7 +57,7 @@ public enum Message {
     MEETING_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeys.MEETING_NOT_EXISTS)),
     TEAM_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeys.TEAM_NOT_EXISTS)),
     UNIQUE_LEADER_TEAM(PropertiesReader.getProperty(PropertyKeys.UNIQUE_LEADER_TEAM)),
-//    INVALID_DATE(PropertiesReader.getProperty(PropertyKeys.INVALID_DATE)),
+    //    INVALID_DATE(PropertiesReader.getProperty(PropertyKeys.INVALID_DATE)),
     DANG_CO_DU_LIEU_LIEN_QUAN_KHONG_THE_XOA_BUOI_HOC(PropertiesReader.getProperty(PropertyKeys.DANG_CO_DU_LIEU_LIEN_QUAN_KHONG_THE_XOA_BUOI_HOC)),
     ACTIVITY_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeys.ACTIVITY_NOT_EXISTS)),
     STUDENT_CLASSES_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeys.STUDENT_CLASSES_NOT_EXISTS)),
@@ -69,7 +69,9 @@ public enum Message {
     CLASS_DID_FULL_CLASS_SIZE(PropertiesReader.getProperty(PropertyKeys.CLASS_DID_FULL_CLASS_SIZE)),
     YOU_DONT_LEAVE_CLASS(PropertiesReader.getProperty(PropertyKeys.YOU_DONT_LEAVE_CLASS)),
     CODE_CLASS_EXISTS(PropertiesReader.getProperty(PropertyKeys.CODE_CLASS_EXISTS)),
-    YOU_MUST_LEADER(PropertiesReader.getProperty(PropertyKeys.YOU_MUST_LEADER));
+    YOU_MUST_LEADER(PropertiesReader.getProperty(PropertyKeys.YOU_MUST_LEADER)),
+    TIME_SEMESTER_OVERLOAD(PropertiesReader.getProperty(PropertyKeys.TIME_SEMESTER_OVERLOAD)),
+    TIME_STUDENT_SEMESTER_OVERLOAD(PropertiesReader.getProperty(PropertyKeys.TIME_STUDENT_SEMESTER_OVERLOAD));
 
     private String message;
 

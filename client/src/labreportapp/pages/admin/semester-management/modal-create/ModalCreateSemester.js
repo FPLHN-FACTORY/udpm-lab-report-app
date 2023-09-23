@@ -15,6 +15,10 @@ const ModalCreateSemester = ({ visible, onCancel }) => {
   const [errorStartTime, setErrorStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [errorEndTime, setErrorEndTime] = useState("");
+  const [startTimeStudent, setStartTimeStudent] = useState("");
+  const [errorStartTimeStudent, setErrorStartTimeStudent] = useState("");
+  const [endTimeStudent, setEndTimeStudent] = useState("");
+  const [errorEndTimeStudent, setErrorEndTimeStudent] = useState("");
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -25,6 +29,10 @@ const ModalCreateSemester = ({ visible, onCancel }) => {
       setErrorEndTime("");
       setErrorStartTime("");
       setErrorName();
+      setStartTimeStudent("");
+      setErrorStartTimeStudent("");
+      setEndTimeStudent("");
+      setErrorEndTimeStudent("");
     };
   }, [visible]);
 
@@ -35,18 +43,27 @@ const ModalCreateSemester = ({ visible, onCancel }) => {
       check++;
     } else {
       setErrorName("");
+      if (name.trim().length > 500) {
+        setErrorName("Tên học kỳ không quá 500 ký tự");
+        check++;
+      } else {
+        setErrorName("");
+      }
     }
-    if (name.trim().length > 500) {
-      setErrorName("Tên học kỳ không quá 500 ký tự");
-      check++;
-    } else {
-      setErrorName("");
-    }
+
     if (startTime === "") {
       setErrorStartTime("Thời gian bắt đầu không được để trống");
       check++;
     } else {
       setErrorStartTime("");
+      if (new Date(startTime) > new Date(endTime)) {
+        setErrorStartTime(
+          "Thời gian bắt đầu không được lớn hơn thời gian kết thúc"
+        );
+        check++;
+      } else {
+        setErrorStartTime("");
+      }
     }
     if (endTime === "") {
       setErrorEndTime("Thời gian kết thúc không được để trống");
@@ -54,17 +71,45 @@ const ModalCreateSemester = ({ visible, onCancel }) => {
     } else {
       setErrorEndTime("");
     }
-    if (new Date(startTime) > new Date(endTime)) {
-      setErrorStartTime(
-        "Thời gian bắt đầu không được lớn hơn thời gian kết thúc"
+
+    if (startTimeStudent === "") {
+      setErrorStartTimeStudent(
+        "Thời gian sinh viên bắt đầu không được để trống"
       );
       check++;
     } else {
-      if (startTime === "") {
-        setErrorStartTime("Thời gian bắt đầu không được để trống");
+      setErrorStartTimeStudent("");
+      if (new Date(startTimeStudent) > new Date(endTimeStudent)) {
+        setErrorStartTimeStudent(
+          "Thời gian sinh viên bắt đầu không được lớn hơn thời gian sinh viên kết thúc"
+        );
         check++;
       } else {
-        setErrorStartTime("");
+        setErrorStartTimeStudent("");
+      }
+      if (new Date(startTimeStudent) < new Date(startTime)) {
+        setErrorStartTimeStudent(
+          "Thời gian sinh viên bắt đầu không được nhỏ hơn thời gian học kỳ bắt đầu"
+        );
+        check++;
+      } else {
+        setErrorStartTimeStudent("");
+      }
+    }
+    if (endTimeStudent === "") {
+      setErrorEndTimeStudent(
+        "Thời gian sinh viên kết thúc không được để trống"
+      );
+      check++;
+    } else {
+      setErrorEndTimeStudent("");
+      if (new Date(endTimeStudent) > new Date(endTime)) {
+        setErrorEndTimeStudent(
+          "Thời gian sinh viên kết thúc không được lớn hơn thời gian học kỳ kết thúc"
+        );
+        check++;
+      } else {
+        setErrorEndTimeStudent("");
       }
     }
 
@@ -73,6 +118,8 @@ const ModalCreateSemester = ({ visible, onCancel }) => {
         name: name,
         startTime: moment(startTime, "YYYY-MM-DD").valueOf(),
         endTime: moment(endTime, "YYYY-MM-DD").valueOf(),
+        startTimeStudent: moment(startTimeStudent, "YYYY-MM-DD").valueOf(),
+        endTimeStudent: moment(endTimeStudent, "YYYY-MM-DD").valueOf(),
       };
 
       AdSemesterAPI.addSemester(obj).then(
@@ -81,9 +128,7 @@ const ModalCreateSemester = ({ visible, onCancel }) => {
           dispatch(AddSemester(response.data.data));
           onCancel();
         },
-        (error) => {
-          toast.error(error.response.data.message);
-        }
+        (error) => {}
       );
     }
   };
@@ -97,7 +142,6 @@ const ModalCreateSemester = ({ visible, onCancel }) => {
         footer={null}
         className="modal_show_detail"
       >
-        {" "}
         <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
           <span style={{ fontSize: "18px" }}>Thêm mới học kỳ</span>
         </div>
@@ -137,6 +181,30 @@ const ModalCreateSemester = ({ visible, onCancel }) => {
                 type="date"
               />
               <span className="error">{errorEndTime}</span>
+            </Col>
+          </Row>
+          <Row gutter={16} style={{ marginBottom: "15px" }}>
+            <Col span={12}>
+              <span>Thời gian sinh viên bắt đầu:</span> <br />
+              <Input
+                value={startTimeStudent}
+                onChange={(e) => {
+                  setStartTimeStudent(e.target.value);
+                }}
+                type="date"
+              />
+              <span className="error">{errorStartTimeStudent}</span>
+            </Col>
+            <Col span={12}>
+              <span>Thời gian sinh viên kết thúc:</span> <br />
+              <Input
+                value={endTimeStudent}
+                onChange={(e) => {
+                  setEndTimeStudent(e.target.value);
+                }}
+                type="date"
+              />
+              <span className="error">{errorEndTimeStudent}</span>
             </Col>
           </Row>
         </div>
