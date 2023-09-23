@@ -25,4 +25,7 @@ public interface StMyClassResponse extends IsIdentified {
 
     @Value("#{target.name}")
     String getLevel();
+
+    @Value("#{target.nameActivity}")
+    String getNameActivity();
 }

@@ -36,6 +36,7 @@ const SemesterManagement = () => {
 
   useEffect(() => {
     fetchData();
+    document.title = "Quản lý học kỳ | Lab-Report-App";
   }, [current]);
 
   const fetchData = () => {
@@ -55,7 +56,7 @@ const SemesterManagement = () => {
   const data = useAppSelector(GetSemester);
   const columns = [
     {
-      title: "STT",
+      title: "#",
       dataIndex: "stt",
       key: "stt",
       render: (text, record, index) => (current - 1) * 10 + index + 1,
@@ -68,7 +69,7 @@ const SemesterManagement = () => {
       width: "30%",
     },
     {
-      title: "Thời gian",
+      title: "Thời gian bắt đầu / kết thúc",
       dataIndex: "startTimeAndEndTime",
       key: "startTimeAndEndTime",
       render: (text, record) => {
@@ -88,7 +89,7 @@ const SemesterManagement = () => {
       },
     },
     {
-      title: "Thời gian học sinh",
+      title: "Thời gian của sinh viên",
       dataIndex: "startTimeStudentAndEndTimeStudent",
       key: "startTimeStudentAndEndTimeStudent",
       render: (text, record) => {
@@ -124,6 +125,7 @@ const SemesterManagement = () => {
             />
           </Tooltip>
           <Popconfirm
+            placement="topLeft"
             title="Xóa học kỳ"
             description="Bạn có chắc chắn muốn xóa học kỳ này không?"
             onConfirm={() => {
@@ -134,7 +136,7 @@ const SemesterManagement = () => {
           >
             <Tooltip title="Xóa">
               <FontAwesomeIcon
-                style={{ cursor: "pointer" }}
+                style={{ cursor: "pointer", marginLeft: "10px" }}
                 icon={faTrash}
                 size="1x"
               />
@@ -190,7 +192,10 @@ const SemesterManagement = () => {
         <span style={{ marginLeft: "10px" }}>Quản lý học kỳ</span>
       </div>
       <div className="filter-semester" style={{ marginBottom: "10px" }}>
-        <FontAwesomeIcon icon={faFilter} size="2x" />
+        <FontAwesomeIcon
+          icon={faFilter}
+          style={{ fontSize: "20px", marginRight: "7px" }}
+        />
         <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
         <hr />
         <div className="title__search">
@@ -218,12 +223,17 @@ const SemesterManagement = () => {
         </div>
       </div>
       <div
-        className="table__category"
-        style={{ marginTop: "25px", padding: "20px" }}
+        className="table__category_custom"
+        style={{ marginTop: "30px", padding: "20px" }}
       >
         <div className="tittle__category">
           <div>
-            {<FontAwesomeIcon icon={faLayerGroup} size="1x" />}
+            {
+              <FontAwesomeIcon
+                icon={faLayerGroup}
+                style={{ marginRight: "7px", fontSize: "20px" }}
+              />
+            }
             <span style={{ fontSize: "18px", fontWeight: "500" }}>
               Danh sách học kỳ
             </span>

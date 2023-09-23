@@ -157,7 +157,7 @@ const ModalUpdateActivity = ({
       onCancel={onCancel}
       width={750}
       footer={null}
-      className="modal_show_detail"
+      className="modal_show_detail_update_activity"
     >
       {" "}
       <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
@@ -257,10 +257,10 @@ const ModalUpdateActivity = ({
             <span className="error">{errorSemesterId}</span>
           </Col>
         </Row>
-        <Row gutter={16} style={{ marginTop: "15px" }}>
+        <Row gutter={16} style={{ marginTop: "15px", marginBottom: "10px" }}>
           <Col span={24}>
             <span>Mô tả:</span> <br />
-            <Input
+            <Input.TextArea
               value={descriptions}
               onChange={(e) => {
                 setDescriptions(e.target.value);

@@ -1114,7 +1114,7 @@ const BoardStompClient = (dispatch, useAppSelector) => {
             task.listMemberByIdTodo.length > 0
           ) {
             const filteredMembers = task.listMemberByIdTodo.map((itemId) =>
-              listMember.find((member) => member.id === itemId)
+              listMember.find((member) => member.memberId === itemId)
             );
             task.listMemberByIdTodo = filteredMembers;
           }

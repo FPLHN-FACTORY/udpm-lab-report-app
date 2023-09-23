@@ -25,13 +25,13 @@ const StudentsInMyClass = () => {
   const { idClass } = useParams();
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = "Bảng điều khiển - Thông tin lớp học";
     featchClass(idClass);
   }, []);
   const featchClass = async (idClass) => {
     try {
       await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
         setClassDetail(responese.data.data);
+        document.title = "Thông tin lớp học | " + responese.data.data.code;
         featchStudentClass(idClass);
       });
     } catch (error) {

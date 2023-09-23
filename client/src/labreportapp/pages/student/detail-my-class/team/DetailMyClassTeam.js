@@ -42,7 +42,7 @@ const DetailMyClassTeam = () => {
   useEffect(() => {
     setIsLoading(true);
     loadDataDetailClass();
-    checkStatusStudentInClass();
+    checkStatusStudentInClass();    document.title = "Bảng điều khiển - Thông tin lớp học";
   }, []);
 
   const loadDataDetailClass = () => {

@@ -24,7 +24,6 @@ const CollapseMeeting = ({ items }) => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = "Bảng điều khiển - chi tiết buổi học";
     setDescriptionsHomeWork("");
     setDescriptionsNote("");
     setLoading(true);
@@ -153,11 +152,9 @@ const CollapseMeeting = ({ items }) => {
                 style={{ marginLeft: "40px", marginRight: "40px" }}
               >
                 <Row gutter={16}>
-                  <Col span={12}>
+                  <Col span={12} style={{ marginTop: "10px" }}>
                     {" "}
-                    <span style={{ color: "black", fontWeight: "bold" }}>
-                      Nhận xét:
-                    </span>
+                    <span style={{ color: "black" }}>Nhận xét:</span>
                     <TextArea
                       style={{ marginTop: "10px" }}
                       rows={4}
@@ -169,13 +166,11 @@ const CollapseMeeting = ({ items }) => {
                       }}
                     />
                   </Col>
-                  <Col span={12}>
+                  <Col span={12} style={{ marginTop: "10px" }}>
                     {" "}
                     <span
                       style={{
                         color: "black",
-                        fontFamily: "unset",
-                        fontWeight: "bold",
                       }}
                     >
                       Bài tập về nhà:
@@ -191,16 +186,14 @@ const CollapseMeeting = ({ items }) => {
                       }}
                     />
                   </Col>
-                  <Col span={12}>
+                  <Col span={12} style={{ marginTop: "15px" }}>
                     {" "}
                     <span
                       style={{
                         color: "black",
-                        fontFamily: "unset",
-                        fontWeight: "bold",
                       }}
                     >
-                      Báo cáo
+                      Báo cáo:
                     </span>
                     <TextArea
                       style={{ marginTop: "10px" }}
@@ -213,16 +206,14 @@ const CollapseMeeting = ({ items }) => {
                       }}
                     />
                   </Col>
-                  <Col span={12}>
+                  <Col span={12} style={{ marginTop: "15px" }}>
                     {" "}
                     <span
                       style={{
                         color: "black",
-                        fontFamily: "unset",
-                        fontWeight: "bold",
                       }}
                     >
-                      Template Report
+                      Template báo cáo:
                     </span>
                     <TextArea
                       style={{ marginTop: "10px" }}

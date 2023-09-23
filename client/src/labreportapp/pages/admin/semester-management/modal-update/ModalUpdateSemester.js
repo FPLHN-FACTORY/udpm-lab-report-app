@@ -149,7 +149,7 @@ const ModalUpdateSemester = ({ visible, onCancel, semester }) => {
         onCancel={onCancel}
         width={750}
         footer={null}
-        className="modal_show_detail"
+        className="modal_show_detail_update_semester"
       >
         {" "}
         <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
@@ -208,7 +208,7 @@ const ModalUpdateSemester = ({ visible, onCancel, semester }) => {
             <Col span={12}>
               <span>Thời gian sinh viên kết thúc:</span> <br />
               <Input
-                value={moment(startTimeStudent).format("YYYY-MM-DD")}
+                value={moment(endTimeStudent).format("YYYY-MM-DD")}
                 onChange={(e) => {
                   setEndTimeStudent(e.target.value);
                 }}

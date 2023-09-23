@@ -53,6 +53,7 @@ const StudentMyClass = () => {
   useEffect(() => {
     loadDataLevel();
     loadDataSemester();
+    document.title = "Lớp của tôi | Lab-Report-App";
   }, []);
 
   const columns = [
@@ -127,6 +128,11 @@ const StudentMyClass = () => {
       title: "Cấp độ",
       dataIndex: "level",
       key: "level",
+    },
+    {
+      title: "Hoạt động",
+      dataIndex: "nameActivity",
+      key: "nameActivity",
     },
     {
       title: "Hành động",

@@ -173,7 +173,7 @@ const ClassManagement = () => {
   };
 
   useEffect(() => {
-    document.title = "Quản lý lớp | Portal-Projects";
+    document.title = "Quản lý lớp học | Lab-Report-App";
     setCode("");
     setSelectedItems("");
     loadDataLevel();
@@ -301,7 +301,7 @@ const ClassManagement = () => {
       ),
     },
   ];
-  
+
   const dataClass = useAppSelector(GetAdClassManagement);
 
   const handleSearchAllByFilter = async () => {
@@ -470,6 +470,7 @@ const ClassManagement = () => {
                 onChange={handleSelectChange}
               >
                 <Option value="">Tất Cả</Option>
+                <Option value="none">Chưa có ca học</Option>
                 {listClassPeriod.map((value) => {
                   return (
                     <Option value={value} key={value}>
@@ -492,6 +493,7 @@ const ClassManagement = () => {
                 filterOption={filterOptions}
               >
                 <Option value="">Tất cả</Option>
+                <Option value="none">Chưa có giảng viên</Option>
                 {teacherDataAll.map((teacher) => (
                   <Option key={teacher.id} value={teacher.id}>
                     {teacher.userName}
@@ -644,7 +646,7 @@ const ClassManagement = () => {
           <div>
             {listClassAll.length > 0 ? (
               <>
-                <div className="table">
+                <div className="table_custom_class_management">
                   <Table
                     dataSource={dataClass}
                     rowKey="id"

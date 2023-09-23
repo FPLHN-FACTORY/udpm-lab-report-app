@@ -140,7 +140,7 @@ const ModalCreateSemester = ({ visible, onCancel }) => {
         onCancel={onCancel}
         width={750}
         footer={null}
-        className="modal_show_detail"
+        className="modal_show_detail_create_semester"
       >
         <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
           <span style={{ fontSize: "18px" }}>Thêm mới học kỳ</span>

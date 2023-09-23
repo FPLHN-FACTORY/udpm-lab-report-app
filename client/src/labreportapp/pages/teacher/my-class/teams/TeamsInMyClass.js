@@ -20,6 +20,7 @@ import LoadingIndicator from "../../../../helper/loading";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEye,
+  faEyeDropper,
   faPenToSquare,
   faTrashCan,
   faUpload,
@@ -47,7 +48,7 @@ const TeamsInMyClass = () => {
   const { idClass } = useParams();
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = "Bảng điều khiển - Quản lý nhóm";
+
     featchTeams(idClass);
     featchClass(idClass);
   }, []);
@@ -59,6 +60,7 @@ const TeamsInMyClass = () => {
     try {
       await TeacherTeamsAPI.getTeamsByIdClass(id).then((responese) => {
         dispatch(SetTeams(responese.data.data));
+
         fetchData(idClass);
       });
     } catch (error) {
@@ -69,6 +71,7 @@ const TeamsInMyClass = () => {
     try {
       await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
         setClassDetail(responese.data.data);
+        document.title = "Quản lý nhóm | " + responese.data.data.code;
       });
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
@@ -153,14 +156,12 @@ const TeamsInMyClass = () => {
       dataIndex: "stt",
       key: "stt",
       render: (text, record, index) => index + 1,
-      width: "5%",
     },
     {
       title: "Tên nhóm",
       dataIndex: "name",
       key: "name",
       sorter: (a, b) => a.name.localeCompare(b.name),
-      width: "30%",
     },
     {
       title: "Chủ đề",
@@ -178,7 +179,6 @@ const TeamsInMyClass = () => {
           </>
         );
       },
-      width: "40%",
     },
     {
       title: "Ngày tạo",
@@ -192,7 +192,6 @@ const TeamsInMyClass = () => {
         }/${startTime.getFullYear()}`;
         return <span>{formattedStartTime}</span>;
       },
-      width: "15%",
     },
     {
       title: "Hành động",
@@ -200,22 +199,24 @@ const TeamsInMyClass = () => {
       key: "actions",
       render: (text, record) => (
         <>
-          <div style={{ width: "105px" }}>
-            <Tooltip title="Xem trello dự án">
-              <Link
-                to={`/detail-project/${record.idProject}`}
-                style={{ color: "black" }}
-              >
-                <FontAwesomeIcon
-                  icon={faEye}
-                  className="icon"
-                  onClick={() => {
-                    setShowDetailModal(true);
-                    handleDetailTeam(record);
-                  }}
-                />
-              </Link>
-            </Tooltip>
+          <div>
+            {record.idProject != null && (
+              <Tooltip title="Xem trello dự án">
+                <Link
+                  to={`/detail-project/${record.idProject}`}
+                  style={{ color: "black" }}
+                >
+                  <FontAwesomeIcon
+                    icon={faEyeDropper}
+                    className="icon"
+                    onClick={() => {
+                      setShowDetailModal(true);
+                      handleDetailTeam(record);
+                    }}
+                  />
+                </Link>
+              </Tooltip>
+            )}
             <Tooltip title="Chi tiết">
               <FontAwesomeIcon
                 icon={faEye}

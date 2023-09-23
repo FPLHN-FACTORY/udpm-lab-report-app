@@ -171,7 +171,7 @@ const TaskModal = memo(({ open, onCancel, id }) => {
       detailTodo.todoListId != null
     ) {
       const list = listMemberAPI.filter((member) =>
-        detailTodo.members.includes(member.id)
+        detailTodo.members.includes(member.memberId)
       );
       setListMemberTodo(list);
     }

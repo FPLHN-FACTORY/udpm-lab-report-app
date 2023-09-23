@@ -30,7 +30,6 @@ const MeetingInMyClass = () => {
   const [classDetail, setClassDetail] = useState({});
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = "Bảng điều khiển - Buổi học";
     featchCountMeeting(idClass);
     featchMeeting(idClass);
     featchClass(idClass);
@@ -39,6 +38,7 @@ const MeetingInMyClass = () => {
     try {
       await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
         setClassDetail(responese.data.data);
+        document.title = "Buổi học | " + responese.data.data.code;
       });
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");

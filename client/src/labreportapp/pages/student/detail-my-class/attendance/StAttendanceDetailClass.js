@@ -93,6 +93,7 @@ const StAttendanceDetailClass = () => {
   ];
 
   useEffect(() => {
+    document.title = "Bảng điều khiển - Điểm danh";
     setIsLoading(true);
     fetchData(id);
   }, [id]);

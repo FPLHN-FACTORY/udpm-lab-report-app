@@ -31,6 +31,7 @@ request.interceptors.response.use(
     // if (error.response && error.response.status === 404) {
     //   window.location.href = "/not-found";
     // }
+
     throw error;
   }
 );

@@ -124,6 +124,7 @@ const MeetingManagment = () => {
     try {
       await ClassAPI.getAdClassDetailById(id).then((responese) => {
         setClassDetail(responese.data.data);
+        document.title = "Quản lý lịch học - " + responese.data.data.code;
       });
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
@@ -257,6 +258,21 @@ const MeetingManagment = () => {
               >
                 FEEDBACK CỦA SINH VIÊN &nbsp;
               </Link>
+              <div
+                className="box-center"
+                style={{
+                  height: "28.5px",
+                  width: "auto",
+                  backgroundColor: "rgb(38, 144, 214)",
+                  color: "white",
+                  borderRadius: "5px",
+                  float: "right",
+                }}
+              >
+                <span style={{ fontSize: "14px", padding: "10px" }}>
+                  {classDetail != null ? classDetail.code : ""}
+                </span>
+              </div>
               <hr />
             </div>
           </div>

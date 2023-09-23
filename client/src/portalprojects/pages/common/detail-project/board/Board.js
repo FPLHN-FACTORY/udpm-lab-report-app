@@ -83,6 +83,7 @@ const Board = () => {
 
       obj.forEach((list) => {
         list.tasks.forEach((task) => {
+          console.log(task.listMemberByIdTodo);
           if (task.listMemberByIdTodo && task.listMemberByIdTodo.length > 0) {
             const filteredMembers = task.listMemberByIdTodo.map((itemId) =>
               listMemberProject.find((member) => member.id === itemId)

@@ -22,7 +22,6 @@ const TeamInMeeting = () => {
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = "Bảng điều khiển - buổi học";
     featchMeeting(idMeeting);
   }, []);
   const featchMeeting = async (id) => {
@@ -31,6 +30,7 @@ const TeamInMeeting = () => {
       await TeacherMeetingAPI.getDetailByIdMeeting(id).then((response) => {
         setMeeting(response.data.data);
         featchTeams(response.data.data.idClass);
+        document.title = "Bảng điều khiển - " + response.data.data.name;
       });
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");

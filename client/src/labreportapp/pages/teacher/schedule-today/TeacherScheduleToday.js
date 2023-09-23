@@ -26,7 +26,7 @@ const TeacherScheduleToday = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = "Bảng điều khiển - lịch dạy hôm nay";
+    document.title = "Bảng điều khiển - Lịch dạy hôm nay";
     featchData(giangVienCurrent.id);
     setTime("7");
     featchDataTime();

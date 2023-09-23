@@ -9,18 +9,22 @@ import { useEffect, useState } from "react";
 import { Button, Table } from "antd";
 import { AdClassCongigurationAPI } from "../../../api/admin/AdClassConfigurationAPI";
 import ModalUpdateClassConfiguration from "./modal-update/ModalUpdateClassConfiguration";
+import LoadingIndicator from "../../../helper/loading";
 
 const ClassConfiguration = () => {
   const [adClassConfiguration, setAdClassConfiguration] = useState([]);
 
   useEffect(() => {
+    setIsLoading(true);
     loadData();
+    document.title = "Cấu hình lớp học | Lab-Report-App";
   }, []);
 
   const loadData = () => {
     AdClassCongigurationAPI.getAll().then((response) => {
       setAdClassConfiguration(response.data.data);
       console.log(response.data.data);
+      setIsLoading(false);
     });
   };
 
@@ -31,6 +35,8 @@ const ClassConfiguration = () => {
     setShowUpdateModal(true);
     setClassConfigurationSelected(item);
   };
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleModalUpdateCancel = () => {
     setShowUpdateModal(false);
@@ -56,6 +62,8 @@ const ClassConfiguration = () => {
   ];
   return (
     <div className="box-general">
+      {" "}
+      {isLoading && <LoadingIndicator />}
       <div className="heading-box">
         <span style={{ fontSize: "20px", fontWeight: "500" }}>
           <FontAwesomeIcon icon={faCogs} style={{ marginRight: "8px" }} /> Cấu
@@ -66,7 +74,12 @@ const ClassConfiguration = () => {
         <div className="tittle__category">
           <div>
             {" "}
-            {<FontAwesomeIcon icon={faLayerGroup} size="1x" />}
+            {
+              <FontAwesomeIcon
+                icon={faLayerGroup}
+                style={{ fontSize: "20px", marginRight: "7px" }}
+              />
+            }
             <span style={{ fontSize: "18px", fontWeight: "500" }}>
               {" "}
               Danh sách cấu hình
@@ -82,9 +95,10 @@ const ClassConfiguration = () => {
             >
               <FontAwesomeIcon
                 icon={faEdit}
-                size="1x"
                 style={{
                   backgroundColor: "rgb(55, 137, 220)",
+                  fontSize: "17px",
+                  marginRight: "5px",
                 }}
               />{" "}
               Chỉnh sửa cấu hình

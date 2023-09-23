@@ -17,8 +17,8 @@ public interface StClassRepository extends ClassRepository {
 
   @Query(value = """
           SELECT c.id, ROW_NUMBER() OVER(ORDER BY c.created_date DESC) as stt, c.code,
-          c.teacher_id, c.class_size, c.start_time, c.class_period, g.name, ac.name as activityName,
-          s.start_time_student, s.end_time_student
+          c.class_size, c.start_time, c.class_period, g.name, ac.name as activityName,
+          s.start_time_student, s.end_time_student, c.descriptions
           FROM class c
           JOIN activity ac ON c.activity_id = ac.id
           JOIN level g ON g.id = ac.level_id

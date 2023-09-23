@@ -130,9 +130,9 @@ const PopupMemberManagement = ({ position, onClose }) => {
       ),
     },
     {
-      title: "Mã số",
-      dataIndex: "code",
-      key: "code",
+      title: "Tài khoản",
+      dataIndex: "userName",
+      key: "userName",
       width: "10%",
       filterDropdown: ({
         setSelectedKeys,
@@ -384,10 +384,10 @@ const PopupMemberManagement = ({ position, onClose }) => {
   }, []);
 
   const fetchListMemberNoJoinProject = (allMember) => {
-    const memberProjectIds = memberProject.map((member) => member.id);
+    const memberProjectIds = memberProject.map((member) => member.memberId);
 
     const membersNotInProject = allMember.filter(
-      (member) => !memberProjectIds.includes(member.id)
+      (member) => !memberProjectIds.includes(member.memberId)
     );
     setListMemberNoJoinProject(membersNotInProject);
   };
@@ -396,9 +396,9 @@ const PopupMemberManagement = ({ position, onClose }) => {
 
   const fetchLoadListMemberAdd = () => {
     const listData = memberAll
-      .filter((member) => valueMultiMember.includes(member.id))
+      .filter((member) => valueMultiMember.includes(member.memberId))
       .map((member) => ({
-        memberId: member.id,
+        memberId: member.memberId,
         email: member.email,
         projectId: detailProject.id,
         role: 0,

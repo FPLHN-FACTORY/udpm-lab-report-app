@@ -13,6 +13,4 @@ public interface StClassService {
 
   StClassCustomResponse joinClass(final StClassRequest req);
 
-
-
 }

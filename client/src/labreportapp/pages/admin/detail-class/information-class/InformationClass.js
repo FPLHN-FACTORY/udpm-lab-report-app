@@ -34,7 +34,7 @@ const InformationClass = () => {
     try {
       await ClassAPI.getAdClassDetailById(idClass).then((responese) => {
         setClassDetail(responese.data.data);
-        console.log(responese.data.data);
+        document.title = "Thông tin lớp học - " + responese.data.data.code;
       });
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
@@ -164,7 +164,7 @@ const InformationClass = () => {
               style={{
                 height: "28.5px",
                 width: "auto",
-                backgroundColor: "#007bff",
+                backgroundColor: "rgb(38, 144, 214)",
                 color: "white",
                 borderRadius: "5px",
                 float: "right",
@@ -296,7 +296,7 @@ const InformationClass = () => {
                 </div>
               </div>
               <br />
-              <div style={{ minHeight: "140px", marginTop: "-8px" }}>
+              <div style={{ minHeight: "140px", marginTop: "15px" }}>
                 {students.length > 0 ? (
                   <>
                     <div className="table">

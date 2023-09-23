@@ -24,7 +24,7 @@ public interface StMyClassRepository extends ClassRepository {
 
     @Query(value = """
             SELECT a.id, ROW_NUMBER() OVER(ORDER BY c.created_date DESC) AS stt,
-            a.code, a.start_time, a.class_period, a.teacher_id, e.name
+            a.code, a.start_time, a.class_period, a.teacher_id, e.name, b.name AS nameActivity
             FROM class a JOIN activity b ON a.activity_id = b.id 
             JOIN semester d ON b.semester_id = d.id
             JOIN student_classes c ON a.id = c.class_id

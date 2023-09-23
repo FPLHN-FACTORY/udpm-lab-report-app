@@ -77,7 +77,7 @@ public enum Message {
     TIME_SEMESTER_OVERLOAD(PropertiesReader.getProperty(PropertyKeys.TIME_SEMESTER_OVERLOAD)),
     TIME_STUDENT_SEMESTER_OVERLOAD(PropertiesReader.getProperty(PropertyKeys.TIME_STUDENT_SEMESTER_OVERLOAD)),
     MEETING_EDIT_ATTENDANCE_FAILD(PropertiesReader.getProperty(PropertyKeys.MEETING_EDIT_ATTENDANCE_FAILD));
-    
+
     private String message;
 
     Message(String message) {

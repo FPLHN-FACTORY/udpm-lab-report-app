@@ -7,6 +7,7 @@ import {
   faTags,
   faPlus,
   faTrash,
+  faAddressCard,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   Button,
@@ -53,6 +54,7 @@ const ActivityManagement = () => {
   useEffect(() => {
     fetchSemesterData();
     fetchLevelData();
+    document.title = "Quản lý hoạt động | Lab-Report-App";
   }, []);
 
   useEffect(() => {
@@ -173,7 +175,7 @@ const ActivityManagement = () => {
 
   const columns = [
     {
-      title: "STT",
+      title: "#",
       dataIndex: "index",
       key: "index",
       render: (text, record, index) => index + 1,
@@ -239,6 +241,7 @@ const ActivityManagement = () => {
             <Tooltip title="Chỉnh sửa chi tiết">
               <FontAwesomeIcon
                 icon={faEdit}
+                style={{ marginRight: "9px" }}
                 size="1x"
                 onClick={() => {
                   handleUpdateActivity(record);
@@ -269,12 +272,15 @@ const ActivityManagement = () => {
       {loading && <LoadingIndicator />}
       <div className="title_activity_management">
         {" "}
-        <FontAwesomeIcon icon={faTags} size="1x" />
+        <FontAwesomeIcon icon={faTags} style={{ fontSize: "25px" }} />
         <span style={{ marginLeft: "10px" }}>Quản lý hoạt động</span>
       </div>
       <div className="filter_my_class">
-        <FontAwesomeIcon icon={faFilter} size="2x" />{" "}
-        <span style={{ fontSize: "25px", fontWeight: "500" }}>Bộ lọc</span>
+        <FontAwesomeIcon
+          icon={faFilter}
+          style={{ fontSize: "20px", marginRight: "7px" }}
+        />{" "}
+        <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
         <hr />
         <div className="content">
           <div className="content-wrapper">
@@ -327,7 +333,11 @@ const ActivityManagement = () => {
           <Button className="btn_filter" onClick={handleSearch}>
             Tìm kiếm
           </Button>
-          <Button className="btn_clear" onClick={handleClear}>
+          <Button
+            className="btn_clear"
+            style={{ backgroundColor: "rgb(38, 144, 214)", color: "white" }}
+            onClick={handleClear}
+          >
             Làm mới bộ lọc
           </Button>
         </div>
@@ -336,7 +346,12 @@ const ActivityManagement = () => {
         <div className="title_activity_management_table">
           <div>
             {" "}
-            {<FontAwesomeIcon icon={faList} size="2x" />}
+            {
+              <FontAwesomeIcon
+                icon={faAddressCard}
+                style={{ fontSize: "20px", marginRight: "7px" }}
+              />
+            }
             <span style={{ fontSize: "18px", fontWeight: "500" }}>
               {" "}
               Danh sách hoạt động

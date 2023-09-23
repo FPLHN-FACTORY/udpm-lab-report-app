@@ -155,30 +155,30 @@
   height: 2px;
   background: linear-gradient(to right, #d2b156 0%, #d2b156 100%);
 }
-.table-teacher .ant-table-wrapper .ant-table-thead > tr > th {
+/* .ant-table-wrapper .ant-table-thead > tr > th {
   background-color: #d2b156;
   color: white;
-}
+} */
 
-.table-teacher .ant-table-wrapper {
+.ant-table-wrapper {
   /* white-space: nowrap; */
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.table-teacher .ant-table-wrapper .ant-table-thead > tr > td {
+/* .ant-table-wrapper .ant-table-thead > tr > td {
   background-color: #d2b156;
   color: white;
 }
-.table-teacher .ant-table-wrapper .ant-table-thead > tr > th:focus {
+.ant-table-wrapper .ant-table-thead > tr > th:focus {
   background-color: #d2b156;
   color: white;
 }
-.table-teacher .ant-table-column-sorters {
+.ant-table-column-sorters {
   display: inline-block;
   cursor: pointer;
 }
-.table-teacher .ant-table-column-sorter-up.inactive,
-.table-teacher .ant-table-column-sorter-down.inactive {
+.ant-table-column-sorter-up.inactive,
+.ant-table-column-sorter-down.inactive {
   color: inherit;
-}
+} */

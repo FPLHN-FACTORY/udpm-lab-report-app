@@ -1,8 +1,12 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./style-admin-dashboard.css";
 import { faLineChart } from "@fortawesome/free-solid-svg-icons";
+import { useEffect } from "react";
 
 const AdFactoryDeploymentStatistics = () => {
+  useEffect(() => {
+    document.title = "Thống kê triển khai xưởng | Lab-Report-App";
+  }, []);
   return (
     <div className="box-general">
       <div className="heading-box">

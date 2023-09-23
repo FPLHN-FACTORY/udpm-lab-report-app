@@ -56,6 +56,7 @@ const StAttendance = () => {
   };
 
   useEffect(() => {
+    document.title = "Điểm danh | Lab-Report-App";
     loadDataSemester();
   }, []);
 
@@ -88,8 +89,9 @@ const StAttendance = () => {
       sorter: (a, b) => a.meetingDate - b.meetingDate,
       render: (text, record) => {
         const time = new Date(record.meetingDate);
-        const formattedTime = `${time.getDate()}/${time.getMonth() + 1
-          }/${time.getFullYear()}`;
+        const formattedTime = `${time.getDate()}/${
+          time.getMonth() + 1
+        }/${time.getFullYear()}`;
 
         return <span>{formattedTime}</span>;
       },
@@ -223,7 +225,7 @@ const StAttendance = () => {
                   columns={columns}
                   pagination={{ pageSize: 8 }}
                   locale={{
-                    emptyText:
+                    emptyText: (
                       <Empty
                         imageStyle={{ height: 60 }}
                         style={{
@@ -231,6 +233,7 @@ const StAttendance = () => {
                         }}
                         description={<span>Không có thông tin buổi học</span>}
                       />
+                    ),
                   }}
                 />
               </div>

@@ -61,7 +61,6 @@ const TeacherPostMyClass = () => {
   const [seeMore, setSeeMore] = useState(true);
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = "Bảng điều khiển - Bài đăng";
     featchClass(idClass);
     featchPost(idClass);
   }, []);
@@ -136,6 +135,7 @@ const TeacherPostMyClass = () => {
     try {
       await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
         dispatch(SetClass(responese.data.data));
+        document.title = "Bài đăng | " + responese.data.data.code;
       });
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");

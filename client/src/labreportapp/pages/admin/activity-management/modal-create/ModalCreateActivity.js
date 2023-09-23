@@ -143,7 +143,7 @@ const ModalCreateActivity = ({
       onCancel={onCancel}
       width={750}
       footer={null}
-      className="modal_show_detail"
+      className="modal_show_detail_create_activity"
     >
       {" "}
       <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
@@ -245,7 +245,7 @@ const ModalCreateActivity = ({
         <Row gutter={16} style={{ marginTop: "15px" }}>
           <Col span={24}>
             <span>Mô tả</span> <br />
-            <Input
+            <Input.TextArea
               value={descriptions}
               onChange={(e) => {
                 setDescriptions(e.target.value);

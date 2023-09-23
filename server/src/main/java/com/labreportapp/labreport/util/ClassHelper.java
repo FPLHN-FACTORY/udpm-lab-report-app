@@ -32,6 +32,7 @@ public class ClassHelper {
                 count = 1;
             }
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
         String maLopMoi = text + "_" + count;

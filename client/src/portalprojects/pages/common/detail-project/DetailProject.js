@@ -202,8 +202,11 @@ const DetailProject = () => {
         >
           <Board />
         </div>
+      </div>
+      <div className="table-container-custom">
+        {" "}
         <div
-          className="table-style"
+          className="custom-table-style"
           style={{ display: isTableVisible ? "" : "none" }}
         >
           {" "}
