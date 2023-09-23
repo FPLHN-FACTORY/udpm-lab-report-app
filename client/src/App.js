@@ -69,6 +69,7 @@ import Cookies from "js-cookie";
 import TemplateReport from "./labreportapp/pages/admin/template-report/TemplateReport";
 import AdFeedbackDetailClass from "./labreportapp/pages/admin/detail-class/feedback/AdFeedbackDetailClass";
 import DetailMeetingAttendance from "./labreportapp/pages/admin/detail-class/meeting-management/detail-meeting/DetailMeetingAttendance";
+import LevelManagement from "./labreportapp/pages/admin/level-management/LevelManagement";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -214,6 +215,16 @@ function App() {
                 <AuthGuard>
                   <DashBoardAdmin>
                     <TemplateReport />
+                  </DashBoardAdmin>
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/admin/level-management"
+              element={
+                <AuthGuard>
+                  <DashBoardAdmin>
+                    <LevelManagement />
                   </DashBoardAdmin>
                 </AuthGuard>
               }

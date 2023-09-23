@@ -57,7 +57,8 @@ public enum Message {
     MEETING_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeys.MEETING_NOT_EXISTS)),
     TEAM_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeys.TEAM_NOT_EXISTS)),
     UNIQUE_LEADER_TEAM(PropertiesReader.getProperty(PropertyKeys.UNIQUE_LEADER_TEAM)),
-//    INVALID_DATE(PropertiesReader.getProperty(PropertyKeys.INVALID_DATE)),
+    LEVEL_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeys.LEVEL_NOT_EXISTS)),
+    //    INVALID_DATE(PropertiesReader.getProperty(PropertyKeys.INVALID_DATE)),
     DANG_CO_DU_LIEU_LIEN_QUAN_KHONG_THE_XOA_BUOI_HOC(PropertiesReader.getProperty(PropertyKeys.DANG_CO_DU_LIEU_LIEN_QUAN_KHONG_THE_XOA_BUOI_HOC)),
     ACTIVITY_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeys.ACTIVITY_NOT_EXISTS)),
     STUDENT_CLASSES_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeys.STUDENT_CLASSES_NOT_EXISTS)),
@@ -71,7 +72,8 @@ public enum Message {
     CODE_CLASS_EXISTS(PropertiesReader.getProperty(PropertyKeys.CODE_CLASS_EXISTS)),
     YOU_MUST_LEADER(PropertiesReader.getProperty(PropertyKeys.YOU_MUST_LEADER)),
     CREATE_CLASS_FAIL(PropertiesReader.getProperty(PropertyKeys.CREATE_CLASS_FAIL)),
-    ATTENDANCE_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeys.ATTENDANCE_NOT_EXISTS));
+    ATTENDANCE_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeys.ATTENDANCE_NOT_EXISTS)),
+    LEVEL_ACTIVITY_ALREADY_EXISTS(PropertiesReader.getProperty(PropertyKeys.LEVEL_ACTIVITY_ALREADY_EXISTS));
 
     private String message;
 

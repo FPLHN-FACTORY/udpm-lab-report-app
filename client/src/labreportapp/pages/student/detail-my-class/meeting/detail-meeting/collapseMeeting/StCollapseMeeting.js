@@ -191,6 +191,47 @@ const CollapseMeeting = ({ items }) => {
                       }}
                     />
                   </Col>
+                  <Col span={12}>
+                    {" "}
+                    <span
+                      style={{
+                        color: "black",
+                        fontFamily: "unset",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Báo cáo
+                    </span>
+                    <TextArea
+                      style={{ marginTop: "10px" }}
+                      rows={4}
+                      // value={descriptionsHomeWork}
+                      // onChange={(e) => setDescriptionsHomeWork(e.target.value)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setEdit(true);
+                      }}
+                    />
+                  </Col>
+                  <Col span={12}>
+                    {" "}
+                    <span
+                      style={{
+                        color: "black",
+                        fontFamily: "unset",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Template Report
+                    </span>
+                    <TextArea
+                      style={{ marginTop: "10px" }}
+                      rows={4}
+                      // value={descriptionsHomeWork}
+                      // onChange={(e) => setDescriptionsHomeWork(e.target.value)}
+                      readOnly
+                    />
+                  </Col>
                   {edit && (
                     <>
                       <div

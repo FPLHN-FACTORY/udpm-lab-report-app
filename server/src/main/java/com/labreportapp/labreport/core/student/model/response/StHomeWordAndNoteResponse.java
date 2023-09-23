@@ -43,4 +43,10 @@ public interface StHomeWordAndNoteResponse {
 
     @Value("#{target.descriptionsNote}")
     String getDescriptionsNote();
+
+//    @Value("#{target.idReport}")
+//    String getIdReport();
+//
+//    @Value("#{target.descriptionsReport}")
+//    String getDescriptionsReport();
 }
