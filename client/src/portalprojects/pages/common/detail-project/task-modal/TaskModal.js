@@ -184,7 +184,7 @@ const TaskModal = memo(({ open, onCancel, id }) => {
       setIdTodoList(detailTodo.id);
 
       const list = listMemberAPI.filter((member) =>
-        detailTodo.members.includes(member.id)
+        detailTodo.members.includes(member.memberId)
       );
 
       const isUserJoined = detailTodo.members.includes(sinhVienCurrent.id);
@@ -332,7 +332,6 @@ const TaskModal = memo(({ open, onCancel, id }) => {
         idTodo: detailTodo.id,
         idTodoList: detailTodo.todoListId,
       };
-
       if (!isJoin) {
         handleOutAssign(obj);
       } else {

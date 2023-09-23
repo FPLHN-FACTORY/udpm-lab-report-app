@@ -20,7 +20,7 @@ public interface MeActivityRepository extends ActivityRepository {
             WHERE a.todo_id = :#{#req.idTodo}
             ORDER BY a.created_date DESC 
             """, countQuery = """
-            SELECT COUNT(1) FROM activityTodo a 
+            SELECT COUNT(1) FROM activity_todo a 
             WHERE a.todo_id = :#{#req.idTodo}
             ORDER BY a.created_date DESC 
             """, nativeQuery = true)

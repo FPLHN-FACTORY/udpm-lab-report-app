@@ -142,7 +142,7 @@ const boardSlice = createSlice({
       const task = list.tasks.find((item) => item.id === obj.idTodo);
       if (task) {
         task.listMemberByIdTodo.forEach((item, index) => {
-          if (item.id === obj.memberId) {
+          if (item.memberId === obj.memberId) {
             task.listMemberByIdTodo.splice(index, 1);
           }
         });

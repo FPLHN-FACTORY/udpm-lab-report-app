@@ -228,7 +228,7 @@ public class DBGenerator implements CommandLineRunner {
         activity1.setId(activityRepository.save(activity1).getId());
 
         Activity activity2 = new Activity();
-        activity2.setCode("JAVA_WEB");
+        activity2.setCode("JAVA_SWING");
         activity2.setName("Xây dựng nhóm đồ án làm trước đồ án tốt nghiệp");
         activity2.setStartTime(new Date().getTime() + 10000);
         activity2.setEndTime(new Date().getTime() + 10000 + 2678400000L);
@@ -239,7 +239,7 @@ public class DBGenerator implements CommandLineRunner {
         activity2.setId(activityRepository.save(activity2).getId());
 
         Class class1 = new Class();
-        class1.setCode("IT17325");
+        class1.setCode("JAVA_WEB_1");
         class1.setClassPeriod(ClassPeriod.CA_3);
         class1.setStartTime(new Date().getTime() + 50000);
         class1.setClassSize(19);
@@ -251,7 +251,7 @@ public class DBGenerator implements CommandLineRunner {
         class1.setId(classRepository.save(class1).getId());
 
         Class class2 = new Class();
-        class2.setCode("IT17326");
+        class2.setCode("JAVA_SWING_1");
         class2.setClassPeriod(ClassPeriod.CA_5);
         class2.setStartTime(new Date().getTime() + 50000);
         class2.setClassSize(1);
@@ -263,7 +263,7 @@ public class DBGenerator implements CommandLineRunner {
         class2.setId(classRepository.save(class2).getId());
 
         Class class3 = new Class();
-        class3.setCode("IT17317");
+        class3.setCode("JAVA_WEB_2");
         class3.setClassPeriod(ClassPeriod.CA_5);
         class3.setStartTime(new Date().getTime() + 50000);
         class3.setClassSize(1);

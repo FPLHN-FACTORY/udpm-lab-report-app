@@ -252,7 +252,7 @@ const BoardStompClient = (dispatch, useAppSelector) => {
                 idTodo: idTodo,
                 idTodoList: idTodoList,
                 member: listMemberProjectRef.current.find(
-                  (item) => item.id === obj.memberId
+                  (item) => item.memberId === obj.memberId
                 ),
               };
               dispatch(CreateMemberBoard(data));

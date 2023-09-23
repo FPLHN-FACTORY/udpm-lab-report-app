@@ -4,6 +4,7 @@ import com.labreportapp.labreport.entity.base.PrimaryEntity;
 import com.labreportapp.labreport.infrastructure.constant.ClassPeriod;
 import com.labreportapp.labreport.infrastructure.constant.EntityProperties;
 import com.labreportapp.labreport.infrastructure.constant.StatusClass;
+import com.labreportapp.labreport.infrastructure.constant.StatusTeacherEdit;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -54,4 +55,6 @@ public class Class extends PrimaryEntity {
     @Column
     private StatusClass statusClass;
 
+    @Column
+    private StatusTeacherEdit statusTeacherEdit;
 }

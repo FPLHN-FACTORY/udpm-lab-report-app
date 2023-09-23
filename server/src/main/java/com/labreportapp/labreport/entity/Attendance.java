@@ -37,4 +37,8 @@ public class Attendance extends PrimaryEntity {
 
     @Column(length = EntityProperties.LENGTH_ID)
     private String studentId;
+
+    @Column(length = Integer.MAX_VALUE)
+    @Nationalized
+    private String notes;
 }
