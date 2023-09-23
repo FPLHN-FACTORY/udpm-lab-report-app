@@ -40,12 +40,6 @@ const ModalCreateMeeting = ({ visible, onCancel }) => {
     } else {
       setErrorMeetingDate("");
     }
-    if (selectedItemsPerson === null || selectedItemsPerson === "") {
-      setErrorTeacher("Người dạy không được để trống");
-      ++check;
-    } else {
-      setErrorTeacher("");
-    }
     if (check === 0) {
       let obj = {
         meetingDate: moment(meetingDate, "YYYY-MM-DD").valueOf(),

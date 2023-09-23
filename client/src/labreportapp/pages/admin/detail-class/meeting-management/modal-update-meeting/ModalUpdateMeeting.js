@@ -46,12 +46,6 @@ const ModalUpdateMeeting = ({ item, visible, onCancel }) => {
     } else {
       setErrorMeetingDate("");
     }
-    if (selectedItemsPerson === null || selectedItemsPerson === "") {
-      setErrorTeacher("Người dạy không được để trống");
-      ++check;
-    } else {
-      setErrorTeacher("");
-    }
     if (check === 0) {
       let obj = {
         id: item.id,

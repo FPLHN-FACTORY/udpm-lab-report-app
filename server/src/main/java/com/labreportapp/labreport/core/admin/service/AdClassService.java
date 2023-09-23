@@ -1,7 +1,9 @@
 package com.labreportapp.labreport.core.admin.service;
 
+import com.labreportapp.labreport.core.admin.model.request.AdChangeTeacherRequest;
 import com.labreportapp.labreport.core.admin.model.request.AdCreateClassRequest;
 import com.labreportapp.labreport.core.admin.model.request.AdFindClassRequest;
+import com.labreportapp.labreport.core.admin.model.request.AdRandomClassRequest;
 import com.labreportapp.labreport.core.admin.model.response.AdActivityClassResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdClassCustomResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdClassResponse;
@@ -33,14 +35,16 @@ public interface AdClassService {
 
     List<AdActivityClassResponse> getAllByIdSemester(final AdFindClassRequest adFindClass);
 
-    AdClassCustomResponse createClass(@Valid final AdCreateClassRequest request);
+    AdClassCustomResponse createClass(@Valid AdCreateClassRequest request);
 
-    AdClassCustomResponse updateClass(@Valid final AdCreateClassRequest request, String id);
+    AdClassCustomResponse updateClass(@Valid AdCreateClassRequest request, String id);
 
     PageableObject<AdListClassCustomResponse> searchClass(final AdFindClassRequest teFindClass);
 
     ByteArrayOutputStream exportExcelClass(HttpServletResponse response, final AdFindClassRequest request);
 
     AdDetailClassRespone adFindClassById(final String id);
+
+    Boolean randomClass(@Valid AdRandomClassRequest request);
 
 }

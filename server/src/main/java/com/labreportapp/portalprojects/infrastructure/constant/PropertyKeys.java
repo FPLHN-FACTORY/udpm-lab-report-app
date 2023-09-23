@@ -68,5 +68,7 @@ public class PropertyKeys {
     public static final String YOU_DONT_LEAVE_CLASS = "you.dont.leave.class";
     public static final String CODE_CLASS_EXISTS = "code.class.exists";
     public static final String YOU_MUST_LEADER = "you.must.leader";
+    public static final String CREATE_CLASS_FAIL = "create.class.fail";
+    public static final String ATTENDANCE_NOT_EXISTS = "attendance.not.exists";
 
 }

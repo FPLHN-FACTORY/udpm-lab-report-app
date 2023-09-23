@@ -89,11 +89,11 @@ public class AdExportExcelClass {
 
                 Cell empClassPeriodCell = empDataRow.createCell(3);
                 empClassPeriodCell.setCellStyle(cellStyle);
-                empClassPeriodCell.setCellValue(String.valueOf(classResponse.getClassPeriod() + 1 ));
+                empClassPeriodCell.setCellValue(classResponse.getClassPeriod() != null ? String.valueOf(classResponse.getClassPeriod() + 1) : "");
 
                 Cell empThoiGianCell = empDataRow.createCell(4);
                 empThoiGianCell.setCellStyle(cellStyle);
-                empThoiGianCell.setCellValue(LabReportUtils.convertMeetingPeriodToTime(classResponse.getClassPeriod()));
+                empThoiGianCell.setCellValue(LabReportUtils.convertMeetingPeriodToTime(classResponse.getClassPeriod() != null ? classResponse.getClassPeriod() : -1));
 
                 Cell empSiSoCell = empDataRow.createCell(5);
                 empSiSoCell.setCellStyle(cellStyle);
@@ -105,7 +105,7 @@ public class AdExportExcelClass {
 
                 Cell empGiangVienCell = empDataRow.createCell(7);
                 empGiangVienCell.setCellStyle(cellStyle);
-                empGiangVienCell.setCellValue(classResponse.getUserNameTeacher());
+                empGiangVienCell.setCellValue(classResponse.getUserNameTeacher() != null ? classResponse.getUserNameTeacher() : "");
 
                 Cell empHoatDongCell = empDataRow.createCell(8);
                 empHoatDongCell.setCellStyle(cellStyle);

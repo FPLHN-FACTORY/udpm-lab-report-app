@@ -94,6 +94,14 @@ export class ClassAPI {
     });
   }
 
+  static randomClass(data) {
+    return request({
+      method: "POST",
+      url: `/admin/class-managerment/random-class`,
+      data: data,
+    });
+  }
+
   static exportExcel(filter) {
     return request({
       method: "GET",

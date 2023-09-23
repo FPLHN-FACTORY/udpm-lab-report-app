@@ -40,6 +40,7 @@ import {
   SetMyClass,
 } from "../../../app/admin/ClassManager.reducer";
 import LoadingIndicatorNoOverlay from "../../../helper/loadingNoOverlay";
+import ModalRandomClass from "./random-class/ModalRandomClass";
 
 const ClassManagement = () => {
   const { Option } = Select;
@@ -60,7 +61,7 @@ const ClassManagement = () => {
   const [clear, setClear] = useState(false);
   const [level, setLevel] = useState("");
   const [listLevel, setListLevel] = useState([]);
-
+  const [size, setSize] = useState("10");
   const dispatch = useAppDispatch();
   const listClassPeriod = [];
 
@@ -75,7 +76,8 @@ const ClassManagement = () => {
 
   useEffect(() => {
     featchAllMyClass();
-  }, [current]);
+  }, [current, size]);
+
   const featchAllMyClass = async () => {
     setLoading(true);
     let filter = {
@@ -85,7 +87,7 @@ const ClassManagement = () => {
       code: code,
       classPeriod: selectedItems,
       page: current,
-      size: 10,
+      size: size,
       levelId: level,
     };
 
@@ -213,7 +215,11 @@ const ClassManagement = () => {
       key: "classPeriod",
       sorter: (a, b) => a.classPeriod - b.classPeriod,
       render: (text, record) => {
-        return <span>{record.classPeriod + 1}</span>;
+        if (record.classPeriod == null) {
+          return <span>Chưa có</span>;
+        } else {
+          return <span>{record.classPeriod + 1}</span>;
+        }
       },
     },
     {
@@ -221,7 +227,11 @@ const ClassManagement = () => {
       dataIndex: "timePeriod",
       key: "timePeriod",
       render: (text, record) => {
-        return <span>{convertMeetingPeriodToTime(record.classPeriod)}</span>;
+        if (record.classPeriod == null) {
+          return <span>Chưa có</span>;
+        } else {
+          return <span>{convertMeetingPeriodToTime(record.classPeriod)}</span>;
+        }
       },
     },
     {
@@ -235,6 +245,13 @@ const ClassManagement = () => {
       dataIndex: "userNameTeacher",
       key: "userNameTeacher",
       sorter: (a, b) => a.userNameTeacher.localeCompare(b.userNameTeacher),
+      render: (text, record) => {
+        if (record.userNameTeacher == null) {
+          return <span>Chưa có</span>;
+        } else {
+          return <span>{record.userNameTeacher}</span>;
+        }
+      },
     },
     {
       title: "Level",
@@ -284,6 +301,7 @@ const ClassManagement = () => {
       ),
     },
   ];
+  
   const dataClass = useAppSelector(GetAdClassManagement);
 
   const handleSearchAllByFilter = async () => {
@@ -365,7 +383,17 @@ const ClassManagement = () => {
       window.URL.revokeObjectURL(url);
     });
   };
-  
+
+  const [showRandomModal, setShowRandomModal] = useState(false);
+
+  const handleClickModalRandom = () => {
+    setShowRandomModal(true);
+  };
+
+  const handleCancelModalRandom = () => {
+    setShowRandomModal(false);
+  };
+
   return (
     <div className="class_management">
       {loading && <LoadingIndicator />}
@@ -433,7 +461,7 @@ const ClassManagement = () => {
         <Row>
           <Col span={12} style={{ padding: "10px" }}>
             <div>
-              <span>Ca học:</span>
+              <span>Ca học dự kiến:</span>
               <br />
               <Select
                 showSearch
@@ -578,6 +606,7 @@ const ClassManagement = () => {
                 backgroundColor: "rgb(55, 137, 220)",
                 marginRight: "5px",
               }}
+              onClick={handleClickModalRandom}
             >
               <FontAwesomeIcon
                 icon={faRandom}
@@ -623,15 +652,36 @@ const ClassManagement = () => {
                     pagination={false}
                   />
                 </div>
-                <div className="pagination_box">
-                  <Pagination
-                    simple
-                    current={current}
-                    onChange={(value) => {
-                      setCurrent(value);
-                    }}
-                    total={totalPages * 10}
-                  />
+                <div>
+                  <div
+                    className="pagination_box"
+                    style={{ display: "flex", alignItems: "center" }}
+                  >
+                    <Pagination
+                      style={{ marginRight: "10px" }}
+                      simple
+                      current={current}
+                      onChange={(value) => {
+                        setCurrent(value);
+                      }}
+                      total={totalPages * 10}
+                    />
+                    <Select
+                      style={{ width: "100px", marginLeft: "10px" }}
+                      value={size}
+                      onChange={(e) => {
+                        setSize(e);
+                      }}
+                    >
+                      <Option value="10">10</Option>
+                      <Option value="25">25</Option>
+                      <Option value="50">50</Option>
+                      <Option value="100">100</Option>
+                      <Option value="250">250</Option>
+                      <Option value="500">500</Option>
+                      <Option value="1000">1000</Option>
+                    </Select>
+                  </div>
                 </div>
               </>
             ) : (
@@ -666,6 +716,11 @@ const ClassManagement = () => {
         visible={showUpdateModal}
         onCancel={handleModalUpdateCancel}
         id={idClassUpdate}
+      />
+      <ModalRandomClass
+        visible={showRandomModal}
+        onCancel={handleCancelModalRandom}
+        fetchData={featchAllMyClass}
       />
     </div>
   );

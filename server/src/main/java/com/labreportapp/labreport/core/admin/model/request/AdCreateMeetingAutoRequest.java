@@ -10,7 +10,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class AdCreateMeetingRequest {
+public class AdCreateMeetingAutoRequest {
 
     @NotNull
     private Long meetingDate;
@@ -21,12 +21,11 @@ public class AdCreateMeetingRequest {
     @NotNull
     private Integer typeMeeting;
 
-    private String address;
-
-    private String descriptions;
-
     @NotBlank
     private String classId;
 
     private String teacherId;
+
+    @NotNull
+    private Integer numberMeeting;
 }

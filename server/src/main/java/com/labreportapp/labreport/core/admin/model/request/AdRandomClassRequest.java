@@ -6,21 +6,19 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * @author quynhncph26201
+ * @author thangncph26123
  */
 @Getter
 @Setter
-public class AdCreateClassRequest {
-
-    @NotNull
-    private Long classPeriod;
-
-    @NotNull
-    private Long startTime;
-
-    private String teacherId;
+public class AdRandomClassRequest {
 
     @NotBlank
     private String activityId;
+
+    @NotNull
+    private Integer numberRandon;
+
+    @NotNull
+    private Long startTime;
 
 }

@@ -2,6 +2,7 @@ package com.labreportapp.labreport.core.admin.controller;
 
 import com.labreportapp.labreport.core.admin.model.request.AdCreateClassRequest;
 import com.labreportapp.labreport.core.admin.model.request.AdFindClassRequest;
+import com.labreportapp.labreport.core.admin.model.request.AdRandomClassRequest;
 import com.labreportapp.labreport.core.admin.model.response.AdActivityClassResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdListClassCustomResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdSemesterAcResponse;
@@ -26,6 +27,7 @@ import java.util.List;
 @RequestMapping("/admin/class-managerment")
 @CrossOrigin("*")
 public class AdClassController {
+
     @Autowired
     private AdClassService service;
 
@@ -99,5 +101,10 @@ public class AdClassController {
     @GetMapping("/information-class/{id}")
     public ResponseObject adDetailClassById(@PathVariable("id") String id) {
         return new ResponseObject(service.adFindClassById(id));
+    }
+
+    @PostMapping("/random-class")
+    public ResponseObject randomClass(@RequestBody AdRandomClassRequest request) {
+        return new ResponseObject(service.randomClass(request));
     }
 }

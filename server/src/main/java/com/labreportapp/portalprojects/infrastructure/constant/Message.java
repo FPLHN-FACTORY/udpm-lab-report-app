@@ -69,7 +69,9 @@ public enum Message {
     CLASS_DID_FULL_CLASS_SIZE(PropertiesReader.getProperty(PropertyKeys.CLASS_DID_FULL_CLASS_SIZE)),
     YOU_DONT_LEAVE_CLASS(PropertiesReader.getProperty(PropertyKeys.YOU_DONT_LEAVE_CLASS)),
     CODE_CLASS_EXISTS(PropertiesReader.getProperty(PropertyKeys.CODE_CLASS_EXISTS)),
-    YOU_MUST_LEADER(PropertiesReader.getProperty(PropertyKeys.YOU_MUST_LEADER));
+    YOU_MUST_LEADER(PropertiesReader.getProperty(PropertyKeys.YOU_MUST_LEADER)),
+    CREATE_CLASS_FAIL(PropertiesReader.getProperty(PropertyKeys.CREATE_CLASS_FAIL)),
+    ATTENDANCE_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeys.ATTENDANCE_NOT_EXISTS));
 
     private String message;
 

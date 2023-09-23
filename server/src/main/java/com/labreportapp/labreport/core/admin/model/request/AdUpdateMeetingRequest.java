@@ -28,6 +28,5 @@ public class AdUpdateMeetingRequest {
 
     private String descriptions;
 
-    @NotBlank
     private String teacherId;
 }

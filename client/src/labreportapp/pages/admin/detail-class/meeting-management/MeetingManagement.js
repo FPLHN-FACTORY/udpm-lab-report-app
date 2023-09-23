@@ -1,11 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import "./style-meeting-management.css";
-import {
-  BookOutlined,
-  ControlOutlined,
-  UnorderedListOutlined,
-} from "@ant-design/icons";
-import { Button, Checkbox, Empty, Popconfirm, Tooltip } from "antd";
+import { BookOutlined, ControlOutlined } from "@ant-design/icons";
+import { Button, Checkbox, Empty, Popconfirm, Select, Tooltip } from "antd";
 import { MeetingManagementAPI } from "../../../../api/admin/meeting-management/MeetingManagementAPI";
 import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import { useEffect, useState } from "react";
@@ -23,6 +19,8 @@ import LoadingIndicator from "../../../../helper/loading";
 import ModalCreateMeeting from "./modal-create-meeting/ModalCreateMeeting";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faCalendar,
+  faCheck,
   faExchange,
   faPencilAlt,
   faPlus,
@@ -33,7 +31,12 @@ import ModalUpdateMeeting from "./modal-update-meeting/ModalUpdateMeeting";
 import { toast } from "react-toastify";
 import { SetTTrueToggle } from "../../../../app/admin/AdCollapsedSlice.reducer";
 import { ClassAPI } from "../../../../api/admin/class-manager/ClassAPI.api";
-import { SetAdTeacher } from "../../../../app/admin/AdTeacherSlice.reducer";
+import {
+  GetAdTeacher,
+  SetAdTeacher,
+} from "../../../../app/admin/AdTeacherSlice.reducer";
+import ModalCreateMeetingAuto from "./modal-create-meeting-auto/ModalCreateMeetingAuto";
+const { Option } = Select;
 
 const MeetingManagment = () => {
   const { id } = useParams();
@@ -42,11 +45,17 @@ const MeetingManagment = () => {
   dispatch(SetTTrueToggle());
   const [isLoading, setIsLoading] = useState(false);
 
-  const loadDataMeeting = () => {
+  const loadDataMeeting = (check) => {
     MeetingManagementAPI.getAllMeetingByIdClass(id).then(
       (response) => {
         dispatch(SetMeeting(response.data.data));
         setIsLoading(false);
+        if (check === 1) {
+          toast.success("Thay đổi giảng viên thành công");
+        }
+        if (check === 2) {
+          toast.success("Tạo nhiều buổi học thành công");
+        }
       },
       (error) => {
         console.log(error);
@@ -56,7 +65,11 @@ const MeetingManagment = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    loadDataMeeting();
+    loadDataMeeting(0);
+
+    return () => {
+      dispatch(SetMeeting([]));
+    };
   }, [dispatch]);
 
   const data = useAppSelector(GetMeeting);
@@ -82,6 +95,17 @@ const MeetingManagment = () => {
   const openModalUpdateMeeting = (item) => {
     setMeetingSelected(item);
     setShowModalUpdateMeeting(true);
+  };
+
+  const [showModalCreateMeetingAuto, setShowModalCreateMeetingAuto] =
+    useState(false);
+
+  const handleCancelModalCreateMeetingAuto = () => {
+    setShowModalCreateMeetingAuto(false);
+  };
+
+  const openModalCreateMeetingAuto = () => {
+    setShowModalCreateMeetingAuto(true);
   };
 
   const deleteMeeting = (id) => {
@@ -127,6 +151,52 @@ const MeetingManagment = () => {
       setSelectedIds(selectedIds.filter((selectedId) => selectedId !== id));
     } else {
       setSelectedIds([...selectedIds, id]);
+    }
+  };
+
+  const [selectedItemsPerson, setSelectedItemsPerson] = useState("");
+
+  const teacherDataAll = useAppSelector(GetAdTeacher);
+
+  const filterTeacherOptions = (input, option) => {
+    return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+  };
+
+  const handleSelectPersonChange = (value) => {
+    setSelectedItemsPerson(value);
+  };
+
+  const [isChangeTeacher, setIsChangeTeacher] = useState(false);
+
+  const changeIsTeacher = () => {
+    if (!isChangeTeacher && selectedIds.length === 0) {
+      toast.error("Hãy chọn buổi học cần thay đổi giảng viên");
+      return;
+    }
+    setIsChangeTeacher(!isChangeTeacher);
+    setSelectedItemsPerson("");
+  };
+
+  const [errorChangeTeacher, setErrorChangeTeacher] = useState("");
+
+  const changeTeacher = () => {
+    let check = 0;
+    if (selectedItemsPerson === "") {
+      setErrorChangeTeacher("Hãy chọn giảng viên");
+      ++check;
+    } else {
+      setErrorChangeTeacher("");
+    }
+    if (check === 0) {
+      let obj = {
+        listMeeting: selectedIds,
+        teacherId: selectedItemsPerson,
+      };
+      MeetingManagementAPI.changeTeacher(obj).then((response) => {
+        loadDataMeeting(1);
+        setSelectedIds([]);
+        setIsChangeTeacher(false);
+      });
     }
   };
 
@@ -202,8 +272,9 @@ const MeetingManagment = () => {
                 {" "}
                 <span style={{ fontSize: "17px", fontWeight: "500" }}>
                   {" "}
-                  <UnorderedListOutlined
-                    style={{ marginRight: "10px", fontSize: "20px" }}
+                  <FontAwesomeIcon
+                    icon={faCalendar}
+                    style={{ marginRight: "7px" }}
                   />
                   Danh sách lịch học:{" "}
                   <span
@@ -236,6 +307,7 @@ const MeetingManagment = () => {
                     backgroundColor: "rgb(38, 144, 214)",
                   }}
                   className="btn-create-meeting"
+                  onClick={changeIsTeacher}
                 >
                   {" "}
                   <FontAwesomeIcon
@@ -250,6 +322,7 @@ const MeetingManagment = () => {
                     backgroundColor: "rgb(38, 144, 214)",
                   }}
                   className="btn-create-meeting"
+                  onClick={openModalCreateMeetingAuto}
                 >
                   {" "}
                   <FontAwesomeIcon
@@ -275,6 +348,70 @@ const MeetingManagment = () => {
               </div>
             </div>
             <div className="data-table">
+              {isChangeTeacher && (
+                <div
+                  style={{
+                    marginTop: "20px",
+                    justifyContent: "center",
+                    display: "flex",
+                    marginBottom: "20px",
+                  }}
+                >
+                  <div style={{ width: "65%" }}>
+                    Chọn giảng viên cần thay đổi: <br />
+                    <Select
+                      showSearch
+                      style={{ width: "100%" }}
+                      value={selectedItemsPerson}
+                      onChange={handleSelectPersonChange}
+                      filterOption={filterTeacherOptions}
+                    >
+                      <Option value="">Chọn 1 giảng viên cần thay đổi</Option>
+                      {teacherDataAll.map((teacher) => (
+                        <Option key={teacher.id} value={teacher.id}>
+                          {teacher.userName}
+                        </Option>
+                      ))}
+                    </Select>
+                    <span style={{ color: "red" }}>{errorChangeTeacher}</span>
+                    <div
+                      style={{
+                        marginTop: "10px",
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Button
+                        style={{
+                          backgroundColor: "rgb(38, 144, 214)",
+                          color: "white",
+                        }}
+                        onClick={changeTeacher}
+                      >
+                        <FontAwesomeIcon
+                          icon={faPencilAlt}
+                          style={{ marginRight: "5px" }}
+                        />
+                        Cập nhật
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              )}
+              <div
+                style={{
+                  marginBottom: "20px",
+                  marginTop: "25px",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <span style={{ color: "red" }}>
+                  (*) Lưu ý: Các buổi học đã diễn ra thì sẽ không thể cập nhật
+                  các thông tin như: ngày học, ca học, giảng viên, hình thức...
+                  và không xóa được buổi học đó.
+                </span>
+              </div>
               {data != null &&
                 data.length > 0 &&
                 data.map((item) => (
@@ -282,14 +419,27 @@ const MeetingManagment = () => {
                     <div tabIndex={0} role="button" className="box-card">
                       <div className="title-left" style={{ paddingLeft: 0 }}>
                         <Link>
-                          <Checkbox
-                            style={{ marginRight: "15px" }}
-                            checked={selectedIds.includes(item.id)}
-                            onClick={(e) => {
-                              e.preventDefault();
-                              handleCheckboxChange(item.id);
-                            }}
-                          />
+                          {item.soDiemDanh != null && (
+                            <FontAwesomeIcon
+                              icon={faCheck}
+                              style={{
+                                marginRight: "10px",
+                                fontSize: "25px",
+                                fontWeight: "bold",
+                              }}
+                            />
+                          )}
+                          {item.soDiemDanh == null && (
+                            <Checkbox
+                              style={{ marginRight: "15px" }}
+                              checked={selectedIds.includes(item.id)}
+                              disabled={item.soDiemDanh == null ? false : true}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                handleCheckboxChange(item.id);
+                              }}
+                            />
+                          )}
                           <Link
                             to={`/admin/class-management/meeting-management/attendance/${item.id}`}
                           >
@@ -350,45 +500,48 @@ const MeetingManagment = () => {
                           </span>
                         </div>
                       </div>
-                      <div className="icon-right">
-                        <Tooltip title="Cập nhật buổi học">
-                          <FontAwesomeIcon
-                            icon={faPencilAlt}
-                            style={{
-                              marginRight: "12px",
-                              cursor: "pointer",
-                              color: "#007bff",
-                            }}
-                            onClick={() => {
-                              openModalUpdateMeeting(item);
-                            }}
-                          />
-                        </Tooltip>
-                        <Tooltip title="Xóa buổi học">
-                          <Popconfirm
-                            title="Xóa buổi học"
-                            description="Bạn có chắc chắn muốn xóa buổi học này không?"
-                            onConfirm={() => {
-                              deleteMeeting(item.id);
-                            }}
-                            okText="Yes"
-                            cancelText="No"
-                          >
+                      {item.soDiemDanh == null && (
+                        <div className="icon-right">
+                          <Tooltip title="Cập nhật buổi học">
                             <FontAwesomeIcon
-                              icon={faTrash}
+                              icon={faPencilAlt}
                               style={{
-                                marginRight: "10px",
-                                marginLeft: "5px",
+                                marginRight: "12px",
                                 cursor: "pointer",
                                 color: "#007bff",
                               }}
+                              onClick={() => {
+                                openModalUpdateMeeting(item);
+                              }}
                             />
-                          </Popconfirm>
-                        </Tooltip>
-                      </div>
+                          </Tooltip>
+                          <Tooltip title="Xóa buổi học">
+                            <Popconfirm
+                              title="Xóa buổi học"
+                              description="Bạn có chắc chắn muốn xóa buổi học này không?"
+                              onConfirm={() => {
+                                deleteMeeting(item.id);
+                              }}
+                              okText="Yes"
+                              cancelText="No"
+                            >
+                              <FontAwesomeIcon
+                                icon={faTrash}
+                                style={{
+                                  marginRight: "10px",
+                                  marginLeft: "5px",
+                                  cursor: "pointer",
+                                  color: "#007bff",
+                                }}
+                              />
+                            </Popconfirm>
+                          </Tooltip>
+                        </div>
+                      )}
                     </div>{" "}
                   </div>
                 ))}
+
               {(data == null || data.length === 0) && (
                 <div style={{ textAlign: "center", marginTop: "15px" }}>
                   <Empty
@@ -412,6 +565,13 @@ const MeetingManagment = () => {
         item={meetingSelected}
         visible={showModalUpdateMeeting}
         onCancel={handleCancelModalUpdateMeeting}
+      />
+      <ModalCreateMeetingAuto
+        visible={showModalCreateMeetingAuto}
+        onCancel={handleCancelModalCreateMeetingAuto}
+        fetchData={() => {
+          loadDataMeeting(2);
+        }}
       />
     </div>
   );

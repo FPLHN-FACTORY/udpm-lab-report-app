@@ -127,7 +127,7 @@ public interface AdClassRepository extends ClassRepository {
     String checkCodeExist(@Param("code") String code, @Param("activityId") String activityId);
 
     @Query(value = """
-            SELECT ROW_NUMBER() OVER(ORDER BY c.last_modified_date DESC ) AS stt,
+            SELECT ROW_NUMBER() OVER(ORDER BY b.code) AS stt,
             a.code, a.start_time, a.class_period, a.class_size, a.teacher_id, c.name as name_level,
             b.name as name_activity
             FROM class a JOIN activity b ON a.activity_id = b.id
@@ -139,6 +139,7 @@ public interface AdClassRepository extends ClassRepository {
             AND (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR  a.class_period = :#{#req.classPeriod})
             AND (:#{#req.idTeacher} IS NULL OR :#{#req.idTeacher} LIKE '' OR a.teacher_id = :#{#req.idTeacher})
             AND (:#{#req.levelId} IS NULL OR :#{#req.levelId} LIKE '' OR c.id = :#{#req.levelId})
+            ORDER BY b.code
             """, nativeQuery = true)
     List<AdExportExcelClassResponse> findClassExportExcel(@Param("req") AdFindClassRequest req);
 

@@ -36,6 +36,7 @@ import memberProjectManagementReducer from "../../portalprojects/app/reducer/adm
 import categoryProjectManagementReducer from "../../portalprojects/app/reducer/admin/category-project-management/categoryProjectManagement.reduce";
 import StakeholderReducer from "../../portalprojects/app/reducer/admin/stakeholder-management/Stakeholder.reducer";
 import NotificationSliceReducer from "../../portalprojects/app/reducer/notification/NotificationSlice.reducer";
+import AdAttendanceDetailMeetingReducer from "./admin/AdAttendanceDetailMeeting.reducer";
 
 export const store = configureStore({
   reducer: {
@@ -59,6 +60,7 @@ export const store = configureStore({
     adCollapsed: AdCollapsedSliceReducer,
     stCollapsed: StCollapsedSliceReducer,
     teCollapsed: TeCollapsedSliceReducer,
+    adAttendanceDetailMeeting: AdAttendanceDetailMeetingReducer,
     ////
     board: boardSliceReducer,
     myProject: myProjectSliceReducer,
