@@ -3,7 +3,7 @@ import "./style-register-class.css";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import LoadingIndicator from "../../../helper/loading";
-import { faRegistered } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faRegistered } from "@fortawesome/free-solid-svg-icons";
 import {
   convertMeetingPeriod,
   convertMeetingPeriodToTime,
@@ -20,14 +20,19 @@ import {
   Tooltip,
   Pagination,
   Popconfirm,
+  Modal,
+  Empty,
 } from "antd";
 import { QuestionCircleFilled, ProjectOutlined } from "@ant-design/icons";
 import { StMyClassAPI } from "../../../api/student/StMyClassAPI";
 import { sinhVienCurrent } from "../../../helper/inForUser";
 import { StClassAPI } from "../../../api/student/StClassAPI";
 import { StLevelAPI } from "../../../api/student/StLevelAPI";
+import { convertLongToDate } from "../../../helper/convertDate";
+import { constant } from "lodash";
 
 const { Option } = Select;
+const { TextArea } = Input;
 const StRegisterClass = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -40,6 +45,12 @@ const StRegisterClass = () => {
   const [listSemester, setListSemester] = useState([]);
   const [listActivity, setListActivity] = useState([]);
   const [listClass, setListClass] = useState([]);
+  const [showClassDescription, setShowClassDescription] = useState(false);
+  const [idSelected, setIdSelected] = useState(null);
+  const [startTimeStudent, setStartTimeStudent] = useState("");
+  const [endTimeStudent, setEndTimeStudent] = useState("");
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
 
   const loadDataLevel = () => {
     StLevelAPI.getLevelAll().then((response) => {
@@ -114,9 +125,16 @@ const StRegisterClass = () => {
       code: classCode,
       classPeriod: classPeriod === "" ? null : parseInt(classPeriod),
       level: level,
+      page: currentPage,
+      size: 10,
     };
     StClassAPI.getClassByCriteriaAndIsActive(filter).then((response) => {
-      setListClass(response.data.data);
+      const data = response.data.data.data;
+      setListClass(data);
+      setCurrentPage(response.data.data.currentPage);
+      setTotalPages(response.data.data.totalPages);
+      setStartTimeStudent(data && data[0] && convertLongToDate(data[0].startTimeStudent))
+      setEndTimeStudent(data && data[0] && convertLongToDate(data[0].endTimeStudent))
       setLoading(false);
     });
   };
@@ -154,7 +172,21 @@ const StRegisterClass = () => {
       ),
     },
     {
-      title: "Số lượng thành viên",
+      title: "Thời gian bắt đầu",
+      dataIndex: "startTime",
+      key: "startTime",
+      sorter: (a, b) => a.startTime - b.startTime,
+      render: (text, record) => {
+        const startTime = new Date(record.startTime);
+
+        const formattedStartTime = `${startTime.getDate()}/${startTime.getMonth() + 1
+          }/${startTime.getFullYear()}`;
+
+        return <span>{formattedStartTime}</span>;
+      },
+    },
+    {
+      title: "Sĩ số",
       dataIndex: "classSize",
       key: "classSize",
       sorter: (a, b) => a.classSize - b.classSize,
@@ -188,15 +220,24 @@ const StRegisterClass = () => {
       key: "level",
     },
     {
+      title: "Hoạt động",
+      dataIndex: "activityName",
+      key: "activityName",
+      sorter: (a, b) => a.activityName - b.activityName,
+      render: (text, record) => {
+        return <span style={{ whiteSpace: "pre-line" }}>{record.activityName}</span>;
+      },
+    },
+    {
       title: "Hành động",
       dataIndex: "action",
       key: "action",
-      align: "center",
+      align: "",
       render: (text, record) => (
         <>
-          <Popconfirm
+          <Popconfirm style={{}} placement={"topRight"}
             title="Tham gia lớp học"
-            description="Bạn có chắc chắn muốn tham gia lớp học này không?"
+            description={"Bạn có chắc chắn muốn tham gia lớp học này?"}
             okText="Có"
             cancelText="Không"
             onConfirm={() => {
@@ -204,13 +245,37 @@ const StRegisterClass = () => {
             }}
           >
             <Tooltip title="Tham gia lớp học">
-              <FontAwesomeIcon icon={faRightToBracket} className="icon" />
+              <FontAwesomeIcon
+                icon={faRightToBracket} className="icon" />
             </Tooltip>
           </Popconfirm>
+          <Tooltip title="Chi tiết">
+            <FontAwesomeIcon icon={faEye} onClick={() => setOpen(true)} className="icon" />
+            <Modal style={{ marginTop: "200px" }}
+              open={open}
+              onCancel={() => setOpen(false)}
+              width={650}
+              footer={null}
+              className="modal_show_detail"
+            >
+              <div className="wrapper-modal">
+                <div style={{ borderBottom: "1px solid black" }}>
+                  <span style={{ fontSize: "18px" }}>Mô tả lớp học</span>
+                </div>
+                <div className="description-title" style={{ marginTop: "20px" }}>
+                  <TextArea rows={4} value={record.activityName} readOnly style={{ cursor: "pointer" }} />
+
+                </div>
+
+              </div>
+            </Modal>
+          </Tooltip>
         </>
       ),
     },
   ];
+
+  const [open, setOpen] = useState(false);
 
   return (
     <>
@@ -382,7 +447,7 @@ const StRegisterClass = () => {
         <div className="wrapper-table">
           <div className="table-class">
             <div className="title-table">
-              <div>
+              <div style={{ display: "d-flex", justifyContent: "space-between" }}>
                 {" "}
                 <span style={{ fontSize: "17px", fontWeight: "500" }}>
                   {" "}
@@ -391,6 +456,17 @@ const StRegisterClass = () => {
                   />
                   Danh sách lớp học
                 </span>
+                {startTimeStudent && endTimeStudent &&
+                  <span style={{ marginLeft: "10px", fontSize: "17px" }}>(Sinh viên có thể đăng ký vào lớp từ ngày
+                    <span style={{ color: "red" }}>
+                      {" " + startTimeStudent + " "}
+                    </span>
+                    đến
+                    <span style={{ color: "red" }}>
+                      {" " + endTimeStudent}
+                    </span>)
+                  </span>
+                }
               </div>
             </div>
             <div className="" style={{ marginTop: "20px" }}>
@@ -398,8 +474,28 @@ const StRegisterClass = () => {
                 dataSource={listClass}
                 rowKey="id"
                 columns={columns}
-                pagination={{ pageSize: 8 }}
+                pagination={false}
+                locale={{
+                  emptyText:
+                    <Empty
+                      imageStyle={{ height: 60 }}
+                      style={{
+                        padding: "20px 0px 20px 0",
+                      }}
+                      description={<span>Không có thông lớp học</span>}
+                    />
+                }}
               />
+              <div className="pagination_box">
+                <Pagination
+                  simple
+                  current={currentPage + 1}
+                  onChange={(page) => {
+                    setCurrentPage(page - 1);
+                  }}
+                  total={totalPages * 10}
+                />
+              </div>
             </div>
           </div>
         </div>
