@@ -13,6 +13,9 @@ public interface AdActivityResponse extends IsIdentified {
     @Value("#{target.name}")
     String getName();
 
+    @Value("#{target.code}")
+    String getCode();
+
     @Value("#{target.startTime}")
     Long getStartTime();
 
@@ -20,11 +23,14 @@ public interface AdActivityResponse extends IsIdentified {
     Long getEndTime();
 
     @Value("#{target.level}")
-    Short getLevel();
+    String getLevel();
 
     @Value("#{target.semesterId}")
     String getSemesterId();
 
     @Value("#{target.nameSemester}")
     String getNameSemester();
+
+    @Value("#{target.descriptions}")
+    String getDescriptions();
 }

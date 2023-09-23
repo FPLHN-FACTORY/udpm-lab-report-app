@@ -9,6 +9,15 @@ public interface AdClassConfigurationResponse extends IsIdentified {
     @Value("#{target.id}")
     String getId();
 
+    @Value("#{target.class_size_min}")
+    Integer getClassSizeMin();
     @Value("#{target.class_size_max}")
-    String getClassSizeMax();
+    Integer getClassSizeMax();
+
+    @Value("#{target.point_min}")
+    Double getPointMin();
+
+    @Value("#{target.maximum_number_of_breaks}")
+    Double getMaximumNumberOfBreaks();
+
 }
