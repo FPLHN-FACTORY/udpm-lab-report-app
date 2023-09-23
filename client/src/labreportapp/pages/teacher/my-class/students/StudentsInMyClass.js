@@ -294,7 +294,7 @@ const StudentsInMyClass = () => {
                 className="group-info-item"
                 style={{ marginTop: "13px", marginBottom: "15px" }}
               >
-                Tình trạng: &nbsp;
+                Trạng thái: &nbsp;
                 {classDetail.statusClass === 0 ? "Đã mở" : "Đã khóa"}
               </span>
               <span
@@ -320,6 +320,15 @@ const StudentsInMyClass = () => {
                 style={{ marginTop: "13px", marginBottom: "15px" }}
               >
                 Mã tham gia: &nbsp;{classDetail.passWord}
+              </span>
+              <span
+                className="group-info-item"
+                style={{ marginTop: "13px", marginBottom: "15px" }}
+              >
+                Trello: &nbsp;
+                {classDetail.allowUseTrello === 0
+                  ? "Cho phép"
+                  : "Không cho phép"}
               </span>
             </div>
           </div>

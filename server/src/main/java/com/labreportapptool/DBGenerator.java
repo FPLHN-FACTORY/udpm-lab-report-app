@@ -220,7 +220,7 @@ public class DBGenerator implements CommandLineRunner {
         activity1.setStartTime(new Date().getTime() + 10000);
         activity1.setEndTime(new Date().getTime() + 10000 + 2678400000L);
         activity1.setSemesterId(semester.getId());
-        activity1.setAllowUseTrello(AllowUseTrello.KHONG_CHO_PHEP);
+        activity1.setAllowUseTrello(AllowUseTrello.CHO_PHEP);
         activity1.setLevelId(level3.getId());
         activity1.setDescriptions("https://docs.google.com/spreadsheets/d/1Gop11N-inh_I-TegG3OyGZpfKu4Ls1-qTY1IAMHSCY4/edit#gid=1799431034");
         activity1.setId(activityRepository.save(activity1).getId());
@@ -231,7 +231,7 @@ public class DBGenerator implements CommandLineRunner {
         activity2.setEndTime(new Date().getTime() + 10000 + 2678400000L);
         activity2.setSemesterId(semester.getId());
         activity2.setLevelId(level2.getId());
-        activity2.setAllowUseTrello(AllowUseTrello.CHO_PHEP);
+        activity2.setAllowUseTrello(AllowUseTrello.KHONG_CHO_PHEP);
         activity2.setDescriptions("https://docs.google.com/spreadsheets/d/1Gop11N-inh_I-TegG3OyGZpfKu4Ls1-qTY1IAMHSCY4/edit#gid=1799431034");
         activity2.setId(activityRepository.save(activity2).getId());
 

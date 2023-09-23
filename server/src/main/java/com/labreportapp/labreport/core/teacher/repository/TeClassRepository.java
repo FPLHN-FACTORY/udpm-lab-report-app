@@ -71,7 +71,8 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
             c.descriptions as descriptions,
             d.name as activityLevel,
             s.name as semesterName,
-            c.status_class as status_class
+            c.status_class as status_class,
+            a.allow_use_trello as allow_use_trello
             FROM activity a
             JOIN class c ON c.activity_id = a.id
             JOIN semester s ON s.id = a.semester_id

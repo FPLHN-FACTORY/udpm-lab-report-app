@@ -56,7 +56,7 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
     Optional<TeMeetingRespone> searchMeetingByIdMeeting(@Param("req") TeFindMeetingRequest req);
 
     @Query(value = """
-             SELECT distinct 
+             SELECT 
              m.id AS idMeeting,
              m.name AS nameMeeting,
              m.descriptions AS descriptionsMeeting,
@@ -68,10 +68,10 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
              r.id as idReport,
              r.descriptions AS descriptionsReport
              FROM meeting m
-             LEFT JOIN home_work h ON h.meeting_id = m.id AND h.team_id = :#{#req.idTeam}
-             LEFT JOIN note n ON n.meeting_id = m.id AND n.team_id = :#{#req.idTeam}
-             LEFT JOIN report r ON r.meeting_id = m.id AND r.team_id = :#{#req.idTeam}
-              WHERE m.id = :#{#req.idMeeting}
+              JOIN home_work h ON h.meeting_id = m.id AND h.team_id = :#{#req.idTeam}
+              JOIN note n ON n.meeting_id = m.id AND n.team_id = :#{#req.idTeam}
+              JOIN report r ON r.meeting_id = m.id AND r.team_id = :#{#req.idTeam}
+             WHERE m.id = :#{#req.idMeeting}
                        """, nativeQuery = true)
     Optional<TeHomeWorkAndNoteMeetingRespone> searchDetailMeetingTeamByIdMeIdTeam(@Param("req") TeFindMeetingRequest req);
 

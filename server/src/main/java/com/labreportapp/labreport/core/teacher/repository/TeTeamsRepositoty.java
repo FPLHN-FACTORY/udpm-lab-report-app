@@ -23,7 +23,8 @@ public interface TeTeamsRepositoty extends JpaRepository<Team, String> {
             t.code as code,
             t.name as name,
             t.subject_name as subjectName,
-            t.created_date as createdDate
+            t.created_date as createdDate,
+            t.project_id as project_id
             FROM team t
             WHERE t.class_id = :#{#req.idClass}
             ORDER BY t.code ASC

@@ -6,10 +6,13 @@ import com.labreportapp.labreport.core.teacher.model.request.TeCreateTeamsReques
 import com.labreportapp.labreport.core.teacher.model.request.TeFindStudentClasses;
 import com.labreportapp.labreport.core.teacher.model.request.TeTeamUpdateStudentClassRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeUpdateTeamsRequest;
+import com.labreportapp.labreport.core.teacher.model.response.TeDetailClassRespone;
 import com.labreportapp.labreport.core.teacher.model.response.TeExcelResponseMessage;
 import com.labreportapp.labreport.core.teacher.model.response.TeStudentCallApiResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeTeamsRespone;
 import com.labreportapp.labreport.core.teacher.repository.TeClassRepository;
+import com.labreportapp.labreport.core.teacher.repository.TeMemberProjectRepository;
+import com.labreportapp.labreport.core.teacher.repository.TeProjectRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeStudentClassesRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeTeamsRepositoty;
 import com.labreportapp.labreport.core.teacher.service.TeStudentClassesService;
@@ -18,7 +21,13 @@ import com.labreportapp.labreport.entity.Class;
 import com.labreportapp.labreport.entity.StudentClasses;
 import com.labreportapp.labreport.entity.Team;
 import com.labreportapp.labreport.infrastructure.constant.RoleTeam;
+import com.labreportapp.labreport.util.RandomString;
+import com.labreportapp.portalprojects.entity.MemberProject;
+import com.labreportapp.portalprojects.entity.Project;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
+import com.labreportapp.portalprojects.infrastructure.constant.RoleMemberProject;
+import com.labreportapp.portalprojects.infrastructure.constant.StatusProject;
+import com.labreportapp.portalprojects.infrastructure.constant.StatusWork;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -42,6 +51,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -69,6 +79,12 @@ public class TeTeamsServiceImpl implements TeTeamsService {
     @Autowired
     private TeExcelImportService teExcelImportService;
 
+    @Autowired
+    private TeProjectRepository teProjectRepository;
+
+    @Autowired
+    private TeMemberProjectRepository teMemberProjectRepository;
+
     @Override
     public List<TeTeamsRespone> getAllTeams(final TeFindStudentClasses teFindStudentClasses) {
         return teTeamsRepositoty.findTeamsByIdClass(teFindStudentClasses);
@@ -91,6 +107,34 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         team.setName(request.getName());
         team.setSubjectName(request.getSubjectName());
         team.setClassId(request.getClassId());
+        Optional<TeDetailClassRespone> objClass = teClassRepository.findClassById(request.getClassId());
+        if (objClass.isPresent()) {
+            if (objClass.get().getAllowUseTrello() == 0) {
+                Project project = new Project();
+                project.setCode("Project_code" + RandomString.random());
+                project.setName("Project" + RandomString.random());
+                project.setStartTime(new Date().getTime());
+                project.setEndTime(new Date().getTime() + 90 * 86400000);
+                project.setStatusProject(StatusProject.DANG_DIEN_RA);
+                project.setBackgroundColor("rgb(38, 144, 214)");
+                Project projectNew = teProjectRepository.save(project);
+                team.setProjectId(projectNew.getId());
+                List<TeStudentCallApiResponse> listStudentClasses = teStudentClassesService.searchApiStudentClassesByIdClass(request.getClassId());
+                List<MemberProject> listMemberProject = new ArrayList<>();
+                if (listStudentClasses != null) {
+                    listStudentClasses.forEach(student -> {
+                        MemberProject memberProject = new MemberProject();
+                        memberProject.setMemberId(student.getIdStudent());
+                        memberProject.setEmail(student.getEmail());
+                        memberProject.setProjectId(project.getId());
+                        memberProject.setRole(student.getRole().equals("0") ? RoleMemberProject.MANAGER : RoleMemberProject.DEV);
+                        memberProject.setStatusWork(StatusWork.DANG_LAM);
+                        listMemberProject.add(memberProject);
+                    });
+                    teMemberProjectRepository.saveAll(listMemberProject);
+                }
+            }
+        }
         Team teamCreate = teTeamsRepositoty.save(team);
         List<StudentClasses> listStudentClasses = teStudentClassesRepository.findStudentClassesByIdClass(request.getClassId());
         List<StudentClasses> studentClassesNew = new ArrayList<>();
@@ -136,6 +180,33 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         team.setCode(request.getCode());
         team.setName(request.getName());
         team.setSubjectName(request.getSubjectName());
+        Optional<TeDetailClassRespone> objClass = teClassRepository.findClassById(team.getClassId());
+        if (!objClass.isPresent()) {
+            if (objClass.get().getAllowUseTrello() == 0) {
+                Project project = new Project();
+                project.setCode("Project_code" + RandomString.random());
+                project.setName("Project" + RandomString.random());
+                project.setStartTime(new Date().getTime());
+                project.setEndTime(new Date().getTime() + 90 * 86400000);
+                project.setStatusProject(StatusProject.DANG_DIEN_RA);
+                project.setId(teProjectRepository.save(project).getId());
+                team.setProjectId(project.getId());
+                List<TeStudentCallApiResponse> listStudentClasses = teStudentClassesService.searchApiStudentClassesByIdClass(team.getClassId());
+                List<MemberProject> listMemberProject = new ArrayList<>();
+                if (listStudentClasses != null) {
+                    listStudentClasses.forEach(student -> {
+                        MemberProject memberProject = new MemberProject();
+                        memberProject.setMemberId(student.getIdStudent());
+                        memberProject.setEmail(student.getEmail());
+                        memberProject.setProjectId(project.getId());
+                        memberProject.setRole(student.getRole().equals("0") ? RoleMemberProject.MANAGER : RoleMemberProject.DEV);
+                        memberProject.setStatusWork(StatusWork.DANG_LAM);
+                        listMemberProject.add(memberProject);
+                    });
+                    teMemberProjectRepository.saveAll(listMemberProject);
+                }
+            }
+        }
         List<StudentClasses> studentClassesNew = new ArrayList<>();
         studentClassesRequest.forEach(item -> {
             StudentClasses studentClasses = teStudentClassesRepository.findStudentClassesById(item.getIdStudentClass());

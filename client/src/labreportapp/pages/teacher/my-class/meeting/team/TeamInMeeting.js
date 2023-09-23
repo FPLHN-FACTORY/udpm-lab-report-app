@@ -140,15 +140,6 @@ const TeamInMeeting = () => {
                 />
                 Danh sách nhóm
               </span>
-              <Button
-                style={{
-                  backgroundColor: "rgb(38, 144, 214)",
-                  color: "white",
-                  float: "right",
-                }}
-              >
-                Template mẫu báo cáo
-              </Button>
             </div>
             <CollapseTeam items={team} />
           </div>

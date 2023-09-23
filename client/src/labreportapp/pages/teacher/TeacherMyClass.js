@@ -1,4 +1,3 @@
-import { toast } from "react-toastify";
 import "./styleTeacherMyClass.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faHome } from "@fortawesome/free-solid-svg-icons";
@@ -103,7 +102,7 @@ const TeacherMyClass = () => {
         setLoading(true);
       });
     } catch (error) {
-      alert("Vui lòng F5 lại trang !");
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
 
@@ -121,7 +120,7 @@ const TeacherMyClass = () => {
         setLoading(true);
       });
     } catch (error) {
-      alert("Vui lòng F5 lại trang !");
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
 
@@ -138,7 +137,7 @@ const TeacherMyClass = () => {
         setLoading(true);
       });
     } catch (error) {
-      alert("Vui lòng F5 lại trang !");
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
 
@@ -151,7 +150,7 @@ const TeacherMyClass = () => {
         }
       );
     } catch (error) {
-      alert("Vui lòng F5 lại trang !");
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
 
@@ -181,13 +180,12 @@ const TeacherMyClass = () => {
       key: "stt",
       sorter: (a, b) => a.stt - b.stt,
     },
-
     {
       title: "Mã lớp",
       dataIndex: "code",
       key: "code",
       sorter: (a, b) => a.code.localeCompare(b.code),
-      width: "20px",
+      align: "center",
     },
     {
       title: "Thời gian bắt đầu",
@@ -201,6 +199,7 @@ const TeacherMyClass = () => {
         }/${startTime.getFullYear()}`;
         return <span>{formattedStartTime}</span>;
       },
+      align: "center",
     },
     {
       title: "Ca học",
@@ -208,6 +207,7 @@ const TeacherMyClass = () => {
       key: "classPeriod",
       render: (text) => <span>{text + 1}</span>,
       sorter: (a, b) => a.classPeriod - b.classPeriod,
+      align: "center",
     },
     {
       title: "Thời gian",
@@ -216,6 +216,7 @@ const TeacherMyClass = () => {
       render: (text, record) => {
         return <span>{convertMeetingPeriodToTime(record.classPeriod)}</span>;
       },
+      align: "center",
     },
     {
       title: "Hoạt động",
@@ -247,6 +248,7 @@ const TeacherMyClass = () => {
           </div>
         </>
       ),
+      align: "center",
     },
   ];
   const filterOptions = (input, option) => {

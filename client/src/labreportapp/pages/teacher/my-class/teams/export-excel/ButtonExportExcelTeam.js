@@ -30,6 +30,10 @@ const ButtonExportExcelTeam = ({ idClass }) => {
       console.log(link);
       link.click();
       window.URL.revokeObjectURL(url);
+      setDownloading(true);
+      setTimeout(() => {
+        setDownloading(false);
+      }, 1500);
       toast.success("Export thành công !");
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");

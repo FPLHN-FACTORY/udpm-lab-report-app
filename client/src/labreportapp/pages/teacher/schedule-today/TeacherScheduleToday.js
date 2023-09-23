@@ -429,7 +429,6 @@ const TeacherScheduleToday = () => {
                     dataSource={dataTime}
                     rowKey="idMeeting"
                     columns={columnsTime}
-                    size="large"
                     pagination={{
                       defaultPageSize: 6,
                     }}

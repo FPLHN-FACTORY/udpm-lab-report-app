@@ -15,14 +15,17 @@ import com.labreportapp.labreport.core.teacher.model.response.TeScheduleMeetingC
 import com.labreportapp.labreport.core.teacher.repository.TeHomeWorkRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeMeetingRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeNoteRepository;
+import com.labreportapp.labreport.core.teacher.repository.TeReportRepository;
 import com.labreportapp.labreport.core.teacher.service.TeMeetingService;
 import com.labreportapp.labreport.core.teacher.service.TeStudentClassesService;
 import com.labreportapp.labreport.entity.HomeWork;
 import com.labreportapp.labreport.entity.Meeting;
 import com.labreportapp.labreport.entity.Note;
+import com.labreportapp.labreport.entity.Report;
 import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
+import lombok.Synchronized;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -52,6 +55,9 @@ public class TeMeetingServiceImpl implements TeMeetingService {
 
     @Autowired
     private TeStudentClassesService teStudentClassesService;
+
+    @Autowired
+    private TeReportRepository teReportRepository;
 
     @Autowired
     private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
@@ -233,38 +239,43 @@ public class TeMeetingServiceImpl implements TeMeetingService {
     }
 
     @Override
+    @Synchronized
     public TeHomeWorkAndNoteMeetingRespone updateDetailMeetingTeamByIdMeIdTeam(TeUpdateHomeWorkAndNoteInMeetingRequest request) {
         Optional<HomeWork> objectHW = teHomeWorkRepository.findById(request.getIdHomeWork());
+        HomeWork homeWorkNew = new HomeWork();
         if (!objectHW.isPresent()) {
-            HomeWork homeWorkNew = new HomeWork();
             homeWorkNew.setMeetingId(request.getIdMeeting());
             homeWorkNew.setTeamId(request.getIdTeam());
             homeWorkNew.setName("");
             homeWorkNew.setDescriptions(request.getDescriptionsHomeWork());
-            homeWorkNew.setId(teHomeWorkRepository.save(homeWorkNew).getId());
         } else {
-            HomeWork homeWork = objectHW.get();
-            homeWork.setId(request.getIdHomeWork());
-            homeWork.setDescriptions(request.getDescriptionsHomeWork());
-            teHomeWorkRepository.save(homeWork);
+            homeWorkNew = objectHW.get();
+            homeWorkNew.setDescriptions(request.getDescriptionsHomeWork());
         }
+        teHomeWorkRepository.save(homeWorkNew);
         Optional<Note> objectNote = teNoteRepository.findById(request.getIdNote());
+        Note noteNew = new Note();
         if (!objectNote.isPresent()) {
-            Note noteNew = new Note();
             noteNew.setMeetingId(request.getIdMeeting());
             noteNew.setTeamId(request.getIdTeam());
             noteNew.setName("");
             noteNew.setDescriptions(request.getDescriptionsNote());
-            noteNew.setId(teNoteRepository.save(noteNew).getId());
         } else {
-            Note note = objectNote.get();
-            note.setId(request.getIdNote());
-            note.setDescriptions(request.getDescriptionsNote());
-            teNoteRepository.save(note);
-            TeFindMeetingRequest te = new TeFindMeetingRequest();
-            te.setIdMeeting(note.getMeetingId());
-            te.setIdTeam(note.getTeamId());
+            noteNew = objectNote.get();
+            noteNew.setDescriptions(request.getDescriptionsNote());
         }
+        teNoteRepository.save(noteNew);
+        Optional<Report> objectReport = teReportRepository.findById(request.getIdReport());
+        Report reportNew = new Report();
+        if (!objectReport.isPresent()) {
+            reportNew.setMeetingId(request.getIdMeeting());
+            reportNew.setTeamId(request.getIdTeam());
+            reportNew.setDescriptions(request.getDescriptionsReport());
+        } else {
+            reportNew = objectReport.get();
+            reportNew.setDescriptions(request.getDescriptionsReport());
+        }
+        teReportRepository.save(reportNew);
         TeFindMeetingRequest teFind = new TeFindMeetingRequest();
         teFind.setIdTeam(request.getIdTeam());
         teFind.setIdMeeting(request.getIdMeeting());

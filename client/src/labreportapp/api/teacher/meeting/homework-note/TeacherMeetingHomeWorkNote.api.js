@@ -5,7 +5,7 @@ export class TeacherMeetingHomeWorkNoteAPI {
   static updateHomeWorkAndNote = (data) => {
     return request({
       method: "PUT",
-      url: url + `/hw-note`,
+      url: url + `/hw-note-report`,
       data: data,
     });
   };

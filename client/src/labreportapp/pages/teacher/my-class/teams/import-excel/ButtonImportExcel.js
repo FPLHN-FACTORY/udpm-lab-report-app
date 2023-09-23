@@ -19,12 +19,9 @@ const ButtonImportExcelTeam = ({ idClass }) => {
             setTimeout(() => {
               if (response.data.data.status === true) {
                 setInputFile("");
-                toast.success(
-                  "Import nhóm thành công, vui lòng chờ giây lát !",
-                  {
-                    position: toast.POSITION.TOP_CENTER,
-                  }
-                );
+                toast.success("Đang import, vui lòng chờ giây lát !", {
+                  position: toast.POSITION.TOP_CENTER,
+                });
               } else {
                 toast.error(
                   "Import thất bại, " +
@@ -43,7 +40,7 @@ const ButtonImportExcelTeam = ({ idClass }) => {
                 "_self"
               );
               setDownloading(false);
-            }, 6400);
+            }, 6000);
           })
           .catch((error) => {
             alert("Lỗi hệ thống, vui lòng F5 lại trang !");

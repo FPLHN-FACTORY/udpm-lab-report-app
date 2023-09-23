@@ -201,6 +201,21 @@ const TeamsInMyClass = () => {
       render: (text, record) => (
         <>
           <div style={{ width: "105px" }}>
+            <Tooltip title="Xem trello dự án">
+              <Link
+                to={`/detail-project/${record.idProject}`}
+                style={{ color: "black" }}
+              >
+                <FontAwesomeIcon
+                  icon={faEye}
+                  className="icon"
+                  onClick={() => {
+                    setShowDetailModal(true);
+                    handleDetailTeam(record);
+                  }}
+                />
+              </Link>
+            </Tooltip>
             <Tooltip title="Chi tiết">
               <FontAwesomeIcon
                 icon={faEye}
@@ -232,7 +247,6 @@ const TeamsInMyClass = () => {
           </div>
         </>
       ),
-      width: "10%",
     },
   ];
   return (

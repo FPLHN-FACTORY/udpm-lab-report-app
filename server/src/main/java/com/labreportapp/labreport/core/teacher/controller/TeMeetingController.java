@@ -58,7 +58,7 @@ public class TeMeetingController {
         return new ResponseObject(find);
     }
 
-    @PutMapping("/hw-note")
+    @PutMapping("/hw-note-report")
     public ResponseObject updateTeHomeWNoteMeetingDetail(@RequestBody TeUpdateHomeWorkAndNoteInMeetingRequest request) {
         TeHomeWorkAndNoteMeetingRespone find = teMeetingService.updateDetailMeetingTeamByIdMeIdTeam(request);
         return new ResponseObject(find);
