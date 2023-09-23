@@ -1,5 +1,6 @@
 package com.labreportapp.labreport.core.student.controller;
 
+import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.core.common.base.ResponseObject;
 import com.labreportapp.labreport.core.student.model.request.StFindClassRequest;
 import com.labreportapp.labreport.core.student.model.request.StClassRequest;
@@ -24,7 +25,7 @@ public class StClassController {
 
     @GetMapping("")
     public ResponseObject getClassByCriteriaAndIsActive(final StFindClassRequest req) {
-        List<StClassCustomResponse> response = stClassService.getAllClassByCriteriaAndIsActive(req);
+        PageableObject<StClassCustomResponse> response = stClassService.getAllClassByCriteriaAndIsActive(req);
         return new ResponseObject(response);
     }
 

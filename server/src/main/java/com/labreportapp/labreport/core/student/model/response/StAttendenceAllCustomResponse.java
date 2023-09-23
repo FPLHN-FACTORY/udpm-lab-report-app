@@ -3,15 +3,24 @@ package com.labreportapp.labreport.core.student.model.response;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 public class StAttendenceAllCustomResponse {
 
-    private String id;
+  private Integer stt;
 
-    private String classCode;
+  private String name;
 
-    private List<StAttendenceAllResponse> attendences;
+  private Long meetingDate;
+
+  private Integer meetingPeriod;
+
+  private Integer typeMeeting;
+
+  private Integer status;
+
+  private String teacherId;
+
+  private String teacherUsername;
+
 }

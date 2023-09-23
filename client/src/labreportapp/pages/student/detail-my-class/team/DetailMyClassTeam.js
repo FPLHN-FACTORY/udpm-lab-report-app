@@ -306,10 +306,10 @@ const DetailMyClassTeam = () => {
                   Ca học:{" "}
                   {detailClass != null
                     ? "Ca " +
-                      parseInt(
-                        convertMeetingPeriodToNumber(detailClass.classPeriod) +
-                          1
-                      )
+                    parseInt(
+                      convertMeetingPeriodToNumber(detailClass.classPeriod) +
+                      1
+                    )
                     : ""}
                 </span>
                 <span
@@ -326,8 +326,8 @@ const DetailMyClassTeam = () => {
                   Giảng viên:{" "}
                   {detailClass != null
                     ? detailClass.nameTeacher +
-                      " - " +
-                      detailClass.usernameTeacher
+                    " - " +
+                    detailClass.usernameTeacher
                     : ""}
                 </span>
               </div>
@@ -409,12 +409,11 @@ const DetailMyClassTeam = () => {
                     style={{ marginTop: "11px", textAlign: "right" }}
                   >
                     <Popconfirm
+                      placement="topRight"
                       description="Bạn có chắc chắn muốn rời lớp học này chứ?"
                       okText="Có"
                       cancelText="Không"
-                      onConfirm={() => {
-                        handleLeaveClass();
-                      }}
+                      onConfirm={() => handleLeaveClass()}
                     >
                       <Button
                         style={{

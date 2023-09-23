@@ -10,6 +10,7 @@ import {
   Table,
   Tooltip,
   Pagination,
+  Empty,
 } from "antd";
 import {
   faAtlas,
@@ -87,9 +88,8 @@ const StAttendance = () => {
       sorter: (a, b) => a.meetingDate - b.meetingDate,
       render: (text, record) => {
         const time = new Date(record.meetingDate);
-        const formattedTime = `${time.getDate()}/${
-          time.getMonth() + 1
-        }/${time.getFullYear()}`;
+        const formattedTime = `${time.getDate()}/${time.getMonth() + 1
+          }/${time.getFullYear()}`;
 
         return <span>{formattedTime}</span>;
       },
@@ -110,6 +110,12 @@ const StAttendance = () => {
       render: (text, record) => {
         return <span>{convertMeetingPeriodToTime(record.meetingPeriod)}</span>;
       },
+    },
+    {
+      title: "Giảng viên",
+      dataIndex: "teacherUsername",
+      sorter: (a, b) => a.teacherUsername - b.teacherUsername,
+      key: "teacherUsername",
     },
     {
       title: "Hình thức",
@@ -216,6 +222,16 @@ const StAttendance = () => {
                   dataSource={item.attendences}
                   columns={columns}
                   pagination={{ pageSize: 8 }}
+                  locale={{
+                    emptyText:
+                      <Empty
+                        imageStyle={{ height: 60 }}
+                        style={{
+                          padding: "20px 0px 20px 0",
+                        }}
+                        description={<span>Không có thông tin buổi học</span>}
+                      />
+                  }}
                 />
               </div>
             </div>
