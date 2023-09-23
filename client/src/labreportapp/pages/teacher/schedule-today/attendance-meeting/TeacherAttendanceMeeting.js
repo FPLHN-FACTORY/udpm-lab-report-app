@@ -9,7 +9,7 @@ import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyCla
 import { TeacherMeetingAPI } from "../../../../api/teacher/meeting/TeacherMeeting.api";
 import { Link } from "react-router-dom";
 import CustomSwitch from "./CustomSwitch";
-import { Table } from "antd";
+import { Empty, Table } from "antd";
 import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import {
@@ -147,17 +147,19 @@ const TeacherAttendanceMeeting = () => {
       fetchData(idClass);
     }
   }, [loadingData]);
+
   const handleSave = async () => {
     try {
-      let dataFind = { listAttendance: data };
+      let dataFind = { listAttendance: data, idMeeting: idMeeting };
       await TeacherAttendanceAPI.createOrUpdate(dataFind).then((respone) => {
-        dispatch(UpdateAttendanceMeeting(respone.data.data));
-        toast.success("Lưu điểm danh thành công !");
+        dispatch(UpdateAttendanceMeeting(respone.data.data.listAttendance));
+        toast.success(respone.data.data.message);
       });
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
+
   const data = useAppSelector(GetAttendanceMeeting);
   const columns = [
     {
@@ -167,20 +169,9 @@ const TeacherAttendanceMeeting = () => {
       render: (text, record, index) => index + 1,
     },
     {
-      title: "Mã sinh viên",
-      dataIndex: "code",
-      key: "code",
-      render: (text, record, index) => {
-        const countSpace = (record.name.match(/ /g) || []).length;
-        const lastSpaceIndex = record.name.lastIndexOf(" ");
-        const wordCount =
-          lastSpaceIndex >= 0
-            ? record.name.substring(lastSpaceIndex + 1).length
-            : 0;
-        const nameIndexCut = countSpace + wordCount;
-        const codeShow = record.username.substring(nameIndexCut).toUpperCase();
-        return <span style={{ color: "#007bff" }}>{codeShow}</span>;
-      },
+      title: "Tên tài khoản",
+      dataIndex: "username",
+      key: "username",
     },
 
     {
@@ -245,7 +236,7 @@ const TeacherAttendanceMeeting = () => {
               Lịch dạy
             </span>
           </Link>
-          <span style={{ fontSize: "18px" }}> / </span>{" "}
+          <span style={{ fontSize: "18px" }}> / </span>
           <span style={{ fontSize: "18px" }}>
             <FontAwesomeIcon
               icon={faBook}
@@ -256,7 +247,7 @@ const TeacherAttendanceMeeting = () => {
         </div>
         <div
           className="box-two-student-in-my-class-son"
-          style={{ marginTop: "25px" }}
+          style={{ marginTop: "25px", minHeight: "500px" }}
         >
           <div className="button-menu">
             <div>
@@ -315,33 +306,34 @@ const TeacherAttendanceMeeting = () => {
                 một trong những nội quy như ra ngoài không lý do, mất trật
                 tự,...
               </span>
+              <br />
+              <span
+                style={{
+                  paddingTop: "15px",
+                  fontWeight: 500,
+                  color: "red",
+                }}
+              >
+                Lưu ý: Nếu trưởng nhóm "Vắng mặt", quyền trưởng nhóm của sinh
+                viên sẽ được thay đổi ngẫu nhiên cho thành viên trong nhóm.
+              </span>
             </div>
           </div>
-          <div style={{ minHeight: "200px" }}>
+          <div>
             {data.length > 0 ? (
-              <>
-                <div className="table">
-                  <Table
-                    dataSource={data}
-                    rowKey="id"
-                    columns={columns}
-                    pagination={false}
-                  />
-                </div>
-              </>
+              <div className="table-teacher">
+                <Table
+                  dataSource={data}
+                  rowKey="id"
+                  columns={columns}
+                  pagination={false}
+                />
+              </div>
             ) : (
-              <>
-                <p
-                  style={{
-                    textAlign: "center",
-                    marginTop: "100px",
-                    fontSize: "15px",
-                    color: "red",
-                  }}
-                >
-                  Không có thông tin sinh viên
-                </p>
-              </>
+              <Empty
+                imageStyle={{ height: 60 }}
+                description={<span>Không có thông tin sinh viên</span>}
+              />
             )}
           </div>
           <div className="box-button-center">

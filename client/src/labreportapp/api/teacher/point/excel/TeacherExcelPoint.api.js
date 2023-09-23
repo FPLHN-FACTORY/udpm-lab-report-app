@@ -1,10 +1,11 @@
 import { request } from "../../../../helper/request.helper";
 const url = `/teacher/point`;
-export class TeacherExcelAPI {
-  static export = (data) => {
+export class TeacherExcelPointAPI {
+  static export = (idClass) => {
     return request({
       method: "GET",
-      url: url + `/export-excel?idClass=` + data.idClass,
+      url: url + `/export-excel?idClass=` + idClass,
+      responseType: "blob",
     });
   };
   static import = (formData, idClass) => {

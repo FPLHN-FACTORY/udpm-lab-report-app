@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import "./styleStudentsInMyClass.css";
-import { Table } from "antd";
+import { Button, Empty, Input, Table } from "antd";
 import { Link } from "react-router-dom";
 import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
 import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/TeacherStudentClasses.api";
@@ -12,7 +12,7 @@ import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import { useEffect, useState } from "react";
 import LoadingIndicator from "../../../../helper/loading";
 import moment from "moment";
-import { ControlOutlined } from "@ant-design/icons";
+import { ControlOutlined, SearchOutlined } from "@ant-design/icons";
 import { SetTTrueToggle } from "../../../../app/teacher/TeCollapsedSlice.reducer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleInfo, faTableList } from "@fortawesome/free-solid-svg-icons";
@@ -43,8 +43,9 @@ const StudentsInMyClass = () => {
     try {
       await TeacherStudentClassesAPI.getStudentInClasses(id).then(
         (responese) => {
-          console.log(responese.data.data);
           dispatch(SetStudentClasses(responese.data.data));
+          console.log("================================");
+          console.log(responese.data.data);
           setLoading(true);
         }
       );
@@ -62,21 +63,45 @@ const StudentsInMyClass = () => {
       width: "12px",
     },
     {
-      title: "Mã sinh viên",
-      dataIndex: "code",
-      key: "code",
-      render: (text, record, index) => {
-        const countSpace = (record.name.match(/ /g) || []).length;
-        const lastSpaceIndex = record.name.lastIndexOf(" ");
-        const wordCount =
-          lastSpaceIndex >= 0
-            ? record.name.substring(lastSpaceIndex + 1).length
-            : 0;
-        const nameIndexCut = countSpace + wordCount;
-        const codeShow = record.username.substring(nameIndexCut).toUpperCase();
-        return <span style={{ color: "#007bff" }}>{codeShow}</span>;
-      },
-      width: "130px",
+      title: "Tên tài khoản",
+      dataIndex: "username",
+      key: "username",
+      filterDropdown: ({
+        setSelectedKeys,
+        selectedKeys,
+        confirm,
+        clearFilters,
+      }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="Tìm kiếm"
+            value={selectedKeys[0]}
+            onChange={(e) =>
+              setSelectedKeys(e.target.value ? [e.target.value] : [])
+            }
+            onPressEnter={confirm}
+            style={{ width: 188, marginBottom: 8, display: "block" }}
+          />
+          <Button
+            type="primary"
+            className="btn_search_member"
+            onClick={confirm}
+            size="small"
+            style={{ width: 90, marginRight: 8 }}
+          >
+            Tìm
+          </Button>
+          <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
+            Đặt lại
+          </Button>
+        </div>
+      ),
+      filterIcon: (filtered) => (
+        <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+      ),
+      onFilter: (value, record) =>
+        record.username.toLowerCase().includes(value.toLowerCase()),
+      sorter: (a, b) => a.username.localeCompare(b.username),
     },
     {
       title: "Nhóm",
@@ -89,7 +114,6 @@ const StudentsInMyClass = () => {
           return <span>{text}</span>;
         }
       },
-      width: "150px",
     },
     {
       title: "Họ và tên",
@@ -251,7 +275,7 @@ const StudentsInMyClass = () => {
                 Hoạt động: &nbsp;{classDetail.activityName}
               </span>
               <span className="group-info-item">
-                Level: &nbsp; {classDetail.activityLevel + 1}
+                Level: &nbsp; {classDetail.activityLevel}
               </span>
               <span
                 className="group-info-item"
@@ -270,7 +294,7 @@ const StudentsInMyClass = () => {
                 className="group-info-item"
                 style={{ marginTop: "13px", marginBottom: "15px" }}
               >
-                Tình trạng: &nbsp;
+                Trạng thái: &nbsp;
                 {classDetail.statusClass === 0 ? "Đã mở" : "Đã khóa"}
               </span>
               <span
@@ -297,6 +321,15 @@ const StudentsInMyClass = () => {
               >
                 Mã tham gia: &nbsp;{classDetail.passWord}
               </span>
+              <span
+                className="group-info-item"
+                style={{ marginTop: "13px", marginBottom: "15px" }}
+              >
+                Trello: &nbsp;
+                {classDetail.allowUseTrello === 0
+                  ? "Cho phép"
+                  : "Không cho phép"}
+              </span>
             </div>
           </div>
           <span style={{ fontSize: "17px", fontWeight: 500 }}>
@@ -311,7 +344,10 @@ const StudentsInMyClass = () => {
               Danh sách sinh viên :
             </div>
           </span>
-          <div style={{ minHeight: "140px", marginTop: "-8px" }}>
+          <div
+            style={{ minHeight: "140px", marginTop: "20px" }}
+            className="table-teacher"
+          >
             {data.length > 0 ? (
               <>
                 <div className="table">
@@ -325,16 +361,10 @@ const StudentsInMyClass = () => {
               </>
             ) : (
               <>
-                <p
-                  style={{
-                    textAlign: "center",
-                    marginTop: "100px",
-                    fontSize: "15px",
-                    color: "red",
-                  }}
-                >
-                  Không có thành viên
-                </p>
+                <Empty
+                  imageStyle={{ height: 60 }}
+                  description={<span>Chưa có sinh viên nào trong lớp</span>}
+                />
               </>
             )}
           </div>

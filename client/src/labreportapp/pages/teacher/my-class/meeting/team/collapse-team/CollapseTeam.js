@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, Collapse, Row } from "antd";
+import { Button, Col, Collapse, Empty, Row } from "antd";
 import "./styleCollapseTeam.css";
 import TextArea from "antd/es/input/TextArea";
 import { TeacherMeetingAPI } from "../../../../../../api/teacher/meeting/TeacherMeeting.api";
+import { TeacherTempalteReportAPI } from "../../../../../../api/teacher/template-report/TeacherTemplateReport.api";
 import { TeacherMeetingHomeWorkNoteAPI } from "../../../../../../api/teacher/meeting/homework-note/TeacherMeetingHomeWorkNote.api";
 import { useParams } from "react-router";
 import { toast } from "react-toastify";
-import LoadingIndicator from "../../../../../../helper/loading";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUsersRectangle } from "@fortawesome/free-solid-svg-icons";
 const { Panel } = Collapse;
@@ -17,15 +17,19 @@ const CollapseTeam = ({ items }) => {
   const { idMeeting } = useParams();
   const [idTeamDetail, setIdTeamDetail] = useState("");
   const [objDetail, setObjDetail] = useState({});
+  const [template, setTempalte] = useState({});
   const [loading, setLoading] = useState(true);
   const [descriptionsHomeWork, setDescriptionsHomeWork] = useState("");
   const [descriptionsNote, setDescriptionsNote] = useState("");
+  const [descriptionsReport, setDescriptionsReport] = useState("");
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Bảng điều khiển - chi tiết buổi học";
     setDescriptionsHomeWork("");
     setDescriptionsNote("");
+    setDescriptionsReport("");
     setLoading(true);
+    featchTemplateReport();
   }, []);
   useEffect(() => {
     featchHomeWorkNote(idTeamDetail);
@@ -44,6 +48,15 @@ const CollapseTeam = ({ items }) => {
     setActivePanel(null);
     setObjDetail({});
   };
+  const featchTemplateReport = async () => {
+    try {
+      await TeacherTempalteReportAPI.getTemplateReport().then((response) => {
+        setTempalte(response.data.data);
+      });
+    } catch (error) {
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+    }
+  };
   const featchHomeWorkNote = async (idTeam) => {
     setLoading(false);
     try {
@@ -58,13 +71,16 @@ const CollapseTeam = ({ items }) => {
           let dataNew = {
             idHomeWork: "",
             idNote: "",
+            idReport: "",
           };
           setObjDetail(dataNew);
           setDescriptionsHomeWork("");
           setDescriptionsNote("");
+          setDescriptionsReport("");
         } else {
           setDescriptionsHomeWork(response.data.data.descriptionsHomeWork);
           setDescriptionsNote(response.data.data.descriptionsNote);
+          setDescriptionsReport(response.data.data.descriptionsReport);
           setObjDetail(response.data.data);
         }
         setLoading(true);
@@ -82,6 +98,8 @@ const CollapseTeam = ({ items }) => {
         descriptionsHomeWork: descriptionsHomeWork,
         idNote: objDetail.idNote,
         descriptionsNote: descriptionsNote,
+        idReport: objDetail.idReport,
+        descriptionsReport: descriptionsReport,
       };
       await TeacherMeetingHomeWorkNoteAPI.updateHomeWorkAndNote(data).then(
         (response) => {
@@ -94,7 +112,7 @@ const CollapseTeam = ({ items }) => {
   };
   return (
     <div
-      className="centered-collapse"
+      className="teacher-collapse"
       onClick={(e) => {
         e.stopPropagation();
         clear();
@@ -104,7 +122,7 @@ const CollapseTeam = ({ items }) => {
         {items.map((item, index) => (
           <Panel
             style={{
-              minWidth: "900px",
+              width: "100%",
               boxShadow:
                 activePanel === index
                   ? "0px 0px 10px rgba(0, 0, 0, 0.2)"
@@ -123,10 +141,9 @@ const CollapseTeam = ({ items }) => {
                 className={`custom-collapse-header ${
                   activePanel === index ? "active" : ""
                 }`}
-                name="box-card"
               >
-                <div className="title-left">
-                  <div className="box-icon">
+                <div className="title-left" style={{ float: "left" }}>
+                  <div className="box-icon" style={{ float: "left" }}>
                     <FontAwesomeIcon
                       icon={faUsersRectangle}
                       style={{ color: "white", fontSize: 21 }}
@@ -134,8 +151,10 @@ const CollapseTeam = ({ items }) => {
                   </div>
                   <span
                     style={{
-                      fontSize: "16px",
+                      lineHeight: "40px",
+                      fontSize: "17px",
                       color: "black",
+                      float: "left",
                     }}
                   >
                     {item.name}
@@ -145,12 +164,16 @@ const CollapseTeam = ({ items }) => {
             }
             key={index}
           >
-            <div className="info-content" onClick={() => setEdit(true)}>
+            <div
+              className="info-content"
+              onClick={() => setEdit(true)}
+              style={{ minWidth: "80%" }}
+            >
               <Row gutter={16}>
-                <Col span={12}>
-                  <span style={{ color: "black" }}>Nhận xét:</span>
+                <Col span={8}>
+                  <span className="title-main">Nhận xét:</span>
                   <TextArea
-                    rows={4}
+                    rows={10}
                     placeholder="Nhập nhận xét"
                     value={descriptionsNote}
                     onChange={(e) => setDescriptionsNote(e.target.value)}
@@ -160,12 +183,10 @@ const CollapseTeam = ({ items }) => {
                     }}
                   />
                 </Col>
-                <Col span={12}>
-                  <span style={{ color: "black", fontFamily: "unset" }}>
-                    Bài tập về nhà:
-                  </span>
+                <Col span={8}>
+                  <span className="title-main">Bài tập về nhà:</span>
                   <TextArea
-                    rows={4}
+                    rows={10}
                     placeholder="Nhập bài tập"
                     value={descriptionsHomeWork}
                     style={{ readOnly: edit && "false" }}
@@ -175,6 +196,26 @@ const CollapseTeam = ({ items }) => {
                       setEdit(true);
                     }}
                   />
+                </Col>
+                <Col span={8}>
+                  <span className="title-main">Báo cáo:</span>
+                  <TextArea
+                    rows={10}
+                    placeholder="Báo cáo"
+                    value={descriptionsReport}
+                    style={{ readOnly: edit && "false" }}
+                    onChange={(e) => setDescriptionsReport(e.target.value)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setEdit(true);
+                    }}
+                  />
+                </Col>
+              </Row>
+              <Row gutter={16}>
+                <Col span={24}>
+                  <span className="title-main">Template mẫu báo cáo:</span>
+                  <TextArea rows={5} value={template.descriptions} />
                 </Col>
               </Row>
             </div>
@@ -205,16 +246,10 @@ const CollapseTeam = ({ items }) => {
           </Panel>
         ))}
         {items.length === 0 && (
-          <p
-            style={{
-              textAlign: "center",
-              marginTop: "100px",
-              fontSize: "15px",
-              color: "red",
-            }}
-          >
-            Lớp học chưa có nhóm !
-          </p>
+          <Empty
+            imageStyle={{ height: 60 }}
+            description={<span>Lớp học chưa có nhóm</span>}
+          />
         )}
       </Collapse>
     </div>

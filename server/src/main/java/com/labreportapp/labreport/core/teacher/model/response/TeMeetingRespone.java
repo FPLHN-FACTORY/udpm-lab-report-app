@@ -28,4 +28,7 @@ public interface TeMeetingRespone {
     @Value("#{target.class_id}")
     String getIdClass();
 
+    @Value("#{target.teacher_id}")
+    String getIdTeacher();
+
 }

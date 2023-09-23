@@ -8,6 +8,12 @@ export class TeacherScheduleTodayAPI {
       url: url + `?idTeacher=` + idTeacher,
     });
   };
+  static getAllNowToTimeByIdTeacher = (data) => {
+    return request({
+      method: "GET",
+      url: url + `-time?idTeacher=` + data.idTeacher + `&time=` + data.time,
+    });
+  };
   static updateDescriptionMeeting = (data) => {
     return request({
       method: "PUT",

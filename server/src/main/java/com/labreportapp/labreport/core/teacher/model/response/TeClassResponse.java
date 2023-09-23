@@ -23,6 +23,8 @@ public interface TeClassResponse {
     Integer getClassPeriod();
 
     @Value("#{target.level}")
-    Integer getLevel();
+    String getLevel();
 
+    @Value("#{target.activity}")
+    String getActivity();
 }

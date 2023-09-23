@@ -2,28 +2,61 @@ import "./styleTeacherScheduleToday.css";
 import { giangVienCurrent } from "../../../helper/inForUser";
 import { useState } from "react";
 import { useEffect } from "react";
-import { ProjectOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import LoadingIndicator from "../../../helper/loading";
-import { Input, Table, Tooltip } from "antd";
+import { Col, Empty, Input, Row, Select, Table, Tooltip } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome, faUpload } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCalendarWeek,
+  faChalkboard,
+  faHome,
+  faUpload,
+} from "@fortawesome/free-solid-svg-icons";
 import { TeacherScheduleTodayAPI } from "../../../api/teacher/meeting/schedule-today/TeacherScheduleToday.api";
 import { toast } from "react-toastify";
+import { convertMeetingPeriodToTime } from "../../../helper/util.helper";
+
+const { Option } = Select;
+
 const TeacherScheduleToday = () => {
   const [loading, setLoading] = useState(false);
   const [dataToday, setDataToday] = useState([]);
+  const [time, setTime] = useState("7");
+  const [dataTime, setDataTime] = useState([]);
+
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Bảng điều khiển - lịch dạy hôm nay";
     featchData(giangVienCurrent.id);
+    setTime("7");
+    featchDataTime();
   }, []);
+  useEffect(() => {
+    featchDataTime();
+  }, [time]);
+
   const featchData = async (idTeacher) => {
     setLoading(false);
     try {
       await TeacherScheduleTodayAPI.getAllByIdTe(idTeacher).then((response) => {
         setDataToday(response.data.data);
       });
+      setLoading(true);
+    } catch (error) {
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+    }
+  };
+  const featchDataTime = async () => {
+    try {
+      let dataFind = {
+        idTeacher: giangVienCurrent.id,
+        time: time,
+      };
+      await TeacherScheduleTodayAPI.getAllNowToTimeByIdTeacher(dataFind).then(
+        (response) => {
+          setDataTime(response.data.data);
+        }
+      );
       setLoading(true);
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
@@ -67,10 +100,16 @@ const TeacherScheduleToday = () => {
   const data = dataToday;
   const columns = [
     {
+      title: "#",
+      dataIndex: "stt",
+      key: "stt",
+      render: (text, record, index) => index + 1,
+      width: "12px",
+    },
+    {
       title: "Mã lớp",
       dataIndex: "codeClass",
       key: "codeClass",
-      width: "15%",
     },
     {
       title: "Ngày",
@@ -79,13 +118,11 @@ const TeacherScheduleToday = () => {
       render: (text, record) => {
         return <span>{convertLongToDate(text)}</span>;
       },
-      width: "5%",
     },
     {
       title: "Tên buổi học",
       dataIndex: "meetingName",
       key: "meetingName",
-      width: "25%",
     },
     {
       title: "Phòng",
@@ -94,7 +131,6 @@ const TeacherScheduleToday = () => {
       render: (text, record) => {
         return <span>{text === 0 ? "Online" : "Offline"}</span>;
       },
-      width: "5%",
     },
 
     {
@@ -106,7 +142,14 @@ const TeacherScheduleToday = () => {
           <span>{record.typeMeeting === 0 ? "Google Meet" : "Xưởng"}</span>
         );
       },
-      width: "13%",
+    },
+    {
+      title: "Thời gian",
+      dataIndex: "timePeriod",
+      key: "timePeriod",
+      render: (text, record) => {
+        return <span>{convertMeetingPeriodToTime(record.meetingPeriod)}</span>;
+      },
     },
     {
       title: "Ca học",
@@ -115,7 +158,11 @@ const TeacherScheduleToday = () => {
       render: (text, record) => {
         return <span>{text + 1}</span>;
       },
-      width: "8%",
+    },
+    {
+      title: "Level",
+      dataIndex: "level",
+      key: "level",
     },
     {
       title: "Link học trực tuyến",
@@ -153,7 +200,6 @@ const TeacherScheduleToday = () => {
           </div>
         );
       },
-      width: "28%",
     },
     {
       title: "Điểm danh",
@@ -185,6 +231,79 @@ const TeacherScheduleToday = () => {
         </>
       ),
       width: "10%",
+    },
+  ];
+  const columnsTime = [
+    {
+      title: "#",
+      dataIndex: "stt",
+      key: "stt",
+      render: (text, record, index) => index + 1,
+      width: "12px",
+    },
+    {
+      title: "Mã lớp",
+      dataIndex: "codeClass",
+      key: "codeClass",
+    },
+    {
+      title: "Ngày",
+      dataIndex: "meetingDate",
+      key: "meetingDate",
+      render: (text, record) => {
+        return <span>{convertLongToDate(text)}</span>;
+      },
+    },
+    {
+      title: "Tên buổi học",
+      dataIndex: "meetingName",
+      key: "meetingName",
+    },
+    {
+      title: "Phòng",
+      dataIndex: "typeMeeting",
+      key: "typeMeeting",
+      render: (text, record) => {
+        return <span>{text === 0 ? "Online" : "Offline"}</span>;
+      },
+    },
+
+    {
+      title: "Địa điểm",
+      dataIndex: "addressCustom",
+      key: "addressCustom",
+      render: (text, record) => {
+        return (
+          <span>{record.typeMeeting === 0 ? "Google Meet" : "Xưởng"}</span>
+        );
+      },
+    },
+    {
+      title: "Thời gian",
+      dataIndex: "timePeriod",
+      key: "timePeriod",
+      render: (text, record) => {
+        return <span>{convertMeetingPeriodToTime(record.meetingPeriod)}</span>;
+      },
+    },
+    {
+      title: "Ca học",
+      dataIndex: "meetingPeriod",
+      key: "meetingPeriod",
+      render: (text, record) => {
+        return <span>{text + 1}</span>;
+      },
+    },
+
+    {
+      title: "Level",
+      dataIndex: "level",
+      key: "level",
+    },
+    {
+      title: "Link học trực tuyến",
+      dataIndex: "meetingAddress",
+      key: "meetingAddress",
     },
   ];
   return (
@@ -235,36 +354,92 @@ const TeacherScheduleToday = () => {
           >
             <div className="title-table">
               <div>
-                {" "}
                 <span style={{ fontSize: "17px", fontWeight: "500" }}>
-                  {" "}
-                  <ProjectOutlined
+                  <FontAwesomeIcon
+                    icon={faChalkboard}
                     style={{ marginRight: "10px", fontSize: "24px" }}
                   />
-                  Danh sách ca dạy
+                  Lịch dạy hôm nay
                 </span>
               </div>
             </div>
-            <div className="table" style={{ marginTop: "30px" }}>
+            <div className="table-teacher" style={{ marginTop: "20px" }}>
               {dataToday.length > 0 ? (
                 <Table
+                  size="middle"
                   dataSource={data}
                   rowKey="idMeeting"
                   columns={columns}
                   pagination={false}
                 />
               ) : (
-                <p
-                  style={{
-                    textAlign: "center",
-                    marginTop: "100px",
-                    fontSize: "15px",
-                    color: "red",
-                  }}
-                >
-                  Không có ca dạy
-                </p>
+                <Empty
+                  imageStyle={{ height: 60 }}
+                  description={
+                    <span style={{ color: "#007bff" }}>Không có ca dạy</span>
+                  }
+                />
               )}
+            </div>
+            <div className="list-lesson-custom">
+              <div className="title-table">
+                <div>
+                  <Row gutter={25}>
+                    <Col span={3}>
+                      <div
+                        style={{
+                          fontSize: "17px",
+                          fontWeight: "500",
+                          paddingTop: "8px",
+                        }}
+                      >
+                        <FontAwesomeIcon
+                          icon={faCalendarWeek}
+                          style={{ marginRight: "10px", fontSize: "24px" }}
+                        />
+                        Lịch dạy
+                      </div>
+                    </Col>
+                    <Col span={21}>
+                      <Select
+                        showSearch
+                        value={time}
+                        onChange={(value) => {
+                          setTime(value);
+                        }}
+                        style={{
+                          width: "100%",
+                          margin: "6px 0 10px 0",
+                        }}
+                      >
+                        <Option value="7">7 ngày tới</Option>
+                        <Option value="14">14 ngày tới</Option>
+                        <Option value="30">30 ngày tới</Option>
+                        <Option value="-7">7 ngày trước</Option>
+                        <Option value="-14">14 ngày trước</Option>
+                        <Option value="-30">30 ngày trước</Option>
+                      </Select>
+                    </Col>
+                  </Row>
+                </div>
+              </div>
+              <div className="table-teacher" style={{ marginTop: "20px" }}>
+                {dataTime.length > 0 ? (
+                  <Table
+                    dataSource={dataTime}
+                    rowKey="idMeeting"
+                    columns={columnsTime}
+                    pagination={{
+                      defaultPageSize: 6,
+                    }}
+                  />
+                ) : (
+                  <Empty
+                    imageStyle={{ height: 60 }}
+                    description={<span>Không có ca dạy</span>}
+                  />
+                )}
+              </div>
             </div>
           </div>
         </div>

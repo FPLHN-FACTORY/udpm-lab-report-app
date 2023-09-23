@@ -1,6 +1,6 @@
 import { Button, Spin } from "antd";
 import { useState } from "react";
-import { TeacherExcelAPI } from "../../../../../api/teacher/point/excel/TeacherExcelPoint.api";
+import { TeacherExcelPointAPI } from "../../../../../api/teacher/point/excel/TeacherExcelPoint.api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
@@ -14,7 +14,7 @@ const ButtonImportExcel = ({ idClass }) => {
       if (selectedFile) {
         const formData = new FormData();
         formData.append("multipartFile", selectedFile);
-        await TeacherExcelAPI.import(formData, idClass)
+        await TeacherExcelPointAPI.import(formData, idClass)
           .then((response) => {
             setTimeout(() => {
               if (response.data.data.status === true) {
@@ -29,7 +29,7 @@ const ButtonImportExcel = ({ idClass }) => {
                 toast.error(
                   "Import thất bại, " +
                     response.data.data.message +
-                    ", vui lòng chờ !",
+                    ", vui lòng chờ giây lát !",
                   {
                     position: toast.POSITION.TOP_CENTER,
                   }

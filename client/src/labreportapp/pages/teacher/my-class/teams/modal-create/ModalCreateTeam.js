@@ -338,16 +338,16 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
                 <>
                   <span>Thành viên:</span>
                   <Row>
-                    {" "}
                     <Col span={24}>
-                      <Table
-                        pagination={false}
-                        className="table-member-management"
-                        columns={columns}
-                        dataSource={dataTable}
-                        rowKey="id"
-                      />
-                    </Col>{" "}
+                      <div className="table-teacher">
+                        <Table
+                          pagination={false}
+                          columns={columns}
+                          dataSource={dataTable}
+                          rowKey="id"
+                        />
+                      </div>
+                    </Col>
                   </Row>
                 </>
               )}

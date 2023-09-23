@@ -9,6 +9,7 @@ import {
   Space,
   Tooltip,
   Table,
+  Empty,
 } from "antd";
 import "./styleModalUpdateTeam.css";
 import { useEffect, useState } from "react";
@@ -317,22 +318,7 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
           </Row>
           <Row style={{ marginBottom: "15px" }}>
             <div style={{ width: "100%" }}>
-              <span>
-                Thành viên:{" "}
-                {listShowTable.length <= 0 ? (
-                  <span
-                    style={{
-                      color: "black",
-                      fontSize: "14px",
-                    }}
-                  >
-                    {" "}
-                    Chưa có thành viên nào tham gia nhóm
-                  </span>
-                ) : (
-                  ""
-                )}
-              </span>
+              <span>Thành viên:</span>
               <Select
                 mode="multiple"
                 placeholder="Thêm thành viên"
@@ -365,23 +351,28 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
             </div>
           </Row>
           {listShowTable.length > 0 ? (
-            <>
-              <Row>
-                {" "}
-                <Col span={24}>
+            <Row>
+              <Col span={24}>
+                <div className="table-teacher">
                   <Table
                     pagination={false}
                     columns={columns}
                     dataSource={listShowTable}
                     rowKey="id"
                   />
-                </Col>{" "}
-              </Row>
-            </>
+                </div>
+              </Col>
+            </Row>
           ) : (
-            <>
-              <span></span>
-            </>
+            <Empty
+              image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+              imageStyle={{ height: 60 }}
+              description={
+                <span style={{ color: "#007bff" }}>
+                  Không có thành viên nào trong nhóm
+                </span>
+              }
+            />
           )}
         </div>
         <div

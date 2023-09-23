@@ -1,6 +1,6 @@
 import "./styleTeacherAttendance.css";
 import { useParams } from "react-router";
-import { ControlOutlined, UnorderedListOutlined } from "@ant-design/icons";
+import { ControlOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "../../../../app/hook";
@@ -12,6 +12,7 @@ import { TeacherAttendanceAPI } from "../../../../api/teacher/attendance/Teacher
 import LoadingIndicator from "../../../../helper/loading";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTableList } from "@fortawesome/free-solid-svg-icons";
+import { Empty } from "antd";
 const TeacherAttendanceClass = () => {
   const { idClass } = useParams();
   const dispatch = useAppDispatch();
@@ -30,6 +31,8 @@ const TeacherAttendanceClass = () => {
       await TeacherMeetingAPI.getColumnMeetingByIdClass(idClass).then(
         (response) => {
           setColumn(response.data.data);
+          console.log("locoasmaa");
+          console.log(response.data.data);
         }
       );
     } catch (error) {
@@ -41,6 +44,8 @@ const TeacherAttendanceClass = () => {
       await TeacherAttendanceAPI.getAllAttendanceByIdClass(idClass)
         .then((responese) => {
           setData(responese.data.data);
+          console.log("dâttattattattattattattattattatt");
+          console.log(responese.data.data);
           setLoading(true);
         })
         .catch((err) => {
@@ -178,7 +183,7 @@ const TeacherAttendanceClass = () => {
                 <hr />
               </div>
             </div>
-            <div className="info-team">
+            {/* <div className="info-team">
               <div className="group-info">
                 <span
                   className="group-info-item"
@@ -193,7 +198,7 @@ const TeacherAttendanceClass = () => {
                   Mô tả: &nbsp;{classDetail.descriptions}
                 </span>
               </div>
-            </div>
+            </div> */}
             <div style={{ overflowX: "auto" }}>
               <div style={{ margin: "15px 0px 15px 15px" }}>
                 <span style={{ fontSize: "17px", fontWeight: 500 }}>
@@ -207,71 +212,79 @@ const TeacherAttendanceClass = () => {
                   Chi tiết điểm danh :
                 </span>
               </div>
-              <table
-                className="custom-table"
-                style={{
-                  width: "100%",
-                  borderCollapse: "collapse",
-                  border: "none",
-                }}
-              >
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Họ và tên</th>
-                    <th>Email</th>
-                    {column != null &&
-                      column.length > 0 &&
-                      column.map((item, index) => (
-                        <th className="column-AP" key={index} style={{}}>
-                          {convertLongToDate(item.meetingDate)}
-                          <br />
-                          <span>{item.nameMeeting}</span>
-                        </th>
-                      ))}
-                    <th>Vắng</th>
-                    <th>Tỷ lệ</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data != null &&
-                    data.length > 0 &&
-                    data.map((item, rowIndex) => {
-                      let countAbsent = 0;
-                      let countMeeting = 0;
-                      return (
-                        <tr key={rowIndex}>
-                          <td style={{ padding: "4px" }}>{rowIndex + 1}</td>
-                          <td style={{ textAlign: "left" }}>{item.name}</td>
-                          <td style={{ textAlign: "left" }}>{item.email}</td>
-                          {item.listAttendance != null &&
-                            item.listAttendance.length > 0 &&
-                            item.listAttendance.map((column, colIndex) => {
-                              countMeeting++;
-                              if (column.statusAttendance === "1") {
-                                countAbsent++;
-                              }
-                              return (
-                                <td key={colIndex}>
-                                  {column.statusAttendance === "0" ? (
-                                    <span style={{ color: "green" }}>A</span>
-                                  ) : column.statusAttendance === "1" ? (
-                                    <span style={{ color: "red" }}>P</span>
-                                  ) : (
-                                    <span>-</span>
-                                  )}
-                                </td>
-                              );
-                            })}
-                          <td>
-                            {parseFloat(countAbsent / countMeeting) * 100}%
-                          </td>
-                          <td>{countAbsent + `/` + countMeeting}</td>
-                        </tr>
-                      );
-                    })}
-                </tbody>
-              </table>
+              {data !== null ? (
+                <table
+                  className="custom-table-teacher"
+                  style={{
+                    width: "100%",
+                    borderCollapse: "collapse",
+                    border: "none",
+                  }}
+                >
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Họ và tên</th>
+                      <th>Email</th>
+                      {column.length > 0 &&
+                        column.map((item, index) => (
+                          <th className="column-AP-teacher" key={index}>
+                            {convertLongToDate(item.meetingDate)}
+                            <br />
+                            <span>{item.nameMeeting}</span>
+                          </th>
+                        ))}
+                      <th>Vắng</th>
+                      <th>Tỷ lệ</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data != null &&
+                      data.map((item, rowIndex) => {
+                        let countAbsent = 0;
+                        let countMeeting = 0;
+                        return (
+                          <tr key={rowIndex}>
+                            <td style={{ padding: "4px" }}>{rowIndex + 1}</td>
+                            <td style={{ textAlign: "left" }}>{item.name}</td>
+                            <td style={{ textAlign: "left" }}>{item.email}</td>
+                            {item.listAttendance != null &&
+                              item.listAttendance.length > 0 &&
+                              item.listAttendance.map((column, colIndex) => {
+                                countMeeting++;
+                                if (column.statusAttendance === "1") {
+                                  countAbsent++;
+                                }
+                                return (
+                                  <td key={colIndex}>
+                                    {column.statusAttendance === "0" ? (
+                                      <span style={{ color: "green" }}>A</span>
+                                    ) : column.statusAttendance === "1" ? (
+                                      <span style={{ color: "red" }}>P</span>
+                                    ) : (
+                                      <span>-</span>
+                                    )}
+                                  </td>
+                                );
+                              })}
+                            <td>
+                              {parseFloat(countAbsent / countMeeting) * 100}%
+                            </td>
+                            <td>{countAbsent + `/` + countMeeting}</td>
+                          </tr>
+                        );
+                      })}
+                  </tbody>
+                </table>
+              ) : (
+                <Empty
+                  imageStyle={{ height: 60 }}
+                  style={{
+                    padding: "20px 0px 20px 0",
+                  }}
+                  description={<span>Không có thông tin buổi học</span>}
+                />
+              )}
             </div>
           </div>
         </div>

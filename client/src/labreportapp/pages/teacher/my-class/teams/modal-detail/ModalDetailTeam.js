@@ -1,4 +1,4 @@
-import { Modal, Row, Col, Input, Table, Select } from "antd";
+import { Modal, Row, Col, Input, Table, Select, Empty } from "antd";
 import "./styleModalDetailTeam.css";
 import { useEffect, useState } from "react";
 import { useAppSelector } from "../../../../../app/hook";
@@ -112,27 +112,24 @@ const ModalDetailTeam = ({ visible, onCancel, team, idClass, click }) => {
             </Col>
           </Row>
           {listShowTable.length > 0 ? (
-            <>
+            <div className="table-teacher">
               <Table
                 dataSource={listShowTable}
                 rowKey="id"
                 columns={columns}
                 pagination={false}
               />
-            </>
+            </div>
           ) : (
-            <>
-              <p
-                style={{
-                  textAlign: "center",
-                  marginTop: "90px",
-                  fontSize: "15px",
-                  color: "red",
-                }}
-              >
-                Không có thành viên nào trong nhóm
-              </p>
-            </>
+            <Empty
+              image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+              imageStyle={{ height: 60 }}
+              description={
+                <span style={{ color: "#007bff" }}>
+                  Không có thành viên nào trong nhóm
+                </span>
+              }
+            />
           )}
         </div>
       </Modal>

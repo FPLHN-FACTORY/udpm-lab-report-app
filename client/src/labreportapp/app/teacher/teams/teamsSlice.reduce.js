@@ -19,6 +19,7 @@ const teTeamsSlice = createSlice({
         subjectName: data.subjectName,
         classId: data.classId,
         createdDate: data.createdDate,
+        idProject: data.projectId,
       };
       state.unshift(newTeam);
       return state;
@@ -40,6 +41,7 @@ const teTeamsSlice = createSlice({
         teamUpdate.subjectName = team.subjectName;
         teamUpdate.classId = team.classId;
         teamUpdate.createdDate = team.createdDate;
+        teamUpdate.idProject = team.projectId;
       }
       return state;
     },

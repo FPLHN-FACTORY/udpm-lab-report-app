@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import "./styleTeamsInMyClass.css";
-import { Row, Table, Button, Tooltip, Col, Modal } from "antd";
+import { Row, Table, Button, Tooltip, Col, Modal, Empty } from "antd";
 import { Link } from "react-router-dom";
 import { ControlOutlined } from "@ant-design/icons";
 import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/TeacherStudentClasses.api";
@@ -19,7 +19,6 @@ import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import LoadingIndicator from "../../../../helper/loading";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faDownload,
   faEye,
   faPenToSquare,
   faTrashCan,
@@ -33,6 +32,7 @@ import { toast } from "react-toastify";
 import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
 import { SetTTrueToggle } from "../../../../app/teacher/TeCollapsedSlice.reducer";
 import ButtonExportExcelTeam from "./export-excel/ButtonExportExcelTeam";
+import ButtonImportExcelTeam from "./import-excel/ButtonImportExcel";
 
 const TeamsInMyClass = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -201,6 +201,21 @@ const TeamsInMyClass = () => {
       render: (text, record) => (
         <>
           <div style={{ width: "105px" }}>
+            <Tooltip title="Xem trello dự án">
+              <Link
+                to={`/detail-project/${record.idProject}`}
+                style={{ color: "black" }}
+              >
+                <FontAwesomeIcon
+                  icon={faEye}
+                  className="icon"
+                  onClick={() => {
+                    setShowDetailModal(true);
+                    handleDetailTeam(record);
+                  }}
+                />
+              </Link>
+            </Tooltip>
             <Tooltip title="Chi tiết">
               <FontAwesomeIcon
                 icon={faEye}
@@ -232,7 +247,6 @@ const TeamsInMyClass = () => {
           </div>
         </>
       ),
-      width: "10%",
     },
   ];
   return (
@@ -361,19 +375,7 @@ const TeamsInMyClass = () => {
             </Row>
             <Row style={{ marginTop: "10px" }}>
               <ButtonExportExcelTeam idClass={idClass} />
-              <Button
-                className="btn_clear"
-                style={{
-                  backgroundColor: "rgb(38, 144, 214)",
-                  color: "white",
-                }}
-              >
-                <FontAwesomeIcon
-                  icon={faUpload}
-                  style={{ marginRight: "7px" }}
-                />
-                Import nhóm
-              </Button>
+              <ButtonImportExcelTeam idClass={idClass} />
               <Button
                 className="btn_clear"
                 style={{
@@ -390,32 +392,21 @@ const TeamsInMyClass = () => {
               </Button>
             </Row>
           </div>
-          <div>
+          <div style={{ marginTop: "20px" }}>
             {data.length > 0 ? (
-              <>
-                <div className="table">
-                  <Table
-                    style={{ marginTop: "150px" }}
-                    dataSource={data}
-                    rowKey="id"
-                    columns={columns}
-                    pagination={false}
-                  />
-                </div>
-              </>
+              <div className="table-teacher">
+                <Table
+                  dataSource={data}
+                  rowKey="id"
+                  columns={columns}
+                  pagination={false}
+                />
+              </div>
             ) : (
-              <>
-                <p
-                  style={{
-                    textAlign: "center",
-                    marginTop: "100px",
-                    fontSize: "15px",
-                    color: "red",
-                  }}
-                >
-                  Không có nhóm nào trong lớp
-                </p>
-              </>
+              <Empty
+                imageStyle={{ height: 60 }}
+                description={<span>Chưa có nhóm nào trong lớp</span>}
+              />
             )}
           </div>
           <ModalDetailTeam

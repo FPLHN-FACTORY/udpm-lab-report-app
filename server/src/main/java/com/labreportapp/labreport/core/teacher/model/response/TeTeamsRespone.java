@@ -22,4 +22,7 @@ public interface TeTeamsRespone {
     @Value("#{target.createdDate}")
     Long getCreatedDate();
 
+    @Value("#{target.project_id}")
+    String getIdProject();
+
 }
