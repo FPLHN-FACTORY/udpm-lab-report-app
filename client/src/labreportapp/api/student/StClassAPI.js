@@ -12,6 +12,8 @@ export class StClassAPI {
         code: filter.code,
         classPeriod: filter.classPeriod,
         level: filter.level,
+        page: filter.page,
+        size: filter.size,
       },
     });
   }

@@ -7,7 +7,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class StAttendenceAllCustomResponse {
+public class StClassAttendenceAllCustomResponse {
 
     private String id;
 
