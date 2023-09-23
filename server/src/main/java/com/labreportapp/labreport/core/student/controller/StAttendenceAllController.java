@@ -2,7 +2,7 @@ package com.labreportapp.labreport.core.student.controller;
 
 import com.labreportapp.labreport.core.common.base.ResponseObject;
 import com.labreportapp.labreport.core.student.model.request.StFindAttendenceAllRequest;
-import com.labreportapp.labreport.core.student.model.response.StAttendenceAllCustomResponse;
+import com.labreportapp.labreport.core.student.model.response.StClassAttendenceAllCustomResponse;
 import com.labreportapp.labreport.core.student.service.StAttendenceAllService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -22,7 +22,7 @@ public class StAttendenceAllController {
 
   @GetMapping("")
   public ResponseObject getClassByStudent(final StFindAttendenceAllRequest req) {
-    List<StAttendenceAllCustomResponse> attendencesResponse = stAttendenceAllService.getClassAttendenceListByStudentInClassAndSemester(req);
+    List<StClassAttendenceAllCustomResponse> attendencesResponse = stAttendenceAllService.getClassAttendenceListByStudentInClassAndSemester(req);
     return new ResponseObject(attendencesResponse);
   }
 

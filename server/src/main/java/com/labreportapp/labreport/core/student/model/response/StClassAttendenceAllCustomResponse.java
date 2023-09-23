@@ -13,5 +13,5 @@ public class StClassAttendenceAllCustomResponse {
 
     private String classCode;
 
-    private List<StAttendenceAllResponse> attendences;
+    private List<StAttendenceAllCustomResponse> attendences;
 }

@@ -26,4 +26,13 @@ public interface StClassResponse extends IsIdentified {
   @Value("#{target.name}")
   String getLevel();
 
+  @Value("#{target.activityName}")
+  String getActivityName();
+
+  @Value("#{target.start_time_student}")
+  Long getStartTimeStudent();
+
+  @Value("#{target.end_time_student}")
+  Long getEndTimeStudent();
+
 }
