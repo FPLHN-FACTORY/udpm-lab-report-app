@@ -8,9 +8,11 @@ import com.labreportapp.labreport.core.admin.repository.AdSemesterRepository;
 import com.labreportapp.labreport.core.admin.service.AdSemesterService;
 import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.entity.Semester;
+import com.labreportapp.labreport.infrastructure.constant.StatusFeedBack;
 import com.labreportapp.labreport.util.FormUtils;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -36,27 +38,61 @@ public class AdSemesterServiceImpl implements AdSemesterService {
     }
 
     @Override
-    public Semester createSermester(AdCreateSemesterRequest obj) {
+    public Semester createSermester(@Valid AdCreateSemesterRequest obj) {
         Semester semester = formUtils.convertToObject(Semester.class, obj);
+        List<Semester> semesterList = adSemesterRepository.findAllSemester();
+        for (Semester semester1 : semesterList) {
+            if (obj.getStartTime() < semester1.getEndTime() && obj.getEndTime() > semester1.getStartTime()) {
+                throw new RestApiException(Message.TIME_SEMESTER_OVERLOAD);
+            }
+            if (obj.getStartTimeStudent() < obj.getStartTime() ||
+                    obj.getEndTimeStudent() > obj.getEndTime() ||
+                    obj.getStartTimeStudent() > obj.getEndTimeStudent()) {
+                throw new RestApiException(Message.TIME_STUDENT_SEMESTER_OVERLOAD);
+            }
+        }
+        semester.setStatusFeedBack(StatusFeedBack.CHUA_FEEDBACK);
         return adSemesterRepository.save(semester);
     }
 
     @Override
-    public Semester updateSermester(AdUpdateSemesterRequest obj) {
+    public Semester updateSermester(@Valid AdUpdateSemesterRequest obj) {
         Optional<Semester> findCategoryById = adSemesterRepository.findById(obj.getId());
         if (!findCategoryById.isPresent()) {
             throw new RestApiException(Message.SEMESTER_NOT_EXISTS);
+        }
+        List<Semester> semesterList = adSemesterRepository.findAllSemester();
+        for (Semester semester1 : semesterList) {
+            if (semester1.getId().equals(obj.getId())) {
+                continue;
+            }
+            if (obj.getStartTime() < semester1.getEndTime() && obj.getEndTime() > semester1.getStartTime()) {
+                throw new RestApiException(Message.TIME_SEMESTER_OVERLOAD);
+            }
+//            if(obj.getStartTime() < semester1.getEndTime() && obj.getStartTime() > semester1.getStartTime()){
+//                throw new RestApiException(Message.TIME_SEMESTER_OVERLOAD);
+//            }
+//            if(obj.getEndTime() < semester1.getEndTime() && obj.getEndTime() > semester1.getStartTime()){
+//                throw new RestApiException(Message.TIME_SEMESTER_OVERLOAD);
+//            }
+            if (obj.getStartTimeStudent() < obj.getStartTime() ||
+                    obj.getEndTimeStudent() > obj.getEndTime() ||
+                    obj.getStartTimeStudent() > obj.getEndTimeStudent()) {
+                throw new RestApiException(Message.TIME_STUDENT_SEMESTER_OVERLOAD);
+            }
         }
         Semester semester = findCategoryById.get();
         semester.setName(obj.getName());
         semester.setStartTime(obj.getStartTime());
         semester.setEndTime(obj.getEndTime());
+        semester.setStartTimeStudent(obj.getStartTimeStudent());
+        semester.setEndTimeStudent(obj.getEndTimeStudent());
         return adSemesterRepository.save(semester);
     }
 
     @Override
     public PageableObject<AdSemesterResponse> searchSemester(AdFindSemesterRequest rep) {
-        Pageable pageable = PageRequest.of(rep.getPage()-1, rep.getSize());
+        Pageable pageable = PageRequest.of(rep.getPage() - 1, rep.getSize());
         Page<AdSemesterResponse> adSemesterResponses = adSemesterRepository.searchSemester(rep, pageable);
         adSemesterResponseList = adSemesterResponses.stream().toList();
         return new PageableObject<>(adSemesterResponses);
@@ -80,7 +116,7 @@ public class AdSemesterServiceImpl implements AdSemesterService {
             throw new RestApiException(Message.SEMESTER_NOT_EXISTS);
         }
 
-        if (countActivities > 0){
+        if (countActivities > 0) {
             System.out.println(countActivities);
             throw new RestApiException(Message.SEMESTER_ACTIVITY_ALREADY_EXISTS);
         }

@@ -73,7 +73,9 @@ public enum Message {
     YOU_MUST_LEADER(PropertiesReader.getProperty(PropertyKeys.YOU_MUST_LEADER)),
     CREATE_CLASS_FAIL(PropertiesReader.getProperty(PropertyKeys.CREATE_CLASS_FAIL)),
     ATTENDANCE_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeys.ATTENDANCE_NOT_EXISTS)),
-    LEVEL_ACTIVITY_ALREADY_EXISTS(PropertiesReader.getProperty(PropertyKeys.LEVEL_ACTIVITY_ALREADY_EXISTS));
+    LEVEL_ACTIVITY_ALREADY_EXISTS(PropertiesReader.getProperty(PropertyKeys.LEVEL_ACTIVITY_ALREADY_EXISTS)),
+    TIME_SEMESTER_OVERLOAD(PropertiesReader.getProperty(PropertyKeys.TIME_SEMESTER_OVERLOAD)),
+    TIME_STUDENT_SEMESTER_OVERLOAD(PropertiesReader.getProperty(PropertyKeys.TIME_STUDENT_SEMESTER_OVERLOAD));
 
     private String message;
 

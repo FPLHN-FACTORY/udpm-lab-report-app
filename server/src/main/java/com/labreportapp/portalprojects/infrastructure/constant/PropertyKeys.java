@@ -56,10 +56,8 @@ public class PropertyKeys {
     public static final String SEMESTER_NOT_EXISTS = "semester.not.exist";
     public static final String SEMESTER_ACTIVITY_ALREADY_EXISTS = "semester.activity.already.exist";
     public static final String LEVEL_ACTIVITY_ALREADY_EXISTS = "level.activity.already.exist";
-
-
     public static final String LEVEL_NOT_EXISTS = "level.not.exist";
-//    public static final String INVALID_DATE = "invalid.date";
+    //    public static final String INVALID_DATE = "invalid.date";
     public static final String DANG_CO_DU_LIEU_LIEN_QUAN_KHONG_THE_XOA_BUOI_HOC = "dang.co.du.lieu.lien.quan.khong.the.xoa.buoi.hoc";
     public static final String STUDENT_CLASSES_NOT_EXISTS = "student.classes.not.exists";
     public static final String STUDENT_HAD_TEAM = "student.had.team";
@@ -74,5 +72,7 @@ public class PropertyKeys {
     public static final String YOU_MUST_LEADER = "you.must.leader";
     public static final String CREATE_CLASS_FAIL = "create.class.fail";
     public static final String ATTENDANCE_NOT_EXISTS = "attendance.not.exists";
+    public static final String TIME_SEMESTER_OVERLOAD = "time.semester.overload";
+    public static final String TIME_STUDENT_SEMESTER_OVERLOAD = "time.student.semester.overload";
 
 }

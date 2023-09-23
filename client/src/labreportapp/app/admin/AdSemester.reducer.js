@@ -18,6 +18,8 @@ const adSemesterSlice = createSlice({
         name: data.name,
         startTime: data.startTime,
         endTime: data.endTime,
+        startTimeStudent: data.startTimeStudent,
+        endTimeStudent: data.endTimeStudent,
       };
       state.unshift(newSemester);
       return state;
@@ -31,6 +33,8 @@ const adSemesterSlice = createSlice({
         state[index].name = updateSemester.name;
         state[index].startTime = updateSemester.startTime;
         state[index].endTime = updateSemester.endTime;
+        state[index].startTimeStudent = updateSemester.startTimeStudent;
+        state[index].endTimeStudent = updateSemester.endTimeStudent;
       }
     },
     DeleteSemester: (state, action) => {
