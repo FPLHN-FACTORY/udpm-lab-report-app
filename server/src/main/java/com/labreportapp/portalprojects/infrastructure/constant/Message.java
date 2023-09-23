@@ -70,7 +70,9 @@ public enum Message {
     CLASS_DID_FULL_CLASS_SIZE(PropertiesReader.getProperty(PropertyKeys.CLASS_DID_FULL_CLASS_SIZE)),
     YOU_DONT_LEAVE_CLASS(PropertiesReader.getProperty(PropertyKeys.YOU_DONT_LEAVE_CLASS)),
     CODE_CLASS_EXISTS(PropertiesReader.getProperty(PropertyKeys.CODE_CLASS_EXISTS)),
+    LEVEL_ACTIVITY_ALREADY_EXISTS(PropertiesReader.getProperty(PropertyKeys.LEVEL_ACTIVITY_ALREADY_EXISTS)),
     YOU_MUST_LEADER(PropertiesReader.getProperty(PropertyKeys.YOU_MUST_LEADER));
+
 
     private String message;
 

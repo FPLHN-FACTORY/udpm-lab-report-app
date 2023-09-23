@@ -46,4 +46,7 @@ public interface AdLevelRepository extends JpaRepository<Level , String> {
                     ORDER BY obj.created_date DESC       
             """, nativeQuery = true)
     Page<AdLevelResponse> searchLevel(@Param("req") AdFindLevelRequest req, Pageable page);
+
+    @Query(value = "SELECT COUNT(*) FROM activity  WHERE level_id = :id", nativeQuery = true)
+    Integer countActivitiesByLevelId(@Param("id") String id);
 }

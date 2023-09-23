@@ -64,9 +64,13 @@ public class AdLevelServiceImpl implements AdLevelService {
     @Override
     public Boolean deleteLevel(String id) {
         Optional<Level> findLevelById = adLevelRepository.findById(id);
+        Integer countActivities = adLevelRepository.countActivitiesByLevelId(id);
 
         if (!findLevelById.isPresent()) {
             throw new RestApiException(Message.SEMESTER_NOT_EXISTS);
+        }
+        if (countActivities > 0 && countActivities != null  ){
+            throw new RestApiException(Message.LEVEL_ACTIVITY_ALREADY_EXISTS);
         }
         adLevelRepository.delete(findLevelById.get());
         return true;

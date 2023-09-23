@@ -58,4 +58,5 @@ public class AdLevelController {
         obj.setId(id);
         return new ResponseObject(adLevelService.updateLevel(obj));
     }
+
 }

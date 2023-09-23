@@ -37,4 +37,5 @@ export class AdLevelAPI {
       url: url + `/delete/` + id,
     });
   };
+  
 }

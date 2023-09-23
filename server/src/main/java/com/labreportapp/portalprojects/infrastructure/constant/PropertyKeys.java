@@ -55,6 +55,8 @@ public class PropertyKeys {
     public static final String MEETING_HOMEWORK_NOTE_NOT_EXISTS = "meeting.homework.note.not.exists";
     public static final String SEMESTER_NOT_EXISTS = "semester.not.exist";
     public static final String SEMESTER_ACTIVITY_ALREADY_EXISTS = "semester.activity.already.exist";
+    public static final String LEVEL_ACTIVITY_ALREADY_EXISTS = "level.activity.already.exist";
+
 
     public static final String LEVEL_NOT_EXISTS = "level.not.exist";
 //    public static final String INVALID_DATE = "invalid.date";
