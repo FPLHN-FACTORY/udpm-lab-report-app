@@ -17,6 +17,10 @@ public abstract class AdBaseActivityRequest {
 
     @NotEmpty
     @NotBlank
+    private String code;
+
+    @NotEmpty
+    @NotBlank
     private String startTime;
 
     @NotEmpty
@@ -30,5 +34,7 @@ public abstract class AdBaseActivityRequest {
     @NotEmpty
     @NotBlank
     private String semesterId;
+
+    private String descriptions;
 
 }

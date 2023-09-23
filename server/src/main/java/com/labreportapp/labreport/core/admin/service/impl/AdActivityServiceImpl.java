@@ -4,13 +4,14 @@ import com.labreportapp.labreport.core.admin.model.request.AdCreatActivityReques
 import com.labreportapp.labreport.core.admin.model.request.AdFindActivityRequest;
 import com.labreportapp.labreport.core.admin.model.request.AdUpdateActivityRequest;
 import com.labreportapp.labreport.core.admin.model.response.AdActivityResponse;
+import com.labreportapp.labreport.core.admin.model.response.AdActivityLevelResponse;
 import com.labreportapp.labreport.core.admin.repository.AdActivityRepository;
 import com.labreportapp.labreport.core.admin.repository.AdSemesterRepository;
 import com.labreportapp.labreport.core.admin.service.AdActivityService;
 import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.entity.Activity;
 import com.labreportapp.labreport.entity.Semester;
-import com.labreportapp.labreport.infrastructure.constant.Level;
+import com.labreportapp.labreport.infrastructure.constant.AllowUseTrello;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import jakarta.validation.Valid;
@@ -40,10 +41,10 @@ public class AdActivityServiceImpl implements AdActivityService {
     @Override
     public PageableObject<AdActivityResponse> searchActivity(final AdFindActivityRequest rep) {
         Pageable pageable = PageRequest.of(rep.getPage(), rep.getSize());
-        if (rep.getSemesterId().equals("")) {
-            List<Semester> listSemester = adSemesterRepository.findAllSemester();
-            rep.setSemesterId(listSemester.get(0).getId());
-        }
+//        if (rep.getSemesterId().equals("")) {
+//            List<Semester> listSemester = adSemesterRepository.findAllSemester();
+//            rep.setSemesterId(listSemester.get(0).getId());
+//        }
         Page<AdActivityResponse> responses = adActivityRepository.findByNameActivity(rep, pageable);
         return new PageableObject<>(responses);
     }
@@ -51,27 +52,34 @@ public class AdActivityServiceImpl implements AdActivityService {
     @Override
     public Activity creatActivity(@Valid AdCreatActivityRequest command) {
         String name = adActivityRepository.getMaActivity(command.getName());
+        List<AdActivityLevelResponse> listLevel = adActivityRepository.getAllLevel();
         if (name != null) {
             throw new RestApiException(Message.ACTIVITY_NOT_EXISTS);
         }
         Activity activity = new Activity();
         activity.setName(command.getName());
-//        if (command.getLevel().equals("0")) {
-//            activity.setLevel(Level.LEVEL_1);
-//        }
-//        if (command.getLevel().equals("1")) {
-//            activity.setLevel(Level.LEVEL_2);
-//        }
-//        if (command.getLevel().equals("2")) {
-//            activity.setLevel(Level.LEVEL_3);
-//        }
+        activity.setCode(command.getCode());
+        if (listLevel != null) {
+            listLevel.forEach(level -> {
+                if (command.getLevel().equals(level.getId())) {
+                    if (level.getName().equalsIgnoreCase("Level 3")) {
+                        activity.setAllowUseTrello(AllowUseTrello.CHO_PHEP);
+                    } else {
+                        activity.setAllowUseTrello(AllowUseTrello.KHONG_CHO_PHEP);
+                    }
+                }
+            });
+        }
         if (!command.getStartTime().equals("") && !command.getEndTime().equals("")) {
             Long startTime = convertDateToString(command.getStartTime());
             Long endTime = convertDateToString(command.getEndTime());
+
             activity.setStartTime(startTime);
             activity.setEndTime(endTime);
         }
+        activity.setLevelId(command.getLevel());
         activity.setSemesterId(command.getSemesterId());
+        activity.setDescriptions(command.getDescriptions());
 
         return adActivityRepository.save(activity);
     }
@@ -79,29 +87,34 @@ public class AdActivityServiceImpl implements AdActivityService {
     @Override
     public Activity updateActivity(@Valid AdUpdateActivityRequest command) {
         Optional<Activity> optional = adActivityRepository.findById(command.getId());
+        List<AdActivityLevelResponse> listLevel = adActivityRepository.getAllLevel();
         if (!optional.isPresent()) {
             throw new RestApiException(Message.ACTIVITY_NOT_EXISTS);
         }
         Activity activity = optional.get();
         activity.setName(command.getName());
-
-//        if (command.getLevel().equals("0")) {
-//            activity.setLevel(Level.LEVEL_1);
-//        }
-//        if (command.getLevel().equals("1")) {
-//            activity.setLevel(Level.LEVEL_2);
-//        }
-//        if (command.getLevel().equals("2")) {
-//            activity.setLevel(Level.LEVEL_3);
-//        }
+        activity.setCode(command.getCode());
+        if (listLevel != null) {
+            listLevel.forEach(level -> {
+                if (command.getLevel().equals(level.getId())) {
+                    if (level.getName().equalsIgnoreCase("Level 3")) {
+                        activity.setAllowUseTrello(AllowUseTrello.CHO_PHEP);
+                    } else {
+                        activity.setAllowUseTrello(AllowUseTrello.KHONG_CHO_PHEP);
+                    }
+                }
+            });
+        }
         if (!command.getStartTime().equals("") && !command.getEndTime().equals("")) {
             Long startTime = convertDateToString(command.getStartTime());
             Long endTime = convertDateToString(command.getEndTime());
+
             activity.setStartTime(startTime);
             activity.setEndTime(endTime);
         }
-
+        activity.setLevelId(command.getLevel());
         activity.setSemesterId(command.getSemesterId());
+        activity.setDescriptions(command.getDescriptions());
         return adActivityRepository.save(activity);
     }
 
@@ -137,6 +150,11 @@ public class AdActivityServiceImpl implements AdActivityService {
     @Override
     public List<Semester> getSemester() {
         return adSemesterRepository.findAllSemester();
+    }
+
+    @Override
+    public List<AdActivityLevelResponse> getLevel() {
+        return adActivityRepository.getAllLevel();
     }
 
     public Long convertDateToString(String dateStringToLong) {

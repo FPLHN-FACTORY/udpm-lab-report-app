@@ -25,6 +25,9 @@ import org.hibernate.annotations.Nationalized;
 @Table(name = "activity")
 public class Activity extends PrimaryEntity {
 
+    @Column(length = EntityProperties.LENGTH_CODE)
+    private String code;
+
     @Column(length = EntityProperties.LENGTH_NAME)
     @Nationalized
     private String name;

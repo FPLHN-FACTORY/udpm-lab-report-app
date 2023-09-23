@@ -10,10 +10,12 @@ export class ActivityManagementAPI {
         "&level=" +
         filter.level +
         "&semesterId=" +
-        filter.semesterId  + "&page=" + filter.page,
+        filter.semesterId +
+        "&page=" +
+        filter.page,
     });
   };
-  
+
   static create = (data) => {
     return request({
       method: "POST",
@@ -41,6 +43,13 @@ export class ActivityManagementAPI {
     return request({
       method: "GET",
       url: "/admin/activity/activity-semester",
+    });
+  };
+
+  static level = () => {
+    return request({
+      method: "GET",
+      url: "/admin/activity/activity-level",
     });
   };
 }

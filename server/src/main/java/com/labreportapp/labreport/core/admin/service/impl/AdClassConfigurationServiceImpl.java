@@ -1,6 +1,7 @@
 package com.labreportapp.labreport.core.admin.service.impl;
 
 import com.labreportapp.labreport.core.admin.model.request.AdUpdateClassConfigurationRequest;
+import com.labreportapp.labreport.core.admin.model.response.AdClassConfigurationCustomResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdClassConfigurationResponse;
 import com.labreportapp.labreport.core.admin.repository.AdClassConfigurationRepository;
 import com.labreportapp.labreport.core.admin.service.AdCLassConfigurationService;
@@ -10,6 +11,7 @@ import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiExce
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,8 +21,16 @@ public class AdClassConfigurationServiceImpl implements AdCLassConfigurationServ
     @Autowired
     private AdClassConfigurationRepository adClassConfigurationRepository;
     @Override
-    public List<AdClassConfigurationResponse> getAllClassConfiguration() {
-        return adClassConfigurationRepository.getAllClassConfiguration();
+    public List<AdClassConfigurationCustomResponse> getAllClassConfiguration() {
+        AdClassConfigurationResponse classConfigurationResponses = adClassConfigurationRepository.getAllClassConfiguration();
+        List<AdClassConfigurationCustomResponse> classConfigurationCustomList = new ArrayList<>();
+        if(classConfigurationResponses != null){
+            classConfigurationCustomList.add(new AdClassConfigurationCustomResponse(classConfigurationResponses.getId(),1,"Số lượng tối thiểu",Double.valueOf(classConfigurationResponses.getClassSizeMin())));
+            classConfigurationCustomList.add(new AdClassConfigurationCustomResponse(classConfigurationResponses.getId(),2,"Số lượng tối đa",Double.valueOf(classConfigurationResponses.getClassSizeMax())));
+            classConfigurationCustomList.add(new AdClassConfigurationCustomResponse(classConfigurationResponses.getId(),3,"Điểm tối thiểu",classConfigurationResponses.getPointMin()));
+            classConfigurationCustomList.add(new AdClassConfigurationCustomResponse(classConfigurationResponses.getId(),4,"Tỉ lệ nghỉ",classConfigurationResponses.getMaximumNumberOfBreaks()));
+        }
+        return classConfigurationCustomList;
     }
 
     @Override
@@ -31,6 +41,9 @@ public class AdClassConfigurationServiceImpl implements AdCLassConfigurationServ
         }
         ClassConfiguration classConfiguration = optionalClassConfiguration.get();
         classConfiguration.setClassSizeMax(adUpdateClassConfigurationRequest.getClassSizeMax());
+        classConfiguration.setClassSizeMin(adUpdateClassConfigurationRequest.getClassSizeMin());
+        classConfiguration.setPointMin(adUpdateClassConfigurationRequest.getPointMin());
+        classConfiguration.setMaximumNumberOfBreaks(adUpdateClassConfigurationRequest.getMaximumNumberOfBreaks());
         return adClassConfigurationRepository.save(classConfiguration);
     }
 

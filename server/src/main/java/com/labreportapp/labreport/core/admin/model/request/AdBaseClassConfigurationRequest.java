@@ -10,7 +10,22 @@ import lombok.ToString;
 @Setter
 @ToString
 public class AdBaseClassConfigurationRequest {
+
+    @NotEmpty
+    @NotBlank
+    private Integer classSizeMin;
+
     @NotEmpty
     @NotBlank
     private Integer classSizeMax;
+
+    @NotEmpty
+    @NotBlank
+    private Double pointMin;
+
+    @NotEmpty
+    @NotBlank
+    private Double maximumNumberOfBreaks;
+
+
 }
