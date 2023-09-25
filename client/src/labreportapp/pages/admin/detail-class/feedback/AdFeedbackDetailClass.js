@@ -3,10 +3,14 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import { ClassAPI } from "../../../../api/admin/class-manager/ClassAPI.api";
-
+import { AdminFeedBackAPI } from "../../../../api/admin/AdFeedBackAPI";
+import { useAppDispatch, useAppSelector } from "../../../../app/hook";
+import { Select, Table } from "antd";
 const AdFeedbackDetailClass = () => {
   const { id } = useParams();
   const [classDetail, setClassDetail] = useState(null);
+  const dispatch = useAppDispatch();
+  const [feedback, setFeedBack] = useState({});
 
   const featchClass = async () => {
     try {
@@ -21,7 +25,45 @@ const AdFeedbackDetailClass = () => {
 
   useEffect(() => {
     featchClass();
+    // featchMeeting(id);
   }, []);
+  const featchMeeting = async (idClass) => {
+    // setLoading(false);
+    // try {
+      await AdminFeedBackAPI.getAllFeedBackByIdClass(idClass).then(
+        (responese) => {
+          dispatch(setFeedBack(responese.data.data));
+          // setLoading(true);
+        }
+      );
+    // } catch (error) {
+    //   alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+    // }
+  };
+  const columns = [
+    {
+      title: "#",
+      dataIndex: "stt",
+      key: "stt",
+      sorter: (a, b) => a.stt - b.stt,
+    },
+    {
+      title: "Feedback",
+      dataIndex: "descriptions",
+      key: "descriptions",
+      sorter: (a, b) => a.descriptions.localeCompare(b.descriptions),
+      width: "30%",
+    },
+    {
+      title: "Sinh Viên",
+      dataIndex: "student_id",
+      key: "student_id",
+      sorter: (a, b) => a.student_id.localeCompare(b.student_id),
+      width: "30%",
+    }
+  ];
+
+
   return (
     <div style={{ paddingTop: "35px" }}>
       <div className="title-meeting-managemnt-my-class">
@@ -93,11 +135,20 @@ const AdFeedbackDetailClass = () => {
                 <span style={{ fontSize: "14px", padding: "10px" }}>
                   {classDetail != null ? classDetail.code : ""}
                 </span>
+
+
               </div>
               <hr />
             </div>
           </div>
         </div>
+        <Table
+                columns={columns}
+                // dataSource={feedback}
+                key="stt"
+                pagination={false}
+              />
+
       </div>
     </div>
   );

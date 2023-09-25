@@ -9,6 +9,8 @@ import LoadingIndicator from "../../../../../../helper/loading";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUsersRectangle } from "@fortawesome/free-solid-svg-icons";
 import { sinhVienCurrent } from "../../../../../../helper/inForUser";
+import { StudentTempalteReportAPI } from "../../../../../../api/student/StTemplateReportAPI";
+
 const { Panel } = Collapse;
 
 const CollapseMeeting = ({ items }) => {
@@ -20,20 +22,33 @@ const CollapseMeeting = ({ items }) => {
   const [loading, setLoading] = useState(true);
   const [descriptionsHomeWork, setDescriptionsHomeWork] = useState("");
   const [descriptionsNote, setDescriptionsNote] = useState("");
+  const [descriptionsReport, setDescriptionsReport] = useState("");
   const [RoleStudent, setStudentRole] = useState([]);
+  const [template, setTempalte] = useState({});
+
 
   useEffect(() => {
     window.scrollTo(0, 0);
     setDescriptionsHomeWork("");
     setDescriptionsNote("");
+    setDescriptionsReport("");
     setLoading(true);
+    featchTemplateReport();
   }, [items]);
 
   const clear = () => {
     setEdit(false);
     setActivePanel(null);
   };
-
+  const featchTemplateReport = async () => {
+    try {
+      await StudentTempalteReportAPI.getTemplateReport().then((response) => {
+        setTempalte(response.data.data);
+      });
+    } catch (error) {
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+    }
+  };
   useEffect(() => {
     featchHomeWorkNote(idTeamDetail);
   }, [idTeamDetail, activePanel]);
@@ -66,6 +81,7 @@ const CollapseMeeting = ({ items }) => {
           let dataNew = {
             idHomeWork: "",
             idNote: "",
+            idReport: "",
           };
           setObjDetail(dataNew);
           setDescriptionsHomeWork("");
@@ -73,6 +89,7 @@ const CollapseMeeting = ({ items }) => {
         } else {
           setDescriptionsHomeWork(response.data.data.descriptionsHomeWork);
           setDescriptionsNote(response.data.data.descriptionsNote);
+          setDescriptionsReport(response.data.data.descriptionsReport);
           setObjDetail(response.data.data);
         }
         setLoading(true);
@@ -90,6 +107,8 @@ const CollapseMeeting = ({ items }) => {
         descriptionsHomeWork: descriptionsHomeWork,
         idNote: objDetail.idNote,
         descriptionsNote: descriptionsNote,
+        idReport: objDetail.idReport,
+        descriptionsReport: descriptionsReport,
         idStudent: sinhVienCurrent.id,
       };
       await StudentMeetingAPI.updateHomeWorkAndNote(data).then((response) => {
@@ -198,12 +217,13 @@ const CollapseMeeting = ({ items }) => {
                     <TextArea
                       style={{ marginTop: "10px" }}
                       rows={4}
-                      // value={descriptionsHomeWork}
+                      value={descriptionsReport}
                       // onChange={(e) => setDescriptionsHomeWork(e.target.value)}
+                      onChange={(e) => setDescriptionsReport(e.target.value)}
                       onClick={(e) => {
-                        e.stopPropagation();
-                        setEdit(true);
-                      }}
+                      e.stopPropagation();
+                      setEdit(true);
+                    }}
                     />
                   </Col>
                   <Col span={12} style={{ marginTop: "15px" }}>
@@ -218,8 +238,7 @@ const CollapseMeeting = ({ items }) => {
                     <TextArea
                       style={{ marginTop: "10px" }}
                       rows={4}
-                      // value={descriptionsHomeWork}
-                      // onChange={(e) => setDescriptionsHomeWork(e.target.value)}
+                      value={template.descriptions}
                       readOnly
                     />
                   </Col>
