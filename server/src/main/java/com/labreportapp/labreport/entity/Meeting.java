@@ -45,9 +45,6 @@ public class Meeting extends PrimaryEntity {
     private String classId;
 
     @Column(length = EntityProperties.LENGTH_ID)
-    private String meetingId;
-
-    @Column(length = EntityProperties.LENGTH_ID)
     private String teacherId;
 
     @Column
@@ -58,4 +55,8 @@ public class Meeting extends PrimaryEntity {
 
     @Column
     private StatusMeeting statusMeeting;
+
+    @Column(length = Integer.MAX_VALUE)
+    @Nationalized
+    private String notes;
 }

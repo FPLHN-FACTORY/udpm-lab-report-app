@@ -9,26 +9,26 @@ import java.util.Date;
 @Setter
 public class StClassCustomResponse {
 
-  private String id;
+    private String id;
 
-  private Integer stt;
+    private Integer stt;
 
-  private String classCode;
+    private String classCode;
 
-  private String teacherUsername;
+    private Integer classSize;
 
-  private Integer classSize;
+    private Long startTime;
 
-  private Long startTime;
+    private Short classPeriod;
 
-  private Short classPeriod;
+    private String level;
 
-  private String level;
+    private String activityName;
 
-  private String activityName;
+    private Long startTimeStudent;
 
-  private Long startTimeStudent;
+    private Long endTimeStudent;
 
-  private Long endTimeStudent;
+    private String descriptions;
 
 }

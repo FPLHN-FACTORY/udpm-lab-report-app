@@ -1,5 +1,7 @@
 package com.labreportapp.labreport.core.admin.controller;
 
+import com.labreportapp.labreport.core.admin.model.request.AdChangeTeacherRequest;
+import com.labreportapp.labreport.core.admin.model.request.AdCreateMeetingAutoRequest;
 import com.labreportapp.labreport.core.admin.model.request.AdCreateMeetingRequest;
 import com.labreportapp.labreport.core.admin.model.request.AdUpdateMeetingRequest;
 import com.labreportapp.labreport.core.admin.service.AdMeetingService;
@@ -44,5 +46,20 @@ public class AdMeetingController {
     @DeleteMapping
     public ResponseObject delete(@RequestParam("id") String id) {
         return new ResponseObject(adMeetingService.delete(id));
+    }
+
+    @PostMapping("/change-teacher")
+    public ResponseObject changeTeacher(@RequestBody AdChangeTeacherRequest request) {
+        return new ResponseObject(adMeetingService.changeTeacher(request));
+    }
+
+    @PostMapping("/create-meeting-auto")
+    public ResponseObject createMeetingAuto(@RequestBody AdCreateMeetingAutoRequest request) {
+        return new ResponseObject(adMeetingService.createMeetingAuto(request));
+    }
+
+    @GetMapping("/detail")
+    public ResponseObject detailMeeting(@RequestParam("id") String id) {
+        return new ResponseObject(adMeetingService.detailMeeting(id));
     }
 }

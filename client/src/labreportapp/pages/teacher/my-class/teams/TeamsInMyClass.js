@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import "./styleTeamsInMyClass.css";
-import { Row, Table, Button, Tooltip, Col, Modal } from "antd";
+import { Row, Table, Button, Tooltip, Col, Modal, Empty } from "antd";
 import { Link } from "react-router-dom";
 import { ControlOutlined } from "@ant-design/icons";
 import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/TeacherStudentClasses.api";
@@ -19,8 +19,8 @@ import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import LoadingIndicator from "../../../../helper/loading";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faDownload,
   faEye,
+  faEyeDropper,
   faPenToSquare,
   faTrashCan,
   faUpload,
@@ -33,6 +33,7 @@ import { toast } from "react-toastify";
 import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
 import { SetTTrueToggle } from "../../../../app/teacher/TeCollapsedSlice.reducer";
 import ButtonExportExcelTeam from "./export-excel/ButtonExportExcelTeam";
+import ButtonImportExcelTeam from "./import-excel/ButtonImportExcel";
 
 const TeamsInMyClass = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -47,7 +48,7 @@ const TeamsInMyClass = () => {
   const { idClass } = useParams();
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = "Bảng điều khiển - Quản lý nhóm";
+
     featchTeams(idClass);
     featchClass(idClass);
   }, []);
@@ -59,6 +60,7 @@ const TeamsInMyClass = () => {
     try {
       await TeacherTeamsAPI.getTeamsByIdClass(id).then((responese) => {
         dispatch(SetTeams(responese.data.data));
+
         fetchData(idClass);
       });
     } catch (error) {
@@ -69,6 +71,7 @@ const TeamsInMyClass = () => {
     try {
       await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
         setClassDetail(responese.data.data);
+        document.title = "Quản lý nhóm | " + responese.data.data.code;
       });
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
@@ -153,14 +156,12 @@ const TeamsInMyClass = () => {
       dataIndex: "stt",
       key: "stt",
       render: (text, record, index) => index + 1,
-      width: "5%",
     },
     {
       title: "Tên nhóm",
       dataIndex: "name",
       key: "name",
       sorter: (a, b) => a.name.localeCompare(b.name),
-      width: "30%",
     },
     {
       title: "Chủ đề",
@@ -178,7 +179,6 @@ const TeamsInMyClass = () => {
           </>
         );
       },
-      width: "40%",
     },
     {
       title: "Ngày tạo",
@@ -192,7 +192,6 @@ const TeamsInMyClass = () => {
         }/${startTime.getFullYear()}`;
         return <span>{formattedStartTime}</span>;
       },
-      width: "15%",
     },
     {
       title: "Hành động",
@@ -200,7 +199,24 @@ const TeamsInMyClass = () => {
       key: "actions",
       render: (text, record) => (
         <>
-          <div style={{ width: "105px" }}>
+          <div>
+            {record.idProject != null && (
+              <Tooltip title="Xem trello dự án">
+                <Link
+                  to={`/detail-project/${record.idProject}`}
+                  style={{ color: "black" }}
+                >
+                  <FontAwesomeIcon
+                    icon={faEyeDropper}
+                    className="icon"
+                    onClick={() => {
+                      setShowDetailModal(true);
+                      handleDetailTeam(record);
+                    }}
+                  />
+                </Link>
+              </Tooltip>
+            )}
             <Tooltip title="Chi tiết">
               <FontAwesomeIcon
                 icon={faEye}
@@ -232,7 +248,6 @@ const TeamsInMyClass = () => {
           </div>
         </>
       ),
-      width: "10%",
     },
   ];
   return (
@@ -361,19 +376,7 @@ const TeamsInMyClass = () => {
             </Row>
             <Row style={{ marginTop: "10px" }}>
               <ButtonExportExcelTeam idClass={idClass} />
-              <Button
-                className="btn_clear"
-                style={{
-                  backgroundColor: "rgb(38, 144, 214)",
-                  color: "white",
-                }}
-              >
-                <FontAwesomeIcon
-                  icon={faUpload}
-                  style={{ marginRight: "7px" }}
-                />
-                Import nhóm
-              </Button>
+              <ButtonImportExcelTeam idClass={idClass} />
               <Button
                 className="btn_clear"
                 style={{
@@ -390,32 +393,21 @@ const TeamsInMyClass = () => {
               </Button>
             </Row>
           </div>
-          <div>
+          <div style={{ marginTop: "20px" }}>
             {data.length > 0 ? (
-              <>
-                <div className="table">
-                  <Table
-                    style={{ marginTop: "150px" }}
-                    dataSource={data}
-                    rowKey="id"
-                    columns={columns}
-                    pagination={false}
-                  />
-                </div>
-              </>
+              <div className="table-teacher">
+                <Table
+                  dataSource={data}
+                  rowKey="id"
+                  columns={columns}
+                  pagination={false}
+                />
+              </div>
             ) : (
-              <>
-                <p
-                  style={{
-                    textAlign: "center",
-                    marginTop: "100px",
-                    fontSize: "15px",
-                    color: "red",
-                  }}
-                >
-                  Không có nhóm nào trong lớp
-                </p>
-              </>
+              <Empty
+                imageStyle={{ height: 60 }}
+                description={<span>Chưa có nhóm nào trong lớp</span>}
+              />
             )}
           </div>
           <ModalDetailTeam

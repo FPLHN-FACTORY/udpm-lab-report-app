@@ -24,7 +24,7 @@ const Table = () => {
   }, [board]);
 
   return (
-    <div>
+    <div className="table-custom-drag-and-drop">
       <TableDragAndDrop data={listViewTable} />
       {loading && <LoadingIndicator />}
     </div>

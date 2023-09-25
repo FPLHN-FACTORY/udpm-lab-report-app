@@ -32,7 +32,6 @@ public class TeClassServiceImpl implements TeClassService {
     private TeClassRepository teClassRepository;
 
     @Override
-    @CacheEvict(value = {"teacherClass"}, allEntries = true)
     public PageableObject<TeClassResponse> searchTeacherClass(final TeFindClassRequest teFindClass) {
         Pageable pageable = PageRequest.of(teFindClass.getPage() - 1, teFindClass.getSize());
         Page<TeClassResponse> pageList = teClassRepository.findClassBySemesterAndActivity(teFindClass, pageable);

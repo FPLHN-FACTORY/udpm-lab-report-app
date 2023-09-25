@@ -24,7 +24,6 @@ const CollapseMeeting = ({ items }) => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = "Bảng điều khiển - chi tiết buổi học";
     setDescriptionsHomeWork("");
     setDescriptionsNote("");
     setLoading(true);
@@ -153,11 +152,9 @@ const CollapseMeeting = ({ items }) => {
                 style={{ marginLeft: "40px", marginRight: "40px" }}
               >
                 <Row gutter={16}>
-                  <Col span={12}>
+                  <Col span={12} style={{ marginTop: "10px" }}>
                     {" "}
-                    <span style={{ color: "black", fontWeight: "bold" }}>
-                      Nhận xét:
-                    </span>
+                    <span style={{ color: "black" }}>Nhận xét:</span>
                     <TextArea
                       style={{ marginTop: "10px" }}
                       rows={4}
@@ -169,13 +166,11 @@ const CollapseMeeting = ({ items }) => {
                       }}
                     />
                   </Col>
-                  <Col span={12}>
+                  <Col span={12} style={{ marginTop: "10px" }}>
                     {" "}
                     <span
                       style={{
                         color: "black",
-                        fontFamily: "unset",
-                        fontWeight: "bold",
                       }}
                     >
                       Bài tập về nhà:
@@ -189,6 +184,43 @@ const CollapseMeeting = ({ items }) => {
                         e.stopPropagation();
                         setEdit(true);
                       }}
+                    />
+                  </Col>
+                  <Col span={12} style={{ marginTop: "15px" }}>
+                    {" "}
+                    <span
+                      style={{
+                        color: "black",
+                      }}
+                    >
+                      Báo cáo:
+                    </span>
+                    <TextArea
+                      style={{ marginTop: "10px" }}
+                      rows={4}
+                      // value={descriptionsHomeWork}
+                      // onChange={(e) => setDescriptionsHomeWork(e.target.value)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setEdit(true);
+                      }}
+                    />
+                  </Col>
+                  <Col span={12} style={{ marginTop: "15px" }}>
+                    {" "}
+                    <span
+                      style={{
+                        color: "black",
+                      }}
+                    >
+                      Template báo cáo:
+                    </span>
+                    <TextArea
+                      style={{ marginTop: "10px" }}
+                      rows={4}
+                      // value={descriptionsHomeWork}
+                      // onChange={(e) => setDescriptionsHomeWork(e.target.value)}
+                      readOnly
                     />
                   </Col>
                   {edit && (

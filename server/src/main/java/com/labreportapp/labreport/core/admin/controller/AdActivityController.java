@@ -60,4 +60,9 @@ public class AdActivityController {
     public ResponseObject getSemester(){
         return new ResponseObject(adActivityService.getSemester());
     }
+
+    @GetMapping("/activity-level")
+    public ResponseObject getLevel(){
+        return new ResponseObject(adActivityService.getLevel());
+    }
 }

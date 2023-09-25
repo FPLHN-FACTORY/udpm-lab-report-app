@@ -1,6 +1,7 @@
 package com.labreportapp.labreport.core.student.controller;
 
 import com.labreportapp.labreport.core.student.model.request.StFindAttendanceRequest;
+import com.labreportapp.labreport.core.student.model.response.StAttendanceCallApiRespone;
 import com.labreportapp.labreport.core.student.model.response.StAttendanceRespone;
 import com.labreportapp.labreport.core.student.service.StAttendanceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,5 +22,10 @@ public class StAttendanceController {
     @GetMapping("/attendance")
     public List<StAttendanceRespone> getAllAttendanceByID(final StFindAttendanceRequest req) {
         return stAttendanceService.getAllAttendanceById(req);
+    }
+
+    @GetMapping("/attendance1")
+    public List<StAttendanceCallApiRespone> getAllAttendanceStudentById(final StFindAttendanceRequest request) {
+        return stAttendanceService.getAllAttendanceStudentById(request);
     }
 }

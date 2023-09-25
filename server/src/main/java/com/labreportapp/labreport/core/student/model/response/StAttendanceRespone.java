@@ -9,7 +9,7 @@ public interface StAttendanceRespone extends IsIdentified {
     Integer getStt();
 
     @Value("#{target.name}")
-    String getName();
+    String getLesson();
 
     @Value("#{target.meeting_date}")
     Long getMeetingDate();
@@ -19,6 +19,9 @@ public interface StAttendanceRespone extends IsIdentified {
 
     @Value("#{target.type_meeting}")
     Integer getTypeMeeting();
+
+    @Value("#{target.teacher_id}")
+    String getTeacherId();
 
     @Value("#{target.status}")
     Integer getStatus();

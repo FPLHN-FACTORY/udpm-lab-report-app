@@ -37,19 +37,17 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
     private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
 
     @Override
-    public List<TeStudentCallApiResponse> searchStudentClassesByIdClass(TeFindStudentClasses teFindStudentClasses) {
+    public List<TeStudentCallApiResponse> searchApiStudentClassesByIdClass(String idClass) {
         List<TeStudentClassesRespone> listRepository = teStudentClassesRepository
-                .findStudentClassByIdClass(teFindStudentClasses);
+                .findStudentClassByIdClass(idClass);
         List<String> idStudentList = listRepository.stream()
                 .map(TeStudentClassesRespone::getIdStudent)
+                .distinct()
                 .collect(Collectors.toList());
-
         List<SimpleResponse> listRespone = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idStudentList);
         List<TeStudentCallApiResponse> listReturn = new ArrayList<>();
         listRepository.forEach(reposi -> {
             listRespone.forEach(respone -> {
-                System.out.println(reposi.getIdStudent());
-                System.out.println(respone.getId());
                 if (reposi.getIdStudent().equals(respone.getId())) {
                     TeStudentCallApiResponse obj = new TeStudentCallApiResponse();
                     obj.setId(respone.getId());
@@ -77,8 +75,8 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
                 .findAllStudentClassForPointByIdClass(idClass);
         List<String> idStudentList = listRepository.stream()
                 .map(TePointImportRespone::getIdStudent)
+                .distinct()
                 .collect(Collectors.toList());
-
         List<SimpleResponse> listRespone = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idStudentList);
         return listRespone;
     }
@@ -89,8 +87,8 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
                 .findStudentClassByIdClassAndIdTeam(teFindStudentClasses);
         List<String> idStudentList = listRepository.stream()
                 .map(TeStudentClassesRespone::getIdStudent)
+                .distinct()
                 .collect(Collectors.toList());
-
         List<SimpleResponse> listRespone = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idStudentList);
         List<TeStudentCallApiResponse> listReturn = new ArrayList<>();
         listRepository.forEach(reposi -> {

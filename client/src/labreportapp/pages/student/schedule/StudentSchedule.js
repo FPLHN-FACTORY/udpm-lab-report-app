@@ -31,6 +31,7 @@ const StudentSchedule = () => {
 
   useEffect(() => {
     fetchData(sinhVienCurrent);
+    document.title = "Lịch học | Lab-Report-App";
   }, [current]);
 
   const fetchData = (sinhVienCurrent) => {
@@ -179,8 +180,8 @@ const StudentSchedule = () => {
       </div>
 
       <div
-        className="table__category"
-        style={{ marginTop: "25px", padding: "20px" }}
+        className="table__category_custom"
+        style={{ marginTop: "30px", padding: "20px" }}
       >
         <div className="tittle__category">
           <div>

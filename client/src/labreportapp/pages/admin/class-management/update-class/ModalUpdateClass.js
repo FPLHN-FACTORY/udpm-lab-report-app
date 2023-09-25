@@ -86,12 +86,20 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
           setClassDetail(respone.data.data);
           setIdSemesterSearch(respone.data.data.semesterId);
           setIdActivitiSearch(respone.data.data.activityId);
-          setSelectedItemsPerson(respone.data.data.teacherId);
+          setSelectedItemsPerson(
+            respone.data.data.teacherId == null
+              ? ""
+              : respone.data.data.teacherId
+          );
           setStartTime(
             moment(respone.data.data.startTime).format("YYYY-MM-DD")
           );
           setCode(respone.data.data.code);
-          setClassPeriod(respone.data.data.classPeriod + "");
+          setClassPeriod(
+            respone.data.data.classPeriod == null
+              ? ""
+              : respone.data.data.classPeriod + ""
+          );
         },
         (error) => {}
       );
@@ -137,13 +145,6 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
   const update = async (id) => {
     let check = 0;
 
-    if (code.trim() === "") {
-      setErrorCode("Mã Lớp không để trống");
-      check++;
-    } else {
-      setErrorCode("");
-    }
-
     if (classPeriod === "") {
       setErrorClassPeriod("Ca Lớp không để trống");
       check++;
@@ -165,7 +166,6 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
 
     if (check === 0) {
       let obj = {
-        code: code,
         classPeriod: classPeriod,
         startTime: moment(startTime, "YYYY-MM-DD").valueOf(),
         teacherId: selectedItemsPerson,
@@ -198,7 +198,7 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
         onCancel={onCancel}
         width={800}
         footer={null}
-        className="modal_show_detail"
+        className="modal_show_detail_project"
       >
         <div>
           <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
@@ -225,23 +225,14 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
                 </Select>
               </Col>
               <Col span={12} style={{ paddingRight: "10px" }}>
-                Hoạt Động: <br />
-                <Select
-                  showSearch
+                <span>Mã lớp:</span> <br />
+                <Input
+                  value={code}
                   style={{ width: "100%" }}
-                  value={idActivitiSearch}
-                  onChange={(value) => {
-                    setIdActivitiSearch(value);
-                  }}
-                >
-                  <Option value="">Chọn 1 hoạt động</Option>
-                  {activityDataAll.map((activity) => (
-                    <Option key={activity.id} value={activity.id}>
-                      {activity.name}
-                    </Option>
-                  ))}
-                </Select>
-                <span className="error">{errorActivitySelect}</span>
+                  disabled={true}
+                  type="text"
+                />
+                <span className="error">{errorCode}</span>
               </Col>
             </Row>
             <Row style={{ marginBottom: "15px" }}>
@@ -254,7 +245,7 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
                   style={{ width: "100%" }}
                   filterOption={filterTeacherOptions}
                 >
-                  <Option value="NULL">Chọn 1 giảng viên</Option>
+                  <Option value="">Chọn 1 giảng viên</Option>
 
                   {teacherDataAll.map((teacher) => (
                     <Option key={teacher.id} value={teacher.id}>
@@ -279,26 +270,33 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
             </Row>
             <Row style={{ marginBottom: "15px" }}>
               <Col span={12} style={{ paddingRight: "10px" }}>
-                <span>Mã lớp:</span> <br />
-                <Input
-                  value={code}
+                Hoạt Động: <br />
+                <Select
+                  showSearch
                   style={{ width: "100%" }}
-                  onChange={(e) => {
-                    setCode(e.target.value);
+                  value={idActivitiSearch}
+                  onChange={(value) => {
+                    setIdActivitiSearch(value);
                   }}
-                  type="text"
-                />
-                <span className="error">{errorCode}</span>
+                >
+                  <Option value="">Chọn 1 hoạt động</Option>
+                  {activityDataAll.map((activity) => (
+                    <Option key={activity.id} value={activity.id}>
+                      {activity.name}
+                    </Option>
+                  ))}
+                </Select>
+                <span className="error">{errorActivitySelect}</span>
               </Col>
               <Col span={12} style={{ paddingRight: "10px" }}>
-                Ca học: <br />
+                Ca học dự kiến: <br />
                 <Select
                   showSearch
                   style={{ width: "100%" }}
                   value={classPeriod}
                   onChange={handleSelectChange}
                 >
-                  <Option value="">Tất Cả</Option>
+                  <Option value="">Chọn ca học dự kiến</Option>
                   {listClassPeriod.map((value) => {
                     return (
                       <Option value={value} key={value}>

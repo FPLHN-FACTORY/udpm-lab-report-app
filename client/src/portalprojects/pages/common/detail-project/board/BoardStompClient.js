@@ -252,7 +252,7 @@ const BoardStompClient = (dispatch, useAppSelector) => {
                 idTodo: idTodo,
                 idTodoList: idTodoList,
                 member: listMemberProjectRef.current.find(
-                  (item) => item.id === obj.memberId
+                  (item) => item.memberId === obj.memberId
                 ),
               };
               dispatch(CreateMemberBoard(data));
@@ -1114,7 +1114,7 @@ const BoardStompClient = (dispatch, useAppSelector) => {
             task.listMemberByIdTodo.length > 0
           ) {
             const filteredMembers = task.listMemberByIdTodo.map((itemId) =>
-              listMember.find((member) => member.id === itemId)
+              listMember.find((member) => member.memberId === itemId)
             );
             task.listMemberByIdTodo = filteredMembers;
           }

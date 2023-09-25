@@ -2,11 +2,10 @@ package com.labreportapp.labreport.core.teacher.service.impl;
 
 import com.labreportapp.labreport.core.common.response.SimpleResponse;
 import com.labreportapp.labreport.core.teacher.excel.TeExcelImportPoint;
-import com.labreportapp.labreport.core.teacher.excel.TeExcelImportPointService;
+import com.labreportapp.labreport.core.teacher.excel.TeExcelImportService;
 import com.labreportapp.labreport.core.teacher.model.request.Base.TePointExcel;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindListPointRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindPointRequest;
-import com.labreportapp.labreport.core.teacher.model.request.TeFindStudentClasses;
 import com.labreportapp.labreport.core.teacher.model.response.TeExcelResponseMessage;
 import com.labreportapp.labreport.core.teacher.model.response.TePointRespone;
 import com.labreportapp.labreport.core.teacher.model.response.TeStudentCallApiResponse;
@@ -35,10 +34,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -56,7 +53,7 @@ public class TePointSeviceImpl implements TePointSevice {
     private TeStudentClassesService teStudentClassesService;
 
     @Autowired
-    private TeExcelImportPointService tePointImportService;
+    private TeExcelImportService tePointImportService;
 
     @Autowired
     private TeClassRepository teClassRepository;
@@ -64,9 +61,6 @@ public class TePointSeviceImpl implements TePointSevice {
     @Override
     public List<TePointRespone> getPointStudentById(String idClass) {
         List<TePointRespone> list = tePointRepository.getAllPointByIdClass(idClass);
-        if (list == null) {
-            return null;
-        }
         return list;
     }
 
@@ -99,20 +93,89 @@ public class TePointSeviceImpl implements TePointSevice {
         return tePointRepository.saveAll(listNew);
     }
 
+    private Sheet configTitle(Workbook workbook, String name) {
+        Font fontTitle = workbook.createFont();
+        Sheet sheet = workbook.createSheet("Bảng điểm");
+        Row titleRow = sheet.createRow(0);
+        Cell cellTitle = titleRow.createCell(0);
+        cellTitle.setCellValue("DANH SÁCH ĐIỂM SINH VIÊN LỚP " + name);
+        cellTitle.setCellStyle(chooseCellStyle("title", workbook));
+        sheet.addMergedRegion(new CellRangeAddress(0, 1, 0, 5));
+        sheet.setColumnWidth(0, 2000);
+        sheet.setColumnWidth(1, 8000);
+        sheet.setColumnWidth(2, 8000);
+        sheet.setColumnWidth(3, 7000);
+        sheet.setColumnWidth(4, 7000);
+        sheet.setColumnWidth(5, 7000);
+        Row headerRow = sheet.createRow(2);
+        Cell cell0 = headerRow.createCell(0);
+        cell0.setCellValue("STT");
+        cell0.setCellStyle(chooseCellStyle("titleTable", workbook));
+        Cell cell1 = headerRow.createCell(1);
+        cell1.setCellValue("Tên sinh viên");
+        cell1.setCellStyle(chooseCellStyle("titleTable", workbook));
+        Cell cell2 = headerRow.createCell(2);
+        cell2.setCellValue("Email");
+        cell2.setCellStyle(chooseCellStyle("titleTable", workbook));
+        Cell cell3 = headerRow.createCell(3);
+        cell3.setCellValue("Điểm giai đoạn 1");
+        cell3.setCellStyle(chooseCellStyle("titleTable", workbook));
+        Cell cell4 = headerRow.createCell(4);
+        cell4.setCellValue("Điểm giai đoạn 2");
+        cell4.setCellStyle(chooseCellStyle("titleTable", workbook));
+        Cell cell5 = headerRow.createCell(5);
+        cell5.setCellValue("Điểm giai đoạn cuối");
+        cell5.setCellStyle(chooseCellStyle("titleTable", workbook));
+        return sheet;
+    }
+
+    private CellStyle chooseCellStyle(String type, Workbook workbook) {
+        CellStyle cellStyle = workbook.createCellStyle();
+        Font fontStyle = workbook.createFont();
+        if (type.equals("title")) {
+            fontStyle.setBold(true);
+            fontStyle.setFontHeightInPoints((short) 20);
+            cellStyle.setAlignment(HorizontalAlignment.CENTER);
+            cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+            cellStyle.setFont(fontStyle);
+        }
+        if (type.equals("titleTable")) {
+            fontStyle.setBold(true);
+            fontStyle.setColor(IndexedColors.WHITE.getIndex());
+            fontStyle.setFontHeightInPoints((short) 13);
+            cellStyle.setAlignment(HorizontalAlignment.CENTER);
+            cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+            cellStyle.setFont(fontStyle);
+            cellStyle.setFillForegroundColor(IndexedColors.LIGHT_BLUE.getIndex());
+            cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            cellStyle.setBorderTop(BorderStyle.THIN);
+            cellStyle.setBorderBottom(BorderStyle.THIN);
+            cellStyle.setBorderLeft(BorderStyle.THIN);
+            cellStyle.setBorderRight(BorderStyle.THIN);
+        }
+        if (type.equals("dataTable")) {
+            cellStyle.setBorderTop(BorderStyle.THIN);
+            cellStyle.setBorderBottom(BorderStyle.THIN);
+            cellStyle.setBorderLeft(BorderStyle.THIN);
+            cellStyle.setBorderRight(BorderStyle.THIN);
+        }
+        if (type.equals("dataCenterTable")) {
+            cellStyle.setAlignment(HorizontalAlignment.CENTER);
+            cellStyle.setBorderTop(BorderStyle.THIN);
+            cellStyle.setBorderBottom(BorderStyle.THIN);
+            cellStyle.setBorderLeft(BorderStyle.THIN);
+            cellStyle.setBorderRight(BorderStyle.THIN);
+        }
+        return cellStyle;
+    }
+
     @Override
     @Synchronized
-    public void exportExcel(HttpServletResponse response, String idClass) {
-        try (Workbook workbook = new XSSFWorkbook()) {
-            response.setContentType("application/octet-stream");
-            DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-            String currentDateTime = dateFormatter.format(new Date());
-            String headerKey = "Content-Disposition";
-            String headerValue = "attachment; filename=BangDiem_" + currentDateTime + ".xlsx";
-            response.setHeader(headerKey, headerValue);
+    public ByteArrayOutputStream exportExcel(HttpServletResponse response, String idClass) {
+        try (Workbook workbook = new XSSFWorkbook();
+             ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             List<TePointRespone> listPointIdClass = getPointStudentById(idClass);
-            TeFindStudentClasses teFindStudentClasses = new TeFindStudentClasses();
-            teFindStudentClasses.setIdClass(idClass);
-            List<TeStudentCallApiResponse> listStudent = teStudentClassesService.searchStudentClassesByIdClass(teFindStudentClasses);
+            List<TeStudentCallApiResponse> listStudent = teStudentClassesService.searchApiStudentClassesByIdClass(idClass);
             List<TePointExcel> listExcel = new ArrayList<>();
             listPointIdClass.forEach((item1) -> {
                 listStudent.forEach((item2) -> {
@@ -130,99 +193,33 @@ public class TePointSeviceImpl implements TePointSevice {
                 });
             });
             Class objClass = teClassRepository.findById(idClass).get();
-            Font fontTitle = workbook.createFont();
-            Sheet sheet = workbook.createSheet("Bảng điểm");
-            fontTitle.setBold(true);
-            fontTitle.setFontHeightInPoints((short) 20);
-            CellStyle titleStyle = workbook.createCellStyle();
-            titleStyle.setAlignment(HorizontalAlignment.CENTER);
-            titleStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-            titleStyle.setFont(fontTitle);
-            Row titleRow = sheet.createRow(0);
-            Cell cellTitle = titleRow.createCell(0);
-            cellTitle.setCellValue("DANH SÁCH ĐIỂM SINH VIÊN LỚP " + objClass.getCode());
-            cellTitle.setCellStyle(titleStyle);
-            sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 5));
-
-            Font fontHeader = workbook.createFont();
-            fontHeader.setBold(true);
-            fontHeader.setColor(IndexedColors.WHITE.getIndex());
-            fontHeader.setFontHeightInPoints((short) 13);
-            CellStyle headerStyle = workbook.createCellStyle();
-            headerStyle.setAlignment(HorizontalAlignment.CENTER);
-            headerStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-            headerStyle.setFont(fontHeader);
-            headerStyle.setFillForegroundColor(IndexedColors.LIGHT_BLUE.getIndex());
-            headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-            headerStyle.setBorderTop(BorderStyle.THIN);
-            headerStyle.setBorderBottom(BorderStyle.THIN);
-            headerStyle.setBorderLeft(BorderStyle.THIN);
-            headerStyle.setBorderRight(BorderStyle.THIN);
-            Font font = workbook.createFont();
-            font.setBold(true);
-            font.setColor(IndexedColors.WHITE.getIndex());
-            font.setFontHeightInPoints((short) 13);
-            headerStyle.setAlignment(HorizontalAlignment.CENTER);
-            headerStyle.setFont(font);
-            headerStyle.setFillForegroundColor(IndexedColors.LIGHT_BLUE.getIndex());
-            headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-            sheet.setColumnWidth(0, 2000);
-            sheet.setColumnWidth(1, 8000);
-            sheet.setColumnWidth(2, 8000);
-            sheet.setColumnWidth(3, 7000);
-            sheet.setColumnWidth(4, 7000);
-            sheet.setColumnWidth(5, 7000);
-            Row headerRow = sheet.createRow(1);
-            Cell cell0 = headerRow.createCell(0);
-            cell0.setCellValue("STT");
-            cell0.setCellStyle(headerStyle);
-            Cell cell1 = headerRow.createCell(1);
-            cell1.setCellValue("Tên sinh viên");
-            cell1.setCellStyle(headerStyle);
-            Cell cell2 = headerRow.createCell(2);
-            cell2.setCellValue("Email");
-            cell2.setCellStyle(headerStyle);
-            Cell cell3 = headerRow.createCell(3);
-            cell3.setCellValue("Điểm giai đoạn 1");
-            cell3.setCellStyle(headerStyle);
-            Cell cell4 = headerRow.createCell(4);
-            cell4.setCellValue("Điểm giai đoạn 2");
-            cell4.setCellStyle(headerStyle);
-            Cell cell5 = headerRow.createCell(5);
-            cell5.setCellValue("Điểm giai đoạn cuối");
-            cell5.setCellStyle(headerStyle);
-            CellStyle boderStyle = workbook.createCellStyle();
-            boderStyle.setBorderTop(BorderStyle.THIN);
-            boderStyle.setBorderBottom(BorderStyle.THIN);
-            boderStyle.setBorderLeft(BorderStyle.THIN);
-            boderStyle.setBorderRight(BorderStyle.THIN);
-            CellStyle dataStyleCenter = workbook.createCellStyle();
-            dataStyleCenter.setAlignment(HorizontalAlignment.CENTER);
-            dataStyleCenter.setBorderTop(BorderStyle.THIN);
-            dataStyleCenter.setBorderBottom(BorderStyle.THIN);
-            dataStyleCenter.setBorderLeft(BorderStyle.THIN);
-            dataStyleCenter.setBorderRight(BorderStyle.THIN);
-            int rowIndex = 2;
+            Sheet sheet = configTitle(workbook, objClass.getCode());
+            int rowIndex = 3;
             int index = 1;
             for (TePointExcel data : listExcel) {
                 Row dataRow = sheet.createRow(rowIndex++);
                 dataRow.createCell(0).setCellValue(index++);
-                dataRow.getCell(0).setCellStyle(dataStyleCenter);
+                dataRow.getCell(0).setCellStyle(chooseCellStyle("dataCenterTable", workbook));
                 dataRow.createCell(1).setCellValue(data.getName());
-                dataRow.getCell(1).setCellStyle(boderStyle);
+                dataRow.getCell(1).setCellStyle(chooseCellStyle("dataTable", workbook));
                 dataRow.createCell(2).setCellValue(data.getEmail());
-                dataRow.getCell(2).setCellStyle(boderStyle);
+                dataRow.getCell(2).setCellStyle(chooseCellStyle("dataTable", workbook));
                 dataRow.createCell(3).setCellValue(data.getCheckPointPhase1());
-                dataRow.getCell(3).setCellStyle(dataStyleCenter);
+                dataRow.getCell(3).setCellStyle(chooseCellStyle("dataCenterTable", workbook));
                 dataRow.createCell(4).setCellValue(data.getCheckPointPhase2());
-                dataRow.getCell(4).setCellStyle(dataStyleCenter);
+                dataRow.getCell(4).setCellStyle(chooseCellStyle("dataCenterTable", workbook));
                 dataRow.createCell(5).setCellValue(data.getFinalPoint());
-                dataRow.getCell(5).setCellStyle(dataStyleCenter);
+                dataRow.getCell(5).setCellStyle(chooseCellStyle("dataCenterTable", workbook));
+            }
+            for (int i = 0; i < 6; i++) {
+                sheet.autoSizeColumn(i, true);
             }
             workbook.write(response.getOutputStream());
             workbook.close();
+            return outputStream;
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
     }
 
@@ -230,7 +227,7 @@ public class TePointSeviceImpl implements TePointSevice {
     public TeExcelResponseMessage importExcel(MultipartFile file, String idClass) {
         TeExcelResponseMessage teExcelResponseMessage = new TeExcelResponseMessage();
         try {
-            List<TeExcelImportPoint> list = tePointImportService.importData(file, idClass);
+            List<TeExcelImportPoint> list = tePointImportService.importDataPoint(file, idClass);
             if (list.size() == 0) {
                 teExcelResponseMessage.setStatus(false);
                 teExcelResponseMessage.setMessage("file excel trống");
@@ -248,8 +245,10 @@ public class TePointSeviceImpl implements TePointSevice {
             ConcurrentHashMap<String, Point> pointUpdate = new ConcurrentHashMap<>();
             teExcelResponseMessage.setStatus(true);
             list.parallelStream().forEach(point -> {
-                String regexName = "^[^0-9!@#$%^&*()_+|~=`{}\\[\\]:\";'<>?,.\\/\\\\]*$";
-                String regexEmail = "^[a-zA-Z0-9._%+-]+@fpt.edu.vn$";
+                String regexName = "^[^!@#$%^&*()_+|~=`{}\\[\\]:\";'<>?,.\\/\\\\]*$";
+                String regexEmailBasic = "^[a-zA-Z0-9._%+-]+@fpt.edu.vn$";
+                String regexEmail = "^[A-Za-z0-9+_.-]+@(.+)$";
+                String regexEmailExactly = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
                 String regexDouble = "^(?:[0-9](?:\\.\\d*)?|10(?:\\.0*)?)$";
                 if (point.getName().isEmpty()) {
                     teExcelResponseMessage.setStatus(false);
@@ -264,6 +263,11 @@ public class TePointSeviceImpl implements TePointSevice {
                 if (point.getEmail().isEmpty()) {
                     teExcelResponseMessage.setStatus(false);
                     teExcelResponseMessage.setMessage("email không được để trống");
+                    return;
+                }
+                if (!point.getEmail().matches(regexEmailExactly)) {
+                    teExcelResponseMessage.setStatus(false);
+                    teExcelResponseMessage.setMessage("email sai định dạng");
                     return;
                 }
                 if (point.getCheckPointPhase1().isEmpty()) {
@@ -319,7 +323,7 @@ public class TePointSeviceImpl implements TePointSevice {
     public void getAllPutMapPoint
             (ConcurrentHashMap<String, SimpleResponse> mapSimple, List<SimpleResponse> listStudent) {
         for (SimpleResponse student : listStudent) {
-            mapSimple.put(student.getEmail().toLowerCase(), student);
+            mapSimple.put(student.getEmail(), student);
         }
     }
 
@@ -333,5 +337,6 @@ public class TePointSeviceImpl implements TePointSevice {
             mapPoint.put(point.getStudentId(), point);
         }
     }
+
 
 }

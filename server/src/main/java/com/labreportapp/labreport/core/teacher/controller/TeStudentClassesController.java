@@ -26,7 +26,7 @@ public class TeStudentClassesController {
 
     @GetMapping("")
     public ResponseObject getTeStudentClasses(final TeFindStudentClasses request) {
-        List<TeStudentCallApiResponse> pageList = teStudentClassesService.searchStudentClassesByIdClass(request);
+        List<TeStudentCallApiResponse> pageList = teStudentClassesService.searchApiStudentClassesByIdClass(request.getIdClass());
         return new ResponseObject(pageList);
     }
 

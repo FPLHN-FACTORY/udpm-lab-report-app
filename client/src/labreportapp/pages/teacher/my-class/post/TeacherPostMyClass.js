@@ -1,5 +1,14 @@
 import "./styleTeacherPostMyClass.css";
-import { Button, Card, Col, Dropdown, Menu, Popconfirm, Row } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  Dropdown,
+  Empty,
+  Menu,
+  Popconfirm,
+  Row,
+} from "antd";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useParams } from "react-router";
@@ -52,7 +61,6 @@ const TeacherPostMyClass = () => {
   const [seeMore, setSeeMore] = useState(true);
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = "Bảng điều khiển - Bài đăng";
     featchClass(idClass);
     featchPost(idClass);
   }, []);
@@ -127,6 +135,7 @@ const TeacherPostMyClass = () => {
     try {
       await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
         dispatch(SetClass(responese.data.data));
+        document.title = "Bài đăng | " + responese.data.data.code;
       });
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
@@ -292,7 +301,6 @@ const TeacherPostMyClass = () => {
             </div>
           </div>
           <div className="box-image" style={{ marginBottom: "20px" }}>
-            {" "}
             <span className="textCode"> {classDetail.code}</span>
           </div>
           <div className="box-post">
@@ -498,8 +506,7 @@ const TeacherPostMyClass = () => {
                                 <div style={{ width: "100%" }}>
                                   <div style={{ width: "95%", float: "left" }}>
                                     <span style={{ lineHeight: "50px" }}>
-                                      {" "}
-                                      {giangVienCurrent.name}{" "}
+                                      {giangVienCurrent.name}
                                       <span
                                         style={{
                                           color: "gray",
@@ -562,16 +569,10 @@ const TeacherPostMyClass = () => {
                     );
                   })
                 ) : (
-                  <p
-                    style={{
-                      textAlign: "center",
-                      marginTop: "100px",
-                      fontSize: "15px",
-                      color: "red",
-                    }}
-                  >
-                    Chưa đăng bài viết nào được đăng!
-                  </p>
+                  <Empty
+                    imageStyle={{ height: 60 }}
+                    description={<span>Chưa có bài viết nào được đăng</span>}
+                  />
                 )}
                 {seeMore && (
                   <Button

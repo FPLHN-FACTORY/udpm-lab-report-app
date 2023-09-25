@@ -1,27 +1,27 @@
-.custom-table > thead > tr > th {
+.custom-table-teacher > thead > tr > th {
   background-color: #d2b156;
   color: white;
 }
-.custom-table {
+.custom-table-teacher {
   border: 1px solid #e8e8e8;
   border-radius: 10px;
   overflow: hidden;
 }
-.custom-table th {
+.custom-table-teacher th {
   font-size: 13px;
   height: 60px;
 }
-.custom-table td {
+.custom-table-teacher td {
   font-size: 13px;
   height: 55px;
   border-bottom: 0.5px solid rgb(237, 237, 237);
 }
-.custom-table th,
-.custom-table td {
+.custom-table-teacher th,
+.custom-table-teacher td {
   text-align: center;
   padding: 1px;
 }
-.column-AP {
+.column-AP-teacher {
   min-width: 15px;
   max-width: auto;
   text-align: center;

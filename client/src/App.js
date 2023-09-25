@@ -68,6 +68,8 @@ import { sinhVienCurrent } from "./labreportapp/helper/inForUser";
 import Cookies from "js-cookie";
 import TemplateReport from "./labreportapp/pages/admin/template-report/TemplateReport";
 import AdFeedbackDetailClass from "./labreportapp/pages/admin/detail-class/feedback/AdFeedbackDetailClass";
+import DetailMeetingAttendance from "./labreportapp/pages/admin/detail-class/meeting-management/detail-meeting/DetailMeetingAttendance";
+import LevelManagement from "./labreportapp/pages/admin/level-management/LevelManagement";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -188,6 +190,16 @@ function App() {
               }
             />
             <Route
+              path="/admin/class-management/meeting-management/attendance/:id"
+              element={
+                <AuthGuard>
+                  <DashBoardAdmin>
+                    <DetailMeetingAttendance />
+                  </DashBoardAdmin>
+                </AuthGuard>
+              }
+            />
+            <Route
               path="/admin/class-management/information-class/:id"
               element={
                 <AuthGuard>
@@ -203,6 +215,16 @@ function App() {
                 <AuthGuard>
                   <DashBoardAdmin>
                     <TemplateReport />
+                  </DashBoardAdmin>
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/admin/level-management"
+              element={
+                <AuthGuard>
+                  <DashBoardAdmin>
+                    <LevelManagement />
                   </DashBoardAdmin>
                 </AuthGuard>
               }

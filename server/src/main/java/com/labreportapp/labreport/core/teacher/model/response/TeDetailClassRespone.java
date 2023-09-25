@@ -40,4 +40,9 @@ public interface TeDetailClassRespone {
     @Value("#{target.status_class}")
     Integer getStatusClass();
 
+    @Value("#{target.allow_use_trello}")
+    Integer getAllowUseTrello();
+
+
+
 }

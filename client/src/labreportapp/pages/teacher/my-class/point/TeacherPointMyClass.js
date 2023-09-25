@@ -32,7 +32,6 @@ const TeacherPointMyClass = () => {
   dispatch(SetTTrueToggle());
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = "Bảng điều khiển - Bảng điểm";
     fetchData(idClass);
   }, []);
   const fetchData = async (idClass) => {
@@ -116,6 +115,7 @@ const TeacherPointMyClass = () => {
     try {
       await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
         setClassDetail(responese.data.data);
+        document.title = "Quản lý điểm | " + responese.data.data.code;
       });
     } catch (error) {
       console.log(error);

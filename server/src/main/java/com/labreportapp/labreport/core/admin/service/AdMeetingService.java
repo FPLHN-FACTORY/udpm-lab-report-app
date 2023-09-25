@@ -1,8 +1,11 @@
 package com.labreportapp.labreport.core.admin.service;
 
+import com.labreportapp.labreport.core.admin.model.request.AdChangeTeacherRequest;
+import com.labreportapp.labreport.core.admin.model.request.AdCreateMeetingAutoRequest;
 import com.labreportapp.labreport.core.admin.model.request.AdCreateMeetingRequest;
 import com.labreportapp.labreport.core.admin.model.request.AdUpdateMeetingRequest;
-import com.labreportapp.labreport.core.admin.model.response.AdMeetingResponse;
+import com.labreportapp.labreport.core.admin.model.response.AdDetailMeetingResponse;
+import com.labreportapp.labreport.core.admin.model.response.AdMeetingCustom;
 import com.labreportapp.labreport.entity.Meeting;
 import jakarta.validation.Valid;
 
@@ -13,11 +16,17 @@ import java.util.List;
  */
 public interface AdMeetingService {
 
-    List<AdMeetingResponse> getAllMeetingByIdClass(String idClass);
+    List<AdMeetingCustom> getAllMeetingByIdClass(String idClass);
 
-    Meeting create(@Valid AdCreateMeetingRequest request);
+    AdMeetingCustom create(@Valid AdCreateMeetingRequest request);
 
-    Meeting update(@Valid AdUpdateMeetingRequest request);
+    AdMeetingCustom update(@Valid AdUpdateMeetingRequest request);
 
     String delete(String id);
+
+    Boolean changeTeacher(@Valid AdChangeTeacherRequest request);
+
+    Boolean createMeetingAuto(@Valid AdCreateMeetingAutoRequest request);
+
+    AdDetailMeetingResponse detailMeeting(String idMeeting);
 }

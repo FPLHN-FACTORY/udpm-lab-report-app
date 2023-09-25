@@ -38,6 +38,7 @@ const StPoint = () => {
 
   useEffect(() => {
     loadDataSemester();
+    document.title = "Điểm | Lab-Report-App";
   }, []);
 
   useEffect(() => {

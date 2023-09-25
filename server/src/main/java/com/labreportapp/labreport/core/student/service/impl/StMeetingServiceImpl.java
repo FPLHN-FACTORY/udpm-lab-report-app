@@ -5,10 +5,7 @@ import com.labreportapp.labreport.core.student.model.request.StUpdateHomeWorkAnd
 import com.labreportapp.labreport.core.student.model.response.StHomeWordAndNoteResponse;
 import com.labreportapp.labreport.core.student.model.response.StMeetingResponse;
 import com.labreportapp.labreport.core.student.model.response.StMyTeamInClassResponse;
-import com.labreportapp.labreport.core.student.repository.StHomeWorkRepository;
-import com.labreportapp.labreport.core.student.repository.StLeadTeamRepository;
-import com.labreportapp.labreport.core.student.repository.StMeetingRepository;
-import com.labreportapp.labreport.core.student.repository.StNoteRepository;
+import com.labreportapp.labreport.core.student.repository.*;
 import com.labreportapp.labreport.core.student.service.StMeetingService;
 import com.labreportapp.labreport.entity.HomeWork;
 import com.labreportapp.labreport.entity.Note;
@@ -31,6 +28,9 @@ public class StMeetingServiceImpl implements StMeetingService {
 
     @Autowired
     private StMeetingRepository stMeetingrepository;
+
+    @Autowired
+    private StReportRepository stReportRepository;
 
     @Autowired
     private StHomeWorkRepository stHomeWorkRepository;
@@ -134,5 +134,7 @@ public class StMeetingServiceImpl implements StMeetingService {
     public Integer getRoleByIdStudent(final StFindMeetingRequest request) {
         return stMeetingrepository.getRoleByIdStudent(request);
     }
+
+
 
 }

@@ -24,7 +24,7 @@ const StTeamMeeting = () => {
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = "Bảng điều khiển - buổi học";
+
     featchMeeting(idMeeting);
     // featchTeams(meeting.idClass)
   }, []);
@@ -34,6 +34,7 @@ const StTeamMeeting = () => {
     try {
       await StudentMeetingAPI.getDetailByIdMeeting(id).then((response) => {
         setMeeting(response.data.data);
+        document.title = "Bảng điều khiển - " + response.data.data.name;
         // featchTeams(response.data.data.idClass);
       });
     } catch (error) {
@@ -45,7 +46,6 @@ const StTeamMeeting = () => {
     featchTeams(meeting.idClass);
   }, [meeting]);
   const featchTeams = async (id) => {
-    
     try {
       await StudentMeetingAPI.getTeamInMeeting(id).then((responese) => {
         // console.log(responese.data.data);

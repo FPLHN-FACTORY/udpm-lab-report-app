@@ -23,7 +23,7 @@ public interface AdSemesterRepository extends SemesterRepository {
             """, nativeQuery = true)
     List<Semester> findAllSemester();
 
-    @Query(value = "SELECT COUNT(obj) FROM activity obj WHERE obj.semesterId = :id", nativeQuery = true)
+    @Query(value = "SELECT COUNT(*) FROM activity obj WHERE obj.semester_id = :id", nativeQuery = true)
     Integer countActivitiesBySemesterId(@Param("id") String id);
 
     @Query(value = """
@@ -31,6 +31,8 @@ public interface AdSemesterRepository extends SemesterRepository {
             ROW_NUMBER() OVER(ORDER BY obj.last_modified_date DESC ) AS stt ,
             obj.id,
             obj.name,
+            obj.start_time_student,
+            obj.end_time_student,
             obj.start_time,
             obj.end_time
             FROM semester obj 

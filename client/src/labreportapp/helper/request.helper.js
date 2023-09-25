@@ -25,12 +25,13 @@ request.interceptors.response.use(
     ) {
       window.location.href = "/not-authorization";
     }
-    if (error.response && error.response.status === 400) {
+    if (error.response != null && error.response.status === 400) {
       toast.error(error.response.data.message);
     }
     // if (error.response && error.response.status === 404) {
     //   window.location.href = "/not-found";
     // }
+
     throw error;
   }
 );

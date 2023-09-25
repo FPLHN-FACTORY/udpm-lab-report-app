@@ -1,4 +1,3 @@
-import { toast } from "react-toastify";
 import "./styleTeacherMyClass.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faHome } from "@fortawesome/free-solid-svg-icons";
@@ -14,6 +13,7 @@ import {
   Table,
   Pagination,
   Tooltip,
+  Empty,
 } from "antd";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -21,6 +21,7 @@ import { useAppDispatch, useAppSelector } from "../../app/hook";
 import { TeacherMyClassAPI } from "../../api/teacher/my-class/TeacherMyClass.api";
 import { TeacherSemesterAPI } from "../../api/teacher/semester/TeacherSemester.api";
 import { TeacherActivityAPI } from "../../api/teacher/activity/TeacherActivity.api";
+import { TeacherLevelAPI } from "../../api/teacher/level/TeacherLevel.api";
 import { SetTeacherSemester } from "../../app/teacher/semester/teacherSemesterSlice.reduce";
 import {
   GetTeacherMyClass,
@@ -34,9 +35,11 @@ const TeacherMyClass = () => {
   const dispatch = useAppDispatch();
   const [listSemester, setListSemester] = useState([]);
   const [listActivity, setListActivity] = useState([]);
+  const [listLevel, setListLevel] = useState([]);
   const [listMyClass, setListMyClass] = useState([]);
   const [idSemesterSeach, setIdSemesterSearch] = useState("");
   const [idActivitiSearch, setIdActivitiSearch] = useState("");
+  const [idLevelSearch, setIdLevelSearch] = useState("");
   const [codeSearch, setCodeSearch] = useState("");
   const [nameSearch, setNameSearch] = useState("");
   const [classPeriodSearch, setClassPeriodSearch] = useState("");
@@ -49,6 +52,7 @@ const TeacherMyClass = () => {
   const [current, setCurrent] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Bảng điều khiển - Lớp của tôi";
@@ -59,20 +63,25 @@ const TeacherMyClass = () => {
     setClassPeriodSearch("");
     setLevelSearch("");
     dispatch(SetTeacherMyClass([]));
+    featchDataLevel();
     featchDataSemester();
     featchAllMyClass(giangVienCurrent);
   }, []);
+
   useEffect(() => {
     featchDataActivity(idSemesterSeach);
     setIdActivitiSearch("");
   }, [idSemesterSeach]);
+
   useEffect(() => {
     featchAllMyClass(giangVienCurrent);
   }, [current]);
+
   useEffect(() => {
     featchAllMyClass(giangVienCurrent);
     setClear(false);
   }, [clear]);
+
   const featchAllMyClass = async (giangVienCurrent) => {
     setLoading(false);
     let filter = {
@@ -93,9 +102,10 @@ const TeacherMyClass = () => {
         setLoading(true);
       });
     } catch (error) {
-      alert("Vui lòng F5 lại trang !");
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
+
   const featchDataSemester = async () => {
     try {
       setLoading(false);
@@ -104,15 +114,33 @@ const TeacherMyClass = () => {
         if (respone.data.data.length > 0) {
           setIdSemesterSearch(respone.data.data[0].id);
         } else {
-          setIdSemesterSearch("null");
+          setIdSemesterSearch("");
         }
         setListSemester(respone.data.data);
         setLoading(true);
       });
     } catch (error) {
-      alert("Vui lòng F5 lại trang !");
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
+
+  const featchDataLevel = async () => {
+    try {
+      setLoading(false);
+      await TeacherLevelAPI.getAllLevel().then((respone) => {
+        if (respone.data.data.length > 0) {
+          setIdLevelSearch(respone.data.data[0].id);
+        } else {
+          setIdLevelSearch("");
+        }
+        setListLevel(respone.data.data);
+        setLoading(true);
+      });
+    } catch (error) {
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+    }
+  };
+
   const featchDataActivity = async (idSemesterSeach) => {
     try {
       await TeacherActivityAPI.getAllActivityByIdSemester(idSemesterSeach).then(
@@ -122,12 +150,14 @@ const TeacherMyClass = () => {
         }
       );
     } catch (error) {
-      alert("Vui lòng F5 lại trang !");
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
+
   const handleSearch = async () => {
     await featchAllMyClass(giangVienCurrent);
   };
+
   const handleClear = () => {
     if (listSemester.length > 0) {
       setIdSemesterSearch(listSemester[0].id);
@@ -139,9 +169,9 @@ const TeacherMyClass = () => {
     setNameSearch("");
     setClassPeriodSearch("");
     setLevelSearch("");
-    toast.success("Hủy bộ lọc thành công !");
     setClear(true);
   };
+
   const data = useAppSelector(GetTeacherMyClass);
   const columns = [
     {
@@ -150,12 +180,12 @@ const TeacherMyClass = () => {
       key: "stt",
       sorter: (a, b) => a.stt - b.stt,
     },
-
     {
       title: "Mã lớp",
       dataIndex: "code",
       key: "code",
       sorter: (a, b) => a.code.localeCompare(b.code),
+      align: "center",
     },
     {
       title: "Thời gian bắt đầu",
@@ -169,6 +199,7 @@ const TeacherMyClass = () => {
         }/${startTime.getFullYear()}`;
         return <span>{formattedStartTime}</span>;
       },
+      align: "center",
     },
     {
       title: "Ca học",
@@ -176,6 +207,7 @@ const TeacherMyClass = () => {
       key: "classPeriod",
       render: (text) => <span>{text + 1}</span>,
       sorter: (a, b) => a.classPeriod - b.classPeriod,
+      align: "center",
     },
     {
       title: "Thời gian",
@@ -184,13 +216,19 @@ const TeacherMyClass = () => {
       render: (text, record) => {
         return <span>{convertMeetingPeriodToTime(record.classPeriod)}</span>;
       },
+      align: "center",
+    },
+    {
+      title: "Hoạt động",
+      dataIndex: "activity",
+      key: "activity",
+      sorter: (a, b) => a.activity.localeCompare(b.activity),
     },
     {
       title: "Level",
       dataIndex: "level",
       key: "level",
-      render: (text) => <span>{text + 1}</span>,
-      sorter: (a, b) => a.level - b.level,
+      sorter: (a, b) => a.level.localeCompare(b.level),
     },
     {
       title: "Hành động",
@@ -210,6 +248,7 @@ const TeacherMyClass = () => {
           </div>
         </>
       ),
+      align: "center",
     },
   ];
   const filterOptions = (input, option) => {
@@ -255,12 +294,12 @@ const TeacherMyClass = () => {
 
             <hr />
           </div>
-          <div className="title-box-two">
+          <div className="title-box-two" style={{ paddingRight: "30px" }}>
             <Row
-              gutter={16}
+              gutter={24}
               style={{ marginBottom: "15px", paddingTop: "20px" }}
             >
-              <Col span={6}>
+              <Col span={8}>
                 <span>Học kỳ</span>
                 <QuestionCircleFilled
                   style={{ paddingLeft: "12px", fontSize: "15px" }}
@@ -274,9 +313,7 @@ const TeacherMyClass = () => {
                   showSearch
                   filterOption={filterOptions}
                   style={{
-                    width: "263px",
-                    minWidth: "120px",
-                    maxWidth: "263px",
+                    width: "100%",
                     margin: "6px 0 10px 0",
                   }}
                 >
@@ -293,11 +330,11 @@ const TeacherMyClass = () => {
                   })}
                 </Select>
               </Col>
-              <Col span={14}>
+              <Col span={16}>
                 <span>Hoạt động</span>
                 <QuestionCircleFilled
                   style={{ paddingLeft: "12px", fontSize: "15px" }}
-                />{" "}
+                />
                 <br />
                 <Select
                   showSearch
@@ -307,7 +344,7 @@ const TeacherMyClass = () => {
                     setIdActivitiSearch(value);
                   }}
                   style={{
-                    width: "868px",
+                    width: "100%",
                     margin: "6px 0 10px 0",
                   }}
                 >
@@ -323,17 +360,17 @@ const TeacherMyClass = () => {
               </Col>
             </Row>
             <Row
-              gutter={16}
+              gutter={24}
               style={{ marginBottom: "15px", paddingTop: "20px" }}
             >
-              <Col span={6}>
-                <span>Mã lớp</span>{" "}
+              <Col span={8}>
+                <span>Mã lớp</span>
                 <QuestionCircleFilled
                   style={{ paddingLeft: "12px", fontSize: "15px" }}
-                />{" "}
+                />
                 <br />
                 <Input
-                  style={{ width: "92%", marginTop: "6px" }}
+                  style={{ width: "100%", marginTop: "6px" }}
                   type="text"
                   placeholder="Nhập mã lớp"
                   value={codeSearch}
@@ -342,12 +379,11 @@ const TeacherMyClass = () => {
                   }}
                 />
               </Col>
-
-              <Col span={6}>
+              <Col span={8}>
                 <span>Ca học</span>
                 <QuestionCircleFilled
                   style={{ paddingLeft: "12px", fontSize: "15px" }}
-                />{" "}
+                />
                 <br />
                 <Select
                   showSearch
@@ -356,7 +392,7 @@ const TeacherMyClass = () => {
                   onChange={(value) => {
                     setClassPeriodSearch(value);
                   }}
-                  style={{ width: "92%", marginTop: "6px" }}
+                  style={{ width: "100%", marginTop: "6px" }}
                 >
                   <Option value="">Tất cả</Option>
                   {listClassPeriod.map((value) => {
@@ -368,11 +404,11 @@ const TeacherMyClass = () => {
                   })}
                 </Select>
               </Col>
-              <Col span={6}>
-                <span>Level</span>{" "}
+              <Col span={8}>
+                <span>Level</span>
                 <QuestionCircleFilled
                   style={{ paddingLeft: "12px", fontSize: "15px" }}
-                />{" "}
+                />
                 <br />
                 <Select
                   showSearch
@@ -381,12 +417,16 @@ const TeacherMyClass = () => {
                   onChange={(value) => {
                     setLevelSearch(value);
                   }}
-                  style={{ width: "92%", marginTop: "6px" }}
+                  style={{ width: "100%", marginTop: "6px" }}
                 >
                   <Option value="">Tất cả</Option>
-                  <Option value="0">1</Option>
-                  <Option value="1">2</Option>
-                  <Option value="2">3</Option>
+                  {listLevel.map((item) => {
+                    return (
+                      <Option value={item.id} key={item.id} title={item.name}>
+                        {item.name}
+                      </Option>
+                    );
+                  })}
                 </Select>
               </Col>
             </Row>
@@ -394,8 +434,8 @@ const TeacherMyClass = () => {
               <Button className="btn_filter" onClick={handleSearch}>
                 Tìm kiếm
               </Button>
-              <Button className="btn_clear" onClick={handleClear}>
-                Làm mới bộ lọc
+              <Button className="button-clear-teacher" onClick={handleClear}>
+                Làm mới
               </Button>
             </div>
           </div>
@@ -405,9 +445,7 @@ const TeacherMyClass = () => {
         <div className="box-four-son">
           <div className="title-table">
             <div>
-              {" "}
               <span style={{ fontSize: "17px", fontWeight: "500" }}>
-                {" "}
                 <ProjectOutlined
                   style={{ marginRight: "10px", fontSize: "24px" }}
                 />
@@ -418,7 +456,7 @@ const TeacherMyClass = () => {
           <div>
             {listMyClass.length > 0 ? (
               <>
-                <div className="table">
+                <div style={{ paddingTop: "15px" }} className="table-teacher">
                   <Table
                     dataSource={data}
                     rowKey="id"
@@ -438,18 +476,10 @@ const TeacherMyClass = () => {
                 </div>
               </>
             ) : (
-              <>
-                <p
-                  style={{
-                    textAlign: "center",
-                    marginTop: "100px",
-                    fontSize: "15px",
-                    color: "red",
-                  }}
-                >
-                  Không có lớp học
-                </p>
-              </>
+              <Empty
+                imageStyle={{ height: 60 }}
+                description={<span>Không có lớp học</span>}
+              />
             )}
           </div>
         </div>

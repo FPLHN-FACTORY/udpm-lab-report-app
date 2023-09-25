@@ -1,6 +1,7 @@
 .board {
   display: flex;
   border-radius: 5px;
+  padding-left: 8px;
 }
 
 .board-container {

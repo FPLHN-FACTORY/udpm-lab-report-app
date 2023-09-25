@@ -18,7 +18,7 @@ const ActivityComponent = ({ item }) => {
 
   const loadDataMember = () => {
     let data = listMemberProject.find(
-      (member) => member.id === item.memberCreatedId
+      (member) => member.memberId === item.memberCreatedId
     );
     setMember(data);
   };

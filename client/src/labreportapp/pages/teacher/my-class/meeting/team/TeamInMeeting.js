@@ -1,4 +1,4 @@
-import { Row, Col } from "antd";
+import { Row, Col, Button } from "antd";
 import { useParams } from "react-router";
 import "./styleTeamInMeeting.css";
 import {
@@ -12,6 +12,8 @@ import { TeacherMeetingAPI } from "../../../../../api/teacher/meeting/TeacherMee
 import { TeacherTeamsAPI } from "../../../../../api/teacher/teams-class/TeacherTeams.api";
 import CollapseTeam from "../team/collapse-team/CollapseTeam";
 import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTableList } from "@fortawesome/free-solid-svg-icons";
 
 const TeamInMeeting = () => {
   const { idMeeting } = useParams();
@@ -20,7 +22,6 @@ const TeamInMeeting = () => {
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = "Bảng điều khiển - buổi học";
     featchMeeting(idMeeting);
   }, []);
   const featchMeeting = async (id) => {
@@ -29,6 +30,7 @@ const TeamInMeeting = () => {
       await TeacherMeetingAPI.getDetailByIdMeeting(id).then((response) => {
         setMeeting(response.data.data);
         featchTeams(response.data.data.idClass);
+        document.title = "Bảng điều khiển - " + response.data.data.name;
       });
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
@@ -91,7 +93,7 @@ const TeamInMeeting = () => {
         </div>
         <div
           className="box-two-student-in-my-class-son"
-          style={{ minHeight: "505px", marginTop: "25px" }}
+          style={{ minHeight: "505px", marginTop: "25px", width: "100%" }}
         >
           <div style={{ marginLeft: "30px" }}>
             <Row gutter={16}>
@@ -123,18 +125,23 @@ const TeamInMeeting = () => {
             </Row>
             <hr />
           </div>
-          <div className="row-meeting">
+          <div
+            className="row-meeting"
+            style={{ width: "100%", padding: "2px" }}
+          >
             <div style={{ margin: "0px 0px 20px 80px" }}>
-              {" "}
-              <span style={{ fontSize: "17px", fontWeight: "500" }}>
-                {" "}
-                <UnorderedListOutlined
-                  style={{ marginRight: "10px", fontSize: "20px" }}
+              <span style={{ fontSize: "17px", fontWeight: "500px" }}>
+                <FontAwesomeIcon
+                  icon={faTableList}
+                  style={{
+                    marginRight: "10px",
+                    fontSize: "20px",
+                  }}
                 />
                 Danh sách nhóm
               </span>
             </div>
-            <CollapseTeam items={team}></CollapseTeam>
+            <CollapseTeam items={team} />
           </div>
         </div>
       </div>

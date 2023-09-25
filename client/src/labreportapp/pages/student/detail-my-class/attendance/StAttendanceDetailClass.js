@@ -39,7 +39,7 @@ const StAttendanceDetailClass = () => {
     },
     {
       title: "Buổi học",
-      dataIndex: "name",
+      dataIndex: "lesson",
       key: "name",
     },
     {
@@ -61,6 +61,11 @@ const StAttendanceDetailClass = () => {
       render: (text, record) => {
         return <span>{convertMeetingPeriodToTime(record.meetingPeriod)}</span>;
       },
+    },
+    {
+      title: "Giảng viên",
+      dataIndex: "userName",
+      key: "userName",
     },
     {
       title: "Hình thức",
@@ -88,6 +93,7 @@ const StAttendanceDetailClass = () => {
   ];
 
   useEffect(() => {
+    document.title = "Bảng điều khiển - Điểm danh";
     setIsLoading(true);
     fetchData(id);
   }, [id]);
@@ -97,6 +103,8 @@ const StAttendanceDetailClass = () => {
       await StAttendanceAPI.getAllAttendanceById(attendanceRequest).then(
         (respone) => {
           setListAttendance(respone.data);
+          console.log("================================================");
+          console.log(respone.data);
           setIsLoading(false);
         }
       );

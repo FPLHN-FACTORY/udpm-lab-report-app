@@ -33,6 +33,6 @@ public interface AdClassResponse extends IsIdentified {
     @Value("#{target.nameActivity}")
     String getActivityName();
 
-//    @Value("#{target.semesterId}")
-//    String getSemesterName();
+    @Value("#{target.nameLevel}")
+    String getNameLevel();
 }

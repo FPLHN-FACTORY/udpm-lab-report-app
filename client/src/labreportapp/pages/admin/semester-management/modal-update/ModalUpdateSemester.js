@@ -15,6 +15,10 @@ const ModalUpdateSemester = ({ visible, onCancel, semester }) => {
   const [errorStartTime, setErrorStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [errorEndTime, setErrorEndTime] = useState("");
+  const [startTimeStudent, setStartTimeStudent] = useState("");
+  const [errorStartTimeStudent, setErrorStartTimeStudent] = useState("");
+  const [endTimeStudent, setEndTimeStudent] = useState("");
+  const [errorEndTimeStudent, setErrorEndTimeStudent] = useState("");
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -22,6 +26,8 @@ const ModalUpdateSemester = ({ visible, onCancel, semester }) => {
       setName(semester.name);
       setStartTime(semester.startTime);
       setEndTime(semester.endTime);
+      setStartTimeStudent(semester.startTimeStudent);
+      setEndTimeStudent(semester.endTimeStudent);
 
       return () => {
         setName("");
@@ -29,6 +35,10 @@ const ModalUpdateSemester = ({ visible, onCancel, semester }) => {
         setEndTime("");
         setErrorEndTime("");
         setErrorStartTime("");
+        setStartTimeStudent("");
+        setEndTimeStudent("");
+        setErrorEndTimeStudent("");
+        setErrorStartTimeStudent("");
         setErrorName();
       };
     }
@@ -41,18 +51,27 @@ const ModalUpdateSemester = ({ visible, onCancel, semester }) => {
       check++;
     } else {
       setErrorName("");
+      if (name.trim().length > 500) {
+        setErrorName("Tên học kỳ không quá 500 ký tự");
+        check++;
+      } else {
+        setErrorName("");
+      }
     }
-    if (name.trim().length > 500) {
-      setErrorName("Tên học kỳ không quá 500 ký tự");
-      check++;
-    } else {
-      setErrorName("");
-    }
+
     if (startTime === "") {
       setErrorStartTime("Thời gian bắt đầu không được để trống");
       check++;
     } else {
       setErrorStartTime("");
+      if (new Date(startTime) > new Date(endTime)) {
+        setErrorStartTime(
+          "Thời gian bắt đầu không được lớn hơn thời gian kết thúc"
+        );
+        check++;
+      } else {
+        setErrorStartTime("");
+      }
     }
     if (endTime === "") {
       setErrorEndTime("Thời gian kết thúc không được để trống");
@@ -60,17 +79,45 @@ const ModalUpdateSemester = ({ visible, onCancel, semester }) => {
     } else {
       setErrorEndTime("");
     }
-    if (new Date(startTime) > new Date(endTime)) {
-      setErrorStartTime(
-        "Thời gian bắt đầu không được lớn hơn thời gian kết thúc"
+
+    if (startTimeStudent === "") {
+      setErrorStartTimeStudent(
+        "Thời gian sinh viên bắt đầu không được để trống"
       );
       check++;
     } else {
-      if (startTime === "") {
-        setErrorStartTime("Thời gian bắt đầu không được để trống");
+      setErrorStartTimeStudent("");
+      if (new Date(startTimeStudent) > new Date(endTimeStudent)) {
+        setErrorStartTimeStudent(
+          "Thời gian sinh viên bắt đầu không được lớn hơn thời gian sinh viên kết thúc"
+        );
         check++;
       } else {
-        setErrorStartTime("");
+        setErrorStartTimeStudent("");
+      }
+      if (new Date(startTimeStudent) < new Date(startTime)) {
+        setErrorStartTimeStudent(
+          "Thời gian sinh viên bắt đầu không được nhỏ hơn thời gian học kỳ bắt đầu"
+        );
+        check++;
+      } else {
+        setErrorStartTimeStudent("");
+      }
+    }
+    if (endTimeStudent === "") {
+      setErrorEndTimeStudent(
+        "Thời gian sinh viên kết thúc không được để trống"
+      );
+      check++;
+    } else {
+      setErrorEndTimeStudent("");
+      if (new Date(endTimeStudent) > new Date(endTime)) {
+        setErrorEndTimeStudent(
+          "Thời gian sinh viên kết thúc không được lớn hơn thời gian học kỳ kết thúc"
+        );
+        check++;
+      } else {
+        setErrorEndTimeStudent("");
       }
     }
 
@@ -80,6 +127,8 @@ const ModalUpdateSemester = ({ visible, onCancel, semester }) => {
         name: name,
         startTime: moment(startTime).valueOf(),
         endTime: moment(endTime).valueOf(),
+        startTimeStudent: moment(startTimeStudent).valueOf(),
+        endTimeStudent: moment(endTimeStudent).valueOf(),
       };
 
       AdSemesterAPI.updateSemester(obj, semester.id).then(
@@ -88,9 +137,7 @@ const ModalUpdateSemester = ({ visible, onCancel, semester }) => {
           dispatch(UpdateSemester(response.data.data));
           onCancel();
         },
-        (error) => {
-          toast.error(error.response.data.message);
-        }
+        (error) => {}
       );
     }
   };
@@ -102,7 +149,7 @@ const ModalUpdateSemester = ({ visible, onCancel, semester }) => {
         onCancel={onCancel}
         width={750}
         footer={null}
-        className="modal_show_detail"
+        className="modal_show_detail_update_semester"
       >
         {" "}
         <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
@@ -144,6 +191,30 @@ const ModalUpdateSemester = ({ visible, onCancel, semester }) => {
                 type="date"
               />
               <span className="error">{errorEndTime}</span>
+            </Col>
+          </Row>
+          <Row gutter={16} style={{ marginBottom: "15px" }}>
+            <Col span={12}>
+              <span>Thời gian sinh viên bắt đầu:</span> <br />
+              <Input
+                value={moment(startTimeStudent).format("YYYY-MM-DD")}
+                onChange={(e) => {
+                  setStartTimeStudent(e.target.value);
+                }}
+                type="date"
+              />
+              <span className="error">{errorStartTimeStudent}</span>
+            </Col>
+            <Col span={12}>
+              <span>Thời gian sinh viên kết thúc:</span> <br />
+              <Input
+                value={moment(endTimeStudent).format("YYYY-MM-DD")}
+                onChange={(e) => {
+                  setEndTimeStudent(e.target.value);
+                }}
+                type="date"
+              />
+              <span className="error">{errorEndTimeStudent}</span>
             </Col>
           </Row>
         </div>

@@ -59,9 +59,6 @@
   justify-content: center;
   align-items: center;
 }
-.table {
-  margin-top: 20px;
-}
 
 .button-menu button {
   border: none;
@@ -94,13 +91,13 @@
   margin-right: 5px;
 }
 
-.btn_clear {
-  background-color: rgb(19, 139, 213);
+.button-clear-teacher {
+  background-color: rgb(38, 144, 214);
   color: white;
   margin-right: 5px;
 }
 
-.btn_clear:hover {
+.button-clear-teacher:hover {
   background-color: rgb(9, 117, 185);
   color: white !important;
   margin-right: 5px;
@@ -158,17 +155,18 @@
   height: 2px;
   background: linear-gradient(to right, #d2b156 0%, #d2b156 100%);
 }
-.ant-table-wrapper .ant-table-thead > tr > th {
+/* .ant-table-wrapper .ant-table-thead > tr > th {
   background-color: #d2b156;
   color: white;
-}
+} */
+
 .ant-table-wrapper {
-  white-space: nowrap;
+  /* white-space: nowrap; */
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.ant-table-wrapper .ant-table-thead > tr > td {
+/* .ant-table-wrapper .ant-table-thead > tr > td {
   background-color: #d2b156;
   color: white;
 }
@@ -183,4 +181,4 @@
 .ant-table-column-sorter-up.inactive,
 .ant-table-column-sorter-down.inactive {
   color: inherit;
-}
+} */

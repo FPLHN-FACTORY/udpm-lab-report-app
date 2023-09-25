@@ -3,11 +3,12 @@ import "./style-modal-update-meeting.css";
 import { useState } from "react";
 import moment from "moment";
 import { useEffect } from "react";
-import { useAppDispatch } from "../../../../../app/hook";
+import { useAppDispatch, useAppSelector } from "../../../../../app/hook";
 import { toast } from "react-toastify";
 import { MeetingManagementAPI } from "../../../../../api/admin/meeting-management/MeetingManagementAPI";
 import { UpdateMeeting } from "../../../../../app/admin/AdMeetingManagement.reducer";
 import { convertMeetingPeriodToNumber } from "../../../../../helper/util.helper";
+import { GetAdTeacher } from "../../../../../app/admin/AdTeacherSlice.reducer";
 
 const { Option } = Select;
 
@@ -32,17 +33,13 @@ const ModalUpdateMeeting = ({ item, visible, onCancel }) => {
       setDescriptions(item.descriptions);
       setErrorName("");
       setErrorMeetingDate("");
+      setSelectedItemsPerson(item.teacherId);
+      setErrorTeacher("");
     }
   }, [item]);
 
   const update = () => {
     let check = 0;
-    if (name === "") {
-      setErrorName("Tên buổi học không được để trống");
-      ++check;
-    } else {
-      setErrorName("");
-    }
     if (meetingDate === "") {
       setErrorMeetingDate("Ngày diễn ra không được để trống");
       ++check;
@@ -52,12 +49,12 @@ const ModalUpdateMeeting = ({ item, visible, onCancel }) => {
     if (check === 0) {
       let obj = {
         id: item.id,
-        name: name,
         meetingDate: moment(meetingDate, "YYYY-MM-DD").valueOf(),
         meetingPeriod: parseInt(meetingPeriod),
         typeMeeting: parseInt(typeMeeting),
         address: address,
         descriptions: descriptions,
+        teacherId: selectedItemsPerson,
       };
 
       MeetingManagementAPI.updateMeeting(obj).then((response) => {
@@ -68,6 +65,18 @@ const ModalUpdateMeeting = ({ item, visible, onCancel }) => {
     }
   };
 
+  const teacherDataAll = useAppSelector(GetAdTeacher);
+  const [selectedItemsPerson, setSelectedItemsPerson] = useState("");
+  const [errorTeacher, setErrorTeacher] = useState("");
+
+  const handleSelectPersonChange = (e) => {
+    setSelectedItemsPerson(e);
+  };
+
+  const filterTeacherOptions = (input, option) => {
+    return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+  };
+
   return (
     <>
       <Modal
@@ -75,7 +84,7 @@ const ModalUpdateMeeting = ({ item, visible, onCancel }) => {
         onCancel={onCancel}
         width={650}
         footer={null}
-        className="modal_show_detail"
+        className="modal_show_detail_meeting"
       >
         <div>
           <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
@@ -84,13 +93,11 @@ const ModalUpdateMeeting = ({ item, visible, onCancel }) => {
           <div style={{ marginTop: "5px" }}>
             <Row>
               <Col span={24} style={{ padding: "5px" }}>
-                <span style={{ color: "red" }}>(*) </span>Tên buổi học:
+                Tên buổi học:
                 <br />
                 <Input
                   value={name}
-                  onChange={(e) => {
-                    setName(e.target.value);
-                  }}
+                  disabled={true}
                   type="text"
                   placeholder="Nhập tên buổi học"
                 />
@@ -155,6 +162,25 @@ const ModalUpdateMeeting = ({ item, visible, onCancel }) => {
                   type="text"
                   placeholder="Nhập địa điểm của buổi học"
                 />
+              </Col>
+              <Col span={24} style={{ padding: "5px" }}>
+                Giảng viên dạy: <br />
+                <Select
+                  showSearch
+                  value={selectedItemsPerson}
+                  onChange={handleSelectPersonChange}
+                  style={{ width: "100%" }}
+                  filterOption={filterTeacherOptions}
+                >
+                  <Option value="">Chọn 1 giảng viên</Option>
+
+                  {teacherDataAll.map((teacher) => (
+                    <Option key={teacher.id} value={teacher.id}>
+                      {teacher.userName}
+                    </Option>
+                  ))}
+                </Select>{" "}
+                <span style={{ color: "red" }}>{errorTeacher}</span>
               </Col>
               <Col span={24} style={{ padding: "5px" }}>
                 Mô tả:

@@ -36,6 +36,7 @@ const SemesterManagement = () => {
 
   useEffect(() => {
     fetchData();
+    document.title = "Quản lý học kỳ | Lab-Report-App";
   }, [current]);
 
   const fetchData = () => {
@@ -52,12 +53,10 @@ const SemesterManagement = () => {
       console.log(response.data.data.data);
     });
   };
-
   const data = useAppSelector(GetSemester);
-
   const columns = [
     {
-      title: "STT",
+      title: "#",
       dataIndex: "stt",
       key: "stt",
       render: (text, record, index) => (current - 1) * 10 + index + 1,
@@ -70,20 +69,38 @@ const SemesterManagement = () => {
       width: "30%",
     },
     {
-      title: "Thời gian",
+      title: "Thời gian bắt đầu / kết thúc",
       dataIndex: "startTimeAndEndTime",
       key: "startTimeAndEndTime",
       render: (text, record) => {
         const startTime = new Date(record.startTime);
         const endTime = new Date(record.endTime);
-
         const formattedStartTime = `${startTime.getDate()}/${
           startTime.getMonth() + 1
         }/${startTime.getFullYear()}`;
         const formattedEndTime = `${endTime.getDate()}/${
           endTime.getMonth() + 1
         }/${endTime.getFullYear()}`;
-
+        return (
+          <span>
+            {formattedStartTime} - {formattedEndTime}
+          </span>
+        );
+      },
+    },
+    {
+      title: "Thời gian của sinh viên",
+      dataIndex: "startTimeStudentAndEndTimeStudent",
+      key: "startTimeStudentAndEndTimeStudent",
+      render: (text, record) => {
+        const startTime = new Date(record.startTimeStudent);
+        const endTime = new Date(record.endTimeStudent);
+        const formattedStartTime = `${startTime.getDate()}/${
+          startTime.getMonth() + 1
+        }/${startTime.getFullYear()}`;
+        const formattedEndTime = `${endTime.getDate()}/${
+          endTime.getMonth() + 1
+        }/${endTime.getFullYear()}`;
         return (
           <span>
             {formattedStartTime} - {formattedEndTime}
@@ -108,6 +125,7 @@ const SemesterManagement = () => {
             />
           </Tooltip>
           <Popconfirm
+            placement="topLeft"
             title="Xóa học kỳ"
             description="Bạn có chắc chắn muốn xóa học kỳ này không?"
             onConfirm={() => {
@@ -118,7 +136,7 @@ const SemesterManagement = () => {
           >
             <Tooltip title="Xóa">
               <FontAwesomeIcon
-                style={{ cursor: "pointer" }}
+                style={{ cursor: "pointer", marginLeft: "10px" }}
                 icon={faTrash}
                 size="1x"
               />
@@ -128,41 +146,33 @@ const SemesterManagement = () => {
       ),
     },
   ];
-
   const [modalUpdate, setModalUpdate] = useState(false);
   const [modalCreate, setModalCreate] = useState(false);
-
   const buttonCreate = () => {
     document.querySelector("body").style.overflowX = "hidden";
     setModalCreate(true);
   };
-
   const buttonCreateCancel = () => {
     document.querySelector("body").style.overflowX = "auto";
     setModalCreate(false);
     setSemester(null);
   };
-
   const buttonUpdate = (record) => {
     document.querySelector("body").style.overflowX = "hidden";
     setModalUpdate(true);
     setSemester(record);
   };
-
   const buttonUpdateCancel = () => {
     document.querySelector("body").style.overflowX = "auto";
     setModalUpdate(false);
   };
-
   const buttonSearch = () => {
     fetchData();
     setCurrent(1);
   };
-
   const clearData = () => {
     setName("");
   };
-
   const buttonDelete = (id) => {
     AdSemesterAPI.deleteSemester(id).then(
       (response) => {
@@ -173,21 +183,23 @@ const SemesterManagement = () => {
       (error) => {}
     );
   };
-  
+
   return (
     <div className="semester">
       {loading && <LoadingIndicator />}
       <div className="title_activity_management">
-        {" "}
         <FontAwesomeIcon icon={faLayerGroup} size="1x" />
         <span style={{ marginLeft: "10px" }}>Quản lý học kỳ</span>
       </div>
       <div className="filter-semester" style={{ marginBottom: "10px" }}>
-        <FontAwesomeIcon icon={faFilter} size="2x" />{" "}
+        <FontAwesomeIcon
+          icon={faFilter}
+          style={{ fontSize: "20px", marginRight: "7px" }}
+        />
         <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
         <hr />
         <div className="title__search">
-          Tên học kỳ:{" "}
+          Tên học kỳ:
           <Input
             type="text"
             value={name}
@@ -210,17 +222,19 @@ const SemesterManagement = () => {
           </Button>
         </div>
       </div>
-
       <div
-        className="table__category"
-        style={{ marginTop: "25px", padding: "20px" }}
+        className="table__category_custom"
+        style={{ marginTop: "30px", padding: "20px" }}
       >
         <div className="tittle__category">
           <div>
-            {" "}
-            {<FontAwesomeIcon icon={faLayerGroup} size="1x" />}
+            {
+              <FontAwesomeIcon
+                icon={faLayerGroup}
+                style={{ marginRight: "7px", fontSize: "20px" }}
+              />
+            }
             <span style={{ fontSize: "18px", fontWeight: "500" }}>
-              {" "}
               Danh sách học kỳ
             </span>
           </div>
@@ -238,7 +252,7 @@ const SemesterManagement = () => {
                 style={{
                   backgroundColor: "rgb(55, 137, 220)",
                 }}
-              />{" "}
+              />
               Thêm học kỳ
             </Button>
           </div>
@@ -263,12 +277,10 @@ const SemesterManagement = () => {
           </div>
         </div>
       </div>
-
       <ModalCreateSemester
         visible={modalCreate}
         onCancel={buttonCreateCancel}
       />
-
       <ModalUpdateSemester
         visible={modalUpdate}
         onCancel={buttonUpdateCancel}

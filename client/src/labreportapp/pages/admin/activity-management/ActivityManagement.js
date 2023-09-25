@@ -2,14 +2,12 @@ import "./style-activity-management.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFilter,
-  faCogs,
   faList,
   faEdit,
-  faEye,
-  faTrashCan,
   faTags,
   faPlus,
   faTrash,
+  faAddressCard,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   Button,
@@ -38,11 +36,7 @@ import { toast } from "react-toastify";
 const ActivityManagement = () => {
   const dispatch = useAppDispatch();
   const [name, setName] = useState("");
-  const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
-  const [level, setLevel] = useState("");
-  const [semesterId, setSemesterId] = useState("");
-
+  const [clear, setClear] = useState(false);
   const [searchName, setSearchName] = useState("");
   const [levelSearch, setLevelSearch] = useState("");
   const [semesterSearch, setSemesterSearch] = useState("");
@@ -55,6 +49,13 @@ const ActivityManagement = () => {
   const { id } = useParams();
   const [activity, setActivity] = useState({});
   const [listSemester, setListSemester] = useState([]);
+  const [listLevel, setListLevel] = useState([]);
+
+  useEffect(() => {
+    fetchSemesterData();
+    fetchLevelData();
+    document.title = "Quản lý hoạt động | Lab-Report-App";
+  }, []);
 
   useEffect(() => {
     fetchData();
@@ -64,9 +65,14 @@ const ActivityManagement = () => {
   }, [current]);
 
   useEffect(() => {
-    fetchSemesterData();
-  }, []);
-
+    if (clear) {
+      fetchData();
+      return () => {
+        setClear(false);
+        dispatch(SetActivityManagement([]));
+      };
+    }
+  }, [clear]);
   const fetchData = async () => {
     let filter = {
       name: searchName,
@@ -77,12 +83,12 @@ const ActivityManagement = () => {
     setLoading(true);
     try {
       const response = await ActivityManagementAPI.fetchAll(filter);
-      let listAcivityManagement = response.data.data.data;
-      dispatch(SetActivityManagement(listAcivityManagement));
+      let listActivityManagement = response.data.data.data;
+      dispatch(SetActivityManagement(listActivityManagement));
       setTotal(response.data.data.totalPages);
       setLoading(false);
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng ấn F5 để tải lại trang");
+      console.error("Lỗi hệ thống, vui lòng ấn F5 để tải lại trang");
     }
   };
 
@@ -91,9 +97,77 @@ const ActivityManagement = () => {
       const response = await ActivityManagementAPI.semester();
       const semesterData = response.data.data;
       setListSemester(semesterData);
-      setSemesterSearch(semesterData[0].id);
     } catch (error) {
       console.error("Error fetching semester data:", error);
+    }
+  };
+
+  const fetchLevelData = () => {
+    ActivityManagementAPI.level().then((response) => {
+      setListLevel(response.data.data);
+    });
+  };
+
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+
+  const handleChangeSearch = (e) => {
+    setSearchName(e.target.value);
+  };
+
+  const handleActivityCreate = () => {
+    document.querySelector("body").style.overflowX = "hidden";
+    setShowCreateModal(true);
+  };
+
+  const handleModalCreateCancel = () => {
+    document.querySelector("body").style.overflowX = "auto";
+    setShowCreateModal(false);
+    setActivity({});
+  };
+
+  const handleUpdateActivity = (item) => {
+    document.querySelector("body").style.overflowX = "hidden";
+    setShowUpdateModal(true);
+    console.log(item);
+    setActivity(item);
+  };
+
+  const handleModalUpdateCancel = () => {
+    document.querySelector("body").style.overflowX = "auto";
+    setShowUpdateModal(false);
+  };
+  const handleSearch = async () => {
+    await fetchData();
+  };
+  const handleClear = () => {
+    setName("");
+    setStatus("");
+    setSearchName("");
+    setLevelSearch("");
+    setSemesterSearch("");
+    setClear(true);
+  };
+
+  const handleSemesterSearch = (value) => {
+    setSemesterSearch(value);
+  };
+
+  const handleLevelSearch = (value) => {
+    setLevelSearch(value);
+  };
+  const searchActivities = async () => {
+    await fetchData();
+  };
+
+  const handleDeleteActivity = async (id) => {
+    try {
+      await ActivityManagementAPI.delete(id).then((response) => {
+        toast.success("Xóa thành công!");
+        dispatch(DeleteActivityManagement(id));
+      });
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -101,10 +175,15 @@ const ActivityManagement = () => {
 
   const columns = [
     {
-      title: "STT",
+      title: "#",
       dataIndex: "index",
       key: "index",
       render: (text, record, index) => index + 1,
+    },
+    {
+      title: "Mã hoạt động",
+      dataIndex: "code",
+      key: "code",
     },
     {
       title: "Tên hoạt động",
@@ -133,27 +212,12 @@ const ActivityManagement = () => {
           </span>
         );
       },
-      width: "175px",
     },
     {
       title: "Cấp độ",
       dataIndex: "level",
       key: "level",
       sorter: (a, b) => a.level - b.level,
-      render: (text) => {
-        let displayText = "";
-        if (text === 0) {
-          displayText = "Level 1";
-        } else if (text === 1) {
-          displayText = "Level 2";
-        } else if (text === 2) {
-          displayText = "Level 3";
-        } else {
-          displayText = text;
-        }
-
-        return <span>{displayText}</span>;
-      },
     },
     {
       title: "Học kỳ",
@@ -162,15 +226,22 @@ const ActivityManagement = () => {
       sorter: (a, b) => a.nameSemester.localeCompare(b.nameSemester),
     },
     {
+      title: "Mô tả",
+      dataIndex: "descriptions",
+      key: "descriptions",
+      sorter: (a, b) => a.descriptions.localeCompare(b.descriptions),
+    },
+    {
       title: "Hành động",
       dataIndex: "actions",
       key: "actions",
       render: (text, record) => (
         <div style={{ textAlign: "center" }}>
-          <Link style={{ marginRight: "30px" }}>
+          <Link style={{ marginRight: "9px" }}>
             <Tooltip title="Chỉnh sửa chi tiết">
               <FontAwesomeIcon
                 icon={faEdit}
+                style={{ marginRight: "9px" }}
                 size="1x"
                 onClick={() => {
                   handleUpdateActivity(record);
@@ -179,6 +250,7 @@ const ActivityManagement = () => {
             </Tooltip>
           </Link>
           <Popconfirm
+            placement="topRight"
             title="Xóa hoạt động"
             description="Bạn có chắc chắn muốn xóa hoạt động này không?"
             onConfirm={() => {
@@ -188,102 +260,27 @@ const ActivityManagement = () => {
             cancelText="Không"
           >
             <Tooltip title="Xóa">
-              <FontAwesomeIcon
-                style={{ cursor: "pointer" }}
-                icon={faTrash}
-                size="1x"
-              />
+              <FontAwesomeIcon color="#1677ff" icon={faTrash} size="1x" />
             </Tooltip>
           </Popconfirm>
         </div>
       ),
     },
   ];
-
-  const [showCreateModal, setShowCreateModal] = useState(false);
-  const [showUpdateModal, setShowUpdateModal] = useState(false);
-
-  const handleChangeSearch = (e) => {
-    setSearchName(e.target.value);
-  };
-
-  const handleActivityCreate = () => {
-    document.querySelector("body").style.overflowX = "hidden";
-    setShowCreateModal(true);
-  };
-
-  const handleModalCreateCancel = () => {
-    document.querySelector("body").style.overflowX = "auto";
-    setShowCreateModal(false);
-    setActivity({});
-  };
-
-  const handleUpdateActivity = (item) => {
-    document.querySelector("body").style.overflowX = "hidden";
-    setShowUpdateModal(true);
-    setActivity(item);
-  };
-
-  const handleModalUpdateCancel = () => {
-    document.querySelector("body").style.overflowX = "auto";
-    setShowUpdateModal(false);
-  };
-  const handleSearch = async () => {
-    await fetchData();
-  };
-
-  const handleClear = () => {
-    setName("");
-    setStatus("");
-    setSearchName("");
-    setLevelSearch("");
-    setSemesterSearch("");
-  };
-
-  const handleSemesterSearch = (value) => {
-    setSemesterSearch(value);
-  };
-
-  const handleLevelSearch = (value) => {
-    setLevelSearch(value);
-  };
-
-  const searchActivitiesByLevel = (level) => {
-    const filteredActivities = data.filter(
-      (activity) => activity.level === level
-    );
-    dispatch(SetActivityManagement(filteredActivities));
-    setCurrent(1);
-  };
-
-  const handleDeleteActivity = async (id) => {
-    try {
-      await ActivityManagementAPI.delete(id).then((response) => {
-        toast.success("Xóa thành công!");
-        dispatch(DeleteActivityManagement(id));
-      });
-    } catch (error) {}
-  };
-
-  const searchActivitiesBySemester = (semesterId) => {
-    const filteredActivities = data.filter(
-      (activity) => activity.semesterId === semesterId
-    );
-    dispatch(SetActivityManagement(filteredActivities));
-    setCurrent(1);
-  };
-
   return (
     <div className="activity_management">
       {loading && <LoadingIndicator />}
       <div className="title_activity_management">
         {" "}
-        <FontAwesomeIcon icon={faTags} size="1x" />
+        <FontAwesomeIcon icon={faTags} style={{ fontSize: "25px" }} />
         <span style={{ marginLeft: "10px" }}>Quản lý hoạt động</span>
       </div>
-      <div className="filter">
-        <FontAwesomeIcon icon={faFilter} size="2x" />{" "}
-        <span style={{ fontSize: "25px", fontWeight: "500" }}>Bộ lọc</span>
+      <div className="filter_my_class">
+        <FontAwesomeIcon
+          icon={faFilter}
+          style={{ fontSize: "20px", marginRight: "7px" }}
+        />{" "}
+        <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
         <hr />
         <div className="content">
           <div className="content-wrapper">
@@ -301,14 +298,16 @@ const ActivityManagement = () => {
             <div className="content-center">
               Cấp độ:{" "}
               <Select
-                style={{ width: "50%", marginLeft: "10px" }}
                 value={levelSearch}
+                style={{ width: "50%", marginLeft: "10px" }}
                 onChange={handleLevelSearch}
               >
-                <Option value="">Tất cả</Option>
-                <Option value="0">Level 1</Option>
-                <Option value="1">Level 2</Option>
-                <Option value="2">Level 3</Option>
+                <Option value={""}>Tất cả</Option>
+                {listLevel.map((level) => (
+                  <Option key={level.id} value={level.id}>
+                    {level.name}
+                  </Option>
+                ))}
               </Select>
             </div>
           </div>
@@ -320,6 +319,7 @@ const ActivityManagement = () => {
                 value={semesterSearch}
                 onChange={handleSemesterSearch}
               >
+                <Option value={""}>Tất cả</Option>
                 {listSemester.map((semester) => (
                   <Option key={semester.id} value={semester.id}>
                     {semester.name}
@@ -333,7 +333,11 @@ const ActivityManagement = () => {
           <Button className="btn_filter" onClick={handleSearch}>
             Tìm kiếm
           </Button>
-          <Button className="btn_clear" onClick={handleClear}>
+          <Button
+            className="btn_clear"
+            style={{ backgroundColor: "rgb(38, 144, 214)", color: "white" }}
+            onClick={handleClear}
+          >
             Làm mới bộ lọc
           </Button>
         </div>
@@ -342,7 +346,12 @@ const ActivityManagement = () => {
         <div className="title_activity_management_table">
           <div>
             {" "}
-            {<FontAwesomeIcon icon={faList} size="2x" />}
+            {
+              <FontAwesomeIcon
+                icon={faAddressCard}
+                style={{ fontSize: "20px", marginRight: "7px" }}
+              />
+            }
             <span style={{ fontSize: "18px", fontWeight: "500" }}>
               {" "}
               Danh sách hoạt động
@@ -391,12 +400,16 @@ const ActivityManagement = () => {
         visible={showCreateModal}
         onCancel={handleModalCreateCancel}
         listSemester={listSemester}
+        listLevel={listLevel}
+        fetchData={fetchData}
       />
       <ModalUpdateActivity
         visible={showUpdateModal}
         onCancel={handleModalUpdateCancel}
         listSemester={listSemester}
         activity={activity}
+        listLevel={listLevel}
+        fetchData={fetchData}
       />
     </div>
   );

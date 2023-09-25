@@ -28,4 +28,6 @@ public interface StMeetingService {
 
     Integer getRoleByIdStudent(final StFindMeetingRequest stFindStudentClasses);
 
+
+
 }

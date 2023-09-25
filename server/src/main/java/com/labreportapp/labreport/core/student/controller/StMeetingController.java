@@ -30,31 +30,31 @@ public class StMeetingController {
     }
 
     @GetMapping("/count")
-    public ResponseObject getCountTeMeeting(final StFindMeetingRequest request) {
+    public ResponseObject getCountStMeeting(final StFindMeetingRequest request) {
         Integer count = service.countMeetingByClassId(request.getIdClass());
         return new ResponseObject(count);
     }
 
     @GetMapping("/detail")
-    public ResponseObject getTeMeetingDetail(final StFindMeetingRequest request) {
+    public ResponseObject getStMeetingDetail(final StFindMeetingRequest request) {
         StMeetingResponse find = service.searchMeetingByIdMeeting(request);
         return new ResponseObject(find);
     }
 
     @GetMapping("/homeword-and-note")
-    public ResponseObject getTeHomeWNoteMeetingDetail(final StFindMeetingRequest request) {
+    public ResponseObject getStHomeWNoteMeetingDetail(final StFindMeetingRequest request) {
         StHomeWordAndNoteResponse find = service.searchDetailMeetingTeamById(request);
         return new ResponseObject(find);
     }
 
     @PutMapping("/homeword-and-note")
-    public ResponseObject updateTeHomeWNoteMeetingDetail(@RequestBody StUpdateHomeWorkAndNotebyLeadTeamRequest request) {
+    public ResponseObject updateStHomeWNoteMeetingDetail(@RequestBody StUpdateHomeWorkAndNotebyLeadTeamRequest request) {
         StHomeWordAndNoteResponse find = service.updateDetailMeetingTeamByLeadTeam(request);
         return new ResponseObject(find);
     }
 
     @GetMapping("/get-team-meeting")
-    public ResponseObject getTeTeamsClass(final StFindMeetingRequest request) {
+    public ResponseObject getStTeamsClass(final StFindMeetingRequest request) {
         List<StMyTeamInClassResponse> pageList = service.getAllTeams(request);
         return new ResponseObject(pageList);
     }
@@ -64,4 +64,5 @@ public class StMeetingController {
         Integer role = service.getRoleByIdStudent(request);
         return new ResponseObject(role);
     }
+
 }

@@ -9,6 +9,8 @@ import {
   faDownload,
   faUpload,
   faPencilAlt,
+  faRandom,
+  faChainSlash,
 } from "@fortawesome/free-solid-svg-icons";
 import { useAppDispatch, useAppSelector } from "../../../app/hook";
 import {
@@ -20,6 +22,7 @@ import {
   Select,
   Row,
   Col,
+  Empty,
 } from "antd";
 import LoadingIndicator from "../../../helper/loading";
 
@@ -36,6 +39,8 @@ import {
   GetAdClassManagement,
   SetMyClass,
 } from "../../../app/admin/ClassManager.reducer";
+import LoadingIndicatorNoOverlay from "../../../helper/loadingNoOverlay";
+import ModalRandomClass from "./random-class/ModalRandomClass";
 
 const ClassManagement = () => {
   const { Option } = Select;
@@ -49,11 +54,14 @@ const ClassManagement = () => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [code, setCode] = useState("");
   const [selectedItemsPerson, setSelectedItemsPerson] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [loadingOverLay, setLoadingOverLay] = useState(false);
   const [current, setCurrent] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [clear, setClear] = useState(false);
-
+  const [level, setLevel] = useState("");
+  const [listLevel, setListLevel] = useState([]);
+  const [size, setSize] = useState("10");
   const dispatch = useAppDispatch();
   const listClassPeriod = [];
 
@@ -68,9 +76,10 @@ const ClassManagement = () => {
 
   useEffect(() => {
     featchAllMyClass();
-  }, [current]);
+  }, [current, size]);
+
   const featchAllMyClass = async () => {
-    setLoading(false);
+    setLoading(true);
     let filter = {
       idTeacher: selectedItemsPerson,
       idActivity: idActivitiSearch,
@@ -78,7 +87,8 @@ const ClassManagement = () => {
       code: code,
       classPeriod: selectedItems,
       page: current,
-      size: 10,
+      size: size,
+      levelId: level,
     };
 
     try {
@@ -87,7 +97,7 @@ const ClassManagement = () => {
         setlistClassAll(respone.data.data.data);
         dispatch(SetMyClass(respone.data.data.data));
 
-        setLoading(true);
+        setLoading(false);
       });
     } catch (error) {
       alert("Vui lòng F5 lại trang !");
@@ -108,28 +118,47 @@ const ClassManagement = () => {
   }, []);
 
   useEffect(() => {
-    const featchDataActivity = async (idSemesterSeach) => {
-      console.log(idSemesterSeach);
-      await ClassAPI.getAllActivityByIdSemester(idSemesterSeach).then(
-        (respone) => {
-          setActivityDataAll(respone.data.data);
-        }
-      );
-    };
-    featchDataActivity(idSemesterSeach);
+    if (idSemesterSeach === "") {
+      setIdActivitiSearch("none");
+      setActivityDataAll([]);
+    } else {
+      const featchDataActivity = async (idSemesterSeach) => {
+        console.log(idSemesterSeach);
+        await ClassAPI.getAllActivityByIdSemester(idSemesterSeach).then(
+          (respone) => {
+            console.log(respone.data.data);
+            if (respone.data.data.length === 0) {
+              setIdActivitiSearch("none");
+              setActivityDataAll([]);
+            } else {
+              setIdActivitiSearch("");
+              setActivityDataAll(respone.data.data);
+            }
+          }
+        );
+      };
+      featchDataActivity(idSemesterSeach);
+    }
   }, [idSemesterSeach]);
 
   useEffect(() => {
     const featchDataSemester = async () => {
       try {
         const responseClassAll = await ClassAPI.fetchAllSemester();
-        const listClassAll = responseClassAll.data;
-        if (listClassAll.data.length > 0) {
-          setIdSemesterSearch(listClassAll.data[0].id);
+        const listSemester = responseClassAll.data;
+        if (listSemester.data.length > 0) {
+          listSemester.data.forEach((item) => {
+            if (
+              item.startTime <= new Date().getTime() &&
+              new Date().getTime() <= item.endTime
+            ) {
+              setIdSemesterSearch(item.id);
+            }
+          });
         } else {
-          setIdSemesterSearch("null");
+          setIdSemesterSearch(null);
         }
-        setSemesterDataAll(listClassAll.data);
+        setSemesterDataAll(listSemester.data);
       } catch (error) {
         alert("Vui lòng F5 lại trang !");
       }
@@ -137,10 +166,17 @@ const ClassManagement = () => {
     featchDataSemester();
   }, []);
 
+  const loadDataLevel = () => {
+    ClassAPI.getAllLevel().then((response) => {
+      setListLevel(response.data.data);
+    });
+  };
+
   useEffect(() => {
-    document.title = "Quản lý lớp | Portal-Projects";
+    document.title = "Quản lý lớp học | Lab-Report-App";
     setCode("");
     setSelectedItems("");
+    loadDataLevel();
     setSelectedItemsPerson("");
   }, []);
 
@@ -162,6 +198,7 @@ const ClassManagement = () => {
       title: "Thời gian bắt đầu",
       dataIndex: "startTime",
       key: "startTime",
+      sorter: (a, b) => a.startTime - b.startTime,
       render: (text, record) => {
         const startTime = new Date(record.startTime);
 
@@ -178,7 +215,11 @@ const ClassManagement = () => {
       key: "classPeriod",
       sorter: (a, b) => a.classPeriod - b.classPeriod,
       render: (text, record) => {
-        return <span>{record.classPeriod + 1}</span>;
+        if (record.classPeriod == null) {
+          return <span>Chưa có</span>;
+        } else {
+          return <span>{record.classPeriod + 1}</span>;
+        }
       },
     },
     {
@@ -186,7 +227,11 @@ const ClassManagement = () => {
       dataIndex: "timePeriod",
       key: "timePeriod",
       render: (text, record) => {
-        return <span>{convertMeetingPeriodToTime(record.classPeriod)}</span>;
+        if (record.classPeriod == null) {
+          return <span>Chưa có</span>;
+        } else {
+          return <span>{convertMeetingPeriodToTime(record.classPeriod)}</span>;
+        }
       },
     },
     {
@@ -200,6 +245,25 @@ const ClassManagement = () => {
       dataIndex: "userNameTeacher",
       key: "userNameTeacher",
       sorter: (a, b) => a.userNameTeacher.localeCompare(b.userNameTeacher),
+      render: (text, record) => {
+        if (record.userNameTeacher == null) {
+          return <span>Chưa có</span>;
+        } else {
+          return <span>{record.userNameTeacher}</span>;
+        }
+      },
+    },
+    {
+      title: "Level",
+      dataIndex: "nameLevel",
+      key: "nameLevel",
+      sorter: (a, b) => a.nameLevel.localeCompare(b.nameLevel),
+    },
+    {
+      title: "Hoạt động",
+      dataIndex: "activityName",
+      key: "activityName",
+      sorter: (a, b) => a.activityName.localeCompare(b.activityName),
     },
     {
       title: "Hành động",
@@ -237,6 +301,7 @@ const ClassManagement = () => {
       ),
     },
   ];
+
   const dataClass = useAppSelector(GetAdClassManagement);
 
   const handleSearchAllByFilter = async () => {
@@ -284,17 +349,63 @@ const ClassManagement = () => {
     return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
   };
 
+  const convertLongToDate = (dateLong) => {
+    const date = new Date(dateLong);
+    const format = `${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
+    return format;
+  };
+
+  const exportExcel = () => {
+    setLoadingOverLay(true);
+    let filter = {
+      idTeacher: selectedItemsPerson,
+      idActivity: idActivitiSearch,
+      idSemester: idSemesterSeach,
+      code: code,
+      classPeriod: selectedItems,
+      page: current,
+      size: 10,
+      levelId: level,
+    };
+    ClassAPI.exportExcel(filter).then((response) => {
+      setLoadingOverLay(false);
+      const blob = new Blob([response.data], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download =
+        "Danh sách lớp học_" +
+        convertLongToDate(new Date().getTime()) +
+        ".xlsx";
+      link.click();
+      window.URL.revokeObjectURL(url);
+    });
+  };
+
+  const [showRandomModal, setShowRandomModal] = useState(false);
+
+  const handleClickModalRandom = () => {
+    setShowRandomModal(true);
+  };
+
+  const handleCancelModalRandom = () => {
+    setShowRandomModal(false);
+  };
+
   return (
     <div className="class_management">
-      {!loading && <LoadingIndicator />}
+      {loading && <LoadingIndicator />}
+      {loadingOverLay && <LoadingIndicatorNoOverlay />}
 
       <div className="title_activity_management">
         {" "}
         <FontAwesomeIcon icon={faTags} size="1x" />
         <span style={{ marginLeft: "10px" }}>Quản lý lớp học</span>
       </div>
-      <div className="filter">
-        <FontAwesomeIcon icon={faFilter} size="2x" />{" "}
+      <div className="filter_class_management">
+        <FontAwesomeIcon icon={faFilter} style={{ fontSize: "19px" }} />{" "}
         <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
         <hr />
         <Row>
@@ -311,7 +422,7 @@ const ClassManagement = () => {
                 }}
                 filterOption={filterOptions}
               >
-                <Option value="">Tất cả</Option>
+                <Option value="">Chọn 1 học kỳ</Option>
 
                 {semesterDataAll.map((semester) => (
                   <Option key={semester.id} value={semester.id}>
@@ -334,7 +445,10 @@ const ClassManagement = () => {
                 }}
                 filterOption={filterOptions}
               >
-                <Option value="">Tất cả</Option>
+                {activityDataAll.length > 0 && <Option value="">Tất cả</Option>}
+                {activityDataAll.length === 0 && (
+                  <Option value="none">Không có hoạt động</Option>
+                )}
                 {activityDataAll.map((activity) => (
                   <Option key={activity.id} value={activity.id}>
                     {activity.name}
@@ -347,7 +461,7 @@ const ClassManagement = () => {
         <Row>
           <Col span={12} style={{ padding: "10px" }}>
             <div>
-              <span>Ca học:</span>
+              <span>Ca học dự kiến:</span>
               <br />
               <Select
                 showSearch
@@ -356,6 +470,7 @@ const ClassManagement = () => {
                 onChange={handleSelectChange}
               >
                 <Option value="">Tất Cả</Option>
+                <Option value="none">Chưa có ca học</Option>
                 {listClassPeriod.map((value) => {
                   return (
                     <Option value={value} key={value}>
@@ -378,6 +493,7 @@ const ClassManagement = () => {
                 filterOption={filterOptions}
               >
                 <Option value="">Tất cả</Option>
+                <Option value="none">Chưa có giảng viên</Option>
                 {teacherDataAll.map((teacher) => (
                   <Option key={teacher.id} value={teacher.id}>
                     {teacher.userName}
@@ -393,6 +509,29 @@ const ClassManagement = () => {
               <span>Mã Lớp:</span>
               <br />
               <Input type="text" value={code} onChange={handleCodeChange} />
+            </div>
+          </Col>
+          <Col span={12} style={{ padding: "10px" }}>
+            <div className="inputCode">
+              <span>Level:</span>
+              <br />
+              <Select
+                onChange={(e) => {
+                  setLevel(e);
+                }}
+                style={{ width: "100%" }}
+                showSearch
+                filterOption={filterOptions}
+                value={level}
+              >
+                <Option value={""}>Tất cả</Option>
+                {listLevel.length > 0 &&
+                  listLevel.map((item) => (
+                    <Option value={item.id} key={item.id}>
+                      {item.name}
+                    </Option>
+                  ))}
+              </Select>
             </div>
           </Col>
         </Row>
@@ -415,7 +554,7 @@ const ClassManagement = () => {
         <div style={{ marginBottom: "8px" }}>
           <div className="table-class-management-info">
             {" "}
-            <FontAwesomeIcon icon={faCogs} size="1x" />
+            <FontAwesomeIcon icon={faChainSlash} style={{ fontSize: "18px" }} />
             <span
               style={{
                 fontSize: "18px",
@@ -434,6 +573,7 @@ const ClassManagement = () => {
                 backgroundColor: "rgb(55, 137, 220)",
                 marginRight: "5px",
               }}
+              onClick={exportExcel}
             >
               <FontAwesomeIcon
                 icon={faDownload}
@@ -468,16 +608,17 @@ const ClassManagement = () => {
                 backgroundColor: "rgb(55, 137, 220)",
                 marginRight: "5px",
               }}
+              onClick={handleClickModalRandom}
             >
               <FontAwesomeIcon
-                icon={faDownload}
+                icon={faRandom}
                 size="1x"
                 style={{
                   backgroundColor: "rgb(55, 137, 220)",
                   marginRight: "7px",
                 }}
               />{" "}
-              Tải mẫu
+              Random lớp
             </Button>
             <Button
               style={{
@@ -493,6 +634,7 @@ const ClassManagement = () => {
                 size="1x"
                 style={{
                   backgroundColor: "rgb(55, 137, 220)",
+                  marginRight: "7px",
                 }}
               />{" "}
               Thêm Lớp
@@ -504,7 +646,7 @@ const ClassManagement = () => {
           <div>
             {listClassAll.length > 0 ? (
               <>
-                <div className="table">
+                <div className="table_custom_class_management">
                   <Table
                     dataSource={dataClass}
                     rowKey="id"
@@ -512,15 +654,36 @@ const ClassManagement = () => {
                     pagination={false}
                   />
                 </div>
-                <div className="pagination_box">
-                  <Pagination
-                    simple
-                    current={current}
-                    onChange={(value) => {
-                      setCurrent(value);
-                    }}
-                    total={totalPages * 10}
-                  />
+                <div>
+                  <div
+                    className="pagination_box"
+                    style={{ display: "flex", alignItems: "center" }}
+                  >
+                    <Pagination
+                      style={{ marginRight: "10px" }}
+                      simple
+                      current={current}
+                      onChange={(value) => {
+                        setCurrent(value);
+                      }}
+                      total={totalPages * 10}
+                    />
+                    <Select
+                      style={{ width: "100px", marginLeft: "10px" }}
+                      value={size}
+                      onChange={(e) => {
+                        setSize(e);
+                      }}
+                    >
+                      <Option value="10">10</Option>
+                      <Option value="25">25</Option>
+                      <Option value="50">50</Option>
+                      <Option value="100">100</Option>
+                      <Option value="250">250</Option>
+                      <Option value="500">500</Option>
+                      <Option value="1000">1000</Option>
+                    </Select>
+                  </div>
                 </div>
               </>
             ) : (
@@ -533,7 +696,14 @@ const ClassManagement = () => {
                     color: "red",
                   }}
                 >
-                  Không có lớp học
+                  <Empty
+                    imageStyle={{ height: 60 }}
+                    description={
+                      <span style={{ color: "#007bff" }}>
+                        Không tìm thấy lớp học nào !
+                      </span>
+                    }
+                  />{" "}
                 </p>
               </>
             )}
@@ -548,6 +718,11 @@ const ClassManagement = () => {
         visible={showUpdateModal}
         onCancel={handleModalUpdateCancel}
         id={idClassUpdate}
+      />
+      <ModalRandomClass
+        visible={showRandomModal}
+        onCancel={handleCancelModalRandom}
+        fetchData={featchAllMyClass}
       />
     </div>
   );

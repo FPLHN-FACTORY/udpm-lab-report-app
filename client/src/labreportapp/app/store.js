@@ -19,6 +19,8 @@ import AdCollapsedSliceReducer from "./admin/AdCollapsedSlice.reducer";
 import StCollapsedSliceReducer from "./student/StCollapsedSlice.reducer";
 import TeCollapsedSliceReducer from "./teacher/TeCollapsedSlice.reducer";
 import teClassSliceReduce from "./teacher/my-class/teClassSlice.reduce";
+import adLevelSliceReducer from "./admin/AdLevelManager.reducer";
+
 //
 import boardSliceReducer from "../../portalprojects/app/reducer/detail-project/DPBoardSlice.reducer";
 import myProjectSliceReducer from "../../portalprojects/app/reducer/my-project/myProjectSlice.reducer";
@@ -36,6 +38,7 @@ import memberProjectManagementReducer from "../../portalprojects/app/reducer/adm
 import categoryProjectManagementReducer from "../../portalprojects/app/reducer/admin/category-project-management/categoryProjectManagement.reduce";
 import StakeholderReducer from "../../portalprojects/app/reducer/admin/stakeholder-management/Stakeholder.reducer";
 import NotificationSliceReducer from "../../portalprojects/app/reducer/notification/NotificationSlice.reducer";
+import AdAttendanceDetailMeetingReducer from "./admin/AdAttendanceDetailMeeting.reducer";
 
 export const store = configureStore({
   reducer: {
@@ -59,6 +62,8 @@ export const store = configureStore({
     adCollapsed: AdCollapsedSliceReducer,
     stCollapsed: StCollapsedSliceReducer,
     teCollapsed: TeCollapsedSliceReducer,
+    adAttendanceDetailMeeting: AdAttendanceDetailMeetingReducer,
+    adLevel: adLevelSliceReducer,
     ////
     board: boardSliceReducer,
     myProject: myProjectSliceReducer,

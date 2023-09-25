@@ -3,15 +3,25 @@ package com.labreportapp.labreport.core.teacher.service.impl;
 import com.labreportapp.labreport.core.common.response.SimpleResponse;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindAttendanceRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindListAttendanceRequest;
+import com.labreportapp.labreport.core.teacher.model.request.TeFindStudentClasses;
 import com.labreportapp.labreport.core.teacher.model.response.Base.TeAttendanceStudentMeetingRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TeAttendanceMessageRespone;
 import com.labreportapp.labreport.core.teacher.model.response.TeAttendanceRespone;
 import com.labreportapp.labreport.core.teacher.model.response.TeAttendanceStudentAllRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TeAttendanceStudentRespone;
 import com.labreportapp.labreport.core.teacher.model.response.TeMeetingCustomToAttendanceRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TeStudentCallApiResponse;
+import com.labreportapp.labreport.core.teacher.model.response.TeTeamsRespone;
 import com.labreportapp.labreport.core.teacher.repository.TeAttendanceRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeMeetingRepository;
+import com.labreportapp.labreport.core.teacher.repository.TeStudentClassesRepository;
 import com.labreportapp.labreport.core.teacher.service.TeAttendanceSevice;
 import com.labreportapp.labreport.core.teacher.service.TeStudentClassesService;
+import com.labreportapp.labreport.core.teacher.service.TeTeamsService;
 import com.labreportapp.labreport.entity.Attendance;
+import com.labreportapp.labreport.entity.Meeting;
+import com.labreportapp.labreport.entity.StudentClasses;
+import com.labreportapp.labreport.infrastructure.constant.RoleTeam;
 import com.labreportapp.labreport.infrastructure.constant.StatusAttendance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +30,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -32,10 +44,16 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
     private TeAttendanceRepository teAttendanceRepo;
 
     @Autowired
+    private TeMeetingRepository teMeetingRepository;
+
+    @Autowired
+    private TeStudentClassesRepository teStudentClassesRepository;
+
+    @Autowired
     private TeStudentClassesService teStudentClassesService;
 
     @Autowired
-    private TeMeetingRepository teMeetingRepository;
+    private TeTeamsService teTeamsService;
 
     @Override
     public List<TeAttendanceRespone> getListCustom(String idMeeting) {
@@ -47,7 +65,7 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
     }
 
     @Override
-    public List<Attendance> addOrUpdateAttendance(TeFindListAttendanceRequest request) {
+    public TeAttendanceMessageRespone addOrUpdateAttendance(TeFindListAttendanceRequest request) {
         List<TeFindAttendanceRequest> list = request.getListAttendance();
         List<Attendance> listNew = new ArrayList<>();
         list.forEach(item -> {
@@ -78,7 +96,108 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
                 listNew.add(attendance);
             }
         });
-        return teAttendanceRepo.saveAll(listNew);
+        List<Attendance> listReturn = teAttendanceRepo.saveAll(listNew);
+        TeAttendanceMessageRespone teAttendanceMessageRespone = randomSetLeadToMember(listReturn, request.getIdMeeting());
+        return teAttendanceMessageRespone;
+    }
+
+    private TeAttendanceMessageRespone randomSetLeadToMember(List<Attendance> listAttendance, String idMeeting) {
+        TeAttendanceMessageRespone objReturn = new TeAttendanceMessageRespone();
+        Optional<Meeting> meeting = teMeetingRepository.findMeetingById(idMeeting);
+        if (meeting.isPresent()) {
+            List<StudentClasses> listStudentClasses = teStudentClassesRepository.findStudentClassesByIdClass(meeting.get().getClassId());
+            List<TeStudentCallApiResponse> listStudent = teStudentClassesService.searchApiStudentClassesByIdClass(meeting.get().getClassId());
+            List<TeAttendanceStudentRespone> listStudentAttendance = new ArrayList<>();
+            listStudent.forEach(student -> {
+                listAttendance.forEach(attendance -> {
+                    if (attendance.getStudentId().equals(student.getIdStudent())) {
+                        TeAttendanceStudentRespone objAdd = new TeAttendanceStudentRespone();
+                        objAdd.setIdAttendance(attendance.getId());
+                        objAdd.setIdStudentClass(student.getIdStudentClass());
+                        objAdd.setIdTeam(student.getIdTeam());
+                        objAdd.setStatusAttendance(attendance.getStatus());
+                        objAdd.setIdMeeting(idMeeting);
+                        objAdd.setIdStudent(student.getIdStudent());
+                        objAdd.setEmail(student.getEmail());
+                        objAdd.setUsername(student.getUsername());
+                        objAdd.setIdTeam(student.getIdTeam());
+                        objAdd.setRole(student.getRole().equals("0") ? RoleTeam.LEADER : RoleTeam.MEMBER);
+                        listStudentAttendance.add(objAdd);
+                    }
+                });
+            });
+            TeFindStudentClasses requestIdClass = new TeFindStudentClasses();
+            requestIdClass.setIdClass(meeting.get().getClassId());
+            List<TeTeamsRespone> listTeam = teTeamsService.getAllTeams(requestIdClass);
+            AtomicInteger countLeaderAbsent = new AtomicInteger();
+            if (listTeam != null) {
+                listTeam.forEach(team -> {
+                    listStudentAttendance.forEach(student -> {
+                        if (checkAtLeastStudentOnTeam(listStudentAttendance, team.getId()) && student.getIdTeam() != null && student.getIdTeam().equalsIgnoreCase(team.getId()) && student.getRole().equals(RoleTeam.LEADER) && student.getStatusAttendance().equals(StatusAttendance.NO)) {
+                            StudentClasses studentClassesFind = listStudentClasses.stream()
+                                    .filter(a -> a.getStudentId().equals(student.getIdStudent()) && a.getId().equals(student.getIdStudentClass()))
+                                    .findFirst()
+                                    .orElse(null);
+                            if (studentClassesFind != null) {
+                                studentClassesFind.setRole(RoleTeam.MEMBER);
+                                teStudentClassesRepository.save(studentClassesFind);
+                                randomLead(listStudentAttendance, listTeam, listStudentClasses, team.getId());
+                                countLeaderAbsent.getAndIncrement();
+                            }
+                        }
+                    });
+                });
+            }
+            if (countLeaderAbsent.get() >= 2) {
+                objReturn.setMessage("Một số trưởng nhóm nghỉ nên quyền trưởng nhóm đã được thay đổi ngẫu nhiên cho thành viên của nhóm. Lưu điểm danh thành công !");
+            } else if (countLeaderAbsent.get() >= 1) {
+                objReturn.setMessage("Một trưởng nhóm nghỉ nên quyền trưởng nhóm đã được thay đổi ngẫu nhiên cho thành viên của nhóm. Lưu điểm danh thành công !");
+            } else {
+                objReturn.setMessage("Lưu điểm danh thành công !");
+            }
+        }
+        objReturn.setListAttendance(listAttendance);
+        return objReturn;
+    }
+
+    public boolean checkAtLeastStudentOnTeam(List<TeAttendanceStudentRespone> listStudentAttendance, String idTeam) {
+        long count = listStudentAttendance.stream()
+                .filter(a -> {
+                    String teamId = a.getIdTeam();
+                    return teamId != null && teamId.equals(idTeam) && a.getStatusAttendance().equals(StatusAttendance.YES);
+                })
+                .count();
+        return count >= 1;
+    }
+
+    private void randomLead(List<TeAttendanceStudentRespone> listStudent, List<TeTeamsRespone> listTeam, List<StudentClasses> listStudentClasses, String idTeam) {
+        if (listTeam != null && listStudent != null && listStudentClasses != null) {
+            List<TeAttendanceStudentRespone> members = listStudent.stream()
+                    .filter(student -> student.getIdTeam() != null && student.getIdTeam().equals(idTeam) && student.getStatusAttendance().equals(StatusAttendance.YES) && student.getRole().equals(RoleTeam.MEMBER))
+                    .collect(Collectors.toList());
+            if (members.size() >= 2) {
+                Random random = new Random();
+                int randomIndex = random.nextInt(members.size());
+                TeAttendanceStudentRespone selectedMember = members.get(randomIndex);
+                StudentClasses find = listStudentClasses.stream()
+                        .filter(a -> a.getId().equals(selectedMember.getIdStudentClass()))
+                        .findFirst()
+                        .orElse(null);
+                if (find != null) {
+                    find.setRole(RoleTeam.LEADER);
+                    teStudentClassesRepository.save(find);
+                }
+            } else if (members.size() == 1) {
+                StudentClasses find = listStudentClasses.stream()
+                        .filter(a -> a.getId().equals(members.get(0).getIdStudentClass()))
+                        .findFirst()
+                        .orElse(null);
+                if (find != null) {
+                    find.setRole(RoleTeam.LEADER);
+                    teStudentClassesRepository.save(find);
+                }
+            }
+        }
     }
 
     @Override

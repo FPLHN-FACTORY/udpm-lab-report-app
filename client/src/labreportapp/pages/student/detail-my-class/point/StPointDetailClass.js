@@ -19,7 +19,7 @@ const StPointDetailClass = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    setIsLoading(true);
+    setIsLoading(true);    document.title = "Bảng điều khiển - Điểm";
     LoadPointData();
   }, []);
 

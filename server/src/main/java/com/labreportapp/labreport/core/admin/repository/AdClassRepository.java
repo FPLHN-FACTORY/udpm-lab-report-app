@@ -53,7 +53,7 @@ public interface AdClassRepository extends ClassRepository {
                                                @Param("idPerson") String idTeacher);
 
     @Query(value = """
-            SELECT s.id as id, s.name as name FROM semester s
+            SELECT s.id as id, s.name as name, s.start_time, s.end_time FROM semester s
             ORDER BY s.end_time DESC
             """, nativeQuery = true)
     List<AdSemesterAcResponse> getAllSemesters();
@@ -71,26 +71,30 @@ public interface AdClassRepository extends ClassRepository {
             SELECT ROW_NUMBER() OVER(ORDER BY c.last_modified_date DESC ) AS stt,
             c.id,
             c.code,c.start_time
-            ,c.class_period,c.class_size,c.teacher_id,a.name as nameActivity 
+            ,c.class_period,c.class_size,c.teacher_id,a.name as nameActivity, d.name AS nameLevel
             FROM activity a
             JOIN class c ON c.activity_id = a.id
+            JOIN level d ON d.id = a.level_id
             JOIN semester s ON s.id = a.semester_id
-            where (:#{#req.idSemester} IS NULL OR :#{#req.idSemester} LIKE '' OR :#{#req.idSemester} LIKE s.id)
-            and (:#{#req.idActivity} IS NULL OR :#{#req.idActivity} LIKE '' OR :#{#req.idActivity} LIKE a.id)
+            where (:#{#req.idSemester} IS NULL OR :#{#req.idSemester} LIKE '' OR s.id = :#{#req.idSemester})
+            and (:#{#req.idActivity} IS NULL OR :#{#req.idActivity} LIKE '' OR a.id = :#{#req.idActivity})
             and (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR c.code LIKE %:#{#req.code}%)
             and (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR  c.class_period = :#{#req.classPeriod})
-            and (:#{#req.idTeacher} IS NULL OR :#{#req.idTeacher} LIKE '' OR :#{#req.idTeacher} LIKE c.teacher_id)
+            and (:#{#req.idTeacher} IS NULL OR :#{#req.idTeacher} LIKE '' OR c.teacher_id = :#{#req.idTeacher})
+            and (:#{#req.levelId} IS NULL OR :#{#req.levelId} LIKE '' OR d.id = :#{#req.levelId})
             ORDER BY c.last_modified_date DESC
             """, countQuery = """
             SELECT COUNT(c.id)
             FROM activity a
             JOIN class c ON c.activity_id = a.id
+            JOIN level d ON d.id = a.level_id
             JOIN semester s ON s.id = a.semester_id
-            WHERE (:#{#req.idSemester} IS NULL OR :#{#req.idSemester} LIKE '' OR :#{#req.idSemester} LIKE s.id)
-            and (:#{#req.idActivity} IS NULL OR :#{#req.idActivity} LIKE '' OR :#{#req.idActivity} LIKE a.id)
+            where (:#{#req.idSemester} IS NULL OR :#{#req.idSemester} LIKE '' OR s.id = :#{#req.idSemester})
+            and (:#{#req.idActivity} IS NULL OR :#{#req.idActivity} LIKE '' OR a.id = :#{#req.idActivity})
             and (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR c.code LIKE %:#{#req.code}%)
             and (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR  c.class_period = :#{#req.classPeriod})
-            and (:#{#req.idTeacher} IS NULL OR :#{#req.idTeacher} LIKE '' OR :#{#req.idTeacher} LIKE c.teacher_id)
+            and (:#{#req.idTeacher} IS NULL OR :#{#req.idTeacher} LIKE '' OR c.teacher_id = :#{#req.idTeacher})
+            and (:#{#req.levelId} IS NULL OR :#{#req.levelId} LIKE '' OR d.id = :#{#req.levelId})
             """, nativeQuery = true)
     Page<AdClassResponse> findClassBySemesterAndActivity(@Param("req") AdFindClassRequest req, Pageable pageable);
 
@@ -121,5 +125,22 @@ public interface AdClassRepository extends ClassRepository {
             SELECT a.id FROM class a WHERE a.activity_id = :activityId AND a.code = :code
             """, nativeQuery = true)
     String checkCodeExist(@Param("code") String code, @Param("activityId") String activityId);
+
+    @Query(value = """
+            SELECT ROW_NUMBER() OVER(ORDER BY b.code) AS stt,
+            a.code, a.start_time, a.class_period, a.class_size, a.teacher_id, c.name as name_level,
+            b.name as name_activity
+            FROM class a JOIN activity b ON a.activity_id = b.id
+            JOIN level c ON c.id = b.level_id
+            JOIN semester d ON d.id = b.semester_id
+            WHERE (:#{#req.idSemester} IS NULL OR :#{#req.idSemester} LIKE '' OR d.id = :#{#req.idSemester})
+            AND (:#{#req.idActivity} IS NULL OR :#{#req.idActivity} LIKE '' OR b.id = :#{#req.idActivity})
+            AND (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR a.code LIKE %:#{#req.code}%)
+            AND (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR  a.class_period = :#{#req.classPeriod})
+            AND (:#{#req.idTeacher} IS NULL OR :#{#req.idTeacher} LIKE '' OR a.teacher_id = :#{#req.idTeacher})
+            AND (:#{#req.levelId} IS NULL OR :#{#req.levelId} LIKE '' OR c.id = :#{#req.levelId})
+            ORDER BY b.code
+            """, nativeQuery = true)
+    List<AdExportExcelClassResponse> findClassExportExcel(@Param("req") AdFindClassRequest req);
 
 }

@@ -1,9 +1,27 @@
 import { ControlOutlined } from "@ant-design/icons";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
+import { ClassAPI } from "../../../../api/admin/class-manager/ClassAPI.api";
 
 const AdFeedbackDetailClass = () => {
   const { id } = useParams();
+  const [classDetail, setClassDetail] = useState(null);
+
+  const featchClass = async () => {
+    try {
+      await ClassAPI.getAdClassDetailById(id).then((responese) => {
+        setClassDetail(responese.data.data);
+        document.title = "Danh sách feedback - " + responese.data.data.code;
+      });
+    } catch (error) {
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+    }
+  };
+
+  useEffect(() => {
+    featchClass();
+  }, []);
   return (
     <div style={{ paddingTop: "35px" }}>
       <div className="title-meeting-managemnt-my-class">
@@ -61,6 +79,21 @@ const AdFeedbackDetailClass = () => {
               >
                 FEEDBACK CỦA SINH VIÊN &nbsp;
               </Link>
+              <div
+                className="box-center"
+                style={{
+                  height: "28.5px",
+                  width: "auto",
+                  backgroundColor: "rgb(38, 144, 214)",
+                  color: "white",
+                  borderRadius: "5px",
+                  float: "right",
+                }}
+              >
+                <span style={{ fontSize: "14px", padding: "10px" }}>
+                  {classDetail != null ? classDetail.code : ""}
+                </span>
+              </div>
               <hr />
             </div>
           </div>

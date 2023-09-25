@@ -22,13 +22,11 @@ const ModalCreateProject = ({ visible, onCancel }) => {
   const [activityDataAll, setActivityDataAll] = useState([]); // Dữ liệu activity
   const [selectedItemsPerson, setSelectedItemsPerson] = useState("");
   const [name, setName] = useState("");
-  const [code, setCode] = useState("");
   const [classPeriod, setClassPeriod] = useState("");
   const [startTime, setStartTime] = useState("");
   const [classSize, setClassSize] = useState(0);
 
   const [errorName, setErrorName] = useState("");
-  const [errorCode, setErrorCode] = useState("");
   const [errorActivity, setErrorActivity] = useState("");
   const [errorClassPeriod, setErrorClassPeriod] = useState("");
   const [errorstartTime, setErrorStartTime] = useState("");
@@ -37,13 +35,11 @@ const ModalCreateProject = ({ visible, onCancel }) => {
   const cancelSuccess = () => {
     onCancel();
     setName("");
-    setCode("");
     setClassPeriod("");
     setStartTime("");
     setSelectedItemsPerson("");
     setIdActivitiSearch("");
     setErrorName("");
-    setErrorCode("");
     setErrorActivity("");
     setErrorClassPeriod("");
     setErrorStartTime("");
@@ -62,13 +58,11 @@ const ModalCreateProject = ({ visible, onCancel }) => {
 
     return () => {
       setName("");
-      setCode("");
       setClassPeriod("");
       setStartTime("");
       setSelectedItemsPerson("");
       setIdActivitiSearch("");
       setErrorName("");
-      setErrorCode("");
       setErrorActivity("");
       setErrorClassPeriod("");
       setErrorStartTime("");
@@ -81,13 +75,20 @@ const ModalCreateProject = ({ visible, onCancel }) => {
       try {
         setLoading(false);
         const responseClassAll = await ClassAPI.fetchAllSemester();
-        const listClassAll = responseClassAll.data;
-        if (listClassAll.data.length > 0) {
-          setIdSemesterSearch(listClassAll.data[0].id);
+        const listSemester = responseClassAll.data;
+        if (listSemester.data.length > 0) {
+          listSemester.data.forEach((item) => {
+            if (
+              item.startTime <= new Date().getTime() &&
+              new Date().getTime() <= item.endTime
+            ) {
+              setIdSemesterSearch(item.id);
+            }
+          });
         } else {
-          setIdSemesterSearch("null");
+          setIdSemesterSearch(null);
         }
-        setSemesterDataAll(listClassAll.data);
+        setSemesterDataAll(listSemester.data);
         setLoading(true);
       } catch (error) {
         alert("Vui lòng F5 lại trang !");
@@ -97,16 +98,27 @@ const ModalCreateProject = ({ visible, onCancel }) => {
   }, []);
 
   useEffect(() => {
-    const featchDataActivity = async (idSemesterSeach) => {
-      console.log(idSemesterSeach);
-      await ClassAPI.getAllActivityByIdSemester(idSemesterSeach).then(
-        (respone) => {
-          setActivityDataAll(respone.data.data);
-          setLoading(true);
-        }
-      );
-    };
-    featchDataActivity(idSemesterSeach);
+    if (idSemesterSeach === "") {
+      setIdActivitiSearch("none");
+      setActivityDataAll([]);
+    } else {
+      const featchDataActivity = async (idSemesterSeach) => {
+        console.log(idSemesterSeach);
+        await ClassAPI.getAllActivityByIdSemester(idSemesterSeach).then(
+          (respone) => {
+            console.log(respone.data.data);
+            if (respone.data.data.length === 0) {
+              setIdActivitiSearch("none");
+              setActivityDataAll([]);
+            } else {
+              setIdActivitiSearch("");
+              setActivityDataAll(respone.data.data);
+            }
+          }
+        );
+      };
+      featchDataActivity(idSemesterSeach);
+    }
   }, [idSemesterSeach]);
 
   const handleSelectPersonChange = (value) => {
@@ -115,13 +127,6 @@ const ModalCreateProject = ({ visible, onCancel }) => {
 
   const create = () => {
     let check = 0;
-
-    if (code.trim() === "") {
-      setErrorCode("Mã Lớp không để trống");
-      check++;
-    } else {
-      setErrorCode("");
-    }
 
     if (classPeriod.trim() === "") {
       setErrorClassPeriod("Ca Lớp không để trống");
@@ -144,7 +149,6 @@ const ModalCreateProject = ({ visible, onCancel }) => {
 
     if (check === 0) {
       let obj = {
-        code: code,
         classPeriod: classPeriod,
         startTime: moment(startTime, "YYYY-MM-DD").valueOf(),
         teacherId: selectedItemsPerson,
@@ -179,7 +183,7 @@ const ModalCreateProject = ({ visible, onCancel }) => {
         onCancel={onCancel}
         width={800}
         footer={null}
-        className="modal_show_detail"
+        className="modal_show_detail_project"
       >
         <div>
           <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
@@ -197,7 +201,7 @@ const ModalCreateProject = ({ visible, onCancel }) => {
                     setIdSemesterSearch(value);
                   }}
                 >
-                  <Option value="NULL">Chọn 1 học kì</Option>
+                  <Option value="">Chọn 1 học kì</Option>
 
                   {semesterDataAll.map((semester) => (
                     <Option key={semester.id} value={semester.id}>
@@ -216,7 +220,12 @@ const ModalCreateProject = ({ visible, onCancel }) => {
                     setIdActivitiSearch(value);
                   }}
                 >
-                  <Option value="">Chọn 1 hoạt động</Option>
+                  {activityDataAll.length > 0 && (
+                    <Option value="">Tất cả</Option>
+                  )}
+                  {activityDataAll.length === 0 && (
+                    <Option value="none">Không có hoạt động</Option>
+                  )}
                   {activityDataAll.map((activity) => (
                     <Option key={activity.id} value={activity.id}>
                       {activity.name}
@@ -236,7 +245,7 @@ const ModalCreateProject = ({ visible, onCancel }) => {
                   style={{ width: "100%" }}
                   filterOption={filterTeacherOptions}
                 >
-                  <Option value="NULL">Chọn 1 giảng viên</Option>
+                  <Option value="">Chọn 1 giảng viên</Option>
 
                   {teacherDataAll.map((teacher) => (
                     <Option key={teacher.id} value={teacher.id}>
@@ -260,20 +269,9 @@ const ModalCreateProject = ({ visible, onCancel }) => {
               </Col>
             </Row>
             <Row style={{ marginBottom: "15px" }}>
+              {" "}
               <Col span={12} style={{ paddingRight: "10px" }}>
-                <span>Mã lớp:</span> <br />
-                <Input
-                  value={code}
-                  style={{ width: "100%" }}
-                  onChange={(e) => {
-                    setCode(e.target.value);
-                  }}
-                  type="text"
-                />
-                <span className="error">{errorCode}</span>
-              </Col>
-              <Col span={12} style={{ paddingRight: "10px" }}>
-                Ca học: <br />
+                Ca học dự kiến: <br />
                 <Select
                   showSearch
                   style={{ width: "100%" }}

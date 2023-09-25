@@ -64,7 +64,7 @@ const PopupMemberTable = ({ todo, position, onClose }) => {
   const checkMemberExists = (id) => {
     if (todo != null && todo.listMemberByIdTodo.length > 0) {
       const isInListMemberTodo = todo.listMemberByIdTodo.some(
-        (member) => member.id === id
+        (member) => member.memberId === id
       );
       return isInListMemberTodo;
     }

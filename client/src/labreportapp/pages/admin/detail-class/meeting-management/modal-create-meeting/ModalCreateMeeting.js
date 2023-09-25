@@ -5,43 +5,35 @@ import moment from "moment";
 import { useParams } from "react-router";
 import { useEffect } from "react";
 import { MeetingManagementAPI } from "../../../../../api/admin/meeting-management/MeetingManagementAPI";
-import { useAppDispatch } from "../../../../../app/hook";
+import { useAppDispatch, useAppSelector } from "../../../../../app/hook";
 import { toast } from "react-toastify";
 import { CreateMeeting } from "../../../../../app/admin/AdMeetingManagement.reducer";
+import { GetAdTeacher } from "../../../../../app/admin/AdTeacherSlice.reducer";
 
 const { Option } = Select;
 
 const ModalCreateMeeting = ({ visible, onCancel }) => {
   const [meetingPeriod, setMeetingPeriod] = useState("0");
   const [typeMeeting, setTypeMeeting] = useState("0");
-  const [name, setName] = useState("");
   const [meetingDate, setMeetingDate] = useState("");
   const [address, setAddress] = useState("");
   const [descriptions, setDescriptions] = useState("");
   const { id } = useParams();
-  const [errorName, setErrorName] = useState("");
   const dispatch = useAppDispatch();
   const [errorMeetingDate, setErrorMeetingDate] = useState("");
 
   useEffect(() => {
-    setName("");
     setTypeMeeting("0");
     setMeetingPeriod("0");
     setMeetingDate("");
     setAddress("");
     setDescriptions("");
-    setErrorName("");
+    setErrorTeacher("");
     setErrorMeetingDate("");
   }, [visible]);
 
   const create = () => {
     let check = 0;
-    if (name === "") {
-      setErrorName("Tên buổi học không được để trống");
-      ++check;
-    } else {
-      setErrorName("");
-    }
     if (meetingDate === "") {
       setErrorMeetingDate("Ngày diễn ra không được để trống");
       ++check;
@@ -50,13 +42,13 @@ const ModalCreateMeeting = ({ visible, onCancel }) => {
     }
     if (check === 0) {
       let obj = {
-        name: name,
         meetingDate: moment(meetingDate, "YYYY-MM-DD").valueOf(),
         meetingPeriod: parseInt(meetingPeriod),
         typeMeeting: parseInt(typeMeeting),
         address: address,
         descriptions: descriptions,
         classId: id,
+        teacherId: selectedItemsPerson,
       };
 
       MeetingManagementAPI.createMeeting(obj).then((response) => {
@@ -67,6 +59,18 @@ const ModalCreateMeeting = ({ visible, onCancel }) => {
     }
   };
 
+  const teacherDataAll = useAppSelector(GetAdTeacher);
+  const [selectedItemsPerson, setSelectedItemsPerson] = useState("");
+  const [errorTeacher, setErrorTeacher] = useState("");
+
+  const handleSelectPersonChange = (e) => {
+    setSelectedItemsPerson(e);
+  };
+
+  const filterTeacherOptions = (input, option) => {
+    return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+  };
+
   return (
     <>
       <Modal
@@ -74,7 +78,7 @@ const ModalCreateMeeting = ({ visible, onCancel }) => {
         onCancel={onCancel}
         width={650}
         footer={null}
-        className="modal_show_detail"
+        className="modal_show_detail_meeting"
       >
         <div>
           <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
@@ -82,19 +86,6 @@ const ModalCreateMeeting = ({ visible, onCancel }) => {
           </div>
           <div style={{ marginTop: "5px" }}>
             <Row>
-              <Col span={24} style={{ padding: "5px" }}>
-                <span style={{ color: "red" }}>(*) </span>Tên buổi học:
-                <br />
-                <Input
-                  value={name}
-                  onChange={(e) => {
-                    setName(e.target.value);
-                  }}
-                  type="text"
-                  placeholder="Nhập tên buổi học"
-                />
-                <span style={{ color: "red" }}>{errorName}</span>
-              </Col>
               <Col span={12} style={{ padding: "5px" }}>
                 <span style={{ color: "red" }}>(*) </span>Ngày diễn ra:
                 <br />
@@ -154,6 +145,25 @@ const ModalCreateMeeting = ({ visible, onCancel }) => {
                   type="text"
                   placeholder="Nhập địa điểm của buổi học"
                 />
+              </Col>
+              <Col span={24} style={{ padding: "5px" }}>
+                Giảng viên dạy: <br />
+                <Select
+                  showSearch
+                  value={selectedItemsPerson}
+                  onChange={handleSelectPersonChange}
+                  style={{ width: "100%" }}
+                  filterOption={filterTeacherOptions}
+                >
+                  <Option value="">Chọn 1 giảng viên</Option>
+
+                  {teacherDataAll.map((teacher) => (
+                    <Option key={teacher.id} value={teacher.id}>
+                      {teacher.userName}
+                    </Option>
+                  ))}
+                </Select>{" "}
+                <span style={{ color: "red" }}>{errorTeacher}</span>
               </Col>
               <Col span={24} style={{ padding: "5px" }}>
                 Mô tả:

@@ -12,16 +12,12 @@ import lombok.Setter;
 @Setter
 public class AdCreateClassRequest {
 
-    @NotBlank
-    private String code;
-
     @NotNull
     private Long classPeriod;
 
     @NotNull
     private Long startTime;
 
-    @NotBlank
     private String teacherId;
 
     @NotBlank

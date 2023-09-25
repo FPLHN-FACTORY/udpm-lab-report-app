@@ -3,9 +3,11 @@ package com.labreportapp.labreport.core.teacher.controller;
 import com.labreportapp.labreport.core.common.base.ResponseObject;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindMeetingRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindScheduleMeetingClassRequest;
+import com.labreportapp.labreport.core.teacher.model.request.TeFindScheduleNowToTime;
 import com.labreportapp.labreport.core.teacher.model.request.TeScheduleUpdateMeetingRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeUpdateHomeWorkAndNoteInMeetingRequest;
 import com.labreportapp.labreport.core.teacher.model.response.TeHomeWorkAndNoteMeetingRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TeMeetingCustomRespone;
 import com.labreportapp.labreport.core.teacher.model.response.TeMeetingCustomToAttendanceRespone;
 import com.labreportapp.labreport.core.teacher.model.response.TeMeetingRespone;
 import com.labreportapp.labreport.core.teacher.model.response.TeScheduleMeetingClassRespone;
@@ -34,7 +36,7 @@ public class TeMeetingController {
 
     @GetMapping("")
     public ResponseObject getTeMeeting(final TeFindMeetingRequest request) {
-        List<TeMeetingRespone> list = teMeetingService.searchMeetingByIdClass(request);
+        List<TeMeetingCustomRespone> list = teMeetingService.searchMeetingByIdClass(request);
         return new ResponseObject(list);
     }
 
@@ -56,7 +58,7 @@ public class TeMeetingController {
         return new ResponseObject(find);
     }
 
-    @PutMapping("/hw-note")
+    @PutMapping("/hw-note-report")
     public ResponseObject updateTeHomeWNoteMeetingDetail(@RequestBody TeUpdateHomeWorkAndNoteInMeetingRequest request) {
         TeHomeWorkAndNoteMeetingRespone find = teMeetingService.updateDetailMeetingTeamByIdMeIdTeam(request);
         return new ResponseObject(find);
@@ -71,6 +73,12 @@ public class TeMeetingController {
     @GetMapping("/schedule")
     public ResponseObject getScheduleTodayTeacher(final TeFindScheduleMeetingClassRequest request) {
         List<TeScheduleMeetingClassRespone> list = teMeetingService.searchScheduleToDayByIdTeacherAndMeetingDate(request);
+        return new ResponseObject(list);
+    }
+
+    @GetMapping("/schedule-time")
+    public ResponseObject getScheduleTodayTeacherTime(final TeFindScheduleNowToTime request) {
+        List<TeScheduleMeetingClassRespone> list = teMeetingService.searchScheduleNowToByIdTeacher(request);
         return new ResponseObject(list);
     }
 

@@ -2,10 +2,10 @@ package com.labreportapp.labreport.core.teacher.controller;
 
 import com.labreportapp.labreport.core.common.base.ResponseObject;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindListAttendanceRequest;
+import com.labreportapp.labreport.core.teacher.model.response.TeAttendanceMessageRespone;
 import com.labreportapp.labreport.core.teacher.model.response.TeAttendanceRespone;
 import com.labreportapp.labreport.core.teacher.model.response.TeAttendanceStudentAllRespone;
 import com.labreportapp.labreport.core.teacher.service.TeAttendanceSevice;
-import com.labreportapp.labreport.entity.Attendance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,7 +36,7 @@ public class TeAttendanceController {
 
     @PostMapping("")
     public ResponseObject createOrUpdate(@RequestBody TeFindListAttendanceRequest request) {
-        List<Attendance> list = teAttendanceSevice.addOrUpdateAttendance(request);
+        TeAttendanceMessageRespone list = teAttendanceSevice.addOrUpdateAttendance(request);
         return new ResponseObject(list);
     }
 

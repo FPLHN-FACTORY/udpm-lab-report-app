@@ -28,7 +28,7 @@ const StMeetingMyClass = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = "Bảng điều khiển - buổi học";
+    document.title = "Bảng điều khiển - Buổi học";
     featchCountMeeting(id);
     featchMeeting(id);
   }, []);

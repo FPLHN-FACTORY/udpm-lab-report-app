@@ -47,7 +47,7 @@ const ViewEditor = ({ item, reply }) => {
   }, [listMemberProject, item]);
 
   const loadDataMember = () => {
-    let data = listMemberProject.find((member) => member.id === item.memberId);
+    let data = listMemberProject.find((member) => member.memberId === item.memberId);
     setCheckShowHide(item.memberId === sinhVienCurrent.id ? false : true);
     setMember(data);
     console.log(data);

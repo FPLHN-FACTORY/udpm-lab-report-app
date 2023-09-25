@@ -10,31 +10,99 @@ const ModalUpdateClassConfiguration = ({
   classConfiguration,
 }) => {
   console.log(classConfiguration);
+  const [idClassConfiguration, setIdClassConfiguration] = useState("");
   const [classSizeMax, setClassSizeMax] = useState("");
   const [errorClassSizeMax, setErrorClassSizeMax] = useState("");
+  const [classSizeMin, setClassSizeMin] = useState("");
+  const [errorClassSizeMin, setErrorClassSizeMin] = useState("");
+  const [pointMin, setPointMin] = useState("");
+  const [errorPointMin, setErrorPointMin] = useState("");
+  const [maximumNumberOfBreaks, setMaximumNumberOfBreaks] = useState("");
+  const [errorMaximumNumberOfBreaks, setErrorMaximumNumberOfBreaks] =
+    useState("");
 
   useEffect(() => {
-    if (visible) {
-      setClassSizeMax(classConfiguration.classSizeMax);
+    if (visible && classConfiguration) {
+      setIdClassConfiguration(classConfiguration[0].id);
+      setClassSizeMax(classConfiguration[1].chiSo);
+      setClassSizeMin(classConfiguration[0].chiSo);
+      setPointMin(classConfiguration[2].chiSo);
+      setMaximumNumberOfBreaks(classConfiguration[3].chiSo);
       setErrorClassSizeMax("");
+      setErrorClassSizeMin("");
+      setErrorPointMin("");
+      setErrorMaximumNumberOfBreaks("");
     } else {
       setClassSizeMax("");
+      setClassSizeMin("");
+      setPointMin("");
+      setMaximumNumberOfBreaks("");
       setErrorClassSizeMax("");
+      setErrorClassSizeMin("");
+      setErrorPointMin("");
+      setErrorMaximumNumberOfBreaks("");
     }
   }, [visible, classConfiguration]);
-
   const update = () => {
     let check = 0;
-    if (classSizeMax.trim() === "") {
-      setErrorClassSizeMax("Số lượng không được để trống");
+    if (classSizeMax === null || classSizeMax === "") {
+      setErrorClassSizeMax("Số lượng tối đa không được để trống");
+      check++;
+    } else if (!Number.isInteger(+classSizeMax) || +classSizeMax <= 0) {
+      setErrorClassSizeMax("Số lượng tối đa phải là số tự nhiên lớn hơn 0");
       check++;
     } else {
       setErrorClassSizeMax("");
     }
+
+    if (classSizeMin === null || classSizeMin === "") {
+      setErrorClassSizeMin("Số lượng tối thiểu không được để trống");
+      check++;
+    } else if (!Number.isInteger(+classSizeMin) || +classSizeMin <= 0) {
+      setErrorClassSizeMin("Số lượng tối thiểu phải là số tự nhiên lớn hơn 0");
+      check++;
+    } else {
+      setErrorClassSizeMin("");
+    }
+
+    if (+classSizeMin >= +classSizeMax) {
+      setErrorClassSizeMin(
+        "Số lượng tối thiểu không được lớn hơn hoặc bằng số lượng tối đa"
+      );
+      check++;
+    }
+    if (pointMin === null || pointMin === "") {
+      setErrorPointMin("Điểm tối thiểu không được để trống");
+      check++;
+    } else if (+pointMin < 0 || +pointMin > 10) {
+      setErrorPointMin("Điểm tối thiểu phải nằm trong khoảng từ 0 đến 10");
+      check++;
+    } else {
+      setErrorPointMin("");
+    }
+    if (maximumNumberOfBreaks === null || maximumNumberOfBreaks === "") {
+      setErrorMaximumNumberOfBreaks("Tỉ lệ nghỉ không được để trống");
+      check++;
+    } else if (
+      !Number.isInteger(+maximumNumberOfBreaks) ||
+      +maximumNumberOfBreaks < 1 ||
+      +maximumNumberOfBreaks > 100
+    ) {
+      setErrorMaximumNumberOfBreaks(
+        "Tỉ lệ nghỉ phải là số tự nhiên trong khoảng từ 1 đến 100"
+      );
+      check++;
+    } else {
+      setErrorMaximumNumberOfBreaks("");
+    }
+
     if (check === 0) {
       let obj = {
-        id: classConfiguration.id,
-        classSizeMax: classSizeMax,
+        id: idClassConfiguration,
+        classSizeMin: +classSizeMin,
+        classSizeMax: +classSizeMax,
+        pointMin: +pointMin,
+        maximumNumberOfBreaks: +maximumNumberOfBreaks,
       };
       AdClassCongigurationAPI.update(obj).then(
         () => {
@@ -55,23 +123,61 @@ const ModalUpdateClassConfiguration = ({
       onCancel={onCancel}
       width={750}
       footer={null}
-      className="modal_show_detail"
+      className="modal_show_detail_config"
     >
       <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
         <span style={{ fontSize: "18px" }}>Sửa hoạt động</span>
       </div>
-      <div style={{ marginTop: "15px", borderBottom: "1px solid black" }}>
-        <Row style={{ marginTop: "15px" }}>
-          <Col span={24}>
-            <span>Số lượng sinh viên trong lớp:</span> <br />
+      <div style={{ marginTop: "15px" }}>
+        <Row gutter={16} style={{ marginBottom: "15px" }}>
+          <Col span={12}>
+            <span>Số lượng sinh viên tối thiểu:</span> <br />
+            <Input
+              value={classSizeMin}
+              onChange={(e) => {
+                setClassSizeMin(e.target.value);
+              }}
+              type="number"
+            />
+            <span className="error">{errorClassSizeMin}</span>
+          </Col>
+          <Col span={12}>
+            <span>Số lượng sinh viên tối đa:</span> <br />
             <Input
               value={classSizeMax}
               onChange={(e) => {
                 setClassSizeMax(e.target.value);
               }}
+              x
               type="number"
             />
             <span className="error">{errorClassSizeMax}</span>
+          </Col>
+        </Row>
+      </div>
+      <div style={{ marginTop: "15px", borderBottom: "1px solid black" }}>
+        <Row gutter={16} style={{ marginBottom: "15px" }}>
+          <Col span={12}>
+            <span>Điểm tối thiểu:</span> <br />
+            <Input
+              value={pointMin}
+              onChange={(e) => {
+                setPointMin(e.target.value);
+              }}
+              type="number"
+            />
+            <span className="error">{errorPointMin}</span>
+          </Col>
+          <Col span={12}>
+            <span>Tỉ lệ nghỉ:</span> <br />
+            <Input
+              value={maximumNumberOfBreaks}
+              onChange={(e) => {
+                setMaximumNumberOfBreaks(e.target.value);
+              }}
+              type="number"
+            />
+            <span className="error">{errorMaximumNumberOfBreaks}</span>
           </Col>
         </Row>
       </div>

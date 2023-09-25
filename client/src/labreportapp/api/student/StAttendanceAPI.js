@@ -7,7 +7,7 @@ export class StAttendanceAPI {
     return request({
       method: "GET",
       url:
-        url + `/attendance?idStudent=${req.idStudent}&idClass=${req.idClass}`,
+        url + `/attendance1?idStudent=${req.idStudent}&idClass=${req.idClass}`,
     });
   };
 }

@@ -17,7 +17,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Checkbox, Input, Popconfirm, Select } from "antd";
 import Image from "../../../../../helper/img/Image";
-import { userCurrent } from "../../../../../helper/inForUser";
 import { useAppDispatch, useAppSelector } from "../../../../../app/hook";
 import { GetMemberProject } from "../../../../../app/reducer/detail-project/DPMemberProject.reducer";
 import { useState } from "react";
@@ -297,7 +296,7 @@ const PopupFilter = ({ position, onClose }) => {
     if (!isAllMember) {
       const memberIdList = listMemberNoUserCurrent
         .filter((member) => member !== sinhVienCurrent.id)
-        .map((member) => member.id);
+        .map((member) => member.memberId);
 
       setValueMultiMember(memberIdList);
     } else {
@@ -408,7 +407,7 @@ const PopupFilter = ({ position, onClose }) => {
                   url={sinhVienCurrent.picture}
                   picxel={30}
                   marginRight={8}
-                  name={sinhVienCurrent.name + " " + sinhVienCurrent.userName}
+                  name={sinhVienCurrent.name + " " + sinhVienCurrent.username}
                 />
                 <span style={{ fontSize: "14px" }}>Thẻ giao cho tôi</span>
               </div>

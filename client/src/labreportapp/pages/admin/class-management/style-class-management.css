@@ -20,3 +20,15 @@
 .createButton {
   float: right;
 }
+
+.filter_class_management {
+  box-shadow: 0px 0px 20px 1px rgba(148, 148, 148, 0.3) !important;
+  background-color: white;
+  border-radius: 5px;
+  margin-top: 20px;
+  padding: 20px;
+}
+
+.table_custom_class_management {
+  margin-top: 20px;
+}
