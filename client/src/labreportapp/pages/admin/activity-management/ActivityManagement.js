@@ -16,6 +16,7 @@ import {
   Popconfirm,
   Select,
   Table,
+  Tag,
   Tooltip,
 } from "antd";
 import { useAppDispatch, useAppSelector } from "../../../app/hook";
@@ -220,16 +221,28 @@ const ActivityManagement = () => {
       sorter: (a, b) => a.level - b.level,
     },
     {
-      title: "Học kỳ",
-      dataIndex: "nameSemester",
-      key: "nameSemester",
-      sorter: (a, b) => a.nameSemester.localeCompare(b.nameSemester),
-    },
-    {
       title: "Mô tả",
       dataIndex: "descriptions",
       key: "descriptions",
       sorter: (a, b) => a.descriptions.localeCompare(b.descriptions),
+    },
+    {
+      title: "Tạo trello",
+      dataIndex: "allowUseTrello",
+      key: "allowUseTrello",
+      render: (text, record) => {
+        if (record.allowUseTrello === 0) {
+          return <Tag color="success">Cho phép</Tag>;
+        } else {
+          return <Tag color="error">Không cho phép</Tag>;
+        }
+      },
+    },
+    {
+      title: "Học kỳ",
+      dataIndex: "nameSemester",
+      key: "nameSemester",
+      sorter: (a, b) => a.nameSemester.localeCompare(b.nameSemester),
     },
     {
       title: "Hành động",
@@ -272,7 +285,7 @@ const ActivityManagement = () => {
       {loading && <LoadingIndicator />}
       <div className="title_activity_management">
         {" "}
-        <FontAwesomeIcon icon={faTags} style={{ fontSize: "25px" }} />
+        <FontAwesomeIcon icon={faTags} style={{ fontSize: "20px" }} />
         <span style={{ marginLeft: "10px" }}>Quản lý hoạt động</span>
       </div>
       <div className="filter_my_class">
@@ -370,13 +383,14 @@ const ActivityManagement = () => {
                 size="1x"
                 style={{
                   backgroundColor: "rgb(55, 137, 220)",
+                  marginRight: "5px",
                 }}
               />{" "}
               Thêm hoạt động
             </Button>
           </div>
         </div>
-        <div style={{ marginTop: "10px" }}>
+        <div style={{ marginTop: "15px" }}>
           <Table
             className="table_content"
             pagination={false}

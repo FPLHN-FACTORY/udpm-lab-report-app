@@ -33,4 +33,7 @@ public interface AdActivityResponse extends IsIdentified {
 
     @Value("#{target.descriptions}")
     String getDescriptions();
+
+    @Value("#{target.allow_use_trello}")
+    Integer getAllowUseTrello();
 }

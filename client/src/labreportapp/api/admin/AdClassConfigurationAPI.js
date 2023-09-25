@@ -11,7 +11,7 @@ export class AdClassCongigurationAPI {
   static update = (data) => {
     return request({
       method: "PUT",
-      url: `/admin/class-configuration/${data.id}`,
+      url: `/admin/class-configuration`,
       data: data,
     });
   };

@@ -38,4 +38,11 @@ export class AdSemesterAPI {
       url: url + `/delete/` + id,
     });
   };
+  
+  static updateStatusFeedback = (id) => {
+    return request({
+      method: "PUT",
+      url: url + `/update-status-feedback/` + id,
+    });
+  };
 }

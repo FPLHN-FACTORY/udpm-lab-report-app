@@ -71,7 +71,13 @@ export class ClassAPI {
         `&size=` +
         filter.size +
         "&levelId=" +
-        filter.levelId,
+        filter.levelId +
+        "&classSize=" +
+        filter.classSize +
+        "&statusClass=" +
+        filter.statusClass +
+        "&statusTeacherEdit=" +
+        filter.statusTeacherEdit,
     });
   }
   static getAdClassDetailById(id) {

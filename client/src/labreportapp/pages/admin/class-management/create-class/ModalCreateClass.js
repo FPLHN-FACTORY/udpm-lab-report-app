@@ -31,6 +31,7 @@ const ModalCreateProject = ({ visible, onCancel }) => {
   const [errorClassPeriod, setErrorClassPeriod] = useState("");
   const [errorstartTime, setErrorStartTime] = useState("");
   const [errorActivitySelect, setErrorActivitySelect] = useState("");
+  const [statusTeacherEdit, setStatusTeacherEdit] = useState("1");
 
   const cancelSuccess = () => {
     onCancel();
@@ -129,7 +130,7 @@ const ModalCreateProject = ({ visible, onCancel }) => {
     let check = 0;
 
     if (classPeriod.trim() === "") {
-      setErrorClassPeriod("Ca Lớp không để trống");
+      setErrorClassPeriod("Ca lớp không để trống");
       check++;
     } else {
       setErrorClassPeriod("");
@@ -153,6 +154,7 @@ const ModalCreateProject = ({ visible, onCancel }) => {
         startTime: moment(startTime, "YYYY-MM-DD").valueOf(),
         teacherId: selectedItemsPerson,
         activityId: idActivitiSearch,
+        statusTeacherEdit: parseInt(statusTeacherEdit),
       };
 
       ClassAPI.create(obj).then(
@@ -192,7 +194,7 @@ const ModalCreateProject = ({ visible, onCancel }) => {
           <div style={{ marginTop: "15px", borderBottom: "1px solid black" }}>
             <Row style={{ marginBottom: "15px" }}>
               <Col span={12} style={{ paddingRight: "10px" }}>
-                Semester: <br />
+                <span style={{ color: "red" }}>(*) </span>Semester: <br />
                 <Select
                   showSearch
                   style={{ width: "100%" }}
@@ -211,7 +213,7 @@ const ModalCreateProject = ({ visible, onCancel }) => {
                 </Select>
               </Col>
               <Col span={12} style={{ paddingRight: "10px" }}>
-                Hoạt Động: <br />
+                <span style={{ color: "red" }}>(*) </span> Hoạt Động: <br />
                 <Select
                   showSearch
                   style={{ width: "100%" }}
@@ -249,13 +251,13 @@ const ModalCreateProject = ({ visible, onCancel }) => {
 
                   {teacherDataAll.map((teacher) => (
                     <Option key={teacher.id} value={teacher.id}>
-                      {teacher.userName}
+                      {teacher.userName + " - " + teacher.name}
                     </Option>
                   ))}
                 </Select>
               </Col>
               <Col span={12} style={{ paddingRight: "10px" }}>
-                <span className="notBlank">(*) </span>
+                <span style={{ color: "red" }}>(*) </span>
                 <span>Thời gian bắt đầu:</span> <br />
                 <Input
                   value={startTime}
@@ -271,14 +273,15 @@ const ModalCreateProject = ({ visible, onCancel }) => {
             <Row style={{ marginBottom: "15px" }}>
               {" "}
               <Col span={12} style={{ paddingRight: "10px" }}>
-                Ca học dự kiến: <br />
+                <span style={{ color: "red" }}>(*) </span> Ca học dự kiến:{" "}
+                <br />
                 <Select
                   showSearch
                   style={{ width: "100%" }}
                   value={classPeriod}
                   onChange={handleSelectChange}
                 >
-                  <Option value="">Tất Cả</Option>
+                  <Option value="">Chọn ca học</Option>
                   {listClassPeriod.map((value) => {
                     return (
                       <Option value={value} key={value}>
@@ -288,6 +291,21 @@ const ModalCreateProject = ({ visible, onCancel }) => {
                   })}
                 </Select>
                 <span className="error">{errorClassPeriod}</span>
+              </Col>
+              <Col span={12} style={{ paddingRight: "10px" }}>
+                <span style={{ color: "red" }}>(*) </span> Quyền giảng viên:{" "}
+                <br />
+                <Select
+                  showSearch
+                  style={{ width: "100%" }}
+                  value={statusTeacherEdit}
+                  onChange={(e) => {
+                    setStatusTeacherEdit(e);
+                  }}
+                >
+                  <Option value="1">Không cho phép</Option>
+                  <Option value="0">Cho phép</Option>
+                </Select>
               </Col>
             </Row>
           </div>

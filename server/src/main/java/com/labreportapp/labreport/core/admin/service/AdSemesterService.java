@@ -25,4 +25,6 @@ public interface AdSemesterService {
 
     Boolean deleteSemester(final String id);
 
+    Boolean updateStatusFeedback(String id);
+
 }

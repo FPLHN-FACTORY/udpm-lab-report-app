@@ -9,8 +9,6 @@ const ModalUpdateClassConfiguration = ({
   onCancel,
   classConfiguration,
 }) => {
-  console.log(classConfiguration);
-  const [idClassConfiguration, setIdClassConfiguration] = useState("");
   const [classSizeMax, setClassSizeMax] = useState("");
   const [errorClassSizeMax, setErrorClassSizeMax] = useState("");
   const [classSizeMin, setClassSizeMin] = useState("");
@@ -22,8 +20,7 @@ const ModalUpdateClassConfiguration = ({
     useState("");
 
   useEffect(() => {
-    if (visible && classConfiguration) {
-      setIdClassConfiguration(classConfiguration[0].id);
+    if (visible && classConfiguration.length > 0) {
       setClassSizeMax(classConfiguration[1].chiSo);
       setClassSizeMin(classConfiguration[0].chiSo);
       setPointMin(classConfiguration[2].chiSo);
@@ -98,7 +95,6 @@ const ModalUpdateClassConfiguration = ({
 
     if (check === 0) {
       let obj = {
-        id: idClassConfiguration,
         classSizeMin: +classSizeMin,
         classSizeMax: +classSizeMax,
         pointMin: +pointMin,

@@ -36,6 +36,7 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
   const [errorstartTime, setErrorStartTime] = useState("");
   const [errorActivitySelect, setErrorActivitySelect] = useState("");
   const [classDetail, setClassDetail] = useState({});
+  const [statusTeacherEdit, setStatusTeacherEdit] = useState("");
 
   const cancelSuccess = () => {
     onCancel();
@@ -83,6 +84,7 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
     const fetchDetail = (id) => {
       ClassAPI.getAdClassDetailById(id).then(
         (respone) => {
+          console.log(respone.data.data);
           setClassDetail(respone.data.data);
           setIdSemesterSearch(respone.data.data.semesterId);
           setIdActivitiSearch(respone.data.data.activityId);
@@ -100,6 +102,7 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
               ? ""
               : respone.data.data.classPeriod + ""
           );
+          setStatusTeacherEdit(respone.data.data.statusTeacherEdit + "");
         },
         (error) => {}
       );
@@ -170,6 +173,7 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
         startTime: moment(startTime, "YYYY-MM-DD").valueOf(),
         teacherId: selectedItemsPerson,
         activityId: idActivitiSearch,
+        statusTeacherEdit: parseInt(statusTeacherEdit),
       };
 
       await ClassAPI.update(id, obj).then((response) => {
@@ -249,7 +253,7 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
 
                   {teacherDataAll.map((teacher) => (
                     <Option key={teacher.id} value={teacher.id}>
-                      {teacher.userName}
+                      {teacher.userName + " - " + teacher.name}
                     </Option>
                   ))}
                 </Select>
@@ -304,6 +308,23 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
                       </Option>
                     );
                   })}
+                </Select>
+                <span className="error">{errorClassPeriod}</span>
+              </Col>
+              <Col
+                span={12}
+                style={{ paddingRight: "10px", marginTop: "15px" }}
+              >
+                Quyền giảng viên chỉnh sửa: <br />
+                <Select
+                  style={{ width: "100%" }}
+                  value={statusTeacherEdit}
+                  onChange={(e) => {
+                    setStatusTeacherEdit(e);
+                  }}
+                >
+                  <Option value="0">Cho phép</Option>
+                  <Option value="1">Không cho phép</Option>
                 </Select>
                 <span className="error">{errorClassPeriod}</span>
               </Col>

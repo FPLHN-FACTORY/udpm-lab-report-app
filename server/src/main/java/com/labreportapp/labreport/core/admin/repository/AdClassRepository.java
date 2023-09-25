@@ -70,8 +70,9 @@ public interface AdClassRepository extends ClassRepository {
     @Query(value = """
             SELECT ROW_NUMBER() OVER(ORDER BY c.last_modified_date DESC ) AS stt,
             c.id,
-            c.code,c.start_time
-            ,c.class_period,c.class_size,c.teacher_id,a.name as nameActivity, d.name AS nameLevel
+            c.code, c.start_time
+            , c.class_period, c.class_size, c.teacher_id,a.name as nameActivity, d.name AS nameLevel,
+            c.status_teacher_edit
             FROM activity a
             JOIN class c ON c.activity_id = a.id
             JOIN level d ON d.id = a.level_id
@@ -79,9 +80,15 @@ public interface AdClassRepository extends ClassRepository {
             where (:#{#req.idSemester} IS NULL OR :#{#req.idSemester} LIKE '' OR s.id = :#{#req.idSemester})
             and (:#{#req.idActivity} IS NULL OR :#{#req.idActivity} LIKE '' OR a.id = :#{#req.idActivity})
             and (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR c.code LIKE %:#{#req.code}%)
-            and (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR  c.class_period = :#{#req.classPeriod})
-            and (:#{#req.idTeacher} IS NULL OR :#{#req.idTeacher} LIKE '' OR c.teacher_id = :#{#req.idTeacher})
+            and (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR  c.class_period = :#{#req.classPeriod}
+            OR IF(:#{#req.classPeriod} = 'none', c.class_period IS NULL, ''))
+            and (:#{#req.idTeacher} IS NULL OR :#{#req.idTeacher} LIKE '' OR c.teacher_id = :#{#req.idTeacher} 
+            OR IF(:#{#req.idTeacher} = 'none', c.teacher_id IS NULL, ''))
             and (:#{#req.levelId} IS NULL OR :#{#req.levelId} LIKE '' OR d.id = :#{#req.levelId})
+            and (:#{#req.classSize} IS NULL OR :#{#req.classSize} LIKE '' OR c.class_size = :#{#req.classSize})
+            and (:#{#req.statusClass} IS NULL OR :#{#req.statusClass} LIKE '' 
+            OR IF(:#{#req.statusClass} = 'yes', c.class_size >= :#{#req.valueClassSize}, c.class_size < :#{#req.valueClassSize}))
+            and (:#{#req.statusTeacherEdit} IS NULL OR :#{#req.statusTeacherEdit} LIKE '' OR c.status_teacher_edit = :#{#req.statusTeacherEdit})
             ORDER BY c.last_modified_date DESC
             """, countQuery = """
             SELECT COUNT(c.id)
@@ -92,9 +99,15 @@ public interface AdClassRepository extends ClassRepository {
             where (:#{#req.idSemester} IS NULL OR :#{#req.idSemester} LIKE '' OR s.id = :#{#req.idSemester})
             and (:#{#req.idActivity} IS NULL OR :#{#req.idActivity} LIKE '' OR a.id = :#{#req.idActivity})
             and (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR c.code LIKE %:#{#req.code}%)
-            and (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR  c.class_period = :#{#req.classPeriod})
-            and (:#{#req.idTeacher} IS NULL OR :#{#req.idTeacher} LIKE '' OR c.teacher_id = :#{#req.idTeacher})
+            and (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR  c.class_period = :#{#req.classPeriod}
+            OR IF(:#{#req.classPeriod} = 'none', c.class_period IS NULL, ''))
+            and (:#{#req.idTeacher} IS NULL OR :#{#req.idTeacher} LIKE '' OR c.teacher_id = :#{#req.idTeacher} 
+            OR IF(:#{#req.idTeacher} = 'none', c.teacher_id IS NULL, ''))
             and (:#{#req.levelId} IS NULL OR :#{#req.levelId} LIKE '' OR d.id = :#{#req.levelId})
+            and (:#{#req.classSize} IS NULL OR :#{#req.classSize} LIKE '' OR c.class_size = :#{#req.classSize})
+            and (:#{#req.statusClass} IS NULL OR :#{#req.statusClass} LIKE '' 
+            OR IF(:#{#req.statusClass} = 'yes', c.class_size >= :#{#req.valueClassSize}, c.class_size < :#{#req.valueClassSize}))
+            and (:#{#req.statusTeacherEdit} IS NULL OR :#{#req.statusTeacherEdit} LIKE '' OR c.status_teacher_edit = :#{#req.statusTeacherEdit})
             """, nativeQuery = true)
     Page<AdClassResponse> findClassBySemesterAndActivity(@Param("req") AdFindClassRequest req, Pageable pageable);
 
@@ -112,7 +125,8 @@ public interface AdClassRepository extends ClassRepository {
             d.name as activityLevel,
             s.id as semesterId,
             s.name as semesterName,
-            c.status_class
+            c.status_class, 
+            c.status_teacher_edit
             FROM activity a
             JOIN level d ON a.level_id = d.id
             JOIN class c ON c.activity_id = a.id

@@ -27,6 +27,7 @@ const ModalCreateActivity = ({
   const [errorEndTime, setErrorEndTime] = useState("");
   const [errorLevel, setErrorLevel] = useState("");
   const [errorSemesterId, setErrorSemesterId] = useState("");
+  const [allowUseTrello, setAllowUseTrello] = useState("1");
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -116,6 +117,7 @@ const ModalCreateActivity = ({
         level: level,
         semesterId: semesterId,
         descriptions: descriptions,
+        allowUseTrello: parseInt(allowUseTrello),
       };
       console.log(code, descriptions, level);
       ActivityManagementAPI.create(obj).then(
@@ -130,9 +132,7 @@ const ModalCreateActivity = ({
           onCancel();
           fetchData();
         },
-        (error) => {
-          toast.error(error.response.data.message);
-        }
+        (error) => {}
       );
     }
   };
@@ -150,9 +150,10 @@ const ModalCreateActivity = ({
         <span style={{ fontSize: "18px" }}>Thêm hoạt động</span>
       </div>
       <div style={{ marginTop: "15px", borderBottom: "1px solid black" }}>
-        <Row gutter={16} style={{ marginTop: "15px" }}>
-          <Col span={24}>
-            <span>Mã</span> <br />
+        <Row style={{ marginTop: "15px" }}>
+          <Col span={12} style={{ padding: "5px" }}>
+            <span style={{ color: "red" }}>(*) </span>
+            <span>Mã:</span> <br />
             <Input
               value={code}
               onChange={(e) => {
@@ -162,9 +163,8 @@ const ModalCreateActivity = ({
             />
             <span className="error">{errorCode}</span>
           </Col>
-        </Row>
-        <Row gutter={16} style={{ marginTop: "15px" }}>
-          <Col span={24}>
+          <Col span={12} style={{ padding: "5px" }}>
+            <span style={{ color: "red" }}>(*) </span>
             <span>Tên:</span> <br />
             <Input
               value={name}
@@ -175,9 +175,9 @@ const ModalCreateActivity = ({
             />
             <span className="error">{errorName}</span>
           </Col>
-        </Row>
-        <Row gutter={16} style={{ marginTop: "15px" }}>
-          <Col span={12}>
+
+          <Col span={12} style={{ padding: "5px" }}>
+            <span style={{ color: "red" }}>(*) </span>{" "}
             <span>Thời gian bắt đầu:</span> <br />
             <Input
               value={startTime}
@@ -188,7 +188,8 @@ const ModalCreateActivity = ({
             />
             <span className="error">{errorStartTime}</span>
           </Col>
-          <Col span={12}>
+          <Col span={12} style={{ padding: "5px" }}>
+            <span style={{ color: "red" }}>(*) </span>{" "}
             <span>Thời gian kết thúc:</span> <br />
             <Input
               value={endTime}
@@ -199,10 +200,9 @@ const ModalCreateActivity = ({
             />
             <span className="error">{errorEndTime}</span>
           </Col>
-        </Row>
-        <Row gutter={16} style={{ marginTop: "15px" }}>
-          <Col span={24}>
-            <span>Cấp độ:</span> <br />
+
+          <Col span={12} style={{ padding: "5px" }}>
+            <span style={{ color: "red" }}>(*) </span> Cấp độ:
             <Select
               style={{ width: "100%" }}
               value={level}
@@ -210,6 +210,8 @@ const ModalCreateActivity = ({
                 setLevel(value);
               }}
             >
+              {" "}
+              <Option value="">Hãy chọn cấp độ</Option>
               {listLevel.map((value) => {
                 return (
                   <Option value={value.id} key={value.id}>
@@ -220,16 +222,15 @@ const ModalCreateActivity = ({
             </Select>
             <span className="error">{errorLevel}</span>
           </Col>
-        </Row>
-        <Row gutter={16} style={{ marginTop: "15px", marginBottom: "15px" }}>
-          <Col span={24}>
-            <span>Tên học kỳ:</span> <br />
+
+          <Col span={12} style={{ padding: "5px" }}>
+            <span style={{ color: "red" }}>(*) </span> Tên học kỳ:
             <Select
               value={semesterId}
               onChange={(value) => {
                 setSemesterId(value);
               }}
-              style={{ marginTop: "6px", width: "100%" }}
+              style={{ width: "100%" }}
             >
               {listSemester.map((value) => {
                 return (
@@ -241,12 +242,25 @@ const ModalCreateActivity = ({
             </Select>
             <span className="error">{errorSemesterId}</span>
           </Col>
-        </Row>
-        <Row gutter={16} style={{ marginTop: "15px" }}>
-          <Col span={24}>
-            <span>Mô tả</span> <br />
+          <Col span={24} style={{ padding: "5px" }}>
+            <span style={{ color: "red" }}>(*) </span>Cho phép sử dụng trello
+            kéo thả: <br />
+            <Select
+              value={allowUseTrello}
+              style={{ width: "100%" }}
+              onChange={(e) => {
+                setAllowUseTrello(e);
+              }}
+            >
+              <Option value="1">Không cho phép</Option>
+              <Option value="0">Cho phép</Option>
+            </Select>
+          </Col>
+          <Col span={24} style={{ padding: "5px" }}>
+            <span>Mô tả:</span> <br />
             <Input.TextArea
               value={descriptions}
+              rows={8}
               onChange={(e) => {
                 setDescriptions(e.target.value);
               }}
