@@ -5,6 +5,8 @@ import {
   faPlus,
   faTrash,
   faPencil,
+  faFilterCircleDollar,
+  faChainSlash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Input, Pagination, Table, Tooltip, Popconfirm } from "antd";
@@ -79,7 +81,11 @@ const LevelManagement = () => {
               onClick={() => {
                 buttonUpdate(record);
               }}
-              style={{ marginRight: "15px", cursor: "pointer" }}
+              style={{
+                marginRight: "15px",
+                cursor: "pointer",
+                color: "rgb(38, 144, 214)",
+              }}
               icon={faPencil}
               size="1x"
             />
@@ -95,7 +101,11 @@ const LevelManagement = () => {
           >
             <Tooltip title="Xóa">
               <FontAwesomeIcon
-                style={{ cursor: "pointer", marginLeft: "10px" }}
+                style={{
+                  cursor: "pointer",
+                  marginLeft: "10px",
+                  color: "rgb(38, 144, 214)",
+                }}
                 icon={faTrash}
                 size="1x"
               />
@@ -182,6 +192,10 @@ const LevelManagement = () => {
             onClick={buttonSearch}
             style={{ marginRight: "20px" }}
           >
+            <FontAwesomeIcon
+              icon={faFilterCircleDollar}
+              style={{ marginRight: 5 }}
+            />
             Tìm kiếm
           </Button>
           <Button
@@ -189,6 +203,7 @@ const LevelManagement = () => {
             onClick={clearData}
             style={{ backgroundColor: "rgb(50, 144, 202)" }}
           >
+            <FontAwesomeIcon icon={faChainSlash} style={{ marginRight: 5 }} />
             Làm mới bộ lọc
           </Button>
         </div>
@@ -225,9 +240,10 @@ const LevelManagement = () => {
                 size="1x"
                 style={{
                   backgroundColor: "rgb(55, 137, 220)",
+                  marginRight: "5px",
                 }}
               />{" "}
-              Thêm Level
+              Thêm level
             </Button>
           </div>
         </div>

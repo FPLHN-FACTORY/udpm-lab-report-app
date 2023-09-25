@@ -9,6 +9,8 @@ import {
   faPlus,
   faFeed,
   faFileEdit,
+  faFilterCircleDollar,
+  faChainSlash,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   Button,
@@ -175,6 +177,7 @@ const SemesterManagement = () => {
                 marginRight: "15px",
                 cursor: "pointer",
                 marginLeft: "3px",
+                color: "rgb(38, 144, 214)",
               }}
               icon={faPencil}
               size="1x"
@@ -192,7 +195,11 @@ const SemesterManagement = () => {
           >
             <Tooltip title="Xóa">
               <FontAwesomeIcon
-                style={{ cursor: "pointer", marginLeft: "10px" }}
+                style={{
+                  cursor: "pointer",
+                  marginLeft: "10px",
+                  color: "rgb(38, 144, 214)",
+                }}
                 icon={faTrash}
                 size="1x"
               />
@@ -267,6 +274,11 @@ const SemesterManagement = () => {
         </div>
         <div className="box_btn_filter">
           <Button className="btn_filter" onClick={buttonSearch}>
+            {" "}
+            <FontAwesomeIcon
+              icon={faFilterCircleDollar}
+              style={{ marginRight: "5px" }}
+            />
             Tìm kiếm
           </Button>
           <Button
@@ -274,6 +286,10 @@ const SemesterManagement = () => {
             onClick={clearData}
             style={{ backgroundColor: "rgb(50, 144, 202)" }}
           >
+            <FontAwesomeIcon
+              icon={faChainSlash}
+              style={{ marginRight: "5px" }}
+            />
             Làm mới bộ lọc
           </Button>
         </div>
@@ -307,6 +323,7 @@ const SemesterManagement = () => {
                 size="1x"
                 style={{
                   backgroundColor: "rgb(55, 137, 220)",
+                  marginRight: "5px",
                 }}
               />
               Thêm học kỳ

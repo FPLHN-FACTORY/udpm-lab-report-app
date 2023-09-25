@@ -150,9 +150,15 @@ public interface AdClassRepository extends ClassRepository {
             WHERE (:#{#req.idSemester} IS NULL OR :#{#req.idSemester} LIKE '' OR d.id = :#{#req.idSemester})
             AND (:#{#req.idActivity} IS NULL OR :#{#req.idActivity} LIKE '' OR b.id = :#{#req.idActivity})
             AND (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR a.code LIKE %:#{#req.code}%)
-            AND (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR  a.class_period = :#{#req.classPeriod})
-            AND (:#{#req.idTeacher} IS NULL OR :#{#req.idTeacher} LIKE '' OR a.teacher_id = :#{#req.idTeacher})
-            AND (:#{#req.levelId} IS NULL OR :#{#req.levelId} LIKE '' OR c.id = :#{#req.levelId})
+            and (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR  a.class_period = :#{#req.classPeriod}
+            OR IF(:#{#req.classPeriod} = 'none', a.class_period IS NULL, ''))
+            and (:#{#req.idTeacher} IS NULL OR :#{#req.idTeacher} LIKE '' OR a.teacher_id = :#{#req.idTeacher} 
+            OR IF(:#{#req.idTeacher} = 'none', a.teacher_id IS NULL, ''))
+            and (:#{#req.levelId} IS NULL OR :#{#req.levelId} LIKE '' OR c.id = :#{#req.levelId})
+            and (:#{#req.classSize} IS NULL OR :#{#req.classSize} LIKE '' OR a.class_size = :#{#req.classSize})
+            and (:#{#req.statusClass} IS NULL OR :#{#req.statusClass} LIKE '' 
+            OR IF(:#{#req.statusClass} = 'yes', a.class_size >= :#{#req.valueClassSize}, a.class_size < :#{#req.valueClassSize}))
+            and (:#{#req.statusTeacherEdit} IS NULL OR :#{#req.statusTeacherEdit} LIKE '' OR a.status_teacher_edit = :#{#req.statusTeacherEdit})
             ORDER BY b.code
             """, nativeQuery = true)
     List<AdExportExcelClassResponse> findClassExportExcel(@Param("req") AdFindClassRequest req);

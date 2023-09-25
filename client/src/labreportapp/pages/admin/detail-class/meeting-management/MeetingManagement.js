@@ -385,7 +385,7 @@ const MeetingManagment = () => {
                       <Option value="">Chọn 1 giảng viên cần thay đổi</Option>
                       {teacherDataAll.map((teacher) => (
                         <Option key={teacher.id} value={teacher.id}>
-                          {teacher.userName}
+                          {teacher.userName + " - " + teacher.name}
                         </Option>
                       ))}
                     </Select>

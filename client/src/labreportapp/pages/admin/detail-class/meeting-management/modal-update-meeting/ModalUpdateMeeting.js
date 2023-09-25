@@ -176,7 +176,7 @@ const ModalUpdateMeeting = ({ item, visible, onCancel }) => {
 
                   {teacherDataAll.map((teacher) => (
                     <Option key={teacher.id} value={teacher.id}>
-                      {teacher.userName}
+                    {teacher.userName + " - " + teacher.name}
                     </Option>
                   ))}
                 </Select>{" "}

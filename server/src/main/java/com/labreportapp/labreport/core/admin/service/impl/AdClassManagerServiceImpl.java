@@ -243,6 +243,8 @@ public class AdClassManagerServiceImpl implements AdClassService {
 
     @Override
     public ByteArrayOutputStream exportExcelClass(HttpServletResponse response, final AdFindClassRequest request) {
+        ClassConfiguration classConfiguration = adClassConfigurationRepository.findAll().get(0);
+        request.setValueClassSize(classConfiguration.getClassSizeMin());
         List<AdExportExcelClassResponse> listClassResponse = repository.findClassExportExcel(request);
         List<String> distinctTeacherIds = listClassResponse.stream()
                 .map(AdExportExcelClassResponse::getTeacherId)

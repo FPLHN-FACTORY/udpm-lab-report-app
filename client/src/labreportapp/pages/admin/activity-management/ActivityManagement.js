@@ -8,6 +8,8 @@ import {
   faPlus,
   faTrash,
   faAddressCard,
+  faFilterCircleDollar,
+  faChainSlash,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   Button,
@@ -254,7 +256,7 @@ const ActivityManagement = () => {
             <Tooltip title="Chỉnh sửa chi tiết">
               <FontAwesomeIcon
                 icon={faEdit}
-                style={{ marginRight: "9px" }}
+                style={{ marginRight: "9px", color: "rgb(38, 144, 214)" }}
                 size="1x"
                 onClick={() => {
                   handleUpdateActivity(record);
@@ -273,7 +275,11 @@ const ActivityManagement = () => {
             cancelText="Không"
           >
             <Tooltip title="Xóa">
-              <FontAwesomeIcon color="#1677ff" icon={faTrash} size="1x" />
+              <FontAwesomeIcon
+                style={{ color: "rgb(38, 144, 214)" }}
+                icon={faTrash}
+                size="1x"
+              />
             </Tooltip>
           </Popconfirm>
         </div>
@@ -344,6 +350,11 @@ const ActivityManagement = () => {
         </div>
         <div className="box_btn_filter">
           <Button className="btn_filter" onClick={handleSearch}>
+            {" "}
+            <FontAwesomeIcon
+              icon={faFilterCircleDollar}
+              style={{ marginRight: 5 }}
+            />
             Tìm kiếm
           </Button>
           <Button
@@ -351,6 +362,10 @@ const ActivityManagement = () => {
             style={{ backgroundColor: "rgb(38, 144, 214)", color: "white" }}
             onClick={handleClear}
           >
+            <FontAwesomeIcon
+              icon={faChainSlash}
+              style={{ marginRight: 5 }}
+            />
             Làm mới bộ lọc
           </Button>
         </div>

@@ -318,7 +318,11 @@ const ClassManagement = () => {
           <Tooltip title="Xem chi tiết">
             <Link to={`/admin/class-management/information-class/${record.id}`}>
               <FontAwesomeIcon
-                style={{ marginRight: "15px", cursor: "pointer" }}
+                style={{
+                  marginRight: "15px",
+                  cursor: "pointer",
+                  color: "rgb(38, 144, 214)",
+                }}
                 icon={faEye}
                 size="1x"
               />
@@ -336,7 +340,7 @@ const ClassManagement = () => {
               size="1x"
               style={{
                 marginLeft: 7,
-                color: "rgb(55, 137, 220)",
+                color: "rgb(38, 144, 214)",
                 cursor: "pointer",
               }}
             />
@@ -365,12 +369,23 @@ const ClassManagement = () => {
 
   const handleClear = () => {
     if (semesterDataAll.length > 0) {
-      setIdSemesterSearch(semesterDataAll[0].id);
+      semesterDataAll.forEach((item) => {
+        if (
+          item.startTime <= new Date().getTime() &&
+          new Date().getTime() <= item.endTime
+        ) {
+          setIdSemesterSearch(item.id);
+        }
+      });
     } else {
-      setIdSemesterSearch("null");
+      setIdSemesterSearch(null);
     }
     setSelectedItems("");
     setCode("");
+    setClassSize("");
+    setLevel("");
+    setStatusClass("");
+    setStatusTeacherEdit("");
     setIdActivitiSearch("");
     setSelectedItemsPerson("");
     setClear(true);
@@ -409,8 +424,11 @@ const ClassManagement = () => {
       code: code,
       classPeriod: selectedItems,
       page: current,
-      size: 10,
+      size: size,
       levelId: level,
+      classSize: classSize,
+      statusClass: statusClass,
+      statusTeacherEdit: statusTeacherEdit,
     };
     ClassAPI.exportExcel(filter).then((response) => {
       setLoadingOverLay(false);
@@ -553,7 +571,12 @@ const ClassManagement = () => {
             <div className="inputCode">
               <span>Mã Lớp:</span>
               <br />
-              <Input type="text" value={code} onChange={handleCodeChange} />
+              <Input
+                placeholder="Nhập mã lớp"
+                type="text"
+                value={code}
+                onChange={handleCodeChange}
+              />
             </div>
           </Col>
           <Col span={12} style={{ padding: "10px" }}>
@@ -585,6 +608,7 @@ const ClassManagement = () => {
               <br />
               <Input
                 type="number"
+                placeholder="Nhập sĩ số lớp"
                 value={classSize}
                 onChange={(e) => {
                   setClassSize(e.target.value);
