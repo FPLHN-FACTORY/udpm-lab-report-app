@@ -1,9 +1,10 @@
-import { Button, Spin } from "antd";
+import { Button, Spin, Upload } from "antd";
 import { useState } from "react";
 import { TeacherExcelPointAPI } from "../../../../../api/teacher/point/excel/TeacherExcelPoint.api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
+import { UploadOutlined } from "@ant-design/icons";
 
 const ButtonImportExcel = ({ idClass }) => {
   const [downloading, setDownloading] = useState(false);
@@ -56,6 +57,9 @@ const ButtonImportExcel = ({ idClass }) => {
   return (
     <>
       <Spin spinning={downloading}>
+        <Upload>
+          <Button icon={<UploadOutlined />}>Upload</Button>
+        </Upload>
         <Button
           style={{
             backgroundColor: "rgb(38, 144, 214)",

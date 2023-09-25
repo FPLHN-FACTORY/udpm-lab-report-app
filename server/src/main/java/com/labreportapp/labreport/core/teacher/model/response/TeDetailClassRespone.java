@@ -43,6 +43,4 @@ public interface TeDetailClassRespone {
     @Value("#{target.allow_use_trello}")
     Integer getAllowUseTrello();
 
-
-
 }

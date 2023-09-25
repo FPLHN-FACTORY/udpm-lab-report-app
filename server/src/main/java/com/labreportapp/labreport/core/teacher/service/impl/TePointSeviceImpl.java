@@ -8,12 +8,15 @@ import com.labreportapp.labreport.core.teacher.model.request.TeFindListPointRequ
 import com.labreportapp.labreport.core.teacher.model.request.TeFindPointRequest;
 import com.labreportapp.labreport.core.teacher.model.response.TeExcelResponseMessage;
 import com.labreportapp.labreport.core.teacher.model.response.TePointRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TePointStudentInforRespone;
 import com.labreportapp.labreport.core.teacher.model.response.TeStudentCallApiResponse;
+import com.labreportapp.labreport.core.teacher.repository.TeClassConfigurationRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeClassRepository;
 import com.labreportapp.labreport.core.teacher.repository.TePointRepository;
 import com.labreportapp.labreport.core.teacher.service.TePointSevice;
 import com.labreportapp.labreport.core.teacher.service.TeStudentClassesService;
 import com.labreportapp.labreport.entity.Class;
+import com.labreportapp.labreport.entity.ClassConfiguration;
 import com.labreportapp.labreport.entity.Point;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Synchronized;
@@ -58,10 +61,59 @@ public class TePointSeviceImpl implements TePointSevice {
     @Autowired
     private TeClassRepository teClassRepository;
 
+    @Autowired
+    private TeClassConfigurationRepository teClassConfigurationRepository;
+
     @Override
-    public List<TePointRespone> getPointStudentById(String idClass) {
+    public List<TePointStudentInforRespone> getPointStudentById(String idClass) {
         List<TePointRespone> list = tePointRepository.getAllPointByIdClass(idClass);
-        return list;
+        List<SimpleResponse> listInfor = teStudentClassesService.searchAllStudentByIdClass(idClass);
+        List<TePointStudentInforRespone> listReturn = new ArrayList<>();
+        ClassConfiguration classConfiguration = teClassConfigurationRepository.findAll().get(0);
+        if (list == null && listInfor == null && classConfiguration == null) {
+            return null;
+        }
+        list.forEach(point -> {
+            listInfor.forEach(infor -> {
+                if (point.getIdStudent().equals(infor.getId())) {
+                    TePointStudentInforRespone student = new TePointStudentInforRespone();
+                    student.setStt(point.getStt());
+                    student.setIdStudentClasses(point.getIdStudentClass());
+                    student.setIdPoint(point.getIdPoint());
+                    student.setIdStudent(point.getIdStudent());
+                    student.setUsername(infor.getUserName());
+                    student.setNameStudent(infor.getName());
+                    if (point.getNameTeam() == null) {
+                        student.setNameTeam("");
+                    } else {
+                        student.setNameTeam(point.getNameTeam());
+                    }
+                    student.setEmailStudent(infor.getEmail());
+                    if (point.getCheckPointPhase1() == null) {
+                        student.setCheckPointPhase1(0.0);
+                    } else {
+                        student.setCheckPointPhase1(point.getCheckPointPhase1());
+                    }
+                    if (point.getCheckPointPhase2() == null) {
+                        student.setCheckPointPhase2(0.0);
+                    } else {
+                        student.setCheckPointPhase2(point.getCheckPointPhase2());
+                    }
+                    if (point.getFinalPoint() == null) {
+                        student.setFinalPoint(0.0);
+                    } else {
+                        student.setFinalPoint(point.getFinalPoint());
+                    }
+                    student.setIdClass(point.getIdClass());
+                    student.setNumberOfSessionAttended(point.getSoBuoiDiHoc());
+                    student.setNumberOfSession(point.getSoBuoiPhaiHoc());
+                    student.setPointMin(classConfiguration.getPointMin());
+                    student.setMaximumNumberOfBreaks(classConfiguration.getMaximumNumberOfBreaks());
+                    listReturn.add(student);
+                }
+            });
+        });
+        return listReturn;
     }
 
     @Override
@@ -73,7 +125,7 @@ public class TePointSeviceImpl implements TePointSevice {
             Optional<TePointRespone> obj = tePointRepository.getPointIdClassIdStudent(item);
             if (obj.isPresent()) {
                 Point point = new Point();
-                point.setId(obj.get().getId());
+                point.setId(obj.get().getIdPoint());
                 point.setStudentId(obj.get().getIdStudent());
                 point.setClassId(obj.get().getIdClass());
                 point.setCheckPointPhase1(item.getCheckPointPhase1());
@@ -174,14 +226,14 @@ public class TePointSeviceImpl implements TePointSevice {
     public ByteArrayOutputStream exportExcel(HttpServletResponse response, String idClass) {
         try (Workbook workbook = new XSSFWorkbook();
              ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-            List<TePointRespone> listPointIdClass = getPointStudentById(idClass);
+            List<TePointStudentInforRespone> listPointIdClass = getPointStudentById(idClass);
             List<TeStudentCallApiResponse> listStudent = teStudentClassesService.searchApiStudentClassesByIdClass(idClass);
             List<TePointExcel> listExcel = new ArrayList<>();
             listPointIdClass.forEach((item1) -> {
                 listStudent.forEach((item2) -> {
                     if (item2.getIdStudent().equals(item1.getIdStudent())) {
                         TePointExcel point = new TePointExcel();
-                        point.setIdPoint(item1.getId());
+                        point.setIdPoint(item1.getIdPoint());
                         point.setIdStudent(item1.getIdStudent());
                         point.setName(item2.getName());
                         point.setEmail(item2.getEmail());

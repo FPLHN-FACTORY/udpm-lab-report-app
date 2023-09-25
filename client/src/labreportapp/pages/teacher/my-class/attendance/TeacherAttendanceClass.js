@@ -31,8 +31,6 @@ const TeacherAttendanceClass = () => {
       await TeacherMeetingAPI.getColumnMeetingByIdClass(idClass).then(
         (response) => {
           setColumn(response.data.data);
-          console.log("locoasmaa");
-          console.log(response.data.data);
         }
       );
     } catch (error) {
@@ -44,8 +42,6 @@ const TeacherAttendanceClass = () => {
       await TeacherAttendanceAPI.getAllAttendanceByIdClass(idClass)
         .then((responese) => {
           setData(responese.data.data);
-          console.log("dâttattattattattattattattattatt");
-          console.log(responese.data.data);
           setLoading(true);
         })
         .catch((err) => {
@@ -184,22 +180,6 @@ const TeacherAttendanceClass = () => {
                 <hr />
               </div>
             </div>
-            {/* <div className="info-team">
-              <div className="group-info">
-                <span
-                  className="group-info-item"
-                  style={{ marginTop: "13px", marginBottom: "15px" }}
-                >
-                  Tên lớp: &nbsp;{classDetail.code}
-                </span>
-                <span
-                  className="group-info-item"
-                  style={{ marginTop: "13px", marginBottom: "15px" }}
-                >
-                  Mô tả: &nbsp;{classDetail.descriptions}
-                </span>
-              </div>
-            </div> */}
             <div style={{ overflowX: "auto" }}>
               <div style={{ margin: "15px 0px 15px 15px" }}>
                 <span style={{ fontSize: "17px", fontWeight: 500 }}>

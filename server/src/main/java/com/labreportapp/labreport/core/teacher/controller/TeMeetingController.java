@@ -1,5 +1,6 @@
 package com.labreportapp.labreport.core.teacher.controller;
 
+import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.core.common.base.ResponseObject;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindMeetingRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindScheduleMeetingClassRequest;
@@ -40,12 +41,6 @@ public class TeMeetingController {
         return new ResponseObject(list);
     }
 
-    @GetMapping("/count")
-    public ResponseObject getCountTeMeeting(final TeFindMeetingRequest request) {
-        Integer count = teMeetingService.countMeetingByClassId(request.getIdClass());
-        return new ResponseObject(count);
-    }
-
     @GetMapping("/detail")
     public ResponseObject getTeMeetingDetail(final TeFindMeetingRequest request) {
         TeMeetingRespone find = teMeetingService.searchMeetingByIdMeeting(request);
@@ -78,7 +73,7 @@ public class TeMeetingController {
 
     @GetMapping("/schedule-time")
     public ResponseObject getScheduleTodayTeacherTime(final TeFindScheduleNowToTime request) {
-        List<TeScheduleMeetingClassRespone> list = teMeetingService.searchScheduleNowToByIdTeacher(request);
+        PageableObject<TeScheduleMeetingClassRespone> list = teMeetingService.searchScheduleNowToByIdTeacher(request);
         return new ResponseObject(list);
     }
 

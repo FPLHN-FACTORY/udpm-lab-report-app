@@ -8,6 +8,8 @@ import com.labreportapp.labreport.core.teacher.model.response.TeMeetingCustomToA
 import com.labreportapp.labreport.core.teacher.model.response.TeMeetingRespone;
 import com.labreportapp.labreport.core.teacher.model.response.TeScheduleMeetingClassRespone;
 import com.labreportapp.labreport.entity.Meeting;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -39,8 +41,6 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                      """, nativeQuery = true)
     List<TeMeetingRespone> findMeetingByIdClass(@Param("req") TeFindMeetingRequest req);
 
-    Integer countMeetingByClassId(String idClass);
-
     @Query(value = """
             SELECT  m.id as id,
             m.name as name,
@@ -56,23 +56,23 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
     Optional<TeMeetingRespone> searchMeetingByIdMeeting(@Param("req") TeFindMeetingRequest req);
 
     @Query(value = """
-             SELECT 
-             m.id AS idMeeting,
-             m.name AS nameMeeting,
-             m.descriptions AS descriptionsMeeting,
-             m.created_date AS createdDate,
-             h.id AS idHomeWork,
-             h.descriptions AS descriptionsHomeWork,
-             n.id AS idNote,
-             n.descriptions AS descriptionsNote,
-             r.id as idReport,
-             r.descriptions AS descriptionsReport
-             FROM meeting m
-              JOIN home_work h ON h.meeting_id = m.id AND h.team_id = :#{#req.idTeam}
-              JOIN note n ON n.meeting_id = m.id AND n.team_id = :#{#req.idTeam}
-              JOIN report r ON r.meeting_id = m.id AND r.team_id = :#{#req.idTeam}
-             WHERE m.id = :#{#req.idMeeting}
-                       """, nativeQuery = true)
+            SELECT 
+            m.id AS idMeeting,
+            m.name AS nameMeeting,
+            m.descriptions AS descriptionsMeeting,
+            m.created_date AS createdDate,
+            h.id AS idHomeWork,
+            h.descriptions AS descriptionsHomeWork,
+            n.id AS idNote,
+            n.descriptions AS descriptionsNote,
+            r.id as idReport,
+            r.descriptions AS descriptionsReport
+            FROM meeting m
+             JOIN home_work h ON h.meeting_id = m.id AND h.team_id = :#{#req.idTeam}
+             JOIN note n ON n.meeting_id = m.id AND n.team_id = :#{#req.idTeam}
+             JOIN report r ON r.meeting_id = m.id AND r.team_id = :#{#req.idTeam}
+            WHERE m.id = :#{#req.idMeeting}
+                      """, nativeQuery = true)
     Optional<TeHomeWorkAndNoteMeetingRespone> searchDetailMeetingTeamByIdMeIdTeam(@Param("req") TeFindMeetingRequest req);
 
     @Query(value = """
@@ -110,7 +110,7 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
     List<TeScheduleMeetingClassRespone> searchScheduleToDayByIdTeacherAndMeetingDate(@Param("req") TeFindScheduleMeetingClassRequest req);
 
     @Query(value = """
-            SELECT 
+            SELECT ROW_NUMBER() OVER(ORDER BY m.meeting_date ASC) AS stt,
              c.id as id_class,
              c.code as code_class,
              m.id as id_meeting,
@@ -152,8 +152,40 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                          AND UNIX_TIMESTAMP(DATE_ADD(CURRENT_DATE(), INTERVAL 30 DAY)) * 1000)
                  )
              ORDER BY m.meeting_date ASC
+            """, countQuery = """
+              SELECT COUNT(m.id)
+                         FROM class c
+                         JOIN meeting m ON m.class_id = c.id
+                         JOIN activity ac ON ac.id = c.activity_id
+                         JOIN level l on l.id = ac.level_id
+                         WHERE c.teacher_id = :#{#req.idTeacher} AND 
+                         (
+                                 (:#{#req.time} LIKE '-7' AND m.meeting_date BETWEEN
+                                     UNIX_TIMESTAMP(DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY)) * 1000
+                                     AND UNIX_TIMESTAMP(CURRENT_DATE()) * 1000)
+                                 OR
+                                  (:#{#req.time} LIKE '-14' AND m.meeting_date BETWEEN
+                                     UNIX_TIMESTAMP(DATE_SUB(CURRENT_DATE(), INTERVAL 14 DAY)) * 1000
+                                     AND UNIX_TIMESTAMP(CURRENT_DATE()) * 1000)
+                                      OR
+                                  (:#{#req.time} LIKE '-30' AND m.meeting_date BETWEEN
+                                     UNIX_TIMESTAMP(DATE_SUB(CURRENT_DATE(), INTERVAL 30 DAY)) * 1000
+                                     AND UNIX_TIMESTAMP(CURRENT_DATE()) * 1000)
+                                 OR
+                                 (:#{#req.time} LIKE '7' AND m.meeting_date BETWEEN
+                                     UNIX_TIMESTAMP(CURRENT_DATE()) * 1000
+                                     AND UNIX_TIMESTAMP(DATE_ADD(CURRENT_DATE(), INTERVAL 7 DAY)) * 1000)
+                                      OR
+                                 (:#{#req.time} LIKE '14' AND m.meeting_date BETWEEN
+                                     UNIX_TIMESTAMP(CURRENT_DATE()) * 1000
+                                     AND UNIX_TIMESTAMP(DATE_ADD(CURRENT_DATE(), INTERVAL 14 DAY)) * 1000)
+                                      OR
+                                 (:#{#req.time} LIKE '30' AND m.meeting_date BETWEEN
+                                     UNIX_TIMESTAMP(CURRENT_DATE()) * 1000
+                                     AND UNIX_TIMESTAMP(DATE_ADD(CURRENT_DATE(), INTERVAL 30 DAY)) * 1000)
+                             )
             """, nativeQuery = true)
-    List<TeScheduleMeetingClassRespone> searchScheduleNowToTimeByIdTeacher(@Param("req") TeFindScheduleNowToTime req);
+    Page<TeScheduleMeetingClassRespone> searchScheduleNowToTimeByIdTeacher(@Param("req") TeFindScheduleNowToTime req, Pageable pageable);
 
     Optional<Meeting> findMeetingById(String id);
 

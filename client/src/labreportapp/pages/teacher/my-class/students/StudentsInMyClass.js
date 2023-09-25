@@ -44,8 +44,6 @@ const StudentsInMyClass = () => {
       await TeacherStudentClassesAPI.getStudentInClasses(id).then(
         (responese) => {
           dispatch(SetStudentClasses(responese.data.data));
-          console.log("================================");
-          console.log(responese.data.data);
           setLoading(true);
         }
       );
@@ -140,7 +138,6 @@ const StudentsInMyClass = () => {
           return <span style={{ color: "red" }}>HL</span>;
         }
       },
-      width: "120px",
     },
   ];
   return (

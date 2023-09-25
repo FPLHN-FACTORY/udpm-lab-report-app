@@ -1,12 +1,12 @@
 import "./styletablePoint.css";
-import { Button, Empty, Input, Table, message } from "antd";
+import { Button, Empty, Input, Table, Tag, message } from "antd";
 import { useAppDispatch, useAppSelector } from "../../../../../app/hook";
 import {
   GetPoint,
   SetPoint,
 } from "../../../../../app/teacher/point/tePointSlice.reduce";
 import { useState } from "react";
-import { SearchOutlined } from "@ant-design/icons";
+import { CloseCircleOutlined, SearchOutlined } from "@ant-design/icons";
 
 const TablePoint = () => {
   const [phase1, setPhase1] = useState(0);
@@ -64,12 +64,60 @@ const TablePoint = () => {
       title: "#",
       dataIndex: "stt",
       key: "stt",
-      render: (text, record, index) => <span>{index + 1}</span>,
+      sorter: (a, b) => a.stt - b.stt,
+    },
+    {
+      title: "Nhóm",
+      dataIndex: "nameTeam",
+      key: "nameTeam",
+      render: (text, record) => {
+        if (text === "") {
+          return <Tag color="processing">Chưa vào nhóm</Tag>;
+        } else {
+          return <span>{text}</span>;
+        }
+      },
+      filterDropdown: ({
+        setSelectedKeys,
+        selectedKeys,
+        confirm,
+        clearFilters,
+      }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="Tìm kiếm"
+            value={selectedKeys[0]}
+            onChange={(e) =>
+              setSelectedKeys(e.target.value ? [e.target.value] : [])
+            }
+            onPressEnter={confirm}
+            style={{ width: 188, marginBottom: 8, display: "block" }}
+          />
+          <Button
+            type="primary"
+            className="btn_search_member"
+            onClick={confirm}
+            size="small"
+            style={{ width: 90, marginRight: 8 }}
+          >
+            Tìm
+          </Button>
+          <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
+            Đặt lại
+          </Button>
+        </div>
+      ),
+      filterIcon: (filtered) => (
+        <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+      ),
+      onFilter: (value, record) =>
+        record.nameTeam.toLowerCase().includes(value.toLowerCase()),
+      sorter: (a, b) => a.nameTeam.localeCompare(b.nameTeam),
     },
     {
       title: "Tên sinh viên",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "nameStudent",
+      key: "nameStudent",
       filterDropdown: ({
         setSelectedKeys,
         selectedKeys,
@@ -104,13 +152,13 @@ const TablePoint = () => {
         <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
       ),
       onFilter: (value, record) =>
-        record.name.toLowerCase().includes(value.toLowerCase()),
-      sorter: (a, b) => a.name.localeCompare(b.name),
+        record.nameStudent.toLowerCase().includes(value.toLowerCase()),
+      sorter: (a, b) => a.nameStudent.localeCompare(b.nameStudent),
     },
     {
       title: "Email",
-      dataIndex: "email",
-      key: "email",
+      dataIndex: "emailStudent",
+      key: "emailStudent",
       filterDropdown: ({
         setSelectedKeys,
         selectedKeys,
@@ -145,14 +193,17 @@ const TablePoint = () => {
         <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
       ),
       onFilter: (value, record) =>
-        record.email.toLowerCase().includes(value.toLowerCase()),
-      sorter: (a, b) => a.email.localeCompare(b.email),
+        record.emailStudent.toLowerCase().includes(value.toLowerCase()),
+      sorter: (a, b) => a.emailStudent.localeCompare(b.emailStudent),
     },
     {
       title: "Điểm giai đoạn 1",
       dataIndex: "checkPointPhase1",
       key: "checkPointPhase1",
       render: (text, record) => {
+        if (text == null || text === "") {
+          text = 0;
+        }
         return (
           <Input
             placeholder="Nhập điểm"
@@ -191,6 +242,9 @@ const TablePoint = () => {
       dataIndex: "checkPointPhase2",
       key: "checkPointPhase2",
       render: (text, record) => {
+        if (text == null || text === "") {
+          text = 0;
+        }
         return (
           <Input
             placeholder="Nhập điểm"
@@ -229,21 +283,82 @@ const TablePoint = () => {
       dataIndex: "finalPoint",
       key: "finalPoint",
       render: (text, record) => {
+        if (
+          (record.checkPointPhase1 !== "" && record.checkPointPhase2 !== "") ||
+          (record.checkPointPhase1 !== null && record.checkPointPhase2 !== null)
+        ) {
+          return (
+            <div style={{ textAlign: "center" }}>
+              {parseFloat(
+                (parseFloat(record.checkPointPhase1) +
+                  parseFloat(record.checkPointPhase2)) /
+                  2
+              ).toLocaleString("de-DE")}
+            </div>
+          );
+        } else {
+          return <div tyle={{ textAlign: "center" }}>0</div>;
+        }
+      },
+    },
+    {
+      title: "Điểm",
+      dataIndex: "statusPointCustome",
+      key: "statusPointCustome",
+      render: (text, record) => {
         return (
           <span>
-            {parseFloat(
-              (parseFloat(record.checkPointPhase1) +
-                parseFloat(record.checkPointPhase2)) /
-                2
-            ).toLocaleString("de-DE")}
+            <Tag icon={<CloseCircleOutlined />} color="error">
+              Không cho phép
+            </Tag>
           </span>
         );
       },
     },
     {
+      title: "Số buổi đi",
+      dataIndex: "numberOfSessionAttended",
+      key: "numberOfSessionAttended",
+      // render: (text, record) => {
+      //   return (
+      //     <span>
+      //       {parseFloat(
+      //         (parseFloat(record.checkPointPhase1) +
+      //           parseFloat(record.checkPointPhase2)) /
+      //           2
+      //       ) >= 5 ? (
+      //         <p style={{ color: "green" }}>Đạt</p>
+      //       ) : (
+      //         <p style={{ color: "red" }}>Trượt</p>
+      //       )}
+      //     </span>
+      //   );
+      // },
+    },
+    {
+      title: "Số buổi học",
+      dataIndex: "numberOfSession",
+      key: "numberOfSession",
+      // render: (text, record) => {
+      //   return (
+      //     <span>
+      //       {parseFloat(
+      //         (parseFloat(record.checkPointPhase1) +
+      //           parseFloat(record.checkPointPhase2)) /
+      //           2
+      //       ) >= 5 ? (
+      //         <p style={{ color: "green" }}>Đạt</p>
+      //       ) : (
+      //         <p style={{ color: "red" }}>Trượt</p>
+      //       )}
+      //     </span>
+      //   );
+      // },
+    },
+    {
       title: "Trạng thái",
-      dataIndex: "statusCustome",
-      key: "statusCustome",
+      dataIndex: "statusAll",
+      key: "statusAll",
       render: (text, record) => {
         return (
           <span>

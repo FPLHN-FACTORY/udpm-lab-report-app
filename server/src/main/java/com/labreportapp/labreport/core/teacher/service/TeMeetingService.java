@@ -1,10 +1,13 @@
 package com.labreportapp.labreport.core.teacher.service;
 
+import com.labreportapp.labreport.core.common.base.PageableObject;
+import com.labreportapp.labreport.core.teacher.model.request.TeFindClassRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindMeetingRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindScheduleMeetingClassRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindScheduleNowToTime;
 import com.labreportapp.labreport.core.teacher.model.request.TeScheduleUpdateMeetingRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeUpdateHomeWorkAndNoteInMeetingRequest;
+import com.labreportapp.labreport.core.teacher.model.response.TeClassResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeHomeWorkAndNoteMeetingRespone;
 import com.labreportapp.labreport.core.teacher.model.response.TeMeetingCustomRespone;
 import com.labreportapp.labreport.core.teacher.model.response.TeMeetingCustomToAttendanceRespone;
@@ -22,8 +25,6 @@ public interface TeMeetingService {
 
     List<TeMeetingCustomRespone> searchMeetingByIdClass(final TeFindMeetingRequest request);
 
-    Integer countMeetingByClassId(String idClass);
-
     TeMeetingRespone searchMeetingByIdMeeting(final TeFindMeetingRequest request);
 
     TeMeetingRespone searchMeetingAndCheckAttendanceByIdMeeting(final TeFindMeetingRequest request);
@@ -34,7 +35,7 @@ public interface TeMeetingService {
 
     List<TeScheduleMeetingClassRespone> searchScheduleToDayByIdTeacherAndMeetingDate(final TeFindScheduleMeetingClassRequest request);
 
-    List<TeScheduleMeetingClassRespone> searchScheduleNowToByIdTeacher(final TeFindScheduleNowToTime request);
+    PageableObject<TeScheduleMeetingClassRespone> searchScheduleNowToByIdTeacher(final TeFindScheduleNowToTime request);
 
     List<TeScheduleMeetingClassRespone> updateAddressMeeting(@RequestBody TeScheduleUpdateMeetingRequest request);
 

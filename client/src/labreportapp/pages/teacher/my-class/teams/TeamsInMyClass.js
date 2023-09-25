@@ -148,6 +148,14 @@ const TeamsInMyClass = () => {
     setObjeactTeam({});
     setShowDetailModal(false);
   };
+  const convertLongToDate = (dateLong) => {
+    const date = new Date(dateLong);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    const format = `${day}/${month}/${year}`;
+    return format;
+  };
   const dataStudentClasses = useAppSelector(GetStudentClasses);
   const data = useAppSelector(GetTeams);
   const columns = [
@@ -186,11 +194,7 @@ const TeamsInMyClass = () => {
       key: "createdDate",
       sorter: (a, b) => a.createdDate - b.createdDate,
       render: (text, record) => {
-        const startTime = new Date(record.createdDate);
-        const formattedStartTime = `${startTime.getDate()}/${
-          startTime.getMonth() + 1
-        }/${startTime.getFullYear()}`;
-        return <span>{formattedStartTime}</span>;
+        return <span>{convertLongToDate(text)}</span>;
       },
     },
     {

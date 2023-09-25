@@ -5,6 +5,7 @@ import com.labreportapp.labreport.core.teacher.excel.TeExcelImportService;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindListPointRequest;
 import com.labreportapp.labreport.core.teacher.model.response.TeExcelResponseMessage;
 import com.labreportapp.labreport.core.teacher.model.response.TePointRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TePointStudentInforRespone;
 import com.labreportapp.labreport.core.teacher.service.TePointSevice;
 import com.labreportapp.labreport.entity.Point;
 import jakarta.servlet.http.HttpServletResponse;
@@ -43,7 +44,7 @@ public class TePointController {
 
     @GetMapping("/get/{idClass}")
     public ResponseObject getPointByIdClass(@PathVariable("idClass") String idClass) {
-        List<TePointRespone> list = tePointSevice.getPointStudentById(idClass);
+        List<TePointStudentInforRespone> list = tePointSevice.getPointStudentById(idClass);
         return new ResponseObject(list);
     }
 

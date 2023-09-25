@@ -35,90 +35,30 @@ const TeacherPointMyClass = () => {
     fetchData(idClass);
   }, []);
   const fetchData = async (idClass) => {
-    await Promise.all([
-      await featchStudentClass(idClass),
-      await featchClass(idClass),
-      await featchPoint(idClass),
-    ]);
+    await Promise.all([await featchClass(idClass), await featchPoint(idClass)]);
   };
   const featchPoint = async (idClass) => {
     try {
       await TeacherPointAPI.getPointByIdClass(idClass).then((response) => {
-        if (response.data.data.length >= 1) {
-          setCheckPoint(true);
-          setListPoint(response.data.data);
-          featchStudentPoint(idClass);
-        } else {
-          setCheckPoint(false);
-          featchStudentClass(idClass);
-          featchStudentPoint(idClass);
-        }
+        setListPoint(response.data.data);
+        dispatch(SetPoint(response.data.data));
+        console.log("================================================");
+        console.log(response.data.data);
+        setLoading(true);
       });
     } catch (error) {
-      console.log(error);
-    }
-  };
-  const featchStudentClass = async (idClass) => {
-    try {
-      await TeacherStudentClassesAPI.getStudentInClasses(idClass).then(
-        (responese) => {
-          const listAPI = responese.data.data.map((item) => {
-            return { ...item };
-          });
-          setListStudentClassAPI(listAPI);
-        }
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const featchStudentPoint = async (idClass) => {
-    try {
-      if (checkPoint) {
-        const listShowTable = listStudentClassAPI.map((item1) => {
-          const matchedObject = listPoint.find(
-            (item2) =>
-              item2.idStudent === item1.idStudent && item2.idClass === idClass
-          );
-          return {
-            ...item1,
-            ...matchedObject,
-            finalPoint:
-              parseFloat(
-                parseFloat(matchedObject.checkPointPhase1) +
-                  parseFloat(matchedObject.checkPointPhase2)
-              ) / 2,
-          };
-        });
-        dispatch(SetPoint(listShowTable));
-      } else {
-        const listShowTable = listStudentClassAPI.map((item1) => {
-          return {
-            ...item1,
-            idClass: idClass,
-            checkPointPhase1: parseFloat("0"),
-            checkPointPhase2: parseFloat("0"),
-            finalPoint: parseFloat("0"),
-          };
-        });
-        dispatch(SetPoint(listShowTable));
-      }
-      if (loadingData === true) {
-        setLoading(true);
-      }
-      setLoadingData(true);
-    } catch (error) {
-      console.log(error);
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
   const featchClass = async (idClass) => {
     try {
+      setLoading(false);
       await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
         setClassDetail(responese.data.data);
         document.title = "Quản lý điểm | " + responese.data.data.code;
       });
     } catch (error) {
-      console.log(error);
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
   useEffect(() => {
@@ -136,7 +76,7 @@ const TeacherPointMyClass = () => {
         toast.success("Lưu bảng điểm thành công !");
       });
     } catch (error) {
-      console.log(error);
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
   const data = useAppSelector(GetPoint);

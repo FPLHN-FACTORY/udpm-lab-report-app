@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Value;
  */
 public interface TeScheduleMeetingClassRespone {
 
+    Integer getStt();
+
     @Value("#{target.id_class}")
     String getIdClass();
 

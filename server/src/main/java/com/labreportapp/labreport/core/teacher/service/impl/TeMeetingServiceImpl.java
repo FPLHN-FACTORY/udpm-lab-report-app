@@ -1,5 +1,6 @@
 package com.labreportapp.labreport.core.teacher.service.impl;
 
+import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.core.common.response.SimpleResponse;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindMeetingRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindScheduleMeetingClassRequest;
@@ -27,6 +28,9 @@ import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import lombok.Synchronized;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -89,11 +93,6 @@ public class TeMeetingServiceImpl implements TeMeetingService {
             });
         });
         return listReturn;
-    }
-
-    @Override
-    public Integer countMeetingByClassId(String idClass) {
-        return teMeetingRepository.countMeetingByClassId(idClass);
     }
 
     @Override
@@ -225,7 +224,7 @@ public class TeMeetingServiceImpl implements TeMeetingService {
                 throw new RestApiException(Message.MEETING_EDIT_ATTENDANCE_FAILD);
             } else {
                 return meetingFind;
-            }
+         }
         }
     }
 
@@ -296,12 +295,13 @@ public class TeMeetingServiceImpl implements TeMeetingService {
     }
 
     @Override
-    public List<TeScheduleMeetingClassRespone> searchScheduleNowToByIdTeacher(TeFindScheduleNowToTime request) {
-        List<TeScheduleMeetingClassRespone> list = teMeetingRepository.searchScheduleNowToTimeByIdTeacher(request);
-        if (list.size() == 0) {
+    public PageableObject<TeScheduleMeetingClassRespone> searchScheduleNowToByIdTeacher(TeFindScheduleNowToTime request) {
+        Pageable pageable = PageRequest.of(request.getPage() - 1, request.getSize());
+        Page<TeScheduleMeetingClassRespone> list = teMeetingRepository.searchScheduleNowToTimeByIdTeacher(request, pageable);
+        if (list == null) {
             return null;
         }
-        return list;
+        return new PageableObject<>(list);
     }
 
     @Override

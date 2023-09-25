@@ -71,10 +71,10 @@ export const convertMeetingPeriodToTime = (meetingPeriod) => {
 
   switch (meetingPeriod) {
     case 0:
-      meetingPeriodStr = "7:15 - 9:15";
+      meetingPeriodStr = "07:15 - 09:15";
       break;
     case 1:
-      meetingPeriodStr = "9:25 - 11:25";
+      meetingPeriodStr = "09:25 - 11:25";
       break;
     case 2:
       meetingPeriodStr = "12:00 - 14:00";
@@ -95,7 +95,7 @@ export const convertMeetingPeriodToTime = (meetingPeriod) => {
       meetingPeriodStr = "22:50 - 00:50";
       break;
     case 8:
-      meetingPeriodStr = "01:00 - 3:00";
+      meetingPeriodStr = "01:00 - 03:00";
       break;
     case 9:
       meetingPeriodStr = "03:10 - 05:10";

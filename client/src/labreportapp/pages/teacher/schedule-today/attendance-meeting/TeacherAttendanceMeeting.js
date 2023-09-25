@@ -153,7 +153,16 @@ const TeacherAttendanceMeeting = () => {
       let dataFind = { listAttendance: data, idMeeting: idMeeting };
       await TeacherAttendanceAPI.createOrUpdate(dataFind).then((respone) => {
         dispatch(UpdateAttendanceMeeting(respone.data.data.listAttendance));
-        toast.success(respone.data.data.message);
+        console.log(
+          "========================== " + respone.data.data.message.length
+        );
+        let className =
+          respone.data.data.message.length < 27
+            ? "custom-toast-short"
+            : "custom-toast-long";
+        toast.success(respone.data.data.message, {
+          className: className,
+        });
       });
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");

@@ -171,6 +171,14 @@ const TeacherMyClass = () => {
     setLevelSearch("");
     setClear(true);
   };
+  const convertLongToDate = (dateLong) => {
+    const date = new Date(dateLong);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    const format = `${day}/${month}/${year}`;
+    return format;
+  };
 
   const data = useAppSelector(GetTeacherMyClass);
   const columns = [
@@ -185,7 +193,6 @@ const TeacherMyClass = () => {
       dataIndex: "code",
       key: "code",
       sorter: (a, b) => a.code.localeCompare(b.code),
-      align: "center",
     },
     {
       title: "Thời gian bắt đầu",
@@ -193,11 +200,7 @@ const TeacherMyClass = () => {
       key: "startTime",
       sorter: (a, b) => a.startTime - b.startTime,
       render: (text, record) => {
-        const startTime = new Date(record.startTime);
-        const formattedStartTime = `${startTime.getDate()}/${
-          startTime.getMonth() + 1
-        }/${startTime.getFullYear()}`;
-        return <span>{formattedStartTime}</span>;
+        return <span>{convertLongToDate(text)}</span>;
       },
       align: "center",
     },
