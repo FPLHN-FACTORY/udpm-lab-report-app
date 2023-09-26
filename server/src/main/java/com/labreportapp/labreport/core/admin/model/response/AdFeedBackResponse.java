@@ -7,12 +7,14 @@ import org.springframework.beans.factory.annotation.Value;
  */
 public interface AdFeedBackResponse {
     @Value("#{target.stt}")
-    Integer stt();
+    Integer getStt();
 
     @Value("#{target.descriptions}")
-    String getDescriptions();
+    String getDescription();
 
-    @Value("#{target.student_id}")
-    String getStudent_id();
+    @Value("#{target.idStudent}")
+    String getIdStudent();
 
+    @Value("#{target.class_id}")
+    String getIdClass();
 }

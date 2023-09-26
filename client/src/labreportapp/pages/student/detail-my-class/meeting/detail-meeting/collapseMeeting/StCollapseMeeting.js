@@ -171,12 +171,12 @@ const CollapseMeeting = ({ items }) => {
                 style={{ marginLeft: "40px", marginRight: "40px" }}
               >
                 <Row gutter={16}>
-                  <Col span={12} style={{ marginTop: "10px" }}>
+                  <Col span={8} style={{ marginTop: "10px" }}>
                     {" "}
-                    <span style={{ color: "black" }}>Nhận xét:</span>
+                    <span  className="title-main">Nhận xét:</span>
                     <TextArea
                       style={{ marginTop: "10px" }}
-                      rows={4}
+                      rows={10}
                       value={descriptionsNote}
                       onChange={(e) => setDescriptionsNote(e.target.value)}
                       onClick={(e) => {
@@ -185,18 +185,16 @@ const CollapseMeeting = ({ items }) => {
                       }}
                     />
                   </Col>
-                  <Col span={12} style={{ marginTop: "10px" }}>
+                  <Col span={8} style={{ marginTop: "10px" }}>
                     {" "}
                     <span
-                      style={{
-                        color: "black",
-                      }}
+                      className="title-main"
                     >
                       Bài tập về nhà:
                     </span>
                     <TextArea
                       style={{ marginTop: "10px" }}
-                      rows={4}
+                      rows={10}
                       value={descriptionsHomeWork}
                       onChange={(e) => setDescriptionsHomeWork(e.target.value)}
                       onClick={(e) => {
@@ -205,18 +203,16 @@ const CollapseMeeting = ({ items }) => {
                       }}
                     />
                   </Col>
-                  <Col span={12} style={{ marginTop: "15px" }}>
+                  <Col span={8} style={{ marginTop: "15px" }}>
                     {" "}
                     <span
-                      style={{
-                        color: "black",
-                      }}
+                      className="title-main"
                     >
                       Báo cáo:
                     </span>
                     <TextArea
                       style={{ marginTop: "10px" }}
-                      rows={4}
+                      rows={10}
                       value={descriptionsReport}
                       // onChange={(e) => setDescriptionsHomeWork(e.target.value)}
                       onChange={(e) => setDescriptionsReport(e.target.value)}
@@ -226,22 +222,7 @@ const CollapseMeeting = ({ items }) => {
                     }}
                     />
                   </Col>
-                  <Col span={12} style={{ marginTop: "15px" }}>
-                    {" "}
-                    <span
-                      style={{
-                        color: "black",
-                      }}
-                    >
-                      Template báo cáo:
-                    </span>
-                    <TextArea
-                      style={{ marginTop: "10px" }}
-                      rows={4}
-                      value={template.descriptions}
-                      readOnly
-                    />
-                  </Col>
+                  
                   {edit && (
                     <>
                       <div
@@ -274,6 +255,12 @@ const CollapseMeeting = ({ items }) => {
                     </>
                   )}
                 </Row>
+                <Row gutter={16}>
+                <Col span={24}>
+                  <span className="title-main">Template mẫu báo cáo:</span>
+                  <TextArea rows={5} value={template.descriptions} />
+                </Col>
+              </Row>
               </div>
             ) : (
               <div
@@ -281,37 +268,53 @@ const CollapseMeeting = ({ items }) => {
                 style={{ marginLeft: "40px", marginRight: "40px" }}
               >
                 <Row gutter={16}>
-                  <Col span={12}>
+                  <Col span={8}>
                     {" "}
-                    <span style={{ color: "black", fontWeight: "bold" }}>
+                    <span  className="title-main">
                       Nhận xét:
                     </span>
                     <TextArea
                       style={{ marginTop: "10px" }}
-                      rows={4}
+                      rows={10}
                       value={descriptionsNote}
                       readOnly
                     />
                   </Col>
-                  <Col span={12}>
+                  <Col span={8}>
                     {" "}
                     <span
-                      style={{
-                        color: "black",
-                        fontFamily: "unset",
-                        fontWeight: "bold",
-                      }}
+                       className="title-main"
                     >
                       Bài tập về nhà:
                     </span>
                     <TextArea
                       style={{ marginTop: "10px" }}
-                      rows={4}
+                      rows={10}
                       value={descriptionsHomeWork}
                       readOnly
                     />
                   </Col>
+                  <Col span={8} style={{ marginTop: "15px" }}>
+                    {" "}
+                    <span
+                      className="title-main"
+                    >
+                      Báo cáo:
+                    </span>
+                    <TextArea
+                      style={{ marginTop: "10px" }}
+                      rows={10}
+                      value={descriptionsReport}
+                      readOnly
+                    />
+                  </Col>
                 </Row>
+                <Row gutter={16}>
+                <Col span={24}>
+                  <span className="title-main">Template mẫu báo cáo:</span>
+                  <TextArea rows={5} value={template.descriptions} />
+                </Col>
+              </Row>
               </div>
             )}
           </>

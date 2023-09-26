@@ -1,6 +1,6 @@
 package com.labreportapp.labreport.core.admin.controller;
 
-import com.labreportapp.labreport.core.admin.model.request.AdFeedBackRequest;
+
 import com.labreportapp.labreport.core.admin.model.response.AdFeedBackResponse;
 import com.labreportapp.labreport.core.admin.service.AdFeedBackService;
 import com.labreportapp.labreport.core.common.base.ResponseObject;
@@ -22,6 +22,7 @@ public class AdFeedBackController {
     @GetMapping("/get/{idClass}")
     public ResponseObject getFeedBackByIdClass(@PathVariable("idClass") String idClass) {
         List<AdFeedBackResponse> list = adFeedBackSevice.searchFeedBack(idClass);
+        System.out.println(list);
         return new ResponseObject(list);
     }
 }
