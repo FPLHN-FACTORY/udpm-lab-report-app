@@ -7,6 +7,7 @@ import com.labreportapp.labreport.core.admin.model.response.AdActivityClassRespo
 import com.labreportapp.labreport.core.admin.model.response.AdListClassCustomResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdSemesterAcResponse;
 import com.labreportapp.labreport.core.admin.service.AdClassService;
+import com.labreportapp.labreport.core.common.base.ImportExcelResponse;
 import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.core.common.base.ResponseObject;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,9 +16,19 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -106,5 +117,11 @@ public class AdClassController {
     @PostMapping("/random-class")
     public ResponseObject randomClass(@RequestBody AdRandomClassRequest request) {
         return new ResponseObject(service.randomClass(request));
+    }
+
+    @PostMapping("/import-excel/{idSemester}")
+    public ResponseObject importListExcel(@RequestParam("multipartFile") MultipartFile multipartFile, @PathVariable("idSemester") String idSemester) throws IOException {
+        ImportExcelResponse importExcelResponse = service.importExcelClass(multipartFile, idSemester);
+        return new ResponseObject(importExcelResponse);
     }
 }

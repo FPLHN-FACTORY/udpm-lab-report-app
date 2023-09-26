@@ -138,4 +138,15 @@ export class ClassAPI {
       responseType: "blob",
     });
   }
+
+  static importExcel = (formData, idSemester) => {
+    return request({
+      method: "POST",
+      url: `/admin/class-managerment/import-excel/` + idSemester,
+      data: formData,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  };
 }

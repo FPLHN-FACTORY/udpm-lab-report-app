@@ -248,7 +248,7 @@ const LevelManagement = () => {
           </div>
         </div>
         <div>
-          <Table
+          <Table  
             dataSource={data}
             rowKey="id"
             columns={columns}

@@ -477,9 +477,15 @@ const MeetingManagment = () => {
                                 <span style={{ color: "black" }}>Offline </span>
                               )}{" "}
                               -{" "}
-                              <span style={{ color: "red" }}>
-                                {item.userNameTeacher}{" "}
-                              </span>{" "}
+                              {item.userNameTeacher != null ? (
+                                <span style={{ color: "red" }}>
+                                  {item.userNameTeacher}
+                                </span>
+                              ) : (
+                                <span style={{ color: "red" }}>
+                                  Chưa có giảng viên
+                                </span>
+                              )}
                               {item.soDiemDanh != null && (
                                 <span style={{ fontSize: "15px" }}>
                                   - Sĩ số điểm danh:{" "}

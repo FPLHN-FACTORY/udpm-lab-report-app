@@ -293,8 +293,8 @@ const ModalCreateProject = ({ visible, onCancel }) => {
                 <span className="error">{errorClassPeriod}</span>
               </Col>
               <Col span={12} style={{ paddingRight: "10px" }}>
-                <span style={{ color: "red" }}>(*) </span> Quyền giảng viên:{" "}
-                <br />
+                <span style={{ color: "red" }}>(*) </span> Quyền giảng viên
+                chỉnh sửa: <br />
                 <Select
                   showSearch
                   style={{ width: "100%" }}

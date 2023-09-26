@@ -44,6 +44,7 @@ import {
 } from "../../../app/admin/ClassManager.reducer";
 import LoadingIndicatorNoOverlay from "../../../helper/loadingNoOverlay";
 import ModalRandomClass from "./random-class/ModalRandomClass";
+import ModalImportClass from "./import-class/ModalImportClass";
 
 const ClassManagement = () => {
   const { Option } = Select;
@@ -457,6 +458,16 @@ const ClassManagement = () => {
     setShowRandomModal(false);
   };
 
+  const [showImportModal, setShowImportModal] = useState(false);
+
+  const handleClickModalImportClass = () => {
+    setShowImportModal(true);
+  };
+
+  const handleCancelModalImportClass = () => {
+    setShowImportModal(false);
+  };
+
   return (
     <div className="class_management">
       {loading && <LoadingIndicator />}
@@ -716,6 +727,7 @@ const ClassManagement = () => {
                 backgroundColor: "rgb(55, 137, 220)",
                 marginRight: "5px",
               }}
+              onClick={handleClickModalImportClass}
             >
               <FontAwesomeIcon
                 icon={faUpload}
@@ -853,6 +865,11 @@ const ClassManagement = () => {
       <ModalRandomClass
         visible={showRandomModal}
         onCancel={handleCancelModalRandom}
+        fetchData={featchAllMyClass}
+      />
+      <ModalImportClass
+        visible={showImportModal}
+        onCancel={handleCancelModalImportClass}
         fetchData={featchAllMyClass}
       />
     </div>

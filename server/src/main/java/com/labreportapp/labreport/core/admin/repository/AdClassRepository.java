@@ -1,7 +1,12 @@
 package com.labreportapp.labreport.core.admin.repository;
 
 import com.labreportapp.labreport.core.admin.model.request.AdFindClassRequest;
-import com.labreportapp.labreport.core.admin.model.response.*;
+import com.labreportapp.labreport.core.admin.model.response.AdActivityClassResponse;
+import com.labreportapp.labreport.core.admin.model.response.AdClassResponse;
+import com.labreportapp.labreport.core.admin.model.response.AdDetailClassRespone;
+import com.labreportapp.labreport.core.admin.model.response.AdExportExcelClassResponse;
+import com.labreportapp.labreport.core.admin.model.response.AdSemesterAcResponse;
+import com.labreportapp.labreport.entity.Class;
 import com.labreportapp.labreport.repository.ClassRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,10 +24,17 @@ import java.util.Optional;
 public interface AdClassRepository extends ClassRepository {
 
     @Query(value = """ 
-            select a.code,a.start_time
-            ,a.class_period,a.class_size,a.teacher_id,b.name as nameActivity 
-              from class a join activity b on a.activity_id=b.id""", nativeQuery = true)
+            select a.code,a.start_time, 
+            a.class_period, a.class_size, a.teacher_id, b.name as nameActivity 
+            from class a join activity b on a.activity_id = b.id
+            """, nativeQuery = true)
     List<AdClassResponse> getAllClass();
+
+    @Query(value = """ 
+            SELECT a.* FROM class a JOIN activity b ON a.activity_id = b.id
+            JOIN semester c ON c.id = b.semester_id WHERE c.id = :idSemester
+            """, nativeQuery = true)
+    List<Class> getAllClassEntity(@Param("idSemester") String idSemester);
 
     @Query(value = """ 
               select a.code,a.start_time

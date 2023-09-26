@@ -205,7 +205,7 @@ const PopupFilter = ({ position, onClose }) => {
 
   useEffect(() => {
     setListMemberNoUserCurrent(
-      memberProject.filter((item) => item.id !== sinhVienCurrent.id)
+      memberProject.filter((item) => item.memberId !== sinhVienCurrent.id)
     );
   }, []);
 
@@ -297,7 +297,7 @@ const PopupFilter = ({ position, onClose }) => {
       const memberIdList = listMemberNoUserCurrent
         .filter((member) => member !== sinhVienCurrent.id)
         .map((member) => member.memberId);
-
+      console.log(memberIdList);
       setValueMultiMember(memberIdList);
     } else {
       setValueMultiMember([]);
@@ -441,7 +441,7 @@ const PopupFilter = ({ position, onClose }) => {
                 >
                   {listMemberNoUserCurrent.map((item) => (
                     <Option
-                      value={item.id}
+                      value={item.memberId}
                       key={item.id}
                       className="item_member_filter_option"
                     >
