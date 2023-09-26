@@ -249,7 +249,6 @@ const DetailMeetingAttendance = () => {
                 <div
                   style={{
                     lineHeight: "42px",
-
                     float: "right",
                     color: "red",
                   }}
