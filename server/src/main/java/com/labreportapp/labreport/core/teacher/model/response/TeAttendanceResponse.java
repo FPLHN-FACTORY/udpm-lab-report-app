@@ -25,4 +25,7 @@ public interface TeAttendanceResponse {
     @Value("#{target.meeting_date}")
     Long getMeetingDate();
 
+    @Value("#{target.notes}")
+    String getNotes();
+
 }

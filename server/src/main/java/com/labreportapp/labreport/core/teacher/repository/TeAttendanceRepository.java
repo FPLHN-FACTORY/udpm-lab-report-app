@@ -21,6 +21,7 @@ public interface TeAttendanceRepository extends JpaRepository<Attendance, String
             SELECT a.id as idAttendance,
             a.name as name_meeting,
             a.status as status,
+            a.notes as notes,
             a.student_id as student_id,
             a.meeting_id as meeting_id,
             m.meeting_date as meeting_date
@@ -28,12 +29,13 @@ public interface TeAttendanceRepository extends JpaRepository<Attendance, String
             JOIN meeting m ON m.id = a.meeting_id
             WHERE a.meeting_id = :#{#idMeeting}
             """, nativeQuery = true)
-    List<TeAttendanceResponse> findAttendanceByIdMeetgId(@Param("idMeeting") String idMeeting);
+    List<TeAttendanceResponse> findListAttendanceByIdMeeting(@Param("idMeeting") String idMeeting);
 
     @Query(value = """
             SELECT a.id as idAttendance,
             a.name as name_meeting,
             a.status as status,
+            a.notes as notes,
             a.student_id as student_id,
             a.meeting_id as meeting_id,
             m.meeting_date as meeting_date
@@ -47,6 +49,7 @@ public interface TeAttendanceRepository extends JpaRepository<Attendance, String
             SELECT a.id as idAttendance,
             a.name as name_meeting,
             a.status as status,
+            a.notes as notes,
             a.student_id as student_id,
             a.meeting_id as meeting_id,
             m.meeting_date as meeting_date

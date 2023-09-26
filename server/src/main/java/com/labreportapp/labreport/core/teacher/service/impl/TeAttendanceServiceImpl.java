@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
 public class TeAttendanceServiceImpl implements TeAttendanceSevice {
 
     @Autowired
-    private TeAttendanceRepository teAttendanceRepo;
+    private TeAttendanceRepository teAttendanceRepository;
 
     @Autowired
     private TeMeetingRepository teMeetingRepository;
@@ -57,7 +57,7 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
 
     @Override
     public List<TeAttendanceResponse> getListCustom(String idMeeting) {
-        List<TeAttendanceResponse> list = teAttendanceRepo.findAttendanceByIdMeetgId(idMeeting);
+        List<TeAttendanceResponse> list = teAttendanceRepository.findListAttendanceByIdMeeting(idMeeting);
         if (list == null) {
             return null;
         }
@@ -67,15 +67,20 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
     @Override
     public TeAttendanceMessageResponse addOrUpdateAttendance(TeFindListAttendanceRequest request) {
         List<TeFindAttendanceRequest> list = request.getListAttendance();
+        List<TeAttendanceResponse> listAttendance = teAttendanceRepository.findListAttendanceByIdMeeting(request.getIdMeeting());
         List<Attendance> listNew = new ArrayList<>();
+        if (list.size() == 0 && listAttendance.size() == 0) {
+            return null;
+        }
         list.forEach(item -> {
-            Optional<TeAttendanceResponse> obj = teAttendanceRepo.findAttendanceByStudentIdAndMeetgId(item);
-            if (obj.isPresent()) {
+            TeAttendanceResponse obj = findAttendanceByStudentId(listAttendance, item.getIdStudent());
+            if (obj != null) {
                 Attendance attendance = new Attendance();
-                attendance.setId(obj.get().getIdAttendance());
-                attendance.setName(item.getNameMeeting());
-                attendance.setMeetingId(obj.get().getIdMeeting());
-                attendance.setStudentId(obj.get().getIdStudent());
+                attendance.setId(obj.getIdAttendance());
+                attendance.setName(obj.getNameMeeting());
+                attendance.setMeetingId(obj.getIdMeeting());
+                attendance.setStudentId(obj.getIdStudent());
+                attendance.setNotes(item.getNotes());
                 if (item.getStatusAttendance().equals("YES") || item.getStatusAttendance() == "YES") {
                     attendance.setStatus(StatusAttendance.YES);
                 } else {
@@ -87,18 +92,28 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
                 attendance.setName(item.getNameMeeting());
                 attendance.setMeetingId(item.getIdMeeting());
                 attendance.setStudentId(item.getIdStudent());
+                attendance.setNotes(item.getNotes());
                 if (item.getStatusAttendance().equals("YES") || item.getStatusAttendance() == "YES") {
                     attendance.setStatus(StatusAttendance.YES);
                 } else {
                     attendance.setStatus(StatusAttendance.NO);
                 }
-                attendance.setId(teAttendanceRepo.save(attendance).getId());
+                attendance.setId(teAttendanceRepository.save(attendance).getId());
                 listNew.add(attendance);
             }
         });
-        List<Attendance> listReturn = teAttendanceRepo.saveAll(listNew);
+        List<Attendance> listReturn = teAttendanceRepository.saveAll(listNew);
         TeAttendanceMessageResponse teAttendanceMessageResponse = randomSetLeadToMember(listReturn, request.getIdMeeting());
         return teAttendanceMessageResponse;
+    }
+
+    private TeAttendanceResponse findAttendanceByStudentId(List<TeAttendanceResponse> listAttendance, String idStudent) {
+        for (TeAttendanceResponse attendance : listAttendance) {
+            if (attendance.getIdStudent().equals(idStudent)) {
+                return attendance;
+            }
+        }
+        return null;
     }
 
     private TeAttendanceMessageResponse randomSetLeadToMember(List<Attendance> listAttendance, String idMeeting) {
@@ -211,7 +226,7 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
         if (listStudent.size() == 0) {
             return null;
         }
-        List<TeAttendanceResponse> listAttendance = teAttendanceRepo.findAttendanceByIdClass(idClass);
+        List<TeAttendanceResponse> listAttendance = teAttendanceRepository.findAttendanceByIdClass(idClass);
         if (listAttendance.size() == 0) {
             return null;
         }
