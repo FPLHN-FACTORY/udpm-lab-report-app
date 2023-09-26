@@ -8,6 +8,7 @@ import {
   Menu,
   Popconfirm,
   Row,
+  Spin,
 } from "antd";
 import { useEffect } from "react";
 import { useState } from "react";
@@ -19,7 +20,10 @@ import LoadingIndicator from "../../../../helper/loading";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faAnglesRight,
   faArrowsRotate,
+  faCaretDown,
+  faCircleChevronDown,
   faCopy,
   faEllipsisVertical,
   faExpand,
@@ -59,6 +63,7 @@ const TeacherPostMyClass = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
   const [seeMore, setSeeMore] = useState(true);
+  const [dowloading, setDownloading] = useState(false);
   useEffect(() => {
     window.scrollTo(0, 0);
     featchClass(idClass);
@@ -575,16 +580,26 @@ const TeacherPostMyClass = () => {
                   />
                 )}
                 {seeMore && (
-                  <Button
-                    style={{ float: "right" }}
-                    type="primary"
-                    icon={<i className="fas fa-arrow-down" />}
-                    onClick={() => {
-                      handleSeeMore();
-                    }}
-                  >
-                    Xem thêm
-                  </Button>
+                  <Spin spinning={dowloading} style={{ marginTop: "10px" }}>
+                    <Button
+                      className="see-more"
+                      style={{
+                        float: "right",
+                        backgroundColor: "rgb(38, 144, 214)",
+                        color: "white",
+                      }}
+                      onClick={() => {
+                        setDownloading(true);
+                        setTimeout(() => {
+                          setDownloading(false);
+                          handleSeeMore();
+                        }, 1000);
+                      }}
+                    >
+                      <span style={{ paddingRight: "10px" }}>Xem thêm </span>
+                      <FontAwesomeIcon icon={faAnglesRight} />
+                    </Button>{" "}
+                  </Spin>
                 )}
               </div>
             </div>

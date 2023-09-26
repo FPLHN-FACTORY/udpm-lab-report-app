@@ -1,6 +1,6 @@
 package com.labreportapp.labreport.core.teacher.service;
 
-import com.labreportapp.labreport.core.teacher.model.response.TeSemesterRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TeSemesterResponse;
 
 import java.util.List;
 
@@ -9,6 +9,6 @@ import java.util.List;
  */
 public interface TeSemesterService {
 
-    List<TeSemesterRespone> getAllSemester();
+    List<TeSemesterResponse> getAllSemester();
 
 }

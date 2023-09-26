@@ -157,7 +157,7 @@ const MeetingInMyClass = () => {
                 style={{
                   height: "28.5px",
                   width: "auto",
-                  backgroundColor: "#007bff",
+                  backgroundColor: "rgb(38, 144, 214)",
                   color: "white",
                   borderRadius: "5px",
                   float: "right",

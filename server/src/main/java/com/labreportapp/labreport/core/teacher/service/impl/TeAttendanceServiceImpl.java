@@ -5,11 +5,11 @@ import com.labreportapp.labreport.core.teacher.model.request.TeFindAttendanceReq
 import com.labreportapp.labreport.core.teacher.model.request.TeFindListAttendanceRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindStudentClasses;
 import com.labreportapp.labreport.core.teacher.model.response.Base.TeAttendanceStudentMeetingRespone;
-import com.labreportapp.labreport.core.teacher.model.response.TeAttendanceMessageRespone;
-import com.labreportapp.labreport.core.teacher.model.response.TeAttendanceRespone;
-import com.labreportapp.labreport.core.teacher.model.response.TeAttendanceStudentAllRespone;
-import com.labreportapp.labreport.core.teacher.model.response.TeAttendanceStudentRespone;
-import com.labreportapp.labreport.core.teacher.model.response.TeMeetingCustomToAttendanceRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TeAttendanceMessageResponse;
+import com.labreportapp.labreport.core.teacher.model.response.TeAttendanceResponse;
+import com.labreportapp.labreport.core.teacher.model.response.TeAttendanceStudentAllResponse;
+import com.labreportapp.labreport.core.teacher.model.response.TeAttendanceStudentResponse;
+import com.labreportapp.labreport.core.teacher.model.response.TeMeetingCustomToAttendanceResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeStudentCallApiResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeTeamsRespone;
 import com.labreportapp.labreport.core.teacher.repository.TeAttendanceRepository;
@@ -56,8 +56,8 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
     private TeTeamsService teTeamsService;
 
     @Override
-    public List<TeAttendanceRespone> getListCustom(String idMeeting) {
-        List<TeAttendanceRespone> list = teAttendanceRepo.findAttendanceByIdMeetgId(idMeeting);
+    public List<TeAttendanceResponse> getListCustom(String idMeeting) {
+        List<TeAttendanceResponse> list = teAttendanceRepo.findAttendanceByIdMeetgId(idMeeting);
         if (list == null) {
             return null;
         }
@@ -65,11 +65,11 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
     }
 
     @Override
-    public TeAttendanceMessageRespone addOrUpdateAttendance(TeFindListAttendanceRequest request) {
+    public TeAttendanceMessageResponse addOrUpdateAttendance(TeFindListAttendanceRequest request) {
         List<TeFindAttendanceRequest> list = request.getListAttendance();
         List<Attendance> listNew = new ArrayList<>();
         list.forEach(item -> {
-            Optional<TeAttendanceRespone> obj = teAttendanceRepo.findAttendanceByStudentIdAndMeetgId(item);
+            Optional<TeAttendanceResponse> obj = teAttendanceRepo.findAttendanceByStudentIdAndMeetgId(item);
             if (obj.isPresent()) {
                 Attendance attendance = new Attendance();
                 attendance.setId(obj.get().getIdAttendance());
@@ -97,21 +97,21 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
             }
         });
         List<Attendance> listReturn = teAttendanceRepo.saveAll(listNew);
-        TeAttendanceMessageRespone teAttendanceMessageRespone = randomSetLeadToMember(listReturn, request.getIdMeeting());
-        return teAttendanceMessageRespone;
+        TeAttendanceMessageResponse teAttendanceMessageResponse = randomSetLeadToMember(listReturn, request.getIdMeeting());
+        return teAttendanceMessageResponse;
     }
 
-    private TeAttendanceMessageRespone randomSetLeadToMember(List<Attendance> listAttendance, String idMeeting) {
-        TeAttendanceMessageRespone objReturn = new TeAttendanceMessageRespone();
+    private TeAttendanceMessageResponse randomSetLeadToMember(List<Attendance> listAttendance, String idMeeting) {
+        TeAttendanceMessageResponse objReturn = new TeAttendanceMessageResponse();
         Optional<Meeting> meeting = teMeetingRepository.findMeetingById(idMeeting);
         if (meeting.isPresent()) {
             List<StudentClasses> listStudentClasses = teStudentClassesRepository.findStudentClassesByIdClass(meeting.get().getClassId());
             List<TeStudentCallApiResponse> listStudent = teStudentClassesService.searchApiStudentClassesByIdClass(meeting.get().getClassId());
-            List<TeAttendanceStudentRespone> listStudentAttendance = new ArrayList<>();
+            List<TeAttendanceStudentResponse> listStudentAttendance = new ArrayList<>();
             listStudent.forEach(student -> {
                 listAttendance.forEach(attendance -> {
                     if (attendance.getStudentId().equals(student.getIdStudent())) {
-                        TeAttendanceStudentRespone objAdd = new TeAttendanceStudentRespone();
+                        TeAttendanceStudentResponse objAdd = new TeAttendanceStudentResponse();
                         objAdd.setIdAttendance(attendance.getId());
                         objAdd.setIdStudentClass(student.getIdStudentClass());
                         objAdd.setIdTeam(student.getIdTeam());
@@ -160,7 +160,7 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
         return objReturn;
     }
 
-    public boolean checkAtLeastStudentOnTeam(List<TeAttendanceStudentRespone> listStudentAttendance, String idTeam) {
+    public boolean checkAtLeastStudentOnTeam(List<TeAttendanceStudentResponse> listStudentAttendance, String idTeam) {
         long count = listStudentAttendance.stream()
                 .filter(a -> {
                     String teamId = a.getIdTeam();
@@ -170,15 +170,15 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
         return count >= 1;
     }
 
-    private void randomLead(List<TeAttendanceStudentRespone> listStudent, List<TeTeamsRespone> listTeam, List<StudentClasses> listStudentClasses, String idTeam) {
+    private void randomLead(List<TeAttendanceStudentResponse> listStudent, List<TeTeamsRespone> listTeam, List<StudentClasses> listStudentClasses, String idTeam) {
         if (listTeam != null && listStudent != null && listStudentClasses != null) {
-            List<TeAttendanceStudentRespone> members = listStudent.stream()
+            List<TeAttendanceStudentResponse> members = listStudent.stream()
                     .filter(student -> student.getIdTeam() != null && student.getIdTeam().equals(idTeam) && student.getStatusAttendance().equals(StatusAttendance.YES) && student.getRole().equals(RoleTeam.MEMBER))
                     .collect(Collectors.toList());
             if (members.size() >= 2) {
                 Random random = new Random();
                 int randomIndex = random.nextInt(members.size());
-                TeAttendanceStudentRespone selectedMember = members.get(randomIndex);
+                TeAttendanceStudentResponse selectedMember = members.get(randomIndex);
                 StudentClasses find = listStudentClasses.stream()
                         .filter(a -> a.getId().equals(selectedMember.getIdStudentClass()))
                         .findFirst()
@@ -201,9 +201,9 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
     }
 
     @Override
-    public List<TeAttendanceStudentAllRespone> getListAttendanceStudentAllMeeting(String idClass) {
-        List<TeAttendanceStudentAllRespone> listMeger = new ArrayList<>();
-        List<TeMeetingCustomToAttendanceRespone> listMeeting = teMeetingRepository.findMeetingCustomToAttendanceByIdClass(idClass);
+    public List<TeAttendanceStudentAllResponse> getListAttendanceStudentAllMeeting(String idClass) {
+        List<TeAttendanceStudentAllResponse> listMeger = new ArrayList<>();
+        List<TeMeetingCustomToAttendanceResponse> listMeeting = teMeetingRepository.findMeetingCustomToAttendanceByIdClass(idClass);
         if (listMeeting.size() == 0) {
             return null;
         }
@@ -211,12 +211,12 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
         if (listStudent.size() == 0) {
             return null;
         }
-        List<TeAttendanceRespone> listAttendance = teAttendanceRepo.findAttendanceByIdClass(idClass);
+        List<TeAttendanceResponse> listAttendance = teAttendanceRepo.findAttendanceByIdClass(idClass);
         if (listAttendance.size() == 0) {
             return null;
         }
         listStudent.forEach(student -> {
-            TeAttendanceStudentAllRespone obj = new TeAttendanceStudentAllRespone();
+            TeAttendanceStudentAllResponse obj = new TeAttendanceStudentAllResponse();
             obj.setIdStudent(student.getId());
             obj.setName(student.getName());
             obj.setEmail(student.getEmail());

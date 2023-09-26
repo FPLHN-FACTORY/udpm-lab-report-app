@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class TeAttendanceStudentAllRespone {
+public class TeAttendanceStudentAllResponse {
 
     private String idStudent;
 

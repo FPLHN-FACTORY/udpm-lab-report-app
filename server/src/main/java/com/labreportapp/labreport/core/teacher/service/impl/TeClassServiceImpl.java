@@ -3,8 +3,8 @@ package com.labreportapp.labreport.core.teacher.service.impl;
 import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindClassRequest;
 import com.labreportapp.labreport.core.teacher.model.response.TeClassResponse;
-import com.labreportapp.labreport.core.teacher.model.response.TeDetailClassRespone;
-import com.labreportapp.labreport.core.teacher.model.response.TeFindUpdateStatusClassRequest;
+import com.labreportapp.labreport.core.teacher.model.response.TeDetailClassResponse;
+import com.labreportapp.labreport.core.teacher.model.request.TeFindUpdateStatusClassRequest;
 import com.labreportapp.labreport.core.teacher.repository.TeClassRepository;
 import com.labreportapp.labreport.core.teacher.service.TeClassService;
 import com.labreportapp.labreport.entity.Class;
@@ -38,8 +38,8 @@ public class TeClassServiceImpl implements TeClassService {
     }
 
     @Override
-    public TeDetailClassRespone findClassById(final String id) {
-        Optional<TeDetailClassRespone> classCheck = teClassRepository.findClassById(id);
+    public TeDetailClassResponse findClassById(final String id) {
+        Optional<TeDetailClassResponse> classCheck = teClassRepository.findClassById(id);
         if (!classCheck.isPresent()) {
             throw new RestApiException(Message.CLASS_NOT_EXISTS);
         }

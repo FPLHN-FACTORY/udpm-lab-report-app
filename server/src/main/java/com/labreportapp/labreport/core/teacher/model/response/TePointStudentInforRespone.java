@@ -18,6 +18,8 @@ public class TePointStudentInforRespone {
 
     private String idStudentClasses;
 
+    private Integer statusTeam;
+
     private String idPoint;
 
     private String idStudent;
@@ -45,4 +47,5 @@ public class TePointStudentInforRespone {
     private Double pointMin;
 
     private Double maximumNumberOfBreaks;
+
 }

@@ -1,7 +1,7 @@
 package com.labreportapp.labreport.core.teacher.repository;
 
 import com.labreportapp.labreport.core.teacher.model.request.TeFindAttendanceRequest;
-import com.labreportapp.labreport.core.teacher.model.response.TeAttendanceRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TeAttendanceResponse;
 import com.labreportapp.labreport.entity.Attendance;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -28,7 +28,7 @@ public interface TeAttendanceRepository extends JpaRepository<Attendance, String
             JOIN meeting m ON m.id = a.meeting_id
             WHERE a.meeting_id = :#{#idMeeting}
             """, nativeQuery = true)
-    List<TeAttendanceRespone> findAttendanceByIdMeetgId(@Param("idMeeting") String idMeeting);
+    List<TeAttendanceResponse> findAttendanceByIdMeetgId(@Param("idMeeting") String idMeeting);
 
     @Query(value = """
             SELECT a.id as idAttendance,
@@ -41,7 +41,7 @@ public interface TeAttendanceRepository extends JpaRepository<Attendance, String
             JOIN meeting m ON m.id = a.meeting_id
             WHERE a.meeting_id = :#{#req.idMeeting} and a.student_id = :#{#req.idStudent}
             """, nativeQuery = true)
-    Optional<TeAttendanceRespone> findAttendanceByStudentIdAndMeetgId(@Param("req") TeFindAttendanceRequest req);
+    Optional<TeAttendanceResponse> findAttendanceByStudentIdAndMeetgId(@Param("req") TeFindAttendanceRequest req);
 
     @Query(value = """
             SELECT a.id as idAttendance,
@@ -55,6 +55,6 @@ public interface TeAttendanceRepository extends JpaRepository<Attendance, String
             JOIN class c on c.id = m.class_id
             WHERE c.id = :#{#idClass}
             """, nativeQuery = true)
-    List<TeAttendanceRespone> findAttendanceByIdClass(@Param("idClass") String idClass);
+    List<TeAttendanceResponse> findAttendanceByIdClass(@Param("idClass") String idClass);
 
 }

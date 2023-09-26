@@ -1,11 +1,7 @@
-import { Row, Col, Button } from "antd";
+import { Row, Col } from "antd";
 import { useParams } from "react-router";
 import "./styleTeamInMeeting.css";
-import {
-  BookOutlined,
-  ControlOutlined,
-  UnorderedListOutlined,
-} from "@ant-design/icons";
+import { BookOutlined, ControlOutlined } from "@ant-design/icons";
 import LoadingIndicator from "../../../../../helper/loading";
 import { useEffect, useState } from "react";
 import { TeacherMeetingAPI } from "../../../../../api/teacher/meeting/TeacherMeeting.api";
@@ -24,6 +20,7 @@ const TeamInMeeting = () => {
     window.scrollTo(0, 0);
     featchMeeting(idMeeting);
   }, []);
+
   const featchMeeting = async (id) => {
     setLoading(false);
     try {

@@ -4,7 +4,7 @@ import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.core.teacher.model.request.TeCreatePostRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindPostClassRepquest;
 import com.labreportapp.labreport.core.teacher.model.request.TeUpdatePostRequest;
-import com.labreportapp.labreport.core.teacher.model.response.TePostRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TePostResponse;
 import com.labreportapp.labreport.entity.Post;
 import jakarta.validation.Valid;
 
@@ -13,7 +13,7 @@ import jakarta.validation.Valid;
  */
 public interface TePostService {
 
-    PageableObject<TePostRespone> searchPagePost(final TeFindPostClassRepquest repquest);
+    PageableObject<TePostResponse> searchPagePost(final TeFindPostClassRepquest repquest);
 
     Post create(@Valid final TeCreatePostRequest request);
 

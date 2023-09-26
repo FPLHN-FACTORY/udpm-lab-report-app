@@ -128,3 +128,14 @@
   font-weight: bold !important;
   color: #b78e3d;
 }
+.see-more {
+  float: right;
+  background-color: rgb(38, 144, 214);
+  color: "white";
+}
+.see-more:hover {
+  float: right;
+  background-color: rgb(38, 144, 214);
+  box-shadow: 0px 0px 20px 1px rgba(148, 148, 148, 0.3);
+  color: "white";
+}

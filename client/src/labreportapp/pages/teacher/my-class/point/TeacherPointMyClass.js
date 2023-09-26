@@ -6,7 +6,6 @@ import { Link, useParams } from "react-router-dom";
 import { Button, Row } from "antd";
 import { useEffect, useState } from "react";
 import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
-import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/TeacherStudentClasses.api";
 import { TeacherPointAPI } from "../../../../api/teacher/point/TeacherPoint.api";
 import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import {
@@ -24,11 +23,9 @@ const TeacherPointMyClass = () => {
   const { idClass } = useParams();
   const dispatch = useAppDispatch();
   const [classDetail, setClassDetail] = useState({});
-  const [listStudentClassAPI, setListStudentClassAPI] = useState([]);
   const [checkPoint, setCheckPoint] = useState(false);
   const [listPoint, setListPoint] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [loadingData, setLoadingData] = useState(false);
   dispatch(SetTTrueToggle());
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -42,8 +39,6 @@ const TeacherPointMyClass = () => {
       await TeacherPointAPI.getPointByIdClass(idClass).then((response) => {
         setListPoint(response.data.data);
         dispatch(SetPoint(response.data.data));
-        console.log("================================================");
-        console.log(response.data.data);
         setLoading(true);
       });
     } catch (error) {
@@ -61,15 +56,11 @@ const TeacherPointMyClass = () => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-  useEffect(() => {
-    if (loadingData === true) {
-      fetchData(idClass);
-    }
-  }, [loadingData]);
   const handleSave = async () => {
     try {
       let dataFind = {
         listPoint: data,
+        idClass: idClass,
       };
       await TeacherPointAPI.createOrUpdate(dataFind).then((respone) => {
         dispatch(UpdatePoint(respone.data.data));
@@ -179,7 +170,7 @@ const TeacherPointMyClass = () => {
                   style={{
                     height: "28.5px",
                     width: "auto",
-                    backgroundColor: "#007bff",
+                    backgroundColor: "rgb(38, 144, 214)",
                     color: "white",
                     borderRadius: "5px",
                     float: "right",

@@ -1,7 +1,7 @@
 package com.labreportapp.labreport.core.teacher.controller;
 
 import com.labreportapp.labreport.core.common.base.ResponseObject;
-import com.labreportapp.labreport.core.teacher.model.response.TeSemesterRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TeSemesterResponse;
 import com.labreportapp.labreport.core.teacher.service.TeSemesterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -24,7 +24,7 @@ public class TeSemesterController {
 
     @GetMapping()
     public ResponseObject getAllSemester() {
-        List<TeSemesterRespone> listSemester = teSemesterService.getAllSemester();
+        List<TeSemesterResponse> listSemester = teSemesterService.getAllSemester();
         return new ResponseObject(listSemester);
     }
 

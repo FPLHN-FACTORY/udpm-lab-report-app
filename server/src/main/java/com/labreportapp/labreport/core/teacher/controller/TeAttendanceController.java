@@ -2,9 +2,9 @@ package com.labreportapp.labreport.core.teacher.controller;
 
 import com.labreportapp.labreport.core.common.base.ResponseObject;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindListAttendanceRequest;
-import com.labreportapp.labreport.core.teacher.model.response.TeAttendanceMessageRespone;
-import com.labreportapp.labreport.core.teacher.model.response.TeAttendanceRespone;
-import com.labreportapp.labreport.core.teacher.model.response.TeAttendanceStudentAllRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TeAttendanceMessageResponse;
+import com.labreportapp.labreport.core.teacher.model.response.TeAttendanceResponse;
+import com.labreportapp.labreport.core.teacher.model.response.TeAttendanceStudentAllResponse;
 import com.labreportapp.labreport.core.teacher.service.TeAttendanceSevice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -30,19 +30,19 @@ public class TeAttendanceController {
 
     @GetMapping("/get/{idMeeting}")
     public ResponseObject getTeAttendanceStudentByIdMeeting(@PathVariable("idMeeting") String idMeeting) {
-        List<TeAttendanceRespone> list = teAttendanceSevice.getListCustom(idMeeting);
+        List<TeAttendanceResponse> list = teAttendanceSevice.getListCustom(idMeeting);
         return new ResponseObject(list);
     }
 
     @PostMapping("")
     public ResponseObject createOrUpdate(@RequestBody TeFindListAttendanceRequest request) {
-        TeAttendanceMessageRespone list = teAttendanceSevice.addOrUpdateAttendance(request);
+        TeAttendanceMessageResponse list = teAttendanceSevice.addOrUpdateAttendance(request);
         return new ResponseObject(list);
     }
 
     @GetMapping("/attendance-all/{idClass}")
     public ResponseObject getAllAttendanceByIdClass(@PathVariable("idClass") String idClass) {
-        List<TeAttendanceStudentAllRespone> listMeger = teAttendanceSevice.getListAttendanceStudentAllMeeting(idClass);
+        List<TeAttendanceStudentAllResponse> listMeger = teAttendanceSevice.getListAttendanceStudentAllMeeting(idClass);
         return new ResponseObject(listMeger);
     }
 

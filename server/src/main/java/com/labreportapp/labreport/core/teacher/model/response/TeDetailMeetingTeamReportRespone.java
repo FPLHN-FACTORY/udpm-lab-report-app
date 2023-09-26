@@ -2,15 +2,15 @@ package com.labreportapp.labreport.core.teacher.model.response;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
+
+import java.util.List;
 
 /**
  * @author hieundph25894
  */
 @Getter
 @Setter
-@ToString
-public class TeMeetingCustomRespone {
+public class TeDetailMeetingTeamReportRespone {
 
     private String id;
 
@@ -28,6 +28,5 @@ public class TeMeetingCustomRespone {
 
     private String idTeacher;
 
-    private String userNameTeacher;
-
+    private List<TeDetailTeamReportRespone> listTeamReport;
 }

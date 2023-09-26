@@ -6,7 +6,7 @@ import {
   SetPoint,
 } from "../../../../../app/teacher/point/tePointSlice.reduce";
 import { useState } from "react";
-import { CloseCircleOutlined, SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined } from "@ant-design/icons";
 
 const TablePoint = () => {
   const [phase1, setPhase1] = useState(0);
@@ -302,76 +302,92 @@ const TablePoint = () => {
       },
     },
     {
-      title: "Điểm",
+      title: "Trạng thái điểm",
       dataIndex: "statusPointCustome",
       key: "statusPointCustome",
       render: (text, record) => {
+        let ratePoint = parseFloat(
+          (parseFloat(record.checkPointPhase1) +
+            parseFloat(record.checkPointPhase2)) /
+            2
+        );
         return (
-          <span>
-            <Tag icon={<CloseCircleOutlined />} color="error">
-              Không cho phép
-            </Tag>
-          </span>
+          <div style={{ textAlign: "center" }}>
+            {ratePoint >= record.pointMin ? (
+              <Tag
+                color="success"
+                style={{ width: "60px", textAlign: "center" }}
+              >
+                Đạt
+              </Tag>
+            ) : (
+              <Tag color="error" style={{ width: "60px", textAlign: "center" }}>
+                Trượt
+              </Tag>
+            )}
+          </div>
         );
       },
     },
     {
-      title: "Số buổi đi",
-      dataIndex: "numberOfSessionAttended",
-      key: "numberOfSessionAttended",
-      // render: (text, record) => {
-      //   return (
-      //     <span>
-      //       {parseFloat(
-      //         (parseFloat(record.checkPointPhase1) +
-      //           parseFloat(record.checkPointPhase2)) /
-      //           2
-      //       ) >= 5 ? (
-      //         <p style={{ color: "green" }}>Đạt</p>
-      //       ) : (
-      //         <p style={{ color: "red" }}>Trượt</p>
-      //       )}
-      //     </span>
-      //   );
-      // },
+      title: "Trạng thái điểm danh",
+      dataIndex: "statusAttendedCustome",
+      key: "statusAttendedCustome",
+      render: (text, record) => {
+        let rateAttended = parseFloat(
+          (parseFloat(record.numberOfSessionAttended) /
+            parseFloat(record.numberOfSession)) *
+            100
+        );
+        return (
+          <div style={{ textAlign: "center" }}>
+            {rateAttended >= record.maximumNumberOfBreaks ? (
+              <Tag
+                color="success"
+                style={{ width: "60px", textAlign: "center" }}
+              >
+                Đạt
+              </Tag>
+            ) : (
+              <Tag color="error" style={{ width: "60px", textAlign: "center" }}>
+                Trượt
+              </Tag>
+            )}
+          </div>
+        );
+      },
     },
     {
-      title: "Số buổi học",
-      dataIndex: "numberOfSession",
-      key: "numberOfSession",
-      // render: (text, record) => {
-      //   return (
-      //     <span>
-      //       {parseFloat(
-      //         (parseFloat(record.checkPointPhase1) +
-      //           parseFloat(record.checkPointPhase2)) /
-      //           2
-      //       ) >= 5 ? (
-      //         <p style={{ color: "green" }}>Đạt</p>
-      //       ) : (
-      //         <p style={{ color: "red" }}>Trượt</p>
-      //       )}
-      //     </span>
-      //   );
-      // },
-    },
-    {
-      title: "Trạng thái",
+      title: "Tình trạng",
       dataIndex: "statusAll",
       key: "statusAll",
       render: (text, record) => {
+        let rateAttended = parseFloat(
+          (parseFloat(record.numberOfSessionAttended) /
+            parseFloat(record.numberOfSession)) *
+            100
+        );
+        let ratePoint = parseFloat(
+          (parseFloat(record.checkPointPhase1) +
+            parseFloat(record.checkPointPhase2)) /
+            2
+        );
         return (
-          <span>
-            {parseFloat(
-              (parseFloat(record.checkPointPhase1) +
-                parseFloat(record.checkPointPhase2)) /
-                2
-            ) >= 5 ? (
-              <p style={{ color: "green" }}>Đạt</p>
+          <div style={{ textAlign: "center" }}>
+            {rateAttended >= record.maximumNumberOfBreaks &&
+            ratePoint >= record.pointMin ? (
+              <Tag
+                color="success"
+                style={{ width: "60px", textAlign: "center" }}
+              >
+                Đạt
+              </Tag>
             ) : (
-              <p style={{ color: "red" }}>Trượt</p>
+              <Tag color="error" style={{ width: "60px", textAlign: "center" }}>
+                Trượt
+              </Tag>
             )}
-          </span>
+          </div>
         );
       },
     },

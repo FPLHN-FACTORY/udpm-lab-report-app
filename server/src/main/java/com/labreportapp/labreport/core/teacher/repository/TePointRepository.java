@@ -1,7 +1,7 @@
 package com.labreportapp.labreport.core.teacher.repository;
 
 import com.labreportapp.labreport.core.teacher.model.request.TeFindPointRequest;
-import com.labreportapp.labreport.core.teacher.model.response.TePointRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TePointResponse;
 import com.labreportapp.labreport.entity.Point;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -56,7 +56,7 @@ public interface TePointRepository extends JpaRepository<Point, String> {
                         sc.class_id, sc.email, t.name, ca.soBuoiDiHoc, cm.soBuoiPhaiHoc
                         ORDER BY t.name ASC
              """, nativeQuery = true)
-    List<TePointRespone> getAllPointByIdClass(@Param("idClass") String idClass);
+    List<TePointResponse> getAllPointByIdClass(@Param("idClass") String idClass);
 
     @Query(value = """
             SELECT * FROM point p
@@ -74,6 +74,13 @@ public interface TePointRepository extends JpaRepository<Point, String> {
             FROM point p
             WHERE p.class_id = :#{#req.idClass} and p.student_id = :#{#req.idStudent}
             """, nativeQuery = true)
-    Optional<TePointRespone> getPointIdClassIdStudent(@Param("req") TeFindPointRequest req);
+    Optional<TePointResponse> getPointIdClassIdStudent(@Param("req") TeFindPointRequest req);
+
+    @Query(value = """
+            SELECT *
+            FROM point p
+            WHERE p.class_id = :#{#idClass}
+            """, nativeQuery = true)
+    List<Point> getAllByClassId(@Param("idClass") String idClass);
 
 }

@@ -3,10 +3,11 @@ package com.labreportapp.labreport.core.teacher.repository;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindMeetingRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindScheduleMeetingClassRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindScheduleNowToTime;
-import com.labreportapp.labreport.core.teacher.model.response.TeHomeWorkAndNoteMeetingRespone;
-import com.labreportapp.labreport.core.teacher.model.response.TeMeetingCustomToAttendanceRespone;
-import com.labreportapp.labreport.core.teacher.model.response.TeMeetingRespone;
-import com.labreportapp.labreport.core.teacher.model.response.TeScheduleMeetingClassRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TeDetailTeamReportRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TeHomeWorkAndNoteMeetingResponse;
+import com.labreportapp.labreport.core.teacher.model.response.TeMeetingCustomToAttendanceResponse;
+import com.labreportapp.labreport.core.teacher.model.response.TeMeetingResponse;
+import com.labreportapp.labreport.core.teacher.model.response.TeScheduleMeetingClassResponse;
 import com.labreportapp.labreport.entity.Meeting;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,7 +40,7 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
             WHERE m.class_id = :#{#req.idClass}
             ORDER BY m.meeting_date DESC
                      """, nativeQuery = true)
-    List<TeMeetingRespone> findMeetingByIdClass(@Param("req") TeFindMeetingRequest req);
+    List<TeMeetingResponse> findMeetingByIdClass(@Param("req") TeFindMeetingRequest req);
 
     @Query(value = """
             SELECT  m.id as id,
@@ -53,7 +54,21 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
             FROM meeting m
             WHERE m.id = :#{#req.idMeeting}
                      """, nativeQuery = true)
-    Optional<TeMeetingRespone> searchMeetingByIdMeeting(@Param("req") TeFindMeetingRequest req);
+    Optional<TeMeetingResponse> searchMeetingByIdMeeting(@Param("req") TeFindMeetingRequest req);
+
+    @Query(value = """
+            SELECT DISTINCT
+                t.id AS id_team,
+                t.name AS name_team,
+                r.id AS id_report
+            FROM team t
+            JOIN class c ON c.id = t.class_id
+            JOIN meeting m ON m.class_id = c.id
+            LEFT JOIN report r ON r.team_id = t.id AND r.meeting_id = :#{#req.idMeeting}
+            WHERE t.class_id = :#{#req.idClass}
+            ORDER BY t.name ASC
+            """, nativeQuery = true)
+    List<TeDetailTeamReportRespone> findTeamReportByIdMeetingIdClass(@Param("req") TeFindMeetingRequest req);
 
     @Query(value = """
             SELECT 
@@ -73,7 +88,7 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
              JOIN report r ON r.meeting_id = m.id AND r.team_id = :#{#req.idTeam}
             WHERE m.id = :#{#req.idMeeting}
                       """, nativeQuery = true)
-    Optional<TeHomeWorkAndNoteMeetingRespone> searchDetailMeetingTeamByIdMeIdTeam(@Param("req") TeFindMeetingRequest req);
+    Optional<TeHomeWorkAndNoteMeetingResponse> searchDetailMeetingTeamByIdMeIdTeam(@Param("req") TeFindMeetingRequest req);
 
     @Query(value = """
             SELECT  
@@ -86,7 +101,7 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
             WHERE m.class_id = :#{#idClass}
             ORDER BY m.meeting_date ASC
                      """, nativeQuery = true)
-    List<TeMeetingCustomToAttendanceRespone> findMeetingCustomToAttendanceByIdClass(@Param("idClass") String idClass);
+    List<TeMeetingCustomToAttendanceResponse> findMeetingCustomToAttendanceByIdClass(@Param("idClass") String idClass);
 
     @Query(value = """
             SELECT 
@@ -107,7 +122,7 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
              WHERE c.teacher_id = :#{#req.idTeacher} AND DATE(FROM_UNIXTIME(m.meeting_date / 1000)) = CURDATE()
              ORDER BY m.meeting_date ASC
             """, nativeQuery = true)
-    List<TeScheduleMeetingClassRespone> searchScheduleToDayByIdTeacherAndMeetingDate(@Param("req") TeFindScheduleMeetingClassRequest req);
+    List<TeScheduleMeetingClassResponse> searchScheduleToDayByIdTeacherAndMeetingDate(@Param("req") TeFindScheduleMeetingClassRequest req);
 
     @Query(value = """
             SELECT ROW_NUMBER() OVER(ORDER BY m.meeting_date ASC) AS stt,
@@ -185,7 +200,7 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                                      AND UNIX_TIMESTAMP(DATE_ADD(CURRENT_DATE(), INTERVAL 30 DAY)) * 1000)
                              )
             """, nativeQuery = true)
-    Page<TeScheduleMeetingClassRespone> searchScheduleNowToTimeByIdTeacher(@Param("req") TeFindScheduleNowToTime req, Pageable pageable);
+    Page<TeScheduleMeetingClassResponse> searchScheduleNowToTimeByIdTeacher(@Param("req") TeFindScheduleNowToTime req, Pageable pageable);
 
     Optional<Meeting> findMeetingById(String id);
 

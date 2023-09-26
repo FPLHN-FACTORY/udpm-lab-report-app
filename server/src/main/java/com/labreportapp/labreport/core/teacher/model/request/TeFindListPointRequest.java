@@ -14,4 +14,6 @@ public class TeFindListPointRequest {
 
     private List<TeFindPointRequest> listPoint;
 
+    private String idClass;
+
 }

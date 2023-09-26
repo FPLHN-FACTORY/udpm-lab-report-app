@@ -1,6 +1,6 @@
 import "./styleTeacherMyClass.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faHome } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faHome, faTableList } from "@fortawesome/free-solid-svg-icons";
 import { giangVienCurrent } from "../../helper/inForUser";
 import LoadingIndicator from "../../helper/loading";
 import { QuestionCircleFilled, ProjectOutlined } from "@ant-design/icons";
@@ -449,8 +449,12 @@ const TeacherMyClass = () => {
           <div className="title-table">
             <div>
               <span style={{ fontSize: "17px", fontWeight: "500" }}>
-                <ProjectOutlined
-                  style={{ marginRight: "10px", fontSize: "24px" }}
+                <FontAwesomeIcon
+                  icon={faTableList}
+                  style={{
+                    marginRight: "10px",
+                    fontSize: "20px",
+                  }}
                 />
                 Danh sách lớp học
               </span>

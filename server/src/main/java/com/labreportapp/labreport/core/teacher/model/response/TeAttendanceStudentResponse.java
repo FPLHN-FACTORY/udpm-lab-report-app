@@ -16,7 +16,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class TeAttendanceStudentRespone {
+public class TeAttendanceStudentResponse {
 
     private String idAttendance;
 

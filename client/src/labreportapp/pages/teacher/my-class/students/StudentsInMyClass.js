@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import "./styleStudentsInMyClass.css";
-import { Button, Empty, Input, Table } from "antd";
+import { Button, Empty, Input, Table, Tag } from "antd";
 import { Link } from "react-router-dom";
 import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
 import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/TeacherStudentClasses.api";
@@ -61,6 +61,69 @@ const StudentsInMyClass = () => {
       width: "12px",
     },
     {
+      title: "Nhóm",
+      dataIndex: "nameTeam",
+      key: "nameTeam",
+      render: (text, record) => {
+        if (text === null || text === "") {
+          return <Tag color="processing">Chưa vào nhóm</Tag>;
+        } else {
+          return <span>{text}</span>;
+        }
+      },
+      filterDropdown: ({
+        setSelectedKeys,
+        selectedKeys,
+        confirm,
+        clearFilters,
+      }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="Tìm kiếm"
+            value={selectedKeys[0]}
+            onChange={(e) =>
+              setSelectedKeys(e.target.value ? [e.target.value] : [])
+            }
+            onPressEnter={confirm}
+            style={{ width: 188, marginBottom: 8, display: "block" }}
+          />
+          <Button
+            type="primary"
+            className="btn_search_member"
+            onClick={confirm}
+            size="small"
+            style={{ width: 90, marginRight: 8 }}
+          >
+            Tìm
+          </Button>
+          <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
+            Đặt lại
+          </Button>
+        </div>
+      ),
+      filterIcon: (filtered) => (
+        <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+      ),
+      onFilter: (value, record) => {
+        if (record.nameTeam === null) {
+          return false;
+        }
+        return record.nameTeam.toLowerCase().includes(value.toLowerCase());
+      },
+      sorter: (a, b) => {
+        if (a.nameTeam === null && b.nameTeam === null) {
+          return 0;
+        }
+        if (a.nameTeam === null) {
+          return -1;
+        }
+        if (b.nameTeam === null) {
+          return 1;
+        }
+        return a.nameTeam.localeCompare(b.nameTeam);
+      },
+    },
+    {
       title: "Tên tài khoản",
       dataIndex: "username",
       key: "username",
@@ -102,29 +165,94 @@ const StudentsInMyClass = () => {
       sorter: (a, b) => a.username.localeCompare(b.username),
     },
     {
-      title: "Nhóm",
-      dataIndex: "nameTeam",
-      key: "nameTeam",
-      render: (text, record) => {
-        if (text === null) {
-          return <span style={{ color: "blue" }}>Chưa vào nhóm</span>;
-        } else {
-          return <span>{text}</span>;
-        }
-      },
-    },
-    {
-      title: "Họ và tên",
+      title: "Tên sinh viên",
       dataIndex: "name",
       key: "name",
       sorter: (a, b) => a.name.localeCompare(b.name),
+      filterDropdown: ({
+        setSelectedKeys,
+        selectedKeys,
+        confirm,
+        clearFilters,
+      }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="Tìm kiếm"
+            value={selectedKeys[0]}
+            onChange={(e) =>
+              setSelectedKeys(e.target.value ? [e.target.value] : [])
+            }
+            onPressEnter={confirm}
+            style={{ width: 188, marginBottom: 8, display: "block" }}
+          />
+          <Button
+            type="primary"
+            className="btn_search_member"
+            onClick={confirm}
+            size="small"
+            style={{ width: 90, marginRight: 8 }}
+          >
+            Tìm
+          </Button>
+          <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
+            Đặt lại
+          </Button>
+        </div>
+      ),
+      filterIcon: (filtered) => (
+        <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+      ),
+      onFilter: (value, record) => {
+        if (record.name === null) {
+          return false;
+        }
+        return record.name.toLowerCase().includes(value.toLowerCase());
+      },
     },
-
     {
       title: "Email",
       dataIndex: "email",
       key: "email",
       sorter: (a, b) => a.email.localeCompare(b.email),
+      filterDropdown: ({
+        setSelectedKeys,
+        selectedKeys,
+        confirm,
+        clearFilters,
+      }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="Tìm kiếm"
+            value={selectedKeys[0]}
+            onChange={(e) =>
+              setSelectedKeys(e.target.value ? [e.target.value] : [])
+            }
+            onPressEnter={confirm}
+            style={{ width: 188, marginBottom: 8, display: "block" }}
+          />
+          <Button
+            type="primary"
+            className="btn_search_member"
+            onClick={confirm}
+            size="small"
+            style={{ width: 90, marginRight: 8 }}
+          >
+            Tìm
+          </Button>
+          <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
+            Đặt lại
+          </Button>
+        </div>
+      ),
+      filterIcon: (filtered) => (
+        <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+      ),
+      onFilter: (value, record) => {
+        if (record.email === null) {
+          return false;
+        }
+        return record.email.toLowerCase().includes(value.toLowerCase());
+      },
     },
 
     {
@@ -132,11 +260,61 @@ const StudentsInMyClass = () => {
       dataIndex: "statusStudent",
       key: "statusStudent",
       render: (text) => {
-        if (text === "0") {
-          return <span style={{ color: "green" }}>HD</span>;
-        } else {
-          return <span style={{ color: "red" }}>HL</span>;
-        }
+        return (
+          <div style={{ textAlign: "center" }}>
+            {text === "0" ? (
+              <Tag
+                color="success"
+                style={{ width: "70px", textAlign: "center" }}
+              >
+                Đạt
+              </Tag>
+            ) : (
+              <Tag color="error" style={{ width: "70px", textAlign: "center" }}>
+                Trượt
+              </Tag>
+            )}
+          </div>
+        );
+      },
+      filterDropdown: ({
+        setSelectedKeys,
+        selectedKeys,
+        confirm,
+        clearFilters,
+      }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="Tìm kiếm"
+            value={selectedKeys[0]}
+            onChange={(e) =>
+              setSelectedKeys(e.target.value ? [e.target.value] : [])
+            }
+            onPressEnter={confirm}
+            style={{ width: 188, marginBottom: 8, display: "block" }}
+          />
+          <Button
+            type="primary"
+            className="btn_search_member"
+            onClick={confirm}
+            size="small"
+            style={{ width: 90, marginRight: 8 }}
+          >
+            Tìm
+          </Button>
+          <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
+            Đặt lại
+          </Button>
+        </div>
+      ),
+      filterIcon: (filtered) => (
+        <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+      ),
+      onFilter: (value, record) => {
+        return (
+          (value === "Đạt" && record.statusStudent === "0") ||
+          (value === "Trượt" && record.statusStudent === "1")
+        );
       },
     },
   ];
@@ -232,7 +410,7 @@ const StudentsInMyClass = () => {
                 style={{
                   height: "28.5px",
                   width: "auto",
-                  backgroundColor: "#007bff",
+                  backgroundColor: "rgb(38, 144, 214)",
                   color: "white",
                   borderRadius: "5px",
                   float: "right",

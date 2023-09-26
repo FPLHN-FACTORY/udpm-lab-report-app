@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 /**
  * @author hieundph25894
  */
-public interface TeHomeWorkAndNoteMeetingRespone {
+public interface TeHomeWorkAndNoteMeetingResponse {
 
     @Value("#{target.idMeeting}")
     String getIdMeeting();

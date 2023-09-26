@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 /**
  * @author hieundph25894
  */
-public interface TePointImportRespone {
+public interface TePointImportResponse {
 
     @Value("#{target.id}")
     String getIdStudentClass();

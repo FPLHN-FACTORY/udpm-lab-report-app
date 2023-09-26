@@ -4,6 +4,7 @@ import com.labreportapp.labreport.core.common.response.SimpleResponse;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindStudentApiRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindStudentClasses;
 import com.labreportapp.labreport.core.teacher.model.response.TeStudentCallApiResponse;
+import com.labreportapp.labreport.core.teacher.model.response.TeStudentStatusApiResponse;
 
 import java.util.List;
 
@@ -13,6 +14,8 @@ import java.util.List;
 public interface TeStudentClassesService {
 
     List<TeStudentCallApiResponse> searchApiStudentClassesByIdClass(String idClass);
+
+    List<TeStudentStatusApiResponse> searchApiStudentClassesStatusByIdClass(String idClass);
 
     List<SimpleResponse> searchAllStudentByIdClass(String idClass);
 

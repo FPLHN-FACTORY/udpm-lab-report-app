@@ -15,7 +15,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class TeAttendanceMessageRespone {
+public class TeAttendanceMessageResponse {
 
     private List<Attendance> listAttendance;
 

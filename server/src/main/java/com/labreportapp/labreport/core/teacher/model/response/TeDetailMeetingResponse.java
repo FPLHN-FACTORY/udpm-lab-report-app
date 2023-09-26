@@ -5,12 +5,12 @@ import org.springframework.beans.factory.annotation.Value;
 /**
  * @author hieundph25894
  */
-public interface TeSemesterRespone {
+public interface TeDetailMeetingResponse {
 
     @Value("#{target.id}")
     String getId();
 
     @Value("#{target.name}")
     String getName();
-
+    
 }

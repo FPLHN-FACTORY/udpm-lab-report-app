@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 /**
  * @author hieundph25894
  */
-public interface TeLevelRespone {
+public interface TeLevelResponse {
 
     @Value("#{target.id}")
     String getId();

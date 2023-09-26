@@ -8,11 +8,13 @@ import com.labreportapp.labreport.core.teacher.model.request.TeFindScheduleNowTo
 import com.labreportapp.labreport.core.teacher.model.request.TeScheduleUpdateMeetingRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeUpdateHomeWorkAndNoteInMeetingRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeUpdateMeetingRequest;
-import com.labreportapp.labreport.core.teacher.model.response.TeHomeWorkAndNoteMeetingRespone;
-import com.labreportapp.labreport.core.teacher.model.response.TeMeetingCustomRespone;
-import com.labreportapp.labreport.core.teacher.model.response.TeMeetingCustomToAttendanceRespone;
-import com.labreportapp.labreport.core.teacher.model.response.TeMeetingRespone;
-import com.labreportapp.labreport.core.teacher.model.response.TeScheduleMeetingClassRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TeDetailMeetingTeamReportRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TeDetailTeamReportRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TeHomeWorkAndNoteMeetingResponse;
+import com.labreportapp.labreport.core.teacher.model.response.TeMeetingCustomResponse;
+import com.labreportapp.labreport.core.teacher.model.response.TeMeetingCustomToAttendanceResponse;
+import com.labreportapp.labreport.core.teacher.model.response.TeMeetingResponse;
+import com.labreportapp.labreport.core.teacher.model.response.TeScheduleMeetingClassResponse;
 import com.labreportapp.labreport.core.teacher.repository.TeHomeWorkRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeMeetingRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeNoteRepository;
@@ -67,18 +69,18 @@ public class TeMeetingServiceImpl implements TeMeetingService {
     private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
 
     @Override
-    public List<TeMeetingCustomRespone> searchMeetingByIdClass(TeFindMeetingRequest request) {
-        List<TeMeetingRespone> list = teMeetingRepository.findMeetingByIdClass(request);
+    public List<TeMeetingCustomResponse> searchMeetingByIdClass(TeFindMeetingRequest request) {
+        List<TeMeetingResponse> list = teMeetingRepository.findMeetingByIdClass(request);
         List<String> idTeacherList = list.stream()
-                .map(TeMeetingRespone::getIdTeacher)
+                .map(TeMeetingResponse::getIdTeacher)
                 .distinct()
                 .collect(Collectors.toList());
         List<SimpleResponse> listRespone = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idTeacherList);
-        List<TeMeetingCustomRespone> listReturn = new ArrayList<>();
+        List<TeMeetingCustomResponse> listReturn = new ArrayList<>();
         list.forEach(reposi -> {
             listRespone.forEach(respone -> {
                 if (reposi.getIdTeacher().equals(respone.getId())) {
-                    TeMeetingCustomRespone obj = new TeMeetingCustomRespone();
+                    TeMeetingCustomResponse obj = new TeMeetingCustomResponse();
                     obj.setId(reposi.getId());
                     obj.setName(reposi.getName());
                     obj.setDescriptions(reposi.getDescriptions());
@@ -96,12 +98,31 @@ public class TeMeetingServiceImpl implements TeMeetingService {
     }
 
     @Override
-    public TeMeetingRespone searchMeetingByIdMeeting(TeFindMeetingRequest request) {
-        Optional<TeMeetingRespone> meeting = teMeetingRepository.searchMeetingByIdMeeting(request);
+    public TeDetailMeetingTeamReportRespone searchMeetingByIdMeeting(TeFindMeetingRequest request) {
+        Optional<TeMeetingResponse> meeting = teMeetingRepository.searchMeetingByIdMeeting(request);
+
         if (!meeting.isPresent()) {
             throw new RestApiException(Message.MEETING_NOT_EXISTS);
         }
-        return meeting.get();
+        TeMeetingResponse meetingResponse = meeting.get();
+        TeFindMeetingRequest requestIdClass = new TeFindMeetingRequest();
+        requestIdClass.setIdClass(meetingResponse.getIdClass());
+        requestIdClass.setIdMeeting(meetingResponse.getId());
+        List<TeDetailTeamReportRespone> listTeam = teMeetingRepository.findTeamReportByIdMeetingIdClass(requestIdClass);
+        if (listTeam.size() == 0) {
+            return null;
+        }
+        TeDetailMeetingTeamReportRespone objReturn = new TeDetailMeetingTeamReportRespone();
+        objReturn.setId(meetingResponse.getId());
+        objReturn.setIdClass(meetingResponse.getIdClass());
+        objReturn.setIdTeacher(meetingResponse.getIdTeacher());
+        objReturn.setName(meetingResponse.getName());
+        objReturn.setDescriptions(meetingResponse.getDescriptions());
+        objReturn.setMeetingDate(meetingResponse.getMeetingDate());
+        objReturn.setTypeMeeting(meetingResponse.getTypeMeeting());
+        objReturn.setMeetingPeriod(meetingResponse.getMeetingPeriod());
+        objReturn.setListTeamReport(listTeam);
+        return objReturn;
     }
 
     private Integer checkPeriod(Integer meetingPeriod) {
@@ -206,12 +227,12 @@ public class TeMeetingServiceImpl implements TeMeetingService {
     }
 
     @Override
-    public TeMeetingRespone searchMeetingAndCheckAttendanceByIdMeeting(TeFindMeetingRequest request) {
-        Optional<TeMeetingRespone> meeting = teMeetingRepository.searchMeetingByIdMeeting(request);
+    public TeMeetingResponse searchMeetingAndCheckAttendanceByIdMeeting(TeFindMeetingRequest request) {
+        Optional<TeMeetingResponse> meeting = teMeetingRepository.searchMeetingByIdMeeting(request);
         if (!meeting.isPresent()) {
             throw new RestApiException(Message.MEETING_NOT_EXISTS);
         }
-        TeMeetingRespone meetingFind = meeting.get();
+        TeMeetingResponse meetingFind = meeting.get();
         LocalDate dateNow = LocalDate.now();
         LocalDate dateMeeting = Instant.ofEpochMilli(meetingFind.getMeetingDate()).atZone(ZoneId.systemDefault()).toLocalDate();
         if (dateNow.isBefore(dateMeeting)) {
@@ -224,13 +245,13 @@ public class TeMeetingServiceImpl implements TeMeetingService {
                 throw new RestApiException(Message.MEETING_EDIT_ATTENDANCE_FAILD);
             } else {
                 return meetingFind;
-         }
+            }
         }
     }
 
     @Override
-    public TeHomeWorkAndNoteMeetingRespone searchDetailMeetingTeamByIdMeIdTeam(TeFindMeetingRequest request) {
-        Optional<TeHomeWorkAndNoteMeetingRespone> object = teMeetingRepository.searchDetailMeetingTeamByIdMeIdTeam(request);
+    public TeHomeWorkAndNoteMeetingResponse searchDetailMeetingTeamByIdMeIdTeam(TeFindMeetingRequest request) {
+        Optional<TeHomeWorkAndNoteMeetingResponse> object = teMeetingRepository.searchDetailMeetingTeamByIdMeIdTeam(request);
         if (!object.isPresent()) {
             return null;
         }
@@ -239,7 +260,7 @@ public class TeMeetingServiceImpl implements TeMeetingService {
 
     @Override
     @Synchronized
-    public TeHomeWorkAndNoteMeetingRespone updateDetailMeetingTeamByIdMeIdTeam(TeUpdateHomeWorkAndNoteInMeetingRequest request) {
+    public TeHomeWorkAndNoteMeetingResponse updateDetailMeetingTeamByIdMeIdTeam(TeUpdateHomeWorkAndNoteInMeetingRequest request) {
         Optional<HomeWork> objectHW = teHomeWorkRepository.findById(request.getIdHomeWork());
         HomeWork homeWorkNew = new HomeWork();
         if (!objectHW.isPresent()) {
@@ -278,7 +299,7 @@ public class TeMeetingServiceImpl implements TeMeetingService {
         TeFindMeetingRequest teFind = new TeFindMeetingRequest();
         teFind.setIdTeam(request.getIdTeam());
         teFind.setIdMeeting(request.getIdMeeting());
-        Optional<TeHomeWorkAndNoteMeetingRespone> objectFind = teMeetingRepository.searchDetailMeetingTeamByIdMeIdTeam(teFind);
+        Optional<TeHomeWorkAndNoteMeetingResponse> objectFind = teMeetingRepository.searchDetailMeetingTeamByIdMeIdTeam(teFind);
         if (!objectFind.isPresent()) {
             throw new RestApiException(Message.MEETING_HOMEWORK_NOTE_NOT_EXISTS);
         }
@@ -286,8 +307,8 @@ public class TeMeetingServiceImpl implements TeMeetingService {
     }
 
     @Override
-    public List<TeScheduleMeetingClassRespone> searchScheduleToDayByIdTeacherAndMeetingDate(TeFindScheduleMeetingClassRequest request) {
-        List<TeScheduleMeetingClassRespone> list = teMeetingRepository.searchScheduleToDayByIdTeacherAndMeetingDate(request);
+    public List<TeScheduleMeetingClassResponse> searchScheduleToDayByIdTeacherAndMeetingDate(TeFindScheduleMeetingClassRequest request) {
+        List<TeScheduleMeetingClassResponse> list = teMeetingRepository.searchScheduleToDayByIdTeacherAndMeetingDate(request);
         if (list.size() == 0) {
             return null;
         }
@@ -295,9 +316,9 @@ public class TeMeetingServiceImpl implements TeMeetingService {
     }
 
     @Override
-    public PageableObject<TeScheduleMeetingClassRespone> searchScheduleNowToByIdTeacher(TeFindScheduleNowToTime request) {
+    public PageableObject<TeScheduleMeetingClassResponse> searchScheduleNowToByIdTeacher(TeFindScheduleNowToTime request) {
         Pageable pageable = PageRequest.of(request.getPage() - 1, request.getSize());
-        Page<TeScheduleMeetingClassRespone> list = teMeetingRepository.searchScheduleNowToTimeByIdTeacher(request, pageable);
+        Page<TeScheduleMeetingClassResponse> list = teMeetingRepository.searchScheduleNowToTimeByIdTeacher(request, pageable);
         if (list == null) {
             return null;
         }
@@ -305,7 +326,7 @@ public class TeMeetingServiceImpl implements TeMeetingService {
     }
 
     @Override
-    public List<TeScheduleMeetingClassRespone> updateAddressMeeting(TeScheduleUpdateMeetingRequest request) {
+    public List<TeScheduleMeetingClassResponse> updateAddressMeeting(TeScheduleUpdateMeetingRequest request) {
         List<TeUpdateMeetingRequest> list = request.getListMeeting();
         if (list.size() == 0) {
             throw new RestApiException(Message.SCHEDULE_TODAY_IS_EMPTY);
@@ -323,8 +344,8 @@ public class TeMeetingServiceImpl implements TeMeetingService {
     }
 
     @Override
-    public List<TeMeetingCustomToAttendanceRespone> listMeetingAttendanceAllByIdClass(String idClass) {
-        List<TeMeetingCustomToAttendanceRespone> listMeeting = teMeetingRepository.findMeetingCustomToAttendanceByIdClass(idClass);
+    public List<TeMeetingCustomToAttendanceResponse> listMeetingAttendanceAllByIdClass(String idClass) {
+        List<TeMeetingCustomToAttendanceResponse> listMeeting = teMeetingRepository.findMeetingCustomToAttendanceByIdClass(idClass);
         return listMeeting;
     }
 

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 /**
  * @author hieundph25894
  */
-public interface TePointRespone {
+public interface TePointResponse {
 
     @Value("#{target.stt}")
     Integer getStt();

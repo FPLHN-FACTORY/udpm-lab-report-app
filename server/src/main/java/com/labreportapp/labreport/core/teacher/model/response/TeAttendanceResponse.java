@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 /**
  * @author hieundph25894
  */
-public interface TeAttendanceRespone {
+public interface TeAttendanceResponse {
 
     @Value("#{target.idAttendance}")
     String getIdAttendance();

@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 /**
  * @author hieundph25894
  */
-public interface TeMeetingCustomToAttendanceRespone {
+public interface TeMeetingCustomToAttendanceResponse {
 
     @Value("#{target.id}")
     String getIdMeeting();

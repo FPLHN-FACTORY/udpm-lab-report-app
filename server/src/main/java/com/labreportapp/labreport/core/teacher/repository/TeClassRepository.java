@@ -2,7 +2,7 @@ package com.labreportapp.labreport.core.teacher.repository;
 
 import com.labreportapp.labreport.core.teacher.model.request.TeFindClassRequest;
 import com.labreportapp.labreport.core.teacher.model.response.TeClassResponse;
-import com.labreportapp.labreport.core.teacher.model.response.TeDetailClassRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TeDetailClassResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -79,7 +79,7 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
             JOIN level d ON d.id = a.level_id
             where c.id = :#{#id}
              """,nativeQuery = true)
-    Optional<TeDetailClassRespone> findClassById(@Param("id") String id);
+    Optional<TeDetailClassResponse> findClassById(@Param("id") String id);
 
     @Query(value = """
             WITH LatestSemester AS (

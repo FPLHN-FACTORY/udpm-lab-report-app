@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 /**
  * @author hieundph25894
  */
-public interface TeDetailClassRespone {
+public interface TeDetailClassResponse {
 
     @Value("#{target.id}")
     String getId();

@@ -2,7 +2,7 @@ package com.labreportapp.labreport.core.teacher.controller;
 
 import com.labreportapp.labreport.core.common.base.ResponseObject;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindClassRequest;
-import com.labreportapp.labreport.core.teacher.model.response.TeActivityRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TeActivityResponse;
 import com.labreportapp.labreport.core.teacher.service.TeActivitySevice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -25,7 +25,7 @@ public class TeActivityController {
 
     @GetMapping("/id-semester")
     public ResponseObject listActivitySemester(final TeFindClassRequest teFindClass) {
-        List<TeActivityRespone> list = teActivitySevice.getAllByIdSemester(teFindClass);
+        List<TeActivityResponse> list = teActivitySevice.getAllByIdSemester(teFindClass);
         return new ResponseObject(list);
     }
 

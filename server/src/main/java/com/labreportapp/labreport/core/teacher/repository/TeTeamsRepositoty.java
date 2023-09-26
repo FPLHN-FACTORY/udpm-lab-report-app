@@ -2,7 +2,7 @@ package com.labreportapp.labreport.core.teacher.repository;
 
 import com.labreportapp.labreport.core.teacher.model.request.TeFindMeetingRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindStudentClasses;
-import com.labreportapp.labreport.core.teacher.model.response.TeHomeWorkAndNoteMeetingRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TeHomeWorkAndNoteMeetingResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeTeamsRespone;
 import com.labreportapp.labreport.entity.Team;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -69,7 +69,7 @@ public interface TeTeamsRepositoty extends JpaRepository<Team, String> {
                         WHERE m.class_id = :#{#req.idClass} and m.id = :#{#req.idMeeting}
                       
             """, nativeQuery = true)
-    List<TeHomeWorkAndNoteMeetingRespone> findTeamAndHomeWorkAndNoteByIdClassAndIdMeeting(@Param("req") TeFindMeetingRequest req);
+    List<TeHomeWorkAndNoteMeetingResponse> findTeamAndHomeWorkAndNoteByIdClassAndIdMeeting(@Param("req") TeFindMeetingRequest req);
 
     @Query(value = """
              SELECT  * from team where class_id = :#{#idClass}

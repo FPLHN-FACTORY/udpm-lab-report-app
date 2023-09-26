@@ -1,4 +1,4 @@
-package com.labreportapp.labreport.core.teacher.model.response;
+package com.labreportapp.labreport.core.teacher.model.request;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +9,6 @@ import lombok.ToString;
  */
 @Getter
 @Setter
-@ToString
 public class TeFindUpdateStatusClassRequest {
 
     private String idClass;

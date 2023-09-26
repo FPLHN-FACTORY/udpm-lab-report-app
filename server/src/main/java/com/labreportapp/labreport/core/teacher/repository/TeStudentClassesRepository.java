@@ -1,8 +1,8 @@
 package com.labreportapp.labreport.core.teacher.repository;
 
 import com.labreportapp.labreport.core.teacher.model.request.TeFindStudentClasses;
-import com.labreportapp.labreport.core.teacher.model.response.TePointImportRespone;
-import com.labreportapp.labreport.core.teacher.model.response.TeStudentClassesRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TePointImportResponse;
+import com.labreportapp.labreport.core.teacher.model.response.TeStudentClassesResponse;
 import com.labreportapp.labreport.entity.StudentClasses;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -26,7 +26,7 @@ public interface TeStudentClassesRepository extends JpaRepository<StudentClasses
             FROM student_classes sc
             WHERE sc.class_id = :#{#idClass}
                      """, nativeQuery = true)
-    List<TePointImportRespone> findAllStudentClassForPointByIdClass(@Param("idClass") String idClass);
+    List<TePointImportResponse> findAllStudentClassForPointByIdClass(@Param("idClass") String idClass);
 
     @Query(value = """
             SELECT DISTINCT 
@@ -50,7 +50,7 @@ public interface TeStudentClassesRepository extends JpaRepository<StudentClasses
             WHERE sc.class_id = :#{#idClass}
             ORDER BY t.code
             """, nativeQuery = true)
-    List<TeStudentClassesRespone> findStudentClassByIdClass(@Param("idClass") String idClass);
+    List<TeStudentClassesResponse> findStudentClassByIdClass(@Param("idClass") String idClass);
 
     @Query(value = """
             SELECT DISTINCT 
@@ -72,7 +72,7 @@ public interface TeStudentClassesRepository extends JpaRepository<StudentClasses
             JOIN team t on t.id = sc.team_id
             WHERE sc.class_id = :#{#req.idClass} and sc.team_id =:#{#req.idTeam}
               """, nativeQuery = true)
-    List<TeStudentClassesRespone> findStudentClassByIdClassAndIdTeam(@Param("req") TeFindStudentClasses req);
+    List<TeStudentClassesResponse> findStudentClassByIdClassAndIdTeam(@Param("req") TeFindStudentClasses req);
 
     @Query(value = """
                 SELECT * FROM student_classes sc WHERE sc.id = :#{#idStudentClass}

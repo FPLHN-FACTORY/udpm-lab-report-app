@@ -6,7 +6,7 @@ import com.labreportapp.labreport.core.teacher.model.request.TeCreateTeamsReques
 import com.labreportapp.labreport.core.teacher.model.request.TeFindStudentClasses;
 import com.labreportapp.labreport.core.teacher.model.request.TeTeamUpdateStudentClassRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeUpdateTeamsRequest;
-import com.labreportapp.labreport.core.teacher.model.response.TeDetailClassRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TeDetailClassResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeExcelResponseMessage;
 import com.labreportapp.labreport.core.teacher.model.response.TeStudentCallApiResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeTeamsRespone;
@@ -107,7 +107,7 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         team.setName(request.getName());
         team.setSubjectName(request.getSubjectName());
         team.setClassId(request.getClassId());
-        Optional<TeDetailClassRespone> objClass = teClassRepository.findClassById(request.getClassId());
+        Optional<TeDetailClassResponse> objClass = teClassRepository.findClassById(request.getClassId());
         if (objClass.isPresent()) {
             if (objClass.get().getAllowUseTrello() == 0) {
                 Project project = new Project();
@@ -180,7 +180,7 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         team.setCode(request.getCode());
         team.setName(request.getName());
         team.setSubjectName(request.getSubjectName());
-        Optional<TeDetailClassRespone> objClass = teClassRepository.findClassById(team.getClassId());
+        Optional<TeDetailClassResponse> objClass = teClassRepository.findClassById(team.getClassId());
         if (!objClass.isPresent()) {
             if (objClass.get().getAllowUseTrello() == 0) {
                 Project project = new Project();

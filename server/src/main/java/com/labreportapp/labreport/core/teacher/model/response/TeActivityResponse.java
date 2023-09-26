@@ -5,15 +5,12 @@ import org.springframework.beans.factory.annotation.Value;
 /**
  * @author hieundph25894
  */
-public interface TePostRespone {
+public interface TeActivityResponse {
 
     @Value("#{target.id}")
     String getId();
 
-    @Value("#{target.descriptions}")
-    String getDescriptions();
-
-    @Value("#{target.created_date}")
-    Long getCreatedDate();
+    @Value("#{target.name}")
+    String getName();
 
 }
