@@ -48,7 +48,6 @@ const TeamsInMyClass = () => {
   const { idClass } = useParams();
   useEffect(() => {
     window.scrollTo(0, 0);
-
     featchTeams(idClass);
     featchClass(idClass);
   }, []);
@@ -60,7 +59,6 @@ const TeamsInMyClass = () => {
     try {
       await TeacherTeamsAPI.getTeamsByIdClass(id).then((responese) => {
         dispatch(SetTeams(responese.data.data));
-
         fetchData(idClass);
       });
     } catch (error) {

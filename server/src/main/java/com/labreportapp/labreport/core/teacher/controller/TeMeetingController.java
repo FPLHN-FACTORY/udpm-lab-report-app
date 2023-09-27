@@ -44,7 +44,6 @@ public class TeMeetingController {
 
     @GetMapping("/detail")
     public ResponseObject getTeMeetingDetail(final TeFindMeetingRequest request) {
-      //  TeMeetingResponse find = teMeetingService.searchMeetingByIdMeeting(request);
         TeDetailMeetingTeamReportRespone obj = teMeetingService.searchMeetingByIdMeeting(request);
         return new ResponseObject(obj);
     }

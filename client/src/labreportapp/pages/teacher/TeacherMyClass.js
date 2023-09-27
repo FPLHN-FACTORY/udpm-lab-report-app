@@ -1,6 +1,14 @@
 import "./styleTeacherMyClass.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faHome, faTableList } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCodeCompare,
+  faEye,
+  faFilter,
+  faHome,
+  faMagnifyingGlass,
+  faMagnifyingGlassArrowRight,
+  faTableList,
+} from "@fortawesome/free-solid-svg-icons";
 import { giangVienCurrent } from "../../helper/inForUser";
 import LoadingIndicator from "../../helper/loading";
 import { QuestionCircleFilled, ProjectOutlined } from "@ant-design/icons";
@@ -435,10 +443,18 @@ const TeacherMyClass = () => {
             </Row>
             <div className="box_btn_filter">
               <Button className="btn_filter" onClick={handleSearch}>
-                Tìm kiếm
+                <FontAwesomeIcon
+                  icon={faFilter}
+                  style={{ paddingRight: "5px" }}
+                />{" "}
+                <span>Tìm kiếm</span>
               </Button>
               <Button className="button-clear-teacher" onClick={handleClear}>
-                Làm mới
+                <FontAwesomeIcon
+                  icon={faCodeCompare}
+                  style={{ paddingRight: "5px" }}
+                />{" "}
+                <span>Làm mới bộ lọc</span>
               </Button>
             </div>
           </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, Collapse, Empty, Row } from "antd";
+import { Badge, Button, Col, Collapse, Empty, Row } from "antd";
 import "./styleCollapseTeam.css";
 import TextArea from "antd/es/input/TextArea";
 import { TeacherMeetingAPI } from "../../../../../../api/teacher/meeting/TeacherMeeting.api";
@@ -118,7 +118,13 @@ const CollapseTeam = ({ items }) => {
         clear();
       }}
     >
-      <Collapse bordered={false} accordion={true} ghost showArrow={true}>
+      <Collapse
+        bordered={false}
+        accordion={true}
+        ghost
+        showArrow={true}
+        className="panel-collap"
+      >
         {items.map((item, index) => (
           <Panel
             style={{
@@ -137,30 +143,36 @@ const CollapseTeam = ({ items }) => {
             }}
             className={`box-title ${activePanel === index ? "active" : ""}`}
             header={
-              <div
-                className={`custom-collapse-header ${
-                  activePanel === index ? "active" : ""
-                }`}
-              >
-                <div className="title-left" style={{ float: "left" }}>
-                  <div className="box-icon" style={{ float: "left" }}>
-                    <FontAwesomeIcon
-                      icon={faUsersRectangle}
-                      style={{ color: "white", fontSize: 21 }}
-                    />
+              <>
+                <div
+                  className={`custom-collapse-header ${
+                    activePanel === index ? "active" : ""
+                  }`}
+                >
+                  <div className="title-left">
+                    <div className="box-icon" style={{ float: "left" }}>
+                      <FontAwesomeIcon
+                        icon={faUsersRectangle}
+                        style={{ color: "white", fontSize: 21 }}
+                      />
+                    </div>
+
+                    <span
+                      style={{
+                        lineHeight: "40px",
+                        fontSize: "17px",
+                        color: "black",
+                        float: "left",
+                      }}
+                    >
+                      {item.name}
+                    </span>
                   </div>
-                  <span
-                    style={{
-                      lineHeight: "40px",
-                      fontSize: "17px",
-                      color: "black",
-                      float: "left",
-                    }}
-                  >
-                    {item.name}
-                  </span>
+                  <div style={{ justifyContent: "right" }}>
+                    {item.report && <Badge.Ribbon text={item.report} />}
+                  </div>
                 </div>
-              </div>
+              </>
             }
             key={index}
           >
@@ -248,7 +260,7 @@ const CollapseTeam = ({ items }) => {
         {items.length === 0 && (
           <Empty
             imageStyle={{ height: 60 }}
-            description={<span>Lớp học chưa có nhóm</span>}
+            description={<span>Không có dữ liệu</span>}
           />
         )}
       </Collapse>

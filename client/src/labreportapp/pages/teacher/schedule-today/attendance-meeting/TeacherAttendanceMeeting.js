@@ -148,7 +148,6 @@ const TeacherAttendanceMeeting = () => {
       fetchData(idClass);
     }
   }, [loadingData]);
-
   const handleSave = async () => {
     try {
       let dataFind = { listAttendance: data, idMeeting: idMeeting };
@@ -166,7 +165,15 @@ const TeacherAttendanceMeeting = () => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-
+  const handleChangeNotes = (id, value) => {
+    let dataUpdate = data.map((item) => {
+      if (item.idStudent === id) {
+        return { ...item, notes: value };
+      }
+      return item;
+    });
+    dispatch(SetAttendanceMeeting(dataUpdate));
+  };
   const data = useAppSelector(GetAttendanceMeeting);
   const columns = [
     {
@@ -269,9 +276,13 @@ const TeacherAttendanceMeeting = () => {
       key: "notes",
       render: (text, record) => {
         return (
-          <>
-            <Input type="text" value={text} />
-          </>
+          <Input
+            type="text"
+            value={text}
+            onChange={(e) =>
+              handleChangeNotes(record.idStudent, e.target.value)
+            }
+          />
         );
       },
     },
@@ -280,6 +291,47 @@ const TeacherAttendanceMeeting = () => {
       dataIndex: "statusAttendance",
       key: "statusAttendance",
       width: "30%",
+      filterDropdown: ({
+        setSelectedKeys,
+        selectedKeys,
+        confirm,
+        clearFilters,
+      }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="Tìm kiếm"
+            value={selectedKeys[0]}
+            onChange={(e) =>
+              setSelectedKeys(e.target.value ? [e.target.value] : [])
+            }
+            onPressEnter={confirm}
+            style={{ width: 188, marginBottom: 8, display: "block" }}
+          />
+          <Button
+            type="primary"
+            className="btn_search_member"
+            onClick={confirm}
+            size="small"
+            style={{ width: 90, marginRight: 8 }}
+          >
+            Tìm
+          </Button>
+          <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
+            Đặt lại
+          </Button>
+        </div>
+      ),
+      filterIcon: (filtered) => (
+        <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+      ),
+      onFilter: (value, record) => {
+        return (
+          (value.toLowerCase() === "có mặt" &&
+            record.statusAttendance === "YES") ||
+          (value.toLowerCase() === "vắng mặt" &&
+            record.statusAttendance === "NO")
+        );
+      },
       render: (text, record) => {
         return (
           <>

@@ -1,6 +1,7 @@
 package com.labreportapp.labreport.core.teacher.service.impl;
 
 import com.labreportapp.labreport.core.common.response.SimpleResponse;
+import com.labreportapp.labreport.core.teacher.email.TeEmailSender;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindAttendanceRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindListAttendanceRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindStudentClasses;
@@ -54,6 +55,9 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
 
     @Autowired
     private TeTeamsService teTeamsService;
+
+    @Autowired
+    private TeEmailSender teEmailSender;
 
     @Override
     public List<TeAttendanceResponse> getListCustom(String idMeeting) {
@@ -187,6 +191,7 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
 
     private void randomLead(List<TeAttendanceStudentResponse> listStudent, List<TeTeamsRespone> listTeam, List<StudentClasses> listStudentClasses, String idTeam) {
         if (listTeam != null && listStudent != null && listStudentClasses != null) {
+            String[] listEmail;
             List<TeAttendanceStudentResponse> members = listStudent.stream()
                     .filter(student -> student.getIdTeam() != null && student.getIdTeam().equals(idTeam) && student.getStatusAttendance().equals(StatusAttendance.YES) && student.getRole().equals(RoleTeam.MEMBER))
                     .collect(Collectors.toList());
@@ -208,10 +213,12 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
                         .findFirst()
                         .orElse(null);
                 if (find != null) {
+                   // listEmail = find.getEmail();
                     find.setRole(RoleTeam.LEADER);
                     teStudentClassesRepository.save(find);
                 }
             }
+           // teEmailSender.sendEmail(listEmail, "ĐIỂM DANH", "Chuyển trưởng nhóm", "Do trưởng nhóm của bạn đã nghỉ lên bạn sẽ được lên làm trưởng nhóm !");
         }
     }
 

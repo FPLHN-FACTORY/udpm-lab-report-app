@@ -56,6 +56,16 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                      """, nativeQuery = true)
     Optional<TeMeetingResponse> searchMeetingByIdMeeting(@Param("req") TeFindMeetingRequest req);
 
+    // SELECT DISTINCT
+    //                t.id AS id_team,
+//                t.name AS name_team,
+//                r.id AS id_report
+//            FROM team t
+//            JOIN class c ON c.id = t.class_id
+//            JOIN meeting m ON m.class_id = c.id
+//            LEFT JOIN report r ON r.team_id = t.id AND r.meeting_id = :#{#req.idMeeting}
+//            WHERE t.class_id = :#{#req.idClass}
+//            ORDER BY t.name ASC
     @Query(value = """
             SELECT DISTINCT
                 t.id AS id_team,
@@ -66,8 +76,9 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
             JOIN meeting m ON m.class_id = c.id
             LEFT JOIN report r ON r.team_id = t.id AND r.meeting_id = :#{#req.idMeeting}
             WHERE t.class_id = :#{#req.idClass}
+                AND (r.id IS NULL OR r.id = '') 
             ORDER BY t.name ASC
-            """, nativeQuery = true)
+                """, nativeQuery = true)
     List<TeDetailTeamReportRespone> findTeamReportByIdMeetingIdClass(@Param("req") TeFindMeetingRequest req);
 
     @Query(value = """

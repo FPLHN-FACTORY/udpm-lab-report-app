@@ -20,29 +20,41 @@ const TeamInMeeting = () => {
     window.scrollTo(0, 0);
     featchMeeting(idMeeting);
   }, []);
-
   const featchMeeting = async (id) => {
     setLoading(false);
     try {
       await TeacherMeetingAPI.getDetailByIdMeeting(id).then((response) => {
         setMeeting(response.data.data);
-        featchTeams(response.data.data.idClass);
+        featchTeams(
+          response.data.data.idClass,
+          response.data.data.listTeamReport
+        );
         document.title = "Bảng điều khiển - " + response.data.data.name;
       });
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-  const featchTeams = async (id) => {
+  const featchTeams = async (id, listReport) => {
     try {
       await TeacherTeamsAPI.getTeamsByIdClass(id).then((responese) => {
-        setTeam(responese.data.data);
+        const mergedList = responese.data.data.map((item1) => {
+          const matchingItem2 = listReport.find(
+            (item2) => item2.idTeam === item1.id
+          );
+          if (matchingItem2) {
+            return { ...item1, report: "Chưa báo cáo" };
+          }
+          return item1;
+        });
+        setTeam(mergedList);
         setLoading(true);
       });
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
+
   const convertLongToDate = (dateLong) => {
     const date = new Date(dateLong);
     const day = String(date.getDate()).padStart(2, "0");
@@ -106,7 +118,8 @@ const TeamInMeeting = () => {
                       color: "#1967D2",
                     }}
                   >
-                    {meeting.name} : {meeting.descriptions}
+                    {meeting.name}
+                    {": " + meeting.descriptions}
                   </span>
                 </div>
               </Col>

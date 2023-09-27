@@ -80,7 +80,7 @@ function Editor({ idTeacher, idClass, showCreate }) {
         }
       );
     } catch (error) {
-      alert(error.message);
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
   const featchSentMaillToStudent = async (body) => {
@@ -93,13 +93,10 @@ function Editor({ idTeacher, idClass, showCreate }) {
         body: body,
       };
       await TeacherMailAPI.sentMaillTeacherPostToStudent(data).then(
-        (response) => {
-          console.log("Gui mail chua thanh cong");
-          console.log(response);
-        }
+        (response) => {}
       );
     } catch (error) {
-      alert(error.message);
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
   return (
