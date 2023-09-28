@@ -109,10 +109,9 @@
 }
 .icon {
   size: 1;
-  color: #4096ff;
+  color: rgb(35, 119, 175);
   cursor: pointer;
 }
-
 .custom-link {
   position: relative;
   font-size: 24px;

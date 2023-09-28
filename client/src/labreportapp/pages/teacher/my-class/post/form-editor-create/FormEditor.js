@@ -62,8 +62,8 @@ function Editor({ idTeacher, idClass, showCreate }) {
           showCreate(false);
           dispatch(CreatePost(respone.data.data));
           featchStudentClass(idClass);
-          featchSentMaillToStudent(obj.descriptions);
           toast.success("Thêm bài viết thành công !");
+          featchSentMaillToStudent(obj.descriptions);
         },
         (error) => {
           toast.error(error.response.data.message);

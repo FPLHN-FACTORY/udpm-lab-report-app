@@ -49,7 +49,7 @@ public interface StMyClassRepository extends ClassRepository {
     List<StMyTeamInClassResponse> getTeamInClass(@Param("req") FindTeamByIdClass req);
 
     @Query(value = """
-            SELECT a.id, a.student_id , a.class_id , a.team_id , a.teEmail , a.role ,a.status FROM student_classes a
+            SELECT a.id, a.student_id , a.class_id , a.team_id , a.email , a.role ,a.status FROM student_classes a
             JOIN team b ON b.id = a.team_id
             WHERE a.class_id = :#{#req.idClass} AND a.team_id = :#{#req.idTeam}
             """, nativeQuery = true)

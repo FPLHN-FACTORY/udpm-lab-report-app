@@ -14,7 +14,7 @@ public interface AdStudentClassRepository extends StudentClassesRepository {
                         SELECT DISTINCT
                         sc.id as idStudentClass,
                         sc.student_id as idStudent,
-                        sc.teEmail as emailStudent,
+                        sc.email as emailStudent,
                         sc.role as role,
                         sc.status as statusStudent,
                         t.id as idTeam,

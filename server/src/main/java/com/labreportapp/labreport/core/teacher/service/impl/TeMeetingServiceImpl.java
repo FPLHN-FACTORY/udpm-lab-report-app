@@ -253,9 +253,10 @@ public class TeMeetingServiceImpl implements TeMeetingService {
             throw new RestApiException(Message.MEETING_IS_OVER);
         } else {
             int checkPeriord = checkPeriod(meetingFind.getMeetingPeriod());
-            if (checkPeriord == 11) {//11 is outside the study shift
-                throw new RestApiException(Message.MEETING_EDIT_ATTENDANCE_FAILD);
-            } else {
+//            if (checkPeriord == 11) {//11 is outside the study shift
+//                throw new RestApiException(Message.MEETING_EDIT_ATTENDANCE_FAILD);
+//            } else {
+            {
                 return meetingFind;
             }
         }

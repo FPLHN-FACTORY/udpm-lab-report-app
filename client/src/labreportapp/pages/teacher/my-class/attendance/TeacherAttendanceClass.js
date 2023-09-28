@@ -11,8 +11,10 @@ import { TeacherMeetingAPI } from "../../../../api/teacher/meeting/TeacherMeetin
 import { TeacherAttendanceAPI } from "../../../../api/teacher/attendance/TeacherAttendance.api";
 import LoadingIndicator from "../../../../helper/loading";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTableList } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faTableList } from "@fortawesome/free-solid-svg-icons";
 import { Empty } from "antd";
+import TeModalDetailOneStudent from "./detail-attendance-one-student/TeModalDetailOneStudent";
+
 const TeacherAttendanceClass = () => {
   const { idClass } = useParams();
   const dispatch = useAppDispatch();
@@ -21,11 +23,22 @@ const TeacherAttendanceClass = () => {
   const [column, setColumn] = useState([]);
   const [classDetail, setClassDetail] = useState({});
   const [loading, setLoading] = useState(false);
+  const [objStudent, setObjStudent] = useState({});
+  const [showDetailModal, setShowDetailModal] = useState(false);
   useEffect(() => {
     featchClass(idClass);
     featchColumn(idClass);
     featchTable(idClass);
   }, []);
+  const handleModalDetailCancel = () => {
+    document.querySelector("body").style.overflowX = "hidden";
+    setObjStudent({});
+    setShowDetailModal(false);
+  };
+  const handleModalDetailShow = (item) => {
+    setShowDetailModal(true);
+    setObjStudent(item);
+  };
   const featchColumn = async (idClass) => {
     try {
       await TeacherMeetingAPI.getColumnMeetingByIdClass(idClass).then(
@@ -63,12 +76,20 @@ const TeacherAttendanceClass = () => {
   };
   const convertLongToDate = (dateLong) => {
     const date = new Date(dateLong);
-    const format = `${date.getDate()}/${date.getMonth() + 1}`;
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    const format = `${day}/${month}/${year}`;
     return format;
   };
   return (
     <>
       {!loading && <LoadingIndicator />}
+      <TeModalDetailOneStudent
+        onCancel={handleModalDetailCancel}
+        visible={showDetailModal}
+        objStudent={objStudent}
+      />
       <div className="attendance-all">
         <div className="box-one">
           <Link to="/teacher/my-class" style={{ color: "black" }}>
@@ -217,6 +238,7 @@ const TeacherAttendanceClass = () => {
                         ))}
                       <th>Vắng</th>
                       <th>Tỷ lệ</th>
+                      <th>Hành động</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -252,6 +274,16 @@ const TeacherAttendanceClass = () => {
                               {parseFloat(countAbsent / countMeeting) * 100}%
                             </td>
                             <td>{countAbsent + `/` + countMeeting}</td>
+                            <td>
+                              <FontAwesomeIcon
+                                icon={faEye}
+                                style={{
+                                  color: "rgb(38, 144, 214)",
+                                  fontSize: "15px",
+                                }}
+                                onClick={() => handleModalDetailShow(item)}
+                              ></FontAwesomeIcon>
+                            </td>
                           </tr>
                         );
                       })}

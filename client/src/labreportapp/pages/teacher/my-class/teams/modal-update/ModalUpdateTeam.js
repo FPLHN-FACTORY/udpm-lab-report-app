@@ -365,13 +365,8 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
             </Row>
           ) : (
             <Empty
-              image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
               imageStyle={{ height: 60 }}
-              description={
-                <span style={{ color: "#007bff" }}>
-                  Không có thành viên nào trong nhóm
-                </span>
-              }
+              description={<span>Không có thành viên nào trong nhóm</span>}
             />
           )}
         </div>

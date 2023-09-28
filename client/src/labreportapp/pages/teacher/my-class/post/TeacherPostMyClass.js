@@ -22,8 +22,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faAnglesRight,
   faArrowsRotate,
-  faCaretDown,
-  faCircleChevronDown,
   faCopy,
   faEllipsisVertical,
   faExpand,
@@ -193,11 +191,14 @@ const TeacherPostMyClass = () => {
     document.body.removeChild(tempInput);
     toast.success("Đã sao chép mật khẩu vào bộ nhớ đệm !");
   };
-  const convertLongToDate = (longValue) => {
-    const date = new Date(longValue);
-    const format = `${date.getDate()}/${
-      date.getMonth() + 1
-    }/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()} `;
+  const convertLongToDate = (dateLong) => {
+    const date = new Date(dateLong);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    const hour = String(date.getHours() + 1).padStart(2, "0");
+    const minute = String(date.getMinutes() + 1).padStart(2, "0");
+    const format = `${day}/${month}/${year}` + ` ${hour}:${minute}`;
     return format;
   };
   const handleFullScreen = (value) => {
@@ -211,7 +212,7 @@ const TeacherPostMyClass = () => {
   const classDetail = useAppSelector(GetClass);
   const data = useAppSelector(GetPost);
   return (
-    <>
+    <div className="teacher-post">
       {!loading && <LoadingIndicator />}
       <ModalFullScreen
         visible={showFullScreen}
@@ -468,7 +469,13 @@ const TeacherPostMyClass = () => {
                   </div>
                 </div>
               )}
-              <div style={{ height: "auto", margin: "20px 0 20px 0" }}>
+              <div
+                style={{
+                  height: "auto",
+                  margin: "20px 0 20px 0",
+                  width: "100%",
+                }}
+              >
                 {data.length > 0 ? (
                   data.map((item, index) => {
                     return (
@@ -538,7 +545,7 @@ const TeacherPostMyClass = () => {
                                             Chỉnh sửa
                                           </Menu.Item>{" "}
                                           <Popconfirm
-                                            title="Xóa học kỳ"
+                                            title="Xóa bài viết"
                                             description="Bạn có chắc chắn muốn xóa bài viết này không ?"
                                             onConfirm={() => {
                                               clickDelete(item.id);
@@ -606,7 +613,7 @@ const TeacherPostMyClass = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 export default TeacherPostMyClass;

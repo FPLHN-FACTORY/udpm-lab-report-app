@@ -202,23 +202,6 @@ const TeamsInMyClass = () => {
       render: (text, record) => (
         <>
           <div>
-            {record.idProject != null && (
-              <Tooltip title="Xem trello dự án">
-                <Link
-                  to={`/detail-project/${record.idProject}`}
-                  style={{ color: "black" }}
-                >
-                  <FontAwesomeIcon
-                    icon={faEyeDropper}
-                    className="icon"
-                    onClick={() => {
-                      setShowDetailModal(true);
-                      handleDetailTeam(record);
-                    }}
-                  />
-                </Link>
-              </Tooltip>
-            )}
             <Tooltip title="Chi tiết">
               <FontAwesomeIcon
                 icon={faEye}
@@ -247,13 +230,30 @@ const TeamsInMyClass = () => {
                 }}
               />
             </Tooltip>
+            {record.idProject != null && (
+              <Tooltip title="Xem trello dự án">
+                <Link
+                  to={`/detail-project/${record.idProject}`}
+                  style={{ color: "black" }}
+                >
+                  <FontAwesomeIcon
+                    icon={faEyeDropper}
+                    className="icon"
+                    onClick={() => {
+                      setShowDetailModal(true);
+                      handleDetailTeam(record);
+                    }}
+                  />
+                </Link>
+              </Tooltip>
+            )}
           </div>
         </>
       ),
     },
   ];
   return (
-    <>
+    <div className="teacher-team">
       {!loading && <LoadingIndicator />}
       <div className="box-one">
         <Link to="/teacher/my-class" style={{ color: "black" }}>
@@ -470,7 +470,7 @@ const TeamsInMyClass = () => {
           </Modal>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

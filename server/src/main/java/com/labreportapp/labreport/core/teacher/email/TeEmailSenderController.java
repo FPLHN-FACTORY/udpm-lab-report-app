@@ -19,7 +19,7 @@ public class TeEmailSenderController {
 
     @PostMapping()
     public ResponseEntity<?> sendMail(@RequestBody TeEmail teEmail) {
-        teEmailSender.sendEmail(teEmail.getToEmail(), teEmail.getSubject(), teEmail.getTitleEmail(), teEmail.getBody());
+        teEmailSender.sendEmail(teEmail.getToEmail(), teEmail.getSubject(), teEmail.getBody());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

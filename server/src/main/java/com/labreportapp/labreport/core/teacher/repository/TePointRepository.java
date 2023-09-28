@@ -36,7 +36,7 @@ public interface TePointRepository extends JpaRepository<Point, String> {
             		     sc.id as id_studentClasses,
             			 p.id as id_point,
                          sc.student_id as id_student,
-                         sc.teEmail as teEmail,
+                         sc.email as email,
                          t.name as name_team,
                          p.check_point_phase1 as check_point_phase1,
                          p.check_point_phase2 as check_point_phase2,
@@ -52,8 +52,8 @@ public interface TePointRepository extends JpaRepository<Point, String> {
                         JOIN count_attendance ca ON ca.idStudent = sc.student_id
                         JOIN count_all_meeting cm ON cm.idClass = sc.class_id
                        WHERE m.status_meeting = 0 and sc.class_id=  :#{#idClass}
-                       GROUP BY p.id, sc.id, sc.student_id, p.check_point_phase1, p.check_point_phase2, p.final_point,
-                        sc.class_id, sc.teEmail, t.name, ca.soBuoiDiHoc, cm.soBuoiPhaiHoc
+                       GROUP BY p.id, sc.id, sc.student_id,p.check_point_phase1, p.check_point_phase2, p.final_point,
+                        sc.class_id, sc.email, t.name, ca.soBuoiDiHoc, cm.soBuoiPhaiHoc
                         ORDER BY t.name ASC
              """, nativeQuery = true)
     List<TePointResponse> getAllPointByIdClass(@Param("idClass") String idClass);

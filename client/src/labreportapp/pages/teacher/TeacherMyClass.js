@@ -187,7 +187,6 @@ const TeacherMyClass = () => {
     const format = `${day}/${month}/${year}`;
     return format;
   };
-
   const data = useAppSelector(GetTeacherMyClass);
   const columns = [
     {

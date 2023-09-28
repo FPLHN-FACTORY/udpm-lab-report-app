@@ -778,7 +778,7 @@ public class DBGenerator implements CommandLineRunner {
 
         Meeting meeting7 = new Meeting();
         meeting7.setName("Buổi 7  ");
-        meeting7.setMeetingDate(new Date().getTime() + 3 * 86400000);
+        meeting7.setMeetingDate(new Date().getTime() + 3 * 86400000+300);
         meeting7.setMeetingPeriod(MeetingPeriod.CA_1);
         meeting7.setDescriptions("Xét từ góc độ cấu tạo (nó gồm có những cái gì): Chủ nghĩa Mác - Lênin có ba bộ phận lý luận cơ bản hợp thành");
         meeting7.setClassId(class1.getId());

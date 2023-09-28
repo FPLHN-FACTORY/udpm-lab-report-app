@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -21,34 +22,39 @@ import java.nio.charset.StandardCharsets;
 public class TeEmailSender {
 
     @Autowired
-    private JavaMailSender javaMailSender;
+    private JavaMailSender emailSender;
 
     @Value("${spring.mail.username}")
     private String sender;
 
-    @Async
-    public void sendEmail(String[] toEmails, String subject, String titleEmail, String bodyEmail) {
+    public static final String LOGO_PATH_SMALL = "/static/images/logoSmall.png";
+
+    public void convertHtmlSendEmail(String[] toEmails, String subject, String titleEmail, String bodyEmail) {
         String htmlBody = MailConstant.BODY_STARTS +
                 titleEmail +
                 MailConstant.BODY_BODY +
                 bodyEmail +
                 MailConstant.BODY_END;
-        sendSimpleMail(toEmails, htmlBody, subject);
+        sendEmail(toEmails, subject, htmlBody);
     }
 
-    private void sendSimpleMail(String[] recipients, String msgBody, String subject) {
+    @Async
+    public void sendEmail(String[] toEmail, String subject, String bodyContend) throws MailException {
+        MimeMessage message = emailSender.createMimeMessage();
         try {
-            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true, StandardCharsets.UTF_8.toString());
-            ClassPathResource resource = new ClassPathResource(MailConstant.LOGO_PATH);
-            mimeMessageHelper.setFrom(sender);
-            mimeMessageHelper.setBcc(recipients);
-            mimeMessageHelper.setText(msgBody, true);
-            mimeMessageHelper.setSubject(subject);
-            mimeMessageHelper.addInline("logoImage", resource);
-            javaMailSender.send(mimeMessage);
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, StandardCharsets.UTF_8.toString());
+            ClassPathResource resource = new ClassPathResource(LOGO_PATH_SMALL);
+            helper.setFrom(sender);
+            helper.setBcc(toEmail);
+            helper.setSubject(subject);
+            helper.setText(bodyContend, true);
+            //  helper.addInline("logoImage", resource);
+            emailSender.send(message);
         } catch (Exception e) {
             log.error("ERROR WHILE SENDING MAIL: {}", e.getMessage());
         }
     }
 }
+
+
+
