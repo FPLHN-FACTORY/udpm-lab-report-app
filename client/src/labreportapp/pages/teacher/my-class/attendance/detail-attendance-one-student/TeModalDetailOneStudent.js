@@ -164,7 +164,7 @@ const TeModalDetailOneStudent = ({ onCancel, visible, objStudent }) => {
       ),
       onFilter: (value, record) => {
         if (record.usernameTeacher === null) {
-          return record.usernameTeacher;
+          return "";
         }
         return record.usernameTeacher
           .toLowerCase()
@@ -240,7 +240,7 @@ const TeModalDetailOneStudent = ({ onCancel, visible, objStudent }) => {
                     style={{
                       position: "absolute",
                       bottom: "3px",
-                      width: "95%",
+                      width: "100%",
                     }}
                   />
                 </div>

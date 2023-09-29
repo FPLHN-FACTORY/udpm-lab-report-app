@@ -109,7 +109,7 @@
 }
 .icon {
   size: 1;
-  color: rgb(35, 119, 175);
+  color: rgb(38, 144, 214) !important;
   cursor: pointer;
 }
 .custom-link {

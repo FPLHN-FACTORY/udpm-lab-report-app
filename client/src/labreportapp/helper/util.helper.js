@@ -111,8 +111,6 @@ export const convertStatusMeetingByDateAndPeriod = (
   meetingPeriod
 ) => {
   const currentDate = new Date();
-
-  // Chuyển đổi meetingPeriod thành một đối tượng mô tả khung giờ
   const meetingPeriods = {
     0: { start: "7:15", end: "9:15" },
     1: { start: "9:25", end: "11:25" },
@@ -125,11 +123,10 @@ export const convertStatusMeetingByDateAndPeriod = (
     8: { start: "01:00", end: "3:00" },
     9: { start: "03:10", end: "05:10" },
   };
-
   if (meetingDate > currentDate) {
-    return true; // Ca học đã diễn ra
+    return true;
   } else if (meetingDate < currentDate) {
-    return false; // Ca học chưa diễn ra
+    return false;
   } else {
     const caHocTime = meetingPeriods[meetingPeriod];
     const caHocStartDate = new Date(
@@ -146,7 +143,6 @@ export const convertStatusMeetingByDateAndPeriod = (
       parseInt(caHocTime.end.split(":")[0]),
       parseInt(caHocTime.end.split(":")[1])
     );
-
     if (currentDate >= caHocStartDate && currentDate <= caHocEndDate) {
       return true;
     } else {

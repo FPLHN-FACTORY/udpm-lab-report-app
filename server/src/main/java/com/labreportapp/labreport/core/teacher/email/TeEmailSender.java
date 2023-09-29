@@ -27,7 +27,7 @@ public class TeEmailSender {
     @Value("${spring.mail.username}")
     private String sender;
 
-    public static final String LOGO_PATH_SMALL = "/static/images/logoSmall.png";
+    public static final String LOGO_PATH_SMALL = "../..//static/images/logo.png";
 
     public void convertHtmlSendEmail(String[] toEmails, String subject, String titleEmail, String bodyEmail) {
         String htmlBody = MailConstant.BODY_STARTS +
@@ -48,7 +48,7 @@ public class TeEmailSender {
             helper.setBcc(toEmail);
             helper.setSubject(subject);
             helper.setText(bodyContend, true);
-            //  helper.addInline("logoImage", resource);
+            helper.addInline("logoImage", resource);
             emailSender.send(message);
         } catch (Exception e) {
             log.error("ERROR WHILE SENDING MAIL: {}", e.getMessage());

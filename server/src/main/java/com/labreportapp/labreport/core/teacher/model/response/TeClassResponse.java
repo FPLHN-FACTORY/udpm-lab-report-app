@@ -22,9 +22,15 @@ public interface TeClassResponse {
     @Value("#{target.class_period}")
     Integer getClassPeriod();
 
+    @Value("#{target.class_size}")
+    Integer getClassSize();
+
     @Value("#{target.level}")
     String getLevel();
 
     @Value("#{target.activity}")
     String getActivity();
+
+    @Value("#{target.teacher_id}")
+    String getTeacherId();
 }

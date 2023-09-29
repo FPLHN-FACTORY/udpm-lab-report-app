@@ -215,6 +215,7 @@ const MeetingInMyClass = () => {
                           record.meetingPeriod
                         ) && (
                           <Badge.Ribbon
+                            color="#E2B357"
                             text={"Học xong"}
                             style={{
                               marginRight: "205px",
@@ -286,7 +287,7 @@ const MeetingInMyClass = () => {
                 ) : (
                   <Empty
                     imageStyle={{ height: 60 }}
-                    description={<span>Không có buổi học</span>}
+                    description={<span>Không có dữ liệu</span>}
                   />
                 )}
               </div>

@@ -169,7 +169,9 @@ const CollapseTeam = ({ items }) => {
                     </span>
                   </div>
                   <div style={{ justifyContent: "right" }}>
-                    {item.report && <Badge.Ribbon text={item.report} />}
+                    {item.report && (
+                      <Badge.Ribbon text={item.report} color="#E2B357" />
+                    )}
                   </div>
                 </div>
               </>

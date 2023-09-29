@@ -2,7 +2,6 @@ import { request } from "../../../helper/request.helper";
 
 const url = `/teacher/student-classes`;
 export class TeacherStudentClassesAPI {
-
   static getStudentInClasses(id) {
     return request({
       method: "GET",
@@ -14,6 +13,13 @@ export class TeacherStudentClassesAPI {
     return request({
       method: "GET",
       url: url + `/team?idClass=` + data.idClass + `&idTeam=` + data.idTeam,
+    });
+  }
+  static sentStudentClassesToClass(data) {
+    return request({
+      method: "PUT",
+      url: url + `/sent-st`,
+      data: data,
     });
   }
 }

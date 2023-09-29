@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import "./styleStudentsInMyClass.css";
-import { Button, Empty, Input, Table, Tag } from "antd";
+import { Button, Checkbox, Empty, Input, Table, Tag, Divider } from "antd";
 import { Link } from "react-router-dom";
 import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
 import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/TeacherStudentClasses.api";
@@ -15,7 +15,13 @@ import moment from "moment";
 import { ControlOutlined, SearchOutlined } from "@ant-design/icons";
 import { SetTTrueToggle } from "../../../../app/teacher/TeCollapsedSlice.reducer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleInfo, faTableList } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircleInfo,
+  faRightFromBracket,
+  faTableList,
+} from "@fortawesome/free-solid-svg-icons";
+import { toast } from "react-toastify";
+import ModalSentStudent from "./modal-sent-student/ModalSentStudent";
 
 const StudentsInMyClass = () => {
   const dispatch = useAppDispatch();
@@ -23,8 +29,11 @@ const StudentsInMyClass = () => {
   const [classDetail, setClassDetail] = useState({});
   const [loading, setLoading] = useState(false);
   const { idClass } = useParams();
+  const [listIdStudent, setListIdStudent] = useState([]);
+  const [showModalSent, setShowModalSent] = useState(false);
   useEffect(() => {
     window.scrollTo(0, 0);
+    dispatch(SetStudentClasses([]));
     featchClass(idClass);
   }, []);
   const featchClass = async (idClass) => {
@@ -43,7 +52,13 @@ const StudentsInMyClass = () => {
     try {
       await TeacherStudentClassesAPI.getStudentInClasses(id).then(
         (responese) => {
-          dispatch(SetStudentClasses(responese.data.data));
+          if (responese.data.data != null) {
+            let studentIds = responese.data.data
+              .filter((item) => item.idTeam === null)
+              .map((item) => item.idStudent);
+            setListIdStudent(studentIds);
+            dispatch(SetStudentClasses(responese.data.data));
+          }
           setLoading(true);
         }
       );
@@ -51,8 +66,9 @@ const StudentsInMyClass = () => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
+
   const data = useAppSelector(GetStudentClasses);
-  const columns = [
+  let columns = [
     {
       title: "#",
       dataIndex: "stt",
@@ -254,7 +270,6 @@ const StudentsInMyClass = () => {
         return record.email.toLowerCase().includes(value.toLowerCase());
       },
     },
-
     {
       title: "Trạng thái",
       dataIndex: "statusStudent",
@@ -318,9 +333,67 @@ const StudentsInMyClass = () => {
       },
     },
   ];
+
+  const [checkedList, setCheckedList] = useState([]);
+  const handleSentStudent = () => {
+    if (checkedList.length === 0) {
+      toast.warning("Vui lòng chọn sinh viên cần chuyển lớp !");
+      return;
+    }
+    setShowModalSent(true);
+  };
+  if (classDetail.statusTeacherEdit === 0 && data != null && data.length > 0) {
+    const checkAll = listIdStudent.length === checkedList.length;
+    const indeterminate =
+      checkedList.length > 0 && checkedList.length < listIdStudent.length;
+    const onChangeCheckBox = (idStudent, checked) => {
+      setCheckedList(
+        checked
+          ? [...checkedList, idStudent]
+          : checkedList.filter((item) => item !== idStudent)
+      );
+    };
+    const onCheckAllChange = (e) => {
+      setCheckedList(e.target.checked ? listIdStudent : []);
+    };
+    columns = [
+      {
+        title: classDetail.statusTeacherEdit === 0 && (
+          <Checkbox
+            indeterminate={indeterminate}
+            onChange={onCheckAllChange}
+            checked={checkAll}
+          />
+        ),
+        dataIndex: "check",
+        key: "check",
+        render: (text, record) => (
+          <>
+            {classDetail.statusTeacherEdit === 0 &&
+              (record.nameTeam !== null ||
+                (record.nameTeam !== "" && (
+                  <Checkbox
+                    checked={checkedList.includes(record.idStudent)}
+                    onChange={(e) =>
+                      onChangeCheckBox(record.idStudent, e.target.checked)
+                    }
+                  />
+                )))}
+          </>
+        ),
+      },
+      ...columns,
+    ];
+  }
   return (
     <>
       {!loading && <LoadingIndicator />}
+      <ModalSentStudent
+        visible={showModalSent}
+        onCancel={() => setShowModalSent(!showModalSent)}
+        listIdStudent={checkedList}
+        classDetail={classDetail}
+      />
       <div className="box-one">
         <Link to="/teacher/my-class" style={{ color: "black" }}>
           <span style={{ fontSize: "18px", paddingLeft: "20px" }}>
@@ -469,20 +542,14 @@ const StudentsInMyClass = () => {
                 className="group-info-item"
                 style={{ marginTop: "13px", marginBottom: "15px" }}
               >
-                Trạng thái: &nbsp;
-                {classDetail.statusClass === 0 ? "Đã mở" : "Đã khóa"}
-              </span>
-              <span
-                className="group-info-item"
-                style={{ marginTop: "13px", marginBottom: "15px" }}
-              >
                 Ca học: &nbsp; {classDetail.classPeriod + 1}
               </span>
               <span
                 className="group-info-item"
                 style={{ marginTop: "13px", marginBottom: "15px" }}
               >
-                Số thành viên: &nbsp;{classDetail.classSize}
+                Số thành viên: &nbsp;
+                {data != null ? data.length : classDetail.classSize}
               </span>
               <span
                 className="group-info-item"
@@ -498,10 +565,38 @@ const StudentsInMyClass = () => {
               </span>
               <span
                 className="group-info-item"
-                style={{ marginTop: "13px", marginBottom: "15px" }}
+                style={{
+                  marginTop: "13px",
+                  marginBottom: "15px",
+                  color: "red",
+                }}
+              >
+                Trạng thái: &nbsp;
+                {classDetail.statusClass === 0 ? "Đã mở" : "Đã khóa"}
+              </span>
+              <span
+                className="group-info-item"
+                style={{
+                  marginTop: "13px",
+                  marginBottom: "15px",
+                  color: "red",
+                }}
               >
                 Trello: &nbsp;
                 {classDetail.allowUseTrello === 0
+                  ? "Cho phép"
+                  : "Không cho phép"}
+              </span>
+              <span
+                className="group-info-item"
+                style={{
+                  marginTop: "13px",
+                  marginBottom: "15px",
+                  color: "red",
+                }}
+              >
+                Di chuyển sinh viên: &nbsp;
+                {classDetail.statusTeacherEdit === 0
                   ? "Cho phép"
                   : "Không cho phép"}
               </span>
@@ -517,13 +612,33 @@ const StudentsInMyClass = () => {
                 }}
               />
               Danh sách sinh viên :
+              {classDetail.statusTeacherEdit === 0 &&
+                data != null &&
+                data.length > 0 && (
+                  <Button
+                    onClick={handleSentStudent}
+                    style={{
+                      backgroundColor: "rgb(38, 144, 214)",
+                      color: "white",
+                      float: "right",
+                    }}
+                  >
+                    <FontAwesomeIcon
+                      icon={faRightFromBracket}
+                      color="white"
+                      style={{ paddingRight: "5px" }}
+                    />
+                    Trao đổi sinh viên
+                  </Button>
+                )}
             </div>
           </span>
+
           <div
             style={{ minHeight: "140px", marginTop: "20px" }}
             className="table-teacher"
           >
-            {data.length > 0 ? (
+            {data != null && data.length > 0 ? (
               <>
                 <div className="table">
                   <Table
@@ -538,7 +653,7 @@ const StudentsInMyClass = () => {
               <>
                 <Empty
                   imageStyle={{ height: 60 }}
-                  description={<span>Chưa có sinh viên nào trong lớp</span>}
+                  description={<span>Không có dữ liệu</span>}
                 />
               </>
             )}

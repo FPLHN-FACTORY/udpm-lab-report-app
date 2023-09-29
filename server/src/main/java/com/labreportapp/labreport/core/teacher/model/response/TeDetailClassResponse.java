@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
  */
 public interface TeDetailClassResponse {
 
-    @Value("#{target.id}")
+    @Value("#{target.id_class}")
     String getId();
 
     @Value("#{target.code}")
@@ -31,8 +31,17 @@ public interface TeDetailClassResponse {
     @Value("#{target.descriptions}")
     String getDescriptions();
 
+    @Value("#{target.activity_id}")
+    String getActivityId();
+
+    @Value("#{target.level_id}")
+    String getLevelId();
+
     @Value("#{target.activityLevel}")
     String getActivityLevel();
+
+    @Value("#{target.semester_id}")
+    String getSemesterId();
 
     @Value("#{target.semesterName}")
     String getSemesterName();
@@ -42,5 +51,8 @@ public interface TeDetailClassResponse {
 
     @Value("#{target.allow_use_trello}")
     Integer getAllowUseTrello();
+
+    @Value("#{target.status_teacher_edit}")
+    Integer getStatusTeacherEdit();
 
 }

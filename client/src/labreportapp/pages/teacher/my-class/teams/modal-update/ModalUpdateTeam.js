@@ -391,6 +391,7 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
                 style={{
                   backgroundColor: "red",
                   color: "white",
+                  marginLeft: "10px",
                 }}
                 onClick={cancelFaild}
               >

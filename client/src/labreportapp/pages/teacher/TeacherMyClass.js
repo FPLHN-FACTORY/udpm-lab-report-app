@@ -196,13 +196,13 @@ const TeacherMyClass = () => {
       sorter: (a, b) => a.stt - b.stt,
     },
     {
-      title: "Mã lớp",
+      title: <div style={{ textAlign: "center" }}>Mã lớp</div>,
       dataIndex: "code",
       key: "code",
       sorter: (a, b) => a.code.localeCompare(b.code),
     },
     {
-      title: "Thời gian bắt đầu",
+      title: <div style={{ textAlign: "center" }}>Thời gian bắt đầu</div>,
       dataIndex: "startTime",
       key: "startTime",
       sorter: (a, b) => a.startTime - b.startTime,
@@ -212,7 +212,7 @@ const TeacherMyClass = () => {
       align: "center",
     },
     {
-      title: "Ca học",
+      title: <div style={{ textAlign: "center" }}>Ca học</div>,
       dataIndex: "classPeriod",
       key: "classPeriod",
       render: (text) => <span>{text + 1}</span>,
@@ -220,7 +220,14 @@ const TeacherMyClass = () => {
       align: "center",
     },
     {
-      title: "Thời gian",
+      title: <div style={{ textAlign: "center" }}>Sĩ số</div>,
+      dataIndex: "classSize",
+      key: "classSize",
+      sorter: (a, b) => a.classSize - b.classSize,
+      align: "center",
+    },
+    {
+      title: <div style={{ textAlign: "center" }}>Thời gian</div>,
       dataIndex: "timePeriod",
       key: "timePeriod",
       render: (text, record) => {
@@ -229,24 +236,25 @@ const TeacherMyClass = () => {
       align: "center",
     },
     {
-      title: "Hoạt động",
+      title: <div style={{ textAlign: "center" }}>Hoạt động</div>,
       dataIndex: "activity",
       key: "activity",
       sorter: (a, b) => a.activity.localeCompare(b.activity),
     },
     {
-      title: "Level",
+      title: <div style={{ textAlign: "center" }}>Cấp độ</div>,
       dataIndex: "level",
       key: "level",
       sorter: (a, b) => a.level.localeCompare(b.level),
+      align: "center",
     },
     {
-      title: "Hành động",
+      title: <div style={{ textAlign: "center" }}>Hành động</div>,
       dataIndex: "actions",
       key: "actions",
       render: (text, record) => (
         <>
-          <div className="box_icon">
+          <div className="box_icon" style={{ textAlign: "center" }}>
             <Link
               to={`/teacher/my-class/post/${record.id}`}
               className="btn btn-success ml-4"

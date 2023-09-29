@@ -75,8 +75,10 @@ function Editor({ idTeacher, idClass, showCreate }) {
     try {
       await TeacherStudentClassesAPI.getStudentInClasses(idClass).then(
         (responese) => {
-          const emailList = responese.data.data.map((item) => item.email);
-          setListMail(emailList);
+          if (responese.data.data != null) {
+            const emailList = responese.data.data.map((item) => item.email);
+            setListMail(emailList);
+          }
         }
       );
     } catch (error) {
@@ -92,9 +94,7 @@ function Editor({ idTeacher, idClass, showCreate }) {
         toEmail: listMail,
         body: body,
       };
-      await TeacherMailAPI.sentMaillTeacherPostToStudent(data).then(
-        (response) => {}
-      );
+      await TeacherMailAPI.sentMaillTeacherPostToStudent(data);
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }

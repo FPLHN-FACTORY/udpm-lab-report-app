@@ -19,4 +19,7 @@ public interface TeMeetingCustomToAttendanceResponse {
     @Value("#{target.meeting_date}")
     Long getMeetingDate();
 
+    @Value("#{target.meeting_period}")
+    Integer getMeetingPeriod();
+
 }

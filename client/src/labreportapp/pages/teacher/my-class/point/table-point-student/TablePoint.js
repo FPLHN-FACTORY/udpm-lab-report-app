@@ -406,7 +406,7 @@ const TablePoint = () => {
       ) : (
         <Empty
           imageStyle={{ height: 60 }}
-          description={<span>Chưa có sinh viên nào trong lớp học</span>}
+          description={<span>Không có dữ liệu</span>}
         />
       )}
     </>

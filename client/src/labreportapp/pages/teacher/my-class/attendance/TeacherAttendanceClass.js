@@ -12,7 +12,7 @@ import { TeacherAttendanceAPI } from "../../../../api/teacher/attendance/Teacher
 import LoadingIndicator from "../../../../helper/loading";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faTableList } from "@fortawesome/free-solid-svg-icons";
-import { Empty } from "antd";
+import { Empty, Tooltip } from "antd";
 import TeModalDetailOneStudent from "./detail-attendance-one-student/TeModalDetailOneStudent";
 
 const TeacherAttendanceClass = () => {
@@ -61,7 +61,7 @@ const TeacherAttendanceClass = () => {
           toast.error(err.data.message);
         });
     } catch (error) {
-      alert(error.message);
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
   const featchClass = async (idClass) => {
@@ -78,8 +78,7 @@ const TeacherAttendanceClass = () => {
     const date = new Date(dateLong);
     const day = String(date.getDate()).padStart(2, "0");
     const month = String(date.getMonth() + 1).padStart(2, "0");
-    const year = date.getFullYear();
-    const format = `${day}/${month}/${year}`;
+    const format = `${day}/${month}`;
     return format;
   };
   return (
@@ -233,6 +232,8 @@ const TeacherAttendanceClass = () => {
                           <th className="column-AP-teacher" key={index}>
                             {convertLongToDate(item.meetingDate)}
                             <br />
+                            <span>Ca {item.meetingPeriod + 1}</span>
+                            <br />
                             <span>{item.nameMeeting}</span>
                           </th>
                         ))}
@@ -275,14 +276,16 @@ const TeacherAttendanceClass = () => {
                             </td>
                             <td>{countAbsent + `/` + countMeeting}</td>
                             <td>
-                              <FontAwesomeIcon
-                                icon={faEye}
-                                style={{
-                                  color: "rgb(38, 144, 214)",
-                                  fontSize: "15px",
-                                }}
-                                onClick={() => handleModalDetailShow(item)}
-                              ></FontAwesomeIcon>
+                              <Tooltip
+                                title="Xem chi tiết"
+                                style={{ cursor: "pointer" }}
+                              >
+                                <FontAwesomeIcon
+                                  icon={faEye}
+                                  className="icon"
+                                  onClick={() => handleModalDetailShow(item)}
+                                />
+                              </Tooltip>
                             </td>
                           </tr>
                         );
@@ -295,7 +298,7 @@ const TeacherAttendanceClass = () => {
                   style={{
                     padding: "20px 0px 20px 0",
                   }}
-                  description={<span>Không có thông tin buổi học</span>}
+                  description={<span>Không có dữ liệu</span>}
                 />
               )}
             </div>

@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import "./styleTeamsInMyClass.css";
-import { Row, Table, Button, Tooltip, Col, Modal, Empty } from "antd";
+import { Row, Table, Button, Tooltip, Modal, Empty } from "antd";
 import { Link } from "react-router-dom";
 import { ControlOutlined } from "@ant-design/icons";
 import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/TeacherStudentClasses.api";
@@ -23,7 +23,6 @@ import {
   faEyeDropper,
   faPenToSquare,
   faTrashCan,
-  faUpload,
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import ModalDetailTeam from "./modal-detail/ModalDetailTeam";
@@ -48,10 +47,11 @@ const TeamsInMyClass = () => {
   const { idClass } = useParams();
   useEffect(() => {
     window.scrollTo(0, 0);
-    featchTeams(idClass);
-    featchClass(idClass);
+    fetchData(idClass);
   }, []);
   const fetchData = async (idClass) => {
+    await featchClass(idClass);
+    await featchTeams(idClass);
     await featchStudentClass(idClass);
   };
   const featchTeams = async (id) => {
@@ -59,7 +59,6 @@ const TeamsInMyClass = () => {
     try {
       await TeacherTeamsAPI.getTeamsByIdClass(id).then((responese) => {
         dispatch(SetTeams(responese.data.data));
-        fetchData(idClass);
       });
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
@@ -80,12 +79,14 @@ const TeamsInMyClass = () => {
     try {
       await TeacherStudentClassesAPI.getStudentInClasses(id).then(
         (responese) => {
-          dispatch(SetStudentClasses(responese.data.data));
+          if (responese.data.data != null) {
+            dispatch(SetStudentClasses(responese.data.data));
+          }
           setLoading(true);
         }
       );
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      alert("Lỗi hệ thống, vui lòng F5 lại trang  !");
     }
   };
   const [teamDelete, setTeamDelete] = useState({});
@@ -98,19 +99,21 @@ const TeamsInMyClass = () => {
       await TeacherTeamsAPI.deleteById(teamDelete.id).then((respone) => {
         toast.success(respone.data.data);
         dispatch(DeleteTeam(teamDelete));
-        const objFilter = dataStudentClasses.map((item) => {
-          if (item.idTeam === teamDelete.id) {
-            return { ...item, idTeam: null, codeTeam: null, role: `1` };
-          }
-          return item;
-        });
-        dispatch(SetStudentClasses(objFilter));
+        if (dataStudentClasses != null) {
+          const objFilter = dataStudentClasses.map((item) => {
+            if (item.idTeam === teamDelete.id) {
+              return { ...item, idTeam: null, codeTeam: null, role: `1` };
+            }
+            return item;
+          });
+          dispatch(SetStudentClasses(objFilter));
+        }
         setTeamDelete({});
         handleCancelModalCreateSusscess();
       });
     } catch (error) {
       toast.warning("Xóa thất bại !");
-      alert("Lỗi hệ thống, vui lòng F5 lại trang  deleete!");
+      alert("Lỗi hệ thống, vui lòng F5 lại trang  !");
     }
   };
   const handleCancelModalCreateSusscess = () => {
@@ -408,7 +411,7 @@ const TeamsInMyClass = () => {
             ) : (
               <Empty
                 imageStyle={{ height: 60 }}
-                description={<span>Chưa có nhóm nào trong lớp</span>}
+                description={<span>Không có dữ liệu</span>}
               />
             )}
           </div>

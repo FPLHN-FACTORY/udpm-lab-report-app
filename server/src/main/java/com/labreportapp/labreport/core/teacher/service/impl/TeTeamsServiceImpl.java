@@ -258,6 +258,11 @@ public class TeTeamsServiceImpl implements TeTeamsService {
             List<TeStudentCallApiResponse> listStudent = teStudentClassesService.searchApiStudentClassesByIdClass(idClass);
             Class objClass = teClassRepository.findById(idClass).get();
             Sheet sheet = configTitle(workbook, objClass.getCode());
+            if(listStudent == null){
+                workbook.write(response.getOutputStream());
+                workbook.close();
+                return outputStream;
+            }
             int rowIndex = 3;
             int index = 1;
             for (TeStudentCallApiResponse data : listStudent) {
@@ -294,6 +299,12 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         cellTitle.setCellValue("DANH SÁCH NHÓM TRONG LỚP " + name);
         cellTitle.setCellStyle(chooseCellStyle("title", workbook));
         sheet.addMergedRegion(new CellRangeAddress(0, 1, 0, 5));
+        sheet.setColumnWidth(0, 2000);
+        sheet.setColumnWidth(1, 8000);
+        sheet.setColumnWidth(2, 8000);
+        sheet.setColumnWidth(3, 2000);
+        sheet.setColumnWidth(4, 7000);
+        sheet.setColumnWidth(5, 7000);
         Row headerRow = sheet.createRow(2);
         Cell cell0 = headerRow.createCell(0);
         cell0.setCellValue("STT");

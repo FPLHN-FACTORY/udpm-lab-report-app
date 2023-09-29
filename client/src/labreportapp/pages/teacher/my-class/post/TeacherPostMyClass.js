@@ -312,7 +312,10 @@ const TeacherPostMyClass = () => {
           <div className="box-post">
             <div className="box-post-left">
               <div className="box-infor" style={{ height: "140px" }}>
-                <span className="title-main">Tên lớp</span>
+                <Row>
+                  {" "}
+                  <span className="title-main">Tên lớp</span>
+                </Row>
                 <p className="infor-main">
                   {classDetail.code}
                   <FontAwesomeIcon
@@ -581,10 +584,12 @@ const TeacherPostMyClass = () => {
                     );
                   })
                 ) : (
-                  <Empty
-                    imageStyle={{ height: 60 }}
-                    description={<span>Chưa có bài viết nào được đăng</span>}
-                  />
+                  <div style={{ paddingTop: "50px" }}>
+                    <Empty
+                      imageStyle={{ height: 60 }}
+                      description={<span>Chưa có bài viết nào được đăng</span>}
+                    />
+                  </div>
                 )}
                 {seeMore && (
                   <Spin spinning={dowloading} style={{ marginTop: "10px" }}>
