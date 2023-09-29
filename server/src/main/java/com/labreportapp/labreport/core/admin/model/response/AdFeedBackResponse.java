@@ -17,4 +17,7 @@ public interface AdFeedBackResponse {
 
     @Value("#{target.class_id}")
     String getIdClass();
+
+    @Value("#{target.created_date}")
+    Long getCreatedDate();
 }

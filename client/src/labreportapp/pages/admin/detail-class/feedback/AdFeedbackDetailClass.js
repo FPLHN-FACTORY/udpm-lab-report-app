@@ -4,7 +4,6 @@ import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import { ClassAPI } from "../../../../api/admin/class-manager/ClassAPI.api";
 import { AdminFeedBackAPI } from "../../../../api/admin/AdFeedBackAPI";
-import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/TeacherStudentClasses.api";
 import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import { Select, Table } from "antd";
 import LoadingIndicator from "../../../../helper/loading";
@@ -30,7 +29,7 @@ const AdFeedbackDetailClass = () => {
   };
   const [pagination, setPagination] = useState({
     current: 1,
-    pageSize: 10 // Number of items to display per page
+    pageSize: 10 
   });
   const handleTableChange = (pagination, filters, sorter) => {
     setPagination(pagination);
@@ -53,7 +52,7 @@ const AdFeedbackDetailClass = () => {
   const featchStudentClass = async (id) => {
     setLoading(false);
     try {
-      await TeacherStudentClassesAPI.getStudentInClasses(id).then(
+      await AdminFeedBackAPI.getStudentInClasses(id).then(
         (responese) => {
          setListStudent(responese.data.data);
          console.log(responese.data.data);
@@ -76,14 +75,34 @@ const AdFeedbackDetailClass = () => {
       dataIndex: "description",
       key: "description",
       sorter: (a, b) => a.descriptions.localeCompare(b.descriptions),
-      width: "60%",
-    }
-    ,
+      width: "50%",
+    },
+    {
+      title: "Ngày feedback",
+      dataIndex: "createdDate",
+      key: "createdDate",
+      sorter: (a, b) => a.createdDate.localeCompare(b.createdDate),
+      width: "40%",
+      render: (createdDate) => {
+        const date = new Date(createdDate);
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+        const hours = date.getHours();
+        const minutes = date.getMinutes();
+        const formattedDate = `${day}/${month}/${year+"  --"}`;
+        const formattedTime = `${hours+" giờ "}:${" "+minutes+" phút"}`;
+        return (
+          <span>
+            {formattedDate} <span style={{ color: "brown" }}>{formattedTime}</span>
+          </span>
+        );
+      },
+    },
     {
       title: "Sinh Viên",
       dataIndex: "idStudent",
       key: "idStudent",
-      // sorter: (a, b) => a.student_id.localeCompare(b.student_id),
       width: "30%",
       render: (idStudent) => {
         const student = listStudent.find((student) => student.idStudent === idStudent);

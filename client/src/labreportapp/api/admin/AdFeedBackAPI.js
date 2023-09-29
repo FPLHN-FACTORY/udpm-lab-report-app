@@ -10,5 +10,10 @@ static getAllFeedBackByIdClass(idClass) {
       url: url + `/get/` + idClass,
     });
   }
-
+  static getStudentInClasses(id) {
+    return request({
+      method: "GET",
+      url: url + `/get-student?idClass=` + id,
+    });
+  }
 }

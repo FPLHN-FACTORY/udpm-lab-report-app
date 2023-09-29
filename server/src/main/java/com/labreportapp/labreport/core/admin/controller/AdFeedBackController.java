@@ -2,8 +2,10 @@ package com.labreportapp.labreport.core.admin.controller;
 
 
 import com.labreportapp.labreport.core.admin.model.response.AdFeedBackResponse;
+import com.labreportapp.labreport.core.admin.model.response.AdStudentCallApiResponse;
 import com.labreportapp.labreport.core.admin.service.AdFeedBackService;
 import com.labreportapp.labreport.core.common.base.ResponseObject;
+import com.labreportapp.labreport.core.teacher.model.request.TeFindStudentClasses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,4 +27,11 @@ public class AdFeedBackController {
         System.out.println(list);
         return new ResponseObject(list);
     }
+
+    @GetMapping("/get-student")
+    public ResponseObject getAdStudentClasses(final TeFindStudentClasses request) {
+        List<AdStudentCallApiResponse> pageList = adFeedBackSevice.searchApiStudentClassesByIdClass(request.getIdClass());
+        return new ResponseObject(pageList);
+    }
+
 }
