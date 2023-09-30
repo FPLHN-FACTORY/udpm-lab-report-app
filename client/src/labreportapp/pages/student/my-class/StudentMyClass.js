@@ -85,35 +85,16 @@ const StudentMyClass = () => {
       },
     },
     {
-      title: "Ca học",
+      title: "Ca",
       dataIndex: "classPeriod",
       key: "classPeriod",
       sorter: (a, b) => a.classPeriod - b.classPeriod,
-      render: (text) => {
-        let displayText = "";
-        if (text === 0) {
-          displayText = "Ca 1";
-        } else if (text === 1) {
-          displayText = "Ca 2";
-        } else if (text === 2) {
-          displayText = "Ca 3";
-        } else if (text === 3) {
-          displayText = "Ca 4";
-        } else if (text === 4) {
-          displayText = "Ca 5";
-        } else if (text === 5) {
-          displayText = "Ca 6";
-        } else if (text === 6) {
-          displayText = "Ca 7";
-        } else if (text === 7) {
-          displayText = "Ca 8";
-        } else if (text === 8) {
-          displayText = "Ca 9";
-        } else if (text === 9) {
-          displayText = "Ca 10";
+      render: (text, record) => {
+        if (record.classPeriod == null) {
+          return <span>Chưa có</span>;
+        } else {
+          return <span>{record.classPeriod + 1}</span>;
         }
-
-        return <span>{displayText}</span>;
       },
     },
     {
@@ -121,7 +102,37 @@ const StudentMyClass = () => {
       dataIndex: "timePeriod",
       key: "timePeriod",
       render: (text, record) => {
-        return <span>{convertMeetingPeriodToTime(record.classPeriod)}</span>;
+        if (record.classPeriod == null) {
+          return <span>Chưa có</span>;
+        } else {
+          return <span>{convertMeetingPeriodToTime(record.classPeriod)}</span>;
+        }
+      },
+    },
+    {
+      title: "Giảng viên",
+      dataIndex: "userNameTeacher",
+      key: "userNameTeacher",
+      sorter: (a, b) => {
+        if (a.userNameTeacher == null && b.userNameTeacher == null) {
+          return 0;
+        }
+        if (a.userNameTeacher == null) {
+          return -1;
+        }
+        if (b.userNameTeacher == null) {
+          return 1;
+        }
+        return a.userNameTeacher.localeCompare(b.userNameTeacher);
+      },
+      render: (text, record) => {
+        if (record.userNameTeacher == null) {
+          return <span>Chưa có</span>;
+        } else {
+          return (
+            <span>{record.userNameTeacher + " - " + record.nameTeacher}</span>
+          );
+        }
       },
     },
     {

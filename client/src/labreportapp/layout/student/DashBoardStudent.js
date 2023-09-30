@@ -1,22 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Layout, Space } from "antd";
 import SidebarStudentComponent from "../../component/student/SidebarStudent";
 import HeaderStudentComponent from "../../component/student/HeaderStudent";
 import "./style.css";
 import { useAppDispatch, useAppSelector } from "../../app/hook";
-import { GetStCollapsed, Toggle } from "../../app/student/StCollapsedSlice.reducer";
+import {
+  GetStCollapsed,
+  Toggle,
+} from "../../app/student/StCollapsedSlice.reducer";
+import { StFeedBackAPI } from "../../api/student/StFeedBackAPI";
+import ModalStudentFeedBack from "./ModalStudentFeedBack";
 
 const { Content, Sider } = Layout;
 
 const DashBoardStudent = ({ children }) => {
   const collapsed = useAppSelector(GetStCollapsed);
   const dispatch = useAppDispatch();
+  const [statusFeedback, setStatusFeedback] = useState(false);
 
   const toggleCollapsed = () => {
     dispatch(Toggle(!collapsed));
   };
 
   document.querySelector("body").style.backgroundImage = "url()";
+
+  const handleCheckFeedBack = () => {
+    StFeedBackAPI.checkFeedBack().then((response) => {
+      setStatusFeedback(response.data.data);
+    });
+  };
+
+  useEffect(() => {
+    handleCheckFeedBack();
+  }, [children]);
 
   return (
     <Space direction="vertical" style={{ width: "100%" }} size={[0, 48]}>
@@ -53,6 +69,10 @@ const DashBoardStudent = ({ children }) => {
             }}
           >
             {children}
+            <ModalStudentFeedBack
+              visible={statusFeedback}
+              setVisible={setStatusFeedback}
+            />
           </Content>
         </Layout>
       </Layout>
