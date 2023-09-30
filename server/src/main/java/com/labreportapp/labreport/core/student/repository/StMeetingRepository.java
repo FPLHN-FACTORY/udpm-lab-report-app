@@ -52,18 +52,22 @@ public interface StMeetingRepository extends JpaRepository<Meeting , String> {
     Optional<StMeetingResponse> searchMeetingByIdMeeting(@Param("req") StFindMeetingRequest req);
 
     @Query(value = """
-            SELECT m.id AS idMeeting,
-            m.name AS nameMeeting,
-            m.descriptions AS descriptionsMeeting,
-            m.created_date AS createdDate,
-            h.id AS idHomeWork,
-            h.descriptions AS descriptionsHomeWork,
-            n.id AS idNote,
-            n.descriptions AS descriptionsNote
+             SELECT 
+             m.id AS idMeeting,
+             m.name AS nameMeeting,
+             m.descriptions AS descriptionsMeeting,
+             m.created_date AS createdDate,
+             h.id AS idHomeWork,
+             h.descriptions AS descriptionsHomeWork,
+             n.id AS idNote,
+             n.descriptions AS descriptionsNote,
+             r.id as idReport,
+             r.descriptions AS descriptionsReport
              FROM meeting m
-             JOIN home_work h ON h.meeting_id = m.id
-             JOIN note n ON n.meeting_id = m.id
-             WHERE m.id = :#{#req.idMeeting} and h.team_id = :#{#req.idTeam} and n.team_id= :#{#req.idTeam}
+              JOIN home_work h ON h.meeting_id = m.id AND h.team_id = :#{#req.idTeam}
+              JOIN note n ON n.meeting_id = m.id AND n.team_id = :#{#req.idTeam}
+              JOIN report r ON r.meeting_id = m.id AND r.team_id = :#{#req.idTeam}
+             WHERE m.id = :#{#req.idMeeting}
                       """, nativeQuery = true)
     Optional<StHomeWordAndNoteResponse> searchDetailMeetingTeamByIdMeIdTeam(@Param("req") StFindMeetingRequest req);
 
