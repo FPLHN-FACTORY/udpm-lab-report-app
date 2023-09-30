@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import "./styleTeamsInMyClass.css";
-import { Row, Table, Button, Tooltip, Modal, Empty } from "antd";
+import { Row, Table, Button, Tooltip, Modal, Empty, Tag } from "antd";
 import { Link } from "react-router-dom";
 import { ControlOutlined } from "@ant-design/icons";
 import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/TeacherStudentClasses.api";
@@ -20,9 +20,10 @@ import LoadingIndicator from "../../../../helper/loading";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEye,
-  faEyeDropper,
+  faMattressPillow,
   faPenToSquare,
   faTrashCan,
+  faUpload,
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import ModalDetailTeam from "./modal-detail/ModalDetailTeam";
@@ -33,6 +34,7 @@ import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyCla
 import { SetTTrueToggle } from "../../../../app/teacher/TeCollapsedSlice.reducer";
 import ButtonExportExcelTeam from "./export-excel/ButtonExportExcelTeam";
 import ButtonImportExcelTeam from "./import-excel/ButtonImportExcel";
+import ModalFileImport from "./modal-file-import/ModalFileImport";
 
 const TeamsInMyClass = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -42,6 +44,7 @@ const TeamsInMyClass = () => {
   const [loading, setLoading] = useState(false);
   const [objeactTeam, setObjeactTeam] = useState({});
   const [classDetail, setClassDetail] = useState({});
+  const [showModalImport, setShowModalImport] = useState(false);
   const dispatch = useAppDispatch();
   dispatch(SetTTrueToggle());
   const { idClass } = useParams();
@@ -181,7 +184,7 @@ const TeamsInMyClass = () => {
         return (
           <>
             {text === "" ? (
-              <span style={{ color: "blue" }}>Chưa có chủ đề</span>
+              <Tag color="processing">Chưa có chủ đề</Tag>
             ) : (
               <span>{text}</span>
             )}
@@ -240,8 +243,9 @@ const TeamsInMyClass = () => {
                   style={{ color: "black" }}
                 >
                   <FontAwesomeIcon
-                    icon={faEyeDropper}
+                    icon={faMattressPillow}
                     className="icon"
+                    style={{ width: "19px" }}
                     onClick={() => {
                       setShowDetailModal(true);
                       handleDetailTeam(record);
@@ -381,7 +385,27 @@ const TeamsInMyClass = () => {
             </Row>
             <Row style={{ marginTop: "10px" }}>
               <ButtonExportExcelTeam idClass={idClass} />
-              <ButtonImportExcelTeam idClass={idClass} />
+              <Button
+                className="btn_clear"
+                style={{
+                  backgroundColor: "rgb(38, 144, 214)",
+                  color: "white",
+                }}
+                onClick={() => setShowModalImport(true)}
+              >
+                {" "}
+                <FontAwesomeIcon
+                  icon={faUpload}
+                  style={{ marginRight: "7px" }}
+                />
+                Import nhóm
+              </Button>
+              <ModalFileImport
+                idClass={idClass}
+                visible={showModalImport}
+                fetchData={fetchData}
+                onCancel={() => setShowModalImport(!showModalImport)}
+              />
               <Button
                 className="btn_clear"
                 style={{

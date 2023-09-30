@@ -47,6 +47,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayOutputStream;
@@ -91,6 +92,7 @@ public class TeTeamsServiceImpl implements TeTeamsService {
     }
 
     @Override
+    @Transactional
     public Team createTeam(@Valid TeCreateTeamsRequest request) {
         List<TeTeamUpdateStudentClassRequest> studentClassesRequest = request.getListStudentClasses();
         int checkLeader = 0;
@@ -152,15 +154,12 @@ public class TeTeamsServiceImpl implements TeTeamsService {
                 }
             });
         });
-//        if (studentClassesNew.size() == 1) {
-//            StudentClasses studentClassesOne = studentClassesNew.get(0);
-//            studentClassesOne.setRole(RoleTeam.LEADER);
-//        }
         teStudentClassesRepository.saveAll(studentClassesNew);
         return teamCreate;
     }
 
     @Override
+    @Transactional
     public Team updateTeam(@Valid TeUpdateTeamsRequest request) {
         Optional<Team> teamFilter = teTeamsRepositoty.findById(request.getId());
         if (teamFilter == null) {
@@ -235,6 +234,7 @@ public class TeTeamsServiceImpl implements TeTeamsService {
     }
 
     @Override
+    @Transactional
     public String deleteTeamById(String idTeam) {
         Team team = teTeamsRepositoty.findById(idTeam).get();
         if (team != null) {
@@ -258,7 +258,7 @@ public class TeTeamsServiceImpl implements TeTeamsService {
             List<TeStudentCallApiResponse> listStudent = teStudentClassesService.searchApiStudentClassesByIdClass(idClass);
             Class objClass = teClassRepository.findById(idClass).get();
             Sheet sheet = configTitle(workbook, objClass.getCode());
-            if(listStudent == null){
+            if (listStudent == null) {
                 workbook.write(response.getOutputStream());
                 workbook.close();
                 return outputStream;
@@ -273,7 +273,7 @@ public class TeTeamsServiceImpl implements TeTeamsService {
                 dataRow.getCell(1).setCellStyle(chooseCellStyle("dataTable", workbook));
                 dataRow.createCell(2).setCellValue(data.getEmail());
                 dataRow.getCell(2).setCellStyle(chooseCellStyle("dataTable", workbook));
-                dataRow.createCell(3).setCellValue(data.getRole().equals("0") ? "X" : "");
+                dataRow.createCell(3).setCellValue(data.getRole() != null ? data.getRole().equals("0") ? "X" : "" : "");
                 dataRow.getCell(3).setCellStyle(chooseCellStyle("dataCenterTable", workbook));
                 dataRow.createCell(4).setCellValue(data.getNameTeam());
                 dataRow.getCell(4).setCellStyle(chooseCellStyle("dataTable", workbook));
@@ -393,6 +393,8 @@ public class TeTeamsServiceImpl implements TeTeamsService {
     }
 
     @Override
+    @Transactional
+    @Synchronized
     public TeExcelResponseMessage importExcelTeam(MultipartFile file, String idClass) {
         TeExcelResponseMessage teExcelResponseMessage = new TeExcelResponseMessage();
         try {
@@ -403,7 +405,6 @@ public class TeTeamsServiceImpl implements TeTeamsService {
                 teExcelResponseMessage.setMessage("file excel trống");
                 return teExcelResponseMessage;
             }
-            List<Team> listTeamDB = checkGetListTeam(listInput, idClass);
             ConcurrentHashMap<String, StudentClasses> mapStudent = new ConcurrentHashMap<>();
             addDataStudentDB(mapStudent, idClass);
             if (listInput.size() != mapStudent.size()) {
@@ -413,49 +414,51 @@ public class TeTeamsServiceImpl implements TeTeamsService {
             }
             teExcelResponseMessage.setStatus(true);
             Map<String, String> teamRoles = new ConcurrentHashMap<>();
+            List<Team> listTeamDB = checkGetListTeam(listInput, idClass);
             ConcurrentHashMap<String, Team> mapTeam = new ConcurrentHashMap<>();
             addDataTeam(mapTeam, listTeamDB);
+            teExcelResponseMessage.setMessage("");
             listInput.parallelStream().forEach(student -> {
                 String regexRole = "^[Xx]?$";
                 String regexName = "^[^!@#$%^&*()_+|~=`{}\\[\\]:\";'<>?,.\\/\\\\]*$";
                 String regexEmailExactly = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
                 if (student.getName().isEmpty()) {
                     teExcelResponseMessage.setStatus(false);
-                    teExcelResponseMessage.setMessage("tên sinh viên không được để trống");
+                    teExcelResponseMessage.setMessage("Tên sinh viên không được để trống !");
                     return;
                 }
                 if (!student.getName().matches(regexName)) {
                     teExcelResponseMessage.setStatus(false);
-                    teExcelResponseMessage.setMessage("tên sinh viên sai định dạng");
+                    teExcelResponseMessage.setMessage("Tên sinh viên sai định dạng !");
                     return;
                 }
                 if (student.getEmail().isEmpty()) {
                     teExcelResponseMessage.setStatus(false);
-                    teExcelResponseMessage.setMessage("email không được để trống");
+                    teExcelResponseMessage.setMessage("Email không được để trống !");
                     return;
                 }
                 if (!student.getEmail().matches(regexEmailExactly)) {
                     teExcelResponseMessage.setStatus(false);
-                    teExcelResponseMessage.setMessage("email sai định dạng");
+                    teExcelResponseMessage.setMessage(teExcelResponseMessage.getMessage() + "Email sai định dạng !");
                     return;
                 }
                 if (!student.getRole().matches(regexRole)) {
                     teExcelResponseMessage.setStatus(false);
-                    teExcelResponseMessage.setMessage("vai trò chỉ được nhập X hoặc để trống");
+                    teExcelResponseMessage.setMessage(teExcelResponseMessage.getMessage() + " Vai trò chỉ được nhập X hoặc để trống !");
                     return;
                 }
                 if ("X".equalsIgnoreCase(student.getRole())) {
                     String existingRole = teamRoles.put(student.getNameTeam(), "X");
                     if ("X".equalsIgnoreCase(existingRole)) {
                         teExcelResponseMessage.setStatus(false);
-                        teExcelResponseMessage.setMessage("Có hai sinh viên làm leader trong cùng một nhóm");
+                        teExcelResponseMessage.setMessage(teExcelResponseMessage.getMessage() + "Có hai sinh viên làm leader trong cùng một nhóm !");
                         return;
                     }
                 }
                 StudentClasses studentFind = mapStudent.get(student.getEmail());
                 if (studentFind == null) {
                     teExcelResponseMessage.setStatus(false);
-                    teExcelResponseMessage.setMessage("email của sinh viên không tồn tại");
+                    teExcelResponseMessage.setMessage(teExcelResponseMessage.getMessage() + "Email của sinh viên không tồn tại !");
                     return;
                 } else {
                     Team teamFind = mapTeam.get(student.getNameTeam());
@@ -468,15 +471,18 @@ public class TeTeamsServiceImpl implements TeTeamsService {
             });
             if (teExcelResponseMessage.getStatus() == true) {
                 teStudentClassesRepository.saveAll(listStudentUp);
+                teExcelResponseMessage.setMessage("Import nhóm thành công !");
+                return teExcelResponseMessage;
+            } else {
+                teExcelResponseMessage.setMessage("Import nhóm thất bại. " + teExcelResponseMessage.getMessage());
                 return teExcelResponseMessage;
             }
         } catch (Exception e) {
             e.printStackTrace();
             teExcelResponseMessage.setStatus(false);
-            teExcelResponseMessage.setMessage("lỗi hệ thống");
+            teExcelResponseMessage.setMessage("Lỗi hệ thống, vui lòng F5 lại trang !");
             return teExcelResponseMessage;
         }
-        return teExcelResponseMessage;
     }
 
     private List<Team> checkGetListTeam(List<TeExcelImportTeam> listRequest, String idClass) {

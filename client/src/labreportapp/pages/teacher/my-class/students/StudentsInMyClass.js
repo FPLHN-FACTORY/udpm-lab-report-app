@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import "./styleStudentsInMyClass.css";
-import { Button, Checkbox, Empty, Input, Table, Tag, Divider } from "antd";
+import { Button, Checkbox, Empty, Input, Table, Tag } from "antd";
 import { Link } from "react-router-dom";
 import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
 import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/TeacherStudentClasses.api";
@@ -571,7 +571,7 @@ const StudentsInMyClass = () => {
                   color: "red",
                 }}
               >
-                Trạng thái: &nbsp;
+                Trạng thái lớp: &nbsp;
                 {classDetail.statusClass === 0 ? "Đã mở" : "Đã khóa"}
               </span>
               <span
@@ -595,7 +595,7 @@ const StudentsInMyClass = () => {
                   color: "red",
                 }}
               >
-                Di chuyển sinh viên: &nbsp;
+                Trao đổi sinh viên: &nbsp;
                 {classDetail.statusTeacherEdit === 0
                   ? "Cho phép"
                   : "Không cho phép"}
