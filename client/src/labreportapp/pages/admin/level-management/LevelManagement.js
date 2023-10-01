@@ -162,14 +162,12 @@ const LevelManagement = () => {
   };
 
   return (
-    <div className="box-general">
+    <div className="box-general" style={{ paddingTop: 50 }}>
       {loading && <LoadingIndicator />}
-
-      <div className="heading-box" style={{ marginTop: "0" }}>
-        <span style={{ fontSize: "20px", fontWeight: "500" }}>
-          <FontAwesomeIcon icon={faLevelUp} style={{ marginRight: "8px" }} />{" "}
-          Quản lý level
-        </span>
+      <div className="title_activity_management" style={{ marginTop: 0 }}>
+        {" "}
+        <FontAwesomeIcon icon={faLevelUp} style={{ fontSize: "20px" }} />
+        <span style={{ marginLeft: "10px" }}>Quản lý level</span>
       </div>
       <div className="filter-level" style={{ marginBottom: "10px" }}>
         <FontAwesomeIcon icon={faFilter} style={{ fontSize: "20px" }} />{" "}
@@ -187,11 +185,7 @@ const LevelManagement = () => {
           />
         </div>
         <div className="box_btn_filter">
-          <Button
-            className="btn_filter"
-            onClick={buttonSearch}
-            style={{ marginRight: "20px" }}
-          >
+          <Button className="btn_filter" onClick={buttonSearch}>
             <FontAwesomeIcon
               icon={faFilterCircleDollar}
               style={{ marginRight: 5 }}
@@ -248,7 +242,7 @@ const LevelManagement = () => {
           </div>
         </div>
         <div>
-          <Table  
+          <Table
             dataSource={data}
             rowKey="id"
             columns={columns}

@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="fe93e581-5589-4bad-ba6a-389fa82a0816" name="Default Changelist" comment="update code FE, BE custom pagition phân trang schedule lesson with time&#10;quản lý điểm getall meger module indentity, sửa luồng logic getAll từ FE qua BE&#10;Css lại 1 chút giao diện role teacher">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="fe93e581-5589-4bad-ba6a-389fa82a0816" name="Default Changelist" comment="update code FE, BE custom pagition phân trang schedule lesson with time&#10;quản lý điểm getall meger module indentity, sửa luồng logic getAll từ FE qua BE&#10;Css lại 1 chút giao diện role teacher" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -41,6 +39,7 @@
       <workItem from="1692333622067" duration="32000" />
       <workItem from="1695236950584" duration="66000" />
       <workItem from="1695654455558" duration="1034000" />
+      <workItem from="1696156909289" duration="143000" />
     </task>
     <task id="LOCAL-00001" summary="update code FE level">
       <created>1695237007877</created>
@@ -56,7 +55,14 @@
       <option name="project" value="LOCAL" />
       <updated>1695654881049</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="update code FE, BE custom pagition phân trang schedule lesson with time&#10;quản lý điểm getall meger module indentity, sửa luồng logic getAll từ FE qua BE&#10;Css lại 1 chút giao diện role teacher">
+      <created>1696156931787</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1696156931787</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

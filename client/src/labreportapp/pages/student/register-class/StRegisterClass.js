@@ -3,7 +3,12 @@ import "./style-register-class.css";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import LoadingIndicator from "../../../helper/loading";
-import { faEye, faRegistered } from "@fortawesome/free-solid-svg-icons";
+import {
+  faChainSlash,
+  faEye,
+  faFilterCircleDollar,
+  faRegistered,
+} from "@fortawesome/free-solid-svg-icons";
 import {
   convertMeetingPeriod,
   convertMeetingPeriodToTime,
@@ -297,7 +302,7 @@ const StRegisterClass = () => {
   return (
     <>
       {loading && <LoadingIndicator />}
-      <div className="box-general">
+      <div className="box-general" style={{ paddingTop: 50 }}>
         <div className="heading-box">
           <span style={{ fontSize: "20px", fontWeight: "500" }}>
             <FontAwesomeIcon
@@ -318,9 +323,7 @@ const StRegisterClass = () => {
             >
               <Col span={6}>
                 <span>Học kỳ:</span>
-                <QuestionCircleFilled
-                  style={{ paddingLeft: "12px", fontSize: "15px" }}
-                />
+
                 <br />
                 <Select
                   showSearch
@@ -347,9 +350,7 @@ const StRegisterClass = () => {
               </Col>
               <Col span={14}>
                 <span>Hoạt động:</span>
-                <QuestionCircleFilled
-                  style={{ paddingLeft: "12px", fontSize: "15px" }}
-                />{" "}
+
                 <br />
                 <Select
                   showSearch
@@ -378,11 +379,7 @@ const StRegisterClass = () => {
               style={{ marginBottom: "0px", paddingTop: "10px" }}
             >
               <Col span={6}>
-                <span>Mã lớp:</span>{" "}
-                <QuestionCircleFilled
-                  style={{ paddingLeft: "12px", fontSize: "15px" }}
-                />{" "}
-                <br />
+                <span>Mã lớp:</span> <br />
                 <Input
                   onChange={(e) => {
                     setClassCode(e.target.value);
@@ -396,9 +393,7 @@ const StRegisterClass = () => {
 
               <Col span={6}>
                 <span>Ca học:</span>
-                <QuestionCircleFilled
-                  style={{ paddingLeft: "12px", fontSize: "15px" }}
-                />{" "}
+
                 <br />
                 <Select
                   style={{ width: "94%", marginTop: "6px" }}
@@ -423,11 +418,7 @@ const StRegisterClass = () => {
                 </Select>
               </Col>
               <Col span={6}>
-                <span>Level:</span>{" "}
-                <QuestionCircleFilled
-                  style={{ paddingLeft: "12px", fontSize: "15px" }}
-                />{" "}
-                <br />
+                <span>Level:</span> <br />
                 <Select
                   style={{ width: "94%", marginTop: "6px" }}
                   onChange={(e) => {
@@ -450,6 +441,10 @@ const StRegisterClass = () => {
           </div>
           <div className="box_btn_filter">
             <Button className="btn_filter" onClick={handleClickFilter}>
+              <FontAwesomeIcon
+                icon={faFilterCircleDollar}
+                style={{ marginRight: 5 }}
+              />{" "}
               Tìm kiếm
             </Button>
             <Button
@@ -457,6 +452,7 @@ const StRegisterClass = () => {
               style={{ backgroundColor: "rgb(38, 144, 214)" }}
               onClick={clearData}
             >
+              <FontAwesomeIcon icon={faChainSlash} style={{ marginRight: 5 }} />{" "}
               Làm mới bộ lọc
             </Button>
           </div>

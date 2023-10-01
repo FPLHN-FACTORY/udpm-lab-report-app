@@ -278,10 +278,10 @@ public class DBGenerator implements CommandLineRunner {
         class3.setId(classRepository.save(class3).getId());
 
         Class class4 = new Class();// check sent class FAIL do quá số lượng sinh viên
-        class4.setCode("JAVA_WEB_1.1");
+        class4.setCode("JAVA_WEB_3");
         class4.setClassPeriod(ClassPeriod.CA_3);
         class4.setStartTime(new Date().getTime() + 50000);
-        class4.setClassSize(25);
+        class4.setClassSize(0);
         class4.setPassword("123456");
         class4.setActivityId(activity1.getId());
         class4.setTeacherId("FA2BAD81-93A5-4F02-B1B7-08DBB743DD7D".toLowerCase());
@@ -291,10 +291,10 @@ public class DBGenerator implements CommandLineRunner {
         class4.setId(classRepository.save(class4).getId());
 
         Class class5 = new Class();// check sent class FAIL do Khác ACtiviti 1quá số lượng sinh viên
-        class5.setCode("JAVA_WEB_1.2");
+        class5.setCode("JAVA_WEB_4");
         class5.setClassPeriod(ClassPeriod.CA_3);
         class5.setStartTime(new Date().getTime() + 50000);
-        class5.setClassSize(19);
+        class5.setClassSize(0);
         class5.setPassword("123456");
         class5.setActivityId(activity2.getId());
         class5.setTeacherId("FA2BAD81-93A5-4F02-B1B7-08DBB743DD7D".toLowerCase());
@@ -304,10 +304,10 @@ public class DBGenerator implements CommandLineRunner {
         class5.setId(classRepository.save(class5).getId());
 
         Class class6 = new Class();
-        class6.setCode("JAVA_WEB_1.3");
+        class6.setCode("JAVA_WEB_5");
         class6.setClassPeriod(ClassPeriod.CA_3);
         class6.setStartTime(new Date().getTime() + 50000);
-        class6.setClassSize(19);
+        class6.setClassSize(0);
         class6.setPassword("123456");
         class6.setActivityId(activity1.getId());
         class6.setTeacherId("FA2BAD81-93A5-4F02-B1B7-08DBB743DD7D".toLowerCase());
@@ -317,10 +317,10 @@ public class DBGenerator implements CommandLineRunner {
         class6.setId(classRepository.save(class6).getId());
 
         Class class7 = new Class();
-        class7.setCode("JAVA_WEB_1.4");
+        class7.setCode("JAVA_WEB_6");
         class7.setClassPeriod(ClassPeriod.CA_3);
         class7.setStartTime(new Date().getTime() + 50000);
-        class7.setClassSize(24);
+        class7.setClassSize(0);
         class7.setPassword("123456");
         class7.setActivityId(activity1.getId());
         class7.setTeacherId("FA2BAD81-93A5-4F02-B1B7-08DBB743DD7D".toLowerCase());

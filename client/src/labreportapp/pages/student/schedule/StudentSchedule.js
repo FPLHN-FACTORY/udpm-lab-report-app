@@ -4,6 +4,8 @@ import {
   faFilter,
   faCalendar,
   faCalendarAlt,
+  faChainSlash,
+  faFilterCircleDollar,
 } from "@fortawesome/free-solid-svg-icons";
 import { Button, Input, Pagination, Table, Select } from "antd";
 import { Option } from "antd/es/mentions";
@@ -135,7 +137,7 @@ const StudentSchedule = () => {
   };
 
   return (
-    <div className="shedule">
+    <div className="shedule" style={{ paddingTop: 50 }}>
       {loading && <LoadingIndicator />}
       <div className="title_activity_management">
         {" "}
@@ -143,7 +145,7 @@ const StudentSchedule = () => {
         <span style={{ marginLeft: "10px" }}>Lịch học</span>
       </div>
       <div className="filter-semester">
-        <FontAwesomeIcon icon={faFilter} size="2x" />{" "}
+        <FontAwesomeIcon icon={faFilter} style={{ fontSize: 20 }} />{" "}
         <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
         <hr />
         <div className="title__search">
@@ -167,6 +169,10 @@ const StudentSchedule = () => {
         </div>
         <div className="box_btn_filter">
           <Button className="btn_filter" onClick={buttonSearch}>
+            <FontAwesomeIcon
+              icon={faFilterCircleDollar}
+              style={{ marginRight: 5 }}
+            />{" "}
             Tìm kiếm
           </Button>
           <Button
@@ -174,6 +180,7 @@ const StudentSchedule = () => {
             style={{ backgroundColor: "rgb(38, 144, 214)" }}
             onClick={clearData}
           >
+            <FontAwesomeIcon icon={faChainSlash} style={{ marginRight: 5 }} />{" "}
             Làm mới bộ lọc
           </Button>
         </div>
@@ -186,7 +193,7 @@ const StudentSchedule = () => {
         <div className="tittle__category">
           <div>
             {" "}
-            {<FontAwesomeIcon icon={faCalendarAlt} size="1x" />}
+            {<FontAwesomeIcon icon={faCalendarAlt} style={{ fontSize: 20 }} />}
             <span style={{ fontSize: "18px", fontWeight: "500" }}>
               {" "}
               Lịch học

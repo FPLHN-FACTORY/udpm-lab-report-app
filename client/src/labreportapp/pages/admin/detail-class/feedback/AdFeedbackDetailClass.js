@@ -127,7 +127,7 @@ const AdFeedbackDetailClass = () => {
           >
             Bảng điều khiển
           </span>
-          <span style={{ color: "gray" }}> - Quản lý lịch học</span>
+          <span style={{ color: "gray" }}> - Feedback của sinh viên</span>
         </span>
       </div>
       <div className="box-filter-meeting-management">

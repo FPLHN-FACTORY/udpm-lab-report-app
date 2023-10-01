@@ -1,4 +1,10 @@
-import { faEye, faFilter, faHome } from "@fortawesome/free-solid-svg-icons";
+import {
+  faChainSlash,
+  faEye,
+  faFilter,
+  faFilterCircleDollar,
+  faHome,
+} from "@fortawesome/free-solid-svg-icons";
 import "./style-student-my-class.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
@@ -12,6 +18,7 @@ import {
   Table,
   Tooltip,
   Pagination,
+  Empty,
 } from "antd";
 import {
   ControlOutlined,
@@ -230,9 +237,7 @@ const StudentMyClass = () => {
           <Row gutter={16} style={{ marginBottom: "10px", paddingTop: "10px" }}>
             <Col span={6}>
               <span>Học kỳ:</span>
-              <QuestionCircleFilled
-                style={{ paddingLeft: "12px", fontSize: "15px" }}
-              />
+
               <br />
               <Select
                 showSearch
@@ -259,9 +264,7 @@ const StudentMyClass = () => {
             </Col>
             <Col span={14}>
               <span>Hoạt động:</span>
-              <QuestionCircleFilled
-                style={{ paddingLeft: "12px", fontSize: "15px" }}
-              />{" "}
+
               <br />
               <Select
                 showSearch
@@ -287,11 +290,7 @@ const StudentMyClass = () => {
           </Row>
           <Row gutter={16} style={{ marginBottom: "0px", paddingTop: "10px" }}>
             <Col span={6}>
-              <span>Mã lớp:</span>{" "}
-              <QuestionCircleFilled
-                style={{ paddingLeft: "12px", fontSize: "15px" }}
-              />{" "}
-              <br />
+              <span>Mã lớp:</span> <br />
               <Input
                 onChange={(e) => {
                   setCode(e.target.value);
@@ -305,9 +304,7 @@ const StudentMyClass = () => {
 
             <Col span={6}>
               <span>Ca học:</span>
-              <QuestionCircleFilled
-                style={{ paddingLeft: "12px", fontSize: "15px" }}
-              />{" "}
+
               <br />
               <Select
                 style={{ width: "94%", marginTop: "6px" }}
@@ -332,11 +329,7 @@ const StudentMyClass = () => {
               </Select>
             </Col>
             <Col span={6}>
-              <span>Level:</span>{" "}
-              <QuestionCircleFilled
-                style={{ paddingLeft: "12px", fontSize: "15px" }}
-              />{" "}
-              <br />
+              <span>Level:</span> <br />
               <Select
                 style={{ width: "94%", marginTop: "6px" }}
                 onChange={(e) => {
@@ -360,6 +353,10 @@ const StudentMyClass = () => {
         </div>
         <div className="box_btn_filter">
           <Button className="btn_filter" onClick={handleClickFilter}>
+            <FontAwesomeIcon
+              icon={faFilterCircleDollar}
+              style={{ marginRight: 5 }}
+            />{" "}
             Tìm kiếm
           </Button>
           <Button
@@ -367,6 +364,11 @@ const StudentMyClass = () => {
             style={{ backgroundColor: "rgb(38, 144, 214)" }}
             onClick={clearData}
           >
+            {" "}
+            <FontAwesomeIcon
+              icon={faChainSlash}
+              style={{ marginRight: 5 }}
+            />{" "}
             Làm mới bộ lọc
           </Button>
         </div>
@@ -383,10 +385,33 @@ const StudentMyClass = () => {
           </div>
         </div>
         <br />
-        <div style={{ marginTop: "25px" }}>
-          {" "}
-          <Table dataSource={listClass} columns={columns} />
-        </div>
+        {listClass.length > 0 && (
+          <div style={{ marginTop: "25px" }}>
+            {" "}
+            <Table dataSource={listClass} columns={columns} />
+          </div>
+        )}
+        {listClass.length === 0 && (
+          <>
+            <p
+              style={{
+                textAlign: "center",
+                marginTop: "100px",
+                fontSize: "15px",
+                color: "red",
+              }}
+            >
+              <Empty
+                imageStyle={{ height: 60 }}
+                description={
+                  <span style={{ color: "#007bff" }}>
+                    Không tìm thấy lớp học nào !
+                  </span>
+                }
+              />{" "}
+            </p>
+          </>
+        )}
       </div>
     </div>
   );
