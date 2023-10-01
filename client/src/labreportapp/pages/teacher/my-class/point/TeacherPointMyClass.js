@@ -1,12 +1,15 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./style-poin-my-class.css";
-import { faFloppyDisk, faMarker } from "@fortawesome/free-solid-svg-icons";
+import {
+  faFloppyDisk,
+  faMarker,
+  faUpload,
+} from "@fortawesome/free-solid-svg-icons";
 import { ControlOutlined } from "@ant-design/icons";
 import { Link, useParams } from "react-router-dom";
 import { Button, Row } from "antd";
 import { useEffect, useState } from "react";
 import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
-import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/TeacherStudentClasses.api";
 import { TeacherPointAPI } from "../../../../api/teacher/point/TeacherPoint.api";
 import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import {
@@ -18,126 +21,64 @@ import TablePoint from "./table-point-student/TablePoint";
 import LoadingIndicator from "../../../../helper/loading";
 import { toast } from "react-toastify";
 import ButtonExportExcel from "./export-excel/ButtonExportExcel";
-import ButtonImportExcel from "./import-excel/ButtonImportExcel";
+import ModalFileImportPoint from "./import-excel/ModalFileImportPoint";
 import { SetTTrueToggle } from "../../../../app/teacher/TeCollapsedSlice.reducer";
+
 const TeacherPointMyClass = () => {
   const { idClass } = useParams();
   const dispatch = useAppDispatch();
   const [classDetail, setClassDetail] = useState({});
-  const [listStudentClassAPI, setListStudentClassAPI] = useState([]);
   const [checkPoint, setCheckPoint] = useState(false);
   const [listPoint, setListPoint] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [loadingData, setLoadingData] = useState(false);
+  const [showModalImport, setShowModalImport] = useState(false);
   dispatch(SetTTrueToggle());
   useEffect(() => {
     window.scrollTo(0, 0);
     fetchData(idClass);
   }, []);
   const fetchData = async (idClass) => {
-    await Promise.all([
-      await featchStudentClass(idClass),
-      await featchClass(idClass),
-      await featchPoint(idClass),
-    ]);
+    await Promise.all([await featchClass(idClass), await featchPoint(idClass)]);
   };
   const featchPoint = async (idClass) => {
     try {
       await TeacherPointAPI.getPointByIdClass(idClass).then((response) => {
-        if (response.data.data.length >= 1) {
-          setCheckPoint(true);
-          setListPoint(response.data.data);
-          featchStudentPoint(idClass);
-        } else {
-          setCheckPoint(false);
-          featchStudentClass(idClass);
-          featchStudentPoint(idClass);
-        }
+        setListPoint(response.data.data);
+        dispatch(SetPoint(response.data.data));
+        setLoading(true);
       });
     } catch (error) {
-      console.log(error);
-    }
-  };
-  const featchStudentClass = async (idClass) => {
-    try {
-      await TeacherStudentClassesAPI.getStudentInClasses(idClass).then(
-        (responese) => {
-          const listAPI = responese.data.data.map((item) => {
-            return { ...item };
-          });
-          setListStudentClassAPI(listAPI);
-        }
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const featchStudentPoint = async (idClass) => {
-    try {
-      if (checkPoint) {
-        const listShowTable = listStudentClassAPI.map((item1) => {
-          const matchedObject = listPoint.find(
-            (item2) =>
-              item2.idStudent === item1.idStudent && item2.idClass === idClass
-          );
-          return {
-            ...item1,
-            ...matchedObject,
-            finalPoint:
-              parseFloat(
-                parseFloat(matchedObject.checkPointPhase1) +
-                  parseFloat(matchedObject.checkPointPhase2)
-              ) / 2,
-          };
-        });
-        dispatch(SetPoint(listShowTable));
-      } else {
-        const listShowTable = listStudentClassAPI.map((item1) => {
-          return {
-            ...item1,
-            idClass: idClass,
-            checkPointPhase1: parseFloat("0"),
-            checkPointPhase2: parseFloat("0"),
-            finalPoint: parseFloat("0"),
-          };
-        });
-        dispatch(SetPoint(listShowTable));
-      }
-      if (loadingData === true) {
-        setLoading(true);
-      }
-      setLoadingData(true);
-    } catch (error) {
-      console.log(error);
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
   const featchClass = async (idClass) => {
     try {
+      setLoading(false);
       await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
         setClassDetail(responese.data.data);
         document.title = "Quản lý điểm | " + responese.data.data.code;
       });
     } catch (error) {
-      console.log(error);
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-  useEffect(() => {
-    if (loadingData === true) {
-      fetchData(idClass);
-    }
-  }, [loadingData]);
   const handleSave = async () => {
     try {
+      const dataToSave = data;
       let dataFind = {
-        listPoint: data,
+        listPoint: dataToSave,
+        idClass: idClass,
       };
       await TeacherPointAPI.createOrUpdate(dataFind).then((respone) => {
         dispatch(UpdatePoint(respone.data.data));
         toast.success("Lưu bảng điểm thành công !");
       });
     } catch (error) {
-      console.log(error);
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
+  };
+  const handleCancelImport = () => {
+    setShowModalImport(false);
   };
   const data = useAppSelector(GetPoint);
   return (
@@ -239,7 +180,7 @@ const TeacherPointMyClass = () => {
                   style={{
                     height: "28.5px",
                     width: "auto",
-                    backgroundColor: "#007bff",
+                    backgroundColor: "rgb(38, 144, 214)",
                     color: "white",
                     borderRadius: "5px",
                     float: "right",
@@ -272,7 +213,26 @@ const TeacherPointMyClass = () => {
               </Row>
               <Row style={{ marginTop: "10px" }}>
                 <ButtonExportExcel idClass={idClass} />
-                <ButtonImportExcel idClass={idClass} />
+                <Button
+                  className="btn_clear"
+                  style={{
+                    backgroundColor: "rgb(38, 144, 214)",
+                    color: "white",
+                  }}
+                  onClick={() => setShowModalImport(true)}
+                >
+                  <FontAwesomeIcon
+                    icon={faUpload}
+                    style={{ marginRight: "7px" }}
+                  />
+                  Import nhóm
+                </Button>
+                <ModalFileImportPoint
+                  idClass={idClass}
+                  visible={showModalImport}
+                  fetchData={fetchData}
+                  onCancel={handleCancelImport}
+                />
                 <Button
                   style={{
                     backgroundColor: "rgb(38, 144, 214)",

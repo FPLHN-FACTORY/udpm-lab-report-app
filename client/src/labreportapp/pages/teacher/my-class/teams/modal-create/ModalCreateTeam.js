@@ -258,7 +258,7 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
         {listStudentClass.length <= 0 ? (
           <p style={{ color: "red", fontSize: "15px", marginLeft: "10px" }}>
             {" "}
-            Không thể tạo nhóm vì tất cả thành viên trong lớp đã có nhóm
+            Không thể tạo nhóm vì không có sinh viên chưa có nhóm
           </p>
         ) : (
           <>
@@ -376,6 +376,7 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
                   style={{
                     backgroundColor: "red",
                     color: "white",
+                    marginLeft: "10px",
                   }}
                   onClick={cancelFaild}
                 >
@@ -398,6 +399,7 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
                   style={{
                     backgroundColor: "red",
                     color: "white",
+                    marginLeft: "10px",
                   }}
                   onClick={cancelFaild}
                 >

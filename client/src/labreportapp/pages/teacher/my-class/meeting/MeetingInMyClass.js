@@ -19,18 +19,16 @@ import {
 } from "../../../../helper/util.helper";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTableList } from "@fortawesome/free-solid-svg-icons";
-import { Empty } from "antd";
+import { Badge, Empty } from "antd";
 
 const MeetingInMyClass = () => {
   const dispatch = useAppDispatch();
   dispatch(SetTTrueToggle());
   const [loading, setLoading] = useState(false);
   const { idClass } = useParams();
-  const [countMeeting, setCountMeeting] = useState(0);
   const [classDetail, setClassDetail] = useState({});
   useEffect(() => {
     window.scrollTo(0, 0);
-    featchCountMeeting(idClass);
     featchMeeting(idClass);
     featchClass(idClass);
   }, []);
@@ -57,23 +55,12 @@ const MeetingInMyClass = () => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-  const featchCountMeeting = async (idClass) => {
-    setLoading(false);
-    try {
-      await TeacherMeetingAPI.countMeetingByIdClass(idClass).then(
-        (responese) => {
-          setCountMeeting(responese.data.data);
-        }
-      );
-    } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
-    }
-  };
   const convertLongToDate = (dateLong) => {
     const date = new Date(dateLong);
-    const format = `${date.getDate()}/${
-      date.getMonth() + 1
-    }/${date.getFullYear()}`;
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    const format = `${day}/${month}/${year}`;
     return format;
   };
   const dataMeeting = useAppSelector(GetMeeting);
@@ -170,7 +157,7 @@ const MeetingInMyClass = () => {
                 style={{
                   height: "28.5px",
                   width: "auto",
-                  backgroundColor: "#007bff",
+                  backgroundColor: "rgb(38, 144, 214)",
                   color: "white",
                   borderRadius: "5px",
                   float: "right",
@@ -200,7 +187,19 @@ const MeetingInMyClass = () => {
                       fontSize: "20px",
                     }}
                   />
-                  Danh sách buổi học : {countMeeting} buổi học
+                  Danh sách buổi học :{" "}
+                  <span
+                    style={{
+                      padding: "5px",
+                      backgroundColor: "rgb(38, 144, 214)",
+                      color: "white",
+                      fontSize: "15px",
+                      borderRadius: "5px",
+                      fontWeight: "400",
+                    }}
+                  >
+                    {dataMeeting != null ? dataMeeting.length : 0} buổi học
+                  </span>
                 </span>
               </div>
               <div className="data-table" style={{ minHeight: "380px" }}>
@@ -211,46 +210,48 @@ const MeetingInMyClass = () => {
                         to={`/teacher/my-class/meeting/detail/${record.id}`}
                         key={record.id}
                       >
-                        <div
-                          className="box-card"
-                          style={{
-                            backgroundColor:
-                              !convertStatusMeetingByDateAndPeriod(
-                                record.meetingDate,
-                                record.meetingPeriod
-                              ) && "rgb(242, 247, 250)",
-                          }}
-                        >
+                        {!convertStatusMeetingByDateAndPeriod(
+                          record.meetingDate,
+                          record.meetingPeriod
+                        ) && (
+                          <Badge.Ribbon
+                            color="#E2B357"
+                            text={"Học xong"}
+                            style={{
+                              marginRight: "205px",
+                            }}
+                          />
+                        )}
+                        <div className="box-card">
                           <div className="title-left">
-                            <div className="flex-container">
-                              <div className="title-icon">
-                                <div className="box-icon">
-                                  <BookOutlined
-                                    style={{ color: "white", fontSize: 21 }}
-                                  />
-                                </div>
-                              </div>
-                              <p
-                                className="title-text"
-                                style={{
-                                  fontSize: "16px",
-                                  color: "black",
-                                }}
-                              >
-                                {record.name} {" - "}
-                                {record.typeMeeting === 0 ? (
-                                  <span>Online</span>
-                                ) : (
-                                  <span>Offline</span>
-                                )}
-                                {" - "}
-                                <span style={{ color: "red" }}>
-                                  {record.userNameTeacher}
-                                </span>
-                              </p>
+                            <div className="box-icon">
+                              <BookOutlined
+                                style={{ color: "white", fontSize: 21 }}
+                              />
                             </div>
+                            <span
+                              className="title-text"
+                              style={{
+                                fontSize: "16px",
+                                color: "black",
+                              }}
+                            >
+                              {record.name} {" - "}
+                              {record.typeMeeting === 0 ? (
+                                <span>Online</span>
+                              ) : (
+                                <span>Offline</span>
+                              )}
+                              {" - "}
+                              <span style={{ color: "red" }}>
+                                {record.userNameTeacher}
+                              </span>
+                            </span>
                           </div>
-                          <div className="title-right">
+                          <div
+                            className="title-right"
+                            style={{ marginTop: "12px" }}
+                          >
                             <div>
                               <span>
                                 Ngày dạy:
@@ -260,8 +261,13 @@ const MeetingInMyClass = () => {
                                     fontWeight: "500",
                                   }}
                                 >
-                                  {" " + convertLongToDate(record.meetingDate)}{" "}
-                                  - <span>Ca </span>
+                                  <span>
+                                    {" "}
+                                    {convertLongToDate(
+                                      record.meetingDate
+                                    )}-{" "}
+                                  </span>
+                                  <span>Ca </span>
                                   {record.meetingPeriod + 1}
                                   <span>
                                     (
@@ -281,7 +287,7 @@ const MeetingInMyClass = () => {
                 ) : (
                   <Empty
                     imageStyle={{ height: 60 }}
-                    description={<span>Không có buổi học</span>}
+                    description={<span>Không có dữ liệu</span>}
                   />
                 )}
               </div>

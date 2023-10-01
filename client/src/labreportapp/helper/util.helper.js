@@ -71,10 +71,10 @@ export const convertMeetingPeriodToTime = (meetingPeriod) => {
 
   switch (meetingPeriod) {
     case 0:
-      meetingPeriodStr = "7:15 - 9:15";
+      meetingPeriodStr = "07:15 - 09:15";
       break;
     case 1:
-      meetingPeriodStr = "9:25 - 11:25";
+      meetingPeriodStr = "09:25 - 11:25";
       break;
     case 2:
       meetingPeriodStr = "12:00 - 14:00";
@@ -95,7 +95,7 @@ export const convertMeetingPeriodToTime = (meetingPeriod) => {
       meetingPeriodStr = "22:50 - 00:50";
       break;
     case 8:
-      meetingPeriodStr = "01:00 - 3:00";
+      meetingPeriodStr = "01:00 - 03:00";
       break;
     case 9:
       meetingPeriodStr = "03:10 - 05:10";
@@ -111,8 +111,6 @@ export const convertStatusMeetingByDateAndPeriod = (
   meetingPeriod
 ) => {
   const currentDate = new Date();
-
-  // Chuyển đổi meetingPeriod thành một đối tượng mô tả khung giờ
   const meetingPeriods = {
     0: { start: "7:15", end: "9:15" },
     1: { start: "9:25", end: "11:25" },
@@ -125,11 +123,10 @@ export const convertStatusMeetingByDateAndPeriod = (
     8: { start: "01:00", end: "3:00" },
     9: { start: "03:10", end: "05:10" },
   };
-
   if (meetingDate > currentDate) {
-    return true; // Ca học đã diễn ra
+    return true;
   } else if (meetingDate < currentDate) {
-    return false; // Ca học chưa diễn ra
+    return false;
   } else {
     const caHocTime = meetingPeriods[meetingPeriod];
     const caHocStartDate = new Date(
@@ -146,7 +143,6 @@ export const convertStatusMeetingByDateAndPeriod = (
       parseInt(caHocTime.end.split(":")[0]),
       parseInt(caHocTime.end.split(":")[1])
     );
-
     if (currentDate >= caHocStartDate && currentDate <= caHocEndDate) {
       return true;
     } else {

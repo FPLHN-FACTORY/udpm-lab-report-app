@@ -7,41 +7,61 @@ const tePointSlice = createSlice({
   initialState,
   reducers: {
     SetPoint: (state, action) => {
-      state = action.payload;
-      return state;
-    },
-    CreatePoint: (state, action) => {
-      const data = action.payload;
-      let newTeam = {
-        id: data.id,
-        descriptions: data.descriptions,
-        createdDate: data.createdDate,
-      };
-      state.unshift(newTeam);
+      let newData = action.payload.map((item) => {
+        let rateAttended = parseFloat(
+          (parseFloat(item.numberOfSessionAttended) /
+            parseFloat(item.numberOfSession)) *
+            100
+        );
+        let ratePoint = parseFloat(
+          (parseFloat(item.checkPointPhase1) +
+            parseFloat(item.checkPointPhase2)) /
+            2
+        );
+        return {
+          ...item,
+          statusTeam:
+            rateAttended >= item.maximumNumberOfBreaks &&
+            ratePoint >= item.pointMin
+              ? 0
+              : 1,
+        };
+      });
+      state = newData;
       return state;
     },
     UpdatePoint: (state, action) => {
       const point = action.payload;
-      const index = state.findIndex((item) => item.id === point.id);
+      const index = state.findIndex(
+        (item) => item.idStudent === point.studentId
+      );
       if (index !== -1) {
         let update = state[index];
+        let rateAttended = parseFloat(
+          (parseFloat(point.numberOfSessionAttended) /
+            parseFloat(point.numberOfSession)) *
+            100
+        );
+        let ratePoint = parseFloat(
+          (parseFloat(point.checkPointPhase1) +
+            parseFloat(point.checkPointPhase2)) /
+            2
+        );
         update.id = point.id;
         update.checkPointPhase1 = point.checkPointPhase1;
         update.checkPointPhase2 = point.checkPointPhase2;
         update.finalPoint = point.finalPoint;
+        update.statusTeam =
+          rateAttended >= point.maximumNumberOfBreaks &&
+          ratePoint >= point.pointMin
+            ? 0
+            : 1;
       }
-      return state;
-    },
-    DeletePoint: (state, action) => {
-      const team = action.payload;
-      const newData = state.filter((item) => item.id !== team.id);
-      state = newData;
       return state;
     },
   },
 });
-export const { SetPoint, CreatePoint, UpdatePoint, DeletePoint } =
-  tePointSlice.actions;
+export const { SetPoint, UpdatePoint } = tePointSlice.actions;
 
 export const GetPoint = (state) => state.tePoint;
 

@@ -1,10 +1,13 @@
 package com.labreportapp.labreport.core.teacher.service;
 
+import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindListAttendanceRequest;
-import com.labreportapp.labreport.core.teacher.model.response.TeAttendanceMessageRespone;
-import com.labreportapp.labreport.core.teacher.model.response.TeAttendanceRespone;
-import com.labreportapp.labreport.core.teacher.model.response.TeAttendanceStudentAllRespone;
-import com.labreportapp.labreport.entity.Attendance;
+import com.labreportapp.labreport.core.teacher.model.request.TeFindStudentAttendanceRequest;
+import com.labreportapp.labreport.core.teacher.model.response.TeAttendanceMessageResponse;
+import com.labreportapp.labreport.core.teacher.model.response.TeAttendanceResponse;
+import com.labreportapp.labreport.core.teacher.model.response.TeAttendanceStudentAllResponse;
+import com.labreportapp.labreport.core.teacher.model.response.TeStudentAttendanceRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TeStudentAttendedDetailRespone;
 
 import java.util.List;
 
@@ -13,10 +16,12 @@ import java.util.List;
  */
 public interface TeAttendanceSevice {
 
-    List<TeAttendanceRespone> getListCustom(String idMeeting);
+    List<TeAttendanceResponse> getListCustom(String idMeeting);
 
-    TeAttendanceMessageRespone addOrUpdateAttendance(final TeFindListAttendanceRequest request);
+    TeAttendanceMessageResponse addOrUpdateAttendance(final TeFindListAttendanceRequest request);
 
-    List<TeAttendanceStudentAllRespone> getListAttendanceStudentAllMeeting(String idClass);
+    List<TeAttendanceStudentAllResponse> getListAttendanceStudentAllMeeting(String idClass);
+
+    PageableObject<TeStudentAttendedDetailRespone> getAllAttendanceStudentById(final TeFindStudentAttendanceRequest req);
 
 }

@@ -11,8 +11,10 @@ import { TeacherMeetingAPI } from "../../../../api/teacher/meeting/TeacherMeetin
 import { TeacherAttendanceAPI } from "../../../../api/teacher/attendance/TeacherAttendance.api";
 import LoadingIndicator from "../../../../helper/loading";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTableList } from "@fortawesome/free-solid-svg-icons";
-import { Empty } from "antd";
+import { faEye, faTableList } from "@fortawesome/free-solid-svg-icons";
+import { Empty, Tooltip } from "antd";
+import TeModalDetailOneStudent from "./detail-attendance-one-student/TeModalDetailOneStudent";
+
 const TeacherAttendanceClass = () => {
   const { idClass } = useParams();
   const dispatch = useAppDispatch();
@@ -21,18 +23,27 @@ const TeacherAttendanceClass = () => {
   const [column, setColumn] = useState([]);
   const [classDetail, setClassDetail] = useState({});
   const [loading, setLoading] = useState(false);
+  const [objStudent, setObjStudent] = useState({});
+  const [showDetailModal, setShowDetailModal] = useState(false);
   useEffect(() => {
     featchClass(idClass);
     featchColumn(idClass);
     featchTable(idClass);
   }, []);
+  const handleModalDetailCancel = () => {
+    document.querySelector("body").style.overflowX = "hidden";
+    setObjStudent({});
+    setShowDetailModal(false);
+  };
+  const handleModalDetailShow = (item) => {
+    setShowDetailModal(true);
+    setObjStudent(item);
+  };
   const featchColumn = async (idClass) => {
     try {
       await TeacherMeetingAPI.getColumnMeetingByIdClass(idClass).then(
         (response) => {
           setColumn(response.data.data);
-          console.log("locoasmaa");
-          console.log(response.data.data);
         }
       );
     } catch (error) {
@@ -44,15 +55,13 @@ const TeacherAttendanceClass = () => {
       await TeacherAttendanceAPI.getAllAttendanceByIdClass(idClass)
         .then((responese) => {
           setData(responese.data.data);
-          console.log("dâttattattattattattattattattatt");
-          console.log(responese.data.data);
           setLoading(true);
         })
         .catch((err) => {
           toast.error(err.data.message);
         });
     } catch (error) {
-      alert(error.message);
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
   const featchClass = async (idClass) => {
@@ -67,12 +76,19 @@ const TeacherAttendanceClass = () => {
   };
   const convertLongToDate = (dateLong) => {
     const date = new Date(dateLong);
-    const format = `${date.getDate()}/${date.getMonth() + 1}`;
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const format = `${day}/${month}`;
     return format;
   };
   return (
     <>
       {!loading && <LoadingIndicator />}
+      <TeModalDetailOneStudent
+        onCancel={handleModalDetailCancel}
+        visible={showDetailModal}
+        objStudent={objStudent}
+      />
       <div className="attendance-all">
         <div className="box-one">
           <Link to="/teacher/my-class" style={{ color: "black" }}>
@@ -165,7 +181,7 @@ const TeacherAttendanceClass = () => {
                   style={{
                     height: "28.5px",
                     width: "auto",
-                    backgroundColor: "#007bff",
+                    backgroundColor: "rgb(38, 144, 214)",
                     color: "white",
                     borderRadius: "5px",
                     float: "right",
@@ -184,22 +200,6 @@ const TeacherAttendanceClass = () => {
                 <hr />
               </div>
             </div>
-            {/* <div className="info-team">
-              <div className="group-info">
-                <span
-                  className="group-info-item"
-                  style={{ marginTop: "13px", marginBottom: "15px" }}
-                >
-                  Tên lớp: &nbsp;{classDetail.code}
-                </span>
-                <span
-                  className="group-info-item"
-                  style={{ marginTop: "13px", marginBottom: "15px" }}
-                >
-                  Mô tả: &nbsp;{classDetail.descriptions}
-                </span>
-              </div>
-            </div> */}
             <div style={{ overflowX: "auto" }}>
               <div style={{ margin: "15px 0px 15px 15px" }}>
                 <span style={{ fontSize: "17px", fontWeight: 500 }}>
@@ -232,11 +232,14 @@ const TeacherAttendanceClass = () => {
                           <th className="column-AP-teacher" key={index}>
                             {convertLongToDate(item.meetingDate)}
                             <br />
+                            <span>Ca {item.meetingPeriod + 1}</span>
+                            <br />
                             <span>{item.nameMeeting}</span>
                           </th>
                         ))}
                       <th>Vắng</th>
                       <th>Tỷ lệ</th>
+                      <th>Hành động</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -272,6 +275,18 @@ const TeacherAttendanceClass = () => {
                               {parseFloat(countAbsent / countMeeting) * 100}%
                             </td>
                             <td>{countAbsent + `/` + countMeeting}</td>
+                            <td>
+                              <Tooltip
+                                title="Xem chi tiết"
+                                style={{ cursor: "pointer" }}
+                              >
+                                <FontAwesomeIcon
+                                  icon={faEye}
+                                  className="icon"
+                                  onClick={() => handleModalDetailShow(item)}
+                                />
+                              </Tooltip>
+                            </td>
                           </tr>
                         );
                       })}
@@ -283,7 +298,7 @@ const TeacherAttendanceClass = () => {
                   style={{
                     padding: "20px 0px 20px 0",
                   }}
-                  description={<span>Không có thông tin buổi học</span>}
+                  description={<span>Không có dữ liệu</span>}
                 />
               )}
             </div>

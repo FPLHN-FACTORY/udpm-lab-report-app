@@ -68,15 +68,15 @@ public interface TodoRepository extends JpaRepository<Todo, String> {
 
     @Query(value = """
             SELECT DISTINCT
-                SUBSTRING_INDEX(c.email, '@', 1) AS name, (select COUNT(1) from to_do g JOIN assign k ON g.id = k.todo_id\s
-                WHERE g.todo_id IS NULL AND k.email = c.email) as member
+                SUBSTRING_INDEX(c.teEmail, '@', 1) AS name, (select COUNT(1) from to_do g JOIN assign k ON g.id = k.todo_id\s
+                WHERE g.todo_id IS NULL AND k.teEmail = c.teEmail) as member
             FROM
                 todo_list a
                 JOIN to_do b ON b.todo_list_id = a.id
                 LEFT JOIN assign c ON c.todo_id = b.id
             WHERE
                 a.project_id = :projectId
-                AND c.email IS NOT NULL;
+                AND c.teEmail IS NOT NULL;
             """, nativeQuery = true)
     List<MeDataDashboardMemberResponse> countTodoByMemberAllProject(@Param("projectId") String projectId);
 
@@ -151,17 +151,17 @@ public interface TodoRepository extends JpaRepository<Todo, String> {
 
     @Query(value = """
             SELECT DISTINCT
-                SUBSTRING_INDEX(c.email, '@', 1) AS name, (select COUNT(1) from to_do g 
+                SUBSTRING_INDEX(c.teEmail, '@', 1) AS name, (select COUNT(1) from to_do g 
                  JOIN period_todo h ON g.id = h.todo_id
                 JOIN assign k ON g.id = k.todo_id
-                WHERE g.todo_id IS NULL AND k.email = c.email AND h.period_id = :periodId) as member
+                WHERE g.todo_id IS NULL AND k.teEmail = c.teEmail AND h.period_id = :periodId) as member
             FROM
                 todo_list a
                 JOIN to_do b ON b.todo_list_id = a.id
                 LEFT JOIN assign c ON c.todo_id = b.id
             WHERE
                 a.project_id = :projectId
-                AND c.email IS NOT NULL 
+                AND c.teEmail IS NOT NULL 
             """, nativeQuery = true)
     List<MeDataDashboardMemberResponse> countTodoByMemberPeriod(@Param("projectId") String projectId,
                                     @Param("periodId") String periodId);

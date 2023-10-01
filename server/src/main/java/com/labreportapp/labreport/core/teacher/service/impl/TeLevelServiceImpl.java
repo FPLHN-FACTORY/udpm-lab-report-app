@@ -1,6 +1,6 @@
 package com.labreportapp.labreport.core.teacher.service.impl;
 
-import com.labreportapp.labreport.core.teacher.model.response.TeLevelRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TeLevelResponse;
 import com.labreportapp.labreport.core.teacher.repository.TeLevelRepository;
 import com.labreportapp.labreport.core.teacher.service.TeLevelService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +18,8 @@ public class TeLevelServiceImpl implements TeLevelService {
     private TeLevelRepository teLevelRepository;
 
     @Override
-    public List<TeLevelRespone> getAllLevel() {
-        List<TeLevelRespone> list = teLevelRepository.getAllLevel();
+    public List<TeLevelResponse> getAllLevel() {
+        List<TeLevelResponse> list = teLevelRepository.getAllLevel();
         if (list.size() == 0) {
             return null;
         }

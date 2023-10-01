@@ -1,11 +1,7 @@
-import { Row, Col, Button } from "antd";
+import { Row, Col } from "antd";
 import { useParams } from "react-router";
 import "./styleTeamInMeeting.css";
-import {
-  BookOutlined,
-  ControlOutlined,
-  UnorderedListOutlined,
-} from "@ant-design/icons";
+import { BookOutlined, ControlOutlined } from "@ant-design/icons";
 import LoadingIndicator from "../../../../../helper/loading";
 import { useEffect, useState } from "react";
 import { TeacherMeetingAPI } from "../../../../../api/teacher/meeting/TeacherMeeting.api";
@@ -29,28 +25,42 @@ const TeamInMeeting = () => {
     try {
       await TeacherMeetingAPI.getDetailByIdMeeting(id).then((response) => {
         setMeeting(response.data.data);
-        featchTeams(response.data.data.idClass);
+        featchTeams(
+          response.data.data.idClass,
+          response.data.data.listTeamReport
+        );
         document.title = "Bảng điều khiển - " + response.data.data.name;
       });
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-  const featchTeams = async (id) => {
+  const featchTeams = async (id, listReport) => {
     try {
       await TeacherTeamsAPI.getTeamsByIdClass(id).then((responese) => {
-        setTeam(responese.data.data);
+        const mergedList = responese.data.data.map((item1) => {
+          const matchingItem2 = listReport.find(
+            (item2) => item2.idTeam === item1.id
+          );
+          if (matchingItem2) {
+            return { ...item1, report: "Chưa báo cáo" };
+          }
+          return item1;
+        });
+        setTeam(mergedList);
         setLoading(true);
       });
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
+
   const convertLongToDate = (dateLong) => {
     const date = new Date(dateLong);
-    const format = `${date.getDate()}/${
-      date.getMonth() + 1
-    }/${date.getFullYear()}`;
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    const format = `${day}/${month}/${year}`;
     return format;
   };
   return (
@@ -108,7 +118,8 @@ const TeamInMeeting = () => {
                       color: "#1967D2",
                     }}
                   >
-                    {meeting.name} : {meeting.descriptions}
+                    {meeting.name}
+                    {": " + meeting.descriptions}
                   </span>
                 </div>
               </Col>

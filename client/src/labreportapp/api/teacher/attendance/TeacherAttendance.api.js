@@ -21,4 +21,19 @@ export class TeacherAttendanceAPI {
       url: url + `/attendance-all/` + idClass,
     });
   };
+  static getAllAttendanceStudentByIdStuIdClass = (data) => {
+    return request({
+      method: "GET",
+      url:
+        url +
+        `/attendance-one-st?idStudent=` +
+        data.idStudent +
+        `&idClass=` +
+        data.idClass +
+        "&page=" +
+        data.page +
+        "&size=" +
+        data.size,
+    });
+  };
 }

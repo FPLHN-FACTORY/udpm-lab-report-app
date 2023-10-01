@@ -1,7 +1,7 @@
 package com.labreportapp.labreport.core.teacher.service;
 
 import com.labreportapp.labreport.core.teacher.model.request.TeFindClassRequest;
-import com.labreportapp.labreport.core.teacher.model.response.TeActivityRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TeActivityResponse;
 
 import java.util.List;
 
@@ -10,6 +10,6 @@ import java.util.List;
  */
 public interface TeActivitySevice {
 
-    List<TeActivityRespone> getAllByIdSemester(final TeFindClassRequest teFindClass);
+    List<TeActivityResponse> getAllByIdSemester(final TeFindClassRequest teFindClass);
 
 }

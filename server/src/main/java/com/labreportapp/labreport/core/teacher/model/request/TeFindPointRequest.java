@@ -20,4 +20,6 @@ public class TeFindPointRequest {
 
     private Double finalPoint;
 
+    private Integer statusTeam;
+
 }

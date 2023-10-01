@@ -7,14 +7,21 @@ import com.labreportapp.labreport.core.teacher.model.request.Base.TePointExcel;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindListPointRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindPointRequest;
 import com.labreportapp.labreport.core.teacher.model.response.TeExcelResponseMessage;
-import com.labreportapp.labreport.core.teacher.model.response.TePointRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TePointResponse;
+import com.labreportapp.labreport.core.teacher.model.response.TePointStudentInforRespone;
 import com.labreportapp.labreport.core.teacher.model.response.TeStudentCallApiResponse;
+import com.labreportapp.labreport.core.teacher.model.response.TeStudentStatusApiResponse;
+import com.labreportapp.labreport.core.teacher.repository.TeClassConfigurationRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeClassRepository;
 import com.labreportapp.labreport.core.teacher.repository.TePointRepository;
+import com.labreportapp.labreport.core.teacher.repository.TeStudentClassesRepository;
 import com.labreportapp.labreport.core.teacher.service.TePointSevice;
 import com.labreportapp.labreport.core.teacher.service.TeStudentClassesService;
 import com.labreportapp.labreport.entity.Class;
+import com.labreportapp.labreport.entity.ClassConfiguration;
 import com.labreportapp.labreport.entity.Point;
+import com.labreportapp.labreport.entity.StudentClasses;
+import com.labreportapp.labreport.infrastructure.constant.StatusTeam;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Synchronized;
 import org.apache.poi.ss.usermodel.BorderStyle;
@@ -32,12 +39,13 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -50,6 +58,9 @@ public class TePointSeviceImpl implements TePointSevice {
     private TePointRepository tePointRepository;
 
     @Autowired
+    private TeStudentClassesRepository teStudentClassesRepository;
+
+    @Autowired
     private TeStudentClassesService teStudentClassesService;
 
     @Autowired
@@ -58,39 +69,121 @@ public class TePointSeviceImpl implements TePointSevice {
     @Autowired
     private TeClassRepository teClassRepository;
 
+    @Autowired
+    private TeClassConfigurationRepository teClassConfigurationRepository;
+
     @Override
-    public List<TePointRespone> getPointStudentById(String idClass) {
-        List<TePointRespone> list = tePointRepository.getAllPointByIdClass(idClass);
-        return list;
+    public List<TePointStudentInforRespone> getPointStudentByIdClass(String idClass) {
+        List<TePointResponse> list = tePointRepository.getAllPointByIdClass(idClass);
+        List<TeStudentStatusApiResponse> listInfor = teStudentClassesService.searchApiStudentClassesStatusByIdClass(idClass);
+        List<TePointStudentInforRespone> listReturn = new ArrayList<>();
+        ClassConfiguration classConfiguration = teClassConfigurationRepository.findAll().get(0);
+        if (list == null && listInfor == null && classConfiguration == null) {
+            return null;
+        }
+        list.forEach(point -> {
+            listInfor.forEach(infor -> {
+                if (point.getIdStudent().equals(infor.getIdStudent())) {
+                    TePointStudentInforRespone student = new TePointStudentInforRespone();
+                    student.setStt(point.getStt());
+                    student.setIdStudentClasses(point.getIdStudentClass());
+                    student.setIdPoint(point.getIdPoint());
+                    student.setIdStudent(point.getIdStudent());
+                    student.setUsername(infor.getUsername());
+                    student.setNameStudent(infor.getName());
+                    student.setStatusTeam(infor.getStatusTeam());
+                    if (point.getNameTeam() == null) {
+                        student.setNameTeam("");
+                    } else {
+                        student.setNameTeam(point.getNameTeam());
+                    }
+                    student.setEmailStudent(infor.getEmail());
+                    if (point.getCheckPointPhase1() == null) {
+                        student.setCheckPointPhase1(0.0);
+                    } else {
+                        student.setCheckPointPhase1(point.getCheckPointPhase1());
+                    }
+                    if (point.getCheckPointPhase2() == null) {
+                        student.setCheckPointPhase2(0.0);
+                    } else {
+                        student.setCheckPointPhase2(point.getCheckPointPhase2());
+                    }
+                    if (point.getFinalPoint() == null) {
+                        student.setFinalPoint(0.0);
+                    } else {
+                        student.setFinalPoint(point.getFinalPoint());
+                    }
+                    student.setIdClass(point.getIdClass());
+                    student.setNumberOfSessionAttended(point.getSoBuoiDiHoc());
+                    student.setNumberOfSession(point.getSoBuoiPhaiHoc());
+                    student.setPointMin(classConfiguration.getPointMin());
+                    student.setMaximumNumberOfBreaks(classConfiguration.getMaximumNumberOfBreaks());
+                    listReturn.add(student);
+                }
+            });
+        });
+        return listReturn;
     }
 
     @Override
     @Synchronized
-    public List<Point> addOrUpdatePoint(TeFindListPointRequest request) {
-        List<TeFindPointRequest> list = request.getListPoint();
-        List<Point> listNew = new ArrayList<>();
-        list.forEach(item -> {
-            Optional<TePointRespone> obj = tePointRepository.getPointIdClassIdStudent(item);
-            if (obj.isPresent()) {
-                Point point = new Point();
-                point.setId(obj.get().getId());
-                point.setStudentId(obj.get().getIdStudent());
-                point.setClassId(obj.get().getIdClass());
-                point.setCheckPointPhase1(item.getCheckPointPhase1());
-                point.setCheckPointPhase2(item.getCheckPointPhase2());
-                point.setFinalPoint((item.getCheckPointPhase1() + item.getCheckPointPhase2()) / 2);
-                listNew.add(point);
-            } else {
+    @Transactional
+    public List<TePointStudentInforRespone> addOrUpdatePoint(TeFindListPointRequest request) {
+        List<TeFindPointRequest> listRequest = request.getListPoint();
+        List<Point> listPointDB = tePointRepository.getAllByClassId(request.getIdClass());
+        List<StudentClasses> listStudentClass = teStudentClassesRepository.findStudentClassesByIdClass(request.getIdClass());
+        List<StudentClasses> listStudentClassUp = new ArrayList<>();
+        List<Point> listPointAddOrUp = new ArrayList<>();
+        if (listPointDB.size() <= 0) {
+            listRequest.forEach(item -> {
                 Point point = new Point();
                 point.setStudentId(item.getIdStudent());
                 point.setClassId(item.getIdClass());
                 point.setCheckPointPhase1(item.getCheckPointPhase1());
                 point.setCheckPointPhase2(item.getCheckPointPhase2());
                 point.setFinalPoint((item.getCheckPointPhase1() + item.getCheckPointPhase2()) / 2);
-                listNew.add(point);
-            }
+                point.setCreatedDate(new Date().getTime());
+                point.setLastModifiedDate(new Date().getTime());
+                listPointAddOrUp.add(point);
+            });
+        } else {
+            listPointDB.forEach(itemDB -> {
+                listRequest.forEach(item -> {
+                    if (itemDB.getStudentId().equals(item.getIdStudent())) {
+                        Point point = new Point();
+                        point.setId(itemDB.getId());
+                        point.setStudentId(itemDB.getStudentId());
+                        point.setClassId(itemDB.getClassId());
+                        point.setCheckPointPhase1(item.getCheckPointPhase1());
+                        point.setCheckPointPhase2(item.getCheckPointPhase2());
+                        point.setFinalPoint((item.getCheckPointPhase1() + item.getCheckPointPhase2()) / 2);
+                        point.setCreatedDate(itemDB.getCreatedDate());
+                        point.setLastModifiedDate(itemDB.getLastModifiedDate());
+                        listPointAddOrUp.add(point);
+                    }
+                });
+            });
+        }
+        listRequest.forEach(item -> {
+            listStudentClass.forEach(student -> {
+                if (student.getStudentId().equals(item.getIdStudent())) {
+                    StudentClasses studentClasses = new StudentClasses();
+                    studentClasses.setId(student.getId());
+                    studentClasses.setStudentId(student.getStudentId());
+                    studentClasses.setEmail(student.getEmail());
+                    studentClasses.setTeamId(student.getTeamId());
+                    studentClasses.setClassId(student.getClassId());
+                    studentClasses.setRole(student.getRole());
+                    studentClasses.setStatus(item.getStatusTeam() == 0 ? StatusTeam.ACTIVE : StatusTeam.INACTIVE);
+                    studentClasses.setStatusStudentFeedBack(student.getStatusStudentFeedBack());
+                    listStudentClassUp.add(studentClasses);
+                }
+            });
         });
-        return tePointRepository.saveAll(listNew);
+        tePointRepository.saveAll(listPointAddOrUp);
+        teStudentClassesRepository.saveAll(listStudentClassUp);
+        return getPointStudentByIdClass(request.getIdClass());
+
     }
 
     private Sheet configTitle(Workbook workbook, String name) {
@@ -174,14 +267,14 @@ public class TePointSeviceImpl implements TePointSevice {
     public ByteArrayOutputStream exportExcel(HttpServletResponse response, String idClass) {
         try (Workbook workbook = new XSSFWorkbook();
              ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-            List<TePointRespone> listPointIdClass = getPointStudentById(idClass);
+            List<TePointStudentInforRespone> listPointIdClass = getPointStudentByIdClass(idClass);
             List<TeStudentCallApiResponse> listStudent = teStudentClassesService.searchApiStudentClassesByIdClass(idClass);
             List<TePointExcel> listExcel = new ArrayList<>();
             listPointIdClass.forEach((item1) -> {
                 listStudent.forEach((item2) -> {
                     if (item2.getIdStudent().equals(item1.getIdStudent())) {
                         TePointExcel point = new TePointExcel();
-                        point.setIdPoint(item1.getId());
+                        point.setIdPoint(item1.getIdPoint());
                         point.setIdStudent(item1.getIdStudent());
                         point.setName(item2.getName());
                         point.setEmail(item2.getEmail());
@@ -224,27 +317,30 @@ public class TePointSeviceImpl implements TePointSevice {
     }
 
     @Override
+    @Synchronized
+    @Transactional
     public TeExcelResponseMessage importExcel(MultipartFile file, String idClass) {
         TeExcelResponseMessage teExcelResponseMessage = new TeExcelResponseMessage();
         try {
-            List<TeExcelImportPoint> list = tePointImportService.importDataPoint(file, idClass);
-            if (list.size() == 0) {
+            List<TeExcelImportPoint> listInput = tePointImportService.importDataPoint(file, idClass);
+            if (listInput.size() == 0) {
                 teExcelResponseMessage.setStatus(false);
-                teExcelResponseMessage.setMessage("file excel trống");
+                teExcelResponseMessage.setMessage("File excel trống, vui lòng export lại excel để sử dụng import !");
                 return teExcelResponseMessage;
             }
             ConcurrentHashMap<String, SimpleResponse> mapPointStudent = new ConcurrentHashMap<>();
             addDataMapsPointStudent(mapPointStudent, idClass);
-            if (list.size() != mapPointStudent.size()) {
+            if (listInput.size() != mapPointStudent.size()) {
                 teExcelResponseMessage.setStatus(false);
-                teExcelResponseMessage.setMessage("số lượng sinh viên trong file excel phải bằng với số lượng sinh viên trong lớp");
+                teExcelResponseMessage.setMessage("Import thất bại. Số lượng sinh viên trong file excel phải bằng với số lượng sinh viên trong lớp !");
                 return teExcelResponseMessage;
             }
             ConcurrentHashMap<String, Point> mapPointStudentDB = new ConcurrentHashMap<>();
             addDataMapsPointStudentDB(mapPointStudentDB, idClass);
             ConcurrentHashMap<String, Point> pointUpdate = new ConcurrentHashMap<>();
             teExcelResponseMessage.setStatus(true);
-            list.parallelStream().forEach(point -> {
+            teExcelResponseMessage.setMessage("");
+            listInput.parallelStream().forEach(point -> {
                 String regexName = "^[^!@#$%^&*()_+|~=`{}\\[\\]:\";'<>?,.\\/\\\\]*$";
                 String regexEmailBasic = "^[a-zA-Z0-9._%+-]+@fpt.edu.vn$";
                 String regexEmail = "^[A-Za-z0-9+_.-]+@(.+)$";
@@ -252,64 +348,75 @@ public class TePointSeviceImpl implements TePointSevice {
                 String regexDouble = "^(?:[0-9](?:\\.\\d*)?|10(?:\\.0*)?)$";
                 if (point.getName().isEmpty()) {
                     teExcelResponseMessage.setStatus(false);
-                    teExcelResponseMessage.setMessage("tên sinh viên không được để trống");
+                    teExcelResponseMessage.setMessage(teExcelResponseMessage.getMessage() +
+                            " Tên sinh viên không được để trống.");
                     return;
+                } else {
+                    if (!point.getName().matches(regexName)) {
+                        teExcelResponseMessage.setStatus(false);
+                        teExcelResponseMessage.setMessage(teExcelResponseMessage.getMessage() +
+                                " Tên sinh viên sai định dạng.");
+                        return;
+                    }
                 }
-                if (!point.getName().matches(regexName)) {
-                    teExcelResponseMessage.setStatus(false);
-                    teExcelResponseMessage.setMessage("tên sinh viên sai định dạng");
-                    return;
-                }
-                if (point.getEmail().isEmpty()) {
-                    teExcelResponseMessage.setStatus(false);
-                    teExcelResponseMessage.setMessage("email không được để trống");
-                    return;
-                }
-                if (!point.getEmail().matches(regexEmailExactly)) {
-                    teExcelResponseMessage.setStatus(false);
-                    teExcelResponseMessage.setMessage("email sai định dạng");
-                    return;
-                }
+
                 if (point.getCheckPointPhase1().isEmpty()) {
                     teExcelResponseMessage.setStatus(false);
-                    teExcelResponseMessage.setMessage("điểm giai đoạn 1 không được để trống");
+                    teExcelResponseMessage.setMessage(teExcelResponseMessage.getMessage() +
+                            " Điểm giai đoạn 1 không được để trống.");
                     return;
                 }
                 if (point.getCheckPointPhase2().isEmpty()) {
                     teExcelResponseMessage.setStatus(false);
-                    teExcelResponseMessage.setMessage("điểm giai đoạn 2 không được để trống");
+                    teExcelResponseMessage.setMessage(teExcelResponseMessage.getMessage() +
+                            " Điểm giai đoạn 2 không được để trống.");
                     return;
                 }
-                if (!point.getCheckPointPhase1().matches(regexDouble)) {
+                if (!point.getCheckPointPhase1().matches(regexDouble) || !point.getCheckPointPhase2().matches(regexDouble)) {
                     teExcelResponseMessage.setStatus(false);
-                    teExcelResponseMessage.setMessage("điểm giai đoạn 1 và giai đoạn 2 phải là số từ 0 -> 10");
+                    teExcelResponseMessage.setMessage(teExcelResponseMessage.getMessage() +
+                            " Điểm giai đoạn 1 và giai đoạn 2 phải là số từ 0 -> 10");
                     return;
                 }
-                if (!point.getCheckPointPhase2().matches(regexDouble)) {
-                    teExcelResponseMessage.setStatus(false);
-                    teExcelResponseMessage.setMessage("điểm giai đoạn 1 và giai đoạn 2 phải là số từ 0 -> 10");
-                    return;
-                }
+
                 SimpleResponse simpleResponse = mapPointStudent.get(point.getEmail());
-                if (simpleResponse == null) {
+                if (point.getEmail().isEmpty()) {
                     teExcelResponseMessage.setStatus(false);
-                    teExcelResponseMessage.setMessage("email của sinh viên không tồn tại");
+                    teExcelResponseMessage.setMessage(teExcelResponseMessage.getMessage() +
+                            " Email không được để trống.");
                     return;
+                } else if (!point.getEmail().matches(regexEmailExactly)) {
+                    teExcelResponseMessage.setStatus(false);
+                    teExcelResponseMessage.setMessage(teExcelResponseMessage.getMessage() +
+                            " Email sai định dạng.");
+                    return;
+                } else {
+                    if (simpleResponse == null) {
+                        teExcelResponseMessage.setStatus(false);
+                        teExcelResponseMessage.setMessage(teExcelResponseMessage.getMessage() + " Email của sinh viên không tồn tại.");
+                        return;
+                    }
                 }
                 Point pointUpd = mapPointStudentDB.get(simpleResponse.getId());
                 pointUpd.setCheckPointPhase1(Double.parseDouble((point.getCheckPointPhase1())));
                 pointUpd.setCheckPointPhase2(Double.parseDouble((point.getCheckPointPhase2())));
-                pointUpd.setFinalPoint(Double.parseDouble(String.valueOf((Double.parseDouble((point.getCheckPointPhase1())) + Double.parseDouble((point.getCheckPointPhase2()))) / 2)));
+                pointUpd.setFinalPoint(Double.parseDouble(String.valueOf(
+                        (Double.parseDouble((point.getCheckPointPhase1()))
+                                + Double.parseDouble((point.getCheckPointPhase2()))) / 2)));
                 pointUpdate.put(pointUpd.getStudentId(), pointUpd);
             });
             if (teExcelResponseMessage.getStatus() == true) {
                 tePointRepository.saveAll(pointUpdate.values());
+                teExcelResponseMessage.setMessage("Import điểm thành công !");
                 return teExcelResponseMessage;
+            } else {
+                teExcelResponseMessage.setMessage("Import điểm thất bại. " + teExcelResponseMessage.getMessage());
             }
-        } catch (Exception e) {
+        } catch (
+                Exception e) {
             e.printStackTrace();
             teExcelResponseMessage.setStatus(false);
-            teExcelResponseMessage.setMessage("lỗi hệ thống");
+            teExcelResponseMessage.setMessage("Lỗi hệ thống vui lòng F5 lại trang !");
             return teExcelResponseMessage;
         }
         return teExcelResponseMessage;

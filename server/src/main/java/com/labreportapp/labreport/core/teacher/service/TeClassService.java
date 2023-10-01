@@ -2,9 +2,11 @@ package com.labreportapp.labreport.core.teacher.service;
 
 import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindClassRequest;
+import com.labreportapp.labreport.core.teacher.model.request.TeFindClassSentStudentRequest;
+import com.labreportapp.labreport.core.teacher.model.request.TeFindUpdateStatusClassRequest;
 import com.labreportapp.labreport.core.teacher.model.response.TeClassResponse;
-import com.labreportapp.labreport.core.teacher.model.response.TeDetailClassRespone;
-import com.labreportapp.labreport.core.teacher.model.response.TeFindUpdateStatusClassRequest;
+import com.labreportapp.labreport.core.teacher.model.response.TeClassSentStudentRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TeDetailClassResponse;
 import com.labreportapp.labreport.entity.Class;
 
 import java.util.List;
@@ -14,9 +16,11 @@ import java.util.List;
  */
 public interface TeClassService {
 
-    PageableObject<TeClassResponse> searchTeacherClass(final TeFindClassRequest teFindClass);
+    PageableObject<TeClassResponse> searchTeacherClass(final TeFindClassRequest request);
 
-    TeDetailClassRespone findClassById(final String id);
+    PageableObject<TeClassSentStudentRespone> findClassBySentStudent(final TeFindClassSentStudentRequest request);
+
+    TeDetailClassResponse findClassById(final String id);
 
     List<TeClassResponse> getClassClosestToTheDateToSemester(String idTeacher);
 

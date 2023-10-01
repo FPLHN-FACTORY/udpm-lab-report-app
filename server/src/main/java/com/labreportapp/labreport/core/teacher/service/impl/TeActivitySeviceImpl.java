@@ -1,7 +1,7 @@
 package com.labreportapp.labreport.core.teacher.service.impl;
 
 import com.labreportapp.labreport.core.teacher.model.request.TeFindClassRequest;
-import com.labreportapp.labreport.core.teacher.model.response.TeActivityRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TeActivityResponse;
 import com.labreportapp.labreport.core.teacher.repository.TeActivityRepository;
 import com.labreportapp.labreport.core.teacher.service.TeActivitySevice;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ public class TeActivitySeviceImpl implements TeActivitySevice {
     private TeActivityRepository teActivityRepository;
 
     @Override
-    public List<TeActivityRespone> getAllByIdSemester(TeFindClassRequest teFindClass) {
+    public List<TeActivityResponse> getAllByIdSemester(TeFindClassRequest teFindClass) {
         return teActivityRepository.getAllByIdSemester(teFindClass);
     }
 

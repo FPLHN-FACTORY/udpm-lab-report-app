@@ -9,7 +9,7 @@ import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyCla
 import { TeacherMeetingAPI } from "../../../../api/teacher/meeting/TeacherMeeting.api";
 import { Link } from "react-router-dom";
 import CustomSwitch from "./CustomSwitch";
-import { Empty, Table } from "antd";
+import { Button, Empty, Input, Table } from "antd";
 import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import {
@@ -19,6 +19,7 @@ import {
 } from "../../../../app/teacher/attendance-meeting-today/teacherAttendanceMeetingSlice.reduce";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBook, faHome } from "@fortawesome/free-solid-svg-icons";
+import { SearchOutlined } from "@ant-design/icons";
 
 const TeacherAttendanceMeeting = () => {
   const dispatch = useAppDispatch();
@@ -147,19 +148,32 @@ const TeacherAttendanceMeeting = () => {
       fetchData(idClass);
     }
   }, [loadingData]);
-
   const handleSave = async () => {
     try {
       let dataFind = { listAttendance: data, idMeeting: idMeeting };
       await TeacherAttendanceAPI.createOrUpdate(dataFind).then((respone) => {
         dispatch(UpdateAttendanceMeeting(respone.data.data.listAttendance));
-        toast.success(respone.data.data.message);
+        let className =
+          respone.data.data.message.length < 27
+            ? "custom-toast-short"
+            : "custom-toast-long";
+        toast.success(respone.data.data.message, {
+          className: className,
+        });
       });
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-
+  const handleChangeNotes = (id, value) => {
+    let dataUpdate = data.map((item) => {
+      if (item.idStudent === id) {
+        return { ...item, notes: value };
+      }
+      return item;
+    });
+    dispatch(SetAttendanceMeeting(dataUpdate));
+  };
   const data = useAppSelector(GetAttendanceMeeting);
   const columns = [
     {
@@ -172,12 +186,82 @@ const TeacherAttendanceMeeting = () => {
       title: "Tên tài khoản",
       dataIndex: "username",
       key: "username",
+      filterDropdown: ({
+        setSelectedKeys,
+        selectedKeys,
+        confirm,
+        clearFilters,
+      }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="Tìm kiếm"
+            value={selectedKeys[0]}
+            onChange={(e) =>
+              setSelectedKeys(e.target.value ? [e.target.value] : [])
+            }
+            onPressEnter={confirm}
+            style={{ width: 188, marginBottom: 8, display: "block" }}
+          />
+          <Button
+            type="primary"
+            className="btn_search_member"
+            onClick={confirm}
+            size="small"
+            style={{ width: 90, marginRight: 8 }}
+          >
+            Tìm
+          </Button>
+          <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
+            Đặt lại
+          </Button>
+        </div>
+      ),
+      filterIcon: (filtered) => (
+        <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+      ),
+      onFilter: (value, record) =>
+        record.username.toLowerCase().includes(value.toLowerCase()),
     },
 
     {
       title: "Tên sinh viên",
       dataIndex: "name",
       key: "name",
+      filterDropdown: ({
+        setSelectedKeys,
+        selectedKeys,
+        confirm,
+        clearFilters,
+      }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="Tìm kiếm"
+            value={selectedKeys[0]}
+            onChange={(e) =>
+              setSelectedKeys(e.target.value ? [e.target.value] : [])
+            }
+            onPressEnter={confirm}
+            style={{ width: 188, marginBottom: 8, display: "block" }}
+          />
+          <Button
+            type="primary"
+            className="btn_search_member"
+            onClick={confirm}
+            size="small"
+            style={{ width: 90, marginRight: 8 }}
+          >
+            Tìm
+          </Button>
+          <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
+            Đặt lại
+          </Button>
+        </div>
+      ),
+      filterIcon: (filtered) => (
+        <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+      ),
+      onFilter: (value, record) =>
+        record.name.toLowerCase().includes(value.toLowerCase()),
       sorter: (a, b) => a.name.localeCompare(b.name),
     },
     {
@@ -187,10 +271,67 @@ const TeacherAttendanceMeeting = () => {
       sorter: (a, b) => a.email.localeCompare(b.email),
     },
     {
+      title: "Ghi chú",
+      dataIndex: "notes",
+      key: "notes",
+      render: (text, record) => {
+        return (
+          <Input
+            type="text"
+            value={text}
+            onChange={(e) =>
+              handleChangeNotes(record.idStudent, e.target.value)
+            }
+          />
+        );
+      },
+    },
+    {
       title: "Trạng thái",
       dataIndex: "statusAttendance",
       key: "statusAttendance",
       width: "30%",
+      filterDropdown: ({
+        setSelectedKeys,
+        selectedKeys,
+        confirm,
+        clearFilters,
+      }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="Tìm kiếm"
+            value={selectedKeys[0]}
+            onChange={(e) =>
+              setSelectedKeys(e.target.value ? [e.target.value] : [])
+            }
+            onPressEnter={confirm}
+            style={{ width: 188, marginBottom: 8, display: "block" }}
+          />
+          <Button
+            type="primary"
+            className="btn_search_member"
+            onClick={confirm}
+            size="small"
+            style={{ width: 90, marginRight: 8 }}
+          >
+            Tìm
+          </Button>
+          <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
+            Đặt lại
+          </Button>
+        </div>
+      ),
+      filterIcon: (filtered) => (
+        <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+      ),
+      onFilter: (value, record) => {
+        return (
+          (value.toLowerCase() === "có mặt" &&
+            record.statusAttendance === "YES") ||
+          (value.toLowerCase() === "vắng mặt" &&
+            record.statusAttendance === "NO")
+        );
+      },
       render: (text, record) => {
         return (
           <>

@@ -9,14 +9,12 @@
   cursor: pointer;
   transition: background-color 0.3s;
 }
-
 .not-active {
   background-color: rgb(255, 255, 255);
   color: white;
   width: 50%;
   height: 40px;
 }
-
 .checked-status-left {
   width: 50%;
   height: 40px;

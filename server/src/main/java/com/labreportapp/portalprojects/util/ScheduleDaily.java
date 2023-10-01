@@ -118,7 +118,7 @@ public class ScheduleDaily {
                 String emailContent =
                         """
                                 <html><body> 
-                                <p><span style=\"font-size: 20px;\">Xin chào!</span> Đây là một email 
+                                <p><span style=\"font-size: 20px;\">Xin chào!</span> Đây là một teEmail 
                                 nhắc nhở về đầu việc <span style=\"color: red;\"><b>
                                 """
                                 + item.getName() +

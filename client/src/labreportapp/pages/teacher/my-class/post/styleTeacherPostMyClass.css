@@ -1,24 +1,24 @@
-.card {
+.teacher-post .card {
   border: 1px solid #ddd;
   border-radius: 5px;
   padding: 10px;
 }
-.box-image {
+.teacher-post .box-image {
   width: auto;
   height: 255px;
   background-image: url("../../../../assets/img/banner-post2.png");
   border-radius: 5px;
   background-size: cover;
 }
-.box-create {
+.teacher-post .box-create {
   border-radius: 5px;
   height: 100px;
   box-shadow: 0 0 10px rgb(228, 227, 227);
 }
-.box-card-one {
+.teacher-post .box-card-one {
   box-shadow: 0 0 10px rgb(228, 227, 227);
 }
-.box-create-post {
+.teacher-post .box-create-post {
   width: 100%;
   display: flex;
   height: auto;
@@ -29,7 +29,7 @@
   box-shadow: 0 0 10px rgb(192, 183, 183);
   cursor: pointer;
 }
-.box-infor {
+.teacher-post .box-infor {
   padding-top: 10px;
   width: 100%;
   align-items: center;
@@ -44,35 +44,35 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.box-post {
+.teacher-post .box-post {
   margin: 20px 0px 0px 0px;
   display: flex;
   justify-content: space-between;
 }
-.box-post-left {
+.teacher-post .box-post-left {
   width: 20%;
 }
-.box-post-right {
+.teacher-post .box-post-right {
   width: 78%;
   margin-left: 2%;
 }
-.box-background {
+.teacher-post .box-background {
   background-color: white;
   padding: 20px;
   box-shadow: 0px 0px 20px 1px rgba(148, 148, 148, 0.3);
   border-radius: 5px;
 }
-.card-title {
+.teacher-post .card-title {
   font-size: 18px;
   font-weight: bold;
 }
-.title-icon-drop {
+.teacher-post .title-icon-drop {
   height: auto;
 }
-.title-text {
+.teacher-post .title-text {
   height: auto;
 }
-.box-icon-drop {
+.teacher-post .box-icon-drop {
   display: inline-block;
   width: 40px;
   height: 40px;
@@ -83,28 +83,27 @@
   border: 2px solid white;
   background-color: #4285f4;
 }
-.box-icon-drop:hover {
+.teacher-post .box-icon-drop:hover {
   background-color: pink;
   cursor: pointer;
 }
-
-.rich-text-editor {
+.teacher-post .rich-text-editor {
   padding: 10px;
 }
-.box-create-post:hover div > .link-create {
+.teacher-post .box-create-post:hover div > .link-create {
   color: #0b6cd3;
 }
-.ant-card-body {
+.teacher-post .ant-card-body {
   padding-left: 7px !important;
   padding-right: 7px !important;
   padding-top: 0 !important;
   padding-bottom: 0 !important;
 }
-.box-infor > p {
+.teacher-post .box-infor > p {
   text-align: center;
 }
-.box-infor span,
-.box-infor p {
+.teacher-post .box-infor span,
+.teacher-post .box-infor p {
   font-weight: 500;
   font-size: 17px;
   white-space: nowrap;
@@ -112,19 +111,30 @@
   text-overflow: ellipsis;
 }
 @media screen and (max-width: 100%) {
-  .box-infor span,
-  .box-infor p {
+  .teacher-post .box-infor span,
+  .teacher-post .box-infor p {
     font-size: 14px;
   }
 }
-.title-main {
+.teacher-post .title-main {
   padding: 8px 0px 0px 15px;
   font-weight: 500;
   font-size: 17px;
 }
-.infor-main {
+.teacher-post .infor-main {
   font-size: 25px !important;
   padding: 1px;
   font-weight: bold !important;
   color: #b78e3d;
+}
+.teacher-post .see-more {
+  float: right;
+  background-color: rgb(38, 144, 214);
+  color: "white";
+}
+.teacher-post .see-more:hover {
+  float: right;
+  background-color: rgb(38, 144, 214);
+  box-shadow: 0px 0px 20px 1px rgba(148, 148, 148, 0.3);
+  color: "white";
 }

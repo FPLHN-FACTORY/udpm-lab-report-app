@@ -25,7 +25,7 @@ public interface StAttendenceAllRepository extends JpaRepository<Attendance, Str
           WHERE (a.student_id IS NULL OR a.student_id = :#{#req.idStudent})
           AND st.class_id = :#{#req.idClass}
           AND s.id = :#{#req.idSemester}
-          GROUP BY m.id
+          GROUP BY m.id, m.name, m.meeting_date, m.meeting_period, m.type_meeting, m.teacher_id, a.status
           ORDER BY m.meeting_date ASC 
           """, nativeQuery = true)
   List<StAttendenceAllResponse> getAttendenceListByStudentInClassAndSemester(@Param("req") StFindAttendenceAllRequest req);

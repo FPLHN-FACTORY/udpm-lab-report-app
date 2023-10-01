@@ -74,7 +74,7 @@ public class PropertyKeys {
     public static final String ATTENDANCE_NOT_EXISTS = "attendance.not.exists";
     public static final String TIME_SEMESTER_OVERLOAD = "time.semester.overload";
     public static final String TIME_STUDENT_SEMESTER_OVERLOAD = "time.student.semester.overload";
-
+    public static final String NAME_IS_EMPTY = "name.is.empty";
     public static final String MEETING_EDIT_ATTENDANCE_FAILD = "meeting.edit.attendance.faild";
 
 }

@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import "./styleStudentsInMyClass.css";
-import { Button, Empty, Input, Table } from "antd";
+import { Button, Checkbox, Empty, Input, Table, Tag } from "antd";
 import { Link } from "react-router-dom";
 import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
 import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/TeacherStudentClasses.api";
@@ -15,7 +15,13 @@ import moment from "moment";
 import { ControlOutlined, SearchOutlined } from "@ant-design/icons";
 import { SetTTrueToggle } from "../../../../app/teacher/TeCollapsedSlice.reducer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleInfo, faTableList } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircleInfo,
+  faRightFromBracket,
+  faTableList,
+} from "@fortawesome/free-solid-svg-icons";
+import { toast } from "react-toastify";
+import ModalSentStudent from "./modal-sent-student/ModalSentStudent";
 
 const StudentsInMyClass = () => {
   const dispatch = useAppDispatch();
@@ -23,8 +29,11 @@ const StudentsInMyClass = () => {
   const [classDetail, setClassDetail] = useState({});
   const [loading, setLoading] = useState(false);
   const { idClass } = useParams();
+  const [listIdStudent, setListIdStudent] = useState([]);
+  const [showModalSent, setShowModalSent] = useState(false);
   useEffect(() => {
     window.scrollTo(0, 0);
+    dispatch(SetStudentClasses([]));
     featchClass(idClass);
   }, []);
   const featchClass = async (idClass) => {
@@ -43,9 +52,13 @@ const StudentsInMyClass = () => {
     try {
       await TeacherStudentClassesAPI.getStudentInClasses(id).then(
         (responese) => {
-          dispatch(SetStudentClasses(responese.data.data));
-          console.log("================================");
-          console.log(responese.data.data);
+          if (responese.data.data != null) {
+            let studentIds = responese.data.data
+              .filter((item) => item.idTeam === null)
+              .map((item) => item.idStudent);
+            setListIdStudent(studentIds);
+            dispatch(SetStudentClasses(responese.data.data));
+          }
           setLoading(true);
         }
       );
@@ -53,14 +66,78 @@ const StudentsInMyClass = () => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
+
   const data = useAppSelector(GetStudentClasses);
-  const columns = [
+  let columns = [
     {
       title: "#",
       dataIndex: "stt",
       key: "stt",
       render: (text, record, index) => index + 1,
       width: "12px",
+    },
+    {
+      title: "Nhóm",
+      dataIndex: "nameTeam",
+      key: "nameTeam",
+      render: (text, record) => {
+        if (text === null || text === "") {
+          return <Tag color="processing">Chưa vào nhóm</Tag>;
+        } else {
+          return <span>{text}</span>;
+        }
+      },
+      filterDropdown: ({
+        setSelectedKeys,
+        selectedKeys,
+        confirm,
+        clearFilters,
+      }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="Tìm kiếm"
+            value={selectedKeys[0]}
+            onChange={(e) =>
+              setSelectedKeys(e.target.value ? [e.target.value] : [])
+            }
+            onPressEnter={confirm}
+            style={{ width: 188, marginBottom: 8, display: "block" }}
+          />
+          <Button
+            type="primary"
+            className="btn_search_member"
+            onClick={confirm}
+            size="small"
+            style={{ width: 90, marginRight: 8 }}
+          >
+            Tìm
+          </Button>
+          <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
+            Đặt lại
+          </Button>
+        </div>
+      ),
+      filterIcon: (filtered) => (
+        <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+      ),
+      onFilter: (value, record) => {
+        if (record.nameTeam === null) {
+          return false;
+        }
+        return record.nameTeam.toLowerCase().includes(value.toLowerCase());
+      },
+      sorter: (a, b) => {
+        if (a.nameTeam === null && b.nameTeam === null) {
+          return 0;
+        }
+        if (a.nameTeam === null) {
+          return -1;
+        }
+        if (b.nameTeam === null) {
+          return 1;
+        }
+        return a.nameTeam.localeCompare(b.nameTeam);
+      },
     },
     {
       title: "Tên tài khoản",
@@ -104,48 +181,219 @@ const StudentsInMyClass = () => {
       sorter: (a, b) => a.username.localeCompare(b.username),
     },
     {
-      title: "Nhóm",
-      dataIndex: "nameTeam",
-      key: "nameTeam",
-      render: (text, record) => {
-        if (text === null) {
-          return <span style={{ color: "blue" }}>Chưa vào nhóm</span>;
-        } else {
-          return <span>{text}</span>;
-        }
-      },
-    },
-    {
-      title: "Họ và tên",
+      title: "Tên sinh viên",
       dataIndex: "name",
       key: "name",
       sorter: (a, b) => a.name.localeCompare(b.name),
+      filterDropdown: ({
+        setSelectedKeys,
+        selectedKeys,
+        confirm,
+        clearFilters,
+      }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="Tìm kiếm"
+            value={selectedKeys[0]}
+            onChange={(e) =>
+              setSelectedKeys(e.target.value ? [e.target.value] : [])
+            }
+            onPressEnter={confirm}
+            style={{ width: 188, marginBottom: 8, display: "block" }}
+          />
+          <Button
+            type="primary"
+            className="btn_search_member"
+            onClick={confirm}
+            size="small"
+            style={{ width: 90, marginRight: 8 }}
+          >
+            Tìm
+          </Button>
+          <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
+            Đặt lại
+          </Button>
+        </div>
+      ),
+      filterIcon: (filtered) => (
+        <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+      ),
+      onFilter: (value, record) => {
+        if (record.name === null) {
+          return false;
+        }
+        return record.name.toLowerCase().includes(value.toLowerCase());
+      },
     },
-
     {
       title: "Email",
       dataIndex: "email",
       key: "email",
       sorter: (a, b) => a.email.localeCompare(b.email),
+      filterDropdown: ({
+        setSelectedKeys,
+        selectedKeys,
+        confirm,
+        clearFilters,
+      }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="Tìm kiếm"
+            value={selectedKeys[0]}
+            onChange={(e) =>
+              setSelectedKeys(e.target.value ? [e.target.value] : [])
+            }
+            onPressEnter={confirm}
+            style={{ width: 188, marginBottom: 8, display: "block" }}
+          />
+          <Button
+            type="primary"
+            className="btn_search_member"
+            onClick={confirm}
+            size="small"
+            style={{ width: 90, marginRight: 8 }}
+          >
+            Tìm
+          </Button>
+          <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
+            Đặt lại
+          </Button>
+        </div>
+      ),
+      filterIcon: (filtered) => (
+        <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+      ),
+      onFilter: (value, record) => {
+        if (record.email === null) {
+          return false;
+        }
+        return record.email.toLowerCase().includes(value.toLowerCase());
+      },
     },
-
     {
       title: "Trạng thái",
       dataIndex: "statusStudent",
       key: "statusStudent",
       render: (text) => {
-        if (text === "0") {
-          return <span style={{ color: "green" }}>HD</span>;
-        } else {
-          return <span style={{ color: "red" }}>HL</span>;
-        }
+        return (
+          <div style={{ textAlign: "center" }}>
+            {text === "0" ? (
+              <Tag
+                color="success"
+                style={{ width: "70px", textAlign: "center" }}
+              >
+                Đạt
+              </Tag>
+            ) : (
+              <Tag color="error" style={{ width: "70px", textAlign: "center" }}>
+                Trượt
+              </Tag>
+            )}
+          </div>
+        );
       },
-      width: "120px",
+      filterDropdown: ({
+        setSelectedKeys,
+        selectedKeys,
+        confirm,
+        clearFilters,
+      }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="Tìm kiếm"
+            value={selectedKeys[0]}
+            onChange={(e) =>
+              setSelectedKeys(e.target.value ? [e.target.value] : [])
+            }
+            onPressEnter={confirm}
+            style={{ width: 188, marginBottom: 8, display: "block" }}
+          />
+          <Button
+            type="primary"
+            className="btn_search_member"
+            onClick={confirm}
+            size="small"
+            style={{ width: 90, marginRight: 8 }}
+          >
+            Tìm
+          </Button>
+          <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
+            Đặt lại
+          </Button>
+        </div>
+      ),
+      filterIcon: (filtered) => (
+        <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+      ),
+      onFilter: (value, record) => {
+        return (
+          (value === "Đạt" && record.statusStudent === "0") ||
+          (value === "Trượt" && record.statusStudent === "1")
+        );
+      },
     },
   ];
+
+  const [checkedList, setCheckedList] = useState([]);
+  const handleSentStudent = () => {
+    if (checkedList.length === 0) {
+      toast.warning("Vui lòng chọn sinh viên cần chuyển lớp !");
+      return;
+    }
+    setShowModalSent(true);
+  };
+  if (classDetail.statusTeacherEdit === 0 && data != null && data.length > 0) {
+    const checkAll = listIdStudent.length === checkedList.length;
+    const indeterminate =
+      checkedList.length > 0 && checkedList.length < listIdStudent.length;
+    const onChangeCheckBox = (idStudent, checked) => {
+      setCheckedList(
+        checked
+          ? [...checkedList, idStudent]
+          : checkedList.filter((item) => item !== idStudent)
+      );
+    };
+    const onCheckAllChange = (e) => {
+      setCheckedList(e.target.checked ? listIdStudent : []);
+    };
+    columns = [
+      {
+        title: classDetail.statusTeacherEdit === 0 && (
+          <Checkbox
+            indeterminate={indeterminate}
+            onChange={onCheckAllChange}
+            checked={checkAll}
+          />
+        ),
+        dataIndex: "check",
+        key: "check",
+        render: (text, record) => (
+          <>
+            {classDetail.statusTeacherEdit === 0 &&
+              (record.nameTeam !== null ||
+                (record.nameTeam !== "" && (
+                  <Checkbox
+                    checked={checkedList.includes(record.idStudent)}
+                    onChange={(e) =>
+                      onChangeCheckBox(record.idStudent, e.target.checked)
+                    }
+                  />
+                )))}
+          </>
+        ),
+      },
+      ...columns,
+    ];
+  }
   return (
     <>
       {!loading && <LoadingIndicator />}
+      <ModalSentStudent
+        visible={showModalSent}
+        onCancel={() => setShowModalSent(!showModalSent)}
+        listIdStudent={checkedList}
+        classDetail={classDetail}
+      />
       <div className="box-one">
         <Link to="/teacher/my-class" style={{ color: "black" }}>
           <span style={{ fontSize: "18px", paddingLeft: "20px" }}>
@@ -235,7 +483,7 @@ const StudentsInMyClass = () => {
                 style={{
                   height: "28.5px",
                   width: "auto",
-                  backgroundColor: "#007bff",
+                  backgroundColor: "rgb(38, 144, 214)",
                   color: "white",
                   borderRadius: "5px",
                   float: "right",
@@ -294,20 +542,14 @@ const StudentsInMyClass = () => {
                 className="group-info-item"
                 style={{ marginTop: "13px", marginBottom: "15px" }}
               >
-                Trạng thái: &nbsp;
-                {classDetail.statusClass === 0 ? "Đã mở" : "Đã khóa"}
-              </span>
-              <span
-                className="group-info-item"
-                style={{ marginTop: "13px", marginBottom: "15px" }}
-              >
                 Ca học: &nbsp; {classDetail.classPeriod + 1}
               </span>
               <span
                 className="group-info-item"
                 style={{ marginTop: "13px", marginBottom: "15px" }}
               >
-                Số thành viên: &nbsp;{classDetail.classSize}
+                Số thành viên: &nbsp;
+                {data != null ? data.length : classDetail.classSize}
               </span>
               <span
                 className="group-info-item"
@@ -323,10 +565,38 @@ const StudentsInMyClass = () => {
               </span>
               <span
                 className="group-info-item"
-                style={{ marginTop: "13px", marginBottom: "15px" }}
+                style={{
+                  marginTop: "13px",
+                  marginBottom: "15px",
+                  color: "red",
+                }}
+              >
+                Trạng thái lớp: &nbsp;
+                {classDetail.statusClass === 0 ? "Đã mở" : "Đã khóa"}
+              </span>
+              <span
+                className="group-info-item"
+                style={{
+                  marginTop: "13px",
+                  marginBottom: "15px",
+                  color: "red",
+                }}
               >
                 Trello: &nbsp;
                 {classDetail.allowUseTrello === 0
+                  ? "Cho phép"
+                  : "Không cho phép"}
+              </span>
+              <span
+                className="group-info-item"
+                style={{
+                  marginTop: "13px",
+                  marginBottom: "15px",
+                  color: "red",
+                }}
+              >
+                Trao đổi sinh viên: &nbsp;
+                {classDetail.statusTeacherEdit === 0
                   ? "Cho phép"
                   : "Không cho phép"}
               </span>
@@ -342,13 +612,33 @@ const StudentsInMyClass = () => {
                 }}
               />
               Danh sách sinh viên :
+              {classDetail.statusTeacherEdit === 0 &&
+                data != null &&
+                data.length > 0 && (
+                  <Button
+                    onClick={handleSentStudent}
+                    style={{
+                      backgroundColor: "rgb(38, 144, 214)",
+                      color: "white",
+                      float: "right",
+                    }}
+                  >
+                    <FontAwesomeIcon
+                      icon={faRightFromBracket}
+                      color="white"
+                      style={{ paddingRight: "5px" }}
+                    />
+                    Trao đổi sinh viên
+                  </Button>
+                )}
             </div>
           </span>
+
           <div
             style={{ minHeight: "140px", marginTop: "20px" }}
             className="table-teacher"
           >
-            {data.length > 0 ? (
+            {data != null && data.length > 0 ? (
               <>
                 <div className="table">
                   <Table
@@ -363,7 +653,7 @@ const StudentsInMyClass = () => {
               <>
                 <Empty
                   imageStyle={{ height: 60 }}
-                  description={<span>Chưa có sinh viên nào trong lớp</span>}
+                  description={<span>Không có dữ liệu</span>}
                 />
               </>
             )}

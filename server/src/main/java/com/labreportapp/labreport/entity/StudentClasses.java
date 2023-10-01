@@ -21,7 +21,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString
 @Entity
 @Table(name = "student_classes")
 public class StudentClasses extends PrimaryEntity {
@@ -49,4 +48,5 @@ public class StudentClasses extends PrimaryEntity {
 
     @Column
     private StatusStudentFeedBack statusStudentFeedBack;
+
 }

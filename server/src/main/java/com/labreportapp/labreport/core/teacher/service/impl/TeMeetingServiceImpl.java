@@ -1,5 +1,6 @@
 package com.labreportapp.labreport.core.teacher.service.impl;
 
+import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.core.common.response.SimpleResponse;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindMeetingRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindScheduleMeetingClassRequest;
@@ -7,11 +8,13 @@ import com.labreportapp.labreport.core.teacher.model.request.TeFindScheduleNowTo
 import com.labreportapp.labreport.core.teacher.model.request.TeScheduleUpdateMeetingRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeUpdateHomeWorkAndNoteInMeetingRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeUpdateMeetingRequest;
-import com.labreportapp.labreport.core.teacher.model.response.TeHomeWorkAndNoteMeetingRespone;
-import com.labreportapp.labreport.core.teacher.model.response.TeMeetingCustomRespone;
-import com.labreportapp.labreport.core.teacher.model.response.TeMeetingCustomToAttendanceRespone;
-import com.labreportapp.labreport.core.teacher.model.response.TeMeetingRespone;
-import com.labreportapp.labreport.core.teacher.model.response.TeScheduleMeetingClassRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TeDetailMeetingTeamReportRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TeDetailTeamReportRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TeHomeWorkAndNoteMeetingResponse;
+import com.labreportapp.labreport.core.teacher.model.response.TeMeetingCustomResponse;
+import com.labreportapp.labreport.core.teacher.model.response.TeMeetingCustomToAttendanceResponse;
+import com.labreportapp.labreport.core.teacher.model.response.TeMeetingResponse;
+import com.labreportapp.labreport.core.teacher.model.response.TeScheduleMeetingClassResponse;
 import com.labreportapp.labreport.core.teacher.repository.TeHomeWorkRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeMeetingRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeNoteRepository;
@@ -27,6 +30,9 @@ import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import lombok.Synchronized;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -63,18 +69,41 @@ public class TeMeetingServiceImpl implements TeMeetingService {
     private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
 
     @Override
-    public List<TeMeetingCustomRespone> searchMeetingByIdClass(TeFindMeetingRequest request) {
-        List<TeMeetingRespone> list = teMeetingRepository.findMeetingByIdClass(request);
+    public TeMeetingResponse searchMeetingAndCheckAttendanceByIdMeeting(TeFindMeetingRequest request) {
+        Optional<TeMeetingResponse> meeting = teMeetingRepository.searchMeetingByIdMeeting(request);
+        if (!meeting.isPresent()) {
+            throw new RestApiException(Message.MEETING_NOT_EXISTS);
+        }
+        TeMeetingResponse meetingFind = meeting.get();
+        LocalDate dateNow = LocalDate.now();
+        LocalDate dateMeeting = Instant.ofEpochMilli(meetingFind.getMeetingDate()).atZone(ZoneId.systemDefault()).toLocalDate();
+        if (dateNow.isBefore(dateMeeting)) {
+            throw new RestApiException(Message.MEETING_HAS_NOT_COME);
+        } else if (dateNow.isAfter(dateMeeting)) {
+            throw new RestApiException(Message.MEETING_IS_OVER);
+        } else {
+            int checkPeriord = checkPeriod(meetingFind.getMeetingPeriod());
+            if (checkPeriord == 11) {//11 is outside the study shift
+                throw new RestApiException(Message.MEETING_EDIT_ATTENDANCE_FAILD);
+            } else {
+                return meetingFind;
+            }
+        }
+    }
+
+    @Override
+    public List<TeMeetingCustomResponse> searchMeetingByIdClass(TeFindMeetingRequest request) {
+        List<TeMeetingResponse> list = teMeetingRepository.findMeetingByIdClass(request);
         List<String> idTeacherList = list.stream()
-                .map(TeMeetingRespone::getIdTeacher)
+                .map(TeMeetingResponse::getIdTeacher)
                 .distinct()
                 .collect(Collectors.toList());
         List<SimpleResponse> listRespone = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idTeacherList);
-        List<TeMeetingCustomRespone> listReturn = new ArrayList<>();
+        List<TeMeetingCustomResponse> listReturn = new ArrayList<>();
         list.forEach(reposi -> {
             listRespone.forEach(respone -> {
                 if (reposi.getIdTeacher().equals(respone.getId())) {
-                    TeMeetingCustomRespone obj = new TeMeetingCustomRespone();
+                    TeMeetingCustomResponse obj = new TeMeetingCustomResponse();
                     obj.setId(reposi.getId());
                     obj.setName(reposi.getName());
                     obj.setDescriptions(reposi.getDescriptions());
@@ -92,17 +121,43 @@ public class TeMeetingServiceImpl implements TeMeetingService {
     }
 
     @Override
-    public Integer countMeetingByClassId(String idClass) {
-        return teMeetingRepository.countMeetingByClassId(idClass);
-    }
-
-    @Override
-    public TeMeetingRespone searchMeetingByIdMeeting(TeFindMeetingRequest request) {
-        Optional<TeMeetingRespone> meeting = teMeetingRepository.searchMeetingByIdMeeting(request);
+    public TeDetailMeetingTeamReportRespone searchMeetingByIdMeeting(TeFindMeetingRequest request) {
+        Optional<TeMeetingResponse> meeting = teMeetingRepository.searchMeetingByIdMeeting(request);
         if (!meeting.isPresent()) {
             throw new RestApiException(Message.MEETING_NOT_EXISTS);
         }
-        return meeting.get();
+        TeMeetingResponse meetingResponse = meeting.get();
+        TeFindMeetingRequest requestIdClass = new TeFindMeetingRequest();
+        requestIdClass.setIdClass(meetingResponse.getIdClass());
+        requestIdClass.setIdMeeting(meetingResponse.getId());
+        List<TeDetailTeamReportRespone> listTeam = teMeetingRepository.findTeamReportByIdMeetingIdClass(requestIdClass);
+        if (listTeam.size() == 0) {
+            return null;
+        }
+        TeDetailMeetingTeamReportRespone objReturn = new TeDetailMeetingTeamReportRespone();
+        objReturn.setId(meetingResponse.getId());
+        objReturn.setIdClass(meetingResponse.getIdClass());
+        objReturn.setIdTeacher(meetingResponse.getIdTeacher());
+        objReturn.setName(meetingResponse.getName());
+        objReturn.setDescriptions(meetingResponse.getDescriptions());
+        objReturn.setMeetingDate(meetingResponse.getMeetingDate());
+        objReturn.setTypeMeeting(meetingResponse.getTypeMeeting());
+        objReturn.setMeetingPeriod(meetingResponse.getMeetingPeriod());
+        LocalDate dateNow = LocalDate.now();
+        LocalDate dateMeeting = Instant.ofEpochMilli(meetingResponse.getMeetingDate()).atZone(ZoneId.systemDefault()).toLocalDate();
+        if (dateNow.isBefore(dateMeeting)) {
+            objReturn.setListTeamReport(new ArrayList<>());
+        } else if (dateNow.isAfter(dateMeeting)) {
+            objReturn.setListTeamReport(listTeam);
+        } else {
+            Integer checkPeriod = checkPeriod(meetingResponse.getMeetingPeriod());
+            if (checkPeriod < meetingResponse.getMeetingPeriod()) {
+                objReturn.setListTeamReport(new ArrayList<>());
+            } else {
+                objReturn.setListTeamReport(listTeam);
+            }
+        }
+        return objReturn;
     }
 
     private Integer checkPeriod(Integer meetingPeriod) {
@@ -112,126 +167,103 @@ public class TeMeetingServiceImpl implements TeMeetingService {
         LocalDateTime endTime;
         switch (meetingPeriod) {
             case 0:
-                meetingPeriodStr = "7:15 - 9:15";
+                meetingPeriodStr = "07:15 - 09:15";
                 startTime = LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 7, 15);
                 endTime = LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 9, 15);
                 if (currentTime.isAfter(startTime) && currentTime.isBefore(endTime)) {
                     return 0;
                 } else {
-                    return 1;
+                    return 11;
                 }
             case 1:
-                meetingPeriodStr = "9:25 - 11:25";
+                meetingPeriodStr = "09:25 - 11:25";
                 startTime = LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 9, 25);
                 endTime = LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 11, 25);
                 if (currentTime.isAfter(startTime) && currentTime.isBefore(endTime)) {
-                    return 0;
-                } else {
                     return 1;
+                } else {
+                    return 11;
                 }
             case 2:
                 meetingPeriodStr = "12:00 - 14:00";
                 startTime = LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 12, 00);
                 endTime = LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 14, 00);
                 if (currentTime.isAfter(startTime) && currentTime.isBefore(endTime)) {
-                    return 0;
+                    return 2;
                 } else {
-                    return 1;
+                    return 11;
                 }
             case 3:
                 meetingPeriodStr = "14:10 - 16:10";
                 startTime = LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 14, 10);
                 endTime = LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 16, 10);
                 if (currentTime.isAfter(startTime) && currentTime.isBefore(endTime)) {
-                    return 0;
+                    return 3;
                 } else {
-                    return 1;
+                    return 11;
                 }
             case 4:
                 meetingPeriodStr = "16:20 - 18:20";
                 startTime = LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 16, 20);
                 endTime = LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 18, 20);
                 if (currentTime.isAfter(startTime) && currentTime.isBefore(endTime)) {
-                    return 0;
+                    return 4;
                 } else {
-                    return 1;
+                    return 11;
                 }
             case 5:
                 meetingPeriodStr = "18:30 - 20:30";
                 startTime = LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 18, 30);
                 endTime = LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 20, 30);
                 if (currentTime.isAfter(startTime) && currentTime.isBefore(endTime)) {
-                    return 0;
+                    return 5;
                 } else {
-                    return 1;
+                    return 11;
                 }
             case 6:
                 meetingPeriodStr = "20:40 - 22:40";
                 startTime = LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 20, 40);
                 endTime = LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 22, 40);
                 if (currentTime.isAfter(startTime) && currentTime.isBefore(endTime)) {
-                    return 0;
+                    return 6;
                 } else {
-                    return 1;
+                    return 11;
                 }
             case 7:
                 meetingPeriodStr = "22:50 - 00:50";
                 startTime = LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 22, 50);
                 endTime = LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 0, 50);
                 if (currentTime.isAfter(startTime) && currentTime.isBefore(endTime)) {
-                    return 0;
+                    return 7;
                 } else {
-                    return 1;
+                    return 11;
                 }
             case 8:
-                meetingPeriodStr = "01:00 - 3:00";
+                meetingPeriodStr = "01:00 - 03:00";
                 startTime = LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 1, 00);
                 endTime = LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 3, 00);
                 if (currentTime.isAfter(startTime) && currentTime.isBefore(endTime)) {
-                    return 0;
+                    return 8;
                 } else {
-                    return 1;
+                    return 11;
                 }
             case 9:
                 meetingPeriodStr = "03:10 - 05:10";
                 startTime = LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 3, 10);
                 endTime = LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 5, 10);
                 if (currentTime.isAfter(startTime) && currentTime.isBefore(endTime)) {
-                    return 0;
+                    return 9;
                 } else {
-                    return 1;
+                    return 11;
                 }
             default:
-                return 1;
+                return 11;
         }
     }
 
     @Override
-    public TeMeetingRespone searchMeetingAndCheckAttendanceByIdMeeting(TeFindMeetingRequest request) {
-        Optional<TeMeetingRespone> meeting = teMeetingRepository.searchMeetingByIdMeeting(request);
-        if (!meeting.isPresent()) {
-            throw new RestApiException(Message.MEETING_NOT_EXISTS);
-        }
-        TeMeetingRespone meetingFind = meeting.get();
-        LocalDate dateNow = LocalDate.now();
-        LocalDate dateMeeting = Instant.ofEpochMilli(meetingFind.getMeetingDate()).atZone(ZoneId.systemDefault()).toLocalDate();
-        if (dateNow.isBefore(dateMeeting)) {
-            throw new RestApiException(Message.MEETING_HAS_NOT_COME);
-        } else if (dateNow.isAfter(dateMeeting)) {
-            throw new RestApiException(Message.MEETING_IS_OVER);
-        } else {
-            int checkPeriord = checkPeriod(meetingFind.getMeetingPeriod());
-            if (checkPeriord != 0) {
-                throw new RestApiException(Message.MEETING_EDIT_ATTENDANCE_FAILD);
-            } else {
-                return meetingFind;
-            }
-        }
-    }
-
-    @Override
-    public TeHomeWorkAndNoteMeetingRespone searchDetailMeetingTeamByIdMeIdTeam(TeFindMeetingRequest request) {
-        Optional<TeHomeWorkAndNoteMeetingRespone> object = teMeetingRepository.searchDetailMeetingTeamByIdMeIdTeam(request);
+    public TeHomeWorkAndNoteMeetingResponse searchDetailMeetingTeamByIdMeIdTeam(TeFindMeetingRequest request) {
+        Optional<TeHomeWorkAndNoteMeetingResponse> object = teMeetingRepository.searchDetailMeetingTeamByIdMeIdTeam(request);
         if (!object.isPresent()) {
             return null;
         }
@@ -240,7 +272,7 @@ public class TeMeetingServiceImpl implements TeMeetingService {
 
     @Override
     @Synchronized
-    public TeHomeWorkAndNoteMeetingRespone updateDetailMeetingTeamByIdMeIdTeam(TeUpdateHomeWorkAndNoteInMeetingRequest request) {
+    public TeHomeWorkAndNoteMeetingResponse updateDetailMeetingTeamByIdMeIdTeam(TeUpdateHomeWorkAndNoteInMeetingRequest request) {
         Optional<HomeWork> objectHW = teHomeWorkRepository.findById(request.getIdHomeWork());
         HomeWork homeWorkNew = new HomeWork();
         if (!objectHW.isPresent()) {
@@ -279,7 +311,7 @@ public class TeMeetingServiceImpl implements TeMeetingService {
         TeFindMeetingRequest teFind = new TeFindMeetingRequest();
         teFind.setIdTeam(request.getIdTeam());
         teFind.setIdMeeting(request.getIdMeeting());
-        Optional<TeHomeWorkAndNoteMeetingRespone> objectFind = teMeetingRepository.searchDetailMeetingTeamByIdMeIdTeam(teFind);
+        Optional<TeHomeWorkAndNoteMeetingResponse> objectFind = teMeetingRepository.searchDetailMeetingTeamByIdMeIdTeam(teFind);
         if (!objectFind.isPresent()) {
             throw new RestApiException(Message.MEETING_HOMEWORK_NOTE_NOT_EXISTS);
         }
@@ -287,8 +319,8 @@ public class TeMeetingServiceImpl implements TeMeetingService {
     }
 
     @Override
-    public List<TeScheduleMeetingClassRespone> searchScheduleToDayByIdTeacherAndMeetingDate(TeFindScheduleMeetingClassRequest request) {
-        List<TeScheduleMeetingClassRespone> list = teMeetingRepository.searchScheduleToDayByIdTeacherAndMeetingDate(request);
+    public List<TeScheduleMeetingClassResponse> searchScheduleToDayByIdTeacherAndMeetingDate(TeFindScheduleMeetingClassRequest request) {
+        List<TeScheduleMeetingClassResponse> list = teMeetingRepository.searchScheduleToDayByIdTeacherAndMeetingDate(request);
         if (list.size() == 0) {
             return null;
         }
@@ -296,16 +328,17 @@ public class TeMeetingServiceImpl implements TeMeetingService {
     }
 
     @Override
-    public List<TeScheduleMeetingClassRespone> searchScheduleNowToByIdTeacher(TeFindScheduleNowToTime request) {
-        List<TeScheduleMeetingClassRespone> list = teMeetingRepository.searchScheduleNowToTimeByIdTeacher(request);
-        if (list.size() == 0) {
+    public PageableObject<TeScheduleMeetingClassResponse> searchScheduleNowToByIdTeacher(TeFindScheduleNowToTime request) {
+        Pageable pageable = PageRequest.of(request.getPage() - 1, request.getSize());
+        Page<TeScheduleMeetingClassResponse> list = teMeetingRepository.searchScheduleNowToTimeByIdTeacher(request, pageable);
+        if (list == null) {
             return null;
         }
-        return list;
+        return new PageableObject<>(list);
     }
 
     @Override
-    public List<TeScheduleMeetingClassRespone> updateAddressMeeting(TeScheduleUpdateMeetingRequest request) {
+    public List<TeScheduleMeetingClassResponse> updateAddressMeeting(TeScheduleUpdateMeetingRequest request) {
         List<TeUpdateMeetingRequest> list = request.getListMeeting();
         if (list.size() == 0) {
             throw new RestApiException(Message.SCHEDULE_TODAY_IS_EMPTY);
@@ -323,8 +356,8 @@ public class TeMeetingServiceImpl implements TeMeetingService {
     }
 
     @Override
-    public List<TeMeetingCustomToAttendanceRespone> listMeetingAttendanceAllByIdClass(String idClass) {
-        List<TeMeetingCustomToAttendanceRespone> listMeeting = teMeetingRepository.findMeetingCustomToAttendanceByIdClass(idClass);
+    public List<TeMeetingCustomToAttendanceResponse> listMeetingAttendanceAllByIdClass(String idClass) {
+        List<TeMeetingCustomToAttendanceResponse> listMeeting = teMeetingRepository.findMeetingCustomToAttendanceByIdClass(idClass);
         return listMeeting;
     }
 

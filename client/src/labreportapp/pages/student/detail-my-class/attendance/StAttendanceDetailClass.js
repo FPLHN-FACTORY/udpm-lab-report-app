@@ -103,8 +103,6 @@ const StAttendanceDetailClass = () => {
       await StAttendanceAPI.getAllAttendanceById(attendanceRequest).then(
         (respone) => {
           setListAttendance(respone.data);
-          console.log("================================================");
-          console.log(respone.data);
           setIsLoading(false);
         }
       );

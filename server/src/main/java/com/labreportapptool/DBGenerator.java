@@ -24,6 +24,7 @@ import com.labreportapp.labreport.infrastructure.constant.StatusClass;
 import com.labreportapp.labreport.infrastructure.constant.StatusFeedBack;
 import com.labreportapp.labreport.infrastructure.constant.StatusMeeting;
 import com.labreportapp.labreport.infrastructure.constant.StatusStudentFeedBack;
+import com.labreportapp.labreport.infrastructure.constant.StatusTeacherEdit;
 import com.labreportapp.labreport.infrastructure.constant.StatusTeam;
 import com.labreportapp.labreport.infrastructure.constant.TypeMeeting;
 import com.labreportapp.labreport.repository.ActivityRepository;
@@ -200,7 +201,7 @@ public class DBGenerator implements CommandLineRunner {
         semester2.setStartTime(1682874000000L);
         semester2.setStartTimeStudent(1682874000000L);
         semester2.setEndTime(1682874000000L + 2678400000L);
-        semester.setStatusFeedBack(StatusFeedBack.DA_FEEDBACK);
+        semester2.setStatusFeedBack(StatusFeedBack.DA_FEEDBACK);
         semester2.setEndTimeStudent(1682874000000L + 86400000L * 7);
         semester2.setId(semesterRepository.save(semester2).getId());
 
@@ -248,6 +249,7 @@ public class DBGenerator implements CommandLineRunner {
         class1.setTeacherId("FA2BAD81-93A5-4F02-B1B7-08DBB743DD7D".toLowerCase());
         class1.setDescriptions("Lớp làm trước đồ án tốt nghiệp bán hàng");
         class1.setStatusClass(StatusClass.OPEN);
+        class1.setStatusTeacherEdit(StatusTeacherEdit.CHO_PHEP);
         class1.setId(classRepository.save(class1).getId());
 
         Class class2 = new Class();
@@ -260,6 +262,7 @@ public class DBGenerator implements CommandLineRunner {
         class2.setActivityId(activity2.getId());
         class2.setTeacherId("FA2BAD81-93A5-4F02-B1B7-08DBB743DD7D".toLowerCase());
         class2.setDescriptions("Lớp làm đồ án tốt nghiệp web bán hàng");
+        class2.setStatusTeacherEdit(StatusTeacherEdit.KHONG_CHO_PHEP);
         class2.setId(classRepository.save(class2).getId());
 
         Class class3 = new Class();
@@ -273,6 +276,58 @@ public class DBGenerator implements CommandLineRunner {
         class3.setTeacherId("1243F96A-42BD-49B3-8E45-08DBB2F9FEB4".toLowerCase());
         class3.setDescriptions("Lớp làm trước dự án 1 bán hàng");
         class3.setId(classRepository.save(class3).getId());
+
+        Class class4 = new Class();// check sent class FAIL do quá số lượng sinh viên
+        class4.setCode("JAVA_WEB_1.1");
+        class4.setClassPeriod(ClassPeriod.CA_3);
+        class4.setStartTime(new Date().getTime() + 50000);
+        class4.setClassSize(25);
+        class4.setPassword("123456");
+        class4.setActivityId(activity1.getId());
+        class4.setTeacherId("FA2BAD81-93A5-4F02-B1B7-08DBB743DD7D".toLowerCase());
+        class4.setDescriptions("Lớp làm trước đồ án tốt nghiệp bán hàng");
+        class4.setStatusClass(StatusClass.OPEN);
+        class4.setStatusTeacherEdit(StatusTeacherEdit.CHO_PHEP);
+        class4.setId(classRepository.save(class4).getId());
+
+        Class class5 = new Class();// check sent class FAIL do Khác ACtiviti 1quá số lượng sinh viên
+        class5.setCode("JAVA_WEB_1.2");
+        class5.setClassPeriod(ClassPeriod.CA_3);
+        class5.setStartTime(new Date().getTime() + 50000);
+        class5.setClassSize(19);
+        class5.setPassword("123456");
+        class5.setActivityId(activity2.getId());
+        class5.setTeacherId("FA2BAD81-93A5-4F02-B1B7-08DBB743DD7D".toLowerCase());
+        class5.setDescriptions("Lớp làm trước đồ án tốt nghiệp bán hàng");
+        class5.setStatusClass(StatusClass.OPEN);
+        class5.setStatusTeacherEdit(StatusTeacherEdit.CHO_PHEP);
+        class5.setId(classRepository.save(class5).getId());
+
+        Class class6 = new Class();
+        class6.setCode("JAVA_WEB_1.3");
+        class6.setClassPeriod(ClassPeriod.CA_3);
+        class6.setStartTime(new Date().getTime() + 50000);
+        class6.setClassSize(19);
+        class6.setPassword("123456");
+        class6.setActivityId(activity1.getId());
+        class6.setTeacherId("FA2BAD81-93A5-4F02-B1B7-08DBB743DD7D".toLowerCase());
+        class6.setDescriptions("Lớp làm trước đồ án tốt nghiệp bán hàng");
+        class6.setStatusClass(StatusClass.OPEN);
+        class6.setStatusTeacherEdit(StatusTeacherEdit.CHO_PHEP);
+        class6.setId(classRepository.save(class6).getId());
+
+        Class class7 = new Class();
+        class7.setCode("JAVA_WEB_1.4");
+        class7.setClassPeriod(ClassPeriod.CA_3);
+        class7.setStartTime(new Date().getTime() + 50000);
+        class7.setClassSize(24);
+        class7.setPassword("123456");
+        class7.setActivityId(activity1.getId());
+        class7.setTeacherId("FA2BAD81-93A5-4F02-B1B7-08DBB743DD7D".toLowerCase());
+        class7.setDescriptions("Lớp làm trước đồ án tốt nghiệp bán hàng");
+        class7.setStatusClass(StatusClass.OPEN);
+        class7.setStatusTeacherEdit(StatusTeacherEdit.CHO_PHEP);
+        class7.setId(classRepository.save(class7).getId());
 
         Project project1 = new Project();
         project1.setCode("Project_1");
@@ -778,7 +833,7 @@ public class DBGenerator implements CommandLineRunner {
 
         Meeting meeting7 = new Meeting();
         meeting7.setName("Buổi 7  ");
-        meeting7.setMeetingDate(new Date().getTime() + 3 * 86400000);
+        meeting7.setMeetingDate(new Date().getTime() + 3 * 86400000+300);
         meeting7.setMeetingPeriod(MeetingPeriod.CA_1);
         meeting7.setDescriptions("Xét từ góc độ cấu tạo (nó gồm có những cái gì): Chủ nghĩa Mác - Lênin có ba bộ phận lý luận cơ bản hợp thành");
         meeting7.setClassId(class1.getId());

@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import "./styleTeamsInMyClass.css";
-import { Row, Table, Button, Tooltip, Col, Modal, Empty } from "antd";
+import { Row, Table, Button, Tooltip, Modal, Empty, Tag } from "antd";
 import { Link } from "react-router-dom";
 import { ControlOutlined } from "@ant-design/icons";
 import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/TeacherStudentClasses.api";
@@ -20,7 +20,7 @@ import LoadingIndicator from "../../../../helper/loading";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEye,
-  faEyeDropper,
+  faMattressPillow,
   faPenToSquare,
   faTrashCan,
   faUpload,
@@ -33,7 +33,7 @@ import { toast } from "react-toastify";
 import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
 import { SetTTrueToggle } from "../../../../app/teacher/TeCollapsedSlice.reducer";
 import ButtonExportExcelTeam from "./export-excel/ButtonExportExcelTeam";
-import ButtonImportExcelTeam from "./import-excel/ButtonImportExcel";
+import ModalFileImportTeam from "./import-excel/ModalFileImportTeam";
 
 const TeamsInMyClass = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -43,16 +43,18 @@ const TeamsInMyClass = () => {
   const [loading, setLoading] = useState(false);
   const [objeactTeam, setObjeactTeam] = useState({});
   const [classDetail, setClassDetail] = useState({});
+  const [showModalImport, setShowModalImport] = useState(false);
+  const [teamDelete, setTeamDelete] = useState({});
   const dispatch = useAppDispatch();
   dispatch(SetTTrueToggle());
   const { idClass } = useParams();
   useEffect(() => {
     window.scrollTo(0, 0);
-
-    featchTeams(idClass);
-    featchClass(idClass);
+    fetchData(idClass);
   }, []);
   const fetchData = async (idClass) => {
+    await featchClass(idClass);
+    await featchTeams(idClass);
     await featchStudentClass(idClass);
   };
   const featchTeams = async (id) => {
@@ -60,8 +62,6 @@ const TeamsInMyClass = () => {
     try {
       await TeacherTeamsAPI.getTeamsByIdClass(id).then((responese) => {
         dispatch(SetTeams(responese.data.data));
-
-        fetchData(idClass);
       });
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
@@ -82,15 +82,17 @@ const TeamsInMyClass = () => {
     try {
       await TeacherStudentClassesAPI.getStudentInClasses(id).then(
         (responese) => {
-          dispatch(SetStudentClasses(responese.data.data));
+          if (responese.data.data != null) {
+            dispatch(SetStudentClasses(responese.data.data));
+          }
           setLoading(true);
         }
       );
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      alert("Lỗi hệ thống, vui lòng F5 lại trang  !");
     }
   };
-  const [teamDelete, setTeamDelete] = useState({});
+
   const handleShowDeleteTeam = (team) => {
     setShowDeleteModal(true);
     setTeamDelete(team);
@@ -100,19 +102,21 @@ const TeamsInMyClass = () => {
       await TeacherTeamsAPI.deleteById(teamDelete.id).then((respone) => {
         toast.success(respone.data.data);
         dispatch(DeleteTeam(teamDelete));
-        const objFilter = dataStudentClasses.map((item) => {
-          if (item.idTeam === teamDelete.id) {
-            return { ...item, idTeam: null, codeTeam: null, role: `1` };
-          }
-          return item;
-        });
-        dispatch(SetStudentClasses(objFilter));
+        if (dataStudentClasses != null) {
+          const objFilter = dataStudentClasses.map((item) => {
+            if (item.idTeam === teamDelete.id) {
+              return { ...item, idTeam: null, codeTeam: null, role: `1` };
+            }
+            return item;
+          });
+          dispatch(SetStudentClasses(objFilter));
+        }
         setTeamDelete({});
         handleCancelModalCreateSusscess();
       });
     } catch (error) {
       toast.warning("Xóa thất bại !");
-      alert("Lỗi hệ thống, vui lòng F5 lại trang  deleete!");
+      alert("Lỗi hệ thống, vui lòng F5 lại trang  !");
     }
   };
   const handleCancelModalCreateSusscess = () => {
@@ -148,6 +152,14 @@ const TeamsInMyClass = () => {
     setObjeactTeam({});
     setShowDetailModal(false);
   };
+  const convertLongToDate = (dateLong) => {
+    const date = new Date(dateLong);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    const format = `${day}/${month}/${year}`;
+    return format;
+  };
   const dataStudentClasses = useAppSelector(GetStudentClasses);
   const data = useAppSelector(GetTeams);
   const columns = [
@@ -172,7 +184,7 @@ const TeamsInMyClass = () => {
         return (
           <>
             {text === "" ? (
-              <span style={{ color: "blue" }}>Chưa có chủ đề</span>
+              <Tag color="processing">Chưa có chủ đề</Tag>
             ) : (
               <span>{text}</span>
             )}
@@ -186,11 +198,7 @@ const TeamsInMyClass = () => {
       key: "createdDate",
       sorter: (a, b) => a.createdDate - b.createdDate,
       render: (text, record) => {
-        const startTime = new Date(record.createdDate);
-        const formattedStartTime = `${startTime.getDate()}/${
-          startTime.getMonth() + 1
-        }/${startTime.getFullYear()}`;
-        return <span>{formattedStartTime}</span>;
+        return <span>{convertLongToDate(text)}</span>;
       },
     },
     {
@@ -200,23 +208,6 @@ const TeamsInMyClass = () => {
       render: (text, record) => (
         <>
           <div>
-            {record.idProject != null && (
-              <Tooltip title="Xem trello dự án">
-                <Link
-                  to={`/detail-project/${record.idProject}`}
-                  style={{ color: "black" }}
-                >
-                  <FontAwesomeIcon
-                    icon={faEyeDropper}
-                    className="icon"
-                    onClick={() => {
-                      setShowDetailModal(true);
-                      handleDetailTeam(record);
-                    }}
-                  />
-                </Link>
-              </Tooltip>
-            )}
             <Tooltip title="Chi tiết">
               <FontAwesomeIcon
                 icon={faEye}
@@ -245,13 +236,34 @@ const TeamsInMyClass = () => {
                 }}
               />
             </Tooltip>
+            {record.idProject != null && (
+              <Tooltip title="Xem trello dự án">
+                <Link
+                  to={`/detail-project/${record.idProject}`}
+                  style={{ color: "black" }}
+                >
+                  <FontAwesomeIcon
+                    icon={faMattressPillow}
+                    className="icon"
+                    style={{ width: "19px" }}
+                    onClick={() => {
+                      setShowDetailModal(true);
+                      handleDetailTeam(record);
+                    }}
+                  />
+                </Link>
+              </Tooltip>
+            )}
           </div>
         </>
       ),
     },
   ];
+  const handleCancelImport = () => {
+    setShowModalImport(false);
+  };
   return (
-    <>
+    <div className="teacher-team">
       {!loading && <LoadingIndicator />}
       <div className="box-one">
         <Link to="/teacher/my-class" style={{ color: "black" }}>
@@ -345,7 +357,7 @@ const TeamsInMyClass = () => {
                 style={{
                   height: "28.5px",
                   width: "auto",
-                  backgroundColor: "#007bff",
+                  backgroundColor: "rgb(38, 144, 214)",
                   color: "white",
                   borderRadius: "5px",
                   float: "right",
@@ -376,7 +388,26 @@ const TeamsInMyClass = () => {
             </Row>
             <Row style={{ marginTop: "10px" }}>
               <ButtonExportExcelTeam idClass={idClass} />
-              <ButtonImportExcelTeam idClass={idClass} />
+              <Button
+                className="btn_clear"
+                style={{
+                  backgroundColor: "rgb(38, 144, 214)",
+                  color: "white",
+                }}
+                onClick={() => setShowModalImport(true)}
+              >
+                <FontAwesomeIcon
+                  icon={faUpload}
+                  style={{ marginRight: "7px" }}
+                />
+                Import nhóm
+              </Button>
+              <ModalFileImportTeam
+                idClass={idClass}
+                visible={showModalImport}
+                fetchData={fetchData}
+                onCancel={handleCancelImport}
+              />
               <Button
                 className="btn_clear"
                 style={{
@@ -398,15 +429,15 @@ const TeamsInMyClass = () => {
               <div className="table-teacher">
                 <Table
                   dataSource={data}
-                  rowKey="id"
                   columns={columns}
+                  rowKey="id"
                   pagination={false}
                 />
               </div>
             ) : (
               <Empty
                 imageStyle={{ height: 60 }}
-                description={<span>Chưa có nhóm nào trong lớp</span>}
+                description={<span>Không có dữ liệu</span>}
               />
             )}
           </div>
@@ -468,7 +499,7 @@ const TeamsInMyClass = () => {
           </Modal>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
