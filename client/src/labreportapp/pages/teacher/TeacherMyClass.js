@@ -11,7 +11,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { giangVienCurrent } from "../../helper/inForUser";
 import LoadingIndicator from "../../helper/loading";
-import { QuestionCircleFilled, ProjectOutlined } from "@ant-design/icons";
+import { QuestionCircleFilled } from "@ant-design/icons";
 import {
   Row,
   Col,
