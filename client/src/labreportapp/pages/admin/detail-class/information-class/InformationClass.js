@@ -12,9 +12,11 @@ import { SetTTrueToggle } from "../../../../app/admin/AdCollapsedSlice.reducer";
 import { useEffect, useState } from "react";
 import { ClassAPI } from "../../../../api/admin/class-manager/ClassAPI.api";
 import moment from "moment";
-import { Button, Empty, Table } from "antd";
+import { Button, Empty, Spin, Table } from "antd";
 import { GetStudentClasses } from "../../../../app/teacher/student-class/studentClassesSlice.reduce";
 import LoadingIndicator from "../../../../helper/loading";
+import LoadingIndicatorNoOverlay from "../../../../helper/loadingNoOverlay";
+import { toast } from "react-toastify";
 
 const InformationClass = () => {
   const { id } = useParams();
@@ -22,6 +24,9 @@ const InformationClass = () => {
   const [classDetail, setClassDetail] = useState({});
   const [students, setStudents] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [loadingOverLay, setLoadingOverLay] = useState(false);
+  const [downloading, setDownloading] = useState(false);
+  const [inputFile, setInputFile] = useState("");
   dispatch(SetTTrueToggle());
 
   useEffect(() => {
@@ -40,6 +45,94 @@ const InformationClass = () => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
+
+  const convertLongToDate = (dateLong) => {
+    const date = new Date(dateLong);
+    const format = `${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
+    return format;
+  };
+
+  const downloadSample = () => {
+    setLoadingOverLay(true);
+    ClassAPI.exportExcelStudentsInClass(id, true).then((response) => {
+      setLoadingOverLay(false);
+      const blob = new Blob([response.data], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download =
+        "Danh sách sinh viên trong lớp " + classDetail.code + "_" +
+        convertLongToDate(new Date().getTime()) +
+        ".xlsx";
+      link.click();
+      window.URL.revokeObjectURL(url);
+    });
+  };
+
+  const exportExcel = () => {
+    setLoadingOverLay(true);
+    ClassAPI.exportExcelStudentsInClass(id, false).then((response) => {
+      setLoadingOverLay(false);
+      const blob = new Blob([response.data], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download =
+        "Danh sách sinh viên trong lớp " + classDetail.code + "_" +
+        convertLongToDate(new Date().getTime()) +
+        ".xlsx";
+      link.click();
+      window.URL.revokeObjectURL(url);
+    });
+  };
+
+  const importExcel = async (e) => {
+    try {
+      const selectedFile = e.target.files[0];
+      if (selectedFile) {
+        const formData = new FormData();
+        formData.append("multipartFile", selectedFile);
+        await ClassAPI.importExcelStudentsInClass(formData, id)
+          .then((response) => {
+            setTimeout(() => {
+              if (response.data.data.status === true) {
+                setInputFile("");
+                toast.success("Đang import, vui lòng chờ giây lát !", {
+                  position: toast.POSITION.TOP_CENTER,
+                });
+              } else {
+                toast.error(
+                  "Import thất bại, " +
+                  response.data.data.message +
+                  ", vui lòng chờ !",
+                  {
+                    position: toast.POSITION.TOP_CENTER,
+                  }
+                );
+              }
+            }, 200);
+            setDownloading(true);
+            setTimeout(() => {
+              window.open(
+                `http://localhost:3000/admin/class-management/information-class/` + id,
+                "_self"
+              );
+              setDownloading(false);
+            }, 1000);
+          })
+          .catch((error) => {
+            alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+          });
+      }
+    } catch (error) {
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+    }
+  }
+
 
   const fetchStudent = async (idClass) => {
     try {
@@ -97,9 +190,9 @@ const InformationClass = () => {
       key: "statusStudent",
       render: (text) => {
         if (text === "0") {
-          return <span style={{ color: "green" }}>HD</span>;
+          return <span style={{ color: "green" }}>Đạt</span>;
         } else {
-          return <span style={{ color: "red" }}>HL</span>;
+          return <span style={{ color: "red" }}>Trượt</span>;
         }
       },
       width: "120px",
@@ -109,6 +202,7 @@ const InformationClass = () => {
   return (
     <div className="box-general-custom">
       {isLoading && <LoadingIndicator />}
+      {loadingOverLay && <LoadingIndicatorNoOverlay />}
       <div className="title-meeting-managemnt-my-class">
         <span style={{ paddingLeft: "20px" }}>
           <ControlOutlined style={{ fontSize: "22px" }} />
@@ -241,8 +335,9 @@ const InformationClass = () => {
                     Danh sách sinh viên trong lớp:
                   </span>
                 </div>
-                <div style={{ float: "right" }}>
+                <div style={{ float: "right", display: "flex" }}>
                   <Button
+                    onClick={exportExcel}
                     style={{
                       color: "white",
                       backgroundColor: "rgb(55, 137, 220)",
@@ -259,24 +354,38 @@ const InformationClass = () => {
                     />{" "}
                     Export
                   </Button>
-                  <Button
-                    style={{
-                      color: "white",
-                      backgroundColor: "rgb(55, 137, 220)",
-                      marginRight: "5px",
-                    }}
-                  >
-                    <FontAwesomeIcon
-                      icon={faUpload}
-                      size="1x"
+                  <Spin spinning={downloading}>
+                    <Button
+                      className="btn_clear"
                       style={{
-                        backgroundColor: "rgb(55, 137, 220)",
-                        marginRight: "7px",
+                        backgroundColor: "rgb(38, 144, 214)",
+                        color: "white",
                       }}
-                    />{" "}
-                    Import
-                  </Button>
+                      onClick={() => {
+                        document.getElementById("fileInput").click();
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faUpload} style={{ marginRight: "7px" }} />
+                      {downloading ? (
+                        "Đang tải lên..."
+                      ) : (
+                        <>
+                          Import
+                          <input
+                            id="fileInput"
+                            type="file"
+                            accept=".xlsx"
+                            onChange={importExcel}
+                            style={{
+                              display: "none",
+                            }}
+                          />
+                        </>
+                      )}
+                    </Button>
+                  </Spin>
                   <Button
+                    onClick={downloadSample}
                     style={{
                       color: "white",
                       backgroundColor: "rgb(55, 137, 220)",
