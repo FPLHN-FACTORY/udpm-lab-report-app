@@ -1,6 +1,6 @@
 import "./styletablePoint.css";
-import { Button, Empty, Input, Table, Tag, message } from "antd";
 import { useAppDispatch, useAppSelector } from "../../../../../app/hook";
+import { Button, Empty, Input, Table, Tag, message } from "antd";
 import {
   GetPoint,
   SetPoint,
@@ -397,9 +397,9 @@ const TablePoint = () => {
       {dataSource.length > 0 ? (
         <div className="table-teacher">
           <Table
-            rowKey="id"
             columns={columns}
             dataSource={dataSource}
+            rowKey="idStudent"
             pagination={false}
           />
         </div>

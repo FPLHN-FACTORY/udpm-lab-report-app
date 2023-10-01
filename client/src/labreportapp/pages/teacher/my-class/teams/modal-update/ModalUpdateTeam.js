@@ -103,9 +103,17 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
   };
 
   const featchDataStudent = async () => {
-    const listFilter = dataStudentClasses.filter(
-      (item) => item.idTeam === team.id
-    );
+    const listFilter = dataStudentClasses
+      .filter((item) => item.idTeam === team.id)
+      .sort((a, b) => {
+        if (a.role === b.role) {
+          return "0";
+        } else if (a.role === "0") {
+          return "-1";
+        } else {
+          return "1";
+        }
+      });
     const listNotFilter = dataStudentClasses.filter(
       (item) => item.idTeam == null || item.idTeam === "null"
     );

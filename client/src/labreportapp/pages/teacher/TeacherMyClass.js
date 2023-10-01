@@ -323,30 +323,34 @@ const TeacherMyClass = () => {
                   style={{ paddingLeft: "12px", fontSize: "15px" }}
                 />
                 <br />
-                <Select
-                  value={idSemesterSeach}
-                  onChange={(value) => {
-                    setIdSemesterSearch(value);
-                  }}
-                  showSearch
-                  filterOption={filterOptions}
-                  style={{
-                    width: "100%",
-                    margin: "6px 0 10px 0",
-                  }}
-                >
-                  {listSemester.map((item) => {
-                    return (
-                      <Option
-                        value={item.id}
-                        key={item.id}
-                        style={{ width: "auto" }}
-                      >
-                        {item.name}
-                      </Option>
-                    );
-                  })}
-                </Select>
+                {listSemester.length > 0 ? (
+                  <Select
+                    value={idSemesterSeach}
+                    onChange={(value) => {
+                      setIdSemesterSearch(value);
+                    }}
+                    showSearch
+                    filterOption={filterOptions}
+                    style={{
+                      width: "100%",
+                      margin: "6px 0 10px 0",
+                    }}
+                  >
+                    {listSemester.map((item) => {
+                      return (
+                        <Option
+                          value={item.id}
+                          key={item.id}
+                          style={{ width: "auto" }}
+                        >
+                          {item.name}
+                        </Option>
+                      );
+                    })}
+                  </Select>
+                ) : (
+                  <p>Không có học kỳ</p>
+                )}
               </Col>
               <Col span={16}>
                 <span>Hoạt động</span>
@@ -354,27 +358,31 @@ const TeacherMyClass = () => {
                   style={{ paddingLeft: "12px", fontSize: "15px" }}
                 />
                 <br />
-                <Select
-                  showSearch
-                  filterOption={filterOptions}
-                  value={idActivitiSearch}
-                  onChange={(value) => {
-                    setIdActivitiSearch(value);
-                  }}
-                  style={{
-                    width: "100%",
-                    margin: "6px 0 10px 0",
-                  }}
-                >
-                  <Option value="">Tất cả</Option>
-                  {listActivity.map((item) => {
-                    return (
-                      <Option value={item.id} key={item.id} title={item.name}>
-                        {item.name}
-                      </Option>
-                    );
-                  })}
-                </Select>
+                {listActivity.length > 0 ? (
+                  <Select
+                    showSearch
+                    filterOption={filterOptions}
+                    value={idActivitiSearch}
+                    onChange={(value) => {
+                      setIdActivitiSearch(value);
+                    }}
+                    style={{
+                      width: "100%",
+                      margin: "6px 0 10px 0",
+                    }}
+                  >
+                    <Option value="">Tất cả</Option>
+                    {listActivity.map((item) => {
+                      return (
+                        <Option value={item.id} key={item.id} title={item.name}>
+                          {item.name}
+                        </Option>
+                      );
+                    })}
+                  </Select>
+                ) : (
+                  <p>Không có hoạt động</p>
+                )}
               </Col>
             </Row>
             <Row
@@ -428,24 +436,28 @@ const TeacherMyClass = () => {
                   style={{ paddingLeft: "12px", fontSize: "15px" }}
                 />
                 <br />
-                <Select
-                  showSearch
-                  filterOption={filterOptions}
-                  value={levelSearch}
-                  onChange={(value) => {
-                    setLevelSearch(value);
-                  }}
-                  style={{ width: "100%", marginTop: "6px" }}
-                >
-                  <Option value="">Tất cả</Option>
-                  {listLevel.map((item) => {
-                    return (
-                      <Option value={item.id} key={item.id} title={item.name}>
-                        {item.name}
-                      </Option>
-                    );
-                  })}
-                </Select>
+                {listLevel.length > 0 ? (
+                  <Select
+                    showSearch
+                    filterOption={filterOptions}
+                    value={levelSearch}
+                    onChange={(value) => {
+                      setLevelSearch(value);
+                    }}
+                    style={{ width: "100%", marginTop: "6px" }}
+                  >
+                    <Option value="">Tất cả</Option>
+                    {listLevel.map((item) => {
+                      return (
+                        <Option value={item.id} key={item.id} title={item.name}>
+                          {item.name}
+                        </Option>
+                      );
+                    })}
+                  </Select>
+                ) : (
+                  <p>Không có cấp độ</p>
+                )}
               </Col>
             </Row>
             <div className="box_btn_filter">

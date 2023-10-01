@@ -33,8 +33,7 @@ import { toast } from "react-toastify";
 import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
 import { SetTTrueToggle } from "../../../../app/teacher/TeCollapsedSlice.reducer";
 import ButtonExportExcelTeam from "./export-excel/ButtonExportExcelTeam";
-import ButtonImportExcelTeam from "./import-excel/ButtonImportExcel";
-import ModalFileImport from "./modal-file-import/ModalFileImport";
+import ModalFileImportTeam from "./import-excel/ModalFileImportTeam";
 
 const TeamsInMyClass = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -45,6 +44,7 @@ const TeamsInMyClass = () => {
   const [objeactTeam, setObjeactTeam] = useState({});
   const [classDetail, setClassDetail] = useState({});
   const [showModalImport, setShowModalImport] = useState(false);
+  const [teamDelete, setTeamDelete] = useState({});
   const dispatch = useAppDispatch();
   dispatch(SetTTrueToggle());
   const { idClass } = useParams();
@@ -92,7 +92,7 @@ const TeamsInMyClass = () => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang  !");
     }
   };
-  const [teamDelete, setTeamDelete] = useState({});
+
   const handleShowDeleteTeam = (team) => {
     setShowDeleteModal(true);
     setTeamDelete(team);
@@ -259,6 +259,9 @@ const TeamsInMyClass = () => {
       ),
     },
   ];
+  const handleCancelImport = () => {
+    setShowModalImport(false);
+  };
   return (
     <div className="teacher-team">
       {!loading && <LoadingIndicator />}
@@ -393,18 +396,17 @@ const TeamsInMyClass = () => {
                 }}
                 onClick={() => setShowModalImport(true)}
               >
-                {" "}
                 <FontAwesomeIcon
                   icon={faUpload}
                   style={{ marginRight: "7px" }}
                 />
                 Import nhóm
               </Button>
-              <ModalFileImport
+              <ModalFileImportTeam
                 idClass={idClass}
                 visible={showModalImport}
                 fetchData={fetchData}
-                onCancel={() => setShowModalImport(!showModalImport)}
+                onCancel={handleCancelImport}
               />
               <Button
                 className="btn_clear"
@@ -427,8 +429,8 @@ const TeamsInMyClass = () => {
               <div className="table-teacher">
                 <Table
                   dataSource={data}
-                  rowKey="id"
                   columns={columns}
+                  rowKey="id"
                   pagination={false}
                 />
               </div>

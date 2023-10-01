@@ -17,12 +17,13 @@ import java.util.List;
 public interface TeActivityRepository extends JpaRepository<Activity, String> {
 
     @Query(value = """
-            SELECT a.id as id, a.name as name FROM activity a 
-            WHERE
-          (:#{#req.idSemester} IS NULL 
-           OR :#{#req.idSemester} = '' 
-           OR a.semester_id = :#{#req.idSemester})
-            """, nativeQuery = true)
+              SELECT a.id as id, a.name as name FROM activity a 
+              WHERE
+            (:#{#req.idSemester} IS NULL 
+             OR :#{#req.idSemester} = '' 
+             OR a.semester_id = :#{#req.idSemester})
+             ORDER BY a.created_date ASC
+              """, nativeQuery = true)
     List<TeActivityResponse> getAllByIdSemester(@Param("req") TeFindClassRequest req);
 
 }

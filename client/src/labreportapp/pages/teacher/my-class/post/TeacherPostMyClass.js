@@ -319,8 +319,7 @@ const TeacherPostMyClass = () => {
                 <p className="infor-main">
                   {classDetail.code}
                   <FontAwesomeIcon
-                    style={{ paddingLeft: 12 }}
-                    size="22"
+                    style={{ paddingLeft: "12px" }}
                     icon={faExpand}
                     onClick={() => handleFullScreen(0)}
                   />
@@ -413,8 +412,7 @@ const TeacherPostMyClass = () => {
                 <p className="infor-main">
                   {classDetail.passWord}
                   <FontAwesomeIcon
-                    style={{ paddingLeft: 12 }}
-                    size="22"
+                    style={{ paddingLeft: "12px" }}
                     icon={faExpand}
                     onClick={() => handleFullScreen(1)}
                   />
@@ -586,7 +584,7 @@ const TeacherPostMyClass = () => {
                 ) : (
                   <div style={{ paddingTop: "50px" }}>
                     <Empty
-                      imageStyle={{ height: 60 }}
+                      imageStyle={{ height: "60px" }}
                       description={<span>Chưa có bài viết nào được đăng</span>}
                     />
                   </div>
@@ -609,7 +607,7 @@ const TeacherPostMyClass = () => {
                       }}
                     >
                       <span style={{ paddingRight: "10px" }}>Xem thêm </span>
-                      <FontAwesomeIcon icon={faAnglesRight} />
+                      <FontAwesomeIcon icon={faAnglesRight} size="lg" />
                     </Button>{" "}
                   </Spin>
                 )}

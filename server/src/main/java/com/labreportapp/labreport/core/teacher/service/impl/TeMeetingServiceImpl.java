@@ -69,6 +69,29 @@ public class TeMeetingServiceImpl implements TeMeetingService {
     private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
 
     @Override
+    public TeMeetingResponse searchMeetingAndCheckAttendanceByIdMeeting(TeFindMeetingRequest request) {
+        Optional<TeMeetingResponse> meeting = teMeetingRepository.searchMeetingByIdMeeting(request);
+        if (!meeting.isPresent()) {
+            throw new RestApiException(Message.MEETING_NOT_EXISTS);
+        }
+        TeMeetingResponse meetingFind = meeting.get();
+        LocalDate dateNow = LocalDate.now();
+        LocalDate dateMeeting = Instant.ofEpochMilli(meetingFind.getMeetingDate()).atZone(ZoneId.systemDefault()).toLocalDate();
+        if (dateNow.isBefore(dateMeeting)) {
+            throw new RestApiException(Message.MEETING_HAS_NOT_COME);
+        } else if (dateNow.isAfter(dateMeeting)) {
+            throw new RestApiException(Message.MEETING_IS_OVER);
+        } else {
+            int checkPeriord = checkPeriod(meetingFind.getMeetingPeriod());
+            if (checkPeriord == 11) {//11 is outside the study shift
+                throw new RestApiException(Message.MEETING_EDIT_ATTENDANCE_FAILD);
+            } else {
+                return meetingFind;
+            }
+        }
+    }
+
+    @Override
     public List<TeMeetingCustomResponse> searchMeetingByIdClass(TeFindMeetingRequest request) {
         List<TeMeetingResponse> list = teMeetingRepository.findMeetingByIdClass(request);
         List<String> idTeacherList = list.stream()
@@ -95,29 +118,6 @@ public class TeMeetingServiceImpl implements TeMeetingService {
             });
         });
         return listReturn;
-    }
-
-    @Override
-    public TeMeetingResponse searchMeetingAndCheckAttendanceByIdMeeting(TeFindMeetingRequest request) {
-        Optional<TeMeetingResponse> meeting = teMeetingRepository.searchMeetingByIdMeeting(request);
-        if (!meeting.isPresent()) {
-            throw new RestApiException(Message.MEETING_NOT_EXISTS);
-        }
-        TeMeetingResponse meetingFind = meeting.get();
-        LocalDate dateNow = LocalDate.now();
-        LocalDate dateMeeting = Instant.ofEpochMilli(meetingFind.getMeetingDate()).atZone(ZoneId.systemDefault()).toLocalDate();
-        if (dateNow.isBefore(dateMeeting)) {
-            throw new RestApiException(Message.MEETING_HAS_NOT_COME);
-        } else if (dateNow.isAfter(dateMeeting)) {
-            throw new RestApiException(Message.MEETING_IS_OVER);
-        } else {
-            int checkPeriord = checkPeriod(meetingFind.getMeetingPeriod());
-            if (checkPeriord == 11) {//11 is outside the study shift
-                throw new RestApiException(Message.MEETING_EDIT_ATTENDANCE_FAILD);
-            } else {
-                return meetingFind;
-            }
-        }
     }
 
     @Override

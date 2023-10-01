@@ -6,12 +6,28 @@ import moment from "moment";
 import { GetStudentClasses } from "../../../../../app/teacher/student-class/studentClassesSlice.reduce";
 
 const { Option } = Select;
-const ModalDetailTeam = ({ visible, onCancel, team, idClass, click }) => {
+const ModalDetailTeam = ({ visible, onCancel, team, idClass }) => {
   const [teamDetail, setTeamDetail] = useState({});
   const [listShowTable, setListShowTable] = useState([]);
   const dataStudentClasses = useAppSelector(GetStudentClasses);
+
+  const featchDataStudent = () => {
+    const listFilter = dataStudentClasses
+      .filter((item) => item.idTeam === team.id)
+      .sort((a, b) => {
+        if (a.role === b.role) {
+          return "0";
+        } else if (a.role === "0") {
+          return "-1";
+        } else {
+          return "1";
+        }
+      });
+    setListShowTable(listFilter);
+  };
+
   useEffect(() => {
-    if (visible === true && team != {} && idClass !== "") {
+    if (visible === true && idClass !== "") {
       setTeamDetail(team);
       featchDataStudent();
     } else {
@@ -19,12 +35,7 @@ const ModalDetailTeam = ({ visible, onCancel, team, idClass, click }) => {
       setListShowTable([]);
     }
   }, [visible]);
-  const featchDataStudent = async () => {
-    const listFilter = dataStudentClasses.filter(
-      (item) => item.idTeam === team.id
-    );
-    setListShowTable(listFilter);
-  };
+
   const columns = [
     {
       title: "#",
@@ -123,7 +134,7 @@ const ModalDetailTeam = ({ visible, onCancel, team, idClass, click }) => {
           ) : (
             <Empty
               imageStyle={{ height: 60 }}
-              description={<span>Không có thành viên nào trong nhóm</span>}
+              description={<span>Không có sinh viên nào trong nhóm</span>}
             />
           )}
         </div>

@@ -1,12 +1,11 @@
 import { Button, Input, Modal } from "antd";
-import { TeacherExcelTeamAPI } from "../../../../../api/teacher/teams-class/excel/TeacherExcelTeam.api";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { TeacherExcelPointAPI } from "../../../../../api/teacher/point/excel/TeacherExcelPoint.api";
 
-const ModalFileImport = ({ visible, onCancel, idClass, fetchData }) => {
+const ModalFileImportPoint = ({ visible, onCancel, idClass, fetchData }) => {
   const [inputFileKey, setInputFileKey] = useState(0);
   const [selectedFile, setSelectedFile] = useState(null);
-
   useEffect(() => {
     if (visible) {
       setSelectedFile(null);
@@ -24,14 +23,14 @@ const ModalFileImport = ({ visible, onCancel, idClass, fetchData }) => {
       setSelectedFile(file);
     }
   };
-  const handleImport = async () => {
+  const handleImportTeam = async () => {
     if (!selectedFile) {
-      toast.error("Vui lòng chọn file excel để import");
+      toast.warning("Vui lòng chọn file excel để import !");
       return;
     }
     const formData = new FormData();
     formData.append("multipartFile", selectedFile);
-    await TeacherExcelTeamAPI.import(formData, idClass).then((response) => {
+    await TeacherExcelPointAPI.import(formData, idClass).then((response) => {
       onCancel();
       if (response.data.data.status === true) {
         fetchData(idClass);
@@ -60,7 +59,7 @@ const ModalFileImport = ({ visible, onCancel, idClass, fetchData }) => {
           }}
         >
           <span style={{ fontSize: "18px" }}>
-            Chọn file excel để import nhóm:
+            Chọn file excel để import điểm:
           </span>
         </div>
         <div style={{ paddingTop: "20px" }}>
@@ -80,10 +79,10 @@ const ModalFileImport = ({ visible, onCancel, idClass, fetchData }) => {
                 color: "white",
               }}
               onClick={() => {
-                handleImport();
+                handleImportTeam();
               }}
             >
-              Thêm
+              Lưu
             </Button>
             <Button
               style={{
@@ -101,4 +100,4 @@ const ModalFileImport = ({ visible, onCancel, idClass, fetchData }) => {
     </>
   );
 };
-export default ModalFileImport;
+export default ModalFileImportPoint;

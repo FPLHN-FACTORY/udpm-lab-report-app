@@ -1,6 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./style-poin-my-class.css";
-import { faFloppyDisk, faMarker } from "@fortawesome/free-solid-svg-icons";
+import {
+  faFloppyDisk,
+  faMarker,
+  faUpload,
+} from "@fortawesome/free-solid-svg-icons";
 import { ControlOutlined } from "@ant-design/icons";
 import { Link, useParams } from "react-router-dom";
 import { Button, Row } from "antd";
@@ -17,8 +21,9 @@ import TablePoint from "./table-point-student/TablePoint";
 import LoadingIndicator from "../../../../helper/loading";
 import { toast } from "react-toastify";
 import ButtonExportExcel from "./export-excel/ButtonExportExcel";
-import ButtonImportExcel from "./import-excel/ButtonImportExcel";
+import ModalFileImportPoint from "./import-excel/ModalFileImportPoint";
 import { SetTTrueToggle } from "../../../../app/teacher/TeCollapsedSlice.reducer";
+
 const TeacherPointMyClass = () => {
   const { idClass } = useParams();
   const dispatch = useAppDispatch();
@@ -26,6 +31,7 @@ const TeacherPointMyClass = () => {
   const [checkPoint, setCheckPoint] = useState(false);
   const [listPoint, setListPoint] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [showModalImport, setShowModalImport] = useState(false);
   dispatch(SetTTrueToggle());
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -58,8 +64,9 @@ const TeacherPointMyClass = () => {
   };
   const handleSave = async () => {
     try {
+      const dataToSave = data;
       let dataFind = {
-        listPoint: data,
+        listPoint: dataToSave,
         idClass: idClass,
       };
       await TeacherPointAPI.createOrUpdate(dataFind).then((respone) => {
@@ -69,6 +76,9 @@ const TeacherPointMyClass = () => {
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
+  };
+  const handleCancelImport = () => {
+    setShowModalImport(false);
   };
   const data = useAppSelector(GetPoint);
   return (
@@ -203,7 +213,26 @@ const TeacherPointMyClass = () => {
               </Row>
               <Row style={{ marginTop: "10px" }}>
                 <ButtonExportExcel idClass={idClass} />
-                <ButtonImportExcel idClass={idClass} />
+                <Button
+                  className="btn_clear"
+                  style={{
+                    backgroundColor: "rgb(38, 144, 214)",
+                    color: "white",
+                  }}
+                  onClick={() => setShowModalImport(true)}
+                >
+                  <FontAwesomeIcon
+                    icon={faUpload}
+                    style={{ marginRight: "7px" }}
+                  />
+                  Import nhóm
+                </Button>
+                <ModalFileImportPoint
+                  idClass={idClass}
+                  visible={showModalImport}
+                  fetchData={fetchData}
+                  onCancel={handleCancelImport}
+                />
                 <Button
                   style={{
                     backgroundColor: "rgb(38, 144, 214)",
