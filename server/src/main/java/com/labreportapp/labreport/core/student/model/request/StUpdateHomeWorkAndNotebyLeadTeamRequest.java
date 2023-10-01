@@ -22,6 +22,10 @@ public class StUpdateHomeWorkAndNotebyLeadTeamRequest {
 
     private String descriptionsNote;
 
+    private String idReport;
+
+    private String descriptionsReport;
+
     private String idStudent;
 
 

@@ -28,6 +28,7 @@ import org.springframework.validation.annotation.Validated;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -55,27 +56,31 @@ public class AdMeetingServiceImpl implements AdMeetingService {
         List<AdMeetingResponse> listMeeting = adMeetingRepository.getAllMeetingByIdClass(idClass);
         List<String> distinctTeacherIds = listMeeting.stream()
                 .map(AdMeetingResponse::getTeacherId)
+                .filter(Objects::nonNull)
                 .distinct()
                 .collect(Collectors.toList());
         List<SimpleResponse> listSimpleResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(distinctTeacherIds);
         List<AdMeetingCustom> listCustom = new ArrayList<>();
         listMeeting.forEach(res -> {
-            listSimpleResponse.forEach(simple -> {
-                if (res.getTeacherId().equals(simple.getId())) {
-                    AdMeetingCustom adMeetingCustom = new AdMeetingCustom();
-                    adMeetingCustom.setId(res.getId());
-                    adMeetingCustom.setMeetingDate(res.getMeetingDate());
-                    adMeetingCustom.setMeetingPeriod(res.getMeetingPeriod());
-                    adMeetingCustom.setTypeMeeting(res.getTypeMeeting());
-                    adMeetingCustom.setTeacherId(res.getTeacherId());
-                    adMeetingCustom.setUserNameTeacher(simple.getUserName());
-                    adMeetingCustom.setSoDiemDanh(res.getSoDiemDanh());
-                    adMeetingCustom.setAddress(res.getAddress());
-                    adMeetingCustom.setDescriptions(res.getDescriptions());
-                    adMeetingCustom.setName(res.getName());
-                    listCustom.add(adMeetingCustom);
+            AdMeetingCustom adMeetingCustom = new AdMeetingCustom();
+            adMeetingCustom.setId(res.getId());
+            adMeetingCustom.setMeetingDate(res.getMeetingDate());
+            adMeetingCustom.setMeetingPeriod(res.getMeetingPeriod());
+            adMeetingCustom.setTypeMeeting(res.getTypeMeeting());
+            adMeetingCustom.setSoDiemDanh(res.getSoDiemDanh());
+            adMeetingCustom.setAddress(res.getAddress());
+            adMeetingCustom.setDescriptions(res.getDescriptions());
+            adMeetingCustom.setName(res.getName());
+            adMeetingCustom.setTeacherId(res.getTeacherId());
+            for (SimpleResponse simpleResponse : listSimpleResponse) {
+                if (adMeetingCustom.getTeacherId() != null) {
+                    if (adMeetingCustom.getTeacherId().equals(simpleResponse.getId())) {
+                        adMeetingCustom.setUserNameTeacher(simpleResponse.getUserName());
+                        break;
+                    }
                 }
-            });
+            }
+            listCustom.add(adMeetingCustom);
         });
         return listCustom;
     }
@@ -86,6 +91,10 @@ public class AdMeetingServiceImpl implements AdMeetingService {
         if (!classFind.isPresent()) {
             throw new RestApiException(Message.CLASS_NOT_EXISTS);
         }
+        Optional<Activity> activityFind = adActivityRepository.findById(classFind.get().getActivityId());
+        if (!activityFind.isPresent()) {
+            throw new RestApiException(Message.ACTIVITY_NOT_EXISTS);
+        }
         Meeting meeting = new Meeting();
         meeting.setName("Buổi học");
         meeting.setMeetingDate(request.getMeetingDate());
@@ -94,7 +103,7 @@ public class AdMeetingServiceImpl implements AdMeetingService {
         meeting.setAddress(request.getAddress());
         meeting.setClassId(request.getClassId());
         meeting.setStatusMeeting(StatusMeeting.BUOI_HOC);
-        meeting.setDescriptions(request.getDescriptions());
+        meeting.setDescriptions(activityFind.get().getDescriptions());
         SimpleResponse simple = null;
         if (!request.getTeacherId().equals("") && request.getTeacherId() != null) {
             meeting.setTeacherId(request.getTeacherId());
@@ -207,9 +216,10 @@ public class AdMeetingServiceImpl implements AdMeetingService {
                     meeting.setTeacherId(request.getTeacherId());
                 }
                 meeting.setClassId(request.getClassId());
+                meeting.setDescriptions(activityFind.get().getDescriptions());
                 meeting.setName("Buổi học");
                 listMeeting.add(meeting);
-                meetingDateInMillis += 7 * 24 * 60 * 60 * 1000;
+                meetingDateInMillis += request.getNumberDay() * 24 * 60 * 60 * 1000;
             }
             adMeetingRepository.saveAll(listMeeting);
             adMeetingRepository.updateNameMeeting(request.getClassId());
@@ -241,7 +251,7 @@ public class AdMeetingServiceImpl implements AdMeetingService {
         if (meeting.getTeacherId() != null) {
             SimpleResponse simpleResponse = convertRequestCallApiIdentity.handleCallApiGetUserById(meeting.getTeacherId());
             adDetailMeetingResponse.setTeacherId(simpleResponse.getId());
-            adDetailMeetingResponse.setUserNameTeacher(simpleResponse.getUserName());
+            adDetailMeetingResponse.setUserNameTeacher(simpleResponse.getUserName() + " - " + simpleResponse.getName());
         }
         return adDetailMeetingResponse;
     }

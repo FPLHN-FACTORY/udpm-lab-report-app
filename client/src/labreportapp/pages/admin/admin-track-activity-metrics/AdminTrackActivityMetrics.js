@@ -8,7 +8,7 @@ const AdminTrackActivityMetrics = () => {
     document.title = "Theo dõi chỉ số hoạt động | Lab-Report-App";
   }, []);
   return (
-    <div className="box-general">
+    <div className="box-general" style={{ paddingTop: 50 }}>
       <div className="heading-box">
         <span style={{ fontSize: "20px", fontWeight: "500" }}>
           <FontAwesomeIcon icon={faLineChart} style={{ marginRight: "8px" }} />{" "}

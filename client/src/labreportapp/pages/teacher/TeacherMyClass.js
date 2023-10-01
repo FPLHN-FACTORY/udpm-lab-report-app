@@ -319,9 +319,7 @@ const TeacherMyClass = () => {
             >
               <Col span={8}>
                 <span>Học kỳ</span>
-                <QuestionCircleFilled
-                  style={{ paddingLeft: "12px", fontSize: "15px" }}
-                />
+
                 <br />
                 {listSemester.length > 0 ? (
                   <Select
@@ -354,9 +352,7 @@ const TeacherMyClass = () => {
               </Col>
               <Col span={16}>
                 <span>Hoạt động</span>
-                <QuestionCircleFilled
-                  style={{ paddingLeft: "12px", fontSize: "15px" }}
-                />
+
                 <br />
                 {listActivity.length > 0 ? (
                   <Select
@@ -391,9 +387,7 @@ const TeacherMyClass = () => {
             >
               <Col span={8}>
                 <span>Mã lớp</span>
-                <QuestionCircleFilled
-                  style={{ paddingLeft: "12px", fontSize: "15px" }}
-                />
+
                 <br />
                 <Input
                   style={{ width: "100%", marginTop: "6px" }}
@@ -407,9 +401,7 @@ const TeacherMyClass = () => {
               </Col>
               <Col span={8}>
                 <span>Ca học</span>
-                <QuestionCircleFilled
-                  style={{ paddingLeft: "12px", fontSize: "15px" }}
-                />
+
                 <br />
                 <Select
                   showSearch
@@ -432,9 +424,7 @@ const TeacherMyClass = () => {
               </Col>
               <Col span={8}>
                 <span>Level</span>
-                <QuestionCircleFilled
-                  style={{ paddingLeft: "12px", fontSize: "15px" }}
-                />
+
                 <br />
                 {listLevel.length > 0 ? (
                   <Select

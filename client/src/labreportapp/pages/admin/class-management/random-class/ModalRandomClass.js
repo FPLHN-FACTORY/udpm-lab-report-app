@@ -136,7 +136,7 @@ const ModalRandomClass = ({ visible, onCancel, fetchData }) => {
         >
           <Row>
             <Col span={12} style={{ padding: "5px" }}>
-              Semester: <br />
+              <span style={{ color: "red" }}>(*) </span> Semester: <br />
               <Select
                 showSearch
                 style={{ width: "100%" }}
@@ -155,7 +155,7 @@ const ModalRandomClass = ({ visible, onCancel, fetchData }) => {
               </Select>
             </Col>
             <Col span={12} style={{ padding: "5px" }}>
-              Hoạt Động: <br />
+              <span style={{ color: "red" }}>(*) </span> Hoạt Động: <br />
               <Select
                 showSearch
                 style={{ width: "100%" }}
@@ -179,7 +179,8 @@ const ModalRandomClass = ({ visible, onCancel, fetchData }) => {
               <span style={{ color: "red" }}>{errorActivity}</span>
             </Col>
             <Col span={12} style={{ padding: "5px" }}>
-              Số lớp muốn random: <br />
+              <span style={{ color: "red" }}>(*) </span> Số lớp muốn random:{" "}
+              <br />
               <Input
                 type="number"
                 min={0}
@@ -192,7 +193,8 @@ const ModalRandomClass = ({ visible, onCancel, fetchData }) => {
               <span style={{ color: "red" }}>{errorSoLopRandom}</span>
             </Col>
             <Col span={12} style={{ padding: "5px" }}>
-              Thời gian bắt đầu dự kiến: <br />
+              <span style={{ color: "red" }}>(*) </span> Thời gian bắt đầu dự
+              kiến: <br />
               <Input
                 type="date"
                 value={startTime}

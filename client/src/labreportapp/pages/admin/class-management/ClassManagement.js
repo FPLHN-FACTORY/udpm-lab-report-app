@@ -11,6 +11,8 @@ import {
   faPencilAlt,
   faRandom,
   faChainSlash,
+  faFilterCircleDollar,
+  faClose,
 } from "@fortawesome/free-solid-svg-icons";
 import { useAppDispatch, useAppSelector } from "../../../app/hook";
 import {
@@ -23,6 +25,7 @@ import {
   Row,
   Col,
   Empty,
+  Tag,
 } from "antd";
 import LoadingIndicator from "../../../helper/loading";
 
@@ -41,6 +44,7 @@ import {
 } from "../../../app/admin/ClassManager.reducer";
 import LoadingIndicatorNoOverlay from "../../../helper/loadingNoOverlay";
 import ModalRandomClass from "./random-class/ModalRandomClass";
+import ModalImportClass from "./import-class/ModalImportClass";
 
 const ClassManagement = () => {
   const { Option } = Select;
@@ -62,6 +66,9 @@ const ClassManagement = () => {
   const [level, setLevel] = useState("");
   const [listLevel, setListLevel] = useState([]);
   const [size, setSize] = useState("10");
+  const [statusClass, setStatusClass] = useState("");
+  const [classSize, setClassSize] = useState("");
+  const [statusTeacherEdit, setStatusTeacherEdit] = useState("");
   const dispatch = useAppDispatch();
   const listClassPeriod = [];
 
@@ -89,6 +96,9 @@ const ClassManagement = () => {
       page: current,
       size: size,
       levelId: level,
+      classSize: classSize,
+      statusClass: statusClass,
+      statusTeacherEdit: statusTeacherEdit,
     };
 
     try {
@@ -182,7 +192,7 @@ const ClassManagement = () => {
 
   const columns = [
     {
-      title: "STT",
+      title: "#",
       dataIndex: "stt",
       key: "stt",
       sorter: (a, b) => a.stt - b.stt,
@@ -210,7 +220,7 @@ const ClassManagement = () => {
       },
     },
     {
-      title: "Ca học",
+      title: "Ca",
       dataIndex: "classPeriod",
       key: "classPeriod",
       sorter: (a, b) => a.classPeriod - b.classPeriod,
@@ -244,7 +254,18 @@ const ClassManagement = () => {
       title: "Giảng viên",
       dataIndex: "userNameTeacher",
       key: "userNameTeacher",
-      sorter: (a, b) => a.userNameTeacher.localeCompare(b.userNameTeacher),
+      sorter: (a, b) => {
+        if (a.userNameTeacher == null && b.userNameTeacher == null) {
+          return 0;
+        }
+        if (a.userNameTeacher == null) {
+          return -1;
+        }
+        if (b.userNameTeacher == null) {
+          return 1;
+        }
+        return a.userNameTeacher.localeCompare(b.userNameTeacher);
+      },
       render: (text, record) => {
         if (record.userNameTeacher == null) {
           return <span>Chưa có</span>;
@@ -266,6 +287,30 @@ const ClassManagement = () => {
       sorter: (a, b) => a.activityName.localeCompare(b.activityName),
     },
     {
+      title: "Trạng thái",
+      dataIndex: "statusClass",
+      key: "statusClass",
+      render: (text, record) => {
+        if (record.statusClass === "Đủ điều kiện") {
+          return <Tag color="success">{record.statusClass}</Tag>;
+        } else {
+          return <Tag color="error">{record.statusClass}</Tag>;
+        }
+      },
+    },
+    {
+      title: "Quyền GV",
+      dataIndex: "statusTeacherEdit",
+      key: "statusTeacherEdit",
+      render: (text, record) => {
+        if (record.statusTeacherEdit === 0) {
+          return <Tag color="success">Cho phép</Tag>;
+        } else {
+          return <Tag color="error">Không cho phép</Tag>;
+        }
+      },
+    },
+    {
       title: "Hành động",
       dataIndex: "actions",
       key: "actions",
@@ -274,7 +319,11 @@ const ClassManagement = () => {
           <Tooltip title="Xem chi tiết">
             <Link to={`/admin/class-management/information-class/${record.id}`}>
               <FontAwesomeIcon
-                style={{ marginRight: "15px", cursor: "pointer" }}
+                style={{
+                  marginRight: "15px",
+                  cursor: "pointer",
+                  color: "rgb(38, 144, 214)",
+                }}
                 icon={faEye}
                 size="1x"
               />
@@ -292,13 +341,14 @@ const ClassManagement = () => {
               size="1x"
               style={{
                 marginLeft: 7,
-                color: "rgb(55, 137, 220)",
+                color: "rgb(38, 144, 214)",
                 cursor: "pointer",
               }}
             />
           </Tooltip>
         </div>
       ),
+      width: "100px",
     },
   ];
 
@@ -320,12 +370,23 @@ const ClassManagement = () => {
 
   const handleClear = () => {
     if (semesterDataAll.length > 0) {
-      setIdSemesterSearch(semesterDataAll[0].id);
+      semesterDataAll.forEach((item) => {
+        if (
+          item.startTime <= new Date().getTime() &&
+          new Date().getTime() <= item.endTime
+        ) {
+          setIdSemesterSearch(item.id);
+        }
+      });
     } else {
-      setIdSemesterSearch("null");
+      setIdSemesterSearch(null);
     }
     setSelectedItems("");
     setCode("");
+    setClassSize("");
+    setLevel("");
+    setStatusClass("");
+    setStatusTeacherEdit("");
     setIdActivitiSearch("");
     setSelectedItemsPerson("");
     setClear(true);
@@ -364,8 +425,11 @@ const ClassManagement = () => {
       code: code,
       classPeriod: selectedItems,
       page: current,
-      size: 10,
+      size: size,
       levelId: level,
+      classSize: classSize,
+      statusClass: statusClass,
+      statusTeacherEdit: statusTeacherEdit,
     };
     ClassAPI.exportExcel(filter).then((response) => {
       setLoadingOverLay(false);
@@ -392,6 +456,16 @@ const ClassManagement = () => {
 
   const handleCancelModalRandom = () => {
     setShowRandomModal(false);
+  };
+
+  const [showImportModal, setShowImportModal] = useState(false);
+
+  const handleClickModalImportClass = () => {
+    setShowImportModal(true);
+  };
+
+  const handleCancelModalImportClass = () => {
+    setShowImportModal(false);
   };
 
   return (
@@ -496,7 +570,7 @@ const ClassManagement = () => {
                 <Option value="none">Chưa có giảng viên</Option>
                 {teacherDataAll.map((teacher) => (
                   <Option key={teacher.id} value={teacher.id}>
-                    {teacher.userName}
+                    {teacher.userName + " - " + teacher.name}
                   </Option>
                 ))}
               </Select>
@@ -508,7 +582,12 @@ const ClassManagement = () => {
             <div className="inputCode">
               <span>Mã Lớp:</span>
               <br />
-              <Input type="text" value={code} onChange={handleCodeChange} />
+              <Input
+                placeholder="Nhập mã lớp"
+                type="text"
+                value={code}
+                onChange={handleCodeChange}
+              />
             </div>
           </Col>
           <Col span={12} style={{ padding: "10px" }}>
@@ -534,9 +613,61 @@ const ClassManagement = () => {
               </Select>
             </div>
           </Col>
+          <Col span={12} style={{ padding: "10px" }}>
+            <div>
+              <span>Sĩ số lớp:</span>
+              <br />
+              <Input
+                type="number"
+                placeholder="Nhập sĩ số lớp"
+                value={classSize}
+                onChange={(e) => {
+                  setClassSize(e.target.value);
+                }}
+              />
+            </div>
+          </Col>
+          <Col span={12} style={{ padding: "10px" }}>
+            <div>
+              <span>Quyền giảng viên chỉnh sửa:</span>
+              <br />
+              <Select
+                value={statusTeacherEdit}
+                onChange={(e) => {
+                  setStatusTeacherEdit(e);
+                }}
+                style={{ width: "100%" }}
+              >
+                <Option value="">Tất cả</Option>
+                <Option value="0">Cho phép chỉnh sửa</Option>
+                <Option value="1">Không cho phép chỉnh sửa</Option>
+              </Select>
+            </div>
+          </Col>
+          <Col span={24} style={{ padding: "10px" }}>
+            <div>
+              <span>Trạng thái:</span>
+              <br />
+              <Select
+                value={statusClass}
+                onChange={(e) => {
+                  setStatusClass(e);
+                }}
+                style={{ width: "100%" }}
+              >
+                <Option value="">Tất cả</Option>
+                <Option value="yes">Đủ điều kiện</Option>
+                <Option value="no">Chưa đủ điều kiện</Option>
+              </Select>
+            </div>
+          </Col>
         </Row>
-        <div className="box_btn_filter">
+        <div className="box_btn_filter" style={{ paddingBottom: "15px" }}>
           <Button className="btn_filter" onClick={handleSearchAllByFilter}>
+            <FontAwesomeIcon
+              icon={faFilterCircleDollar}
+              style={{ marginRight: "5px" }}
+            />{" "}
             Tìm kiếm
           </Button>
           <Button
@@ -544,6 +675,11 @@ const ClassManagement = () => {
             style={{ backgroundColor: "rgb(38, 144, 214)" }}
             onClick={handleClear}
           >
+            {" "}
+            <FontAwesomeIcon
+              icon={faChainSlash}
+              style={{ marginRight: "5px" }}
+            />{" "}
             Làm mới bộ lọc
           </Button>
         </div>
@@ -591,6 +727,7 @@ const ClassManagement = () => {
                 backgroundColor: "rgb(55, 137, 220)",
                 marginRight: "5px",
               }}
+              onClick={handleClickModalImportClass}
             >
               <FontAwesomeIcon
                 icon={faUpload}
@@ -708,6 +845,12 @@ const ClassManagement = () => {
               </>
             )}
           </div>
+          <div>
+            <span style={{ color: "red" }}>
+              (*) Lưu ý: Lớp có trạng thái chưa đủ điều kiện là lớp có sĩ số nhỏ
+              hơn (sĩ số nhỏ nhất) đã cấu hình ở màn cấu hình lớp học.
+            </span>
+          </div>
         </div>
       </div>
       <ModalCreateProject
@@ -722,6 +865,11 @@ const ClassManagement = () => {
       <ModalRandomClass
         visible={showRandomModal}
         onCancel={handleCancelModalRandom}
+        fetchData={featchAllMyClass}
+      />
+      <ModalImportClass
+        visible={showImportModal}
+        onCancel={handleCancelModalImportClass}
         fetchData={featchAllMyClass}
       />
     </div>

@@ -27,4 +27,8 @@ public class AdClassCustomResponse {
     private String activityName;
 
     private String nameLevel;
+
+    private String statusClass;
+
+    private Integer statusTeacherEdit;
 }

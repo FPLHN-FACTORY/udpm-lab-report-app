@@ -1,6 +1,7 @@
 package com.labreportapp.labreport.core.admin.service.impl;
 
 import com.labreportapp.labreport.core.admin.excel.AdExportExcelClass;
+import com.labreportapp.labreport.core.admin.excel.AdImportExcelClass;
 import com.labreportapp.labreport.core.admin.model.request.AdCreateClassRequest;
 import com.labreportapp.labreport.core.admin.model.request.AdFindClassRequest;
 import com.labreportapp.labreport.core.admin.model.request.AdRandomClassRequest;
@@ -10,18 +11,24 @@ import com.labreportapp.labreport.core.admin.model.response.AdClassResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdDetailClassRespone;
 import com.labreportapp.labreport.core.admin.model.response.AdExportExcelClassCustom;
 import com.labreportapp.labreport.core.admin.model.response.AdExportExcelClassResponse;
+import com.labreportapp.labreport.core.admin.model.response.AdImportExcelClassResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdListClassCustomResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdSemesterAcResponse;
 import com.labreportapp.labreport.core.admin.repository.AdActivityRepository;
+import com.labreportapp.labreport.core.admin.repository.AdClassConfigurationRepository;
 import com.labreportapp.labreport.core.admin.repository.AdClassRepository;
 import com.labreportapp.labreport.core.admin.service.AdClassService;
+import com.labreportapp.labreport.core.common.base.ImportExcelResponse;
 import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.core.common.base.SimpleEntityProjection;
 import com.labreportapp.labreport.core.common.response.SimpleResponse;
 import com.labreportapp.labreport.entity.Activity;
 import com.labreportapp.labreport.entity.Class;
+import com.labreportapp.labreport.entity.ClassConfiguration;
+import com.labreportapp.labreport.infrastructure.apiconstant.ActorConstants;
 import com.labreportapp.labreport.infrastructure.constant.ClassPeriod;
 import com.labreportapp.labreport.infrastructure.constant.StatusClass;
+import com.labreportapp.labreport.infrastructure.constant.StatusTeacherEdit;
 import com.labreportapp.labreport.repository.ActivityRepository;
 import com.labreportapp.labreport.repository.LevelRepository;
 import com.labreportapp.labreport.util.ClassHelper;
@@ -41,14 +48,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
@@ -85,6 +92,9 @@ public class AdClassManagerServiceImpl implements AdClassService {
     @Autowired
     @Qualifier(ActivityRepository.NAME)
     private ActivityRepository activityRepository;
+
+    @Autowired
+    private AdClassConfigurationRepository adClassConfigurationRepository;
 
     @Override
     public List<AdClassResponse> getAllClass() {
@@ -123,6 +133,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
         classNew.setClassSize(0);
         classNew.setClassPeriod(ClassPeriod.values()[Math.toIntExact(request.getClassPeriod())]);
         classNew.setPassword(RandomString.random());
+        classNew.setStatusTeacherEdit(StatusTeacherEdit.values()[request.getStatusTeacherEdit()]);
         Optional<Activity> activityFind = adActivityRepository.findById(request.getActivityId());
         if (!activityFind.isPresent()) {
             throw new RestApiException(Message.ACTIVITY_NOT_EXISTS);
@@ -140,6 +151,8 @@ public class AdClassManagerServiceImpl implements AdClassService {
         adClassCustomResponse.setCode(classNew.getCode());
         adClassCustomResponse.setActivityName(activityFind.get().getName());
         adClassCustomResponse.setStartTime(classNew.getStartTime());
+        adClassCustomResponse.setStatusClass("Chưa đủ điều kiện");
+        adClassCustomResponse.setStatusTeacherEdit(classNew.getStatusTeacherEdit() == StatusTeacherEdit.CHO_PHEP ? 0 : 1);
         adClassCustomResponse.setNameLevel(levelRepository.findById(activityFind.get().getLevelId()).get().getName());
         if (!request.getTeacherId().equals("")) {
             adClassCustomResponse.setTeacherId(request.getTeacherId());
@@ -155,8 +168,8 @@ public class AdClassManagerServiceImpl implements AdClassService {
     public AdClassCustomResponse updateClass(@Valid AdCreateClassRequest request, String id) {
         Class classNew = repository.findById(id).get();
         classNew.setStartTime(request.getStartTime());
-        classNew.setCode(classHelper.genMaLopTheoHoatDong(request.getActivityId()));
         classNew.setClassPeriod(ClassPeriod.values()[Math.toIntExact(request.getClassPeriod())]);
+        classNew.setStatusTeacherEdit(StatusTeacherEdit.values()[request.getStatusTeacherEdit()]);
         Optional<Activity> activityFind = adActivityRepository.findById(request.getActivityId());
         if (!activityFind.isPresent()) {
             throw new RestApiException(Message.ACTIVITY_NOT_EXISTS);
@@ -174,6 +187,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
         adClassCustomResponse.setActivityName(activityFind.get().getName());
         adClassCustomResponse.setStartTime(classNew.getStartTime());
         adClassCustomResponse.setNameLevel(levelRepository.findById(activityFind.get().getLevelId()).get().getName());
+        adClassCustomResponse.setStatusTeacherEdit(classNew.getStatusTeacherEdit() == StatusTeacherEdit.CHO_PHEP ? 0 : 1);
         if (request.getTeacherId() != null && !request.getTeacherId().equals("")) {
             adClassCustomResponse.setTeacherId(request.getTeacherId());
 
@@ -186,6 +200,8 @@ public class AdClassManagerServiceImpl implements AdClassService {
     @Override
     public PageableObject<AdListClassCustomResponse> searchClass(final AdFindClassRequest adFindClass) {
         Pageable pageable = PageRequest.of(adFindClass.getPage() - 1, adFindClass.getSize());
+        ClassConfiguration classConfiguration = adClassConfigurationRepository.findAll().get(0);
+        adFindClass.setValueClassSize(classConfiguration.getClassSizeMin());
         Page<AdClassResponse> pageList = repository.findClassBySemesterAndActivity(adFindClass, pageable);
         List<AdClassResponse> listResponse = pageList.getContent();
         List<String> idList = listResponse.stream()
@@ -193,7 +209,6 @@ public class AdClassManagerServiceImpl implements AdClassService {
                 .filter(Objects::nonNull)
                 .distinct()
                 .collect(Collectors.toList());
-
         List<SimpleResponse> response = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idList);
         List<AdListClassCustomResponse> listClassCustomResponses = new ArrayList<>();
         for (AdClassResponse adClassResponse : listResponse) {
@@ -207,6 +222,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
             adListClassCustomResponse.setStt(adClassResponse.getStt());
             adListClassCustomResponse.setNameLevel(adClassResponse.getNameLevel());
             adListClassCustomResponse.setActivityName(adClassResponse.getActivityName());
+            adListClassCustomResponse.setStatusTeacherEdit(adClassResponse.getStatusTeacherEdit());
             for (SimpleResponse simpleResponse : response) {
                 if (adClassResponse.getTeacherId() != null) {
                     if (adClassResponse.getTeacherId().equals(simpleResponse.getId())) {
@@ -215,7 +231,11 @@ public class AdClassManagerServiceImpl implements AdClassService {
                     }
                 }
             }
-
+            if (adListClassCustomResponse.getClassSize() > classConfiguration.getClassSizeMin()) {
+                adListClassCustomResponse.setStatusClass("Đủ điều kiện");
+            } else {
+                adListClassCustomResponse.setStatusClass("Chưa đủ điều kiện");
+            }
             listClassCustomResponses.add(adListClassCustomResponse);
         }
         PageableObject<AdListClassCustomResponse> pageableObject = new PageableObject<>();
@@ -227,6 +247,8 @@ public class AdClassManagerServiceImpl implements AdClassService {
 
     @Override
     public ByteArrayOutputStream exportExcelClass(HttpServletResponse response, final AdFindClassRequest request) {
+        ClassConfiguration classConfiguration = adClassConfigurationRepository.findAll().get(0);
+        request.setValueClassSize(classConfiguration.getClassSizeMin());
         List<AdExportExcelClassResponse> listClassResponse = repository.findClassExportExcel(request);
         List<String> distinctTeacherIds = listClassResponse.stream()
                 .map(AdExportExcelClassResponse::getTeacherId)
@@ -297,6 +319,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
                 classNew.setActivityId(request.getActivityId());
                 classNew.setCode(codeActivity + "_" + (count++));
                 classNew.setPassword(RandomString.random());
+                classNew.setStatusTeacherEdit(StatusTeacherEdit.KHONG_CHO_PHEP);
                 listClass.add(classNew);
             }
             repository.saveAll(listClass);
@@ -305,5 +328,82 @@ public class AdClassManagerServiceImpl implements AdClassService {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public ImportExcelResponse importExcelClass(MultipartFile multipartFile, String idSemester) {
+        ImportExcelResponse response = new ImportExcelResponse();
+        try {
+            response.setStatus(true);
+            AdImportExcelClass adImportExcelClass = new AdImportExcelClass();
+            List<AdImportExcelClassResponse> listClassImport = adImportExcelClass.importData(multipartFile);
+            ConcurrentHashMap<String, SimpleResponse> mapGiangVien = new ConcurrentHashMap<>();
+            ConcurrentHashMap<String, Class> mapClass = new ConcurrentHashMap<>();
+            addDataInMapGiangVien(mapGiangVien);
+            addDataInMapClass(mapClass, idSemester);
+            ConcurrentHashMap<String, Class> listClassUpdate = new ConcurrentHashMap<>();
+            listClassImport.parallelStream().forEach(classExcel -> {
+                if (classExcel.getCode().isEmpty()) {
+                    response.setStatus(false);
+                    response.setMessage("Mã lớp không được để trống");
+                    return;
+                }
+                Class classFind = mapClass.get(classExcel.getCode());
+                if (classFind == null) {
+                    response.setStatus(false);
+                    response.setMessage("Không tim thấy lớp học");
+                    return;
+                }
+                if (classExcel.getClassPeriod() != null) {
+                    classFind.setClassPeriod(ClassPeriod.values()[classExcel.getClassPeriod() - 1]);
+                } else {
+                    classFind.setClassPeriod(null);
+                }
+                SimpleResponse giangVien = null;
+                if (!classExcel.getUsernameTeacher().isEmpty()) {
+                    giangVien = mapGiangVien.get(classExcel.getUsernameTeacher().toLowerCase());
+                    if (giangVien == null) {
+                        response.setStatus(false);
+                        response.setMessage("Giảng viên không tồn tại");
+                        return;
+                    }
+                    classFind.setTeacherId(giangVien.getId());
+                } else {
+                    classFind.setTeacherId(null);
+                }
+                listClassUpdate.put(classFind.getCode(), classFind);
+            });
+            if (response.getStatus()) {
+                repository.saveAll(listClassUpdate.values());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setStatus(false);
+            response.setMessage("Lỗi hệ thống");
+            return response;
+        }
+        return response;
+    }
+
+    public void addDataInMapGiangVien(ConcurrentHashMap<String, SimpleResponse> mapAll) {
+        List<SimpleResponse> giangVienHuongDanList = convertRequestCallApiIdentity.handleCallApiGetUserByRoleAndModule(ActorConstants.ACTOR_TEACHER);
+        getALlPutMapGiangVien(mapAll, giangVienHuongDanList);
+    }
+
+    public void getALlPutMapGiangVien(ConcurrentHashMap<String, SimpleResponse> mapSimple, List<SimpleResponse> listGiangVien) {
+        for (SimpleResponse xx : listGiangVien) {
+            mapSimple.put(xx.getUserName().toLowerCase(), xx);
+        }
+    }
+
+    public void addDataInMapClass(ConcurrentHashMap<String, Class> mapAll, String idSemester) {
+        List<Class> classList = repository.getAllClassEntity(idSemester);
+        getALlPutMapClass(mapAll, classList);
+    }
+
+    public void getALlPutMapClass(ConcurrentHashMap<String, Class> mapSimple, List<Class> listClass) {
+        for (Class xx : listClass) {
+            mapSimple.put(xx.getCode(), xx);
+        }
     }
 }

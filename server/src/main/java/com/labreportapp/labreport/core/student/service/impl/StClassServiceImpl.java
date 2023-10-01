@@ -13,6 +13,8 @@ import com.labreportapp.labreport.core.student.repository.StStudentClassesReposi
 import com.labreportapp.labreport.core.student.service.StClassService;
 import com.labreportapp.labreport.entity.Class;
 import com.labreportapp.labreport.entity.StudentClasses;
+import com.labreportapp.labreport.infrastructure.constant.StatusStudentFeedBack;
+import com.labreportapp.labreport.infrastructure.constant.StatusTeam;
 import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
@@ -110,6 +112,8 @@ public class StClassServiceImpl implements StClassService {
             studentJoinClass.setClassId(req.getIdClass());
             studentJoinClass.setEmail(responseStudent.getEmail());
             studentJoinClass.setStudentId(req.getIdStudent());
+            studentJoinClass.setStatusStudentFeedBack(StatusStudentFeedBack.CHUA_FEEDBACK);
+            studentJoinClass.setStatus(StatusTeam.INACTIVE);
             studentJoinClass.setCreatedDate(new Date().getTime());
             StudentClasses studentInClass = stStudentClassesRepository.save(studentJoinClass);
 

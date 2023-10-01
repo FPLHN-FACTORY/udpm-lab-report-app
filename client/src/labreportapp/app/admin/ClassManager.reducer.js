@@ -25,6 +25,8 @@ const adClassManagementSlice = createSlice({
         activityId: data.activityId,
         activityName: data.activityName,
         nameLevel: data.nameLevel,
+        statusClass: data.statusClass,
+        statusTeacherEdit: data.statusTeacherEdit,
       };
       state.forEach((item, index) => {
         item.stt = index + 1;
@@ -46,6 +48,7 @@ const adClassManagementSlice = createSlice({
           item.activityId = data.activityId;
           item.activityName = data.activityName;
           item.nameLevel = data.nameLevel;
+          item.statusTeacherEdit = data.statusTeacherEdit;
         }
       });
 

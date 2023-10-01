@@ -23,4 +23,7 @@ public class AdCreateClassRequest {
     @NotBlank
     private String activityId;
 
+    @NotNull
+    private Integer statusTeacherEdit;
+
 }

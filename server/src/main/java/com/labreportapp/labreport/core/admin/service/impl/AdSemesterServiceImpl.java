@@ -110,17 +110,26 @@ public class AdSemesterServiceImpl implements AdSemesterService {
     @Override
     public Boolean deleteSemester(String id) {
         Optional<Semester> findSemesterById = adSemesterRepository.findById(id);
-        Integer countActivities = adSemesterRepository.countActivitiesBySemesterId(id);
-
         if (!findSemesterById.isPresent()) {
             throw new RestApiException(Message.SEMESTER_NOT_EXISTS);
         }
-
+        Integer countActivities = adSemesterRepository.countActivitiesBySemesterId(id);
         if (countActivities > 0) {
             System.out.println(countActivities);
             throw new RestApiException(Message.SEMESTER_ACTIVITY_ALREADY_EXISTS);
         }
         adSemesterRepository.delete(findSemesterById.get());
+        return true;
+    }
+
+    @Override
+    public Boolean updateStatusFeedback(String id) {
+        Optional<Semester> findSemesterById = adSemesterRepository.findById(id);
+        if (!findSemesterById.isPresent()) {
+            throw new RestApiException(Message.SEMESTER_NOT_EXISTS);
+        }
+        findSemesterById.get().setStatusFeedBack(StatusFeedBack.DA_FEEDBACK);
+        adSemesterRepository.save(findSemesterById.get());
         return true;
     }
 }

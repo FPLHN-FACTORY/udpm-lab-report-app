@@ -3,6 +3,7 @@ package com.labreportapp.labreport.core.student.service;
 import com.labreportapp.labreport.core.common.base.SimpleEntityProjection;
 import com.labreportapp.labreport.core.student.model.request.StClassRequest;
 import com.labreportapp.labreport.core.student.model.request.StFindClassRequest;
+import com.labreportapp.labreport.core.student.model.response.StMyClassCustom;
 import com.labreportapp.labreport.core.student.model.response.StMyClassResponse;
 
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
  */
 public interface StMyClassService {
 
-    List<StMyClassResponse> getAllClass(final StFindClassRequest req);
+    List<StMyClassCustom> getAllClass(final StFindClassRequest req);
 
     void leaveClass(final StClassRequest req);
 

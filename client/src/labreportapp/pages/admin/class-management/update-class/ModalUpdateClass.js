@@ -36,6 +36,7 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
   const [errorstartTime, setErrorStartTime] = useState("");
   const [errorActivitySelect, setErrorActivitySelect] = useState("");
   const [classDetail, setClassDetail] = useState({});
+  const [statusTeacherEdit, setStatusTeacherEdit] = useState("");
 
   const cancelSuccess = () => {
     onCancel();
@@ -83,6 +84,7 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
     const fetchDetail = (id) => {
       ClassAPI.getAdClassDetailById(id).then(
         (respone) => {
+          console.log(respone.data.data);
           setClassDetail(respone.data.data);
           setIdSemesterSearch(respone.data.data.semesterId);
           setIdActivitiSearch(respone.data.data.activityId);
@@ -100,6 +102,7 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
               ? ""
               : respone.data.data.classPeriod + ""
           );
+          setStatusTeacherEdit(respone.data.data.statusTeacherEdit + "");
         },
         (error) => {}
       );
@@ -146,7 +149,7 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
     let check = 0;
 
     if (classPeriod === "") {
-      setErrorClassPeriod("Ca Lớp không để trống");
+      setErrorClassPeriod("Ca lớp không để trống");
       check++;
     } else {
       setErrorClassPeriod("");
@@ -170,6 +173,7 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
         startTime: moment(startTime, "YYYY-MM-DD").valueOf(),
         teacherId: selectedItemsPerson,
         activityId: idActivitiSearch,
+        statusTeacherEdit: parseInt(statusTeacherEdit),
       };
 
       await ClassAPI.update(id, obj).then((response) => {
@@ -207,7 +211,7 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
           <div style={{ marginTop: "15px", borderBottom: "1px solid black" }}>
             <Row style={{ marginBottom: "15px" }}>
               <Col span={12} style={{ paddingRight: "10px" }}>
-                Semester: <br />
+                <span style={{ color: "red" }}>(*) </span> Semester: <br />
                 <Select
                   showSearch
                   style={{ width: "100%" }}
@@ -225,7 +229,8 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
                 </Select>
               </Col>
               <Col span={12} style={{ paddingRight: "10px" }}>
-                <span>Mã lớp:</span> <br />
+                <span style={{ color: "red" }}>(*) </span> <span>Mã lớp:</span>{" "}
+                <br />
                 <Input
                   value={code}
                   style={{ width: "100%" }}
@@ -249,13 +254,13 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
 
                   {teacherDataAll.map((teacher) => (
                     <Option key={teacher.id} value={teacher.id}>
-                      {teacher.userName}
+                      {teacher.userName + " - " + teacher.name}
                     </Option>
                   ))}
                 </Select>
               </Col>
               <Col span={12} style={{ paddingRight: "10px" }}>
-                <span className="notBlank">(*) </span>
+                <span style={{ color: "red" }}>(*) </span>
                 <span>Thời gian bắt đầu:</span> <br />
                 <Input
                   value={startTime}
@@ -270,7 +275,7 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
             </Row>
             <Row style={{ marginBottom: "15px" }}>
               <Col span={12} style={{ paddingRight: "10px" }}>
-                Hoạt Động: <br />
+                <span style={{ color: "red" }}>(*) </span> Hoạt Động: <br />
                 <Select
                   showSearch
                   style={{ width: "100%" }}
@@ -289,7 +294,8 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
                 <span className="error">{errorActivitySelect}</span>
               </Col>
               <Col span={12} style={{ paddingRight: "10px" }}>
-                Ca học dự kiến: <br />
+                <span style={{ color: "red" }}>(*) </span> Ca học dự kiến:{" "}
+                <br />
                 <Select
                   showSearch
                   style={{ width: "100%" }}
@@ -306,6 +312,23 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
                   })}
                 </Select>
                 <span className="error">{errorClassPeriod}</span>
+              </Col>
+              <Col
+                span={12}
+                style={{ paddingRight: "10px", marginTop: "15px" }}
+              >
+                <span style={{ color: "red" }}>(*) </span>Quyền giảng viên chỉnh
+                sửa: <br />
+                <Select
+                  style={{ width: "100%" }}
+                  value={statusTeacherEdit}
+                  onChange={(e) => {
+                    setStatusTeacherEdit(e);
+                  }}
+                >
+                  <Option value="0">Cho phép</Option>
+                  <Option value="1">Không cho phép</Option>
+                </Select>
               </Col>
             </Row>
           </div>

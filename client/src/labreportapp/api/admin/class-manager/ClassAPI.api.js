@@ -71,7 +71,13 @@ export class ClassAPI {
         `&size=` +
         filter.size +
         "&levelId=" +
-        filter.levelId,
+        filter.levelId +
+        "&classSize=" +
+        filter.classSize +
+        "&statusClass=" +
+        filter.statusClass +
+        "&statusTeacherEdit=" +
+        filter.statusTeacherEdit,
     });
   }
   static getAdClassDetailById(id) {
@@ -122,8 +128,48 @@ export class ClassAPI {
         `&size=` +
         filter.size +
         "&levelId=" +
-        filter.levelId,
+        filter.levelId +
+        "&classSize=" +
+        filter.classSize +
+        "&statusClass=" +
+        filter.statusClass +
+        "&statusTeacherEdit=" +
+        filter.statusTeacherEdit,
       responseType: "blob",
     });
   }
+
+  static importExcel = (formData, idSemester) => {
+    return request({
+      method: "POST",
+      url: `/admin/class-managerment/import-excel/` + idSemester,
+      data: formData,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  };
+
+  static importExcelStudentsInClass(formData, id) {
+    return request({
+      method: "POST",
+      url:
+        `/admin/student-classes/import-excel/${id}`,
+      data: formData,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  }
+
+  static exportExcelStudentsInClass(id, isSample) {
+    return request({
+      method: "GET",
+      url:
+        `/admin/student-classes/export-excel/${id}` +
+        `?isSample=${isSample}`,
+      responseType: "blob",
+    });
+  }
+
 }

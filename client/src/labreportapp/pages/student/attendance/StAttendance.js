@@ -147,7 +147,7 @@ const StAttendance = () => {
     },
   ];
   return (
-    <div className="box-general">
+    <div className="box-general" style={{ paddingTop: 50 }}>
       {isLoading && <LoadingIndicator />}
       <div className="heading-box">
         <span style={{ fontSize: "20px", fontWeight: "500" }}>
@@ -241,6 +241,38 @@ const StAttendance = () => {
           </>
         );
       })}
+      {listClass.length === 0 && (
+        <div
+          style={{
+            backgroundColor: "white",
+            borderRadius: 5,
+            paddingTop: 10,
+            paddingBottom: 30,
+            marginTop: 25,
+            boxShadow: "0px 0px 20px 1px rgba(148, 148, 148, 0.3)",
+          }}
+        >
+          <>
+            <p
+              style={{
+                textAlign: "center",
+                marginTop: "100px",
+                fontSize: "15px",
+                color: "red",
+              }}
+            >
+              <Empty
+                imageStyle={{ height: 60 }}
+                description={
+                  <span style={{ color: "#007bff" }}>
+                    Không tìm thấy lớp học nào !
+                  </span>
+                }
+              />{" "}
+            </p>
+          </>
+        </div>
+      )}
     </div>
   );
 };
