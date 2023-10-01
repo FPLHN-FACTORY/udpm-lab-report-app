@@ -16,6 +16,7 @@ import com.labreportapp.labreport.core.student.repository.StClassConfigurationRe
 import com.labreportapp.labreport.core.student.repository.StClassRepository;
 import com.labreportapp.labreport.entity.StudentClasses;
 import com.labreportapp.labreport.infrastructure.apiconstant.ActorConstants;
+import com.labreportapp.labreport.infrastructure.constant.StatusStudentFeedBack;
 import com.labreportapp.labreport.infrastructure.constant.StatusTeam;
 import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
 import jakarta.servlet.http.HttpServletResponse;
@@ -196,6 +197,7 @@ public class AdStudentClassServiceImpl implements AdStudentClassService {
                 st.setStudentId(getSimple.getId());
                 st.setEmail(getSimple.getEmail());
                 st.setStatus(StatusTeam.INACTIVE);
+                st.setStatusStudentFeedBack(StatusStudentFeedBack.CHUA_FEEDBACK);
                 st.setCreatedDate(new Date().getTime());
                 mapStudents.put(getSimple.getEmail(), st);
 
