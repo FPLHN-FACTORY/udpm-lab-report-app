@@ -126,4 +126,27 @@ export class ClassAPI {
       responseType: "blob",
     });
   }
+
+  static importExcelStudentsInClass(formData, id) {
+    return request({
+      method: "POST",
+      url:
+        `/admin/student-classes/import-excel/${id}`,
+      data: formData,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  }
+
+  static exportExcelStudentsInClass(id, isSample) {
+    return request({
+      method: "GET",
+      url:
+        `/admin/student-classes/export-excel/${id}` +
+        `?isSample=${isSample}`,
+      responseType: "blob",
+    });
+  }
+
 }
