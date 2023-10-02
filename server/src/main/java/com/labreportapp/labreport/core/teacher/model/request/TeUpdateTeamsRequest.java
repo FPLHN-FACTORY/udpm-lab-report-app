@@ -18,7 +18,6 @@ public class TeUpdateTeamsRequest {
     @NotBlank
     private String id;
 
-
     private String subjectName;
 
     private List<TeTeamUpdateStudentClassRequest> listStudentClasses;

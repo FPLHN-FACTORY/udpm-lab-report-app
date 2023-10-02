@@ -17,6 +17,7 @@ import lombok.ToString;
 /**
  * @author thangncph26123
  */
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

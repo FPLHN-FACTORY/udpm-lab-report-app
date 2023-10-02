@@ -331,73 +331,92 @@ public class DBGenerator implements CommandLineRunner {
 
         Project project1 = new Project();
         project1.setCode("Project_1");
-        project1.setName("Module quản lý dự án");
-        project1.setStartTime(1678294800000L);
-        project1.setEndTime(1685379600000L);
+        project1.setName("Module điểm thưởng");
+        project1.setStartTime(1696260088553L);
+        project1.setEndTime(1695446153961L);
         project1.setProgress(Float.parseFloat("0"));
-        project1.setBackgroundColor("#59a1e3");
-        project1.setDescriptions("Mục đích của dự án là để quản lý các dự án của bộ môn PTPM");
+        project1.setBackgroundColor("rgb(38, 144, 214)");
+        project1.setDescriptions("Mục đích xem điểm thưởng");
         project1.setStatusProject(StatusProject.DANG_DIEN_RA);
         project1.setId((projectRepository.save(project1).getId()));
 
+        Project project2 = new Project();
+        project2.setCode("Project_2");
+        project2.setName("Module quản lý dự án");
+        project2.setStartTime(1678294800000L);
+        project2.setEndTime(1685379600000L);
+        project2.setProgress(Float.parseFloat("0"));
+        project2.setBackgroundColor("#59a1e3");
+        project2.setDescriptions("Mục đích của dự án là để quản lý các dự án của bộ môn PTPM");
+        project2.setStatusProject(StatusProject.DANG_DIEN_RA);
+        project2.setId((projectRepository.save(project2).getId()));
+
+        Project project3 = new Project();
+        project3.setCode("Project_3");
+        project3.setName("Module bài viết");
+        project3.setStartTime(1678294800000L);
+        project3.setEndTime(1685379600000L);
+        project3.setProgress(Float.parseFloat("0"));
+        project3.setBackgroundColor("#59a1e3");
+        project3.setDescriptions("Mục đích phục vụ xem bài viết của bộ môn");
+        project3.setStatusProject(StatusProject.DANG_DIEN_RA);
+        project3.setId((projectRepository.save(project3).getId()));
+
+
 //Team - class 1
         Team team1 = new Team();
-        team1.setCode("TC1_1");
+        team1.setProjectId(project1.getId());
         team1.setName("Nhóm 1");
         team1.setSubjectName("Website bán giày Bee Shoes");
         team1.setClassId(class1.getId());
         team1.setId(teamRepository.save(team1).getId());
 
         Team team2 = new Team();
-        team2.setCode("TC1_2");
-        team2.setProjectId(project1.getId());
+        team2.setProjectId(project2.getId());
         team2.setName("Nhóm 2");
         team2.setSubjectName("Website camera fly");
         team2.setClassId(class1.getId());
         team2.setId(teamRepository.save(team2).getId());
 
         Team team3 = new Team();
-        team3.setCode("TC1_3");
+        team3.setProjectId(project3.getId());
         team3.setName("Nhóm 3");
         team3.setSubjectName("Website bán quần áo Bee Poly");
         team3.setClassId(class1.getId());
         team3.setId(teamRepository.save(team3).getId());
 
-        Team team4 = new Team();
-        team4.setCode("TC1_4");
-        team4.setName("Nhóm 4");
-        team4.setSubjectName("Website bán nước hoa Base Poly");
-        team4.setClassId(class1.getId());
-        team4.setId(teamRepository.save(team4).getId());
+//        Team team4 = new Team();
+//        team4.setName("Nhóm 4");
+//        team4.setSubjectName("Website bán nước hoa Base Poly");
+//        team4.setClassId(class1.getId());
+//        team4.setId(teamRepository.save(team4).getId());
 
         //Team - class 2
         Team team5 = new Team();
-        team5.setCode("TC2_1");
         team5.setName("Nhóm 1");
         team5.setSubjectName("Website bán giày Bee Shoes");
         team5.setClassId(class2.getId());
         team5.setId(teamRepository.save(team5).getId());
 
         Team team6 = new Team();
-        team6.setCode("TC2_2");
         team6.setName("Nhóm 2");
         team6.setSubjectName("Website camera HIPOLY");
         team6.setClassId(class2.getId());
         team6.setId(teamRepository.save(team6).getId());
-
-        Team team7 = new Team();
-        team7.setCode("TC2_3");
-        team7.setName("Nhóm 3");
-        team7.setSubjectName("Website bán áo ONESH Poly");
-        team7.setClassId(class2.getId());
-        team7.setId(teamRepository.save(team7).getId());
-
-        Team team8 = new Team();
-        team8.setCode("TC2_4");
-        team8.setName("Nhóm 4");
-        team8.setSubjectName("Website bán quần hoa CHPPoly");
-        team8.setClassId(class2.getId());
-        team8.setId(teamRepository.save(team8).getId());
+//
+//        Team team7 = new Team();
+//        team7.setCode("TC2_3");
+//        team7.setName("Nhóm 3");
+//        team7.setSubjectName("Website bán áo ONESH Poly");
+//        team7.setClassId(class2.getId());
+//        team7.setId(teamRepository.save(team7).getId());
+//
+//        Team team8 = new Team();
+//        team8.setCode("TC2_4");
+//        team8.setName("Nhóm 4");
+//        team8.setSubjectName("Website bán quần hoa CHPPoly");
+//        team8.setClassId(class2.getId());
+//        team8.setId(teamRepository.save(team8).getId());
 
 // student_ class
         // class 1- team 2 (1-5)
@@ -833,7 +852,7 @@ public class DBGenerator implements CommandLineRunner {
 
         Meeting meeting7 = new Meeting();
         meeting7.setName("Buổi 7  ");
-        meeting7.setMeetingDate(new Date().getTime() + 3 * 86400000+300);
+        meeting7.setMeetingDate(new Date().getTime() + 3 * 86400000 + 300);
         meeting7.setMeetingPeriod(MeetingPeriod.CA_1);
         meeting7.setDescriptions("Xét từ góc độ cấu tạo (nó gồm có những cái gì): Chủ nghĩa Mác - Lênin có ba bộ phận lý luận cơ bản hợp thành");
         meeting7.setClassId(class1.getId());
@@ -1138,7 +1157,7 @@ public class DBGenerator implements CommandLineRunner {
 
         TemplateReport templateReport = new TemplateReport();
         templateReport.setDescriptions("Báo cáo: \n  1. Sinh viên 1: Mô tả nhiệm vụ, công việc " +
-                "\n  2. Sinh viên 2: ..." + "\n  3. Sinh viên 3: ..."+ "\n  4. Sinh viên : ...");
+                "\n  2. Sinh viên 2: ..." + "\n  3. Sinh viên 3: ..." + "\n  4. Sinh viên : ...");
         templateReport.setId(templateReportRepository.save(templateReport).getId());
 
 //post - class 1
@@ -1640,45 +1659,129 @@ public class DBGenerator implements CommandLineRunner {
         projectCategory2.setProjectId(project1.getId());
         projectCategory2.setId(projectCategoryRepository.save(projectCategory2).getId());
 
+        //  project 1 - team 1
         MemberProject memberProject1 = new MemberProject();
-        memberProject1.setMemberId("71090C89-F618-41AE-2A8D-08DBB201EFE8".toLowerCase());
+        memberProject1.setMemberId("f5882312-81a5-4d44-8e44-08dbb2f9feb4".toLowerCase());
         memberProject1.setProjectId(project1.getId());
-        memberProject1.setEmail("hieundph25894@fpt.edu.vn");
+        memberProject1.setEmail("quynhncph26201@fpt.edu.vn");
         memberProject1.setRole(RoleMemberProject.MANAGER);
         memberProject1.setStatusWork(StatusWork.DANG_LAM);
         memberProject1.setId(memberProjectRepository.save(memberProject1).getId());
 
         MemberProject memberProject2 = new MemberProject();
-        memberProject2.setMemberId("2435C7D5-9BEC-45AC-9BFE-08DBA87523FE".toLowerCase());
+        memberProject2.setMemberId("80de791c-f32b-4e7d-8e46-08dbb2f9feb4".toLowerCase());
         memberProject2.setProjectId(project1.getId());
-        memberProject2.setEmail("thangncph26123@fpt.edu.vn");
+        memberProject2.setEmail("hieundph26058@fpt.edu.vn");
         memberProject2.setRole(RoleMemberProject.LEADER);
         memberProject2.setStatusWork(StatusWork.DANG_LAM);
         memberProject2.setId(memberProjectRepository.save(memberProject2).getId());
 
         MemberProject memberProject3 = new MemberProject();
-        memberProject3.setMemberId("6A85641C-874B-4AD0-B1BA-08DBB743DD7D".toLowerCase());
+        memberProject3.setMemberId("fcb1d931-cb71-4f12-94d6-08dbb66b2f92".toLowerCase());
         memberProject3.setProjectId(project1.getId());
-        memberProject3.setEmail("hatqph21186@fpt.edu.vn");
+        memberProject3.setEmail("huynqph26772@fpt.edu.vn");
         memberProject3.setRole(RoleMemberProject.DEV);
         memberProject3.setStatusWork(StatusWork.DANG_LAM);
         memberProject3.setId(memberProjectRepository.save(memberProject3).getId());
 
         MemberProject memberProject4 = new MemberProject();
-        memberProject4.setMemberId("B8E51E50-4823-4F9A-B1BC-08DBB743DD7D".toLowerCase());
+        memberProject4.setMemberId("59f0cb47-5bd4-4909-b1c4-08dbb743dd7d".toLowerCase());
         memberProject4.setProjectId(project1.getId());
-        memberProject4.setEmail("nhatnvph26159@fpt.edu.vn");
+        memberProject4.setEmail("vanntph19604@fpt.edu.vn");
         memberProject4.setRole(RoleMemberProject.TESTER);
         memberProject4.setStatusWork(StatusWork.DANG_LAM);
         memberProject4.setId(memberProjectRepository.save(memberProject4).getId());
 
         MemberProject memberProject5 = new MemberProject();
-        memberProject5.setMemberId("B34C613D-8AA5-4865-B1BD-08DBB743DD7D".toLowerCase());
+        memberProject5.setMemberId("2b5c2803-c998-4012-8e47-08dbb2f9feb4".toLowerCase());
         memberProject5.setProjectId(project1.getId());
-        memberProject5.setEmail("tuannvph25577@fpt.edu.vn");
+        memberProject5.setEmail("vinhnvph23845@fpt.edu.vn");
         memberProject5.setRole(RoleMemberProject.DEV);
         memberProject5.setStatusWork(StatusWork.DANG_LAM);
         memberProject5.setId(memberProjectRepository.save(memberProject5).getId());
+
+        // project 2 - team 2
+        MemberProject memberProject6 = new MemberProject();
+        memberProject6.setMemberId("71090C89-F618-41AE-2A8D-08DBB201EFE8".toLowerCase());
+        memberProject6.setProjectId(project2.getId());
+        memberProject6.setEmail("hieundph25894@fpt.edu.vn");
+        memberProject6.setRole(RoleMemberProject.MANAGER);
+        memberProject6.setStatusWork(StatusWork.DANG_LAM);
+        memberProject6.setId(memberProjectRepository.save(memberProject6).getId());
+
+        MemberProject memberProject7 = new MemberProject();
+        memberProject7.setMemberId("2435C7D5-9BEC-45AC-9BFE-08DBA87523FE".toLowerCase());
+        memberProject7.setProjectId(project2.getId());
+        memberProject7.setEmail("thangncph26123@fpt.edu.vn");
+        memberProject7.setRole(RoleMemberProject.LEADER);
+        memberProject7.setStatusWork(StatusWork.DANG_LAM);
+        memberProject7.setId(memberProjectRepository.save(memberProject7).getId());
+
+        MemberProject memberProject8 = new MemberProject();
+        memberProject8.setMemberId("6A85641C-874B-4AD0-B1BA-08DBB743DD7D".toLowerCase());
+        memberProject8.setProjectId(project2.getId());
+        memberProject8.setEmail("hatqph21186@fpt.edu.vn");
+        memberProject8.setRole(RoleMemberProject.DEV);
+        memberProject8.setStatusWork(StatusWork.DANG_LAM);
+        memberProject8.setId(memberProjectRepository.save(memberProject8).getId());
+
+        MemberProject memberProject9 = new MemberProject();
+        memberProject9.setMemberId("B8E51E50-4823-4F9A-B1BC-08DBB743DD7D".toLowerCase());
+        memberProject9.setProjectId(project2.getId());
+        memberProject9.setEmail("nhatnvph26159@fpt.edu.vn");
+        memberProject9.setRole(RoleMemberProject.TESTER);
+        memberProject9.setStatusWork(StatusWork.DANG_LAM);
+        memberProject9.setId(memberProjectRepository.save(memberProject9).getId());
+
+        MemberProject memberProject10 = new MemberProject();
+        memberProject10.setMemberId("B34C613D-8AA5-4865-B1BD-08DBB743DD7D".toLowerCase());
+        memberProject10.setProjectId(project2.getId());
+        memberProject10.setEmail("tuannvph25577@fpt.edu.vn");
+        memberProject10.setRole(RoleMemberProject.DEV);
+        memberProject10.setStatusWork(StatusWork.DANG_LAM);
+        memberProject10.setId(memberProjectRepository.save(memberProject10).getId());
+
+        // project 3
+        MemberProject memberProject11 = new MemberProject();
+        memberProject11.setMemberId("d3c53418-67ea-47fe-b1be-08dbb743dd7d".toLowerCase());
+        memberProject11.setProjectId(project3.getId());
+        memberProject11.setEmail("anhdtnph25326@fpt.edu.vn");
+        memberProject11.setRole(RoleMemberProject.MANAGER);
+        memberProject11.setStatusWork(StatusWork.DANG_LAM);
+        memberProject11.setId(memberProjectRepository.save(memberProject11).getId());
+
+        MemberProject memberProject12 = new MemberProject();
+        memberProject12.setMemberId("07e9748d-cf8c-4d48-b1bf-08dbb743dd7d".toLowerCase());
+        memberProject12.setProjectId(project3.getId());
+        memberProject12.setEmail("trangntph19494@fpt.edu.vn");
+        memberProject12.setRole(RoleMemberProject.LEADER);
+        memberProject12.setStatusWork(StatusWork.DANG_LAM);
+        memberProject12.setId(memberProjectRepository.save(memberProject12).getId());
+
+        MemberProject memberProject13 = new MemberProject();
+        memberProject13.setMemberId("8e0a1e2d-246f-49b7-b1c2-08dbb743dd7d".toLowerCase());
+        memberProject13.setProjectId(project3.getId());
+        memberProject13.setEmail("hoangdvph25902@fpt.edu.vn");
+        memberProject13.setRole(RoleMemberProject.DEV);
+        memberProject13.setStatusWork(StatusWork.DANG_LAM);
+        memberProject13.setId(memberProjectRepository.save(memberProject13).getId());
+
+        MemberProject memberProject14 = new MemberProject();
+        memberProject14.setMemberId("967C6BB6-0F50-4862-B1C0-08DBB743DD7D".toLowerCase());
+        memberProject14.setProjectId(project3.getId());
+        memberProject14.setEmail("huyvqph25924@fpt.edu.vn");
+        memberProject14.setRole(RoleMemberProject.TESTER);
+        memberProject14.setStatusWork(StatusWork.DANG_LAM);
+        memberProject14.setId(memberProjectRepository.save(memberProject14).getId());
+
+        MemberProject memberProject15 = new MemberProject();
+        memberProject15.setMemberId("1d566092-b2dd-49c6-b1c1-08dbb743dd7d".toLowerCase());
+        memberProject15.setProjectId(project3.getId());
+        memberProject15.setEmail("hungpvph25929@fpt.edu.vn");
+        memberProject15.setRole(RoleMemberProject.DEV);
+        memberProject15.setStatusWork(StatusWork.DANG_LAM);
+        memberProject15.setId(memberProjectRepository.save(memberProject15).getId());
+
 
         Period period1 = new Period();
         period1.setCode("period_1");
@@ -2014,18 +2117,7 @@ public class DBGenerator implements CommandLineRunner {
         labelTodo18.setTodoId(todo7.getId());
         labelTodo18.setLabelProjectId(labelProject6.getId());
         labelTodo18.setId(labelTodoRepository.save(labelTodo18).getId());
-        //
 
-        Project project2 = new Project();
-        project2.setCode("Project_2");
-        project2.setName("Module quản lý thành viên");
-        project2.setStartTime(1678294800000L);
-        project2.setEndTime(1685379600000L);
-        project2.setBackgroundColor("#59a1e3");
-        project2.setProgress(Float.parseFloat("0"));
-        project2.setDescriptions("Mục đích của dự án là để quản lý các dự án của bộ môn PTPM");
-        project2.setStatusProject(StatusProject.DANG_DIEN_RA);
-        project2.setId((projectRepository.save(project2).getId()));
 
         LabelProject labelProject1_2 = new LabelProject();
         labelProject1_2.setCode(label1.getCode());
