@@ -3,8 +3,10 @@ package com.labreportapp.labreport.core.teacher.controller;
 import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.core.common.base.ResponseObject;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindClassRequest;
+import com.labreportapp.labreport.core.teacher.model.request.TeFindClassSentStudentRequest;
+import com.labreportapp.labreport.core.teacher.model.request.TeFindUpdateStatusClassRequest;
 import com.labreportapp.labreport.core.teacher.model.response.TeClassResponse;
-import com.labreportapp.labreport.core.teacher.model.response.TeFindUpdateStatusClassRequest;
+import com.labreportapp.labreport.core.teacher.model.response.TeClassSentStudentRespone;
 import com.labreportapp.labreport.core.teacher.service.TeClassService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -30,6 +32,12 @@ public class TeClassController {
     @GetMapping("")
     public ResponseObject searchTeClass(final TeFindClassRequest teFindClass) {
         PageableObject<TeClassResponse> pageList = teClassService.searchTeacherClass(teFindClass);
+        return new ResponseObject(pageList);
+    }
+
+    @GetMapping("/class-sent")
+    public ResponseObject classSentStudent(final TeFindClassSentStudentRequest request) {
+        PageableObject<TeClassSentStudentRespone> pageList = teClassService.findClassBySentStudent(request);
         return new ResponseObject(pageList);
     }
 

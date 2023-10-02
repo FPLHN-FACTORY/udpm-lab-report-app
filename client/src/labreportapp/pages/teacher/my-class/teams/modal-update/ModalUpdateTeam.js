@@ -103,9 +103,17 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
   };
 
   const featchDataStudent = async () => {
-    const listFilter = dataStudentClasses.filter(
-      (item) => item.idTeam === team.id
-    );
+    const listFilter = dataStudentClasses
+      .filter((item) => item.idTeam === team.id)
+      .sort((a, b) => {
+        if (a.role === b.role) {
+          return "0";
+        } else if (a.role === "0") {
+          return "-1";
+        } else {
+          return "1";
+        }
+      });
     const listNotFilter = dataStudentClasses.filter(
       (item) => item.idTeam == null || item.idTeam === "null"
     );
@@ -365,13 +373,8 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
             </Row>
           ) : (
             <Empty
-              image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
               imageStyle={{ height: 60 }}
-              description={
-                <span style={{ color: "#007bff" }}>
-                  Không có thành viên nào trong nhóm
-                </span>
-              }
+              description={<span>Không có thành viên nào trong nhóm</span>}
             />
           )}
         </div>
@@ -396,6 +399,7 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
                 style={{
                   backgroundColor: "red",
                   color: "white",
+                  marginLeft: "10px",
                 }}
                 onClick={cancelFaild}
               >

@@ -9,9 +9,10 @@ import jakarta.validation.Valid;
 import java.util.List;
 
 public interface AdCLassConfigurationService {
+
     List<AdClassConfigurationCustomResponse> getAllClassConfiguration();
 
     ClassConfiguration updateClassConfiguration(@Valid AdUpdateClassConfigurationRequest adUpdateClassConfigurationRequest);
 
-    ClassConfiguration getOneByIdClassConfiguration(String id);
+    ClassConfiguration getOneByIdClassConfiguration();
 }

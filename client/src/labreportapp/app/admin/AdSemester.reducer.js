@@ -20,6 +20,7 @@ const adSemesterSlice = createSlice({
         endTime: data.endTime,
         startTimeStudent: data.startTimeStudent,
         endTimeStudent: data.endTimeStudent,
+        statusFeedback: 0,
       };
       state.unshift(newSemester);
       return state;
@@ -37,6 +38,15 @@ const adSemesterSlice = createSlice({
         state[index].endTimeStudent = updateSemester.endTimeStudent;
       }
     },
+    UpdateStatusFeedback: (state, action) => {
+      const idUpdateSemester = action.payload;
+      const index = state.findIndex(
+        (semester) => semester.id === idUpdateSemester
+      );
+      if (index !== -1) {
+        state[index].statusFeedback = 1;
+      }
+    },
     DeleteSemester: (state, action) => {
       const idSemester = action.payload;
       const index = state.findIndex((semester) => semester.id === idSemester);
@@ -45,8 +55,13 @@ const adSemesterSlice = createSlice({
   },
 });
 
-export const { SetSemester, AddSemester, UpdateSemester, DeleteSemester } =
-  adSemesterSlice.actions;
+export const {
+  SetSemester,
+  AddSemester,
+  UpdateSemester,
+  DeleteSemester,
+  UpdateStatusFeedback,
+} = adSemesterSlice.actions;
 
 export const GetSemester = (state) => state.adSemester;
 

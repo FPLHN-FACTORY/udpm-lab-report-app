@@ -19,4 +19,24 @@ public class LabReportAppSessionImpl implements LabReportAppSession {
         return String.valueOf(session.getAttribute(SessionConstant.TOKEN));
     }
 
+    @Override
+    public String getUserId() {
+        return String.valueOf(session.getAttribute(SessionConstant.USER_CURRENT_ID));
+    }
+
+    @Override
+    public String getEmail() {
+        return String.valueOf(session.getAttribute(SessionConstant.USER_CURRENT_EMAIL));
+    }
+
+    @Override
+    public String getUserName() {
+        return String.valueOf(session.getAttribute(SessionConstant.USER_CURRENT_USERNAME));
+    }
+
+    @Override
+    public String getName() {
+        return String.valueOf(session.getAttribute(SessionConstant.USER_CURRENT_NAME));
+    }
+
 }

@@ -12,13 +12,13 @@ public class AdTemplateReportController {
     @Autowired
     private AdTemplateReportService adTemplateReportService;
 
-    @GetMapping("/{id}")
-    public ResponseObject viewTemplateReport(@PathVariable String id) {
-        return new ResponseObject(adTemplateReportService.getOneTemplateReport(id));
+    @GetMapping
+    public ResponseObject viewTemplateReport() {
+        return new ResponseObject(adTemplateReportService.getOneTemplateReport());
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseObject updateTemplateReport(@PathVariable String id, @RequestBody AdUpdateTemplateReportRequest adUpdateTemplateReportRequest) {
-        return new ResponseObject(adTemplateReportService.update(id, adUpdateTemplateReportRequest));
+    @PutMapping("/update")
+    public ResponseObject updateTemplateReport(@RequestBody AdUpdateTemplateReportRequest adUpdateTemplateReportRequest) {
+        return new ResponseObject(adTemplateReportService.update(adUpdateTemplateReportRequest));
     }
 }

@@ -222,7 +222,7 @@ const Board = () => {
       )),
     [board.lists]
   );
-  console.log("board render");
+  
   return (
     <div>
       {isLoading && <LoadingIndicator />}

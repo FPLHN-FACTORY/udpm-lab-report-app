@@ -3,11 +3,14 @@ package com.labreportapp.labreport.core.teacher.controller;
 import com.labreportapp.labreport.core.common.base.ResponseObject;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindStudentApiRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindStudentClasses;
+import com.labreportapp.labreport.core.teacher.model.request.TeSentStudentClassRequest;
 import com.labreportapp.labreport.core.teacher.model.response.TeStudentCallApiResponse;
 import com.labreportapp.labreport.core.teacher.service.TeStudentClassesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,6 +42,11 @@ public class TeStudentClassesController {
     @GetMapping("/call-api-st")
     public ResponseObject getStudentInMyTeam(final TeFindStudentApiRequest request) {
         return new ResponseObject(teStudentClassesService.callApiStudent(request));
+    }
+
+    @PutMapping("/sent-st")
+    public ResponseObject sentStudentClassesToClass(@RequestBody TeSentStudentClassRequest request) {
+        return new ResponseObject(teStudentClassesService.updateSentStudentClassesToClass(request));
     }
 
 }

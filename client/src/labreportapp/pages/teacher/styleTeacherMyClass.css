@@ -76,7 +76,7 @@
 
 .box_btn_filter {
   text-align: center;
-  padding: 20px 0px 20px 0px;
+  padding: 20px 0 20px 0;
 }
 
 .btn_filter {
@@ -109,10 +109,9 @@
 }
 .icon {
   size: 1;
-  color: #4096ff;
+  color: rgb(38, 144, 214) !important;
   cursor: pointer;
 }
-
 .custom-link {
   position: relative;
   font-size: 24px;
@@ -155,30 +154,7 @@
   height: 2px;
   background: linear-gradient(to right, #d2b156 0%, #d2b156 100%);
 }
-/* .ant-table-wrapper .ant-table-thead > tr > th {
-  background-color: #d2b156;
-  color: white;
-} */
-
 .ant-table-wrapper {
-  /* white-space: nowrap; */
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
-/* .ant-table-wrapper .ant-table-thead > tr > td {
-  background-color: #d2b156;
-  color: white;
-}
-.ant-table-wrapper .ant-table-thead > tr > th:focus {
-  background-color: #d2b156;
-  color: white;
-}
-.ant-table-column-sorters {
-  display: inline-block;
-  cursor: pointer;
-}
-.ant-table-column-sorter-up.inactive,
-.ant-table-column-sorter-down.inactive {
-  color: inherit;
-} */

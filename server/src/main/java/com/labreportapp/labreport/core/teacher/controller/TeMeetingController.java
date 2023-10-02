@@ -1,16 +1,18 @@
 package com.labreportapp.labreport.core.teacher.controller;
 
+import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.core.common.base.ResponseObject;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindMeetingRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindScheduleMeetingClassRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindScheduleNowToTime;
 import com.labreportapp.labreport.core.teacher.model.request.TeScheduleUpdateMeetingRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeUpdateHomeWorkAndNoteInMeetingRequest;
-import com.labreportapp.labreport.core.teacher.model.response.TeHomeWorkAndNoteMeetingRespone;
-import com.labreportapp.labreport.core.teacher.model.response.TeMeetingCustomRespone;
-import com.labreportapp.labreport.core.teacher.model.response.TeMeetingCustomToAttendanceRespone;
-import com.labreportapp.labreport.core.teacher.model.response.TeMeetingRespone;
-import com.labreportapp.labreport.core.teacher.model.response.TeScheduleMeetingClassRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TeDetailMeetingTeamReportRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TeHomeWorkAndNoteMeetingResponse;
+import com.labreportapp.labreport.core.teacher.model.response.TeMeetingCustomResponse;
+import com.labreportapp.labreport.core.teacher.model.response.TeMeetingCustomToAttendanceResponse;
+import com.labreportapp.labreport.core.teacher.model.response.TeMeetingResponse;
+import com.labreportapp.labreport.core.teacher.model.response.TeScheduleMeetingClassResponse;
 import com.labreportapp.labreport.core.teacher.service.TeMeetingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -36,61 +38,55 @@ public class TeMeetingController {
 
     @GetMapping("")
     public ResponseObject getTeMeeting(final TeFindMeetingRequest request) {
-        List<TeMeetingCustomRespone> list = teMeetingService.searchMeetingByIdClass(request);
+        List<TeMeetingCustomResponse> list = teMeetingService.searchMeetingByIdClass(request);
         return new ResponseObject(list);
-    }
-
-    @GetMapping("/count")
-    public ResponseObject getCountTeMeeting(final TeFindMeetingRequest request) {
-        Integer count = teMeetingService.countMeetingByClassId(request.getIdClass());
-        return new ResponseObject(count);
     }
 
     @GetMapping("/detail")
     public ResponseObject getTeMeetingDetail(final TeFindMeetingRequest request) {
-        TeMeetingRespone find = teMeetingService.searchMeetingByIdMeeting(request);
-        return new ResponseObject(find);
+        TeDetailMeetingTeamReportRespone obj = teMeetingService.searchMeetingByIdMeeting(request);
+        return new ResponseObject(obj);
     }
 
     @GetMapping("/hw-note")
     public ResponseObject getTeHomeWNoteMeetingDetail(final TeFindMeetingRequest request) {
-        TeHomeWorkAndNoteMeetingRespone find = teMeetingService.searchDetailMeetingTeamByIdMeIdTeam(request);
+        TeHomeWorkAndNoteMeetingResponse find = teMeetingService.searchDetailMeetingTeamByIdMeIdTeam(request);
         return new ResponseObject(find);
     }
 
     @PutMapping("/hw-note-report")
     public ResponseObject updateTeHomeWNoteMeetingDetail(@RequestBody TeUpdateHomeWorkAndNoteInMeetingRequest request) {
-        TeHomeWorkAndNoteMeetingRespone find = teMeetingService.updateDetailMeetingTeamByIdMeIdTeam(request);
+        TeHomeWorkAndNoteMeetingResponse find = teMeetingService.updateDetailMeetingTeamByIdMeIdTeam(request);
         return new ResponseObject(find);
     }
 
     @GetMapping("/detail-attendance")
     public ResponseObject getTeMeetingAndCheckAttendance(final TeFindMeetingRequest request) {
-        TeMeetingRespone find = teMeetingService.searchMeetingAndCheckAttendanceByIdMeeting(request);
+        TeMeetingResponse find = teMeetingService.searchMeetingAndCheckAttendanceByIdMeeting(request);
         return new ResponseObject(find);
     }
 
     @GetMapping("/schedule")
     public ResponseObject getScheduleTodayTeacher(final TeFindScheduleMeetingClassRequest request) {
-        List<TeScheduleMeetingClassRespone> list = teMeetingService.searchScheduleToDayByIdTeacherAndMeetingDate(request);
+        List<TeScheduleMeetingClassResponse> list = teMeetingService.searchScheduleToDayByIdTeacherAndMeetingDate(request);
         return new ResponseObject(list);
     }
 
     @GetMapping("/schedule-time")
     public ResponseObject getScheduleTodayTeacherTime(final TeFindScheduleNowToTime request) {
-        List<TeScheduleMeetingClassRespone> list = teMeetingService.searchScheduleNowToByIdTeacher(request);
+        PageableObject<TeScheduleMeetingClassResponse> list = teMeetingService.searchScheduleNowToByIdTeacher(request);
         return new ResponseObject(list);
     }
 
     @PutMapping("/schedule")
     public ResponseObject updateScheduleTodayTeacher(@RequestBody TeScheduleUpdateMeetingRequest request) {
-        List<TeScheduleMeetingClassRespone> list = teMeetingService.updateAddressMeeting(request);
+        List<TeScheduleMeetingClassResponse> list = teMeetingService.updateAddressMeeting(request);
         return new ResponseObject(list);
     }
 
     @GetMapping("/column-attendance/{idClass}")
     public ResponseObject getColumnMeetingByIdClass(@PathVariable("idClass") String idClass) {
-        List<TeMeetingCustomToAttendanceRespone> list = teMeetingService.listMeetingAttendanceAllByIdClass(idClass);
+        List<TeMeetingCustomToAttendanceResponse> list = teMeetingService.listMeetingAttendanceAllByIdClass(idClass);
         return new ResponseObject(list);
     }
 

@@ -27,6 +27,28 @@ export class TeacherMyClassAPI {
         filter.size,
     });
   }
+  static getClassSentStudent(filter) {
+    return request({
+      method: "GET",
+      url:
+        url +
+        `/class-sent` +
+        `?idSemester=` +
+        filter.idSemester +
+        `&idActivity=` +
+        filter.idActivity +
+        `&idLevel=` +
+        filter.idLevel +
+        `&idClass=` +
+        filter.idClass +
+        `&countStudent=` +
+        filter.countStudent +
+        `&page=` +
+        filter.page +
+        `&size=` +
+        filter.size,
+    });
+  }
   static detailMyClass(idClass) {
     return request({
       method: "GET",

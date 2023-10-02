@@ -1,0 +1,7 @@
+.modal_show_detail_project_student_feedback .overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal_show_detail_project_student_feedback .ant-modal-close-x {
+  display: none;
+}

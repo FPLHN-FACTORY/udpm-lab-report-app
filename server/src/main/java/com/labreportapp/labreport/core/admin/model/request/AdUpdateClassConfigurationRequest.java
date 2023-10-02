@@ -6,5 +6,4 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AdUpdateClassConfigurationRequest extends AdBaseClassConfigurationRequest{
-    private String id;
 }

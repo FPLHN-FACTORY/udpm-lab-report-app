@@ -23,4 +23,12 @@ public class AdFindClassRequest extends PageableRequest {
 
     private String levelId;
 
+    private String classSize;
+
+    private String statusClass;
+
+    private String statusTeacherEdit;
+
+    private Integer valueClassSize;
+
 }

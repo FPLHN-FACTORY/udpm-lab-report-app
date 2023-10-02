@@ -1,5 +1,5 @@
 import "./style-post-detail-class.css";
-import { Button, Card, Dropdown, Menu, Modal, Row } from "antd";
+import { Button, Card, Empty } from "antd";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useParams } from "react-router";
@@ -8,15 +8,11 @@ import { StudentPostAPI } from "../../../../api/student/StPostAPI";
 import LoadingIndicator from "../../../../helper/loading";
 import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
 import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsisVertical, faHome } from "@fortawesome/free-solid-svg-icons";
 import {
   GetPost,
   NextPagePost,
   SetPost,
 } from "../../../../app/student/StPost.reduce";
-import { toast } from "react-toastify";
-import JoditEditor from "jodit-react";
 import ViewEditorJodit from "../../../../helper/editor/ViewEditorJodit";
 import { ControlOutlined } from "@ant-design/icons";
 import { giangVienCurrent } from "../../../../helper/inForUser";
@@ -96,11 +92,14 @@ const StPostDetailClass = () => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-  const convertLongToDate = (longValue) => {
-    const date = new Date(longValue);
-    const format = `${date.getDate()}/${
-      date.getMonth() + 1
-    }/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()} `;
+  const convertLongToDate = (dateLong) => {
+    const date = new Date(dateLong);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    const hour = String(date.getHours() + 1).padStart(2, "0");
+    const minute = String(date.getMinutes() + 1).padStart(2, "0");
+    const format = `${day}/${month}/${year}` + ` ${hour}:${minute}`;
     return format;
   };
   const handleSeeMore = () => {
@@ -212,6 +211,7 @@ const StPostDetailClass = () => {
                   style={{
                     height: "auto",
                     margin: "20px 0 20px 0",
+                    width: "100%",
                   }}
                 >
                   {data.length > 0 ? (
@@ -258,25 +258,10 @@ const StPostDetailClass = () => {
                       );
                     })
                   ) : (
-                    <div
-                      style={{
-                        width: "100%",
-                        textAlign: "center",
-                        display: "flex",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <p
-                        style={{
-                          textAlign: "center",
-                          marginTop: "100px",
-                          fontSize: "15px",
-                          color: "red",
-                        }}
-                      >
-                        Chưa có bài đăng nào !
-                      </p>
-                    </div>
+                    <Empty
+                      imageStyle={{ height: 60 }}
+                      description={<span>Chưa có bài viết nào được đăng</span>}
+                    />
                   )}
                   {seeMore && totalPage > 1 && (
                     <Button

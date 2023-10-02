@@ -5,6 +5,8 @@ import {
   faPlus,
   faTrash,
   faPencil,
+  faFilterCircleDollar,
+  faChainSlash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Input, Pagination, Table, Tooltip, Popconfirm } from "antd";
@@ -79,7 +81,11 @@ const LevelManagement = () => {
               onClick={() => {
                 buttonUpdate(record);
               }}
-              style={{ marginRight: "15px", cursor: "pointer" }}
+              style={{
+                marginRight: "15px",
+                cursor: "pointer",
+                color: "rgb(38, 144, 214)",
+              }}
               icon={faPencil}
               size="1x"
             />
@@ -95,7 +101,11 @@ const LevelManagement = () => {
           >
             <Tooltip title="Xóa">
               <FontAwesomeIcon
-                style={{ cursor: "pointer", marginLeft: "10px" }}
+                style={{
+                  cursor: "pointer",
+                  marginLeft: "10px",
+                  color: "rgb(38, 144, 214)",
+                }}
                 icon={faTrash}
                 size="1x"
               />
@@ -152,14 +162,12 @@ const LevelManagement = () => {
   };
 
   return (
-    <div className="box-general">
+    <div className="box-general" style={{ paddingTop: 50 }}>
       {loading && <LoadingIndicator />}
-
-      <div className="heading-box" style={{ marginTop: "0" }}>
-        <span style={{ fontSize: "20px", fontWeight: "500" }}>
-          <FontAwesomeIcon icon={faLevelUp} style={{ marginRight: "8px" }} />{" "}
-          Quản lý level
-        </span>
+      <div className="title_activity_management" style={{ marginTop: 0 }}>
+        {" "}
+        <FontAwesomeIcon icon={faLevelUp} style={{ fontSize: "20px" }} />
+        <span style={{ marginLeft: "10px" }}>Quản lý level</span>
       </div>
       <div className="filter-level" style={{ marginBottom: "10px" }}>
         <FontAwesomeIcon icon={faFilter} style={{ fontSize: "20px" }} />{" "}
@@ -177,11 +185,11 @@ const LevelManagement = () => {
           />
         </div>
         <div className="box_btn_filter">
-          <Button
-            className="btn_filter"
-            onClick={buttonSearch}
-            style={{ marginRight: "20px" }}
-          >
+          <Button className="btn_filter" onClick={buttonSearch}>
+            <FontAwesomeIcon
+              icon={faFilterCircleDollar}
+              style={{ marginRight: 5 }}
+            />
             Tìm kiếm
           </Button>
           <Button
@@ -189,6 +197,7 @@ const LevelManagement = () => {
             onClick={clearData}
             style={{ backgroundColor: "rgb(50, 144, 202)" }}
           >
+            <FontAwesomeIcon icon={faChainSlash} style={{ marginRight: 5 }} />
             Làm mới bộ lọc
           </Button>
         </div>
@@ -225,9 +234,10 @@ const LevelManagement = () => {
                 size="1x"
                 style={{
                   backgroundColor: "rgb(55, 137, 220)",
+                  marginRight: "5px",
                 }}
               />{" "}
-              Thêm Level
+              Thêm level
             </Button>
           </div>
         </div>

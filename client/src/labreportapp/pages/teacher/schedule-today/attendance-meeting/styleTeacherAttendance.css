@@ -30,3 +30,9 @@
   transition: box-shadow 0.3s, background-color 0.3s;
   cursor: pointer;
 }
+.custom-toast-short {
+  font-size: 17px;
+}
+.custom-toast-long {
+  font-size: 13px;
+}

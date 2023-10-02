@@ -35,4 +35,7 @@ public interface AdClassResponse extends IsIdentified {
 
     @Value("#{target.nameLevel}")
     String getNameLevel();
+
+    @Value("#{target.status_teacher_edit}")
+    Integer getStatusTeacherEdit();
 }

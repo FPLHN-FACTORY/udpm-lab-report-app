@@ -4,9 +4,8 @@ import com.labreportapp.labreport.core.common.base.ResponseObject;
 import com.labreportapp.labreport.core.teacher.excel.TeExcelImportService;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindListPointRequest;
 import com.labreportapp.labreport.core.teacher.model.response.TeExcelResponseMessage;
-import com.labreportapp.labreport.core.teacher.model.response.TePointRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TePointStudentInforRespone;
 import com.labreportapp.labreport.core.teacher.service.TePointSevice;
-import com.labreportapp.labreport.entity.Point;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -43,13 +42,13 @@ public class TePointController {
 
     @GetMapping("/get/{idClass}")
     public ResponseObject getPointByIdClass(@PathVariable("idClass") String idClass) {
-        List<TePointRespone> list = tePointSevice.getPointStudentById(idClass);
+        List<TePointStudentInforRespone> list = tePointSevice.getPointStudentByIdClass(idClass);
         return new ResponseObject(list);
     }
 
     @PostMapping("")
     public ResponseObject createOrUpdate(@RequestBody TeFindListPointRequest request) {
-        List<Point> list = tePointSevice.addOrUpdatePoint(request);
+        List<TePointStudentInforRespone> list = tePointSevice.addOrUpdatePoint(request);
         return new ResponseObject(list);
     }
 

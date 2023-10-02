@@ -8,6 +8,8 @@ import {
   faPlus,
   faTrash,
   faAddressCard,
+  faFilterCircleDollar,
+  faChainSlash,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   Button,
@@ -16,6 +18,7 @@ import {
   Popconfirm,
   Select,
   Table,
+  Tag,
   Tooltip,
 } from "antd";
 import { useAppDispatch, useAppSelector } from "../../../app/hook";
@@ -220,16 +223,28 @@ const ActivityManagement = () => {
       sorter: (a, b) => a.level - b.level,
     },
     {
-      title: "Học kỳ",
-      dataIndex: "nameSemester",
-      key: "nameSemester",
-      sorter: (a, b) => a.nameSemester.localeCompare(b.nameSemester),
-    },
-    {
       title: "Mô tả",
       dataIndex: "descriptions",
       key: "descriptions",
       sorter: (a, b) => a.descriptions.localeCompare(b.descriptions),
+    },
+    {
+      title: "Tạo trello",
+      dataIndex: "allowUseTrello",
+      key: "allowUseTrello",
+      render: (text, record) => {
+        if (record.allowUseTrello === 0) {
+          return <Tag color="success">Cho phép</Tag>;
+        } else {
+          return <Tag color="error">Không cho phép</Tag>;
+        }
+      },
+    },
+    {
+      title: "Học kỳ",
+      dataIndex: "nameSemester",
+      key: "nameSemester",
+      sorter: (a, b) => a.nameSemester.localeCompare(b.nameSemester),
     },
     {
       title: "Hành động",
@@ -241,7 +256,7 @@ const ActivityManagement = () => {
             <Tooltip title="Chỉnh sửa chi tiết">
               <FontAwesomeIcon
                 icon={faEdit}
-                style={{ marginRight: "9px" }}
+                style={{ marginRight: "9px", color: "rgb(38, 144, 214)" }}
                 size="1x"
                 onClick={() => {
                   handleUpdateActivity(record);
@@ -260,7 +275,11 @@ const ActivityManagement = () => {
             cancelText="Không"
           >
             <Tooltip title="Xóa">
-              <FontAwesomeIcon color="#1677ff" icon={faTrash} size="1x" />
+              <FontAwesomeIcon
+                style={{ color: "rgb(38, 144, 214)" }}
+                icon={faTrash}
+                size="1x"
+              />
             </Tooltip>
           </Popconfirm>
         </div>
@@ -272,7 +291,7 @@ const ActivityManagement = () => {
       {loading && <LoadingIndicator />}
       <div className="title_activity_management">
         {" "}
-        <FontAwesomeIcon icon={faTags} style={{ fontSize: "25px" }} />
+        <FontAwesomeIcon icon={faTags} style={{ fontSize: "20px" }} />
         <span style={{ marginLeft: "10px" }}>Quản lý hoạt động</span>
       </div>
       <div className="filter_my_class">
@@ -331,6 +350,11 @@ const ActivityManagement = () => {
         </div>
         <div className="box_btn_filter">
           <Button className="btn_filter" onClick={handleSearch}>
+            {" "}
+            <FontAwesomeIcon
+              icon={faFilterCircleDollar}
+              style={{ marginRight: 5 }}
+            />
             Tìm kiếm
           </Button>
           <Button
@@ -338,6 +362,10 @@ const ActivityManagement = () => {
             style={{ backgroundColor: "rgb(38, 144, 214)", color: "white" }}
             onClick={handleClear}
           >
+            <FontAwesomeIcon
+              icon={faChainSlash}
+              style={{ marginRight: 5 }}
+            />
             Làm mới bộ lọc
           </Button>
         </div>
@@ -370,13 +398,14 @@ const ActivityManagement = () => {
                 size="1x"
                 style={{
                   backgroundColor: "rgb(55, 137, 220)",
+                  marginRight: "5px",
                 }}
               />{" "}
               Thêm hoạt động
             </Button>
           </div>
         </div>
-        <div style={{ marginTop: "10px" }}>
+        <div style={{ marginTop: "15px" }}>
           <Table
             className="table_content"
             pagination={false}

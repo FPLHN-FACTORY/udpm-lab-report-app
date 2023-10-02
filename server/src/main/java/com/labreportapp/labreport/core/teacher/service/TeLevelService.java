@@ -1,6 +1,6 @@
 package com.labreportapp.labreport.core.teacher.service;
 
-import com.labreportapp.labreport.core.teacher.model.response.TeLevelRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TeLevelResponse;
 
 import java.util.List;
 
@@ -9,6 +9,6 @@ import java.util.List;
  */
 public interface TeLevelService {
 
-    List<TeLevelRespone> getAllLevel();
+    List<TeLevelResponse> getAllLevel();
 
 }

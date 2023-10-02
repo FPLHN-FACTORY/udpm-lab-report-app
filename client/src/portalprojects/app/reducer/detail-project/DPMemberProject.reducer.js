@@ -13,7 +13,7 @@ const MemberProjectSlice = createSlice({
     UpdateMemberProject: (state, action) => {
       let data = action.payload;
       state.forEach((item) => {
-        if (item.id === data.memberId) {
+        if (item.memberId === data.memberId) {
           item.statusWork = data.statusWork === "DANG_LAM" ? 0 + "" : 1 + "";
           item.role =
             data.role === "MANAGER"

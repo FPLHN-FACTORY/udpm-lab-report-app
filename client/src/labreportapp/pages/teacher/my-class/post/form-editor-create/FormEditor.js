@@ -62,8 +62,8 @@ function Editor({ idTeacher, idClass, showCreate }) {
           showCreate(false);
           dispatch(CreatePost(respone.data.data));
           featchStudentClass(idClass);
-          featchSentMaillToStudent(obj.descriptions);
           toast.success("Thêm bài viết thành công !");
+          featchSentMaillToStudent(obj.descriptions);
         },
         (error) => {
           toast.error(error.response.data.message);
@@ -75,12 +75,14 @@ function Editor({ idTeacher, idClass, showCreate }) {
     try {
       await TeacherStudentClassesAPI.getStudentInClasses(idClass).then(
         (responese) => {
-          const emailList = responese.data.data.map((item) => item.email);
-          setListMail(emailList);
+          if (responese.data.data != null) {
+            const emailList = responese.data.data.map((item) => item.email);
+            setListMail(emailList);
+          }
         }
       );
     } catch (error) {
-      alert(error.message);
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
   const featchSentMaillToStudent = async (body) => {
@@ -92,14 +94,9 @@ function Editor({ idTeacher, idClass, showCreate }) {
         toEmail: listMail,
         body: body,
       };
-      await TeacherMailAPI.sentMaillTeacherPostToStudent(data).then(
-        (response) => {
-          console.log("Gui mail chua thanh cong");
-          console.log(response);
-        }
-      );
+      await TeacherMailAPI.sentMaillTeacherPostToStudent(data);
     } catch (error) {
-      alert(error.message);
+      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
   return (

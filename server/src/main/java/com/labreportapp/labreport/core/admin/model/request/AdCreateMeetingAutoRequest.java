@@ -28,4 +28,7 @@ public class AdCreateMeetingAutoRequest {
 
     @NotNull
     private Integer numberMeeting;
+
+    @NotNull
+    private Integer numberDay;
 }

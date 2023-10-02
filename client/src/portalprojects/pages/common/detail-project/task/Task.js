@@ -69,7 +69,6 @@ const Task = ({ task, index, onClick }) => {
       JSON.stringify(obj)
     );
   };
-  console.log("task render");
   return (
     <Draggable draggableId={task.id} index={index} key={index}>
       {(provided) => (

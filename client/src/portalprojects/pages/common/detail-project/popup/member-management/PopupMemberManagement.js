@@ -338,7 +338,7 @@ const PopupMemberManagement = ({ position, onClose }) => {
 
   const handleRoleChange = (item, value) => {
     let obj = {
-      idMember: item.id,
+      idMember: item.memberId,
       idProject: detailProject.id,
       statusWork: parseInt(item.statusWork),
       role: parseInt(value),
@@ -355,7 +355,7 @@ const PopupMemberManagement = ({ position, onClose }) => {
 
   const handleStatusChange = (item, value) => {
     let obj = {
-      idMember: item.id,
+      idMember: item.memberId,
       idProject: detailProject.id,
       statusWork: parseInt(value),
       role: parseInt(item.role),

@@ -4,7 +4,7 @@ import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.core.teacher.model.request.TeCreatePostRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindPostClassRepquest;
 import com.labreportapp.labreport.core.teacher.model.request.TeUpdatePostRequest;
-import com.labreportapp.labreport.core.teacher.model.response.TePostRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TePostResponse;
 import com.labreportapp.labreport.core.teacher.repository.TePostRepository;
 import com.labreportapp.labreport.core.teacher.service.TePostService;
 import com.labreportapp.labreport.entity.Post;
@@ -29,9 +29,9 @@ public class TePostServiceImpl implements TePostService {
     private TePostRepository tePostRepository;
 
     @Override
-    public PageableObject<TePostRespone> searchPagePost(TeFindPostClassRepquest repquest) {
+    public PageableObject<TePostResponse> searchPagePost(TeFindPostClassRepquest repquest) {
         Pageable pageable = PageRequest.of(repquest.getPage() - 1, repquest.getSize());
-        Page<TePostRespone> list = tePostRepository.searchPostByIdTeacherIdClass(repquest, pageable);
+        Page<TePostResponse> list = tePostRepository.searchPostByIdTeacherIdClass(repquest, pageable);
         return new PageableObject<>(list);
     }
 

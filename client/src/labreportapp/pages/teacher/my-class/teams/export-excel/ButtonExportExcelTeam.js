@@ -15,7 +15,6 @@ const ButtonExportExcelTeam = ({ idClass }) => {
     }-${date.getDay()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
     return format;
   };
-
   const handleExport = async () => {
     try {
       const response = await TeacherExcelTeamAPI.export(idClass);
@@ -27,7 +26,6 @@ const ButtonExportExcelTeam = ({ idClass }) => {
       link.href = url;
       link.download =
         "DanhSachNhom_" + convertLongToDate(new Date().getTime()) + ".xlsx";
-      console.log(link);
       link.click();
       window.URL.revokeObjectURL(url);
       setDownloading(true);

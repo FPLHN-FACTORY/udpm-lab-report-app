@@ -122,7 +122,7 @@ const InformationClass = () => {
                 "_self"
               );
               setDownloading(false);
-            }, 1000);
+            }, 2000);
           })
           .catch((error) => {
             alert("Lỗi hệ thống, vui lòng F5 lại trang !");

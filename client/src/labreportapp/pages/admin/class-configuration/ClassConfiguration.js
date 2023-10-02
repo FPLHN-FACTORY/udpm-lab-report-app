@@ -61,7 +61,7 @@ const ClassConfiguration = () => {
     },
   ];
   return (
-    <div className="box-general">
+    <div className="box-general" style={{ paddingTop: 50 }}>
       {" "}
       {isLoading && <LoadingIndicator />}
       <div className="heading-box">

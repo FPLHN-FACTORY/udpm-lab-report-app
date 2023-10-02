@@ -75,7 +75,18 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
         >
           <Link to="/admin/activity-management">Quản lý hoạt động</Link>{" "}
         </Menu.Item>
-
+        <Menu.Item
+          key="8"
+          className="menu_custom"
+          icon={
+            <FontAwesomeIcon
+              icon={faLayerGroup}
+              style={{ color: "rgb(226, 179, 87)" }}
+            />
+          }
+        >
+          <Link to="/admin/class-configuration">Cấu hình lớp học</Link>
+        </Menu.Item>
         <Menu.Item
           key="3"
           className="menu_custom"
@@ -128,18 +139,6 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           }
         >
           <Link to="/admin/template-report">Template báo cáo</Link>
-        </Menu.Item>
-        <Menu.Item
-          key="8"
-          className="menu_custom"
-          icon={
-            <FontAwesomeIcon
-              icon={faLayerGroup}
-              style={{ color: "rgb(226, 179, 87)" }}
-            />
-          }
-        >
-          <Link to="/admin/class-configuration">Cấu hình lớp học</Link>
         </Menu.Item>
       </Menu>
     </Sider>

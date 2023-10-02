@@ -2,8 +2,7 @@ package com.labreportapp.labreport.core.teacher.service;
 
 import com.labreportapp.labreport.core.teacher.model.request.TeFindListPointRequest;
 import com.labreportapp.labreport.core.teacher.model.response.TeExcelResponseMessage;
-import com.labreportapp.labreport.core.teacher.model.response.TePointRespone;
-import com.labreportapp.labreport.entity.Point;
+import com.labreportapp.labreport.core.teacher.model.response.TePointStudentInforRespone;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,9 +14,9 @@ import java.util.List;
  */
 public interface TePointSevice {
 
-    List<TePointRespone> getPointStudentById(String idClass);
+    List<TePointStudentInforRespone> getPointStudentByIdClass(String idClass);
 
-    List<Point> addOrUpdatePoint(final TeFindListPointRequest request);
+    List<TePointStudentInforRespone> addOrUpdatePoint(TeFindListPointRequest request);
 
     ByteArrayOutputStream exportExcel(HttpServletResponse response, String idClass);
 

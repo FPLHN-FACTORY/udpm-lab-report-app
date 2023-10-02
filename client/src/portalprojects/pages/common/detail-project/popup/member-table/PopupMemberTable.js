@@ -73,7 +73,7 @@ const PopupMemberTable = ({ todo, position, onClose }) => {
   const clickChangeAssign = debounce((check, item) => {
     if (todo != null) {
       let obj = {
-        idMember: item.id,
+        idMember: item.memberId,
         nameMember: item.name,
         email: item.email,
         idTodoCreateOrDelete: todo.id,
@@ -164,7 +164,7 @@ const PopupMemberTable = ({ todo, position, onClose }) => {
             <div
               style={{ float: "left", position: "relative" }}
               onClick={() => {
-                clickChangeAssign(checkMemberExists(item.id), item);
+                clickChangeAssign(checkMemberExists(item.memberId), item);
               }}
               key={index}
             >
@@ -177,7 +177,7 @@ const PopupMemberTable = ({ todo, position, onClose }) => {
                   name={item.name + " " + item.userName}
                 />
               </div>
-              {checkMemberExists(item.id) && (
+              {checkMemberExists(item.memberId) && (
                 <Tooltip title={item.name + " " + item.userName}>
                   <div className="✓style">
                     <span>✓</span>

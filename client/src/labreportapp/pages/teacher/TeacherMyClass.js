@@ -1,6 +1,14 @@
 import "./styleTeacherMyClass.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faHome } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCodeCompare,
+  faEye,
+  faFilter,
+  faHome,
+  faMagnifyingGlass,
+  faMagnifyingGlassArrowRight,
+  faTableList,
+} from "@fortawesome/free-solid-svg-icons";
 import { giangVienCurrent } from "../../helper/inForUser";
 import LoadingIndicator from "../../helper/loading";
 import { QuestionCircleFilled, ProjectOutlined } from "@ant-design/icons";
@@ -171,7 +179,14 @@ const TeacherMyClass = () => {
     setLevelSearch("");
     setClear(true);
   };
-
+  const convertLongToDate = (dateLong) => {
+    const date = new Date(dateLong);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    const format = `${day}/${month}/${year}`;
+    return format;
+  };
   const data = useAppSelector(GetTeacherMyClass);
   const columns = [
     {
@@ -181,28 +196,23 @@ const TeacherMyClass = () => {
       sorter: (a, b) => a.stt - b.stt,
     },
     {
-      title: "Mã lớp",
+      title: <div style={{ textAlign: "center" }}>Mã lớp</div>,
       dataIndex: "code",
       key: "code",
       sorter: (a, b) => a.code.localeCompare(b.code),
-      align: "center",
     },
     {
-      title: "Thời gian bắt đầu",
+      title: <div style={{ textAlign: "center" }}>Thời gian bắt đầu</div>,
       dataIndex: "startTime",
       key: "startTime",
       sorter: (a, b) => a.startTime - b.startTime,
       render: (text, record) => {
-        const startTime = new Date(record.startTime);
-        const formattedStartTime = `${startTime.getDate()}/${
-          startTime.getMonth() + 1
-        }/${startTime.getFullYear()}`;
-        return <span>{formattedStartTime}</span>;
+        return <span>{convertLongToDate(text)}</span>;
       },
       align: "center",
     },
     {
-      title: "Ca học",
+      title: <div style={{ textAlign: "center" }}>Ca học</div>,
       dataIndex: "classPeriod",
       key: "classPeriod",
       render: (text) => <span>{text + 1}</span>,
@@ -210,7 +220,14 @@ const TeacherMyClass = () => {
       align: "center",
     },
     {
-      title: "Thời gian",
+      title: <div style={{ textAlign: "center" }}>Sĩ số</div>,
+      dataIndex: "classSize",
+      key: "classSize",
+      sorter: (a, b) => a.classSize - b.classSize,
+      align: "center",
+    },
+    {
+      title: <div style={{ textAlign: "center" }}>Thời gian</div>,
       dataIndex: "timePeriod",
       key: "timePeriod",
       render: (text, record) => {
@@ -219,24 +236,25 @@ const TeacherMyClass = () => {
       align: "center",
     },
     {
-      title: "Hoạt động",
+      title: <div style={{ textAlign: "center" }}>Hoạt động</div>,
       dataIndex: "activity",
       key: "activity",
       sorter: (a, b) => a.activity.localeCompare(b.activity),
     },
     {
-      title: "Level",
+      title: <div style={{ textAlign: "center" }}>Cấp độ</div>,
       dataIndex: "level",
       key: "level",
       sorter: (a, b) => a.level.localeCompare(b.level),
+      align: "center",
     },
     {
-      title: "Hành động",
+      title: <div style={{ textAlign: "center" }}>Hành động</div>,
       dataIndex: "actions",
       key: "actions",
       render: (text, record) => (
         <>
-          <div className="box_icon">
+          <div className="box_icon" style={{ textAlign: "center" }}>
             <Link
               to={`/teacher/my-class/post/${record.id}`}
               className="btn btn-success ml-4"
@@ -301,62 +319,66 @@ const TeacherMyClass = () => {
             >
               <Col span={8}>
                 <span>Học kỳ</span>
-                <QuestionCircleFilled
-                  style={{ paddingLeft: "12px", fontSize: "15px" }}
-                />
+
                 <br />
-                <Select
-                  value={idSemesterSeach}
-                  onChange={(value) => {
-                    setIdSemesterSearch(value);
-                  }}
-                  showSearch
-                  filterOption={filterOptions}
-                  style={{
-                    width: "100%",
-                    margin: "6px 0 10px 0",
-                  }}
-                >
-                  {listSemester.map((item) => {
-                    return (
-                      <Option
-                        value={item.id}
-                        key={item.id}
-                        style={{ width: "auto" }}
-                      >
-                        {item.name}
-                      </Option>
-                    );
-                  })}
-                </Select>
+                {listSemester.length > 0 ? (
+                  <Select
+                    value={idSemesterSeach}
+                    onChange={(value) => {
+                      setIdSemesterSearch(value);
+                    }}
+                    showSearch
+                    filterOption={filterOptions}
+                    style={{
+                      width: "100%",
+                      margin: "6px 0 10px 0",
+                    }}
+                  >
+                    {listSemester.map((item) => {
+                      return (
+                        <Option
+                          value={item.id}
+                          key={item.id}
+                          style={{ width: "auto" }}
+                        >
+                          {item.name}
+                        </Option>
+                      );
+                    })}
+                  </Select>
+                ) : (
+                  <p>Không có học kỳ</p>
+                )}
               </Col>
               <Col span={16}>
                 <span>Hoạt động</span>
-                <QuestionCircleFilled
-                  style={{ paddingLeft: "12px", fontSize: "15px" }}
-                />
+
                 <br />
-                <Select
-                  showSearch
-                  filterOption={filterOptions}
-                  value={idActivitiSearch}
-                  onChange={(value) => {
-                    setIdActivitiSearch(value);
-                  }}
-                  style={{
-                    width: "100%",
-                    margin: "6px 0 10px 0",
-                  }}
-                >
-                  <Option value="">Tất cả</Option>
-                  {listActivity.map((item) => {
-                    return (
-                      <Option value={item.id} key={item.id} title={item.name}>
-                        {item.name}
-                      </Option>
-                    );
-                  })}
-                </Select>
+                {listActivity.length > 0 ? (
+                  <Select
+                    showSearch
+                    filterOption={filterOptions}
+                    value={idActivitiSearch}
+                    onChange={(value) => {
+                      setIdActivitiSearch(value);
+                    }}
+                    style={{
+                      width: "100%",
+                      margin: "6px 0 10px 0",
+                    }}
+                  >
+                    <Option value="">Tất cả</Option>
+                    {listActivity.map((item) => {
+                      return (
+                        <Option value={item.id} key={item.id} title={item.name}>
+                          {item.name}
+                        </Option>
+                      );
+                    })}
+                  </Select>
+                ) : (
+                  <p>Không có hoạt động</p>
+                )}
               </Col>
             </Row>
             <Row
@@ -365,9 +387,7 @@ const TeacherMyClass = () => {
             >
               <Col span={8}>
                 <span>Mã lớp</span>
-                <QuestionCircleFilled
-                  style={{ paddingLeft: "12px", fontSize: "15px" }}
-                />
+
                 <br />
                 <Input
                   style={{ width: "100%", marginTop: "6px" }}
@@ -381,9 +401,7 @@ const TeacherMyClass = () => {
               </Col>
               <Col span={8}>
                 <span>Ca học</span>
-                <QuestionCircleFilled
-                  style={{ paddingLeft: "12px", fontSize: "15px" }}
-                />
+
                 <br />
                 <Select
                   showSearch
@@ -406,36 +424,46 @@ const TeacherMyClass = () => {
               </Col>
               <Col span={8}>
                 <span>Level</span>
-                <QuestionCircleFilled
-                  style={{ paddingLeft: "12px", fontSize: "15px" }}
-                />
+
                 <br />
-                <Select
-                  showSearch
-                  filterOption={filterOptions}
-                  value={levelSearch}
-                  onChange={(value) => {
-                    setLevelSearch(value);
-                  }}
-                  style={{ width: "100%", marginTop: "6px" }}
-                >
-                  <Option value="">Tất cả</Option>
-                  {listLevel.map((item) => {
-                    return (
-                      <Option value={item.id} key={item.id} title={item.name}>
-                        {item.name}
-                      </Option>
-                    );
-                  })}
-                </Select>
+                {listLevel.length > 0 ? (
+                  <Select
+                    showSearch
+                    filterOption={filterOptions}
+                    value={levelSearch}
+                    onChange={(value) => {
+                      setLevelSearch(value);
+                    }}
+                    style={{ width: "100%", marginTop: "6px" }}
+                  >
+                    <Option value="">Tất cả</Option>
+                    {listLevel.map((item) => {
+                      return (
+                        <Option value={item.id} key={item.id} title={item.name}>
+                          {item.name}
+                        </Option>
+                      );
+                    })}
+                  </Select>
+                ) : (
+                  <p>Không có cấp độ</p>
+                )}
               </Col>
             </Row>
             <div className="box_btn_filter">
               <Button className="btn_filter" onClick={handleSearch}>
-                Tìm kiếm
+                <FontAwesomeIcon
+                  icon={faFilter}
+                  style={{ paddingRight: "5px" }}
+                />{" "}
+                <span>Tìm kiếm</span>
               </Button>
               <Button className="button-clear-teacher" onClick={handleClear}>
-                Làm mới
+                <FontAwesomeIcon
+                  icon={faCodeCompare}
+                  style={{ paddingRight: "5px" }}
+                />{" "}
+                <span>Làm mới bộ lọc</span>
               </Button>
             </div>
           </div>
@@ -446,8 +474,12 @@ const TeacherMyClass = () => {
           <div className="title-table">
             <div>
               <span style={{ fontSize: "17px", fontWeight: "500" }}>
-                <ProjectOutlined
-                  style={{ marginRight: "10px", fontSize: "24px" }}
+                <FontAwesomeIcon
+                  icon={faTableList}
+                  style={{
+                    marginRight: "10px",
+                    fontSize: "20px",
+                  }}
                 />
                 Danh sách lớp học
               </span>

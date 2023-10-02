@@ -25,4 +25,7 @@ public interface AdSemesterResponse extends IsIdentified {
 
     @Value("#{target.end_time}")
     Long getEndTime();
+
+    @Value("#{target.status_feed_back}")
+    Integer getStatusFeedback();
 }

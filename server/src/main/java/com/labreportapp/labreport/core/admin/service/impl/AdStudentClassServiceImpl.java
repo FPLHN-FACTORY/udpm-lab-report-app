@@ -16,6 +16,7 @@ import com.labreportapp.labreport.core.student.repository.StClassConfigurationRe
 import com.labreportapp.labreport.core.student.repository.StClassRepository;
 import com.labreportapp.labreport.entity.StudentClasses;
 import com.labreportapp.labreport.infrastructure.apiconstant.ActorConstants;
+import com.labreportapp.labreport.infrastructure.constant.StatusStudentFeedBack;
 import com.labreportapp.labreport.infrastructure.constant.StatusTeam;
 import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
 import jakarta.servlet.http.HttpServletResponse;
@@ -102,13 +103,15 @@ public class AdStudentClassServiceImpl implements AdStudentClassService {
 
     for (AdStudentClassesRespone st : studentsInClass) {
       simpleResponse.forEach((s -> {
-        AdExportExcelStudentsClassCustomResponse export = new AdExportExcelStudentsClassCustomResponse();
-        export.setStatusStudent(st.getStatusStudent());
-        export.setNameTeam(st.getNameTeam());
-        export.setEmail(st.getEmailStudentClass());
-        export.setName(st.getIdStudent().equals(s.getId()) ? s.getName() : "");
-        export.setUsername(st.getIdStudent().equals(s.getId()) ? s.getUserName() : "");
-        studentsInClassResponse.add(export);
+        if (st.getIdStudent().equals(s.getId())) {
+          AdExportExcelStudentsClassCustomResponse export = new AdExportExcelStudentsClassCustomResponse();
+          export.setStatusStudent(st.getStatusStudent());
+          export.setNameTeam(st.getNameTeam());
+          export.setEmail(st.getEmailStudentClass());
+          export.setName(st.getIdStudent().equals(s.getId()) ? s.getName() : "");
+          export.setUsername(st.getIdStudent().equals(s.getId()) ? s.getUserName() : "");
+          studentsInClassResponse.add(export);
+        }
       }));
     }
 
@@ -119,7 +122,8 @@ public class AdStudentClassServiceImpl implements AdStudentClassService {
   @Synchronized
   public AdImportExcelStudentClasses importExcelStudentsInClass(MultipartFile multipartFile, String idClass) {
     AdImportExcelStudentClasses response = new AdImportExcelStudentClasses();
-    ConcurrentHashMap<String, StudentClasses> mapStudents = new ConcurrentHashMap<>();
+    ConcurrentHashMap<String, StudentClasses> mapStudentsSheet = new ConcurrentHashMap<>();
+    ConcurrentHashMap<String, Boolean> mapStudentCurrent = this.studentClassesCurrent(idClass);
     StClassRequest stClassRequest = new StClassRequest();
     stClassRequest.setIdClass(idClass);
     Optional<StClassResponse> conditionClass = stClassRepository.checkConditionCouldJoinOrLeaveClass(stClassRequest);
@@ -189,18 +193,24 @@ public class AdStudentClassServiceImpl implements AdStudentClassService {
           return;
         }
 
+        if (mapStudentCurrent.putIfAbsent(imp.getEmail(), true) != null) {
+          response.setStatus(false);
+          response.setMessage("Sinh viên đã tồn tại trong lớp!");
+          return;
+        }
+
         StudentClasses st = new StudentClasses();
         st.setClassId(idClass);
         st.setStudentId(getSimple.getId());
         st.setEmail(getSimple.getEmail());
         st.setStatus(StatusTeam.INACTIVE);
+        st.setStatusStudentFeedBack(StatusStudentFeedBack.CHUA_FEEDBACK);
         st.setCreatedDate(new Date().getTime());
-        mapStudents.put(getSimple.getEmail(), st);
+        mapStudentsSheet.put(getSimple.getEmail(), st);
 
       });
       if (response.getStatus()) {
-        List<StudentClasses> students = new ArrayList<>(mapStudents.values());
-        adStudentClassRepository.deleteAll();
+        List<StudentClasses> students = new ArrayList<>(mapStudentsSheet.values());
         adStudentClassRepository.saveAll(students);
       }
 
@@ -211,5 +221,19 @@ public class AdStudentClassServiceImpl implements AdStudentClassService {
       return response;
     }
     return response;
+  }
+
+  private ConcurrentHashMap<String, Boolean> studentClassesCurrent(String idClass) {
+    List<AdStudentClassesRespone> studentsInClass = adStudentClassRepository
+            .findStudentClassByIdClass(idClass);
+    ConcurrentHashMap<String, Boolean> mapStudentClassCurrent = new ConcurrentHashMap<>();
+
+    if (!studentsInClass.isEmpty()) {
+      studentsInClass.forEach((s -> {
+        mapStudentClassCurrent.put(s.getEmailStudentClass(), true);
+      }));
+    }
+
+    return mapStudentClassCurrent;
   }
 }

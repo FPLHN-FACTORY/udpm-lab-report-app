@@ -249,7 +249,6 @@ const DetailMeetingAttendance = () => {
                 <div
                   style={{
                     lineHeight: "42px",
-                    color: "grey",
                     float: "right",
                     color: "red",
                   }}
@@ -416,22 +415,25 @@ const DetailMeetingAttendance = () => {
             </div>
           </div>
         </div>
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <Popconfirm
-            title="Lưu điểm danh"
-            description="Bạn có chắc chắn muốn lưu điểm danh cho buổi học này không?"
-            onConfirm={() => {
-              saveAttendance();
-            }}
-            okText="Yes"
-            cancelText="No"
-          >
-            <Button className="btn_save_attendance_detail_meeting">
-              <FontAwesomeIcon icon={faSave} style={{ marginRight: "5px" }} />
-              Lưu điểm danh
-            </Button>
-          </Popconfirm>
-        </div>
+
+        {listAttendance != null && listAttendance.length > 0 && (
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <Popconfirm
+              title="Lưu điểm danh"
+              description="Bạn có chắc chắn muốn lưu điểm danh cho buổi học này không?"
+              onConfirm={() => {
+                saveAttendance();
+              }}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button className="btn_save_attendance_detail_meeting">
+                <FontAwesomeIcon icon={faSave} style={{ marginRight: "5px" }} />
+                Lưu điểm danh
+              </Button>
+            </Popconfirm>
+          </div>
+        )}
       </div>
     </>
   );

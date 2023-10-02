@@ -10,10 +10,12 @@ import com.labreportapp.labreport.core.admin.model.response.AdClassResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdDetailClassRespone;
 import com.labreportapp.labreport.core.admin.model.response.AdListClassCustomResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdSemesterAcResponse;
+import com.labreportapp.labreport.core.common.base.ImportExcelResponse;
 import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.core.common.base.SimpleEntityProjection;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayOutputStream;
 import java.util.List;
@@ -46,5 +48,7 @@ public interface AdClassService {
     AdDetailClassRespone adFindClassById(final String id);
 
     Boolean randomClass(@Valid AdRandomClassRequest request);
+
+    ImportExcelResponse importExcelClass(MultipartFile multipartFile, String idSemester);
 
 }

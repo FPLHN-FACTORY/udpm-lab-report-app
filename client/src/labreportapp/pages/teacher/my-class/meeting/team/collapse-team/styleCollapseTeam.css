@@ -5,12 +5,11 @@
 }
 .teacher-collapse .ant-collapse-header:hover {
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(115, 115, 114, 0.3);
+  box-shadow: 0 0 10px rgba(11, 99, 251, 0.3);
   transition: box-shadow 0.3s, background-color 0.3s;
   background-color: rgb(238, 245, 249);
   cursor: pointer;
 }
-
 .teacher-collapse .ant-collapse-header {
   border: none;
   width: 1000px;
@@ -38,7 +37,7 @@
   margin-left: 20px;
 }
 .teacher-collapse .title-right {
-  float: right;
+  float: left;
   width: 25%;
   font-size: 13px;
   color: grey;
@@ -56,4 +55,17 @@
   color: black;
   font-size: 17px;
   float: left;
+}
+
+.teacher-collapse .panel-collap {
+  border-bottom: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+@media (max-width: 100px) {
+  .teacher-collapse .panel-collap {
+    width: auto;
+    border-radius: 0;
+    box-shadow: none;
+  }
 }

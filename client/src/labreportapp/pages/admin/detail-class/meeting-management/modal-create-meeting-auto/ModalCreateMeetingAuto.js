@@ -27,6 +27,8 @@ const ModalCreateMeetingAuto = ({ visible, onCancel, fetchData }) => {
   const [errorTeacher, setErrorTeacher] = useState("");
   const [numberMeeting, setNumberMeeting] = useState("1");
   const [errorNumberMeeting, setErrorNumberMeeting] = useState("");
+  const [numberDay, setNumberDay] = useState("1");
+  const [errorNumberDay, setErrorNumberDay] = useState("");
 
   const handleSelectPersonChange = (e) => {
     setSelectedItemsPerson(e);
@@ -46,6 +48,8 @@ const ModalCreateMeetingAuto = ({ visible, onCancel, fetchData }) => {
     setSelectedItemsPerson("");
     setNumberMeeting("1");
     setErrorNumberMeeting("");
+    setNumberDay("1");
+    setErrorNumberDay("");
   }, [visible]);
 
   const createMeetingAuto = () => {
@@ -79,13 +83,31 @@ const ModalCreateMeetingAuto = ({ visible, onCancel, fetchData }) => {
       ++check;
     } else {
       setErrorNumberMeeting("");
+      if (parseInt(numberMeeting) < 0) {
+        setErrorNumberMeeting("Số buổi học không được nhỏ hơn 0");
+        ++check;
+      } else {
+        setErrorNumberMeeting("");
+      }
     }
-    if (parseInt(numberMeeting) < 0) {
-      setErrorNumberMeeting("Số buổi học không được nhỏ hơn 0");
+
+    if (numberDay === "") {
+      setErrorNumberDay(
+        "Số ngày cách nhau giữa 2 buổi gần nhất không được để trống"
+      );
       ++check;
     } else {
-      setErrorNumberMeeting("");
+      setErrorNumberDay("");
+      if (parseInt(numberDay) < 0) {
+        setErrorNumberDay(
+          "Số ngày cách nhau giữa 2 buổi gần nhất không được nhỏ hơn 0"
+        );
+        ++check;
+      } else {
+        setErrorNumberDay("");
+      }
     }
+
     if (check === 0) {
       let obj = {
         meetingDate: moment(meetingDate, "YYYY-MM-DD").valueOf(),
@@ -94,6 +116,7 @@ const ModalCreateMeetingAuto = ({ visible, onCancel, fetchData }) => {
         classId: id,
         teacherId: selectedItemsPerson,
         numberMeeting: parseInt(numberMeeting),
+        numberDay: parseInt(numberDay),
       };
       MeetingManagementAPI.createMeetingAuto(obj).then((response) => {
         fetchData();
@@ -184,14 +207,14 @@ const ModalCreateMeetingAuto = ({ visible, onCancel, fetchData }) => {
 
                 {teacherDataAll.map((teacher) => (
                   <Option key={teacher.id} value={teacher.id}>
-                    {teacher.userName}
+                    {teacher.userName + " - " + teacher.name}
                   </Option>
                 ))}
               </Select>{" "}
               <span style={{ color: "red" }}>{errorTeacher}</span>
             </Col>
-            <Col span={24} style={{ padding: "5px" }}>
-              Số buổi cần tạo: <br />
+            <Col span={12} style={{ padding: "5px" }}>
+              <span style={{ color: "red" }}>(*) </span> Số buổi cần tạo: <br />
               <Input
                 type="number"
                 min={0}
@@ -204,13 +227,28 @@ const ModalCreateMeetingAuto = ({ visible, onCancel, fetchData }) => {
               />
               <span style={{ color: "red" }}>{errorNumberMeeting}</span>
             </Col>
+            <Col span={12} style={{ padding: "5px" }}>
+              <span style={{ color: "red" }}>(*) </span>Số ngày cách nhau giữa 2
+              buổi gần nhất: <br />
+              <Input
+                type="number"
+                min={0}
+                step={1}
+                max={50}
+                value={numberDay}
+                onChange={(e) => {
+                  setNumberDay(e.target.value);
+                }}
+              />
+              <span style={{ color: "red" }}>{errorNumberDay}</span>
+            </Col>
           </Row>
           <Row style={{ marginTop: "7px" }}>
             <span style={{ color: "red", fontSize: "14px" }}>
               (*) Lưu ý: Các buổi học tiếp theo khi tạo bằng chức năng này sẽ
-              được tính là thời gian của buổi trước đó cộng với 7 ngày và ca
-              học, giảng viên, hình thức tất cả các buổi học được tạo sẽ giống
-              nhau.
+              được tính là thời gian của buổi trước đó cộng với (Số ngày cách
+              nhau giữa 2 buổi gần nhất) ngày và ca học, giảng viên, hình thức
+              tất cả các buổi học được tạo sẽ giống nhau.
             </span>
           </Row>
         </div>

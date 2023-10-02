@@ -3,13 +3,21 @@ package com.labreportapp.labreport.core.teacher.service.impl;
 import com.labreportapp.labreport.core.common.response.SimpleResponse;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindStudentApiRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindStudentClasses;
-import com.labreportapp.labreport.core.teacher.model.response.TePointImportRespone;
+import com.labreportapp.labreport.core.teacher.model.request.TeSentStudentClassRequest;
+import com.labreportapp.labreport.core.teacher.model.response.TePointImportResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeStudentCallApiResponse;
-import com.labreportapp.labreport.core.teacher.model.response.TeStudentClassesRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TeStudentClassesResponse;
+import com.labreportapp.labreport.core.teacher.model.response.TeStudentStatusApiResponse;
+import com.labreportapp.labreport.core.teacher.repository.TeClassRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeStudentClassesRepository;
 import com.labreportapp.labreport.core.teacher.service.TeStudentClassesService;
+import com.labreportapp.labreport.entity.Class;
+import com.labreportapp.labreport.entity.StudentClasses;
 import com.labreportapp.labreport.infrastructure.apiconstant.ApiConstants;
+import com.labreportapp.labreport.infrastructure.constant.StatusTeam;
 import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
+import com.labreportapp.portalprojects.infrastructure.constant.Message;
+import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -19,6 +27,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -31,6 +40,9 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
     private TeStudentClassesRepository teStudentClassesRepository;
 
     @Autowired
+    private TeClassRepository teClassRepository;
+
+    @Autowired
     private RestTemplate restTemplate;
 
     @Autowired
@@ -38,14 +50,20 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
 
     @Override
     public List<TeStudentCallApiResponse> searchApiStudentClassesByIdClass(String idClass) {
-        List<TeStudentClassesRespone> listRepository = teStudentClassesRepository
+        List<TeStudentClassesResponse> listRepository = teStudentClassesRepository
                 .findStudentClassByIdClass(idClass);
+        if (listRepository.size() == 0) {
+            return null;
+        }
         List<String> idStudentList = listRepository.stream()
-                .map(TeStudentClassesRespone::getIdStudent)
+                .map(TeStudentClassesResponse::getIdStudent)
                 .distinct()
                 .collect(Collectors.toList());
         List<SimpleResponse> listRespone = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idStudentList);
         List<TeStudentCallApiResponse> listReturn = new ArrayList<>();
+        if (listRepository.size() == 0 && listRespone.size() == 0) {
+            return null;
+        }
         listRepository.forEach(reposi -> {
             listRespone.forEach(respone -> {
                 if (reposi.getIdStudent().equals(respone.getId())) {
@@ -70,11 +88,46 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
     }
 
     @Override
+    public List<TeStudentStatusApiResponse> searchApiStudentClassesStatusByIdClass(String idClass) {
+        List<StudentClasses> listStudentClass = teStudentClassesRepository.findStudentClassesByIdClass(idClass);
+        if (listStudentClass.size() == 0) {
+            return null;
+        }
+        List<String> idStudentList = listStudentClass.stream()
+                .map(StudentClasses::getStudentId)
+                .distinct()
+                .collect(Collectors.toList());
+        List<SimpleResponse> listRespone = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idStudentList);
+        List<TeStudentStatusApiResponse> listReturn = new ArrayList<>();
+        if (listStudentClass.size() == 0 && listRespone.size() == 0) {
+            return null;
+        }
+        listStudentClass.forEach(reposi -> {
+            listRespone.forEach(respone -> {
+                if (reposi.getStudentId().equals(respone.getId())) {
+                    TeStudentStatusApiResponse obj = new TeStudentStatusApiResponse();
+                    obj.setIdStudentClass(reposi.getId());
+                    obj.setIdStudent(reposi.getStudentId());
+                    obj.setName(respone.getName());
+                    obj.setEmail(reposi.getEmail());
+                    obj.setUsername(respone.getUserName());
+                    obj.setStatusTeam(reposi.getStatus().equals(StatusTeam.ACTIVE) ? 0 : 1);
+                    listReturn.add(obj);
+                }
+            });
+        });
+        return listReturn;
+    }
+
+    @Override
     public List<SimpleResponse> searchAllStudentByIdClass(String idClass) {
-        List<TePointImportRespone> listRepository = teStudentClassesRepository
+        List<TePointImportResponse> listRepository = teStudentClassesRepository
                 .findAllStudentClassForPointByIdClass(idClass);
+        if (listRepository.size() == 0) {
+            return null;
+        }
         List<String> idStudentList = listRepository.stream()
-                .map(TePointImportRespone::getIdStudent)
+                .map(TePointImportResponse::getIdStudent)
                 .distinct()
                 .collect(Collectors.toList());
         List<SimpleResponse> listRespone = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idStudentList);
@@ -83,10 +136,13 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
 
     @Override
     public List<TeStudentCallApiResponse> searchStudentClassesByIdClassAndIdTeam(TeFindStudentClasses teFindStudentClasses) {
-        List<TeStudentClassesRespone> listRepository = teStudentClassesRepository
+        List<TeStudentClassesResponse> listRepository = teStudentClassesRepository
                 .findStudentClassByIdClassAndIdTeam(teFindStudentClasses);
+        if (listRepository.size() == 0) {
+            return null;
+        }
         List<String> idStudentList = listRepository.stream()
-                .map(TeStudentClassesRespone::getIdStudent)
+                .map(TeStudentClassesResponse::getIdStudent)
                 .distinct()
                 .collect(Collectors.toList());
         List<SimpleResponse> listRespone = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idStudentList);
@@ -112,6 +168,41 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
         });
         return listReturn;
     }
+
+    @Override
+    public Boolean updateSentStudentClassesToClass(TeSentStudentClassRequest request) {
+        boolean check = false;
+        Optional<Class> classFind = teClassRepository.findById(request.getIdClassSent());
+        if (!classFind.isPresent()) {
+            throw new RestApiException(Message.CLASS_NOT_EXISTS);
+        }
+        List<StudentClasses> studentClasses = teStudentClassesRepository.findStudentClassesByIdClass(request.getIdClassOld());
+        List<String> idStudents = request.getListIdStudent();
+        List<StudentClasses> studentClassesUp = new ArrayList<>();
+        if (request.getListIdStudent().size() == 0 || studentClasses.size() == 0) {
+            return false;
+        }
+        studentClasses.forEach(item -> {
+            idStudents.forEach(id -> {
+                if (id.equals(item.getStudentId())) {
+                    StudentClasses studentSent = new StudentClasses();
+                    studentSent.setId(item.getId());
+                    studentSent.setEmail(item.getEmail());
+                    studentSent.setStudentId(item.getStudentId());
+                    studentSent.setStatus(item.getStatus());
+                    studentSent.setStatusStudentFeedBack(item.getStatusStudentFeedBack());
+                    studentSent.setStatusStudentFeedBack(item.getStatusStudentFeedBack());
+                    studentSent.setTeamId(null);
+                    studentSent.setClassId(request.getIdClassSent());
+                    studentClassesUp.add(studentSent);
+                }
+            });
+        });
+        teStudentClassesRepository.saveAll(studentClassesUp);
+        //  check = studentClassesNew.size() != 0;
+        return true;
+    }
+
 
     @Override
     public List<TeStudentCallApiResponse> callApiStudent(TeFindStudentApiRequest teFindStudentApiRequest) {

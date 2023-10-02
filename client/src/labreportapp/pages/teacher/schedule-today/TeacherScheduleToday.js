@@ -4,7 +4,17 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import LoadingIndicator from "../../../helper/loading";
-import { Col, Empty, Input, Row, Select, Table, Tooltip } from "antd";
+import {
+  Button,
+  Col,
+  Empty,
+  Input,
+  Pagination,
+  Row,
+  Select,
+  Table,
+  Tooltip,
+} from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCalendarWeek,
@@ -15,6 +25,7 @@ import {
 import { TeacherScheduleTodayAPI } from "../../../api/teacher/meeting/schedule-today/TeacherScheduleToday.api";
 import { toast } from "react-toastify";
 import { convertMeetingPeriodToTime } from "../../../helper/util.helper";
+import { SearchOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
 
@@ -23,6 +34,8 @@ const TeacherScheduleToday = () => {
   const [dataToday, setDataToday] = useState([]);
   const [time, setTime] = useState("7");
   const [dataTime, setDataTime] = useState([]);
+  const [current, setCurrent] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -31,9 +44,10 @@ const TeacherScheduleToday = () => {
     setTime("7");
     featchDataTime();
   }, []);
+
   useEffect(() => {
     featchDataTime();
-  }, [time]);
+  }, [time, current]);
 
   const featchData = async (idTeacher) => {
     setLoading(false);
@@ -51,10 +65,13 @@ const TeacherScheduleToday = () => {
       let dataFind = {
         idTeacher: giangVienCurrent.id,
         time: time,
+        page: current,
+        size: 6,
       };
       await TeacherScheduleTodayAPI.getAllNowToTimeByIdTeacher(dataFind).then(
         (response) => {
-          setDataTime(response.data.data);
+          setTotalPages(parseInt(response.data.data.totalPages));
+          setDataTime(response.data.data.data);
         }
       );
       setLoading(true);
@@ -92,11 +109,13 @@ const TeacherScheduleToday = () => {
   };
   const convertLongToDate = (dateLong) => {
     const date = new Date(dateLong);
-    const format = `${date.getDate()}/${
-      date.getMonth() + 1
-    }/${date.getFullYear()}`;
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    const format = `${day}/${month}/${year}`;
     return format;
   };
+
   const data = dataToday;
   const columns = [
     {
@@ -110,13 +129,50 @@ const TeacherScheduleToday = () => {
       title: "Mã lớp",
       dataIndex: "codeClass",
       key: "codeClass",
+      filterDropdown: ({
+        setSelectedKeys,
+        selectedKeys,
+        confirm,
+        clearFilters,
+      }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="Tìm kiếm"
+            value={selectedKeys[0]}
+            onChange={(e) =>
+              setSelectedKeys(e.target.value ? [e.target.value] : [])
+            }
+            onPressEnter={confirm}
+            style={{ width: 188, marginBottom: 8, display: "block" }}
+          />
+          <Button
+            type="primary"
+            className="btn_search_member"
+            onClick={confirm}
+            size="small"
+            style={{ width: 90, marginRight: 8 }}
+          >
+            Tìm
+          </Button>
+          <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
+            Đặt lại
+          </Button>
+        </div>
+      ),
+      filterIcon: (filtered) => (
+        <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+      ),
+      onFilter: (value, record) =>
+        record.codeClass.toLowerCase().includes(value.toLowerCase()),
     },
     {
       title: "Ngày",
       dataIndex: "meetingDate",
       key: "meetingDate",
       render: (text, record) => {
-        return <span>{convertLongToDate(text)}</span>;
+        return (
+          <div style={{ textAlign: "center" }}>{convertLongToDate(text)}</div>
+        );
       },
     },
     {
@@ -148,7 +204,11 @@ const TeacherScheduleToday = () => {
       dataIndex: "timePeriod",
       key: "timePeriod",
       render: (text, record) => {
-        return <span>{convertMeetingPeriodToTime(record.meetingPeriod)}</span>;
+        return (
+          <div style={{ textAlign: "center" }}>
+            {convertMeetingPeriodToTime(record.meetingPeriod)}
+          </div>
+        );
       },
     },
     {
@@ -156,13 +216,15 @@ const TeacherScheduleToday = () => {
       dataIndex: "meetingPeriod",
       key: "meetingPeriod",
       render: (text, record) => {
-        return <span>{text + 1}</span>;
+        return <div style={{ textAlign: "center" }}>{text + 1}</div>;
       },
+      sorter: (a, b) => a.meetingPeriod - b.meetingPeriod,
     },
     {
       title: "Level",
       dataIndex: "level",
       key: "level",
+      sorter: (a, b) => a.level.localeCompare(b.level),
     },
     {
       title: "Link học trực tuyến",
@@ -207,7 +269,7 @@ const TeacherScheduleToday = () => {
       key: "actions",
       render: (text, record) => (
         <>
-          <div className="box_icon">
+          <div className="box_icon" style={{ textAlign: "center" }}>
             <Link
               to={`/teacher/schedule-today/attendance/${record.idMeeting}`}
               className="btn btn-success ml-4"
@@ -238,21 +300,57 @@ const TeacherScheduleToday = () => {
       title: "#",
       dataIndex: "stt",
       key: "stt",
-      render: (text, record, index) => index + 1,
-      width: "12px",
     },
     {
       title: "Mã lớp",
       dataIndex: "codeClass",
       key: "codeClass",
+      filterDropdown: ({
+        setSelectedKeys,
+        selectedKeys,
+        confirm,
+        clearFilters,
+      }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="Tìm kiếm"
+            value={selectedKeys[0]}
+            onChange={(e) =>
+              setSelectedKeys(e.target.value ? [e.target.value] : [])
+            }
+            onPressEnter={confirm}
+            style={{ width: 188, marginBottom: 8, display: "block" }}
+          />
+          <Button
+            type="primary"
+            className="btn_search_member"
+            onClick={confirm}
+            size="small"
+            style={{ width: 90, marginRight: 8 }}
+          >
+            Tìm
+          </Button>
+          <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
+            Đặt lại
+          </Button>
+        </div>
+      ),
+      filterIcon: (filtered) => (
+        <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+      ),
+      onFilter: (value, record) =>
+        record.codeClass.toLowerCase().includes(value.toLowerCase()),
     },
     {
       title: "Ngày",
       dataIndex: "meetingDate",
       key: "meetingDate",
       render: (text, record) => {
-        return <span>{convertLongToDate(text)}</span>;
+        return (
+          <div style={{ textAlign: "center" }}>{convertLongToDate(text)}</div>
+        );
       },
+      sorter: (a, b) => a.meetingDate - b.meetingDate,
     },
     {
       title: "Tên buổi học",
@@ -283,7 +381,11 @@ const TeacherScheduleToday = () => {
       dataIndex: "timePeriod",
       key: "timePeriod",
       render: (text, record) => {
-        return <span>{convertMeetingPeriodToTime(record.meetingPeriod)}</span>;
+        return (
+          <div style={{ textAlign: "center" }}>
+            {convertMeetingPeriodToTime(record.meetingPeriod)}
+          </div>
+        );
       },
     },
     {
@@ -291,14 +393,16 @@ const TeacherScheduleToday = () => {
       dataIndex: "meetingPeriod",
       key: "meetingPeriod",
       render: (text, record) => {
-        return <span>{text + 1}</span>;
+        return <div style={{ textAlign: "center" }}>{text + 1}</div>;
       },
+      sorter: (a, b) => a.meetingPeriod - b.meetingPeriod,
     },
 
     {
       title: "Level",
       dataIndex: "level",
       key: "level",
+      sorter: (a, b) => a.level - b.level,
     },
     {
       title: "Link học trực tuyến",
@@ -425,14 +529,30 @@ const TeacherScheduleToday = () => {
               </div>
               <div className="table-teacher" style={{ marginTop: "20px" }}>
                 {dataTime.length > 0 ? (
-                  <Table
-                    dataSource={dataTime}
-                    rowKey="idMeeting"
-                    columns={columnsTime}
-                    pagination={{
-                      defaultPageSize: 6,
-                    }}
-                  />
+                  <>
+                    <div>
+                      <Table
+                        dataSource={dataTime}
+                        rowKey="idMeeting"
+                        columns={columnsTime}
+                        pagination={false}
+                      />
+                      <div
+                        className="pagination_box"
+                        style={{ display: "flex", alignItems: "center" }}
+                      >
+                        <Pagination
+                          style={{ marginRight: "10px" }}
+                          simple
+                          current={current}
+                          onChange={(value) => {
+                            setCurrent(value);
+                          }}
+                          total={totalPages * 10}
+                        />
+                      </div>
+                    </div>
+                  </>
                 ) : (
                   <Empty
                     imageStyle={{ height: 60 }}

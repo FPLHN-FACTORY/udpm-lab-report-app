@@ -59,4 +59,9 @@ public class AdSemesterController {
         return new ResponseObject(adSemesterService.updateSermester(obj));
     }
 
+    @PutMapping("/update-status-feedback/{id}")
+    public ResponseObject updateStatusFeedback(@PathVariable("id") String id) {
+        return new ResponseObject(adSemesterService.updateStatusFeedback(id));
+    }
+
 }

@@ -10,29 +10,13 @@
   align-items: center;
   place-items: center;
 }
-.box-filter {
-  margin: 13px 10px 15px 13px;
-  background-color: rgb(255, 255, 255);
-  width: 98%;
-  min-height: 100px;
-  height: auto;
-  border-radius: 5px;
-  padding: 20px;
-}
-.content-class {
-  margin: 0px 15px 15px 15px;
-}
-.content-class span {
-  font-size: 17px;
-  font-weight: 400;
-}
 .teacher-meeting .box-card {
-  margin: 0px 0px 0px 15%;
   width: 70%;
   min-height: 68px;
   height: auto;
   display: flex;
   place-items: center;
+  align-items: center;
   border-radius: 7px;
   border-bottom: 1px solid rgb(206, 206, 206);
 }
@@ -42,23 +26,6 @@
   transition: box-shadow 0.3s, background-color 0.3s;
   background-color: rgb(238, 245, 249);
   cursor: pointer;
-}
-.flex-container {
-  display: flex;
-  align-items: center;
-}
-.title-text {
-  font-size: 16px;
-  color: black;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.title-icon {
-  height: auto;
-}
-.title-text {
-  height: auto;
 }
 .box-icon {
   display: inline-block;
@@ -70,16 +37,13 @@
   line-height: 40px;
   border: 2px solid white;
   background-color: #4285f4;
-  margin-right: 10px;
 }
 .title-left {
   min-height: 40px;
   line-height: auto;
   height: auto;
   float: left;
-  min-width: 600px;
-  width: 75%;
-  margin-left: 20px;
+  width: auto;
 }
 
 .title-right {
@@ -87,6 +51,11 @@
   width: 35%;
   font-size: 13px;
   color: grey;
+}
+.title-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .title-text {
   font-size: 16px;

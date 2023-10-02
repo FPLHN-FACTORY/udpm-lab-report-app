@@ -8,6 +8,7 @@ import {
   Menu,
   Popconfirm,
   Row,
+  Spin,
 } from "antd";
 import { useEffect } from "react";
 import { useState } from "react";
@@ -19,6 +20,7 @@ import LoadingIndicator from "../../../../helper/loading";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faAnglesRight,
   faArrowsRotate,
   faCopy,
   faEllipsisVertical,
@@ -59,6 +61,7 @@ const TeacherPostMyClass = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
   const [seeMore, setSeeMore] = useState(true);
+  const [dowloading, setDownloading] = useState(false);
   useEffect(() => {
     window.scrollTo(0, 0);
     featchClass(idClass);
@@ -188,11 +191,14 @@ const TeacherPostMyClass = () => {
     document.body.removeChild(tempInput);
     toast.success("Đã sao chép mật khẩu vào bộ nhớ đệm !");
   };
-  const convertLongToDate = (longValue) => {
-    const date = new Date(longValue);
-    const format = `${date.getDate()}/${
-      date.getMonth() + 1
-    }/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()} `;
+  const convertLongToDate = (dateLong) => {
+    const date = new Date(dateLong);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    const hour = String(date.getHours() + 1).padStart(2, "0");
+    const minute = String(date.getMinutes() + 1).padStart(2, "0");
+    const format = `${day}/${month}/${year}` + ` ${hour}:${minute}`;
     return format;
   };
   const handleFullScreen = (value) => {
@@ -206,7 +212,7 @@ const TeacherPostMyClass = () => {
   const classDetail = useAppSelector(GetClass);
   const data = useAppSelector(GetPost);
   return (
-    <>
+    <div className="teacher-post">
       {!loading && <LoadingIndicator />}
       <ModalFullScreen
         visible={showFullScreen}
@@ -306,12 +312,14 @@ const TeacherPostMyClass = () => {
           <div className="box-post">
             <div className="box-post-left">
               <div className="box-infor" style={{ height: "140px" }}>
-                <span className="title-main">Tên lớp</span>
+                <Row>
+                  {" "}
+                  <span className="title-main">Tên lớp</span>
+                </Row>
                 <p className="infor-main">
                   {classDetail.code}
                   <FontAwesomeIcon
-                    style={{ paddingLeft: 12 }}
-                    size="22"
+                    style={{ paddingLeft: "12px" }}
                     icon={faExpand}
                     onClick={() => handleFullScreen(0)}
                   />
@@ -404,8 +412,7 @@ const TeacherPostMyClass = () => {
                 <p className="infor-main">
                   {classDetail.passWord}
                   <FontAwesomeIcon
-                    style={{ paddingLeft: 12 }}
-                    size="22"
+                    style={{ paddingLeft: "12px" }}
                     icon={faExpand}
                     onClick={() => handleFullScreen(1)}
                   />
@@ -463,7 +470,13 @@ const TeacherPostMyClass = () => {
                   </div>
                 </div>
               )}
-              <div style={{ height: "auto", margin: "20px 0 20px 0" }}>
+              <div
+                style={{
+                  height: "auto",
+                  margin: "20px 0 20px 0",
+                  width: "100%",
+                }}
+              >
                 {data.length > 0 ? (
                   data.map((item, index) => {
                     return (
@@ -533,7 +546,7 @@ const TeacherPostMyClass = () => {
                                             Chỉnh sửa
                                           </Menu.Item>{" "}
                                           <Popconfirm
-                                            title="Xóa học kỳ"
+                                            title="Xóa bài viết"
                                             description="Bạn có chắc chắn muốn xóa bài viết này không ?"
                                             onConfirm={() => {
                                               clickDelete(item.id);
@@ -569,29 +582,41 @@ const TeacherPostMyClass = () => {
                     );
                   })
                 ) : (
-                  <Empty
-                    imageStyle={{ height: 60 }}
-                    description={<span>Chưa có bài viết nào được đăng</span>}
-                  />
+                  <div style={{ paddingTop: "50px" }}>
+                    <Empty
+                      imageStyle={{ height: "60px" }}
+                      description={<span>Chưa có bài viết nào được đăng</span>}
+                    />
+                  </div>
                 )}
                 {seeMore && (
-                  <Button
-                    style={{ float: "right" }}
-                    type="primary"
-                    icon={<i className="fas fa-arrow-down" />}
-                    onClick={() => {
-                      handleSeeMore();
-                    }}
-                  >
-                    Xem thêm
-                  </Button>
+                  <Spin spinning={dowloading} style={{ marginTop: "10px" }}>
+                    <Button
+                      className="see-more"
+                      style={{
+                        float: "right",
+                        backgroundColor: "rgb(38, 144, 214)",
+                        color: "white",
+                      }}
+                      onClick={() => {
+                        setDownloading(true);
+                        setTimeout(() => {
+                          setDownloading(false);
+                          handleSeeMore();
+                        }, 1000);
+                      }}
+                    >
+                      <span style={{ paddingRight: "10px" }}>Xem thêm </span>
+                      <FontAwesomeIcon icon={faAnglesRight} size="lg" />
+                    </Button>{" "}
+                  </Spin>
                 )}
               </div>
             </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 export default TeacherPostMyClass;

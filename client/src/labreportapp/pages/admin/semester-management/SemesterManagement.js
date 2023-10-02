@@ -7,8 +7,20 @@ import {
   faPencil,
   faTrash,
   faPlus,
+  faFeed,
+  faFileEdit,
+  faFilterCircleDollar,
+  faChainSlash,
 } from "@fortawesome/free-solid-svg-icons";
-import { Button, Input, Pagination, Table, Tooltip, Popconfirm } from "antd";
+import {
+  Button,
+  Input,
+  Pagination,
+  Table,
+  Tooltip,
+  Popconfirm,
+  Tag,
+} from "antd";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useAppSelector, useAppDispatch } from "../../../app/hook";
@@ -16,6 +28,7 @@ import {
   SetSemester,
   GetSemester,
   DeleteSemester,
+  UpdateStatusFeedback,
 } from "../../../app/admin/AdSemester.reducer";
 import { toast } from "react-toastify";
 import { AdSemesterAPI } from "../../../api/admin/AdSemesterAPI";
@@ -54,6 +67,14 @@ const SemesterManagement = () => {
     });
   };
   const data = useAppSelector(GetSemester);
+
+  const updateStatusFeedback = (id) => {
+    AdSemesterAPI.updateStatusFeedback(id).then((response) => {
+      dispatch(UpdateStatusFeedback(id));
+      toast.success("Bật feedback thành công");
+    });
+  };
+
   const columns = [
     {
       title: "#",
@@ -109,17 +130,55 @@ const SemesterManagement = () => {
       },
     },
     {
+      title: "Trạng thái feedback",
+      dataIndex: "statusFeedback",
+      key: "statusFeedback",
+      render: (text, record) => {
+        if (record.statusFeedback === 0) {
+          return <Tag color="processing">Chưa bật feedback</Tag>;
+        } else {
+          return <Tag color="success">Đã bật feedback</Tag>;
+        }
+      },
+    },
+    {
       title: "Hành động",
       dataIndex: "actions",
       key: "actions",
       render: (text, record) => (
         <div>
+          {record.statusFeedback === 0 && (
+            <Popconfirm
+              placement="topLeft"
+              title="Bật feedback"
+              description="Bạn có chắc chắn muốn bật feedback không?"
+              onConfirm={() => {
+                updateStatusFeedback(record.id);
+              }}
+              okText="Có"
+              cancelText="Không"
+            >
+              <Tooltip title="Bật feedback">
+                <FontAwesomeIcon
+                  onClick={() => {}}
+                  style={{ marginRight: "19px", cursor: "pointer" }}
+                  icon={faFileEdit}
+                  size="1x"
+                />
+              </Tooltip>
+            </Popconfirm>
+          )}
           <Tooltip title="Cập nhật">
             <FontAwesomeIcon
               onClick={() => {
                 buttonUpdate(record);
               }}
-              style={{ marginRight: "15px", cursor: "pointer" }}
+              style={{
+                marginRight: "15px",
+                cursor: "pointer",
+                marginLeft: "3px",
+                color: "rgb(38, 144, 214)",
+              }}
               icon={faPencil}
               size="1x"
             />
@@ -136,7 +195,11 @@ const SemesterManagement = () => {
           >
             <Tooltip title="Xóa">
               <FontAwesomeIcon
-                style={{ cursor: "pointer", marginLeft: "10px" }}
+                style={{
+                  cursor: "pointer",
+                  marginLeft: "10px",
+                  color: "rgb(38, 144, 214)",
+                }}
                 icon={faTrash}
                 size="1x"
               />
@@ -211,6 +274,11 @@ const SemesterManagement = () => {
         </div>
         <div className="box_btn_filter">
           <Button className="btn_filter" onClick={buttonSearch}>
+            {" "}
+            <FontAwesomeIcon
+              icon={faFilterCircleDollar}
+              style={{ marginRight: "5px" }}
+            />
             Tìm kiếm
           </Button>
           <Button
@@ -218,6 +286,10 @@ const SemesterManagement = () => {
             onClick={clearData}
             style={{ backgroundColor: "rgb(50, 144, 202)" }}
           >
+            <FontAwesomeIcon
+              icon={faChainSlash}
+              style={{ marginRight: "5px" }}
+            />
             Làm mới bộ lọc
           </Button>
         </div>
@@ -251,6 +323,7 @@ const SemesterManagement = () => {
                 size="1x"
                 style={{
                   backgroundColor: "rgb(55, 137, 220)",
+                  marginRight: "5px",
                 }}
               />
               Thêm học kỳ

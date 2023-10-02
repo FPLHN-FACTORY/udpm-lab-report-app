@@ -8,51 +8,62 @@ import com.labreportapp.labreport.core.admin.service.AdCLassConfigurationService
 import com.labreportapp.labreport.entity.ClassConfiguration;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
+@Validated
 public class AdClassConfigurationServiceImpl implements AdCLassConfigurationService {
 
     @Autowired
     private AdClassConfigurationRepository adClassConfigurationRepository;
+
     @Override
     public List<AdClassConfigurationCustomResponse> getAllClassConfiguration() {
         AdClassConfigurationResponse classConfigurationResponses = adClassConfigurationRepository.getAllClassConfiguration();
         List<AdClassConfigurationCustomResponse> classConfigurationCustomList = new ArrayList<>();
-        if(classConfigurationResponses != null){
-            classConfigurationCustomList.add(new AdClassConfigurationCustomResponse(classConfigurationResponses.getId(),1,"Số lượng tối thiểu",Double.valueOf(classConfigurationResponses.getClassSizeMin())));
-            classConfigurationCustomList.add(new AdClassConfigurationCustomResponse(classConfigurationResponses.getId(),2,"Số lượng tối đa",Double.valueOf(classConfigurationResponses.getClassSizeMax())));
-            classConfigurationCustomList.add(new AdClassConfigurationCustomResponse(classConfigurationResponses.getId(),3,"Điểm tối thiểu",classConfigurationResponses.getPointMin()));
-            classConfigurationCustomList.add(new AdClassConfigurationCustomResponse(classConfigurationResponses.getId(),4,"Tỉ lệ nghỉ",classConfigurationResponses.getMaximumNumberOfBreaks()));
+        if (classConfigurationResponses != null) {
+            classConfigurationCustomList.add(new AdClassConfigurationCustomResponse(classConfigurationResponses.getId(), 1, "Số lượng tối thiểu", Double.valueOf(classConfigurationResponses.getClassSizeMin())));
+            classConfigurationCustomList.add(new AdClassConfigurationCustomResponse(classConfigurationResponses.getId(), 2, "Số lượng tối đa", Double.valueOf(classConfigurationResponses.getClassSizeMax())));
+            classConfigurationCustomList.add(new AdClassConfigurationCustomResponse(classConfigurationResponses.getId(), 3, "Điểm tối thiểu", classConfigurationResponses.getPointMin()));
+            classConfigurationCustomList.add(new AdClassConfigurationCustomResponse(classConfigurationResponses.getId(), 4, "Tỉ lệ nghỉ", classConfigurationResponses.getMaximumNumberOfBreaks()));
         }
         return classConfigurationCustomList;
     }
 
     @Override
-    public ClassConfiguration updateClassConfiguration(AdUpdateClassConfigurationRequest adUpdateClassConfigurationRequest) {
-        Optional<ClassConfiguration> optionalClassConfiguration = adClassConfigurationRepository.findById(adUpdateClassConfigurationRequest.getId());
-        if(!optionalClassConfiguration.isPresent()){
+    public ClassConfiguration updateClassConfiguration(@Valid AdUpdateClassConfigurationRequest adUpdateClassConfigurationRequest) {
+        List<ClassConfiguration> classConfigurationList = adClassConfigurationRepository.findAll();
+        if (classConfigurationList == null || classConfigurationList.isEmpty()) {
+            ClassConfiguration classConfigurationNew = new ClassConfiguration();
+            classConfigurationNew.setClassSizeMax(adUpdateClassConfigurationRequest.getClassSizeMax());
+            classConfigurationNew.setClassSizeMin(adUpdateClassConfigurationRequest.getClassSizeMin());
+            classConfigurationNew.setPointMin(adUpdateClassConfigurationRequest.getPointMin());
+            classConfigurationNew.setMaximumNumberOfBreaks(adUpdateClassConfigurationRequest.getMaximumNumberOfBreaks());
+            return adClassConfigurationRepository.save(classConfigurationNew);
+        }
+        ClassConfiguration optionalClassConfiguration = classConfigurationList.get(0);
+        if (optionalClassConfiguration == null) {
             throw new RestApiException(Message.CLASS_NOT_EXISTS);
         }
-        ClassConfiguration classConfiguration = optionalClassConfiguration.get();
-        classConfiguration.setClassSizeMax(adUpdateClassConfigurationRequest.getClassSizeMax());
-        classConfiguration.setClassSizeMin(adUpdateClassConfigurationRequest.getClassSizeMin());
-        classConfiguration.setPointMin(adUpdateClassConfigurationRequest.getPointMin());
-        classConfiguration.setMaximumNumberOfBreaks(adUpdateClassConfigurationRequest.getMaximumNumberOfBreaks());
-        return adClassConfigurationRepository.save(classConfiguration);
+        optionalClassConfiguration.setClassSizeMax(adUpdateClassConfigurationRequest.getClassSizeMax());
+        optionalClassConfiguration.setClassSizeMin(adUpdateClassConfigurationRequest.getClassSizeMin());
+        optionalClassConfiguration.setPointMin(adUpdateClassConfigurationRequest.getPointMin());
+        optionalClassConfiguration.setMaximumNumberOfBreaks(adUpdateClassConfigurationRequest.getMaximumNumberOfBreaks());
+        return adClassConfigurationRepository.save(optionalClassConfiguration);
     }
 
     @Override
-    public ClassConfiguration getOneByIdClassConfiguration(String id) {
-        Optional<ClassConfiguration> optionalClassConfiguration = adClassConfigurationRepository.findById(id);
-        if (!optionalClassConfiguration.isPresent()){
-            throw new RestApiException(Message.CLASS_NOT_EXISTS);
+    public ClassConfiguration getOneByIdClassConfiguration() {
+        List<ClassConfiguration> classConfigurationList = adClassConfigurationRepository.findAll();
+        if (classConfigurationList == null || classConfigurationList.isEmpty()) {
+            return null;
         }
-        return optionalClassConfiguration.get();
+        return classConfigurationList.get(0);
     }
 }

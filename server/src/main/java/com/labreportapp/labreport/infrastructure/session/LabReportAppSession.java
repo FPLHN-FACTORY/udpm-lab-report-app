@@ -6,4 +6,12 @@ package com.labreportapp.labreport.infrastructure.session;
 public interface LabReportAppSession {
 
     String getToken();
+
+    String getUserId();
+
+    String getEmail();
+
+    String getUserName();
+
+    String getName();
 }

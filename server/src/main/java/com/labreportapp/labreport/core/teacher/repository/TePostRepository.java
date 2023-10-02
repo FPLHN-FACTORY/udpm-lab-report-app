@@ -1,7 +1,7 @@
 package com.labreportapp.labreport.core.teacher.repository;
 
 import com.labreportapp.labreport.core.teacher.model.request.TeFindPostClassRepquest;
-import com.labreportapp.labreport.core.teacher.model.response.TePostRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TePostResponse;
 import com.labreportapp.labreport.entity.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +31,6 @@ public interface TePostRepository extends JpaRepository<Post, String> {
             FROM post p 
             WHERE p.teacher_id = :#{#req.idTeacher} and p.class_id = :#{#req.idClass}"""
            , nativeQuery = true)
-    Page<TePostRespone> searchPostByIdTeacherIdClass(@Param("req")TeFindPostClassRepquest req, Pageable pageable);
+    Page<TePostResponse> searchPostByIdTeacherIdClass(@Param("req")TeFindPostClassRepquest req, Pageable pageable);
 
 }
