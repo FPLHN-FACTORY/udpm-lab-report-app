@@ -1,9 +1,8 @@
 package com.labreportapp.labreport.core.admin.service.impl;
 
 
+import com.labreportapp.labreport.core.admin.model.response.AdFeedBackCustom;
 import com.labreportapp.labreport.core.admin.model.response.AdFeedBackResponse;
-import com.labreportapp.labreport.core.admin.model.response.AdStudentCallApiResponse;
-import com.labreportapp.labreport.core.admin.model.response.AdStudentClassesResponse;
 import com.labreportapp.labreport.core.admin.repository.AdFeedBackRepository;
 import com.labreportapp.labreport.core.admin.service.AdFeedBackService;
 import com.labreportapp.labreport.core.common.response.SimpleResponse;
@@ -13,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
  */
 @Service
 public class AdFeedBackServiceImpl implements AdFeedBackService {
+
     @Autowired
     private AdFeedBackRepository repository;
 
@@ -27,41 +28,33 @@ public class AdFeedBackServiceImpl implements AdFeedBackService {
     private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
 
     @Override
-    public List<AdFeedBackResponse> searchFeedBack(String idClass) {
+    public List<AdFeedBackCustom> searchFeedBack(String idClass) {
         List<AdFeedBackResponse> list = repository.getAllFeedBack(idClass);
-        return list;
-    }
-
-    @Override
-    public List<AdStudentCallApiResponse> searchApiStudentClassesByIdClass(String idClass) {
-        List<AdStudentClassesResponse> listRepository = repository
-                .findStudentClassByIdClass(idClass);
-        List<String> idStudentList = listRepository.stream()
-                .map(AdStudentClassesResponse::getIdStudent)
+        List<String> idListStudent = list.stream()
+                .map(AdFeedBackResponse::getIdStudent)
+                .filter(Objects::nonNull)
                 .distinct()
                 .collect(Collectors.toList());
-        List<SimpleResponse> listRespone = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idStudentList);
-        List<AdStudentCallApiResponse> listReturn = new ArrayList<>();
-        listRepository.forEach(reposi -> {
-            listRespone.forEach(respone -> {
-                if (reposi.getIdStudent().equals(respone.getId())) {
-                    AdStudentCallApiResponse obj = new AdStudentCallApiResponse();
-                    obj.setId(respone.getId());
-                    obj.setName(respone.getName());
-                    obj.setUsername(respone.getUserName());
-                    obj.setEmail(reposi.getEmailStudentClass());
-                    obj.setIdStudent(respone.getId());
-                    obj.setIdStudentClass(reposi.getIdStudentClass());
-                    obj.setRole(reposi.getRole());
-                    obj.setStatusStudent(reposi.getStatusStudent());
-                    obj.setIdTeam(reposi.getIdTeam());
-                    obj.setCodeTeam(reposi.getCodeTeam());
-                    obj.setNameTeam(reposi.getNameTeam());
-                    obj.setSubjectName(reposi.getSubjectName());
-                    listReturn.add(obj);
-                }
-            });
+        List<SimpleResponse> listResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idListStudent);
+        List<AdFeedBackCustom> listFeedBackCustom = new ArrayList<>();
+        list.forEach(feedback -> {
+            AdFeedBackCustom adFeedBackCustom = new AdFeedBackCustom();
+            adFeedBackCustom.setDescription(feedback.getDescription());
+            adFeedBackCustom.setCreatedDate(feedback.getCreatedDate());
+            adFeedBackCustom.setIdClass(feedback.getIdClass());
+            adFeedBackCustom.setStt(feedback.getStt());
+            adFeedBackCustom.setIdStudent(feedback.getIdStudent());
+            if (feedback.getIdStudent() != null) {
+                listResponse.forEach(response -> {
+                    if (feedback.getIdStudent().equals(response.getId())) {
+                        adFeedBackCustom.setEmailStudent(response.getEmail());
+                        adFeedBackCustom.setNameStudent(response.getName());
+                    }
+                });
+            }
+            listFeedBackCustom.add(adFeedBackCustom);
         });
-        return listReturn;
+        return listFeedBackCustom;
     }
+
 }

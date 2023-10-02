@@ -15,6 +15,7 @@ import java.util.List;
  */
 @Repository
 public interface AdFeedBackRepository extends JpaRepository<FeedBack , String> {
+
     @Query(value = """
                  SELECT ROW_NUMBER() OVER(ORDER BY c.last_modified_date DESC ) AS stt,
                   c.descriptions as descriptions,
