@@ -18,11 +18,13 @@ import com.labreportapp.labreport.infrastructure.constant.StatusTeam;
 import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
+import lombok.Synchronized;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -170,15 +172,19 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
     }
 
     @Override
+    @Transactional
+    @Synchronized
     public Boolean updateSentStudentClassesToClass(TeSentStudentClassRequest request) {
         boolean check = false;
-        Optional<Class> classFind = teClassRepository.findById(request.getIdClassSent());
-        if (!classFind.isPresent()) {
+        Optional<Class> classSent = teClassRepository.findById(request.getIdClassSent());
+        Optional<Class> classOld = teClassRepository.findById(request.getIdClassOld());
+        if (!classSent.isPresent()) {
             throw new RestApiException(Message.CLASS_NOT_EXISTS);
         }
         List<StudentClasses> studentClasses = teStudentClassesRepository.findStudentClassesByIdClass(request.getIdClassOld());
         List<String> idStudents = request.getListIdStudent();
         List<StudentClasses> studentClassesUp = new ArrayList<>();
+        List<Class> classUp = new ArrayList<>();
         if (request.getListIdStudent().size() == 0 || studentClasses.size() == 0) {
             return false;
         }
@@ -191,15 +197,21 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
                     studentSent.setStudentId(item.getStudentId());
                     studentSent.setStatus(item.getStatus());
                     studentSent.setStatusStudentFeedBack(item.getStatusStudentFeedBack());
-                    studentSent.setStatusStudentFeedBack(item.getStatusStudentFeedBack());
+                    studentSent.setRole(null);
                     studentSent.setTeamId(null);
                     studentSent.setClassId(request.getIdClassSent());
                     studentClassesUp.add(studentSent);
                 }
             });
         });
+        Class sent = classSent.get();
+        sent.setClassSize(sent.getClassSize() + idStudents.size());
+        classUp.add(sent);
+        Class old = classOld.get();
+        old.setClassSize(classOld.get().getClassSize() - idStudents.size());
+        classUp.add(old);
+        teClassRepository.saveAll(classUp);
         teStudentClassesRepository.saveAll(studentClassesUp);
-        //  check = studentClassesNew.size() != 0;
         return true;
     }
 

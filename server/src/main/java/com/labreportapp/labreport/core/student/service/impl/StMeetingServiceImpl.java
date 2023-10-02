@@ -5,7 +5,11 @@ import com.labreportapp.labreport.core.student.model.request.StUpdateHomeWorkAnd
 import com.labreportapp.labreport.core.student.model.response.StHomeWordAndNoteResponse;
 import com.labreportapp.labreport.core.student.model.response.StMeetingResponse;
 import com.labreportapp.labreport.core.student.model.response.StMyTeamInClassResponse;
-import com.labreportapp.labreport.core.student.repository.*;
+import com.labreportapp.labreport.core.student.repository.StHomeWorkRepository;
+import com.labreportapp.labreport.core.student.repository.StLeadTeamRepository;
+import com.labreportapp.labreport.core.student.repository.StMeetingRepository;
+import com.labreportapp.labreport.core.student.repository.StNoteRepository;
+import com.labreportapp.labreport.core.student.repository.StReportRepository;
 import com.labreportapp.labreport.core.student.service.StMeetingService;
 import com.labreportapp.labreport.entity.HomeWork;
 import com.labreportapp.labreport.entity.Note;
@@ -14,8 +18,10 @@ import com.labreportapp.labreport.entity.StudentClasses;
 import com.labreportapp.labreport.infrastructure.constant.RoleTeam;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
+import lombok.Synchronized;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -79,47 +85,51 @@ public class StMeetingServiceImpl implements StMeetingService {
     }
 
     @Override
+    @Transactional
+    @Synchronized
     public StHomeWordAndNoteResponse updateDetailMeetingTeamByLeadTeam(StUpdateHomeWorkAndNotebyLeadTeamRequest request) {
         Optional<StudentClasses> optionalStudentClasses = stLeadTeamRepository.findStudentClassesByStudentId(request.getIdStudent());
-
         if (optionalStudentClasses.isPresent()) {
             StudentClasses studentClasses = optionalStudentClasses.get();
             if (studentClasses.getRole().equals(RoleTeam.LEADER)) {
-                Optional<HomeWork> objectHW = stHomeWorkRepository.findById(request.getIdHomeWork());
                 HomeWork homeWorkNew = new HomeWork();
-                if (!objectHW.isPresent()) {
-                    homeWorkNew.setMeetingId(request.getIdMeeting());
-                    homeWorkNew.setTeamId(request.getIdTeam());
-                    homeWorkNew.setName("");
-                    homeWorkNew.setDescriptions(request.getDescriptionsHomeWork());
-                } else {
-                    homeWorkNew = objectHW.get();
-                    homeWorkNew.setDescriptions(request.getDescriptionsHomeWork());
+                homeWorkNew.setMeetingId(request.getIdMeeting());
+                homeWorkNew.setTeamId(request.getIdTeam());
+                homeWorkNew.setName("");
+                homeWorkNew.setDescriptions(request.getDescriptionsHomeWork());
+                if (request.getIdHomeWork() != null) {
+                    Optional<HomeWork> objectHW = stHomeWorkRepository.findById(request.getIdHomeWork());
+                    if (objectHW.isPresent()) {
+                        homeWorkNew.setId(objectHW.get().getId());
+                    }
                 }
                 stHomeWorkRepository.save(homeWorkNew);
-                Optional<Note> objectNote = stNoteRepository.findById(request.getIdNote());
                 Note noteNew = new Note();
-                if (!objectNote.isPresent()) {
-                    noteNew.setMeetingId(request.getIdMeeting());
-                    noteNew.setTeamId(request.getIdTeam());
-                    noteNew.setName("");
-                    noteNew.setDescriptions(request.getDescriptionsNote());
-                } else {
-                    noteNew = objectNote.get();
-                    noteNew.setDescriptions(request.getDescriptionsNote());
+                noteNew.setMeetingId(request.getIdMeeting());
+                noteNew.setTeamId(request.getIdTeam());
+                noteNew.setName("");
+                noteNew.setDescriptions(request.getDescriptionsNote());
+                if (request.getIdNote() != null) {
+                    Optional<Note> objectNote = stNoteRepository.findById(request.getIdNote());
+                    if (objectNote.isPresent()) {
+                        noteNew.setId(objectNote.get().getId());
+                    }
                 }
                 stNoteRepository.save(noteNew);
-                Optional<Report> objectReport = stReportRepository.findById(request.getIdReport());
                 Report reportNew = new Report();
-                if (!objectReport.isPresent()) {
-                    reportNew.setMeetingId(request.getIdMeeting());
-                    reportNew.setTeamId(request.getIdTeam());
-                    reportNew.setDescriptions(request.getDescriptionsReport());
-                } else {
-                    reportNew = objectReport.get();
-                    reportNew.setDescriptions(request.getDescriptionsReport());
+                reportNew.setMeetingId(request.getIdMeeting());
+                reportNew.setTeamId(request.getIdTeam());
+                reportNew.setDescriptions(request.getDescriptionsReport());
+                if (request.getIdReport() != null) {
+                    Optional<Report> objectReport = stReportRepository.findById(request.getIdReport());
+                    if (objectReport.isPresent()) {
+                        reportNew.setId(objectReport.get().getId());
+                    }
                 }
                 stReportRepository.save(reportNew);
+                StFindMeetingRequest teFind = new StFindMeetingRequest();
+                teFind.setIdTeam(request.getIdTeam());
+                teFind.setIdMeeting(request.getIdMeeting());
             } else {
                 throw new RestApiException(Message.YOU_MUST_LEADER);
             }
@@ -129,9 +139,8 @@ public class StMeetingServiceImpl implements StMeetingService {
         stFind.setIdMeeting(request.getIdMeeting());
         Optional<StHomeWordAndNoteResponse> objectFind = stMeetingrepository.searchDetailMeetingTeamByIdMeIdTeam(stFind);
         if (!objectFind.isPresent()) {
-            throw new RestApiException(Message.MEETING_HOMEWORK_NOTE_NOT_EXISTS);
+            return null;
         }
-
         return objectFind.get();
     }
 
@@ -139,7 +148,5 @@ public class StMeetingServiceImpl implements StMeetingService {
     public Integer getRoleByIdStudent(final StFindMeetingRequest request) {
         return stMeetingrepository.getRoleByIdStudent(request);
     }
-
-
 
 }

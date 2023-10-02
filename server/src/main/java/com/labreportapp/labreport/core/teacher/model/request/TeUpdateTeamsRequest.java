@@ -18,17 +18,11 @@ public class TeUpdateTeamsRequest {
     @NotBlank
     private String id;
 
-    @NotEmpty
-    @NotBlank
-    private String code;
-
-    @NotEmpty
-    @NotBlank
-    private String name;
 
     private String subjectName;
 
     private List<TeTeamUpdateStudentClassRequest> listStudentClasses;
 
     private List<TeTeamUpdateStudentClassRequest> listStudentClassesDeleteIdTeam;
+
 }

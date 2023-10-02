@@ -23,7 +23,7 @@ const ModalFileImportPoint = ({ visible, onCancel, idClass, fetchData }) => {
       setSelectedFile(file);
     }
   };
-  const handleImportTeam = async () => {
+  const handleImportPoint = async () => {
     if (!selectedFile) {
       toast.warning("Vui lòng chọn file excel để import !");
       return;
@@ -74,25 +74,25 @@ const ModalFileImportPoint = ({ visible, onCancel, idClass, fetchData }) => {
           />
           <div style={{ paddingTop: "15px", float: "right", right: 0 }}>
             <Button
+              className="btn_filter"
               style={{
-                backgroundColor: "rgb(61, 139, 227)",
-                color: "white",
-              }}
-              onClick={() => {
-                handleImportTeam();
-              }}
-            >
-              Lưu
-            </Button>
-            <Button
-              style={{
-                backgroundColor: "red",
-                color: "white",
-                marginLeft: "10px",
+                width: "66px",
               }}
               onClick={() => handleCancelImport()}
             >
               Hủy
+            </Button>
+            <Button
+              className="btn_clean"
+              style={{
+                width: "66px",
+                marginLeft: "10px",
+              }}
+              onClick={() => {
+                handleImportPoint();
+              }}
+            >
+              Lưu
             </Button>
           </div>
         </div>

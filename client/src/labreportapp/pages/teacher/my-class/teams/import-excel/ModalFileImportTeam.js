@@ -74,25 +74,25 @@ const ModalFileImport = ({ visible, onCancel, idClass, fetchData }) => {
           />
           <div style={{ paddingTop: "15px", float: "right", right: 0 }}>
             <Button
+              className="btn_filter"
               style={{
-                backgroundColor: "rgb(61, 139, 227)",
-                color: "white",
+                width: "66px",
+              }}
+              onClick={() => handleCancelImport()}
+            >
+              Hủy
+            </Button>
+            <Button
+              className="btn_clean"
+              style={{
+                width: "66px",
+                marginLeft: "10px",
               }}
               onClick={() => {
                 handleImport();
               }}
             >
               Lưu
-            </Button>
-            <Button
-              style={{
-                backgroundColor: "red",
-                color: "white",
-                marginLeft: "10px",
-              }}
-              onClick={() => handleCancelImport()}
-            >
-              Hủy
             </Button>
           </div>
         </div>

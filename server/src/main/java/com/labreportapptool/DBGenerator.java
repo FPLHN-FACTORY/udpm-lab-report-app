@@ -373,28 +373,28 @@ public class DBGenerator implements CommandLineRunner {
         //Team - class 2
         Team team5 = new Team();
         team5.setCode("TC2_1");
-        team5.setName("Nhóm 1 class 2");
+        team5.setName("Nhóm 1");
         team5.setSubjectName("Website bán giày Bee Shoes");
         team5.setClassId(class2.getId());
         team5.setId(teamRepository.save(team5).getId());
 
         Team team6 = new Team();
         team6.setCode("TC2_2");
-        team6.setName("Nhóm 2c2");
+        team6.setName("Nhóm 2");
         team6.setSubjectName("Website camera HIPOLY");
         team6.setClassId(class2.getId());
         team6.setId(teamRepository.save(team6).getId());
 
         Team team7 = new Team();
         team7.setCode("TC2_3");
-        team7.setName("Nhóm 3c2");
+        team7.setName("Nhóm 3");
         team7.setSubjectName("Website bán áo ONESH Poly");
         team7.setClassId(class2.getId());
         team7.setId(teamRepository.save(team7).getId());
 
         Team team8 = new Team();
         team8.setCode("TC2_4");
-        team8.setName("Nhóm 4c2");
+        team8.setName("Nhóm 4");
         team8.setSubjectName("Website bán quần hoa CHPPoly");
         team8.setClassId(class2.getId());
         team8.setId(teamRepository.save(team8).getId());
@@ -1118,7 +1118,7 @@ public class DBGenerator implements CommandLineRunner {
         note8.setName("Note buổi 1 team 2");
         note8.setMeetingId(meeting8.getId());
         note8.setTeamId(team1.getId());
-        note8.setDescriptions("");
+        note8.setDescriptions("Note buoi 8 nhe");
         note8.setId(noteRepository.save(note8).getId());
 
         // report - team 1 - class 1
@@ -1137,8 +1137,8 @@ public class DBGenerator implements CommandLineRunner {
         report2.setId(reportRepository.save(report2).getId());
 
         TemplateReport templateReport = new TemplateReport();
-        templateReport.setDescriptions("Báo cáo: \n  1.Sinh viên 1: Mô tả nhiệm vụ" +
-                "\n  2. Sinh viên 2: ..." + "\n  3. Sinh viên 3: ...");
+        templateReport.setDescriptions("Báo cáo: \n  1. Sinh viên 1: Mô tả nhiệm vụ, công việc " +
+                "\n  2. Sinh viên 2: ..." + "\n  3. Sinh viên 3: ..."+ "\n  4. Sinh viên : ...");
         templateReport.setId(templateReportRepository.save(templateReport).getId());
 
 //post - class 1

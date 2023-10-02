@@ -15,9 +15,8 @@ import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import { useEffect, useState } from "react";
 import LoadingIndicator from "../../../../helper/loading";
 import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome } from "@fortawesome/free-solid-svg-icons";
 import { SetTTrueToggle } from "../../../../app/student/StCollapsedSlice.reducer";
+import { Empty } from "antd";
 const StMeetingMyClass = () => {
   const dispatch = useAppDispatch();
   dispatch(SetTTrueToggle());
@@ -43,7 +42,6 @@ const StMeetingMyClass = () => {
         }
       );
     } catch (error) {
-      console.log(error);
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
@@ -225,16 +223,10 @@ const StMeetingMyClass = () => {
                       </>
                     ) : (
                       <>
-                        <p
-                          style={{
-                            textAlign: "center",
-                            marginTop: "100px",
-                            fontSize: "15px",
-                            color: "red",
-                          }}
-                        >
-                          Chưa có buổi học nào đã học !
-                        </p>
+                        <Empty
+                          imageStyle={{ height: 60 }}
+                          description={<span>Không có dữ liệu</span>}
+                        />
                       </>
                     )}
                   </div>

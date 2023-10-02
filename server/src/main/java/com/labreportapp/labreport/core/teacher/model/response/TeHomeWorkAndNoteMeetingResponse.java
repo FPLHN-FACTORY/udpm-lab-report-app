@@ -16,9 +16,6 @@ public interface TeHomeWorkAndNoteMeetingResponse {
     @Value("#{target.descriptionsMeeting}")
     String getDescriptionsMeeting();
 
-    @Value("#{target.createdDate}")
-    Long getCreatedDate();
-
     @Value("#{target.idHomeWork}")
     String getIdHomeWork();
 

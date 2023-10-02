@@ -145,12 +145,6 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
   };
   const create = () => {
     let check = 0;
-    if (name.trim() === "") {
-      setErrorName("Tên nhóm không được để trống");
-      check++;
-    } else {
-      setErrorName("");
-    }
     if (check === 0) {
       featchDataTable();
       let teamNew = {
@@ -264,7 +258,7 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
           <>
             <div style={{ marginTop: "15px", borderBottom: "1px solid black" }}>
               <Row gutter={16} style={{ marginBottom: "15px" }}>
-                <Col span={12}>
+                {/* <Col span={12}>
                   {" "}
                   <span className="notBlank">*</span>
                   <span>Tên nhóm:</span> <br />
@@ -277,8 +271,8 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
                     type="text"
                   />
                   <span className="error">{errorName}</span>
-                </Col>
-                <Col span={12}>
+                </Col> */}
+                <Col span={24}>
                   {" "}
                   <span>Chủ đề:</span> <br />
                   <Input
@@ -364,23 +358,22 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
             <>
               <div style={{ paddingTop: "15px" }}>
                 <Button
-                  style={{
-                    backgroundColor: "rgb(61, 139, 227)",
-                    color: "white",
-                  }}
-                  onClick={create}
-                >
-                  Thêm
-                </Button>
-                <Button
+                  className="btn_filter"
                   style={{
                     backgroundColor: "red",
                     color: "white",
-                    marginLeft: "10px",
+                    width: "66px",
                   }}
                   onClick={cancelFaild}
                 >
                   Hủy
+                </Button>{" "}
+                <Button
+                  className="btn_clean"
+                  style={{ width: "66px", marginLeft: "10px" }}
+                  onClick={create}
+                >
+                  Thêm
                 </Button>
               </div>
             </>

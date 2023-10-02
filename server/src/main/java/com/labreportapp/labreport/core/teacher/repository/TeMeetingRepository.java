@@ -27,14 +27,14 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
 
     @Query(value = """
             SELECT  
-            m.id as id,
-            m.name as name,
-            m.descriptions as descriptions,
-            m.meeting_date as meeting_date,
-            m.type_meeting as type_meeting,
-            m.meeting_period as meeting_period,
-            m.class_id as class_id,
-            m.teacher_id as teacher_id
+                m.id as id,
+                m.name as name,
+                m.descriptions as descriptions,
+                m.meeting_date as meeting_date,
+                m.type_meeting as type_meeting,
+                m.meeting_period as meeting_period,
+                m.class_id as class_id,
+                m.teacher_id as teacher_id
             FROM meeting m
             JOIN class c ON c.id = m.class_id
             WHERE m.class_id = :#{#req.idClass}
@@ -44,13 +44,13 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
 
     @Query(value = """
             SELECT  m.id as id,
-            m.name as name,
-            m.descriptions as descriptions,
-            m.meeting_date as meeting_date,
-            m.type_meeting as type_meeting,
-            m.meeting_period as meeting_period,
-            m.class_id as class_id,
-            m.teacher_id as teacher_id
+                m.name as name,
+                m.descriptions as descriptions,
+                m.meeting_date as meeting_date,
+                m.type_meeting as type_meeting,
+                m.meeting_period as meeting_period,
+                m.class_id as class_id,
+                m.teacher_id as teacher_id
             FROM meeting m
             WHERE m.id = :#{#req.idMeeting}
                      """, nativeQuery = true)
@@ -72,32 +72,33 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
     List<TeDetailTeamReportRespone> findTeamReportByIdMeetingIdClass(@Param("req") TeFindMeetingRequest req);
 
     @Query(value = """
-            SELECT 
-            m.id AS idMeeting,
-            m.name AS nameMeeting,
-            m.descriptions AS descriptionsMeeting,
-            m.created_date AS createdDate,
-            h.id AS idHomeWork,
-            h.descriptions AS descriptionsHomeWork,
-            n.id AS idNote,
-            n.descriptions AS descriptionsNote,
-            r.id as idReport,
-            r.descriptions AS descriptionsReport
+            SELECT DISTINCT 
+                m.id AS idMeeting,
+                m.name AS nameMeeting,
+                m.descriptions AS descriptionsMeeting,
+                h.id AS idHomeWork,
+                h.descriptions AS descriptionsHomeWork,
+                n.id AS idNote,
+                n.descriptions AS descriptionsNote,
+                r.id as idReport,
+                r.descriptions AS descriptionsReport
             FROM meeting m
-             JOIN home_work h ON h.meeting_id = m.id AND h.team_id = :#{#req.idTeam}
-             JOIN note n ON n.meeting_id = m.id AND n.team_id = :#{#req.idTeam}
-             JOIN report r ON r.meeting_id = m.id AND r.team_id = :#{#req.idTeam}
+            JOIN class c ON c.id = m.class_id
+            JOIN team t ON t.class_id = c.id
+            LEFT JOIN home_work h ON h.meeting_id = m.id AND h.team_id = :#{#req.idTeam}
+            LEFT JOIN note n ON n.meeting_id = m.id AND n.team_id = :#{#req.idTeam}
+            LEFT JOIN report r ON r.meeting_id = m.id AND r.team_id = :#{#req.idTeam}
             WHERE m.id = :#{#req.idMeeting}
                       """, nativeQuery = true)
     Optional<TeHomeWorkAndNoteMeetingResponse> searchDetailMeetingTeamByIdMeIdTeam(@Param("req") TeFindMeetingRequest req);
 
     @Query(value = """
             SELECT  
-            m.id as id,
-            m.name as name,
-            m.class_id as class_id,
-            m.meeting_date as meeting_date,
-            m.meeting_period as meeting_period
+                m.id as id,
+                m.name as name,
+                m.class_id as class_id,
+                m.meeting_date as meeting_date,
+                m.meeting_period as meeting_period
             FROM meeting m
             JOIN class c ON c.id = m.class_id
             WHERE m.class_id = :#{#idClass}
@@ -107,16 +108,16 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
 
     @Query(value = """
             SELECT 
-             c.id as id_class,
-             c.code as code_class,
-             m.id as id_meeting,
-             m.meeting_date as meeting_date,
-             m.meeting_period as meeting_period,
-             m.name as name_meeting,
-             m.type_meeting as type_meeting,
-             m.address as address_meeting,
-             m.descriptions as descriptions_meeting,
-             l.name as level
+                 c.id as id_class,
+                 c.code as code_class,
+                 m.id as id_meeting,
+                 m.meeting_date as meeting_date,
+                 m.meeting_period as meeting_period,
+                 m.name as name_meeting,
+                 m.type_meeting as type_meeting,
+                 m.address as address_meeting,
+                 m.descriptions as descriptions_meeting,
+                 l.name as level
              FROM class c
              JOIN meeting m ON m.class_id = c.id
              JOIN activity ac ON ac.id = c.activity_id
@@ -128,16 +129,16 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
 
     @Query(value = """
             SELECT ROW_NUMBER() OVER(ORDER BY m.meeting_date ASC) AS stt,
-             c.id as id_class,
-             c.code as code_class,
-             m.id as id_meeting,
-             m.meeting_date as meeting_date,
-             m.meeting_period as meeting_period,
-             m.name as name_meeting,
-             m.type_meeting as type_meeting,
-             m.address as address_meeting,
-             m.descriptions as descriptions_meeting,
-             l.name as level
+                 c.id as id_class,
+                 c.code as code_class,
+                 m.id as id_meeting,
+                 m.meeting_date as meeting_date,
+                 m.meeting_period as meeting_period,
+                 m.name as name_meeting,
+                 m.type_meeting as type_meeting,
+                 m.address as address_meeting,
+                 m.descriptions as descriptions_meeting,
+                 l.name as level
              FROM class c
              JOIN meeting m ON m.class_id = c.id
              JOIN activity ac ON ac.id = c.activity_id

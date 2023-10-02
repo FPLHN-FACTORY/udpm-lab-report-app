@@ -243,7 +243,7 @@ const ModalSentStudent = ({
                     }}
                   />{" "}
                   <Button
-                    type="primary"
+                    className="btn_clean"
                     style={{
                       color: "white",
                       position: "absolute",

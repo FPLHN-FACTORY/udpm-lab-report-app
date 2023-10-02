@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, Collapse, Row } from "antd";
+import { Button, Col, Row } from "antd";
 import "./style-collapse-meeting.css";
 import TextArea from "antd/es/input/TextArea";
 import { StudentMeetingAPI } from "../../../../../../api/student/StMeetingAPI";
 import { useParams } from "react-router";
 import { toast } from "react-toastify";
-import LoadingIndicator from "../../../../../../helper/loading";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUsersRectangle } from "@fortawesome/free-solid-svg-icons";
 import { sinhVienCurrent } from "../../../../../../helper/inForUser";
 import { StudentTempalteReportAPI } from "../../../../../../api/student/StTemplateReportAPI";
-
-const { Panel } = Collapse;
+import LoadingIndicator from "../../../../../../helper/loading";
 
 const CollapseMeeting = ({ items }) => {
   const [activePanel, setActivePanel] = useState(null);
@@ -19,27 +15,34 @@ const CollapseMeeting = ({ items }) => {
   const { idMeeting } = useParams();
   const [idTeamDetail, setIdTeamDetail] = useState("");
   const [objDetail, setObjDetail] = useState({});
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [descriptionsHomeWork, setDescriptionsHomeWork] = useState("");
   const [descriptionsNote, setDescriptionsNote] = useState("");
   const [descriptionsReport, setDescriptionsReport] = useState("");
-  const [RoleStudent, setStudentRole] = useState([]);
   const [template, setTempalte] = useState({});
-
-
+  const [role, setRole] = useState(1);
   useEffect(() => {
     window.scrollTo(0, 0);
     setDescriptionsHomeWork("");
     setDescriptionsNote("");
     setDescriptionsReport("");
-    setLoading(true);
     featchTemplateReport();
   }, [items]);
 
-  const clear = () => {
-    setEdit(false);
-    setActivePanel(null);
-  };
+  useEffect(() => {
+    if (items[0].classId != null && items[0].classId != undefined) {
+      const getRoleByIdStudent = (idStudent) => {
+        setLoading(false);
+        StudentMeetingAPI.getRoleByIdStudent(idStudent, items[0].classId).then(
+          (response) => {
+            setRole(response.data.data);
+          }
+        );
+      };
+      setRole(getRoleByIdStudent(sinhVienCurrent.id));
+    }
+  }, [items]);
+
   const featchTemplateReport = async () => {
     try {
       await StudentTempalteReportAPI.getTemplateReport().then((response) => {
@@ -79,9 +82,9 @@ const CollapseMeeting = ({ items }) => {
       ).then((response) => {
         if (response.data.data === null) {
           let dataNew = {
-            idHomeWork: "",
-            idNote: "",
-            idReport: "",
+            idHomeWork: null,
+            idNote: null,
+            idReport: null,
           };
           setObjDetail(dataNew);
           setDescriptionsHomeWork("");
@@ -124,31 +127,18 @@ const CollapseMeeting = ({ items }) => {
     setEdit(false);
     featchHomeWorkNote(idTeamDetail);
   };
-
-  useEffect(() => {
-    if (items[0].classId != null && items[0].classId != undefined) {
-      const getRoleByIdStudent = (idStudent) => {
-        setLoading(false);
-
-        StudentMeetingAPI.getRoleByIdStudent(idStudent, items[0].classId).then(
-          (response) => {
-            setStudentRole(response.data.data);
-            console.log(response.data.data);
-            setLoading(true);
-          }
-        );
-      };
-      getRoleByIdStudent(sinhVienCurrent.id);
-    }
-  }, [items]);
-
+  const clear = () => {
+    setEdit(false);
+    setActivePanel(null);
+  };
   return (
     <div className="lesson-information">
+      {!loading && <LoadingIndicator />}
       {items.map((item, index) => (
         <div className="info-team">
-          <span className="info-heading" style={{ marginLeft: "40px" }}>
+          <div className="info-heading" style={{ marginLeft: "40px" }}>
             Thông tin nhóm:
-          </span>
+          </div>
           <div
             className="group-info"
             style={{ marginLeft: "40px", marginRight: "40px" }}
@@ -165,15 +155,14 @@ const CollapseMeeting = ({ items }) => {
       <>
         <div>
           <>
-            {RoleStudent === 0 ? (
+            {role === 0 ? (
               <div
                 className="info-content"
                 style={{ marginLeft: "40px", marginRight: "40px" }}
               >
                 <Row gutter={16}>
                   <Col span={8} style={{ marginTop: "10px" }}>
-                    {" "}
-                    <span  className="title-main">Nhận xét:</span>
+                    <span className="title-main">Nhận xét:</span>
                     <TextArea
                       style={{ marginTop: "10px" }}
                       rows={10}
@@ -186,12 +175,7 @@ const CollapseMeeting = ({ items }) => {
                     />
                   </Col>
                   <Col span={8} style={{ marginTop: "10px" }}>
-                    {" "}
-                    <span
-                      className="title-main"
-                    >
-                      Bài tập về nhà:
-                    </span>
+                    <span className="title-main">Bài tập về nhà:</span>
                     <TextArea
                       style={{ marginTop: "10px" }}
                       rows={10}
@@ -203,64 +187,58 @@ const CollapseMeeting = ({ items }) => {
                       }}
                     />
                   </Col>
-                  <Col span={8} style={{ marginTop: "15px" }}>
-                    {" "}
-                    <span
-                      className="title-main"
-                    >
-                      Báo cáo:
-                    </span>
+                  <Col span={8} style={{ marginTop: "10px" }}>
+                    <span className="title-main">Báo cáo:</span>
                     <TextArea
                       style={{ marginTop: "10px" }}
                       rows={10}
                       value={descriptionsReport}
-                      // onChange={(e) => setDescriptionsHomeWork(e.target.value)}
                       onChange={(e) => setDescriptionsReport(e.target.value)}
                       onClick={(e) => {
-                      e.stopPropagation();
-                      setEdit(true);
-                    }}
+                        e.stopPropagation();
+                        setEdit(true);
+                      }}
                     />
                   </Col>
-                  
-                  {edit && (
-                    <>
-                      <div
-                        style={{
-                          paddingTop: "15px",
-                          paddingLeft: "85%",
-                          marginLeft: "40px",
-                        }}
-                      >
-                        <Button
-                          style={{
-                            backgroundColor: "rgb(61, 139, 227)",
-                            color: "white",
-                            marginRight: "10px",
-                          }}
-                          onClick={update}
-                        >
-                          Lưu
-                        </Button>
-                        <Button
-                          style={{
-                            backgroundColor: "red",
-                            color: "white",
-                          }}
-                          onClick={handleCancel}
-                        >
-                          Hủy
-                        </Button>
-                      </div>
-                    </>
-                  )}
                 </Row>
+                {edit && role === 0 && (
+                  <>
+                    <div
+                      style={{
+                        paddingTop: "15px",
+                        paddingLeft: "85%",
+                        marginLeft: "40px",
+                      }}
+                    >
+                      {" "}
+                      <Button
+                        style={{
+                          backgroundColor: "#E2B357",
+                          color: "white",
+                          marginRight: "15px",
+                        }}
+                        onClick={handleCancel}
+                      >
+                        Hủy
+                      </Button>
+                      <Button
+                        style={{
+                          backgroundColor: "rgb(61, 139, 227)",
+                          color: "white",
+                        }}
+                        onClick={update}
+                      >
+                        Lưu
+                      </Button>
+                    </div>
+                  </>
+                )}
                 <Row gutter={16}>
-                <Col span={24}>
-                  <span className="title-main">Template mẫu báo cáo:</span>
-                  <TextArea rows={5} value={template.descriptions} />
-                </Col>
-              </Row>
+                  <Col span={24}>
+                    <span className="title-main">Template mẫu báo cáo:</span>
+                    <TextArea rows={5} value={template.descriptions} />
+                  </Col>
+                </Row>
               </div>
             ) : (
               <div
@@ -270,9 +248,7 @@ const CollapseMeeting = ({ items }) => {
                 <Row gutter={16}>
                   <Col span={8}>
                     {" "}
-                    <span  className="title-main">
-                      Nhận xét:
-                    </span>
+                    <span className="title-main">Nhận xét:</span>
                     <TextArea
                       style={{ marginTop: "10px" }}
                       rows={10}
@@ -282,11 +258,7 @@ const CollapseMeeting = ({ items }) => {
                   </Col>
                   <Col span={8}>
                     {" "}
-                    <span
-                       className="title-main"
-                    >
-                      Bài tập về nhà:
-                    </span>
+                    <span className="title-main">Bài tập về nhà:</span>
                     <TextArea
                       style={{ marginTop: "10px" }}
                       rows={10}
@@ -296,11 +268,7 @@ const CollapseMeeting = ({ items }) => {
                   </Col>
                   <Col span={8} style={{ marginTop: "15px" }}>
                     {" "}
-                    <span
-                      className="title-main"
-                    >
-                      Báo cáo:
-                    </span>
+                    <span className="title-main">Báo cáo:</span>
                     <TextArea
                       style={{ marginTop: "10px" }}
                       rows={10}
@@ -310,11 +278,11 @@ const CollapseMeeting = ({ items }) => {
                   </Col>
                 </Row>
                 <Row gutter={16}>
-                <Col span={24}>
-                  <span className="title-main">Template mẫu báo cáo:</span>
-                  <TextArea rows={5} value={template.descriptions} />
-                </Col>
-              </Row>
+                  <Col span={24}>
+                    <span className="title-main">Template mẫu báo cáo:</span>
+                    <TextArea rows={5} value={template.descriptions} />
+                  </Col>
+                </Row>
               </div>
             )}
           </>

@@ -34,6 +34,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -131,9 +132,6 @@ public class TeMeetingServiceImpl implements TeMeetingService {
         requestIdClass.setIdClass(meetingResponse.getIdClass());
         requestIdClass.setIdMeeting(meetingResponse.getId());
         List<TeDetailTeamReportRespone> listTeam = teMeetingRepository.findTeamReportByIdMeetingIdClass(requestIdClass);
-        if (listTeam.size() == 0) {
-            return null;
-        }
         TeDetailMeetingTeamReportRespone objReturn = new TeDetailMeetingTeamReportRespone();
         objReturn.setId(meetingResponse.getId());
         objReturn.setIdClass(meetingResponse.getIdClass());
@@ -272,40 +270,41 @@ public class TeMeetingServiceImpl implements TeMeetingService {
 
     @Override
     @Synchronized
+    @Transactional
     public TeHomeWorkAndNoteMeetingResponse updateDetailMeetingTeamByIdMeIdTeam(TeUpdateHomeWorkAndNoteInMeetingRequest request) {
-        Optional<HomeWork> objectHW = teHomeWorkRepository.findById(request.getIdHomeWork());
         HomeWork homeWorkNew = new HomeWork();
-        if (!objectHW.isPresent()) {
-            homeWorkNew.setMeetingId(request.getIdMeeting());
-            homeWorkNew.setTeamId(request.getIdTeam());
-            homeWorkNew.setName("");
-            homeWorkNew.setDescriptions(request.getDescriptionsHomeWork());
-        } else {
-            homeWorkNew = objectHW.get();
-            homeWorkNew.setDescriptions(request.getDescriptionsHomeWork());
+        homeWorkNew.setMeetingId(request.getIdMeeting());
+        homeWorkNew.setTeamId(request.getIdTeam());
+        homeWorkNew.setName("");
+        homeWorkNew.setDescriptions(request.getDescriptionsHomeWork());
+        if (request.getIdHomeWork() != null) {
+            Optional<HomeWork> objectHW = teHomeWorkRepository.findById(request.getIdHomeWork());
+            if (objectHW.isPresent()) {
+                homeWorkNew.setId(objectHW.get().getId());
+            }
         }
         teHomeWorkRepository.save(homeWorkNew);
-        Optional<Note> objectNote = teNoteRepository.findById(request.getIdNote());
         Note noteNew = new Note();
-        if (!objectNote.isPresent()) {
-            noteNew.setMeetingId(request.getIdMeeting());
-            noteNew.setTeamId(request.getIdTeam());
-            noteNew.setName("");
-            noteNew.setDescriptions(request.getDescriptionsNote());
-        } else {
-            noteNew = objectNote.get();
-            noteNew.setDescriptions(request.getDescriptionsNote());
+        noteNew.setMeetingId(request.getIdMeeting());
+        noteNew.setTeamId(request.getIdTeam());
+        noteNew.setName("");
+        noteNew.setDescriptions(request.getDescriptionsNote());
+        if (request.getIdNote() != null) {
+            Optional<Note> objectNote = teNoteRepository.findById(request.getIdNote());
+            if (objectNote.isPresent()) {
+                noteNew.setId(objectNote.get().getId());
+            }
         }
         teNoteRepository.save(noteNew);
-        Optional<Report> objectReport = teReportRepository.findById(request.getIdReport());
         Report reportNew = new Report();
-        if (!objectReport.isPresent()) {
-            reportNew.setMeetingId(request.getIdMeeting());
-            reportNew.setTeamId(request.getIdTeam());
-            reportNew.setDescriptions(request.getDescriptionsReport());
-        } else {
-            reportNew = objectReport.get();
-            reportNew.setDescriptions(request.getDescriptionsReport());
+        reportNew.setMeetingId(request.getIdMeeting());
+        reportNew.setTeamId(request.getIdTeam());
+        reportNew.setDescriptions(request.getDescriptionsReport());
+        if (request.getIdReport() != null) {
+            Optional<Report> objectReport = teReportRepository.findById(request.getIdReport());
+            if (objectReport.isPresent()) {
+                reportNew.setId(objectReport.get().getId());
+            }
         }
         teReportRepository.save(reportNew);
         TeFindMeetingRequest teFind = new TeFindMeetingRequest();
@@ -313,7 +312,7 @@ public class TeMeetingServiceImpl implements TeMeetingService {
         teFind.setIdMeeting(request.getIdMeeting());
         Optional<TeHomeWorkAndNoteMeetingResponse> objectFind = teMeetingRepository.searchDetailMeetingTeamByIdMeIdTeam(teFind);
         if (!objectFind.isPresent()) {
-            throw new RestApiException(Message.MEETING_HOMEWORK_NOTE_NOT_EXISTS);
+            return null;
         }
         return objectFind.get();
     }
@@ -338,6 +337,7 @@ public class TeMeetingServiceImpl implements TeMeetingService {
     }
 
     @Override
+    @Transactional
     public List<TeScheduleMeetingClassResponse> updateAddressMeeting(TeScheduleUpdateMeetingRequest request) {
         List<TeUpdateMeetingRequest> list = request.getListMeeting();
         if (list.size() == 0) {
