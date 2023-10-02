@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUsersRectangle } from "@fortawesome/free-solid-svg-icons";
 const { Panel } = Collapse;
 
-const CollapseTeam = ({ items }) => {
+const CollapseTeam = ({ team, featchMeeting }) => {
   const [activePanel, setActivePanel] = useState(null);
   const [edit, setEdit] = useState(false);
   const { idMeeting } = useParams();
@@ -68,15 +68,15 @@ const CollapseTeam = ({ items }) => {
         data
       ).then((response) => {
         if (response.data.data === null) {
-          let dataNew = {
-            idHomeWork: "",
-            idNote: "",
-            idReport: "",
+          const dataNew = {
+            idHomeWork: null,
+            idNote: null,
+            idReport: null,
           };
-          setObjDetail(dataNew);
           setDescriptionsHomeWork("");
           setDescriptionsNote("");
           setDescriptionsReport("");
+          setObjDetail(dataNew);
         } else {
           setDescriptionsHomeWork(response.data.data.descriptionsHomeWork);
           setDescriptionsNote(response.data.data.descriptionsNote);
@@ -103,11 +103,16 @@ const CollapseTeam = ({ items }) => {
       };
       await TeacherMeetingHomeWorkNoteAPI.updateHomeWorkAndNote(data).then(
         (response) => {
-          toast.success("Lưu thành công");
+          toast.success("Lưu thành công !");
+          setDescriptionsHomeWork(response.data.data.descriptionsHomeWork);
+          setDescriptionsNote(response.data.data.descriptionsNote);
+          setDescriptionsReport(response.data.data.descriptionsReport);
+          setObjDetail(response.data.data);
+          featchMeeting(idMeeting);
         }
       );
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      alert(error.message);
     }
   };
   return (
@@ -125,7 +130,7 @@ const CollapseTeam = ({ items }) => {
         showArrow={true}
         className="panel-collap"
       >
-        {items.map((item, index) => (
+        {team.map((item, index) => (
           <Panel
             style={{
               width: "100%",
@@ -229,37 +234,31 @@ const CollapseTeam = ({ items }) => {
               <Row gutter={16}>
                 <Col span={24}>
                   <span className="title-main">Template mẫu báo cáo:</span>
-                  <TextArea rows={5} value={template.descriptions} />
+                  <TextArea rows={4} value={template.descriptions} />
                 </Col>
               </Row>
+              {edit && (
+                <>
+                  <div style={{ paddingTop: "15px", textAlign: "center" }}>
+                    <Button
+                      className="btn_filter"
+                      style={{
+                        marginRight: "15px",
+                      }}
+                      onClick={handleCancel}
+                    >
+                      Hủy
+                    </Button>{" "}
+                    <Button className="btn_clean" onClick={update}>
+                      Lưu
+                    </Button>
+                  </div>
+                </>
+              )}
             </div>
-            {edit && (
-              <>
-                <div style={{ paddingTop: "15px", paddingLeft: "85%" }}>
-                  <Button
-                    style={{
-                      backgroundColor: "rgb(61, 139, 227)",
-                      color: "white",
-                    }}
-                    onClick={update}
-                  >
-                    Lưu
-                  </Button>
-                  <Button
-                    style={{
-                      backgroundColor: "red",
-                      color: "white",
-                    }}
-                    onClick={handleCancel}
-                  >
-                    Hủy
-                  </Button>
-                </div>
-              </>
-            )}
           </Panel>
         ))}
-        {items.length === 0 && (
+        {team.length === 0 && (
           <Empty
             imageStyle={{ height: 60 }}
             description={<span>Không có dữ liệu</span>}

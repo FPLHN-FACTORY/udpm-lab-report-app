@@ -60,7 +60,6 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
   useEffect(() => {
     if (visible === true) {
       setSubjectName(team.subjectName);
-      setCode(team.code);
       setName(team.name);
       setListStudentsChange([]);
       setListStudentMulty([]);
@@ -300,7 +299,6 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
           <Row gutter={16} style={{ marginBottom: "15px" }}>
             <Col span={12}>
               {" "}
-              <span className="notBlank">*</span>
               <span>Tên nhóm:</span> <br />
               <Input
                 placeholder="Nhập tên"
@@ -308,6 +306,7 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
                 onChange={(e) => {
                   setName(e.target.value);
                 }}
+                readOnly={true}
                 type="text"
               />
               <span className="error">{errorName}</span>
@@ -387,23 +386,23 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
           <>
             <div style={{ paddingTop: "15px" }}>
               <Button
+                className="btn_filter"
                 style={{
-                  backgroundColor: "rgb(61, 139, 227)",
-                  color: "white",
-                }}
-                onClick={update}
-              >
-                Sửa
-              </Button>
-              <Button
-                style={{
-                  backgroundColor: "red",
-                  color: "white",
-                  marginLeft: "10px",
+                  width: "66px",
                 }}
                 onClick={cancelFaild}
               >
                 Hủy
+              </Button>
+              <Button
+                className="btn_clean"
+                style={{
+                  width: "66px",
+                  marginLeft: "10px",
+                }}
+                onClick={update}
+              >
+                Sửa
               </Button>
             </div>
           </>

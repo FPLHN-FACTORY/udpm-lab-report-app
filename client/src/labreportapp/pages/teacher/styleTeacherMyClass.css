@@ -80,33 +80,33 @@
 }
 
 .btn_filter {
-  background-color: #e1af4a;
+  /* background-color: #e1af4a; */
+  background-color: #e2b357;
   color: white;
-  margin-right: 5px;
+  margin-right: 15px;
 }
 
 .btn_filter:hover {
-  background-color: #d09f3c;
+  background-color: #e1af4b !important;
   color: white !important;
   margin-right: 5px;
+  border-color: transparent !important;
+  outline: #e2ac3f !important;
+  box-shadow: 0 0 10px rgb(228, 227, 227);
 }
 
-.button-clear-teacher {
+.btn_clean {
   background-color: rgb(38, 144, 214);
   color: white;
   margin-right: 5px;
 }
 
-.button-clear-teacher:hover {
+.btn_clean:hover {
   background-color: rgb(9, 117, 185);
   color: white !important;
   margin-right: 5px;
 }
-.btn_filter:hover {
-  border-color: transparent !important;
-  outline: #e2ac3f !important;
-  box-shadow: none !important;
-}
+
 .icon {
   size: 1;
   color: rgb(38, 144, 214) !important;

@@ -208,6 +208,24 @@ const TeamsInMyClass = () => {
       render: (text, record) => (
         <>
           <div>
+            {record.idProject != null && (
+              <Tooltip title="Xem trello dự án">
+                <Link
+                  to={`/detail-project/${record.idProject}`}
+                  style={{ color: "black" }}
+                >
+                  <FontAwesomeIcon
+                    icon={faMattressPillow}
+                    className="icon"
+                    style={{ width: "19px" }}
+                    onClick={() => {
+                      setShowDetailModal(true);
+                      handleDetailTeam(record);
+                    }}
+                  />
+                </Link>
+              </Tooltip>
+            )}
             <Tooltip title="Chi tiết">
               <FontAwesomeIcon
                 icon={faEye}
@@ -236,24 +254,6 @@ const TeamsInMyClass = () => {
                 }}
               />
             </Tooltip>
-            {record.idProject != null && (
-              <Tooltip title="Xem trello dự án">
-                <Link
-                  to={`/detail-project/${record.idProject}`}
-                  style={{ color: "black" }}
-                >
-                  <FontAwesomeIcon
-                    icon={faMattressPillow}
-                    className="icon"
-                    style={{ width: "19px" }}
-                    onClick={() => {
-                      setShowDetailModal(true);
-                      handleDetailTeam(record);
-                    }}
-                  />
-                </Link>
-              </Tooltip>
-            )}
           </div>
         </>
       ),
@@ -477,18 +477,19 @@ const TeamsInMyClass = () => {
                 }}
               >
                 <Button
+                  className="btn_filter"
                   style={{
-                    backgroundColor: "red",
-                    color: "white",
+                    width: "66px",
                   }}
                   onClick={handleCancelModalCreateFaild}
                 >
                   Hủy
                 </Button>{" "}
                 <Button
+                  className="btn_clean"
                   style={{
-                    backgroundColor: "rgb(61, 139, 227)",
-                    color: "white",
+                    width: "66px",
+                    marginLeft: "10px",
                   }}
                   onClick={handleDeleteTeam}
                 >

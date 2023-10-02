@@ -20,24 +20,26 @@ const TeamInMeeting = () => {
     window.scrollTo(0, 0);
     featchMeeting(idMeeting);
   }, []);
-  const featchMeeting = async (id) => {
+  const featchMeeting = async (idMeeting) => {
     setLoading(false);
     try {
-      await TeacherMeetingAPI.getDetailByIdMeeting(id).then((response) => {
-        setMeeting(response.data.data);
-        featchTeams(
-          response.data.data.idClass,
-          response.data.data.listTeamReport
-        );
-        document.title = "Bảng điều khiển - " + response.data.data.name;
-      });
+      await TeacherMeetingAPI.getDetailByIdMeeting(idMeeting).then(
+        (response) => {
+          setMeeting(response.data.data);
+          featchTeams(
+            response.data.data.idClass,
+            response.data.data.listTeamReport
+          );
+          document.title = "Bảng điều khiển - " + response.data.data.name;
+        }
+      );
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-  const featchTeams = async (id, listReport) => {
+  const featchTeams = async (idClass, listReport) => {
     try {
-      await TeacherTeamsAPI.getTeamsByIdClass(id).then((responese) => {
+      await TeacherTeamsAPI.getTeamsByIdClass(idClass).then((responese) => {
         const mergedList = responese.data.data.map((item1) => {
           const matchingItem2 = listReport.find(
             (item2) => item2.idTeam === item1.id
@@ -152,7 +154,7 @@ const TeamInMeeting = () => {
                 Danh sách nhóm
               </span>
             </div>
-            <CollapseTeam items={team} />
+            <CollapseTeam team={team} featchMeeting={featchMeeting} />
           </div>
         </div>
       </div>

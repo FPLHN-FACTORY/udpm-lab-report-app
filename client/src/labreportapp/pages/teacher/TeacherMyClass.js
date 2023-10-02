@@ -5,13 +5,10 @@ import {
   faEye,
   faFilter,
   faHome,
-  faMagnifyingGlass,
-  faMagnifyingGlassArrowRight,
   faTableList,
 } from "@fortawesome/free-solid-svg-icons";
 import { giangVienCurrent } from "../../helper/inForUser";
 import LoadingIndicator from "../../helper/loading";
-import { QuestionCircleFilled, ProjectOutlined } from "@ant-design/icons";
 import {
   Row,
   Col,
@@ -451,14 +448,18 @@ const TeacherMyClass = () => {
               </Col>
             </Row>
             <div className="box_btn_filter">
-              <Button className="btn_filter" onClick={handleSearch}>
+              <Button
+                className="btn_filter"
+                onClick={handleSearch}
+                style={{ paddingRight: "12px", backgroundColor: "#E2B357" }}
+              >
                 <FontAwesomeIcon
                   icon={faFilter}
                   style={{ paddingRight: "5px" }}
                 />{" "}
                 <span>Tìm kiếm</span>
               </Button>
-              <Button className="button-clear-teacher" onClick={handleClear}>
+              <Button className="btn_clean" onClick={handleClear}>
                 <FontAwesomeIcon
                   icon={faCodeCompare}
                   style={{ paddingRight: "5px" }}

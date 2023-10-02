@@ -20,16 +20,6 @@ public class TeCreateTeamsRequest {
     @NotBlank
     private String classId;
 
-    @NotEmpty
-    @NotBlank
-    private String code;
-
-    @NotEmpty
-    @NotBlank
-    private String name;
-
-    @NotEmpty
-    @NotBlank
     private String subjectName;
 
     private List<TeTeamUpdateStudentClassRequest> listStudentClasses;

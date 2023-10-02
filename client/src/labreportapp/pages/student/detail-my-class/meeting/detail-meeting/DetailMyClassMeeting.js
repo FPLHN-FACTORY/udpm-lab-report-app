@@ -1,17 +1,10 @@
-import { Row, Col } from "antd";
+import { Row, Col, Empty } from "antd";
 import { useParams } from "react-router";
 import "./style-detail-my-class-meeting.css";
-import {
-  BookOutlined,
-  ControlOutlined,
-  UnorderedListOutlined,
-} from "@ant-design/icons";
+import { BookOutlined, UnorderedListOutlined } from "@ant-design/icons";
 import LoadingIndicator from "../../../../../helper/loading";
 import { useEffect, useState } from "react";
 import { StudentMeetingAPI } from "../../../../../api/student/StMeetingAPI";
-import { StMyTeamClassAPI } from "../../../../../api/student/StTeamClass";
-
-import { TeacherTeamsAPI } from "../../../../../api/teacher/teams-class/TeacherTeams.api";
 import CollapseMeeting from "../detail-meeting/collapseMeeting/StCollapseMeeting";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
@@ -22,11 +15,10 @@ const StTeamMeeting = () => {
   const [meeting, setMeeting] = useState({});
   const [team, setTeam] = useState(["a", "b"]);
   const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     window.scrollTo(0, 0);
-
     featchMeeting(idMeeting);
-    // featchTeams(meeting.idClass)
   }, []);
 
   const featchMeeting = async (id) => {
@@ -35,23 +27,16 @@ const StTeamMeeting = () => {
       await StudentMeetingAPI.getDetailByIdMeeting(id).then((response) => {
         setMeeting(response.data.data);
         document.title = "Bảng điều khiển - " + response.data.data.name;
-        // featchTeams(response.data.data.idClass);
+        featchTeams(response.data.data.idClass);
       });
     } catch (error) {
       toast.error(error.response.data.message);
     }
   };
-
-  useEffect(() => {
-    featchTeams(meeting.idClass);
-  }, [meeting]);
   const featchTeams = async (id) => {
     try {
       await StudentMeetingAPI.getTeamInMeeting(id).then((responese) => {
-        // console.log(responese.data.data);
         setTeam(responese.data.data);
-        // console.log(team);
-
         setTimeout(() => {
           setLoading(true);
         }, 250);
@@ -73,10 +58,7 @@ const StTeamMeeting = () => {
     <>
       {!loading && <LoadingIndicator />}
       <div className="box-one">
-        <Link
-          //  to="/teacher/my-class"
-          style={{ color: "black" }}
-        >
+        <Link style={{ color: "black" }}>
           <span style={{ fontSize: "18px", paddingLeft: "20px" }}>
             <FontAwesomeIcon
               icon={faHome}
@@ -161,16 +143,10 @@ const StTeamMeeting = () => {
             </div>
             {team.length === 0 && (
               <>
-                <p
-                  style={{
-                    textAlign: "center",
-                    marginTop: "100px",
-                    fontSize: "15px",
-                    color: "red",
-                  }}
-                >
-                  Bạn chưa thuộc nhóm nào
-                </p>
+                <Empty
+                  imageStyle={{ height: 60 }}
+                  description={<span>Không có dữ liệu</span>}
+                />
               </>
             )}
             {team.length > 0 && (

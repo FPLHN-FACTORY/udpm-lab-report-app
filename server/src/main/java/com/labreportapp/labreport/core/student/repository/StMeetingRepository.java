@@ -18,7 +18,7 @@ import java.util.Optional;
  * @author quynhncph26201
  */
 @Repository
-public interface StMeetingRepository extends JpaRepository<Meeting , String> {
+public interface StMeetingRepository extends JpaRepository<Meeting, String> {
     @Query(value = """
             SELECT  
             m.id as id,
@@ -52,23 +52,24 @@ public interface StMeetingRepository extends JpaRepository<Meeting , String> {
     Optional<StMeetingResponse> searchMeetingByIdMeeting(@Param("req") StFindMeetingRequest req);
 
     @Query(value = """
-             SELECT 
-             m.id AS idMeeting,
-             m.name AS nameMeeting,
-             m.descriptions AS descriptionsMeeting,
-             m.created_date AS createdDate,
-             h.id AS idHomeWork,
-             h.descriptions AS descriptionsHomeWork,
-             n.id AS idNote,
-             n.descriptions AS descriptionsNote,
-             r.id as idReport,
-             r.descriptions AS descriptionsReport
-             FROM meeting m
-              JOIN home_work h ON h.meeting_id = m.id AND h.team_id = :#{#req.idTeam}
-              JOIN note n ON n.meeting_id = m.id AND n.team_id = :#{#req.idTeam}
-              JOIN report r ON r.meeting_id = m.id AND r.team_id = :#{#req.idTeam}
-             WHERE m.id = :#{#req.idMeeting}
-                      """, nativeQuery = true)
+            SELECT DISTINCT
+                  m.id AS idMeeting,
+                  m.name AS nameMeeting,
+                  m.descriptions AS descriptionsMeeting,
+                  h.id AS idHomeWork,
+                  h.descriptions AS descriptionsHomeWork,
+                  n.id AS idNote,
+                  n.descriptions AS descriptionsNote,
+                  r.id as idReport,
+                  r.descriptions AS descriptionsReport
+            FROM meeting m
+            JOIN class c ON c.id = m.class_id
+            JOIN team t ON t.class_id = c.id
+            LEFT JOIN home_work h ON h.meeting_id = m.id AND h.team_id = :#{#req.idTeam}
+            LEFT JOIN note n ON n.meeting_id = m.id AND n.team_id = :#{#req.idTeam}
+            LEFT JOIN report r ON r.meeting_id = m.id AND r.team_id = :#{#req.idTeam}
+            WHERE m.id = :#{#req.idMeeting}
+                     """, nativeQuery = true)
     Optional<StHomeWordAndNoteResponse> searchDetailMeetingTeamByIdMeIdTeam(@Param("req") StFindMeetingRequest req);
 
     @Query(value = """

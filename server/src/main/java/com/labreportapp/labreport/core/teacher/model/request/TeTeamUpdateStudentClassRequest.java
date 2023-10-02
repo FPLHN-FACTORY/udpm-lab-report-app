@@ -18,6 +18,10 @@ public class TeTeamUpdateStudentClassRequest {
     @NotBlank
     private String idStudentClass;
 
+    private String email;
+
+    private String idStudent;
+
     @NotBlank
     @NotEmpty
     private String role;

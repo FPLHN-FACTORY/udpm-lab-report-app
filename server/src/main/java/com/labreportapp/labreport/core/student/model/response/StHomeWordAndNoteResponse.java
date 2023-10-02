@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
  * @author quynhncph26201
  */
 public interface StHomeWordAndNoteResponse {
+
     @Value("#{target.idMeeting}")
     String getIdMeeting();
 
@@ -14,23 +15,6 @@ public interface StHomeWordAndNoteResponse {
 
     @Value("#{target.descriptionsMeeting}")
     String getDescriptionsMeeting();
-
-//    @Value("#{target.idTeam}")
-//    String getIdTeam();
-//
-//    @Value("#{target.codeTeam}")
-//    String getCodeTeam();
-
-//    @Value("#{target.nameTeam}")
-//    String getNameTeam();
-//
-//    @Value("#{target.subjectName}")
-//    String getSubjectName();
-
-    //    @Value("#{target.class_id}")
-    //   String getIdClass();
-    @Value("#{target.createdDate}")
-    Long getCreatedDate();
 
     @Value("#{target.idHomeWork}")
     String getIdHomeWork();

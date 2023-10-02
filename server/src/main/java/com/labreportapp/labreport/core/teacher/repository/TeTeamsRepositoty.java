@@ -27,7 +27,7 @@ public interface TeTeamsRepositoty extends JpaRepository<Team, String> {
             t.project_id as project_id
             FROM team t
             WHERE t.class_id = :#{#req.idClass}
-            ORDER BY t.code ASC
+            ORDER BY t.name ASC
                      """, countQuery = """
             SELECT COUNT(DISTINCT t.id)
             FROM team t
@@ -46,7 +46,6 @@ public interface TeTeamsRepositoty extends JpaRepository<Team, String> {
              m.id as idMeeting,
              m.name as nameMeeting,
              m.descriptions as descriptionsMeeting,
-            t.code as codeTeam,
             t.name  as nameTeam,
             t.subject_name as subjectName,
             m.created_date as createdDate,
@@ -67,7 +66,6 @@ public interface TeTeamsRepositoty extends JpaRepository<Team, String> {
                         LEFT JOIN home_work h ON h.team_id = t.id
                         LEFT JOIN note n ON n.team_id = t.id
                         WHERE m.class_id = :#{#req.idClass} and m.id = :#{#req.idMeeting}
-                      
             """, nativeQuery = true)
     List<TeHomeWorkAndNoteMeetingResponse> findTeamAndHomeWorkAndNoteByIdClassAndIdMeeting(@Param("req") TeFindMeetingRequest req);
 
@@ -75,4 +73,16 @@ public interface TeTeamsRepositoty extends JpaRepository<Team, String> {
              SELECT  * from team where class_id = :#{#idClass}
             """, nativeQuery = true)
     List<Team> getTeamByClassId(@Param("idClass") String idClass);
+
+    @Query(value = """
+             SELECT IFNULL(
+                    CONCAT(' ', MAX(CAST(SUBSTRING_INDEX(t.name, ' ', -1) AS SIGNED)) + 1),
+                    '1'
+                ) AS new_name
+            FROM team t
+            LEFT JOIN class c ON t.class_id = c.id
+             WHERE c.id = :idClass
+             """, nativeQuery = true)
+    Integer getNameNhomAuto(@Param("idClass") String idClass);
+
 }

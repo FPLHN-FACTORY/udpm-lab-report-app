@@ -14,12 +14,8 @@ import {
 import { Table, Button, Tooltip, Space, Popconfirm } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { sinhVienCurrent } from "../../../../helper/inForUser";
-import {
-  convertMeetingPeriod,
-  convertMeetingPeriodToNumber,
-} from "../../../../helper/util.helper";
+import { convertMeetingPeriodToNumber } from "../../../../helper/util.helper";
 import { convertLongToDate } from "../../../../helper/convertDate";
-import { EyeOutlined, UserAddOutlined } from "@ant-design/icons";
 import ModalDetailTeam from "./modal-detail-team/ModalDetailTeam";
 import LoadingIndicatorNoOverlay from "../../../../helper/loadingNoOverlay";
 import { SetTTrueToggle } from "../../../../app/student/StCollapsedSlice.reducer";
@@ -42,7 +38,8 @@ const DetailMyClassTeam = () => {
   useEffect(() => {
     setIsLoading(true);
     loadDataDetailClass();
-    checkStatusStudentInClass();    document.title = "Bảng điều khiển - Thông tin lớp học";
+    checkStatusStudentInClass();
+    document.title = "Bảng điều khiển - Thông tin lớp học";
   }, []);
 
   const loadDataDetailClass = () => {
@@ -306,10 +303,10 @@ const DetailMyClassTeam = () => {
                   Ca học:{" "}
                   {detailClass != null
                     ? "Ca " +
-                    parseInt(
-                      convertMeetingPeriodToNumber(detailClass.classPeriod) +
-                      1
-                    )
+                      parseInt(
+                        convertMeetingPeriodToNumber(detailClass.classPeriod) +
+                          1
+                      )
                     : ""}
                 </span>
                 <span
@@ -326,8 +323,8 @@ const DetailMyClassTeam = () => {
                   Giảng viên:{" "}
                   {detailClass != null
                     ? detailClass.nameTeacher +
-                    " - " +
-                    detailClass.usernameTeacher
+                      " - " +
+                      detailClass.usernameTeacher
                     : ""}
                 </span>
               </div>
@@ -381,7 +378,12 @@ const DetailMyClassTeam = () => {
                       okText="Có"
                       cancelText="Không"
                     >
-                      <Button className="btnRoiNhom">Rời nhóm</Button>
+                      <Button
+                        style={{ backgroundColor: "#E2B357" }}
+                        className="btnRoiNhom"
+                      >
+                        Rời nhóm
+                      </Button>
                     </Popconfirm>
                   </div>
                 </>
