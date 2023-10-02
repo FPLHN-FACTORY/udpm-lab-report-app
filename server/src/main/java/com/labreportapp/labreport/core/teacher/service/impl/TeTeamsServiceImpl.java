@@ -232,16 +232,18 @@ public class TeTeamsServiceImpl implements TeTeamsService {
                             if (studentClasses != null) {
                                 MemberProject memberProject = mapMember.get(studentClasses.getStudentId());
                                 if (memberProject == null) {
-                                    memberProject.setMemberId(mapStudent.get(student.getEmail()).getStudentId());
-                                    memberProject.setEmail(student.getEmail());
-                                    memberProject.setProjectId(projectFind.get().getId());
-                                    memberProject.setRole(student.getRole().equals("0") ? RoleMemberProject.MANAGER : RoleMemberProject.DEV);
-                                    memberProject.setStatusWork(StatusWork.DANG_LAM);
+                                    MemberProject memberProjectNew = new MemberProject();
+                                    memberProjectNew.setMemberId(mapStudent.get(student.getEmail()).getStudentId());
+                                    memberProjectNew.setEmail(student.getEmail());
+                                    memberProjectNew.setProjectId(projectFind.get().getId());
+                                    memberProjectNew.setRole(student.getRole().equals("0") ? RoleMemberProject.MANAGER : RoleMemberProject.DEV);
+                                    memberProjectNew.setStatusWork(StatusWork.DANG_LAM);
+                                    listMemberProjectUpdate.add(memberProjectNew);
                                 } else {
                                     memberProject.setId(memberProject.getId());
                                     memberProject.setRole(student.getRole().equals("0") ? RoleMemberProject.MANAGER : RoleMemberProject.DEV);
+                                    listMemberProjectUpdate.add(memberProject);
                                 }
-                                listMemberProjectUpdate.add(memberProject);
                             }
                         });
                         if (studentClassesDeleteIdTeamRequest.size() != 0) {
