@@ -10,10 +10,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImage } from "@fortawesome/free-solid-svg-icons";
 import { UploadOutlined } from "@ant-design/icons";
 import { v4 as uuidv4 } from "uuid";
-import { userCurrent } from "../../../../../helper/inForUser";
 import { DetailTodoAPI } from "../../../../../api/detail-todo/detailTodo.api";
 import LoadingIndicatorNoOverlay from "../../../../../helper/loadingNoOverlay";
-import { sinhVienCurrent } from "../../../../../../labreportapp/helper/inForUser";
 
 const PopupImage = ({ position, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -91,7 +89,6 @@ const PopupImage = ({ position, onClose }) => {
       idTodo: detailTodo.id,
       idTodoList: detailTodo.todoListId,
       projectId: detailProject.id,
-      idUser: sinhVienCurrent.id,
     };
 
     stompClient.send(

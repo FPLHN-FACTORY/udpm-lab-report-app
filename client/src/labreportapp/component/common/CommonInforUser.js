@@ -7,6 +7,8 @@ import { Badge, Dropdown, Menu, Switch } from "antd";
 import { Link } from "react-router-dom";
 import AvtDefault from "../../assets/img/328693761_727939795557043_1972102579202651860_n.jpg";
 import { useState } from "react";
+import { useAppSelector } from "../../app/hook";
+import { GetUserCurrent } from "../../app/common/UserCurrent.reducer";
 
 const CommonInforUser = () => {
   const handleMenuClick = (e) => {
@@ -40,6 +42,8 @@ const CommonInforUser = () => {
     // }
   };
 
+  const userCurrent = useAppSelector(GetUserCurrent);
+
   return (
     <>
       <Badge>
@@ -63,12 +67,16 @@ const CommonInforUser = () => {
           onClick={(e) => e.preventDefault()}
           style={{ display: "flex", alignItems: "center" }}
         >
-          <img className="img_avatar" src={AvtDefault} alt="User Avatar" />
+          <img
+            className="img_avatar"
+            src={userCurrent != null ? userCurrent.picture : ""}
+            alt="avt"
+          />
           <span
             className="span-name-usercurrent"
             style={{ marginLeft: 8, fontWeight: 500, color: "#4f4f4f" }}
           >
-            Nguyễn Công Thắng
+            {userCurrent != null ? userCurrent.name : ""}
           </span>
         </Link>
       </Dropdown>

@@ -23,7 +23,6 @@ export class StClassAPI {
       method: "POST",
       url: "/student/class/join",
       params: {
-        idStudent: filter.idStudent,
         idClass: filter.idClass,
       },
     });

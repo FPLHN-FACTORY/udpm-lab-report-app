@@ -11,6 +11,7 @@ import com.labreportapp.labreport.core.student.repository.StAttendenceAllReposit
 import com.labreportapp.labreport.core.student.repository.StMyClassRepository;
 import com.labreportapp.labreport.core.student.service.StAttendenceAllService;
 import com.labreportapp.labreport.infrastructure.apiconstant.ActorConstants;
+import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,60 +25,64 @@ import java.util.stream.Collectors;
 @Service
 public class StAttendenceAllServiceImpl implements StAttendenceAllService {
 
-  @Autowired
-  private StMyClassRepository stMyClassRepository;
+    @Autowired
+    private StMyClassRepository stMyClassRepository;
 
-  @Autowired
-  private StAttendenceAllRepository stAttendenceAllRepository;
+    @Autowired
+    private StAttendenceAllRepository stAttendenceAllRepository;
 
-  @Autowired
-  private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
+    @Autowired
+    private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
 
-  @Override
-  public List<StClassAttendenceAllCustomResponse> getClassAttendenceListByStudentInClassAndSemester(StFindAttendenceAllRequest req) {
-    StFindClassRequest stFindClassRequest = new StFindClassRequest();
-    stFindClassRequest.setSemesterId(req.getIdSemester());
-    stFindClassRequest.setStudentId(req.getIdStudent());
+    @Autowired
+    private LabReportAppSession labReportAppSession;
 
-    List<StMyClassResponse> getClassListByStudentInSemester = stMyClassRepository.getAllClass(stFindClassRequest);
-    List<StClassAttendenceAllCustomResponse> response = new ArrayList<>();
+    @Override
+    public List<StClassAttendenceAllCustomResponse> getClassAttendenceListByStudentInClassAndSemester(StFindAttendenceAllRequest req) {
+        req.setIdStudent(labReportAppSession.getUserId());
+        StFindClassRequest stFindClassRequest = new StFindClassRequest();
+        stFindClassRequest.setSemesterId(req.getIdSemester());
+        stFindClassRequest.setStudentId(req.getIdStudent());
 
-    List<SimpleResponse> simplesResponse = convertRequestCallApiIdentity.
-            handleCallApiGetUserByRoleAndModule(ActorConstants.ACTOR_TEACHER);
+        List<StMyClassResponse> getClassListByStudentInSemester = stMyClassRepository.getAllClass(stFindClassRequest);
+        List<StClassAttendenceAllCustomResponse> response = new ArrayList<>();
 
-    Map<String, SimpleResponse> simpleMap = simplesResponse.stream()
-            .collect(Collectors.toMap(SimpleResponse::getId, Function.identity()));
+        List<SimpleResponse> simplesResponse = convertRequestCallApiIdentity.
+                handleCallApiGetUserByRoleAndModule(ActorConstants.ACTOR_TEACHER);
+
+        Map<String, SimpleResponse> simpleMap = simplesResponse.stream()
+                .collect(Collectors.toMap(SimpleResponse::getId, Function.identity()));
 
 
-    for (StMyClassResponse classResponse : getClassListByStudentInSemester) {
-      StClassAttendenceAllCustomResponse classAttendenceResponse = new StClassAttendenceAllCustomResponse();
-      classAttendenceResponse.setId(classResponse.getId());
-      classAttendenceResponse.setClassCode(classResponse.getCode());
+        for (StMyClassResponse classResponse : getClassListByStudentInSemester) {
+            StClassAttendenceAllCustomResponse classAttendenceResponse = new StClassAttendenceAllCustomResponse();
+            classAttendenceResponse.setId(classResponse.getId());
+            classAttendenceResponse.setClassCode(classResponse.getCode());
 
-      req.setIdClass(classAttendenceResponse.getId());
-      List<StAttendenceAllResponse> getAttendenceListByStudentInClassAndSemester = stAttendenceAllRepository.getAttendenceListByStudentInClassAndSemester(req);
+            req.setIdClass(classAttendenceResponse.getId());
+            List<StAttendenceAllResponse> getAttendenceListByStudentInClassAndSemester = stAttendenceAllRepository.getAttendenceListByStudentInClassAndSemester(req);
 
-      List<StAttendenceAllCustomResponse> customAttendenceListResponses = new ArrayList<>();
-      getAttendenceListByStudentInClassAndSemester.forEach(att -> {
-                StAttendenceAllCustomResponse attendenceInClass = new StAttendenceAllCustomResponse();
-                attendenceInClass.setStt(att.getStt());
-                attendenceInClass.setStatus(att.getStatus());
-                attendenceInClass.setMeetingDate(att.getMeetingDate());
-                attendenceInClass.setMeetingPeriod(att.getMeetingPeriod());
-                attendenceInClass.setTypeMeeting(att.getTypeMeeting());
-                attendenceInClass.setName(att.getName());
-                attendenceInClass.setTeacherId(att.getTeacherId());
+            List<StAttendenceAllCustomResponse> customAttendenceListResponses = new ArrayList<>();
+            getAttendenceListByStudentInClassAndSemester.forEach(att -> {
+                        StAttendenceAllCustomResponse attendenceInClass = new StAttendenceAllCustomResponse();
+                        attendenceInClass.setStt(att.getStt());
+                        attendenceInClass.setStatus(att.getStatus());
+                        attendenceInClass.setMeetingDate(att.getMeetingDate());
+                        attendenceInClass.setMeetingPeriod(att.getMeetingPeriod());
+                        attendenceInClass.setTypeMeeting(att.getTypeMeeting());
+                        attendenceInClass.setName(att.getName());
+                        attendenceInClass.setTeacherId(att.getTeacherId());
 
-                SimpleResponse simpleResponse = simpleMap.get(att.getTeacherId());
-                attendenceInClass.setTeacherUsername(att.getTeacherId().equals(simpleResponse.getId())
-                        ? simpleResponse.getUserName() : null);
-                customAttendenceListResponses.add(attendenceInClass);
-              }
-      );
-      classAttendenceResponse.setAttendences(customAttendenceListResponses);
-      response.add(classAttendenceResponse);
+                        SimpleResponse simpleResponse = simpleMap.get(att.getTeacherId());
+                        attendenceInClass.setTeacherUsername(att.getTeacherId().equals(simpleResponse.getId())
+                                ? simpleResponse.getUserName() : null);
+                        customAttendenceListResponses.add(attendenceInClass);
+                    }
+            );
+            classAttendenceResponse.setAttendences(customAttendenceListResponses);
+            response.add(classAttendenceResponse);
+        }
+
+        return response;
     }
-
-    return response;
-  }
 }

@@ -15,6 +15,7 @@ import com.labreportapp.labreport.entity.Semester;
 import com.labreportapp.labreport.entity.StudentClasses;
 import com.labreportapp.labreport.infrastructure.constant.StatusFeedBack;
 import com.labreportapp.labreport.infrastructure.constant.StatusStudentFeedBack;
+import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.labreport.repository.SemesterRepository;
 import com.labreportapp.labreport.repository.StudentClassesRepository;
 import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
@@ -57,8 +58,11 @@ public class StFeedBackServiceImpl implements StFeedBackService {
     @Autowired
     private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
 
+    @Autowired
+    private LabReportAppSession labReportAppSession;
+
     @Override
-    public Boolean checkFeedBack(final StCheckFeedBackRequest request) {
+    public Boolean checkFeedBack() {
         String idSemesterCurrent = semesterHelper.getSemesterCurrent();
         if (idSemesterCurrent == null) {
             return false;
@@ -68,7 +72,7 @@ public class StFeedBackServiceImpl implements StFeedBackService {
             throw new RestApiException(Message.SEMESTER_NOT_EXISTS);
         }
         if (semesterFind.get().getStatusFeedBack() == StatusFeedBack.DA_FEEDBACK) {
-            List<StCheckFeedBackResponse> listStudentClasses = stFeedBackRepository.getStudentClassesByIdStudent(request.getUserId(), idSemesterCurrent);
+            List<StCheckFeedBackResponse> listStudentClasses = stFeedBackRepository.getStudentClassesByIdStudent(labReportAppSession.getUserId(), idSemesterCurrent);
             if (listStudentClasses == null || listStudentClasses.size() == 0) {
                 return false;
             }
@@ -91,7 +95,7 @@ public class StFeedBackServiceImpl implements StFeedBackService {
         if (!semesterFind.isPresent()) {
             throw new RestApiException(Message.SEMESTER_NOT_EXISTS);
         }
-        List<StCheckFeedBackResponse> listStudentClasses = stFeedBackRepository.getStudentClassesByIdStudent(request.getStudentId(), idSemesterCurrent);
+        List<StCheckFeedBackResponse> listStudentClasses = stFeedBackRepository.getStudentClassesByIdStudent(labReportAppSession.getUserId(), idSemesterCurrent);
         List<String> distinctStudentClassesIds = listStudentClasses.stream()
                 .map(StCheckFeedBackResponse::getId)
                 .filter(Objects::nonNull)
@@ -106,7 +110,7 @@ public class StFeedBackServiceImpl implements StFeedBackService {
         List<FeedBack> listFeedBackNew = new ArrayList<>();
         for (StStudentFeedBackRequest studentFeedBackRequest : listFeedBack) {
             FeedBack feedBack = new FeedBack();
-            feedBack.setStudentId(request.getStudentId());
+            feedBack.setStudentId(labReportAppSession.getUserId());
             feedBack.setClassId(studentFeedBackRequest.getClassId());
             feedBack.setDescriptions(studentFeedBackRequest.getDescriptions());
             listFeedBackNew.add(feedBack);
@@ -123,6 +127,7 @@ public class StFeedBackServiceImpl implements StFeedBackService {
 
     @Override
     public List<StMyClassCustom> getAllClass(final StFindClassRequest req) {
+        req.setStudentId(labReportAppSession.getUserId());
         List<StMyClassResponse> listMyClassResponse = stFeedBackRepository.getAllClass(req);
         List<String> distinctTeacherIds = listMyClassResponse.stream()
                 .map(StMyClassResponse::getTeacherId)

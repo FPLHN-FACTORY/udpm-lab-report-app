@@ -6,7 +6,6 @@ import { useAppDispatch } from "../../../../app/hook";
 import { Table } from "antd";
 import { useEffect, useState } from "react";
 import { StAttendanceAPI } from "../../../../api/student/StAttendanceAPI";
-import { sinhVienCurrent } from "../../../../helper/inForUser";
 import { convertMeetingPeriodToTime } from "../../../../helper/util.helper";
 import LoadingIndicator from "../../../../helper/loading";
 import { SetTTrueToggle } from "../../../../app/student/StCollapsedSlice.reducer";
@@ -17,7 +16,6 @@ const StAttendanceDetailClass = () => {
   const { id } = useParams();
   const [listAttendance, setListAttendance] = useState([]);
   const [attendanceRequest, setAttendanceRequest] = useState({
-    idStudent: sinhVienCurrent.id,
     idClass: id,
   });
   const [isLoading, setIsLoading] = useState(false);

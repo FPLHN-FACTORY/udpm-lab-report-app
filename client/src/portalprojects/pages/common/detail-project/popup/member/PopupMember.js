@@ -12,12 +12,10 @@ import { GetProject } from "../../../../../app/reducer/detail-project/DPProjectS
 import { GetMemberProject } from "../../../../../app/reducer/detail-project/DPMemberProject.reducer";
 import Image from "../../../../../helper/img/Image";
 import { GetDetailTodo } from "../../../../../app/reducer/detail-project/DPDetailTodoSlice.reducer";
-import { userCurrent } from "../../../../../helper/inForUser";
 import { getStompClient } from "../../stomp-client-config/StompClientManager";
 import debounce from "lodash/debounce";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUsers } from "@fortawesome/free-solid-svg-icons";
-import { sinhVienCurrent } from "../../../../../../labreportapp/helper/inForUser";
 
 const { Option } = Select;
 
@@ -78,7 +76,6 @@ const PopupMember = ({ position, onClose }) => {
         email: item.email,
         idTodoCreateOrDelete: detailTodo.id,
         projectId: detailProject.id,
-        idUser: sinhVienCurrent.id,
         idTodo: detailTodo.id,
         idTodoList: detailTodo.todoListId,
       };

@@ -11,7 +11,6 @@ import { Link } from "react-router-dom";
 import { GetProject } from "../../../../../app/reducer/detail-project/DPProjectSlice.reducer";
 import { GetMemberProject } from "../../../../../app/reducer/detail-project/DPMemberProject.reducer";
 import Image from "../../../../../helper/img/Image";
-import { userCurrent } from "../../../../../helper/inForUser";
 import { getStompClient } from "../../stomp-client-config/StompClientManager";
 import debounce from "lodash/debounce";
 import { GetLabelProject } from "../../../../../app/reducer/detail-project/DPLabelProject.reducer";

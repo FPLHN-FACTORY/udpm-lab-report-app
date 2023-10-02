@@ -37,5 +37,5 @@ public class MeDeleteResourceRequest {
     @NotNull
     private String projectId;
 
-    private String idUser;
+//    private String idUser;
 }

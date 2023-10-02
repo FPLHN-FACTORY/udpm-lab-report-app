@@ -18,10 +18,10 @@ public class MeDeleteCommentRequest {
     @NotEmpty
     private String id;
 
-    @NotNull
-    @NotBlank
-    @NotEmpty
-    private String memberId;
+//    @NotNull
+//    @NotBlank
+//    @NotEmpty
+//    private String memberId;
 
     @NotNull
     @NotBlank

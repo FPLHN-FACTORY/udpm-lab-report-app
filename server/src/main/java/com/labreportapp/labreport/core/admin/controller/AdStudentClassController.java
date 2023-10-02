@@ -22,43 +22,42 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/admin/student-classes")
 @CrossOrigin(origins = {"*"})
 public class AdStudentClassController {
-  @Autowired
-  private AdStudentClassService adStudentClassService;
 
+    @Autowired
+    private AdStudentClassService adStudentClassService;
 
-  @GetMapping("/{idClass}")
-  public ResponseObject getTeStudentClasses(@PathVariable String idClass) {
-    List<AdStudentCallApiRespone> pageList = adStudentClassService.findStudentClassByIdClass(idClass);
-    return new ResponseObject(pageList);
-  }
-
-  @GetMapping("/export-excel/{id}")
-  public ResponseEntity<byte[]> exportExcel(HttpServletResponse response, @PathVariable("id") String idClass,
-                                            @RequestParam("isSample") Boolean isSample) {
-    try {
-      ByteArrayOutputStream file = adStudentClassService.exportStudentsInClassExcel(response, idClass, isSample);
-      HttpHeaders headers = new HttpHeaders();
-      headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-      headers.setContentDispositionFormData("attachment", "students.xlsx");
-      return ResponseEntity.ok()
-              .headers(headers)
-              .body(file.toByteArray());
-    } catch (Exception e) {
-      e.printStackTrace();
-      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    @GetMapping("/{idClass}")
+    public ResponseObject getTeStudentClasses(@PathVariable String idClass) {
+        List<AdStudentCallApiRespone> pageList = adStudentClassService.findStudentClassByIdClass(idClass);
+        return new ResponseObject(pageList);
     }
-  }
 
-  @PostMapping("/import-excel/{id}")
-  public ResponseObject importExcel(@RequestParam("multipartFile") MultipartFile multipartFile, @PathVariable String id) throws IOException {
-    AdImportExcelStudentClasses importResponse = adStudentClassService.importExcelStudentsInClass(multipartFile, id);
-    return new ResponseObject(importResponse);
-  }
+    @GetMapping("/export-excel/{id}")
+    public ResponseEntity<byte[]> exportExcel(HttpServletResponse response, @PathVariable("id") String idClass,
+                                              @RequestParam("isSample") Boolean isSample) {
+        try {
+            ByteArrayOutputStream file = adStudentClassService.exportStudentsInClassExcel(response, idClass, isSample);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            headers.setContentDispositionFormData("attachment", "students.xlsx");
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(file.toByteArray());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/import-excel/{id}")
+    public ResponseObject importExcel(@RequestParam("multipartFile") MultipartFile multipartFile, @PathVariable String id) throws IOException {
+        AdImportExcelStudentClasses importResponse = adStudentClassService.importExcelStudentsInClass(multipartFile, id);
+        return new ResponseObject(importResponse);
+    }
 
 }

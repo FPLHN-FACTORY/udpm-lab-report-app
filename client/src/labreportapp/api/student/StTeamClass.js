@@ -1,5 +1,4 @@
-import { sinhVienCurrent } from "../../helper/inForUser";
-import { apiDanhSachGiangVien, request } from "../../helper/request.helper";
+import { request } from "../../helper/request.helper";
 
 export class StMyTeamClassAPI {
   static getTeamInClass(idClass) {
@@ -24,12 +23,7 @@ export class StMyTeamClassAPI {
   static checkStatusStudentInClass(idClass) {
     return request({
       method: "GET",
-      url:
-        `/student/my-class/team/check-status` +
-        `?idClass=` +
-        idClass +
-        `&idStudent=` +
-        sinhVienCurrent.id,
+      url: `/student/my-class/team/check-status` + `?idClass=` + idClass,
     });
   }
 

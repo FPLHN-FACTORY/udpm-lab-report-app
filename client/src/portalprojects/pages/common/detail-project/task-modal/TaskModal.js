@@ -48,7 +48,6 @@ import { getStompClient } from "../stomp-client-config/StompClientManager";
 import { GetPeriodCurrent } from "../../../../app/reducer/detail-project/DPPeriodSlice.reducer";
 import { GetProject } from "../../../../app/reducer/detail-project/DPProjectSlice.reducer";
 import PopupPriority from "../popup/priority/PopupPriority";
-import { userCurrent } from "../../../../helper/inForUser";
 import { debounce } from "lodash";
 import { toast } from "react-toastify";
 import CommentForm from "./comment/CommentForm";
@@ -61,7 +60,7 @@ import ListAttachment from "./attachment/ListAttachment";
 import PopupImage from "../popup/image/PopupImage";
 import ListImage from "./image/ListImage";
 import PopupShowDetailImage from "../popup/popup-show-detail-image/PopupShowDetailImage";
-import { sinhVienCurrent } from "../../../../../labreportapp/helper/inForUser";
+import { GetUserCurrent } from "../../../../../labreportapp/app/common/UserCurrent.reducer";
 
 const TaskModal = memo(({ open, onCancel, id }) => {
   const dispatch = useAppDispatch();
@@ -82,6 +81,7 @@ const TaskModal = memo(({ open, onCancel, id }) => {
   const [descriptions, setDescriptions] = useState(null);
   const [typeTodo, setTypeTodo] = useState(null);
   const [isJoin, setIsJoin] = useState(false);
+  const userCurrent = useAppSelector(GetUserCurrent)
 
   const listMemberAPI = useAppSelector(GetMemberProject);
   const list = useAppSelector(GetAllList);
@@ -106,7 +106,6 @@ const TaskModal = memo(({ open, onCancel, id }) => {
       idTodoList: detailTodo.todoListId,
       projectId: detailProject.id,
       periodId: periodCurrent.id,
-      idUser: sinhVienCurrent.id,
     };
     stompClient.send(
       "/action/update-complete-todo/" +
@@ -187,7 +186,7 @@ const TaskModal = memo(({ open, onCancel, id }) => {
         detailTodo.members.includes(member.memberId)
       );
 
-      const isUserJoined = detailTodo.members.includes(sinhVienCurrent.id);
+      const isUserJoined = detailTodo.members.includes(userCurrent.id);
       setIsJoin(isUserJoined);
       setListMemberTodo(list);
       setListLabelTodo(detailTodo.labels);
@@ -323,12 +322,11 @@ const TaskModal = memo(({ open, onCancel, id }) => {
   const handleJoinOutAssign = debounce(() => {
     if (detailTodo != null) {
       let obj = {
-        idMember: sinhVienCurrent.id,
-        nameMember: sinhVienCurrent.name,
-        email: sinhVienCurrent.email,
+        idMember: userCurrent.id,
+        nameMember: userCurrent.name,
+        email: userCurrent.email,
         idTodoCreateOrDelete: detailTodo.id,
         projectId: detailProject.id,
-        idUser: sinhVienCurrent.id,
         idTodo: detailTodo.id,
         idTodoList: detailTodo.todoListId,
       };

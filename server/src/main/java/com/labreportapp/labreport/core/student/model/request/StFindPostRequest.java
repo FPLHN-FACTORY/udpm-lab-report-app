@@ -17,6 +17,4 @@ public class StFindPostRequest extends PageableRequest {
 
     private String idClass;
 
-    private String idTeacher;
-
 }

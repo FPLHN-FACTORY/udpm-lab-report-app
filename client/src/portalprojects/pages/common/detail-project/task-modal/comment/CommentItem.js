@@ -6,7 +6,6 @@ import Image from "../../../../../helper/img/Image";
 import Picker from "emoji-picker-react";
 import { useAppDispatch, useAppSelector } from "../../../../../app/hook";
 import { GetMemberProject } from "../../../../../app/reducer/detail-project/DPMemberProject.reducer";
-import { userCurrent } from "../../../../../helper/inForUser";
 import moment from "moment/moment";
 import { GetDetailTodo } from "../../../../../app/reducer/detail-project/DPDetailTodoSlice.reducer";
 import { Popconfirm, Tooltip } from "antd";
@@ -15,7 +14,7 @@ import { GetProject } from "../../../../../app/reducer/detail-project/DPProjectS
 import { GetPeriodCurrent } from "../../../../../app/reducer/detail-project/DPPeriodSlice.reducer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane, faTimes } from "@fortawesome/free-solid-svg-icons";
-import { sinhVienCurrent } from "../../../../../../labreportapp/helper/inForUser";
+import { GetUserCurrent } from "../../../../../../labreportapp/app/common/UserCurrent.reducer";
 
 const ViewEditor = ({ item, reply }) => {
   const listMemberProject = useAppSelector(GetMemberProject);
@@ -35,6 +34,8 @@ const ViewEditor = ({ item, reply }) => {
   });
   const [checkBtnComment, setCheckBtnComment] = useState(true);
 
+  const userCurrent = useAppSelector(GetUserCurrent)
+
   useEffect(() => {
     console.log(item);
     if (
@@ -47,8 +48,10 @@ const ViewEditor = ({ item, reply }) => {
   }, [listMemberProject, item]);
 
   const loadDataMember = () => {
-    let data = listMemberProject.find((member) => member.memberId === item.memberId);
-    setCheckShowHide(item.memberId === sinhVienCurrent.id ? false : true);
+    let data = listMemberProject.find(
+      (member) => member.memberId === item.memberId
+    );
+    setCheckShowHide(item.memberId === userCurrent.id ? false : true);
     setMember(data);
     console.log(data);
   };
@@ -66,7 +69,6 @@ const ViewEditor = ({ item, reply }) => {
   const deleteComment = () => {
     let obj = {
       id: item.id,
-      memberId: item.memberId,
       idTodo: detailTodo.id,
       idTodoList: detailTodo.todoListId,
     };
@@ -106,7 +108,6 @@ const ViewEditor = ({ item, reply }) => {
       content: inputStr,
       idTodo: detailTodo.id,
       idTodoList: detailTodo.todoListId,
-      memberId: item.memberId,
     };
     stompClient.send(
       "/action/update-comment/" + detailProject.id + "/" + periodCurrent.id,
@@ -131,9 +132,9 @@ const ViewEditor = ({ item, reply }) => {
           )}
           <div style={{ position: "relative", display: "flex" }}>
             <Image
-              url={sinhVienCurrent.picture}
+              url={userCurrent.picture}
               picxel={33}
-              name={sinhVienCurrent.name + " " + sinhVienCurrent.userName}
+              name={userCurrent.name + " " + userCurrent.userName}
             />
 
             <ReactQuill

@@ -90,7 +90,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { parseInt } from "lodash";
 import { CommonAPI } from "../../../../api/commonAPI";
 import { MemberProjectAPI } from "../../../../api/my-project/memberProject.api";
-import { userCurrent } from "../../../../helper/inForUser";
 import notiCusTom from "../../../../helper/background";
 import {
   SetCountNotifications,

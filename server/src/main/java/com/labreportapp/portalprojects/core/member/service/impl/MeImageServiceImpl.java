@@ -1,5 +1,6 @@
 package com.labreportapp.portalprojects.core.member.service.impl;
 
+import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.portalprojects.core.common.base.TodoObject;
 import com.labreportapp.portalprojects.core.member.model.request.MeChangeCoverTodoRequest;
 import com.labreportapp.portalprojects.core.member.model.request.MeCreateImageRequest;
@@ -24,6 +25,7 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.Synchronized;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Service;
@@ -55,6 +57,9 @@ public class MeImageServiceImpl implements MeImageService {
     @Autowired
     private CloudinaryUploadImages cloudinaryUploadImages;
 
+    @Qualifier
+    private LabReportAppSession labReportAppSession;
+
     @Override
     @Synchronized
     @CacheEvict(value = {"todosByPeriodAndTodoList", "todoById", "detailTodosById", "todosByFilter"}, allEntries = true)
@@ -85,7 +90,7 @@ public class MeImageServiceImpl implements MeImageService {
         activityTodo.setTodoListId(request.getIdTodoList());
         activityTodo.setTodoId(request.getIdTodo());
         activityTodo.setImageId(newImage.getId());
-        activityTodo.setMemberCreatedId(request.getIdUser());
+        activityTodo.setMemberCreatedId(labReportAppSession.getUserId());
         activityTodo.setContentAction("đã thêm " + request.getNameFileOld() + " vào thẻ này");
         activityTodo.setUrlImage(request.getUrlImage());
 
@@ -158,7 +163,7 @@ public class MeImageServiceImpl implements MeImageService {
         activityTodo.setProjectId(request.getProjectId());
         activityTodo.setTodoListId(request.getIdTodoList());
         activityTodo.setTodoId(request.getIdTodo());
-        activityTodo.setMemberCreatedId(request.getIdUser());
+        activityTodo.setMemberCreatedId(labReportAppSession.getUserId());
         activityTodo.setContentAction("đã xóa " + request.getNameImage() + " khỏi thẻ này");
         ActivityTodo newActivityTodo = meActivityRepository.save(activityTodo);
 

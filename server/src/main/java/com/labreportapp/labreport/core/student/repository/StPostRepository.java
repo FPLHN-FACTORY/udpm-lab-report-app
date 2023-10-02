@@ -25,12 +25,13 @@ public interface StPostRepository extends JpaRepository<Post, String> {
              p.teacher_id,
              p.class_id
             FROM post p 
-            WHERE p.teacher_id = :#{#req.idTeacher} and p.class_id = :#{#req.idClass}
+            WHERE p.class_id = :#{#req.idClass}
             ORDER BY p.created_date DESC 
             """,countQuery = """
             SELECT COUNT(DISTINCT p.id)
             FROM post p 
-            WHERE p.teacher_id = :#{#req.idTeacher} and p.class_id = :#{#req.idClass}"""
+            WHERE p.class_id = :#{#req.idClass}
+            """
             , nativeQuery = true)
     Page<StPostResponse> searchPostByIdClass(@Param("req") StFindPostRequest req, Pageable pageable);
 }

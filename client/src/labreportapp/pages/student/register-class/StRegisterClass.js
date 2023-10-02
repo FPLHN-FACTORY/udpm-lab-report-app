@@ -30,7 +30,6 @@ import {
 } from "antd";
 import { QuestionCircleFilled, ProjectOutlined } from "@ant-design/icons";
 import { StMyClassAPI } from "../../../api/student/StMyClassAPI";
-import { sinhVienCurrent } from "../../../helper/inForUser";
 import { StClassAPI } from "../../../api/student/StClassAPI";
 import { StLevelAPI } from "../../../api/student/StLevelAPI";
 import { convertLongToDate } from "../../../helper/convertDate";
@@ -108,7 +107,6 @@ const StRegisterClass = () => {
     try {
       setLoading(true);
       const filter = {
-        idStudent: sinhVienCurrent.id,
         idClass: record.id,
       };
       await StClassAPI.studentJoinClass(filter).then((response) => {

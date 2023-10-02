@@ -11,12 +11,10 @@ import { Link } from "react-router-dom";
 import { GetProject } from "../../../../../app/reducer/detail-project/DPProjectSlice.reducer";
 import { GetMemberProject } from "../../../../../app/reducer/detail-project/DPMemberProject.reducer";
 import Image from "../../../../../helper/img/Image";
-import { userCurrent } from "../../../../../helper/inForUser";
 import { getStompClient } from "../../stomp-client-config/StompClientManager";
 import debounce from "lodash/debounce";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUsers } from "@fortawesome/free-solid-svg-icons";
-import { sinhVienCurrent } from "../../../../../../labreportapp/helper/inForUser";
 
 const { Option } = Select;
 
@@ -78,7 +76,6 @@ const PopupMemberTable = ({ todo, position, onClose }) => {
         email: item.email,
         idTodoCreateOrDelete: todo.id,
         projectId: detailProject.id,
-        idUser: sinhVienCurrent.id,
         idTodo: todo.id,
         idTodoList: todo.todoListId,
       };

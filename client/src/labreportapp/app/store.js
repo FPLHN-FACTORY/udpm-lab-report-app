@@ -39,6 +39,7 @@ import categoryProjectManagementReducer from "../../portalprojects/app/reducer/a
 import StakeholderReducer from "../../portalprojects/app/reducer/admin/stakeholder-management/Stakeholder.reducer";
 import NotificationSliceReducer from "../../portalprojects/app/reducer/notification/NotificationSlice.reducer";
 import AdAttendanceDetailMeetingReducer from "./admin/AdAttendanceDetailMeeting.reducer";
+import UserCurrentReducer from "./common/UserCurrent.reducer";
 
 export const store = configureStore({
   reducer: {
@@ -81,6 +82,7 @@ export const store = configureStore({
     memberProjectManagement: memberProjectManagementReducer,
     categoryProjectManagement: categoryProjectManagementReducer,
     notification: NotificationSliceReducer,
+    userCurrent: UserCurrentReducer
   },
 });
 

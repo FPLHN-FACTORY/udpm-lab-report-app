@@ -14,14 +14,12 @@ import {
 } from "../../../app/reducer/my-project/myProjectSlice.reducer";
 import { MyProjectAPI } from "../../../api/my-project/myProject.api";
 import { useEffect, useState } from "react";
-import { userCurrent } from "../../../helper/inForUser";
 import { MemberProjectAPI } from "../../../api/my-project/memberProject.api";
 import { CommonAPI } from "../../../api/commonAPI";
 import { Link } from "react-router-dom";
 import LoadingIndicator from "../../../helper/loading";
 import Image from "../../../helper/img/Image";
 import { ProjectOutlined } from "@ant-design/icons";
-import { sinhVienCurrent } from "../../../../labreportapp/helper/inForUser";
 
 const { Option } = Select;
 
@@ -44,7 +42,6 @@ const MyProject = () => {
 
   const fetchData = async () => {
     let filter = {
-      idUser: sinhVienCurrent.id,
       nameProject: name,
       status: status === "" ? null : parseInt(status),
       page: current - 1,

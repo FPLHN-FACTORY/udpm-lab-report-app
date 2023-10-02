@@ -1,5 +1,6 @@
 package com.labreportapp.portalprojects.core.member.service.impl;
 
+import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.portalprojects.core.common.base.PageableObject;
 import com.labreportapp.portalprojects.core.common.base.TodoObject;
 import com.labreportapp.portalprojects.core.member.model.request.MeCreateCommentRequest;
@@ -35,12 +36,15 @@ public class MeCommentServiceImpl implements MeCommentService {
     @Autowired
     private MeCommentRepository meCommentRepository;
 
+    @Autowired
+    private LabReportAppSession labReportAppSession;
+
     @Override
     @Synchronized
     @CacheEvict(value = {"todosByPeriodAndTodoList", "detailTodosById"}, allEntries = true)
     public TodoObject add(@Valid MeCreateCommentRequest request) {
         Comment comment = new Comment();
-        comment.setMemberId(request.getIdUser());
+        comment.setMemberId(labReportAppSession.getUserId());
         comment.setTodoId(request.getIdTodo());
         comment.setContent(request.getContent());
         comment.setStatusEdit(0);
@@ -65,7 +69,7 @@ public class MeCommentServiceImpl implements MeCommentService {
         if (!commentFind.isPresent()) {
             throw new MessageHandlingException(Message.COMMENT_NOT_EXISTS);
         }
-        if (!commentFind.get().getMemberId().equals(request.getMemberId())) {
+        if (!commentFind.get().getMemberId().equals(labReportAppSession.getUserId())) {
             throw new MessageHandlingException(Message.USER_NOT_ALLOWED);
         }
         commentFind.get().setContent(request.getContent());
@@ -85,7 +89,7 @@ public class MeCommentServiceImpl implements MeCommentService {
         if (!commentFind.isPresent()) {
             throw new MessageHandlingException(Message.COMMENT_NOT_EXISTS);
         }
-        if (!commentFind.get().getMemberId().equals(request.getMemberId())) {
+        if (!commentFind.get().getMemberId().equals(labReportAppSession.getUserId())) {
             throw new MessageHandlingException(Message.USER_NOT_ALLOWED);
         }
         meCommentRepository.delete(commentFind.get());

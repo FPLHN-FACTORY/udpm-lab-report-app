@@ -5,7 +5,6 @@ import { ControlOutlined } from "@ant-design/icons";
 import { useAppDispatch } from "../../../../app/hook";
 import { useState, useEffect } from "react"; // Import useState và useEffect
 import { StPointDetailAPI } from "../../../../api/student/StPointDetailAPI";
-import { sinhVienCurrent } from "../../../../helper/inForUser";
 import { Table } from "antd";
 import LoadingIndicator from "../../../../helper/loading";
 import { SetTTrueToggle } from "../../../../app/student/StCollapsedSlice.reducer";
@@ -19,7 +18,8 @@ const StPointDetailClass = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    setIsLoading(true);    document.title = "Bảng điều khiển - Điểm";
+    setIsLoading(true);
+    document.title = "Bảng điều khiển - Điểm";
     LoadPointData();
   }, []);
 

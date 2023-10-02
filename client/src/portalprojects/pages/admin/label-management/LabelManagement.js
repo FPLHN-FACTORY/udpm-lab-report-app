@@ -18,11 +18,10 @@ import {
   GetLabelManagement,
   SetLabelManagement,
 } from "../../../app/reducer/admin/label-management/labelManagementSlice.reducer";
-import { userCurrent } from "../../../helper/inForUser";
 import { LabelManagementAPI } from "../../../api/label-management/labelManagement.api";
 import ModalCreateLabel from "./modal-create/ModalCreateLabel";
 import ModalUpdateLabel from "./modal-update/ModalUpdateLabel";
-import { sinhVienCurrent } from "../../../../labreportapp/helper/inForUser";
+import { GetUserCurrent } from "../../../../labreportapp/app/common/UserCurrent.reducer";
 
 const LabelManagement = () => {
   const dispatch = useAppDispatch();
@@ -45,9 +44,11 @@ const LabelManagement = () => {
     };
   }, [current]);
 
+  const userCurrent = useAppSelector(GetUserCurrent)
+
   const fetchData = async () => {
     let filter = {
-      idUser: sinhVienCurrent.id,
+      idUser: userCurrent.id,
       nameLabel: name,
       name: searchName,
       status: status === "" ? null : parseInt(status),

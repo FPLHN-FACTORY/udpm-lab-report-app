@@ -8,7 +8,6 @@ import { toast } from "react-toastify";
 import { useAppSelector } from "../../../../app/hook";
 import { GetPeriodCurrent } from "../../../../app/reducer/detail-project/DPPeriodSlice.reducer";
 import { GetProject } from "../../../../app/reducer/detail-project/DPProjectSlice.reducer";
-import { userCurrent } from "../../../../helper/inForUser";
 import { getStompClient } from "../stomp-client-config/StompClientManager";
 import { useMemo } from "react";
 import { UpdateNameTodoList } from "../../../../app/reducer/detail-project/DPBoardSlice.reducer";
@@ -16,7 +15,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import PopupListAction from "../popup/menu-list/PopupListAction";
 import { useLocation, useNavigate } from "react-router";
-import { sinhVienCurrent } from "../../../../../labreportapp/helper/inForUser";
 
 const List = ({ list, index }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -90,7 +88,6 @@ const List = ({ list, index }) => {
       nameTodoList: list.name,
       periodId: periodCurrent.id,
       projectId: detailProject.id,
-      idUser: sinhVienCurrent.id,
     };
     stompClient.send(
       "/action/create-todo/" + detailProject.id + "/" + periodCurrent.id,

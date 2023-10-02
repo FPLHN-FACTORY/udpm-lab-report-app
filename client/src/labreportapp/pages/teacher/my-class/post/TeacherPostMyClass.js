@@ -28,7 +28,6 @@ import {
   faLock,
   faLockOpen,
 } from "@fortawesome/free-solid-svg-icons";
-import { giangVienCurrent } from "../../../../helper/inForUser";
 import Editor from "./form-editor-create/FormEditor";
 import EditorUpdate from "./form-editor-update/FormEditorUpdate";
 import {
@@ -47,6 +46,7 @@ import {
   UpdateClass,
 } from "../../../../app/teacher/my-class/teClassSlice.reduce";
 import ModalFullScreen from "./modal-full-screen/ModalFullScreen";
+import { GetUserCurrent } from "../../../../app/common/UserCurrent.reducer";
 
 const TeacherPostMyClass = () => {
   const dispatch = useAppDispatch();
@@ -102,7 +102,6 @@ const TeacherPostMyClass = () => {
     try {
       let data = {
         idClass: idClass,
-        idTeacher: giangVienCurrent.id,
         page: currentPage,
         size: 8,
       };
@@ -122,7 +121,6 @@ const TeacherPostMyClass = () => {
     try {
       let data = {
         idClass: idClass,
-        idTeacher: giangVienCurrent.id,
         page: currentPage,
         size: 8,
       };
@@ -211,6 +209,7 @@ const TeacherPostMyClass = () => {
   };
   const classDetail = useAppSelector(GetClass);
   const data = useAppSelector(GetPost);
+  const userRedux = useAppSelector(GetUserCurrent);
   return (
     <div className="teacher-post">
       {!loading && <LoadingIndicator />}
@@ -430,7 +429,6 @@ const TeacherPostMyClass = () => {
                       }}
                     >
                       <Editor
-                        idTeacher={giangVienCurrent.id}
                         idClass={idClass}
                         showCreate={showHandleCreate}
                         style={{
@@ -519,7 +517,7 @@ const TeacherPostMyClass = () => {
                                 <div style={{ width: "100%" }}>
                                   <div style={{ width: "95%", float: "left" }}>
                                     <span style={{ lineHeight: "50px" }}>
-                                      {giangVienCurrent.name}
+                                      {userRedux.name}
                                       <span
                                         style={{
                                           color: "gray",

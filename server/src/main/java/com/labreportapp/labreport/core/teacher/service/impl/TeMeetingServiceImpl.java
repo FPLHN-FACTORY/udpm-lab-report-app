@@ -25,6 +25,7 @@ import com.labreportapp.labreport.entity.HomeWork;
 import com.labreportapp.labreport.entity.Meeting;
 import com.labreportapp.labreport.entity.Note;
 import com.labreportapp.labreport.entity.Report;
+import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
@@ -68,6 +69,9 @@ public class TeMeetingServiceImpl implements TeMeetingService {
 
     @Autowired
     private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
+
+    @Autowired
+    private LabReportAppSession labReportAppSession;
 
     @Override
     public TeMeetingResponse searchMeetingAndCheckAttendanceByIdMeeting(TeFindMeetingRequest request) {
@@ -319,6 +323,7 @@ public class TeMeetingServiceImpl implements TeMeetingService {
 
     @Override
     public List<TeScheduleMeetingClassResponse> searchScheduleToDayByIdTeacherAndMeetingDate(TeFindScheduleMeetingClassRequest request) {
+        request.setIdTeacher(labReportAppSession.getUserId());
         List<TeScheduleMeetingClassResponse> list = teMeetingRepository.searchScheduleToDayByIdTeacherAndMeetingDate(request);
         if (list.size() == 0) {
             return null;
@@ -351,7 +356,7 @@ public class TeMeetingServiceImpl implements TeMeetingService {
         });
         teMeetingRepository.saveAll(listNew);
         TeFindScheduleMeetingClassRequest find = new TeFindScheduleMeetingClassRequest();
-        find.setIdTeacher(request.getIdTeacher());
+        find.setIdTeacher(labReportAppSession.getUserId());
         return teMeetingRepository.searchScheduleToDayByIdTeacherAndMeetingDate(find);
     }
 

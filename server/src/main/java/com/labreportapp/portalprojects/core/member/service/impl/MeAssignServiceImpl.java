@@ -1,5 +1,6 @@
 package com.labreportapp.portalprojects.core.member.service.impl;
 
+import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.portalprojects.core.common.base.TodoObject;
 import com.labreportapp.portalprojects.core.member.model.request.MeCreateOrDeleteAssignRequest;
 import com.labreportapp.portalprojects.core.member.repository.MeActivityRepository;
@@ -32,6 +33,9 @@ public class MeAssignServiceImpl implements MeAssignService {
     @Autowired
     private MeActivityRepository meActivityRepository;
 
+    @Autowired
+    private LabReportAppSession labReportAppSession;
+
     @Override
     public List<String> getAllMemberByIdTodo(String idTodo) {
         return meAssignRepository.getAllMemberByIdTodo(idTodo);
@@ -49,17 +53,17 @@ public class MeAssignServiceImpl implements MeAssignService {
         meAssignRepository.delete(request.getIdMember(), request.getIdTodo());
         ActivityTodo activityTodo = new ActivityTodo();
 
-        if (request.getIdMember().equals(request.getIdUser())) {
+        if (request.getIdMember().equals(labReportAppSession.getUserId())) {
             activityTodo.setProjectId(request.getProjectId());
             activityTodo.setTodoId(request.getIdTodo());
             activityTodo.setTodoListId(request.getIdTodoList());
-            activityTodo.setMemberCreatedId(request.getIdUser());
+            activityTodo.setMemberCreatedId(labReportAppSession.getUserId());
             activityTodo.setContentAction("đã rời khỏi thẻ này");
         } else {
             activityTodo.setProjectId(request.getProjectId());
             activityTodo.setTodoId(request.getIdTodo());
             activityTodo.setTodoListId(request.getIdTodoList());
-            activityTodo.setMemberCreatedId(request.getIdUser());
+            activityTodo.setMemberCreatedId(labReportAppSession.getUserId());
             activityTodo.setMemberId(request.getIdMember());
             activityTodo.setContentAction("đã xóa " + request.getNameMember() + " khỏi thẻ này");
         }
@@ -83,17 +87,17 @@ public class MeAssignServiceImpl implements MeAssignService {
         assign.setMemberId(request.getIdMember());
 
         ActivityTodo activityTodo = new ActivityTodo();
-        if (request.getIdMember().equals(request.getIdUser())) {
+        if (request.getIdMember().equals(labReportAppSession.getUserId())) {
             activityTodo.setProjectId(request.getProjectId());
             activityTodo.setTodoId(request.getIdTodo());
             activityTodo.setTodoListId(request.getIdTodoList());
-            activityTodo.setMemberCreatedId(request.getIdUser());
+            activityTodo.setMemberCreatedId(labReportAppSession.getUserId());
             activityTodo.setContentAction("đã tham gia thẻ này");
         } else {
             activityTodo.setProjectId(request.getProjectId());
             activityTodo.setTodoId(request.getIdTodo());
             activityTodo.setTodoListId(request.getIdTodoList());
-            activityTodo.setMemberCreatedId(request.getIdUser());
+            activityTodo.setMemberCreatedId(labReportAppSession.getUserId());
             activityTodo.setMemberId(request.getIdMember());
             activityTodo.setContentAction("đã thêm " + request.getNameMember() + " vào thẻ này");
         }

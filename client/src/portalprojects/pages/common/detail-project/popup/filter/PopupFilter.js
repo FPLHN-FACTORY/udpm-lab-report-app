@@ -27,13 +27,14 @@ import {
 } from "../../../../../app/reducer/detail-project/DPBoardSlice.reducer";
 import { debounce } from "lodash";
 import useDebounce from "../../../../../custom-hook/useDebounce";
-import { sinhVienCurrent } from "../../../../../../labreportapp/helper/inForUser";
+import { GetUserCurrent } from "../../../../../../labreportapp/app/common/UserCurrent.reducer";
 
 const { Option } = Select;
 
 const PopupFilter = ({ position, onClose }) => {
   const popupRef = useRef(null);
-
+  
+  const userCurrent = useAppSelector(GetUserCurrent)
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -115,14 +116,14 @@ const PopupFilter = ({ position, onClose }) => {
   useEffect(() => {
     if (filterTodo?.member != null) {
       setIsCheckedNoMember(filterTodo.member.includes("none"));
-      setIsCheckedMe(filterTodo.member.includes(sinhVienCurrent.id));
+      setIsCheckedMe(filterTodo.member.includes(userCurrent.id));
 
       let listMemberAfter = filterTodo.member.filter(
-        (member) => member !== "none" && member !== sinhVienCurrent.id
+        (member) => member !== "none" && member !== userCurrent.id
       );
       setValueMultiMember(listMemberAfter);
     }
-  }, [filterTodo?.member, sinhVienCurrent.id]);
+  }, [filterTodo?.member, userCurrent.id]);
 
   useEffect(() => {
     if (filterTodo?.label != null) {
@@ -205,7 +206,7 @@ const PopupFilter = ({ position, onClose }) => {
 
   useEffect(() => {
     setListMemberNoUserCurrent(
-      memberProject.filter((item) => item.memberId !== sinhVienCurrent.id)
+      memberProject.filter((item) => item.memberId !== userCurrent.id)
     );
   }, []);
 
@@ -233,7 +234,7 @@ const PopupFilter = ({ position, onClose }) => {
     if (filterTodo != null) {
       setValueName(filterTodo.name);
       setIsCheckedNoMember(filterTodo.member.includes("none"));
-      setIsCheckedMe(filterTodo.member.includes(sinhVienCurrent.id));
+      setIsCheckedMe(filterTodo.member.includes(userCurrent.id));
       setIsCheckedNoLabel(filterTodo.label.includes("none"));
       setIsCheckedNoDueDate(filterTodo.dueDate.includes("noDueDate"));
       setIsCheckedOverDueDate(filterTodo.dueDate.includes("overDueDate"));
@@ -241,7 +242,7 @@ const PopupFilter = ({ position, onClose }) => {
       setIsCheckedCompleteSoon(filterTodo.dueDate.includes("completeSoon"));
       setIsCheckedCompleteLate(filterTodo.dueDate.includes("completeLate"));
       let listMemberAfter = filterTodo.member.filter(
-        (member) => member !== "none" && member !== sinhVienCurrent.id
+        (member) => member !== "none" && member !== userCurrent.id
       );
       setValueMultiMember(listMemberAfter);
       let listLabelAfter = filterTodo.label.filter((label) => label !== "none");
@@ -270,10 +271,10 @@ const PopupFilter = ({ position, onClose }) => {
     }
 
     if (isCheckedMe) {
-      filter.member.push(sinhVienCurrent.id);
+      filter.member.push(userCurrent.id);
     } else {
       filter.member = filter.member.filter(
-        (member) => member !== sinhVienCurrent.id
+        (member) => member !== userCurrent.id
       );
     }
 
@@ -295,7 +296,7 @@ const PopupFilter = ({ position, onClose }) => {
   const handleClickAllMember = () => {
     if (!isAllMember) {
       const memberIdList = listMemberNoUserCurrent
-        .filter((member) => member !== sinhVienCurrent.id)
+        .filter((member) => member !== userCurrent.id)
         .map((member) => member.memberId);
       console.log(memberIdList);
       setValueMultiMember(memberIdList);
@@ -404,10 +405,10 @@ const PopupFilter = ({ position, onClose }) => {
               </div>
               <div className="content_right">
                 <Image
-                  url={sinhVienCurrent.picture}
+                  url={userCurrent.picture}
                   picxel={30}
                   marginRight={8}
-                  name={sinhVienCurrent.name + " " + sinhVienCurrent.username}
+                  name={userCurrent.name + " " + userCurrent.username}
                 />
                 <span style={{ fontSize: "14px" }}>Thẻ giao cho tôi</span>
               </div>

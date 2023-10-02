@@ -6,7 +6,6 @@ export class StPointAllAPI {
       method: "GET",
       url: "/student/point",
       params: {
-        idStudent: filter.idStudent,
         idSemester: filter.idSemester,
       },
     });

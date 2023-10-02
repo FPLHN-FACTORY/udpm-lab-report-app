@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 public final class MeFindProjectRequest extends PageableRequest {
 
-    private String idUser;
+//    private String idUser;
 
     private String nameProject;
 

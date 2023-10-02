@@ -15,6 +15,7 @@ import com.labreportapp.labreport.entity.Class;
 import com.labreportapp.labreport.entity.StudentClasses;
 import com.labreportapp.labreport.infrastructure.constant.StatusStudentFeedBack;
 import com.labreportapp.labreport.infrastructure.constant.StatusTeam;
+import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
@@ -45,6 +46,9 @@ public class StClassServiceImpl implements StClassService {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private LabReportAppSession labReportAppSession;
 
     @Autowired
     private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
@@ -93,7 +97,7 @@ public class StClassServiceImpl implements StClassService {
             throw new RestApiException("Bạn chưa thể vào lớp");
         }
         Optional<StudentClasses> findStudentClasses = stStudentClassesRepository.
-                findStudentClassesByClassIdAndStudentId(req.getIdClass(), req.getIdStudent());
+                findStudentClassesByClassIdAndStudentId(req.getIdClass(), labReportAppSession.getUserId());
         if (findStudentClasses.isPresent()) {
             throw new RestApiException(Message.YOU_HAD_IN_CLASS);
         }
@@ -103,7 +107,7 @@ public class StClassServiceImpl implements StClassService {
             throw new RestApiException(Message.CLASS_DID_FULL_CLASS_SIZE);
         }
 
-        SimpleResponse responseStudent = convertRequestCallApiIdentity.handleCallApiGetUserById(req.getIdStudent());
+        SimpleResponse responseStudent = convertRequestCallApiIdentity.handleCallApiGetUserById(labReportAppSession.getUserId());
 
         StudentClasses studentJoinClass = new StudentClasses();
         StClassCustomResponse customResponse = new StClassCustomResponse();
@@ -111,13 +115,13 @@ public class StClassServiceImpl implements StClassService {
         if (responseStudent != null) {
             studentJoinClass.setClassId(req.getIdClass());
             studentJoinClass.setEmail(responseStudent.getEmail());
-            studentJoinClass.setStudentId(req.getIdStudent());
+            studentJoinClass.setStudentId(labReportAppSession.getUserId());
             studentJoinClass.setStatusStudentFeedBack(StatusStudentFeedBack.CHUA_FEEDBACK);
             studentJoinClass.setStatus(StatusTeam.INACTIVE);
             studentJoinClass.setCreatedDate(new Date().getTime());
             StudentClasses studentInClass = stStudentClassesRepository.save(studentJoinClass);
 
-            if (studentInClass.getStudentId().equals(req.getIdStudent())) {
+            if (studentInClass.getStudentId().equals(labReportAppSession.getUserId())) {
                 Class classOfStudentWantJoin = findClass.get();
                 classOfStudentWantJoin.setClassSize(classOfStudentWantJoin.getClassSize() + 1);
                 Class updatedClass = stClassRepository.save(classOfStudentWantJoin);

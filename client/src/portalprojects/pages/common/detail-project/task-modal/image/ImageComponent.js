@@ -8,9 +8,7 @@ import { GetProject } from "../../../../../app/reducer/detail-project/DPProjectS
 import { GetPeriodCurrent } from "../../../../../app/reducer/detail-project/DPPeriodSlice.reducer";
 import { GetDetailTodo } from "../../../../../app/reducer/detail-project/DPDetailTodoSlice.reducer";
 import { getStompClient } from "../../stomp-client-config/StompClientManager";
-import { userCurrent } from "../../../../../helper/inForUser";
 import PopupDetailImage from "../../popup/popup-show-detail-image/PopupDetailImage";
-import { sinhVienCurrent } from "../../../../../../labreportapp/helper/inForUser";
 
 const ImageComponent = ({ item }) => {
   const [image, setImage] = useState(null);
@@ -66,7 +64,6 @@ const ImageComponent = ({ item }) => {
       idTodo: detailTodo.id,
       idTodoList: detailTodo.todoListId,
       projectId: detailProject.id,
-      idUser: sinhVienCurrent.id,
     };
 
     stompClient.send(

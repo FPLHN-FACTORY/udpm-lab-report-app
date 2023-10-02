@@ -21,12 +21,10 @@ import {
 import { GetProject } from "../../../../app/reducer/detail-project/DPProjectSlice.reducer";
 import LoadingIndicator from "../../../../helper/loading";
 import { GetMemberProject } from "../../../../app/reducer/detail-project/DPMemberProject.reducer";
-import { userCurrent } from "../../../../helper/inForUser";
 import { GetSessionId } from "../../../../app/reducer/detail-project/StompClient.reducer";
 import { getStompClient } from "../stomp-client-config/StompClientManager";
 import BoardStompClient from "./BoardStompClient";
 import { toast } from "react-toastify";
-import { sinhVienCurrent } from "../../../../../labreportapp/helper/inForUser";
 
 const Board = () => {
   const dispatch = useAppDispatch();
@@ -176,7 +174,6 @@ const Board = () => {
         indexAfter: result.destination.index,
         periodId: periodCurrent.id,
         projectId: detailProject.id,
-        idUser: sinhVienCurrent.id,
         sessionId: sessionSocket,
       };
       let idTodoListOld = obj.idTodoListOld;
@@ -222,7 +219,7 @@ const Board = () => {
       )),
     [board.lists]
   );
-  
+
   return (
     <div>
       {isLoading && <LoadingIndicator />}

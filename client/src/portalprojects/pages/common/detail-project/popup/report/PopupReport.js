@@ -8,9 +8,7 @@ import { useAppSelector } from "../../../../../app/hook";
 import { GetProject } from "../../../../../app/reducer/detail-project/DPProjectSlice.reducer";
 import { GetPeriodCurrent } from "../../../../../app/reducer/detail-project/DPPeriodSlice.reducer";
 import { GetDetailTodo } from "../../../../../app/reducer/detail-project/DPDetailTodoSlice.reducer";
-import { userCurrent } from "../../../../../helper/inForUser";
 import { getStompClient } from "../../stomp-client-config/StompClientManager";
-import { sinhVienCurrent } from "../../../../../../labreportapp/helper/inForUser";
 
 const PopupReport = ({ position, onClose }) => {
   const popupRef = useRef(null);
@@ -72,7 +70,6 @@ const PopupReport = ({ position, onClose }) => {
       progress: parseInt(valueProgress),
       periodId: periodCurrent.id,
       projectId: detailProject.id,
-      idUser: sinhVienCurrent.id,
       idTodo: detailTodo.id,
       idTodoList: detailTodo.todoListId,
     };

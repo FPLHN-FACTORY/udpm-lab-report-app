@@ -28,6 +28,6 @@ public class MeCreateCommentRequest {
     @NotEmpty
     private String content;
 
-    private String idUser;
+//    private String idUser;
 
 }

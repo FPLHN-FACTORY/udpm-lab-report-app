@@ -5,14 +5,12 @@ import { useAppSelector } from "../../../../../app/hook";
 import { GetPeriodCurrent } from "../../../../../app/reducer/detail-project/DPPeriodSlice.reducer";
 import { GetProject } from "../../../../../app/reducer/detail-project/DPProjectSlice.reducer";
 import { GetDetailTodo } from "../../../../../app/reducer/detail-project/DPDetailTodoSlice.reducer";
-import { userCurrent } from "../../../../../helper/inForUser";
 import { getStompClient } from "../../stomp-client-config/StompClientManager";
 import moment from "moment";
 import { formatDateToString } from "../../../../../helper/convertDate";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock, faTimes } from "@fortawesome/free-solid-svg-icons";
-import { sinhVienCurrent } from "../../../../../../labreportapp/helper/inForUser";
 
 const { Option } = Select;
 
@@ -79,7 +77,6 @@ const PopupDeadline = ({ position, onClose }) => {
       deadline: formatDateToString(deadline),
       reminder: reminder,
       projectId: detailProject.id,
-      idUser: sinhVienCurrent.id,
       idTodo: detailTodo.id,
       idTodoList: detailTodo.todoListId,
     };
@@ -103,7 +100,6 @@ const PopupDeadline = ({ position, onClose }) => {
     let obj = {
       idTodoDelete: detailTodo.id,
       projectId: detailProject.id,
-      idUser: sinhVienCurrent.id,
       idTodo: detailTodo.id,
       idTodoList: detailTodo.todoListId,
     };

@@ -10,7 +10,5 @@ import lombok.Setter;
 @Setter
 public class StOutTeamRequest {
 
-    private String idStudent;
-
     private String idClass;
 }

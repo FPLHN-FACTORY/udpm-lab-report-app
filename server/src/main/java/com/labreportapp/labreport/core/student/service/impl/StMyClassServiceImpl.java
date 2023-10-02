@@ -13,6 +13,7 @@ import com.labreportapp.labreport.core.student.repository.StStudentClassesReposi
 import com.labreportapp.labreport.core.student.service.StMyClassService;
 import com.labreportapp.labreport.entity.Class;
 import com.labreportapp.labreport.entity.StudentClasses;
+import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.labreport.repository.LevelRepository;
 import com.labreportapp.labreport.repository.SemesterRepository;
 import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
@@ -54,6 +55,9 @@ public class StMyClassServiceImpl implements StMyClassService {
     @Autowired
     private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
 
+    @Autowired
+    private LabReportAppSession labReportAppSession;
+
     @Override
     public List<StMyClassCustom> getAllClass(final StFindClassRequest req) {
         List<StMyClassResponse> listMyClassResponse = stMyClassRepository.getAllClass(req);
@@ -92,7 +96,7 @@ public class StMyClassServiceImpl implements StMyClassService {
     public void leaveClass(final StClassRequest req) {
         Optional<Class> findCurrentMyClass = stClassRepository.findById(req.getIdClass());
         Optional<StudentClasses> findStudentInClass = stStudentClassesRepository.
-                findStudentClassesByClassIdAndStudentId(req.getIdClass(), req.getIdStudent());
+                findStudentClassesByClassIdAndStudentId(req.getIdClass(), labReportAppSession.getUserId());
 
         if (findStudentInClass.isPresent()) {
             Optional<StClassResponse> conditionClass = stClassRepository.checkConditionCouldJoinOrLeaveClass(req);

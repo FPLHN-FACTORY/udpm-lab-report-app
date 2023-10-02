@@ -7,7 +7,6 @@ import {
   faHome,
   faTableList,
 } from "@fortawesome/free-solid-svg-icons";
-import { giangVienCurrent } from "../../helper/inForUser";
 import LoadingIndicator from "../../helper/loading";
 import {
   Row,
@@ -70,7 +69,7 @@ const TeacherMyClass = () => {
     dispatch(SetTeacherMyClass([]));
     featchDataLevel();
     featchDataSemester();
-    featchAllMyClass(giangVienCurrent);
+    featchAllMyClass();
   }, []);
 
   useEffect(() => {
@@ -79,18 +78,17 @@ const TeacherMyClass = () => {
   }, [idSemesterSeach]);
 
   useEffect(() => {
-    featchAllMyClass(giangVienCurrent);
+    featchAllMyClass();
   }, [current]);
 
   useEffect(() => {
-    featchAllMyClass(giangVienCurrent);
+    featchAllMyClass();
     setClear(false);
   }, [clear]);
 
-  const featchAllMyClass = async (giangVienCurrent) => {
+  const featchAllMyClass = async () => {
     setLoading(false);
     let filter = {
-      idTeacher: giangVienCurrent.id,
       idActivity: idActivitiSearch,
       idSemester: idSemesterSeach,
       code: codeSearch,
@@ -160,7 +158,7 @@ const TeacherMyClass = () => {
   };
 
   const handleSearch = async () => {
-    await featchAllMyClass(giangVienCurrent);
+    await featchAllMyClass();
   };
 
   const handleClear = () => {

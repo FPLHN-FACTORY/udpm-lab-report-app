@@ -8,6 +8,7 @@ import com.labreportapp.labreport.core.teacher.model.response.TePostResponse;
 import com.labreportapp.labreport.core.teacher.repository.TePostRepository;
 import com.labreportapp.labreport.core.teacher.service.TePostService;
 import com.labreportapp.labreport.entity.Post;
+import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +29,12 @@ public class TePostServiceImpl implements TePostService {
     @Autowired
     private TePostRepository tePostRepository;
 
+    @Autowired
+    private LabReportAppSession labReportAppSession;
+
     @Override
     public PageableObject<TePostResponse> searchPagePost(TeFindPostClassRepquest repquest) {
+        repquest.setIdTeacher(labReportAppSession.getUserId());
         Pageable pageable = PageRequest.of(repquest.getPage() - 1, repquest.getSize());
         Page<TePostResponse> list = tePostRepository.searchPostByIdTeacherIdClass(repquest, pageable);
         return new PageableObject<>(list);
@@ -44,7 +49,7 @@ public class TePostServiceImpl implements TePostService {
         post.setDescriptions(request.getDescriptions());
         post.setCreatedDate(new Date().getTime());
         post.setClassId(request.getIdClass());
-        post.setTeacherId(request.getIdTeacher());
+        post.setTeacherId(labReportAppSession.getUserId());
         return tePostRepository.save(post);
     }
 

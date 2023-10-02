@@ -318,7 +318,7 @@ const TeamsInMyClass = () => {
                 }}
               >
                 QUẢN LÝ NHÓM &nbsp;
-              </Link>{" "}
+              </Link>
               <Link
                 to={`/teacher/my-class/meeting/${idClass}`}
                 className="custom-link"

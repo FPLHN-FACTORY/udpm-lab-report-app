@@ -7,7 +7,5 @@ import lombok.Setter;
 @Setter
 public class StClassRequest {
 
-  private String idStudent;
-
   private String idClass;
 }

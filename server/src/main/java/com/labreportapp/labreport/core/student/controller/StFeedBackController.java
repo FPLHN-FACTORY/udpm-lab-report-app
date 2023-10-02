@@ -36,8 +36,8 @@ public class StFeedBackController {
     private SemesterHelper semesterHelper;
 
     @GetMapping("/check")
-    public ResponseObject checkFeedBack(final StCheckFeedBackRequest request) {
-        return new ResponseObject(stFeedBackService.checkFeedBack(request));
+    public ResponseObject checkFeedBack() {
+        return new ResponseObject(stFeedBackService.checkFeedBack());
     }
 
     @GetMapping("/get-semester-current")

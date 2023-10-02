@@ -15,8 +15,8 @@ import {
 } from "../../../../app/student/StPost.reduce";
 import ViewEditorJodit from "../../../../helper/editor/ViewEditorJodit";
 import { ControlOutlined } from "@ant-design/icons";
-import { giangVienCurrent } from "../../../../helper/inForUser";
 import { SetTTrueToggle } from "../../../../app/student/StCollapsedSlice.reducer";
+import { GetUserCurrent } from "../../../../app/common/UserCurrent.reducer";
 
 const StPostDetailClass = () => {
   const dispatch = useAppDispatch();
@@ -41,7 +41,6 @@ const StPostDetailClass = () => {
       let data = {
         idClass: id,
         page: currentPage,
-        idTeacher: giangVienCurrent.id,
         size: 8,
       };
       await StudentPostAPI.getPagePost(data).then((responese) => {
@@ -71,7 +70,6 @@ const StPostDetailClass = () => {
       let data = {
         idClass: id,
         page: currentPage,
-        idTeacher: giangVienCurrent.id,
         size: 8,
       };
       await StudentPostAPI.getPagePost(data).then((responese) => {
@@ -112,6 +110,7 @@ const StPostDetailClass = () => {
   };
 
   const data = useAppSelector(GetPost);
+  const userRedux = useAppSelector(GetUserCurrent);
   return (
     <>
       {!loading && <LoadingIndicator />}
@@ -231,7 +230,7 @@ const StPostDetailClass = () => {
                                   <div style={{ width: "95%", float: "left" }}>
                                     <span style={{ lineHeight: "50px" }}>
                                       {" "}
-                                      {giangVienCurrent.name}{" "}
+                                      {userRedux.name}{" "}
                                       <span
                                         style={{
                                           color: "gray",

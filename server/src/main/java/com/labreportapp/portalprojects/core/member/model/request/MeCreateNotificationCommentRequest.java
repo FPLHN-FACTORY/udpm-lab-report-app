@@ -28,14 +28,14 @@ public class MeCreateNotificationCommentRequest {
     @NotBlank
     @NotEmpty
     private String url;
-
-    @NotNull
-    @NotBlank
-    @NotEmpty
-    private String idUser;
-
-    @NotNull
-    @NotBlank
-    @NotEmpty
-    private String username;
+//
+//    @NotNull
+//    @NotBlank
+//    @NotEmpty
+//    private String idUser;
+//
+//    @NotNull
+//    @NotBlank
+//    @NotEmpty
+//    private String username;
 }

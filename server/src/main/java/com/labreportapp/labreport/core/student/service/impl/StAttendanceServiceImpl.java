@@ -6,6 +6,7 @@ import com.labreportapp.labreport.core.student.model.response.StAttendanceCallAp
 import com.labreportapp.labreport.core.student.model.response.StAttendanceRespone;
 import com.labreportapp.labreport.core.student.repository.StAttendanceRepository;
 import com.labreportapp.labreport.core.student.service.StAttendanceService;
+import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,19 +17,25 @@ import java.util.stream.Collectors;
 
 @Service
 public class StAttendanceServiceImpl implements StAttendanceService {
+
     @Autowired
     private StAttendanceRepository stAttendanceRepository;
 
     @Autowired
     private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
 
+    @Autowired
+    private LabReportAppSession labReportAppSession;
+
     @Override
     public List<StAttendanceRespone> getAllAttendanceById(StFindAttendanceRequest req) {
+        req.setIdStudent(labReportAppSession.getUserId());
         return stAttendanceRepository.getAllAttendanceById(req);
     }
 
     @Override
     public List<StAttendanceCallApiRespone> getAllAttendanceStudentById(StFindAttendanceRequest request) {
+        request.setIdStudent(labReportAppSession.getUserId());
         List<StAttendanceRespone> stAttendanceResponeList = stAttendanceRepository.getAllAttendanceById(request);
         List<String> idTeacherList = stAttendanceResponeList.stream()
                 .map(StAttendanceRespone::getTeacherId)

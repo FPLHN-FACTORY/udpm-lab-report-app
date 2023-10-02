@@ -268,7 +268,7 @@ const MeetingInMyClass = () => {
                                     )}-{" "}
                                   </span>
                                   <span>Ca </span>
-                                  {record.meetingPeriod + 1}
+                                  {record.meetingPeriod + 1 + " "}
                                   <span>
                                     (
                                     {convertMeetingPeriodToTime(

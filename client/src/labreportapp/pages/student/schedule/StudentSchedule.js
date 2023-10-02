@@ -18,7 +18,6 @@ import {
 } from "../../../app/student/StSchedule.reduce";
 import { toast } from "react-toastify";
 import { StScheduleAPI } from "../../../api/student/StScheduleAPI";
-import { sinhVienCurrent } from "../../../helper/inForUser";
 import moment from "moment";
 import React, { useCallback } from "react";
 import LoadingIndicator from "../../../helper/loading";
@@ -32,16 +31,15 @@ const StudentSchedule = () => {
   const [searchTime, setSearchTime] = useState("7");
 
   useEffect(() => {
-    fetchData(sinhVienCurrent);
+    fetchData();
     document.title = "Lịch học | Lab-Report-App";
   }, [current]);
 
-  const fetchData = (sinhVienCurrent) => {
+  const fetchData = () => {
     const searchTimeAsNumber = parseInt(searchTime);
     console.log(searchTimeAsNumber);
     setLoading(true);
     let filter = {
-      idStudent: sinhVienCurrent.id,
       searchTime: searchTimeAsNumber,
       page: current,
       size: 10,
@@ -124,7 +122,7 @@ const StudentSchedule = () => {
     },
   ];
   const buttonSearch = () => {
-    fetchData(sinhVienCurrent);
+    fetchData();
     setCurrent(1);
   };
 

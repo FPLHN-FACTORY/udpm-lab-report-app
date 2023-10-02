@@ -14,9 +14,7 @@ import { GetDetailTodo } from "../../../../../app/reducer/detail-project/DPDetai
 import { GetProject } from "../../../../../app/reducer/detail-project/DPProjectSlice.reducer";
 import { GetPeriodCurrent } from "../../../../../app/reducer/detail-project/DPPeriodSlice.reducer";
 import { getStompClient } from "../../stomp-client-config/StompClientManager";
-import { userCurrent } from "../../../../../helper/inForUser";
 import { Popconfirm } from "antd";
-import { sinhVienCurrent } from "../../../../../../labreportapp/helper/inForUser";
 
 const PopupShowDetailImage = ({ imageId, nameFile, onClose }) => {
   const [imageDetail, setImageDetail] = useState(null);
@@ -69,7 +67,6 @@ const PopupShowDetailImage = ({ imageId, nameFile, onClose }) => {
       idTodo: detailTodo.id,
       idTodoList: detailTodo.todoListId,
       projectId: detailProject.id,
-      idUser: sinhVienCurrent.id,
     };
 
     stompClient.send(

@@ -1,5 +1,6 @@
 package com.labreportapp.portalprojects.core.member.service.impl;
 
+import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.portalprojects.core.common.base.TodoObject;
 import com.labreportapp.portalprojects.core.member.model.request.MeCreateResourceRequest;
 import com.labreportapp.portalprojects.core.member.model.request.MeDeleteResourceRequest;
@@ -42,6 +43,9 @@ public class MeResourceServiceImpl implements MeResourceService {
     @Autowired
     private SuccessNotificationSender successNotificationSender;
 
+    @Autowired
+    private LabReportAppSession labReportAppSession;
+
     @Override
     public List<MeResourceResponse> getAll(String idTodo) {
         return meReourceRepository.getAll(idTodo);
@@ -65,7 +69,7 @@ public class MeResourceServiceImpl implements MeResourceService {
         resource.setTodoId(request.getIdTodo());
 
         ActivityTodo activityTodo = new ActivityTodo();
-        activityTodo.setMemberCreatedId(request.getIdUser());
+        activityTodo.setMemberCreatedId(labReportAppSession.getUserId());
         activityTodo.setTodoId(request.getIdTodo());
         activityTodo.setTodoListId(request.getIdTodoList());
         activityTodo.setProjectId(request.getProjectId());
@@ -106,7 +110,7 @@ public class MeResourceServiceImpl implements MeResourceService {
         activityTodo.setProjectId(request.getProjectId());
         activityTodo.setTodoId(request.getIdTodo());
         activityTodo.setTodoListId(request.getIdTodoList());
-        activityTodo.setMemberCreatedId(request.getIdUser());
+        activityTodo.setMemberCreatedId(labReportAppSession.getUserId());
         if (!request.getName().isEmpty() && request.getName() != null) {
             activityTodo.setContentAction("đã xóa link đính kèm " + request.getName() + " khỏi thẻ này");
         } else {

@@ -7,7 +7,6 @@ export class StAttendenceAPI {
       method: "GET",
       url: "/student/attendence",
       params: {
-        idStudent: filter.idStudent,
         idSemester: filter.idSemester,
       },
     });

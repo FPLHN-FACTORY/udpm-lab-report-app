@@ -16,6 +16,7 @@ import com.labreportapp.labreport.entity.Note;
 import com.labreportapp.labreport.entity.Report;
 import com.labreportapp.labreport.entity.StudentClasses;
 import com.labreportapp.labreport.infrastructure.constant.RoleTeam;
+import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import lombok.Synchronized;
@@ -47,6 +48,9 @@ public class StMeetingServiceImpl implements StMeetingService {
 
     @Autowired
     private StLeadTeamRepository stLeadTeamRepository;
+
+    @Autowired
+    private LabReportAppSession labReportAppSession;
 
     @Override
     public List<StMeetingResponse> searchMeetingByIdClass(StFindMeetingRequest request) {
@@ -88,7 +92,7 @@ public class StMeetingServiceImpl implements StMeetingService {
     @Transactional
     @Synchronized
     public StHomeWordAndNoteResponse updateDetailMeetingTeamByLeadTeam(StUpdateHomeWorkAndNotebyLeadTeamRequest request) {
-        Optional<StudentClasses> optionalStudentClasses = stLeadTeamRepository.findStudentClassesByStudentId(request.getIdStudent());
+        Optional<StudentClasses> optionalStudentClasses = stLeadTeamRepository.findStudentClassesByStudentId(labReportAppSession.getUserId());
         if (optionalStudentClasses.isPresent()) {
             StudentClasses studentClasses = optionalStudentClasses.get();
             if (studentClasses.getRole().equals(RoleTeam.LEADER)) {

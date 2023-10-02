@@ -1,5 +1,6 @@
 package com.labreportapp.portalprojects.core.member.service.impl;
 
+import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.portalprojects.core.common.base.PageableObject;
 import com.labreportapp.portalprojects.core.common.base.TodoAndTodoListObject;
 import com.labreportapp.portalprojects.core.common.base.TodoObject;
@@ -132,6 +133,9 @@ public class MeTodoServiceImpl implements MeTodoService {
 
     @Autowired
     private TodoHelper todoHelper;
+
+    @Autowired
+    private LabReportAppSession labReportAppSession;
 
     @Override
     @Cacheable(value = "todosByPeriodAndTodoList", key = "#request.name.toString() + '-' " +
@@ -367,7 +371,7 @@ public class MeTodoServiceImpl implements MeTodoService {
         activityTodo.setTodoListId(request.getIdTodoList());
         activityTodo.setProjectId(request.getProjectId());
         activityTodo.setContentAction("đã cập nhật phần trăm tiến độ của đầu việc thành " + request.getProgress() + "%");
-        activityTodo.setMemberCreatedId(request.getIdUser());
+        activityTodo.setMemberCreatedId(labReportAppSession.getUserId());
         TodoObject todoObject = TodoObject.builder()
                 .data(meTodoRepository.save(todoFindById.get()))
                 .dataActivity(meActivityRepository.save(activityTodo))
@@ -484,7 +488,7 @@ public class MeTodoServiceImpl implements MeTodoService {
         }
 
         ActivityTodo activityTodo = new ActivityTodo();
-        activityTodo.setMemberCreatedId(request.getIdUser());
+        activityTodo.setMemberCreatedId(labReportAppSession.getUserId());
         activityTodo.setProjectId(request.getProjectId());
         activityTodo.setTodoListId(request.getIdTodoList());
         activityTodo.setTodoId(request.getIdTodo());
@@ -510,7 +514,7 @@ public class MeTodoServiceImpl implements MeTodoService {
         todoFind.get().setReminderTime(null);
         todoFind.get().setStatusReminder(StatusReminder.CHUA_GUI);
         ActivityTodo activityTodo = new ActivityTodo();
-        activityTodo.setMemberCreatedId(request.getIdUser());
+        activityTodo.setMemberCreatedId(labReportAppSession.getUserId());
         activityTodo.setProjectId(request.getProjectId());
         activityTodo.setTodoListId(request.getIdTodoList());
         activityTodo.setTodoId(request.getIdTodo());
@@ -548,7 +552,7 @@ public class MeTodoServiceImpl implements MeTodoService {
         activityTodo.setTodoId(newTodo.getId());
         activityTodo.setTodoListId(request.getTodoListId());
         activityTodo.setProjectId(request.getProjectId());
-        activityTodo.setMemberCreatedId(request.getIdUser());
+        activityTodo.setMemberCreatedId(labReportAppSession.getUserId());
         activityTodo.setContentAction("đã thêm thẻ này vào " + request.getNameTodoList());
         meActivityRepository.save(activityTodo);
 
@@ -586,7 +590,7 @@ public class MeTodoServiceImpl implements MeTodoService {
             activityTodo.setTodoId(request.getIdTodo());
             activityTodo.setTodoListId(request.getIdTodoListNew());
             activityTodo.setProjectId(request.getProjectId());
-            activityTodo.setMemberCreatedId(request.getIdUser());
+            activityTodo.setMemberCreatedId(labReportAppSession.getUserId());
             activityTodo.setContentAction("đã kéo thẻ này từ " + request.getNameTodoListOld() + " tới " + request.getNameTodoListNew());
             Short countTodo = meTodoRepository.countTodoInTodoList(request.getIdTodoListNew(), request.getPeriodId());
             todoFind.get().setIndexTodo(request.getIndexAfter());
@@ -621,7 +625,7 @@ public class MeTodoServiceImpl implements MeTodoService {
         activityTodo.setTodoListId(request.getIdTodoList());
         activityTodo.setTodoId(request.getIdTodo());
         activityTodo.setProjectId(request.getProjectId());
-        activityTodo.setMemberCreatedId(request.getIdUser());
+        activityTodo.setMemberCreatedId(labReportAppSession.getUserId());
         Short countTodo = meTodoRepository.countTodoInCheckList(request.getIdTodo());
         if (request.getStatus() == 0) {
             todoFind.get().setCompletionTime(new Date().getTime());
@@ -668,7 +672,7 @@ public class MeTodoServiceImpl implements MeTodoService {
         activityTodo.setTodoId(request.getIdTodo());
         activityTodo.setTodoListId(request.getIdTodoListNew());
         activityTodo.setProjectId(request.getProjectId());
-        activityTodo.setMemberCreatedId(request.getIdUser());
+        activityTodo.setMemberCreatedId(labReportAppSession.getUserId());
         activityTodo.setContentAction("đã kéo thẻ này từ " + request.getNameTodoListOld() + " tới " + request.getNameTodoListNew());
 
         TodoAndTodoListObject todoAndTodoListObject = TodoAndTodoListObject.builder().data(meTodoRepository.save(todoFind.get())).

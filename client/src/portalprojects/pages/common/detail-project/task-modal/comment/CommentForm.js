@@ -1,6 +1,5 @@
 import ReactQuill from "react-quill";
 import Image from "../../../../../helper/img/Image";
-import { userCurrent } from "../../../../../helper/inForUser";
 import "./styleCommentForm.css";
 import { memo, useEffect, useState } from "react";
 import Picker from "emoji-picker-react";
@@ -21,7 +20,7 @@ import { current } from "@reduxjs/toolkit";
 import { GetMemberProject } from "../../../../../app/reducer/detail-project/DPMemberProject.reducer";
 import { DetailProjectAPI } from "../../../../../api/detail-project/detailProject.api";
 import PopupTagComment from "../../popup/popup-tag-comment/PopupTagComment";
-import { sinhVienCurrent } from "../../../../../../labreportapp/helper/inForUser";
+import { GetUserCurrent } from "../../../../../../labreportapp/app/common/UserCurrent.reducer";
 
 const CommentForm = memo(() => {
   const [inputStr, setInputStr] = useState("<p></p>");
@@ -40,6 +39,8 @@ const CommentForm = memo(() => {
   const memberProject = useAppSelector(GetMemberProject);
   const [totalPages, setTotalPages] = useState(0);
   const dispatch = useAppDispatch();
+
+  const userCurrent = useAppSelector(GetUserCurrent)
 
   useEffect(() => {
     if (detailTodo != null) {
@@ -86,7 +87,7 @@ const CommentForm = memo(() => {
     const memberIds = [];
 
     memberProject.forEach((item) => {
-      if (usernames.includes(item.userName) && item.id !== sinhVienCurrent.id) {
+      if (usernames.includes(item.userName) && item.id !== userCurrent.id) {
         memberIds.push(item.id);
       }
     });
@@ -110,7 +111,6 @@ const CommentForm = memo(() => {
       idTodo: detailTodo.id,
       idTodoList: detailTodo.todoListId,
       content: inputStr,
-      idUser: sinhVienCurrent.id,
       mentionedUsernames: cleanedUsernames,
     };
 
@@ -131,8 +131,6 @@ const CommentForm = memo(() => {
           periodCurrent.id +
           "&idTodo=" +
           detailTodo.id,
-        idUser: sinhVienCurrent.id,
-        username: sinhVienCurrent.userName,
       };
 
       DetailProjectAPI.createNotification(objComment).then((response) => {});
@@ -194,9 +192,9 @@ const CommentForm = memo(() => {
       )}
       <div style={{ position: "relative", display: "flex" }}>
         <Image
-          url={sinhVienCurrent.picture}
+          url={userCurrent.picture}
           picxel={33}
-          name={sinhVienCurrent.name + " " + sinhVienCurrent.userName}
+          name={userCurrent.name + " " + userCurrent.userName}
         />
 
         <ReactQuill

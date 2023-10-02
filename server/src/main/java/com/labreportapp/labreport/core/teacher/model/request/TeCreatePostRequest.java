@@ -18,6 +18,4 @@ public class TeCreatePostRequest {
 
     private String idClass;
 
-    private String idTeacher;
-
 }

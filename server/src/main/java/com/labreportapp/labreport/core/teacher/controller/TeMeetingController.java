@@ -14,6 +14,7 @@ import com.labreportapp.labreport.core.teacher.model.response.TeMeetingCustomToA
 import com.labreportapp.labreport.core.teacher.model.response.TeMeetingResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeScheduleMeetingClassResponse;
 import com.labreportapp.labreport.core.teacher.service.TeMeetingService;
+import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,6 +36,9 @@ public class TeMeetingController {
 
     @Autowired
     private TeMeetingService teMeetingService;
+
+    @Autowired
+    private LabReportAppSession labReportAppSession;
 
     @GetMapping("")
     public ResponseObject getTeMeeting(final TeFindMeetingRequest request) {
@@ -74,6 +78,7 @@ public class TeMeetingController {
 
     @GetMapping("/schedule-time")
     public ResponseObject getScheduleTodayTeacherTime(final TeFindScheduleNowToTime request) {
+        request.setIdTeacher(labReportAppSession.getUserId());
         PageableObject<TeScheduleMeetingClassResponse> list = teMeetingService.searchScheduleNowToByIdTeacher(request);
         return new ResponseObject(list);
     }

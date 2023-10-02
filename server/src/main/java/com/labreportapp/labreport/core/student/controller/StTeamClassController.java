@@ -6,6 +6,7 @@ import com.labreportapp.labreport.core.student.model.request.FindTeamClassReques
 import com.labreportapp.labreport.core.student.model.request.StJoinTeamRequest;
 import com.labreportapp.labreport.core.student.model.request.StOutTeamRequest;
 import com.labreportapp.labreport.core.student.service.StTeamClassService;
+import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +26,9 @@ public class StTeamClassController {
 
     @Autowired
     private StTeamClassService service;
+
+    @Autowired
+    private LabReportAppSession labReportAppSession;
 
     @GetMapping("/get-team-in-class")
     public ResponseObject getTeamInClass(final FindTeamByIdClass request) {
@@ -47,8 +51,8 @@ public class StTeamClassController {
     }
 
     @GetMapping("/check-status")
-    public ResponseObject checkStatusStudentInClass(@RequestParam("idClass") String idClass, @RequestParam("idStudent") String idStudent) {
-        return new ResponseObject(service.checkStatusStudentInClass(idClass, idStudent));
+    public ResponseObject checkStatusStudentInClass(@RequestParam("idClass") String idClass) {
+        return new ResponseObject(service.checkStatusStudentInClass(idClass, labReportAppSession.getUserId()));
     }
 
     @GetMapping("/detail")

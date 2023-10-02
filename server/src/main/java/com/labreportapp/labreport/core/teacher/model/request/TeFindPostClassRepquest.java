@@ -13,7 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class TeFindPostClassRepquest  extends PageableRequest {
+public class TeFindPostClassRepquest extends PageableRequest {
 
     private String idClass;
 

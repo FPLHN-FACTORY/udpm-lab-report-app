@@ -4,11 +4,11 @@ import { TeacherPostAPI } from "../../../../../api/teacher/post/TeacherPost.api"
 import { CreatePost } from "../../../../../app/teacher/post/tePostSlice.reduce";
 import { toast } from "react-toastify";
 import { Button } from "antd";
-import { useAppDispatch } from "../../../../../app/hook";
+import { useAppDispatch, useAppSelector } from "../../../../../app/hook";
 import { TeacherStudentClassesAPI } from "../../../../../api/teacher/student-class/TeacherStudentClasses.api";
 import { TeacherMailAPI } from "../../../../../api/teacher/sent-mail/TeacherMailAPI.api";
-import { giangVienCurrent } from "../../../../../helper/inForUser";
-function Editor({ idTeacher, idClass, showCreate }) {
+import { GetUserCurrent } from "../../../../../app/common/UserCurrent.reducer";
+function Editor({ idClass, showCreate }) {
   const [descriptionss, setDescriptionss] = useState("<p><br></p>");
   const dispatch = useAppDispatch();
   const [listMail, setListMail] = useState([]);
@@ -52,7 +52,6 @@ function Editor({ idTeacher, idClass, showCreate }) {
     }
     if (empty === 0) {
       let obj = {
-        idTeacher: idTeacher,
         descriptions: descriptionss,
         idClass: idClass,
       };
@@ -85,11 +84,12 @@ function Editor({ idTeacher, idClass, showCreate }) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
+  const userRedux = useAppSelector(GetUserCurrent)
   const featchSentMaillToStudent = async (body) => {
     try {
       let data = {
         titleEmail:
-          "Giảng viên " + giangVienCurrent.name + " đã thêm một thông báo mới.",
+          "Giảng viên " + userRedux.name + " đã thêm một thông báo mới.",
         subject: "Thông báo bài viết mới",
         toEmail: listMail,
         body: body,

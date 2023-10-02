@@ -8,6 +8,7 @@ import com.labreportapp.labreport.core.teacher.model.request.TeFindUpdateStatusC
 import com.labreportapp.labreport.core.teacher.model.response.TeClassResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeClassSentStudentRespone;
 import com.labreportapp.labreport.core.teacher.service.TeClassService;
+import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,8 +30,12 @@ public class TeClassController {
     @Autowired
     private TeClassService teClassService;
 
+    @Autowired
+    private LabReportAppSession labReportAppSession;
+
     @GetMapping("")
     public ResponseObject searchTeClass(final TeFindClassRequest teFindClass) {
+        teFindClass.setIdTeacher(labReportAppSession.getUserId());
         PageableObject<TeClassResponse> pageList = teClassService.searchTeacherClass(teFindClass);
         return new ResponseObject(pageList);
     }

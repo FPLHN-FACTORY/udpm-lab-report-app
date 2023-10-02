@@ -8,14 +8,12 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { formatDateTime } from "../../../../../helper/convertDate";
 import { Link } from "react-router-dom";
-import { userCurrent } from "../../../../../helper/inForUser";
 import { useAppSelector } from "../../../../../app/hook";
 import { GetDetailTodo } from "../../../../../app/reducer/detail-project/DPDetailTodoSlice.reducer";
 import { GetProject } from "../../../../../app/reducer/detail-project/DPProjectSlice.reducer";
 import { GetPeriodCurrent } from "../../../../../app/reducer/detail-project/DPPeriodSlice.reducer";
 import { getStompClient } from "../../stomp-client-config/StompClientManager";
 import { Popconfirm } from "antd";
-import { sinhVienCurrent } from "../../../../../../labreportapp/helper/inForUser";
 
 const PopupDetailImage = ({ item, onClose }) => {
   const detailTodo = useAppSelector(GetDetailTodo);
@@ -50,7 +48,6 @@ const PopupDetailImage = ({ item, onClose }) => {
       idTodo: detailTodo.id,
       idTodoList: detailTodo.todoListId,
       projectId: detailProject.id,
-      idUser: sinhVienCurrent.id,
     };
 
     stompClient.send(

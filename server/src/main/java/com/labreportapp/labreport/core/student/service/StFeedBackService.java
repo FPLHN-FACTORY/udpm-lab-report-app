@@ -14,7 +14,7 @@ import java.util.List;
  */
 public interface StFeedBackService {
 
-    Boolean checkFeedBack(final StCheckFeedBackRequest request);
+    Boolean checkFeedBack();
 
     Boolean createFeedBack(@Valid StStudentListFeedBackRequest request);
 

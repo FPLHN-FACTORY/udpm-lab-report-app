@@ -36,7 +36,6 @@ import Image from "../../../../helper/img/Image";
 import { memo } from "react";
 import { getStompClient } from "../stomp-client-config/StompClientManager";
 import { GetSessionId } from "../../../../app/reducer/detail-project/StompClient.reducer";
-import { userCurrent } from "../../../../helper/inForUser";
 import { GetProject } from "../../../../app/reducer/detail-project/DPProjectSlice.reducer";
 import { GetPeriodCurrent } from "../../../../app/reducer/detail-project/DPPeriodSlice.reducer";
 import { formatDateTime } from "../../../../helper/convertDate";
@@ -54,7 +53,6 @@ import PopupLabelTable from "../popup/label-table/PopupLabelTable";
 import PopupMemberTable from "../popup/member-table/PopupMemberTable";
 import PopupDeadlineTable from "../popup/deadline-table/PopupDeadlineTable";
 import { useLocation, useNavigate } from "react-router";
-import { sinhVienCurrent } from "../../../../../labreportapp/helper/inForUser";
 
 const { Option } = Select;
 
@@ -172,7 +170,6 @@ const TableDragAndDrop = ({ data }) => {
       indexAfter: 0,
       periodId: periodCurrent.id,
       projectId: detailProject.id,
-      idUser: sinhVienCurrent.id,
       sessionId: sessionSocket,
     };
     let idTodoListOld = obj.idTodoListOld;
@@ -200,7 +197,6 @@ const TableDragAndDrop = ({ data }) => {
       idTodoList: task.todoListId,
       projectId: detailProject.id,
       periodId: periodCurrent.id,
-      idUser: sinhVienCurrent.id,
     };
 
     stompClient.send(
@@ -647,7 +643,6 @@ const TableDragAndDrop = ({ data }) => {
       indexAfter: indexAfter,
       periodId: periodCurrent.id,
       projectId: detailProject.id,
-      idUser: sinhVienCurrent.id,
       sessionId: sessionSocket,
     };
 

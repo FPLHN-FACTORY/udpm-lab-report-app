@@ -1,5 +1,4 @@
 import "./styleTeacherScheduleToday.css";
-import { giangVienCurrent } from "../../../helper/inForUser";
 import { useState } from "react";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
@@ -40,7 +39,7 @@ const TeacherScheduleToday = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Bảng điều khiển - Lịch dạy hôm nay";
-    featchData(giangVienCurrent.id);
+    featchData();
     setTime("7");
     featchDataTime();
   }, []);
@@ -49,10 +48,10 @@ const TeacherScheduleToday = () => {
     featchDataTime();
   }, [time, current]);
 
-  const featchData = async (idTeacher) => {
+  const featchData = async () => {
     setLoading(false);
     try {
-      await TeacherScheduleTodayAPI.getAllByIdTe(idTeacher).then((response) => {
+      await TeacherScheduleTodayAPI.getAllByIdTe().then((response) => {
         setDataToday(response.data.data);
       });
       setLoading(true);
@@ -63,7 +62,6 @@ const TeacherScheduleToday = () => {
   const featchDataTime = async () => {
     try {
       let dataFind = {
-        idTeacher: giangVienCurrent.id,
         time: time,
         page: current,
         size: 6,
@@ -94,7 +92,6 @@ const TeacherScheduleToday = () => {
   const updateAddress = async () => {
     try {
       let dataUp = {
-        idTeacher: giangVienCurrent.id,
         listMeeting: dataToday,
       };
       await TeacherScheduleTodayAPI.updateDescriptionMeeting(dataUp).then(
@@ -468,7 +465,7 @@ const TeacherScheduleToday = () => {
               </div>
             </div>
             <div className="table-teacher" style={{ marginTop: "20px" }}>
-              {dataToday.length > 0 ? (
+              {dataToday != null && dataToday.length > 0 ? (
                 <Table
                   size="middle"
                   dataSource={data}

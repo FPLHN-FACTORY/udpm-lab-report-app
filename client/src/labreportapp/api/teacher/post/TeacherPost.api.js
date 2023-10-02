@@ -9,8 +9,6 @@ export class TeacherPostAPI {
         url +
         `?idClass=` +
         data.idClass +
-        `&idTeacher=` +
-        data.idTeacher +
         `&page=` +
         data.page +
         `&size=` +

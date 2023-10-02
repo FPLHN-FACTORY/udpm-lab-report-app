@@ -20,6 +20,7 @@ import com.labreportapp.labreport.entity.Team;
 import com.labreportapp.labreport.infrastructure.apiconstant.ApiConstants;
 import com.labreportapp.labreport.infrastructure.constant.RoleTeam;
 import com.labreportapp.labreport.infrastructure.constant.StatusTeam;
+import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.labreport.repository.StudentClassesRepository;
 import com.labreportapp.labreport.repository.TeamRepository;
 import com.labreportapp.labreport.util.ConvertListIdToString;
@@ -68,6 +69,9 @@ public class StTeamClassServiceImpl implements StTeamClassService {
     private StudentClassesRepository studentClassesRepository;
 
     @Autowired
+    private LabReportAppSession labReportAppSession;
+
+    @Autowired
     private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
 
     public List<StStudentCallApiResponse> callApi() {
@@ -90,7 +94,7 @@ public class StTeamClassServiceImpl implements StTeamClassService {
     @Override
     @Synchronized
     public String joinTeam(@Valid StJoinTeamRequest request) {
-        StudentClasses studentClasses = stStudentClassesRepository.findStudentClassesByClassIdAndStudentId(request.getIdClass(), request.getIdStudent()).get();
+        StudentClasses studentClasses = stStudentClassesRepository.findStudentClassesByClassIdAndStudentId(request.getIdClass(), labReportAppSession.getUserId()).get();
         if (studentClasses == null) {
             throw new RestApiException(Message.STUDENT_CLASSES_NOT_EXISTS);
         }
@@ -98,7 +102,7 @@ public class StTeamClassServiceImpl implements StTeamClassService {
             throw new RestApiException(Message.STUDENT_HAD_TEAM);
         }
         studentClasses.setTeamId(request.getIdTeam());
-        studentClasses.setEmail(request.getEmail());
+        studentClasses.setEmail(labReportAppSession.getEmail());
         studentClasses.setStatus(StatusTeam.ACTIVE);
         Integer countMemberInTeam = repository.countMemberInTeam(request.getIdClass(), request.getIdTeam());
         if (countMemberInTeam == 0) {
@@ -113,7 +117,7 @@ public class StTeamClassServiceImpl implements StTeamClassService {
     @Override
     @Synchronized
     public String outTeam(@Valid StOutTeamRequest request) {
-        StudentClasses studentClasses = stStudentClassesRepository.findStudentClassesByClassIdAndStudentId(request.getIdClass(), request.getIdStudent()).get();
+        StudentClasses studentClasses = stStudentClassesRepository.findStudentClassesByClassIdAndStudentId(request.getIdClass(), labReportAppSession.getUserId()).get();
         if (studentClasses == null) {
             throw new RestApiException(Message.STUDENT_CLASSES_NOT_EXISTS);
         }

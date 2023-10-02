@@ -26,7 +26,4 @@ public class StUpdateHomeWorkAndNotebyLeadTeamRequest {
 
     private String descriptionsReport;
 
-    private String idStudent;
-
-
 }

@@ -33,8 +33,8 @@ public class MeUpdateCommentRequest {
     @NotBlank
     private String idTodoList;
 
-    @NotEmpty
-    @NotNull
-    @NotBlank
-    private String memberId;
+//    @NotEmpty
+//    @NotNull
+//    @NotBlank
+//    private String memberId;
 }

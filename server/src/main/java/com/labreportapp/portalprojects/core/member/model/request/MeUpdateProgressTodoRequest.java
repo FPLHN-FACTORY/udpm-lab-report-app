@@ -30,8 +30,8 @@ public class MeUpdateProgressTodoRequest extends MeTodoAndTodoListRequest{
     @NotEmpty
     private String projectId;
 
-    @NotNull
-    @NotBlank
-    @NotEmpty
-    private String idUser;
+//    @NotNull
+//    @NotBlank
+//    @NotEmpty
+//    private String idUser;
 }

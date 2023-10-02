@@ -23,5 +23,5 @@ public class MeDeleteDeadlineTodoRequest extends MeTodoAndTodoListRequest{
     @NotEmpty
     private String projectId;
 
-    private String idUser;
+//    private String idUser;
 }

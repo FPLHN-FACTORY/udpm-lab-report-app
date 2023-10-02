@@ -32,6 +32,6 @@ public class MeCreateTodoRequest {
     @NotEmpty
     private String projectId;
 
-    private String idUser;
+//    private String idUser;
 
 }

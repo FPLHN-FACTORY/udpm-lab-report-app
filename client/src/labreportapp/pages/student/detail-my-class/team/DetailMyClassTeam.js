@@ -13,7 +13,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Table, Button, Tooltip, Space, Popconfirm } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { sinhVienCurrent } from "../../../../helper/inForUser";
 import { convertMeetingPeriodToNumber } from "../../../../helper/util.helper";
 import { convertLongToDate } from "../../../../helper/convertDate";
 import ModalDetailTeam from "./modal-detail-team/ModalDetailTeam";
@@ -70,7 +69,6 @@ const DetailMyClassTeam = () => {
   const handleLeaveClass = () => {
     const obj = {
       idClass: id,
-      idStudent: sinhVienCurrent.id,
     };
     StMyClassAPI.leaveClass(obj)
       .then((response) => {
@@ -173,8 +171,6 @@ const DetailMyClassTeam = () => {
   const joinTeam = (idTeam) => {
     setIsLoadingOverlay(true);
     let obj = {
-      idStudent: sinhVienCurrent.id,
-      email: sinhVienCurrent.email,
       idClass: id,
       idTeam: idTeam,
     };
@@ -189,7 +185,6 @@ const DetailMyClassTeam = () => {
     setIsLoadingOverlay(true);
 
     let obj = {
-      idStudent: sinhVienCurrent.id,
       idClass: id,
     };
 

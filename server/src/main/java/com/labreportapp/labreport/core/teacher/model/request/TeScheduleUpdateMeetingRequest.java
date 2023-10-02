@@ -12,8 +12,6 @@ import java.util.List;
 @Setter
 public class TeScheduleUpdateMeetingRequest {
 
-    private String idTeacher;
-
     private List<TeUpdateMeetingRequest> listMeeting;
 
 }

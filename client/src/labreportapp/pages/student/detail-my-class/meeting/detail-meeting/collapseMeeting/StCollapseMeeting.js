@@ -5,7 +5,6 @@ import TextArea from "antd/es/input/TextArea";
 import { StudentMeetingAPI } from "../../../../../../api/student/StMeetingAPI";
 import { useParams } from "react-router";
 import { toast } from "react-toastify";
-import { sinhVienCurrent } from "../../../../../../helper/inForUser";
 import { StudentTempalteReportAPI } from "../../../../../../api/student/StTemplateReportAPI";
 import LoadingIndicator from "../../../../../../helper/loading";
 
@@ -31,15 +30,15 @@ const CollapseMeeting = ({ items }) => {
 
   useEffect(() => {
     if (items[0].classId != null && items[0].classId != undefined) {
-      const getRoleByIdStudent = (idStudent) => {
+      const getRoleByIdStudent = () => {
         setLoading(false);
-        StudentMeetingAPI.getRoleByIdStudent(idStudent, items[0].classId).then(
+        StudentMeetingAPI.getRoleByIdStudent(items[0].classId).then(
           (response) => {
             setRole(response.data.data);
           }
         );
       };
-      setRole(getRoleByIdStudent(sinhVienCurrent.id));
+      setRole(getRoleByIdStudent());
     }
   }, [items]);
 
@@ -112,7 +111,6 @@ const CollapseMeeting = ({ items }) => {
         descriptionsNote: descriptionsNote,
         idReport: objDetail.idReport,
         descriptionsReport: descriptionsReport,
-        idStudent: sinhVienCurrent.id,
       };
       await StudentMeetingAPI.updateHomeWorkAndNote(data).then((response) => {
         toast.success("Lưu thành công");

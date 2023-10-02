@@ -8,11 +8,9 @@ import { faLink } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { formatDateTime } from "../../../../../helper/convertDate";
 import { Popconfirm } from "antd";
-import { userCurrent } from "../../../../../helper/inForUser";
 import { getStompClient } from "../../stomp-client-config/StompClientManager";
 import { useState } from "react";
 import PopupUpdateAttachment from "./popup-update-attachment/PopupUpdateAttachment";
-import { sinhVienCurrent } from "../../../../../../labreportapp/helper/inForUser";
 
 const Attachment = ({ item }) => {
   const detailTodo = useAppSelector(GetDetailTodo);
@@ -29,7 +27,6 @@ const Attachment = ({ item }) => {
       idTodo: detailTodo.id,
       idTodoList: detailTodo.todoListId,
       projectId: detailProject.id,
-      idUser: sinhVienCurrent.id,
     };
 
     stompClient.send(

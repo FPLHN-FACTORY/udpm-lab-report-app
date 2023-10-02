@@ -13,7 +13,7 @@ const { Content, Sider, Footer } = Layout;
 
 const DashBoardTeacher = ({ children }) => {
   const collapsed = useAppSelector(GetTeCollapsed);
-  const dispatch = useAppDispatch();  
+  const dispatch = useAppDispatch();
 
   const toggleCollapsed = () => {
     dispatch(Toggle(!collapsed));

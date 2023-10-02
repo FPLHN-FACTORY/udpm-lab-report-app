@@ -28,11 +28,7 @@ public interface TeTeamsRepositoty extends JpaRepository<Team, String> {
             FROM team t
             WHERE t.class_id = :#{#req.idClass}
             ORDER BY t.name ASC
-                     """, countQuery = """
-            SELECT COUNT(DISTINCT t.id)
-            FROM team t
-            WHERE t.class_id = :#{#req.idClass}
-            """, nativeQuery = true)
+                     """, nativeQuery = true)
     List<TeTeamsRespone> findTeamsByIdClass(@Param("req") TeFindStudentClasses req);
 
     @Query(value = """
@@ -59,14 +55,7 @@ public interface TeTeamsRepositoty extends JpaRepository<Team, String> {
              LEFT JOIN home_work h ON h.team_id = t.id
              LEFT JOIN note n ON n.team_id = t.id
              WHERE m.class_id = :#{#req.idClass} and m.id = :#{#req.idMeeting}
-                      """, countQuery = """
-                            SELECT COUNT(DISTINCT t.id)
-                       FROM team t 
-                        JOIN meeting m ON m.class_id = t.class_id
-                        LEFT JOIN home_work h ON h.team_id = t.id
-                        LEFT JOIN note n ON n.team_id = t.id
-                        WHERE m.class_id = :#{#req.idClass} and m.id = :#{#req.idMeeting}
-            """, nativeQuery = true)
+                      """, nativeQuery = true)
     List<TeHomeWorkAndNoteMeetingResponse> findTeamAndHomeWorkAndNoteByIdClassAndIdMeeting(@Param("req") TeFindMeetingRequest req);
 
     @Query(value = """

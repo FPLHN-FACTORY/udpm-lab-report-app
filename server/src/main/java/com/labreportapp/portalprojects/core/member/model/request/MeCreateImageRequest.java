@@ -39,6 +39,6 @@ public class MeCreateImageRequest {
     @NotNull
     @NotEmpty
     private String projectId;
-
-    private String idUser;
+//
+//    private String idUser;
 }

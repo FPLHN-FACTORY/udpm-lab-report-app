@@ -13,8 +13,5 @@ import java.util.List;
 @Setter
 public class StStudentListFeedBackRequest {
 
-    @NotBlank
-    private String studentId;
-
     private List<StStudentFeedBackRequest> listFeedBack;
 }

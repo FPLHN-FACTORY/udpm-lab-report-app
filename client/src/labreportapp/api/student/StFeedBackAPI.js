@@ -1,11 +1,11 @@
-import { sinhVienCurrent } from "../../helper/inForUser";
 import { request } from "../../helper/request.helper";
 
 export class StFeedBackAPI {
+  
   static checkFeedBack() {
     return request({
       method: "GET",
-      url: "/student/feedback/check?userId=" + sinhVienCurrent.id,
+      url: "/student/feedback/check",
     });
   }
 
@@ -13,8 +13,7 @@ export class StFeedBackAPI {
     return request({
       method: "GET",
       url:
-        "/student/feedback/get-all-class-feedback?studentId=" +
-        sinhVienCurrent.id,
+        "/student/feedback/get-all-class-feedback",
     });
   }
 

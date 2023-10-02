@@ -4,6 +4,7 @@ import com.labreportapp.labreport.core.common.base.ResponseObject;
 import com.labreportapp.labreport.core.student.model.request.StFindPointAllRequest;
 import com.labreportapp.labreport.core.student.model.response.StPointAllCustomRespone;
 import com.labreportapp.labreport.core.student.service.StPointAllService;
+import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,11 +17,16 @@ import java.util.List;
 @RequestMapping("/student/point")
 @CrossOrigin("*")
 public class StPointAllController {
+
     @Autowired
     private StPointAllService stPointAllService;
 
+    @Autowired
+    private LabReportAppSession labReportAppSession;
+
     @GetMapping("")
     public ResponseObject getPointByStudent(final StFindPointAllRequest req){
+        req.setIdStudent(labReportAppSession.getUserId());
         List<StPointAllCustomRespone> getPointByStudent = stPointAllService.getClassPointListByStudentInClassAndSemester(req);
         return new ResponseObject(getPointByStudent);
     }

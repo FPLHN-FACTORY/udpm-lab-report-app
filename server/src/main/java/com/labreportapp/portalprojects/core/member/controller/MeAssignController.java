@@ -1,5 +1,6 @@
 package com.labreportapp.portalprojects.core.member.controller;
 
+import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.portalprojects.core.common.base.ResponseObject;
 import com.labreportapp.portalprojects.core.member.model.request.DesVarProjectIdAndPeriodIdRequest;
 import com.labreportapp.portalprojects.core.member.model.request.MeCreateOrDeleteAssignRequest;
@@ -26,6 +27,9 @@ public class MeAssignController {
     @Autowired
     private MeAssignService meAssignService;
 
+    @Autowired
+    private LabReportAppSession labReportAppSession;
+
     @GetMapping
     public ResponseObject getMemberByIdTodo(@RequestParam("idTodo") String idTodo) {
         return new ResponseObject(meAssignService.getAllMemberByIdTodo(idTodo));
@@ -50,7 +54,7 @@ public class MeAssignController {
     @SendTo("/portal-projects/assign/{projectId}/{periodId}")
     public ResponseObject joinAssign(@RequestBody MeCreateOrDeleteAssignRequest request,
                                  @ModelAttribute DesVarProjectIdAndPeriodIdRequest des) {
-        request.setIdMember(request.getIdUser());
+        request.setIdMember(labReportAppSession.getUserId());
         return new ResponseObject(meAssignService.create(request));
     }
 
@@ -58,7 +62,7 @@ public class MeAssignController {
     @SendTo("/portal-projects/assign/{projectId}/{periodId}")
     public ResponseObject outAssign(@RequestBody MeCreateOrDeleteAssignRequest request,
                                    @ModelAttribute DesVarProjectIdAndPeriodIdRequest des) {
-        request.setIdMember(request.getIdUser());
+        request.setIdMember(labReportAppSession.getUserId());
         return new ResponseObject(meAssignService.delete(request));
     }
 }

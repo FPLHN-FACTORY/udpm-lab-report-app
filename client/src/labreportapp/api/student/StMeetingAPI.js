@@ -1,5 +1,4 @@
 import { request } from "../../helper/request.helper";
-import { sinhVienCurrent } from "../../helper/inForUser";
 
 const url = `/student/meeting`;
 export class StudentMeetingAPI {
@@ -39,22 +38,16 @@ export class StudentMeetingAPI {
       data: data,
     });
   };
-  static getTeamInMeeting(idClass, idStudent) {
+  static getTeamInMeeting(idClass) {
     return request({
       method: "GET",
-      url:
-        url +
-        `/get-team-meeting` +
-        `?idClass=` +
-        idClass +
-        `&idStudent=` +
-        sinhVienCurrent.id,
+      url: url + `/get-team-meeting` + `?idClass=` + idClass,
     });
   }
-  static getRoleByIdStudent(idStudent, idClass) {
+  static getRoleByIdStudent(idClass) {
     return request({
       method: "GET",
-      url: url + `/get-role?idStudent=` + idStudent + "&idClass=" + idClass,
+      url: url + `/get-role?idClass=` + idClass,
     });
   }
 }

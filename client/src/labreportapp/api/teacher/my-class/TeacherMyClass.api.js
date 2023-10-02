@@ -7,9 +7,7 @@ export class TeacherMyClassAPI {
       method: "GET",
       url:
         url +
-        `?idTeacher=` +
-        filter.idTeacher +
-        `&idSemester=` +
+        `?idSemester=` +
         filter.idSemester +
         `&idActivity=` +
         filter.idActivity +

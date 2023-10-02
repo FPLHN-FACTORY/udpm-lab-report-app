@@ -52,7 +52,7 @@ public class MeUpdateIndexTodoRequest {
     @NotEmpty
     private String projectId;
 
-    private String idUser;
+//    private String idUser;
 
     private String sessionId;
 }

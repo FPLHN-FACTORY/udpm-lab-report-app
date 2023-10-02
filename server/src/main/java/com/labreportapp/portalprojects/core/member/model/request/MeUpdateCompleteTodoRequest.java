@@ -41,5 +41,5 @@ public class MeUpdateCompleteTodoRequest {
     @NotEmpty
     private String periodId;
 
-    private String idUser;
+//    private String idUser;
 }

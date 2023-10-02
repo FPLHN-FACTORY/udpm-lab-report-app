@@ -1,5 +1,6 @@
 package com.labreportapp.portalprojects.core.member.service.impl;
 
+import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.portalprojects.core.member.model.request.MeCreateNotificationCommentRequest;
 import com.labreportapp.portalprojects.core.member.repository.MeNotificationMemberRepository;
 import com.labreportapp.portalprojects.core.member.repository.MeNotificationRepository;
@@ -27,19 +28,22 @@ public class MeNotificationServiceImpl implements MeNotificationService {
     @Autowired
     private MeNotificationMemberRepository meNotificationMemberRepository;
 
+    @Autowired
+    private LabReportAppSession labReportAppSession;
+
     @Override
     public void createNotification(@Valid MeCreateNotificationCommentRequest request) {
         Notification notification = new Notification();
-        notification.setMemberIdCreated(request.getIdUser());
+        notification.setMemberIdCreated(labReportAppSession.getUserId());
         notification.setUrl(request.getUrl());
         notification.setTodoId(request.getTodoId());
-        notification.setContent(request.getUsername() + " đã nhắc đến bạn trong một bình luận");
+        notification.setContent(labReportAppSession.getUserName() + " đã nhắc đến bạn trong một bình luận");
         Notification newNotification = meNotificationRepository.save(notification);
 
         List<String> listIdMember = request.getListMemberId();
         List<NotificationMember> newList = new ArrayList<>();
         listIdMember.forEach(xx -> {
-            if (!xx.equals(request.getIdUser())) {
+            if (!xx.equals(labReportAppSession.getUserId())) {
                 NotificationMember notificationMember = new NotificationMember();
                 notificationMember.setNotificationId(newNotification.getId());
                 notificationMember.setMemberId(xx);

@@ -20,7 +20,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { StMyClassAPI } from "../../../api/student/StMyClassAPI";
 import { StAttendenceAPI } from "../../../api/student/StAttendenceAllAPI";
-import { sinhVienCurrent } from "../../../helper/inForUser";
 import axios from "axios";
 import { green } from "@ant-design/colors";
 import { convertMeetingPeriodToTime } from "../../../helper/util.helper";
@@ -36,7 +35,6 @@ const StAttendance = () => {
 
   const getClassAttendenceListByStudentInClassAndSemester = (semester) => {
     const filter = {
-      idStudent: sinhVienCurrent.id,
       idSemester: semester,
     };
     StAttendenceAPI.getClassAttendenceListByStudentInClassAndSemester(

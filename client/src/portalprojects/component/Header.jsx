@@ -12,7 +12,6 @@ import {
 import { Link } from "react-router-dom";
 import "./style-header.css";
 import AvtDefault from "../assets/img/328693761_727939795557043_1972102579202651860_n.jpg";
-import { userCurrent } from "../helper/inForUser";
 import PopupNotification from "./notification/Notification";
 import { DetailProjectAPI } from "../api/detail-project/detailProject.api";
 import { useAppDispatch, useAppSelector } from "../app/hook";
@@ -24,7 +23,7 @@ import {
   SetToTalPages,
 } from "../app/reducer/notification/NotificationSlice.reducer";
 import { useEffect } from "react";
-import { sinhVienCurrent } from "../../labreportapp/helper/inForUser";
+import { GetUserCurrent } from "../../labreportapp/app/common/UserCurrent.reducer";
 
 const { Header } = Layout;
 
@@ -59,7 +58,7 @@ const HeaderComponent = ({ collapsed, toggleCollapsed }) => {
     //   });
     // }
   };
-
+  const userCurrent = useAppSelector(GetUserCurrent);
   const [isOpenPopupNotification, setIsOpenPopupNotification] = useState(false);
   const [popupPositionPopupNotification, setPopupPositionPopupNotification] =
     useState({
@@ -83,13 +82,13 @@ const HeaderComponent = ({ collapsed, toggleCollapsed }) => {
   const dispatch = useAppDispatch();
 
   const loadCountNotification = () => {
-    DetailProjectAPI.countNotification(sinhVienCurrent.id).then((response) => {
+    DetailProjectAPI.countNotification(userCurrent.id).then((response) => {
       dispatch(SetCountNotifications(response.data.data));
     });
   };
 
   const loadDataNotification = () => {
-    DetailProjectAPI.fetchAllNotification(sinhVienCurrent.id, 0).then(
+    DetailProjectAPI.fetchAllNotification(userCurrent.id, 0).then(
       (response) => {
         dispatch(SetListNotification(response.data.data.data));
         dispatch(SetCurrentPage(response.data.data.currentPage));
@@ -99,9 +98,11 @@ const HeaderComponent = ({ collapsed, toggleCollapsed }) => {
   };
 
   useEffect(() => {
-    loadCountNotification();
-    loadDataNotification();
-  }, []);
+    if (userCurrent != null) {
+      loadCountNotification();
+      loadDataNotification();
+    }
+  }, [userCurrent]);
 
   const countNotifications = useAppSelector(GetCountNotification);
 
@@ -171,14 +172,14 @@ const HeaderComponent = ({ collapsed, toggleCollapsed }) => {
             >
               <img
                 className="img_avatar"
-                src={sinhVienCurrent.picture}
+                src={userCurrent != null ? userCurrent.picture : ""}
                 alt="User Avatar"
               />
               <span
                 className="span-name-usercurrent"
                 style={{ marginLeft: 8, fontWeight: 500, color: "#4f4f4f" }}
               >
-                {sinhVienCurrent.name}
+                {userCurrent != null ? userCurrent.name : ""}
               </span>
             </Link>
           </Dropdown>

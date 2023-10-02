@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { Empty, Select, Table } from "antd";
 import { Option } from "antd/es/mentions";
 import { StMyClassAPI } from "../../../api/student/StMyClassAPI";
-import { sinhVienCurrent } from "../../../helper/inForUser";
 import { StPointAllAPI } from "../../../api/student/StPointAllAPI";
 import LoadingIndicator from "../../../helper/loading";
 
@@ -18,7 +17,6 @@ const StPoint = () => {
 
   const getClass = (semester) => {
     const filter = {
-      idStudent: sinhVienCurrent.id,
       idSemester: semester,
     };
     StPointAllAPI.getClassPointListByStudentInClassAndSemester(filter).then(

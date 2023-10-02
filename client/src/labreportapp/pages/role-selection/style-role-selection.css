@@ -1,0 +1,56 @@
+/* RoleSelection.css */
+
+/* Tùy chỉnh background và phông chữ cho container 
+/* Tùy chỉnh background full màn hình */
+.role-selection-container {
+  position: relative;
+  min-height: 100vh; /* Chiều cao tối thiểu 100% của viewport */
+  background-image: url("https://images.unsplash.com/photo-1694431217622-67247f11aa38?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Tạo overlay đen với độ trong suốt */
+.role-selection-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: white;
+  width: 100%;
+  height: 100%;
+}
+
+/* Tùy chỉnh giao diện nội dung */
+.role-selection-content {
+  text-align: center;
+  color: #fff;
+  padding: 20px;
+  margin-bottom: 100px;
+  border-radius: 10px;
+}
+
+/* Tùy chỉnh phông chữ cho tiêu đề */
+h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* Tùy chỉnh giao diện Radio.Group và Radio.Button */
+.ant-radio-group {
+  margin-bottom: 20px;
+}
+
+.ant-radio-button-wrapper {
+  margin-right: 8px;
+}
+
+/* Tùy chỉnh giao diện nút "Xác nhận" */
+.ant-btn-primary {
+  background-color: #1890ff; /* Màu primary của Ant Design */
+  border-color: #1890ff;
+  margin-top: 10px;
+}

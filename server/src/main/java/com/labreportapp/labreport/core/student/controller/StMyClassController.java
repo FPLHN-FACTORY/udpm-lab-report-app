@@ -4,6 +4,7 @@ import com.labreportapp.labreport.core.common.base.ResponseObject;
 import com.labreportapp.labreport.core.student.model.request.StClassRequest;
 import com.labreportapp.labreport.core.student.model.request.StFindClassRequest;
 import com.labreportapp.labreport.core.student.service.StMyClassService;
+import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,9 +23,12 @@ public class StMyClassController {
     @Autowired
     private StMyClassService stMyClassService;
 
+    @Autowired
+    private LabReportAppSession labReportAppSession;
+
     @GetMapping
     public ResponseObject getAllClass(final StFindClassRequest request) {
-        System.out.println(request);
+        request.setStudentId(labReportAppSession.getUserId());
         return new ResponseObject(stMyClassService.getAllClass(request));
     }
 

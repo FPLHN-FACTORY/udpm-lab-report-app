@@ -11,7 +11,6 @@ import { useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell, faCheck } from "@fortawesome/free-solid-svg-icons";
 import { DetailProjectAPI } from "../../api/detail-project/detailProject.api";
-import { userCurrent } from "../../helper/inForUser";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { convertTimestampToCustomFormatVer2 } from "../../helper/convertDate";
@@ -25,7 +24,7 @@ import {
   SetToTalPages,
   ShowMoreNotification,
 } from "../../app/reducer/notification/NotificationSlice.reducer";
-import { sinhVienCurrent } from "../../../labreportapp/helper/inForUser";
+import { GetUserCurrent } from "../../../labreportapp/app/common/UserCurrent.reducer";
 
 const { Option } = Select;
 
@@ -85,8 +84,10 @@ const PopupNotification = ({ position, onClose }) => {
   const currentPage = useAppSelector(GetCurrentPageNotifications);
   const totalPages = useAppSelector(GetTotalPageNotifications);
 
+  const userCurrent = useAppSelector(GetUserCurrent);
+
   const showMoreNotification = () => {
-    DetailProjectAPI.fetchAllNotification(sinhVienCurrent.id, currentPage + 1).then(
+    DetailProjectAPI.fetchAllNotification(userCurrent.id, currentPage + 1).then(
       (response) => {
         dispatch(ShowMoreNotification(response.data.data.data));
         dispatch(SetCurrentPage(response.data.data.currentPage));
@@ -97,7 +98,7 @@ const PopupNotification = ({ position, onClose }) => {
 
   const updateStatusAll = () => {
     dispatch(ChangeAllStatusNotification());
-    DetailProjectAPI.updateAllStatusNotification(sinhVienCurrent.id).then(
+    DetailProjectAPI.updateAllStatusNotification(userCurrent.id).then(
       (response) => {}
     );
   };

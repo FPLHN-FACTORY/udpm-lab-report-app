@@ -6,9 +6,7 @@ import { GetAllList } from "../../../../../../app/reducer/detail-project/DPBoard
 import { GetPeriodCurrent } from "../../../../../../app/reducer/detail-project/DPPeriodSlice.reducer";
 import { GetProject } from "../../../../../../app/reducer/detail-project/DPProjectSlice.reducer";
 import { toast } from "react-toastify";
-import { userCurrent } from "../../../../../../helper/inForUser";
 import { getStompClient } from "../../../stomp-client-config/StompClientManager";
-import { sinhVienCurrent } from "../../../../../../../labreportapp/helper/inForUser";
 
 const { Option } = Select;
 
@@ -85,7 +83,6 @@ const PopupAddTask = ({ onClose }) => {
       nameTodoList: findNameTodoList(valueList),
       periodId: periodCurrent.id,
       projectId: detailProject.id,
-      idUser: sinhVienCurrent.id,
     };
     stompClient.send(
       "/action/create-todo/" + detailProject.id + "/" + periodCurrent.id,

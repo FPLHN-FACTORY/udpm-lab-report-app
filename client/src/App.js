@@ -52,7 +52,6 @@ import {
   SetToTalPages,
 } from "./portalprojects/app/reducer/notification/NotificationSlice.reducer";
 import ProjectManagement from "./portalprojects/pages/admin/project-management/ProjectManagement";
-import { userCurrent } from "./portalprojects/helper/inForUser";
 import { DetailProjectAPI } from "./portalprojects/api/detail-project/detailProject.api";
 import Dashboard from "./portalprojects/layout/DashBoard";
 import CategoryManagement from "./portalprojects/pages/admin/category-management/CategoryManagement";
@@ -64,12 +63,14 @@ import DetailProjectDashBoard from "./portalprojects/pages/common/detail-project
 import DashboardGeneral from "./portalprojects/pages/common/dashboard/Dashboard";
 import MyProject from "./portalprojects/pages/member/my-project/MyProject";
 import PeriodProject from "./portalprojects/pages/member/period-project/PeriodProject";
-import { sinhVienCurrent } from "./labreportapp/helper/inForUser";
 import Cookies from "js-cookie";
 import TemplateReport from "./labreportapp/pages/admin/template-report/TemplateReport";
 import AdFeedbackDetailClass from "./labreportapp/pages/admin/detail-class/feedback/AdFeedbackDetailClass";
 import DetailMeetingAttendance from "./labreportapp/pages/admin/detail-class/meeting-management/detail-meeting/DetailMeetingAttendance";
 import LevelManagement from "./labreportapp/pages/admin/level-management/LevelManagement";
+import RoleSelection from "./labreportapp/pages/role-selection/RoleSelection";
+import { useAppSelector } from "./labreportapp/app/hook";
+import { GetUserCurrent } from "./labreportapp/app/common/UserCurrent.reducer";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -87,35 +88,38 @@ function App() {
     audio.play();
   };
 
-  stompClientAll.connect({}, () => {
-    stompClientAll.subscribe(
-      "/portal-projects/create-notification/" + sinhVienCurrent.id,
-      (message) => {
-        toast.info("Bạn có thông báo mới", {
-          position: toast.POSITION.BOTTOM_RIGHT,
-        });
-        playNotificationSound();
+  
 
-        DetailProjectAPI.countNotification(sinhVienCurrent.id).then(
-          (response) => {
-            dispatch(SetCountNotifications(response.data.data));
-          }
-        );
+  const previousURL = window.location.search;
+  const previousURLParams = new URLSearchParams(previousURL);
+  const tokenFromPreviousURL = previousURLParams.get("Token");
+  if (tokenFromPreviousURL) {
+    Cookies.set("token", tokenFromPreviousURL, { expires: 365 });
+  }
 
-        DetailProjectAPI.fetchAllNotification(sinhVienCurrent.id, 0).then(
-          (response) => {
-            dispatch(SetListNotification(response.data.data.data));
-            dispatch(SetCurrentPage(response.data.data.currentPage));
-            dispatch(SetToTalPages(response.data.data.totalPages));
-          }
-        );
-      }
-    );
-  });
+  // stompClientAll.connect({}, () => {
+  //   stompClientAll.subscribe(
+  //     "/portal-projects/create-notification/" + userCurrent.id,
+  //     (message) => {
+  //       toast.info("Bạn có thông báo mới", {
+  //         position: toast.POSITION.BOTTOM_RIGHT,
+  //       });
+  //       playNotificationSound();
 
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjI0MzVjN2Q1LTliZWMtNDVhYy05YmZlLTA4ZGJhODc1MjNmZSIsIm5hbWUiOiJOZ3V54buFbiBDw7RuZyBUaOG6r25nIFAgSCAyIDYgMSAyIDMiLCJlbWFpbCI6InRoYW5nbmNwaDI2MTIzQGZwdC5lZHUudm4iLCJ1c2VyTmFtZSI6InRoYW5nbmNwaDI2MTIzIiwicGljdHVyZSI6Imh0dHBzOi8vbGgzLmdvb2dsZXVzZXJjb250ZW50LmNvbS9hL0FDZzhvY0x0QXFfakZCbmJ5RlR1SUJ2WU9uR2dLWS1NVDkwQW82S3RkRHplNjhDUlBZbz1zOTYtYyIsImlkVHJhaW5pbmdGYWNpbGl0eSI6Ijc5NmE0ZmE0LThhYWItNDJjNC05ZjM1LTg3MGJiMDAwNWFmMSIsImxvY2FsSG9zdCI6Imh0dHA6Ly9sb2NhbGhvc3Q6Njg2OCIsInJvbGUiOiJBRE1JTiIsInJvbGVOYW1lcyI6IlF14bqjbiB0cuG7iyB2acOqbiIsIm5iZiI6MTY5NTEyNTE5MCwiZXhwIjoxNzI2NjYxMTkwLCJpYXQiOjE2OTUxMjUxOTAsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjQ5MDUzIiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NDkwNTMifQ.ni40b7Hvptv0bWR5mM1N28j2YNVrPQGwTMZVDJq43gY";
-  Cookies.set("token", token, { expires: 365 });
+  //       DetailProjectAPI.countNotification(userCurrent.id).then((response) => {
+  //         dispatch(SetCountNotifications(response.data.data));
+  //       });
+
+  //       DetailProjectAPI.fetchAllNotification(userCurrent.id, 0).then(
+  //         (response) => {
+  //           dispatch(SetListNotification(response.data.data.data));
+  //           dispatch(SetCurrentPage(response.data.data.currentPage));
+  //           dispatch(SetToTalPages(response.data.data.totalPages));
+  //         }
+  //       );
+  //     }
+  //   );
+  // });
 
   return (
     <div className="App scroll-smooth md:scroll-auto">
@@ -131,7 +135,7 @@ function App() {
 
             <Route
               path="/"
-              element={<Navigate replace to="/teacher/schedule-today" />}
+              element={<Navigate replace to="/role-selection" />}
             />
 
             <Route
@@ -147,6 +151,14 @@ function App() {
             <Route
               path="/admin"
               element={<Navigate replace to="/admin/class-management" />}
+            />
+            <Route
+              path="/role-selection"
+              element={
+                <AuthGuard>
+                    <RoleSelection />
+                </AuthGuard>
+              }
             />
 
             <Route

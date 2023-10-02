@@ -9,7 +9,6 @@ import { convertMeetingPeriodToNumber } from "../../helper/util.helper";
 import { convertLongToDate } from "../../helper/convertDate";
 import LoadingIndicatorNoOverlay from "../../helper/loadingNoOverlay";
 import { toast } from "react-toastify";
-import { sinhVienCurrent } from "../../helper/inForUser";
 
 const { Option } = Select;
 
@@ -54,7 +53,6 @@ const ModalStudentFeedBack = ({ visible, setVisible }) => {
       return;
     }
     let obj = {
-      studentId: sinhVienCurrent.id,
       listFeedBack: listFeedBack,
     };
     setIsLoading(true);

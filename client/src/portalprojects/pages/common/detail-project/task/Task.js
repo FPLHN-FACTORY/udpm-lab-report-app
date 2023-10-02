@@ -25,8 +25,6 @@ import Image from "../../../../helper/img/Image";
 import { Tooltip } from "antd";
 import { formatDateTime } from "../../../../helper/convertDate";
 import { getStompClient } from "../stomp-client-config/StompClientManager";
-import { userCurrent } from "../../../../helper/inForUser";
-import { sinhVienCurrent } from "../../../../../labreportapp/helper/inForUser";
 
 const Task = ({ task, index, onClick }) => {
   const dispatch = useAppDispatch();
@@ -57,7 +55,6 @@ const Task = ({ task, index, onClick }) => {
       idTodoList: task.todoListId,
       projectId: detailProject.id,
       periodId: periodCurrent.id,
-      idUser: sinhVienCurrent.id,
     };
 
     stompClient.send(

@@ -32,5 +32,5 @@ public class MeCreateOrDeleteAssignRequest extends MeTodoAndTodoListRequest{
     @NotEmpty
     private String projectId;
 
-    private String idUser;
+//    private String idUser;
 }

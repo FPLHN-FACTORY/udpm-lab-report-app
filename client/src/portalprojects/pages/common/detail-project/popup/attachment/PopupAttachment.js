@@ -5,11 +5,9 @@ import { GetDetailTodo } from "../../../../../app/reducer/detail-project/DPDetai
 import { useAppSelector } from "../../../../../app/hook";
 import { GetProject } from "../../../../../app/reducer/detail-project/DPProjectSlice.reducer";
 import { GetPeriodCurrent } from "../../../../../app/reducer/detail-project/DPPeriodSlice.reducer";
-import { userCurrent } from "../../../../../helper/inForUser";
 import { getStompClient } from "../../stomp-client-config/StompClientManager";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLink } from "@fortawesome/free-solid-svg-icons";
-import { sinhVienCurrent } from "../../../../../../labreportapp/helper/inForUser";
 
 const PopupAttachment = ({ position, onClose }) => {
   useEffect(() => {
@@ -61,7 +59,6 @@ const PopupAttachment = ({ position, onClose }) => {
       idTodo: detailTodo.id,
       idTodoList: detailTodo.todoListId,
       projectId: detailProject.id,
-      idUser: sinhVienCurrent.id,
     };
 
     stompClient.send(

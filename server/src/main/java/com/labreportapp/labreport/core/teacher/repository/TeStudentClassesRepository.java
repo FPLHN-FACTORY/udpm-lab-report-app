@@ -44,12 +44,7 @@ public interface TeStudentClassesRepository extends JpaRepository<StudentClasses
             LEFT JOIN team t on t.id = sc.team_id
             WHERE sc.class_id = :#{#idClass}
             ORDER BY t.name ASC
-                     """, countQuery = """
-            SELECT COUNT(DISTINCT sc.id)
-            FROM student_classes sc
-            JOIN team t on t.id = sc.team_id
-            WHERE sc.class_id = :#{#idClass}
-            """, nativeQuery = true)
+                     """, nativeQuery = true)
     List<TeStudentClassesResponse> findStudentClassByIdClass(@Param("idClass") String idClass);
 
     @Query(value = """
@@ -67,12 +62,7 @@ public interface TeStudentClassesRepository extends JpaRepository<StudentClasses
             JOIN team t on t.id = sc.team_id
             WHERE sc.class_id = :#{#req.idClass} and sc.team_id =:#{#req.idTeam}
             ORDER BY sc.role ASC
-                     """, countQuery = """
-            SELECT COUNT(DISTINCT sc.id)
-            FROM student_classes sc
-            JOIN team t on t.id = sc.team_id
-            WHERE sc.class_id = :#{#req.idClass} and sc.team_id =:#{#req.idTeam}
-              """, nativeQuery = true)
+                     """, nativeQuery = true)
     List<TeStudentClassesResponse> findStudentClassByIdClassAndIdTeam(@Param("req") TeFindStudentClasses req);
 
     @Query(value = """

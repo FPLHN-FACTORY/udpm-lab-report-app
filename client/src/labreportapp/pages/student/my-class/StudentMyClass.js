@@ -26,7 +26,6 @@ import {
   ProjectOutlined,
 } from "@ant-design/icons";
 import { StMyClassAPI } from "../../../api/student/StMyClassAPI";
-import { sinhVienCurrent } from "../../../helper/inForUser";
 import { Link } from "react-router-dom";
 import { convertMeetingPeriodToTime } from "../../../helper/util.helper";
 import { StLevelAPI } from "../../../api/student/StLevelAPI";
@@ -205,7 +204,6 @@ const StudentMyClass = () => {
       code: code,
       classPeriod: classPeriod === "" ? null : parseInt(classPeriod),
       level: level,
-      studentId: sinhVienCurrent.id,
     };
     StMyClassAPI.getAllClass(filter).then((response) => {
       setListClass(response.data.data);

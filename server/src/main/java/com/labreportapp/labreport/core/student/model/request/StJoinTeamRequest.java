@@ -12,12 +12,6 @@ import lombok.Setter;
 public class StJoinTeamRequest {
 
     @NotBlank
-    private String idStudent;
-
-    @NotBlank
-    private String email;
-
-    @NotBlank
     private String idClass;
 
     @NotBlank
