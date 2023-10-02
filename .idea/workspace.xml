@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="fe93e581-5589-4bad-ba6a-389fa82a0816" name="Default Changelist" comment="" />
+    <list default="true" id="fe93e581-5589-4bad-ba6a-389fa82a0816" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/api/admin/class-manager/ClassAPI.api.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/api/admin/class-manager/ClassAPI.api.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/pages/admin/detail-class/information-class/InformationClass.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/pages/admin/detail-class/information-class/InformationClass.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/admin/controller/AdStudentClassController.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/admin/controller/AdStudentClassController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/admin/service/AdStudentClassService.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/admin/service/AdStudentClassService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/admin/service/impl/AdStudentClassServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/admin/service/impl/AdStudentClassServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/resources/application.properties" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -10,21 +20,48 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
   <component name="ProjectId" id="2SsVZMZpVYQCDeNR2sAzdkWKaya" />
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/server" />
-    <property name="node.js.detected.package.eslint" value="true" />
-    <property name="node.js.detected.package.tslint" value="true" />
-    <property name="node.js.selected.package.eslint" value="(autodetect)" />
-    <property name="node.js.selected.package.tslint" value="(autodetect)" />
-    <property name="nodejs_package_manager_path" value="npm" />
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/final/Documents/JavaProject/udpm-lab-report&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;
+  }
+}</component>
+  <component name="RunManager">
+    <configuration name="C:/Users/final/Documents/JavaProject/udpm-lab-report/udpm-lab-report-app" type="GradleRunConfiguration" factoryName="Gradle" nameIsGenerated="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list />
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -37,62 +74,10 @@
       <workItem from="1689935331793" duration="207000" />
       <workItem from="1692284603639" duration="47000" />
       <workItem from="1692333622067" duration="32000" />
-      <workItem from="1695236950584" duration="66000" />
-      <workItem from="1695654455558" duration="1034000" />
-      <workItem from="1696156909289" duration="143000" />
-      <workItem from="1696162283414" duration="127000" />
     </task>
-    <task id="LOCAL-00001" summary="update code FE level">
-      <created>1695237007877</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1695237007877</updated>
-    </task>
-    <task id="LOCAL-00002" summary="update code FE, BE custom pagition phân trang schedule lesson with time&#10;quản lý điểm getall meger module indentity, sửa luồng logic getAll từ FE qua BE&#10;Css lại 1 chút giao diện role teacher">
-      <created>1695654881049</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1695654881049</updated>
-    </task>
-    <task id="LOCAL-00003" summary="update code FE, BE custom pagition phân trang schedule lesson with time&#10;quản lý điểm getall meger module indentity, sửa luồng logic getAll từ FE qua BE&#10;Css lại 1 chút giao diện role teacher">
-      <created>1696156931787</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1696156931787</updated>
-    </task>
-    <task id="LOCAL-00004" summary="update code fix bug after merge all">
-      <created>1696162340442</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1696162340442</updated>
-    </task>
-    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
-    <option name="oldMeFiltersMigrated" value="true" />
-  </component>
-  <component name="VcsManagerConfiguration">
-    <MESSAGE value="update code FE level" />
-    <MESSAGE value="update code FE, BE custom pagition phân trang schedule lesson with time&#10;quản lý điểm getall meger module indentity, sửa luồng logic getAll từ FE qua BE&#10;Css lại giao diện teacher" />
-    <MESSAGE value="update code FE, BE custom pagition phân trang schedule lesson with time&#10;quản lý điểm getall meger module indentity, sửa luồng logic getAll từ FE qua BE&#10;Css lại 1 chút giao diện role teacher" />
-    <MESSAGE value="update code fix bug after merge all" />
-    <option name="LAST_COMMIT_MESSAGE" value="update code fix bug after merge all" />
   </component>
 </project>

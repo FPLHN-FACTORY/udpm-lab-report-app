@@ -5,14 +5,14 @@ import {
   faLineChart,
   faUpload,
 } from "@fortawesome/free-solid-svg-icons";
-import { ControlOutlined } from "@ant-design/icons";
+import { ControlOutlined, SearchOutlined } from "@ant-design/icons";
 import { Link, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import { SetTTrueToggle } from "../../../../app/admin/AdCollapsedSlice.reducer";
 import { useEffect, useState } from "react";
 import { ClassAPI } from "../../../../api/admin/class-manager/ClassAPI.api";
 import moment from "moment";
-import { Button, Empty, Spin, Table } from "antd";
+import { Button, Empty, Input, Spin, Table } from "antd";
 import { GetStudentClasses } from "../../../../app/teacher/student-class/studentClassesSlice.reduce";
 import LoadingIndicator from "../../../../helper/loading";
 import LoadingIndicatorNoOverlay from "../../../../helper/loadingNoOverlay";
@@ -63,7 +63,9 @@ const InformationClass = () => {
       const link = document.createElement("a");
       link.href = url;
       link.download =
-        "Danh sách sinh viên trong lớp " + classDetail.code + "_" +
+        "Danh sách sinh viên trong lớp " +
+        classDetail.code +
+        "_" +
         convertLongToDate(new Date().getTime()) +
         ".xlsx";
       link.click();
@@ -82,7 +84,9 @@ const InformationClass = () => {
       const link = document.createElement("a");
       link.href = url;
       link.download =
-        "Danh sách sinh viên trong lớp " + classDetail.code + "_" +
+        "Danh sách sinh viên trong lớp " +
+        classDetail.code +
+        "_" +
         convertLongToDate(new Date().getTime()) +
         ".xlsx";
       link.click();
@@ -107,8 +111,8 @@ const InformationClass = () => {
               } else {
                 toast.error(
                   "Import thất bại, " +
-                  response.data.data.message +
-                  ", vui lòng chờ !",
+                    response.data.data.message +
+                    ", vui lòng chờ !",
                   {
                     position: toast.POSITION.TOP_CENTER,
                   }
@@ -118,11 +122,12 @@ const InformationClass = () => {
             setDownloading(true);
             setTimeout(() => {
               window.open(
-                `http://localhost:3000/admin/class-management/information-class/` + id,
+                `http://localhost:3000/admin/class-management/information-class/` +
+                  id,
                 "_self"
               );
               setDownloading(false);
-            }, 1000);
+            }, 2000);
           })
           .catch((error) => {
             alert("Lỗi hệ thống, vui lòng F5 lại trang !");
@@ -131,8 +136,7 @@ const InformationClass = () => {
     } catch (error) {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
-  }
-
+  };
 
   const fetchStudent = async (idClass) => {
     try {
@@ -150,13 +154,54 @@ const InformationClass = () => {
       dataIndex: "stt",
       key: "stt",
       render: (text, record, index) => index + 1,
+      sorter: (a, b) => a.stt - b.stt,
       width: "12px",
     },
     {
       title: "Tên tài khoản",
       dataIndex: "username",
       key: "username",
-      width: "130px",
+      sorter: (a, b) => a.username.localeCompare(b.username),
+      filterDropdown: ({
+        setSelectedKeys,
+        selectedKeys,
+        confirm,
+        clearFilters,
+      }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="Tìm kiếm"
+            value={selectedKeys[0]}
+            autoFocus={true}
+            onChange={(e) =>
+              setSelectedKeys(e.target.value ? [e.target.value] : [])
+            }
+            onPressEnter={confirm}
+            style={{ width: 188, marginBottom: 8, display: "block" }}
+          />
+          <Button
+            type="primary"
+            className="btn_search_member"
+            onClick={confirm}
+            size="small"
+            style={{ width: 90, marginRight: 8 }}
+          >
+            Tìm
+          </Button>
+          <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
+            Đặt lại
+          </Button>
+        </div>
+      ),
+      filterIcon: (filtered) => (
+        <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+      ),
+      onFilter: (value, record) => {
+        if (record.username === null) {
+          return false;
+        }
+        return record.username.toLowerCase().includes(value.toLowerCase());
+      },
     },
     {
       title: "Nhóm",
@@ -169,19 +214,150 @@ const InformationClass = () => {
           return <span>{text}</span>;
         }
       },
-      width: "150px",
+      sorter: (a, b) => {
+        if (a.nameTeam == null && b.nameTeam == null) {
+          return 0;
+        }
+        if (a.nameTeam == null) {
+          return -1;
+        }
+        if (b.nameTeam == null) {
+          return 1;
+        }
+        return a.nameTeam.localeCompare(b.nameTeam);
+      },
+      filterDropdown: ({
+        setSelectedKeys,
+        selectedKeys,
+        confirm,
+        clearFilters,
+      }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="Tìm kiếm"
+            value={selectedKeys[0]}
+            onChange={(e) =>
+              setSelectedKeys(e.target.value ? [e.target.value] : [])
+            }
+            autoFocus={true}
+            onPressEnter={confirm}
+            style={{ width: 188, marginBottom: 8, display: "block" }}
+          />
+          <Button
+            type="primary"
+            className="btn_search_member"
+            onClick={confirm}
+            size="small"
+            style={{ width: 90, marginRight: 8 }}
+          >
+            Tìm
+          </Button>
+          <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
+            Đặt lại
+          </Button>
+        </div>
+      ),
+      filterIcon: (filtered) => (
+        <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+      ),
+      onFilter: (value, record) => {
+        if (record.nameTeam === null) {
+          return false;
+        }
+        return record.nameTeam.toLowerCase().includes(value.toLowerCase());
+      },
     },
     {
       title: "Họ và tên",
       dataIndex: "name",
       key: "name",
       sorter: (a, b) => a.name.localeCompare(b.name),
+      filterDropdown: ({
+        setSelectedKeys,
+        selectedKeys,
+        confirm,
+        clearFilters,
+      }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="Tìm kiếm"
+            value={selectedKeys[0]}
+            onChange={(e) =>
+              setSelectedKeys(e.target.value ? [e.target.value] : [])
+            }
+            autoFocus={true}
+            onPressEnter={confirm}
+            style={{ width: 188, marginBottom: 8, display: "block" }}
+          />
+          <Button
+            type="primary"
+            className="btn_search_member"
+            onClick={confirm}
+            size="small"
+            style={{ width: 90, marginRight: 8 }}
+          >
+            Tìm
+          </Button>
+          <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
+            Đặt lại
+          </Button>
+        </div>
+      ),
+      filterIcon: (filtered) => (
+        <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+      ),
+      onFilter: (value, record) => {
+        if (record.name === null) {
+          return false;
+        }
+        return record.name.toLowerCase().includes(value.toLowerCase());
+      },
     },
     {
       title: "Email",
       dataIndex: "email",
       key: "email",
       sorter: (a, b) => a.email.localeCompare(b.email),
+      filterDropdown: ({
+        setSelectedKeys,
+        selectedKeys,
+        confirm,
+        clearFilters,
+      }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="Tìm kiếm"
+            value={selectedKeys[0]}
+            onChange={(e) =>
+              setSelectedKeys(e.target.value ? [e.target.value] : [])
+            }
+            autoFocus={true}
+            onPressEnter={confirm}
+            style={{ width: 188, marginBottom: 8, display: "block" }}
+          />
+          <Button
+            type="primary"
+            className="btn_search_member"
+            onClick={confirm}
+            size="small"
+            style={{ width: 90, marginRight: 8 }}
+          >
+            Tìm
+          </Button>
+          <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
+            Đặt lại
+          </Button>
+        </div>
+      ),
+      filterIcon: (filtered) => (
+        <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+      ),
+      onFilter: (value, record) => {
+        if (record.email === null) {
+          return false;
+        }
+        return record.email.toLowerCase().includes(value.toLowerCase());
+      },
     },
 
     {
@@ -195,6 +371,7 @@ const InformationClass = () => {
           return <span style={{ color: "red" }}>Trượt</span>;
         }
       },
+      sorter: (a, b) => a.statusStudent.localeCompare(b.statusStudent),
       width: "120px",
     },
   ];
@@ -365,7 +542,10 @@ const InformationClass = () => {
                         document.getElementById("fileInput").click();
                       }}
                     >
-                      <FontAwesomeIcon icon={faUpload} style={{ marginRight: "7px" }} />
+                      <FontAwesomeIcon
+                        icon={faUpload}
+                        style={{ marginRight: "7px" }}
+                      />
                       {downloading ? (
                         "Đang tải lên..."
                       ) : (

@@ -1,12 +1,14 @@
-import { ControlOutlined } from "@ant-design/icons";
+import { ControlOutlined, SearchOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import { ClassAPI } from "../../../../api/admin/class-manager/ClassAPI.api";
 import { AdminFeedBackAPI } from "../../../../api/admin/AdFeedBackAPI";
 import { useAppDispatch, useAppSelector } from "../../../../app/hook";
-import { Select, Table } from "antd";
+import { Button, Input, Select, Table } from "antd";
 import LoadingIndicator from "../../../../helper/loading";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
 const AdFeedbackDetailClass = () => {
   const { id } = useParams();
@@ -15,7 +17,6 @@ const AdFeedbackDetailClass = () => {
   const [feedback, setFeedBack] = useState([]);
   const [listStudent, setListStudent] = useState([]);
   const [loading, setLoading] = useState(false);
-
 
   const featchClass = async () => {
     try {
@@ -27,42 +28,26 @@ const AdFeedbackDetailClass = () => {
       alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
-  const [pagination, setPagination] = useState({
-    current: 1,
-    pageSize: 10 
-  });
-  const handleTableChange = (pagination, filters, sorter) => {
-    setPagination(pagination);
-  };
 
   useEffect(() => {
+    setLoading(false);
     featchClass();
     featchFeedBack(id);
-    featchStudentClass(id);
   }, []);
+
   const featchFeedBack = async (idClass) => {
     try {
-      await AdminFeedBackAPI.getAllFeedBackByIdClass(idClass).then((response) => {
+      await AdminFeedBackAPI.getAllFeedBackByIdClass(idClass).then(
+        (response) => {
           setFeedBack(response.data.data);
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const featchStudentClass = async (id) => {
-    setLoading(false);
-    try {
-      await AdminFeedBackAPI.getStudentInClasses(id).then(
-        (responese) => {
-         setListStudent(responese.data.data);
-         console.log(responese.data.data);
           setLoading(true);
         }
       );
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
+
   const columns = [
     {
       title: "#",
@@ -71,18 +56,108 @@ const AdFeedbackDetailClass = () => {
       sorter: (a, b) => a.stt - b.stt,
     },
     {
-      title: "Feedback",
+      title: "Họ và tên",
+      dataIndex: "nameStudent",
+      key: "nameStudent",
+      sorter: (a, b) => a.nameStudent.localeCompare(b.nameStudent),
+      filterDropdown: ({
+        setSelectedKeys,
+        selectedKeys,
+        confirm,
+        clearFilters,
+      }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="Tìm kiếm"
+            value={selectedKeys[0]}
+            onChange={(e) =>
+              setSelectedKeys(e.target.value ? [e.target.value] : [])
+            }
+            autoFocus={true}
+            onPressEnter={confirm}
+            style={{ width: 188, marginBottom: 8, display: "block" }}
+          />
+          <Button
+            type="primary"
+            className="btn_search_member"
+            onClick={confirm}
+            size="small"
+            style={{ width: 90, marginRight: 8 }}
+          >
+            Tìm
+          </Button>
+          <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
+            Đặt lại
+          </Button>
+        </div>
+      ),
+      filterIcon: (filtered) => (
+        <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+      ),
+      onFilter: (value, record) => {
+        if (record.nameStudent === null) {
+          return false;
+        }
+        return record.nameStudent.toLowerCase().includes(value.toLowerCase());
+      },
+    },
+    {
+      title: "Email",
+      dataIndex: "emailStudent",
+      key: "emailStudent",
+      sorter: (a, b) => a.nameStudent.localeCompare(b.nameStudent),
+      filterDropdown: ({
+        setSelectedKeys,
+        selectedKeys,
+        confirm,
+        clearFilters,
+      }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="Tìm kiếm"
+            value={selectedKeys[0]}
+            onChange={(e) =>
+              setSelectedKeys(e.target.value ? [e.target.value] : [])
+            }
+            autoFocus={true}
+            onPressEnter={confirm}
+            style={{ width: 188, marginBottom: 8, display: "block" }}
+          />
+          <Button
+            type="primary"
+            className="btn_search_member"
+            onClick={confirm}
+            size="small"
+            style={{ width: 90, marginRight: 8 }}
+          >
+            Tìm
+          </Button>
+          <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
+            Đặt lại
+          </Button>
+        </div>
+      ),
+      filterIcon: (filtered) => (
+        <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+      ),
+      onFilter: (value, record) => {
+        if (record.emailStudent === null) {
+          return false;
+        }
+        return record.emailStudent.toLowerCase().includes(value.toLowerCase());
+      },
+    },
+    {
+      title: "Nội dung",
       dataIndex: "description",
       key: "description",
       sorter: (a, b) => a.descriptions.localeCompare(b.descriptions),
-      width: "50%",
     },
     {
-      title: "Ngày feedback",
+      title: "Ngày làm feedback",
       dataIndex: "createdDate",
       key: "createdDate",
-      sorter: (a, b) => a.createdDate.localeCompare(b.createdDate),
-      width: "40%",
+      sorter: (a, b) => a.createdDate - b.createdDate,
       render: (createdDate) => {
         const date = new Date(createdDate);
         const day = date.getDate();
@@ -90,27 +165,17 @@ const AdFeedbackDetailClass = () => {
         const year = date.getFullYear();
         const hours = date.getHours();
         const minutes = date.getMinutes();
-        const formattedDate = `${day}/${month}/${year+"  --"}`;
-        const formattedTime = `${hours+" giờ "}:${" "+minutes+" phút"}`;
+        const formattedDate = `${day}/${month}/${year + "  -"}`;
+        const formattedTime = `${hours + "h"}:${"" + minutes + "p"}`;
         return (
           <span>
-            {formattedDate} <span style={{ color: "brown" }}>{formattedTime}</span>
+            {formattedDate}{" "}
+            <span style={{ color: "brown" }}>{formattedTime}</span>
           </span>
         );
       },
     },
-    {
-      title: "Sinh Viên",
-      dataIndex: "idStudent",
-      key: "idStudent",
-      width: "30%",
-      render: (idStudent) => {
-        const student = listStudent.find((student) => student.idStudent === idStudent);
-        return student ? student.username : "";
-      }
-    }
   ];
-
 
   return (
     <div style={{ paddingTop: "35px" }}>
@@ -184,22 +249,26 @@ const AdFeedbackDetailClass = () => {
                 <span style={{ fontSize: "14px", padding: "10px" }}>
                   {classDetail != null ? classDetail.code : ""}
                 </span>
-
-
               </div>
               <hr />
             </div>
           </div>
-          <Table
-                columns={columns}
-                dataSource={feedback}
-                key="stt"
-                pagination={pagination}
-                onChange={handleTableChange}
+          <div style={{ marginTop: 15, marginBottom: 12 }}>
+            <span style={{ fontSize: 16 }}>
+              <FontAwesomeIcon
+                icon={faCheck}
+                style={{ marginRight: 7, fontSize: 18 }}
               />
+              Danh sách feedback:
+            </span>
+          </div>
+          <Table
+            columns={columns}
+            dataSource={feedback}
+            key="id"
+            pagination={false}
+          />
         </div>
-        
-
       </div>
     </div>
   );

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
  * @author quynhncph26201
  */
 public interface AdFeedBackResponse {
+
     @Value("#{target.stt}")
     Integer getStt();
 
