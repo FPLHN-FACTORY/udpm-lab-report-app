@@ -5,7 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fe93e581-5589-4bad-ba6a-389fa82a0816" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/api/admin/class-manager/ClassAPI.api.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/api/admin/class-manager/ClassAPI.api.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/pages/admin/detail-class/information-class/InformationClass.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/pages/admin/detail-class/information-class/InformationClass.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/admin/controller/AdStudentClassController.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/admin/controller/AdStudentClassController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/admin/service/AdStudentClassService.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/admin/service/AdStudentClassService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/admin/service/impl/AdStudentClassServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/admin/service/impl/AdStudentClassServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,21 +27,21 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/final/Documents/JavaProject/udpm-lab-report",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/final/Documents/JavaProject/udpm-lab-report&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="C:/Users/final/Documents/JavaProject/udpm-lab-report/udpm-lab-report-app" type="GradleRunConfiguration" factoryName="Gradle" nameIsGenerated="true">
       <ExternalSystemSettings>
