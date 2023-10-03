@@ -21,7 +21,7 @@ import { GetMemberProject } from "../../../../../app/reducer/detail-project/DPMe
 import { DetailProjectAPI } from "../../../../../api/detail-project/detailProject.api";
 import PopupTagComment from "../../popup/popup-tag-comment/PopupTagComment";
 import { GetUserCurrent } from "../../../../../../labreportapp/app/common/UserCurrent.reducer";
-
+import Cookies from "js-cookie";
 const CommentForm = memo(() => {
   const [inputStr, setInputStr] = useState("<p></p>");
   const [showPicker, setShowPicker] = useState(false);
@@ -40,7 +40,7 @@ const CommentForm = memo(() => {
   const [totalPages, setTotalPages] = useState(0);
   const dispatch = useAppDispatch();
 
-  const userCurrent = useAppSelector(GetUserCurrent)
+  const userCurrent = useAppSelector(GetUserCurrent);
 
   useEffect(() => {
     if (detailTodo != null) {
@@ -113,10 +113,13 @@ const CommentForm = memo(() => {
       content: inputStr,
       mentionedUsernames: cleanedUsernames,
     };
-
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     stompClient.send(
       "/action/create-comment/" + detailProject.id + "/" + periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
 
@@ -134,8 +137,12 @@ const CommentForm = memo(() => {
       };
 
       DetailProjectAPI.createNotification(objComment).then((response) => {});
+      const bearerToken = Cookies.get("token");
+      const headers = {
+        Authorization: "Bearer " + bearerToken,
+      };
       objComment.listMemberId.forEach((item) => {
-        stompClient.send("/action/create-notification/" + item, {}, {});
+        stompClient.send("/action/create-notification/" + item, headers, {});
       });
     }
 

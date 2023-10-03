@@ -1,6 +1,5 @@
 package com.labreportapp.portalprojects.core.member.service.impl;
 
-import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.portalprojects.core.common.base.PageableObject;
 import com.labreportapp.portalprojects.core.common.base.TodoAndTodoListObject;
 import com.labreportapp.portalprojects.core.common.base.TodoObject;
@@ -60,6 +59,7 @@ import com.labreportapp.portalprojects.infrastructure.constant.TypeTodo;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.MessageHandlingException;
 import com.labreportapp.portalprojects.infrastructure.successnotification.ConstantMessageSuccess;
 import com.labreportapp.portalprojects.infrastructure.successnotification.SuccessNotificationSender;
+import com.labreportapp.portalprojects.infrastructure.wsconfigure.WebSocketSessionManager;
 import com.labreportapp.portalprojects.repository.PeriodTodoRepository;
 import com.labreportapp.portalprojects.util.DateConverter;
 import com.labreportapp.portalprojects.util.DateTimeUtil;
@@ -135,7 +135,7 @@ public class MeTodoServiceImpl implements MeTodoService {
     private TodoHelper todoHelper;
 
     @Autowired
-    private LabReportAppSession labReportAppSession;
+    private WebSocketSessionManager webSocketSessionManager;
 
     @Override
     @Cacheable(value = "todosByPeriodAndTodoList", key = "#request.name.toString() + '-' " +
@@ -371,7 +371,7 @@ public class MeTodoServiceImpl implements MeTodoService {
         activityTodo.setTodoListId(request.getIdTodoList());
         activityTodo.setProjectId(request.getProjectId());
         activityTodo.setContentAction("đã cập nhật phần trăm tiến độ của đầu việc thành " + request.getProgress() + "%");
-        activityTodo.setMemberCreatedId(labReportAppSession.getUserId());
+        activityTodo.setMemberCreatedId(webSocketSessionManager.getSessionInfo(headerAccessor.getSessionId()).getId());
         TodoObject todoObject = TodoObject.builder()
                 .data(meTodoRepository.save(todoFindById.get()))
                 .dataActivity(meActivityRepository.save(activityTodo))
@@ -486,16 +486,17 @@ public class MeTodoServiceImpl implements MeTodoService {
             todoFind.get().setReminderTime(deadline.getTime() - Long.parseLong(request.getReminder()));
             todoFind.get().setStatusReminder(StatusReminder.CHUA_GUI);
         }
-
         ActivityTodo activityTodo = new ActivityTodo();
-        activityTodo.setMemberCreatedId(labReportAppSession.getUserId());
+        activityTodo.setMemberCreatedId(webSocketSessionManager.getSessionInfo(headerAccessor.getSessionId()).getId());
         activityTodo.setProjectId(request.getProjectId());
         activityTodo.setTodoListId(request.getIdTodoList());
         activityTodo.setTodoId(request.getIdTodo());
         activityTodo.setContentAction("đã cập nhật ngày hạn của thẻ này thành " + DateConverter.convertDateToString(deadline.getTime()));
+
         TodoObject todoObject = TodoObject.builder().data(meTodoRepository.save(todoFind.get()))
                 .dataActivity(meActivityRepository.save(activityTodo))
                 .idTodoList(request.getIdTodoList()).idTodo(request.getIdTodo()).build();
+
         successNotificationSender.senderNotification(ConstantMessageSuccess.CAP_NHAT_THANH_CONG, headerAccessor);
         return todoObject;
     }
@@ -514,7 +515,7 @@ public class MeTodoServiceImpl implements MeTodoService {
         todoFind.get().setReminderTime(null);
         todoFind.get().setStatusReminder(StatusReminder.CHUA_GUI);
         ActivityTodo activityTodo = new ActivityTodo();
-        activityTodo.setMemberCreatedId(labReportAppSession.getUserId());
+        activityTodo.setMemberCreatedId(webSocketSessionManager.getSessionInfo(headerAccessor.getSessionId()).getId());
         activityTodo.setProjectId(request.getProjectId());
         activityTodo.setTodoListId(request.getIdTodoList());
         activityTodo.setTodoId(request.getIdTodo());
@@ -552,7 +553,7 @@ public class MeTodoServiceImpl implements MeTodoService {
         activityTodo.setTodoId(newTodo.getId());
         activityTodo.setTodoListId(request.getTodoListId());
         activityTodo.setProjectId(request.getProjectId());
-        activityTodo.setMemberCreatedId(labReportAppSession.getUserId());
+        activityTodo.setMemberCreatedId(webSocketSessionManager.getSessionInfo(headerAccessor.getSessionId()).getId());
         activityTodo.setContentAction("đã thêm thẻ này vào " + request.getNameTodoList());
         meActivityRepository.save(activityTodo);
 
@@ -564,7 +565,7 @@ public class MeTodoServiceImpl implements MeTodoService {
     @Override
     @CacheEvict(value = {"todosByPeriodAndTodoList", "todoById", "detailTodosById", "todosByFilter"}, allEntries = true)
     @Synchronized
-    public TodoAndTodoListObject updateIndexTodo(@Valid MeUpdateIndexTodoRequest request) {
+    public TodoAndTodoListObject updateIndexTodo(@Valid MeUpdateIndexTodoRequest request, StompHeaderAccessor headerAccessor) {
         if (request.getIdTodoListOld().equals(request.getIdTodoListNew()) && request.getIndexBefore() == request.getIndexAfter()) {
             throw new MessageHandlingException(Message.ERROR_UNKNOWN);
         }
@@ -590,7 +591,7 @@ public class MeTodoServiceImpl implements MeTodoService {
             activityTodo.setTodoId(request.getIdTodo());
             activityTodo.setTodoListId(request.getIdTodoListNew());
             activityTodo.setProjectId(request.getProjectId());
-            activityTodo.setMemberCreatedId(labReportAppSession.getUserId());
+            activityTodo.setMemberCreatedId(webSocketSessionManager.getSessionInfo(headerAccessor.getSessionId()).getId());
             activityTodo.setContentAction("đã kéo thẻ này từ " + request.getNameTodoListOld() + " tới " + request.getNameTodoListNew());
             Short countTodo = meTodoRepository.countTodoInTodoList(request.getIdTodoListNew(), request.getPeriodId());
             todoFind.get().setIndexTodo(request.getIndexAfter());
@@ -616,7 +617,7 @@ public class MeTodoServiceImpl implements MeTodoService {
     @CacheEvict(value = {"todosByPeriodAndTodoList", "todoById", "detailTodosById", "todosByFilter"}, allEntries = true)
     @Synchronized
     @Transactional
-    public TodoObject updateCompleteTodo(@Valid MeUpdateCompleteTodoRequest request) {
+    public TodoObject updateCompleteTodo(@Valid MeUpdateCompleteTodoRequest request, StompHeaderAccessor headerAccessor) {
         Optional<Todo> todoFind = meTodoRepository.findById(request.getId());
         if (!todoFind.isPresent()) {
             throw new MessageHandlingException(Message.TO_DO_NOT_EXISTS);
@@ -625,7 +626,7 @@ public class MeTodoServiceImpl implements MeTodoService {
         activityTodo.setTodoListId(request.getIdTodoList());
         activityTodo.setTodoId(request.getIdTodo());
         activityTodo.setProjectId(request.getProjectId());
-        activityTodo.setMemberCreatedId(labReportAppSession.getUserId());
+        activityTodo.setMemberCreatedId(webSocketSessionManager.getSessionInfo(headerAccessor.getSessionId()).getId());
         Short countTodo = meTodoRepository.countTodoInCheckList(request.getIdTodo());
         if (request.getStatus() == 0) {
             todoFind.get().setCompletionTime(new Date().getTime());
@@ -658,7 +659,7 @@ public class MeTodoServiceImpl implements MeTodoService {
     @CacheEvict(value = {"todosByPeriodAndTodoList", "todoById", "detailTodosById", "todosByFilter"}, allEntries = true)
     @Transactional
     @Synchronized
-    public TodoAndTodoListObject updateIndexTodoViewTable(@Valid MeUpdateIndexTodoRequest request) {
+    public TodoAndTodoListObject updateIndexTodoViewTable(@Valid MeUpdateIndexTodoRequest request, StompHeaderAccessor headerAccessor) {
         Optional<Todo> todoFind = meTodoRepository.findById(request.getIdTodo());
         if (!todoFind.isPresent()) {
             throw new MessageHandlingException(Message.TO_DO_NOT_EXISTS);
@@ -672,7 +673,7 @@ public class MeTodoServiceImpl implements MeTodoService {
         activityTodo.setTodoId(request.getIdTodo());
         activityTodo.setTodoListId(request.getIdTodoListNew());
         activityTodo.setProjectId(request.getProjectId());
-        activityTodo.setMemberCreatedId(labReportAppSession.getUserId());
+        activityTodo.setMemberCreatedId(webSocketSessionManager.getSessionInfo(headerAccessor.getSessionId()).getId());
         activityTodo.setContentAction("đã kéo thẻ này từ " + request.getNameTodoListOld() + " tới " + request.getNameTodoListNew());
 
         TodoAndTodoListObject todoAndTodoListObject = TodoAndTodoListObject.builder().data(meTodoRepository.save(todoFind.get())).
@@ -919,7 +920,7 @@ public class MeTodoServiceImpl implements MeTodoService {
             if (!periodFind.isPresent()) {
                 throw new MessageHandlingException(Message.PERIOD_NOT_EXISTS);
             }
-            if(sum != 0) {
+            if (sum != 0) {
                 float average = (float) sum / listProgressByIdPeriod.size();
                 DecimalFormat decimalFormat = new DecimalFormat("#.#");
                 decimalFormat.setRoundingMode(RoundingMode.HALF_UP);
@@ -927,7 +928,7 @@ public class MeTodoServiceImpl implements MeTodoService {
 
                 periodFind.get().setProgress(Float.parseFloat(roundedAverage));
                 mePeriodRepository.save(periodFind.get());
-            }else {
+            } else {
                 periodFind.get().setProgress(Float.parseFloat("0"));
                 mePeriodRepository.save(periodFind.get());
             }

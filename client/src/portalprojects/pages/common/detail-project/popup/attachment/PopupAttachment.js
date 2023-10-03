@@ -8,6 +8,7 @@ import { GetPeriodCurrent } from "../../../../../app/reducer/detail-project/DPPe
 import { getStompClient } from "../../stomp-client-config/StompClientManager";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLink } from "@fortawesome/free-solid-svg-icons";
+import Cookies from "js-cookie";
 
 const PopupAttachment = ({ position, onClose }) => {
   useEffect(() => {
@@ -60,10 +61,13 @@ const PopupAttachment = ({ position, onClose }) => {
       idTodoList: detailTodo.todoListId,
       projectId: detailProject.id,
     };
-
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     stompClient.send(
       "/action/create-resource/" + detailProject.id + "/" + periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
 

@@ -15,7 +15,7 @@ import { GetPeriodCurrent } from "../../../../../app/reducer/detail-project/DPPe
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { GetUserCurrent } from "../../../../../../labreportapp/app/common/UserCurrent.reducer";
-
+import Cookies from "js-cookie";
 const ViewEditor = ({ item, reply }) => {
   const listMemberProject = useAppSelector(GetMemberProject);
   const [member, setMember] = useState(null);
@@ -72,10 +72,13 @@ const ViewEditor = ({ item, reply }) => {
       idTodo: detailTodo.id,
       idTodoList: detailTodo.todoListId,
     };
-
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     stompClient.send(
       "/action/delete-comment/" + detailProject.id + "/" + periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
   };
@@ -109,9 +112,13 @@ const ViewEditor = ({ item, reply }) => {
       idTodo: detailTodo.id,
       idTodoList: detailTodo.todoListId,
     };
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     stompClient.send(
       "/action/update-comment/" + detailProject.id + "/" + periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
     setShowPicker(false);

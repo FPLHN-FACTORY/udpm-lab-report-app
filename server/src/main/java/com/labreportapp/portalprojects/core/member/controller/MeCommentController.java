@@ -10,6 +10,7 @@ import com.labreportapp.portalprojects.core.member.service.MeCommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -31,26 +32,26 @@ public class MeCommentController {
     @MessageMapping("/create-comment/{projectId}/{periodId}")
     @SendTo("/portal-projects/create-comment/{projectId}/{periodId}")
     public ResponseObject add(@RequestBody MeCreateCommentRequest request,
-                              @ModelAttribute DesVarProjectIdAndPeriodIdRequest des) {
-        return new ResponseObject(meCommentService.add(request));
+                              @ModelAttribute DesVarProjectIdAndPeriodIdRequest des, StompHeaderAccessor headerAccessor) {
+        return new ResponseObject(meCommentService.add(request, headerAccessor));
     }
 
     @GetMapping()
-    public ResponseObject getAllCommentByIdTodo(final MeFindCommentRequest request){
+    public ResponseObject getAllCommentByIdTodo(final MeFindCommentRequest request) {
         return new ResponseObject(meCommentService.getAllCommentByIdTodo(request));
     }
 
     @MessageMapping("/update-comment/{projectId}/{periodId}")
     @SendTo("/portal-projects/update-comment/{projectId}/{periodId}")
     public ResponseObject update(@RequestBody MeUpdateCommentRequest request,
-                              @ModelAttribute DesVarProjectIdAndPeriodIdRequest des) {
-        return new ResponseObject(meCommentService.update(request));
+                                 @ModelAttribute DesVarProjectIdAndPeriodIdRequest des, StompHeaderAccessor headerAccessor) {
+        return new ResponseObject(meCommentService.update(request, headerAccessor));
     }
 
     @MessageMapping("/delete-comment/{projectId}/{periodId}")
     @SendTo("/portal-projects/delete-comment/{projectId}/{periodId}")
     public ResponseObject delete(@RequestBody MeDeleteCommentRequest request,
-                                 @ModelAttribute DesVarProjectIdAndPeriodIdRequest des) {
-        return new ResponseObject(meCommentService.delete(request));
+                                 @ModelAttribute DesVarProjectIdAndPeriodIdRequest des, StompHeaderAccessor headerAccessor) {
+        return new ResponseObject(meCommentService.delete(request, headerAccessor));
     }
 }

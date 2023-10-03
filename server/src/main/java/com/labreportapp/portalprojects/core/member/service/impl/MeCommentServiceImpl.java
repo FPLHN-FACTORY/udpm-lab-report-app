@@ -13,6 +13,7 @@ import com.labreportapp.portalprojects.core.member.service.MeCommentService;
 import com.labreportapp.portalprojects.entity.Comment;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.MessageHandlingException;
+import com.labreportapp.portalprojects.infrastructure.wsconfigure.WebSocketSessionManager;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.Synchronized;
@@ -21,6 +22,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -35,16 +37,16 @@ public class MeCommentServiceImpl implements MeCommentService {
 
     @Autowired
     private MeCommentRepository meCommentRepository;
-
+    
     @Autowired
-    private LabReportAppSession labReportAppSession;
+    private WebSocketSessionManager webSocketSessionManager;
 
     @Override
     @Synchronized
     @CacheEvict(value = {"todosByPeriodAndTodoList", "detailTodosById"}, allEntries = true)
-    public TodoObject add(@Valid MeCreateCommentRequest request) {
+    public TodoObject add(@Valid MeCreateCommentRequest request, StompHeaderAccessor headerAccessor) {
         Comment comment = new Comment();
-        comment.setMemberId(labReportAppSession.getUserId());
+        comment.setMemberId(webSocketSessionManager.getSessionInfo(headerAccessor.getSessionId()).getId());
         comment.setTodoId(request.getIdTodo());
         comment.setContent(request.getContent());
         comment.setStatusEdit(0);
@@ -64,12 +66,12 @@ public class MeCommentServiceImpl implements MeCommentService {
     @Synchronized
     @Transactional
     @CacheEvict(value = {"detailTodosById"}, allEntries = true)
-    public TodoObject update(@Valid MeUpdateCommentRequest request) {
+    public TodoObject update(@Valid MeUpdateCommentRequest request, StompHeaderAccessor headerAccessor) {
         Optional<Comment> commentFind = meCommentRepository.findById(request.getId());
         if (!commentFind.isPresent()) {
             throw new MessageHandlingException(Message.COMMENT_NOT_EXISTS);
         }
-        if (!commentFind.get().getMemberId().equals(labReportAppSession.getUserId())) {
+        if (!commentFind.get().getMemberId().equals(webSocketSessionManager.getSessionInfo(headerAccessor.getSessionId()).getId())) {
             throw new MessageHandlingException(Message.USER_NOT_ALLOWED);
         }
         commentFind.get().setContent(request.getContent());
@@ -84,12 +86,12 @@ public class MeCommentServiceImpl implements MeCommentService {
     @Synchronized
     @Transactional
     @CacheEvict(value = {"todosByPeriodAndTodoList", "detailTodosById"}, allEntries = true)
-    public TodoObject delete(@Valid MeDeleteCommentRequest request) {
+    public TodoObject delete(@Valid MeDeleteCommentRequest request, StompHeaderAccessor headerAccessor) {
         Optional<Comment> commentFind = meCommentRepository.findById(request.getId());
         if (!commentFind.isPresent()) {
             throw new MessageHandlingException(Message.COMMENT_NOT_EXISTS);
         }
-        if (!commentFind.get().getMemberId().equals(labReportAppSession.getUserId())) {
+        if (!commentFind.get().getMemberId().equals(webSocketSessionManager.getSessionInfo(headerAccessor.getSessionId()).getId())) {
             throw new MessageHandlingException(Message.USER_NOT_ALLOWED);
         }
         meCommentRepository.delete(commentFind.get());

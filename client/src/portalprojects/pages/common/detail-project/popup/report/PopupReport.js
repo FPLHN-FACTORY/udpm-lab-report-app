@@ -9,7 +9,7 @@ import { GetProject } from "../../../../../app/reducer/detail-project/DPProjectS
 import { GetPeriodCurrent } from "../../../../../app/reducer/detail-project/DPPeriodSlice.reducer";
 import { GetDetailTodo } from "../../../../../app/reducer/detail-project/DPDetailTodoSlice.reducer";
 import { getStompClient } from "../../stomp-client-config/StompClientManager";
-
+import Cookies from "js-cookie";
 const PopupReport = ({ position, onClose }) => {
   const popupRef = useRef(null);
 
@@ -73,13 +73,16 @@ const PopupReport = ({ position, onClose }) => {
       idTodo: detailTodo.id,
       idTodoList: detailTodo.todoListId,
     };
-
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     stompClient.send(
       "/action/update-progress-todo/" +
         detailProject.id +
         "/" +
         periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
   };

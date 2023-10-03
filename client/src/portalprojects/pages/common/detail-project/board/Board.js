@@ -25,6 +25,7 @@ import { GetSessionId } from "../../../../app/reducer/detail-project/StompClient
 import { getStompClient } from "../stomp-client-config/StompClientManager";
 import BoardStompClient from "./BoardStompClient";
 import { toast } from "react-toastify";
+import Cookies from "js-cookie";
 
 const Board = () => {
   const dispatch = useAppDispatch();
@@ -150,6 +151,10 @@ const Board = () => {
         sessionId: sessionSocket,
       };
       if (stompClient) {
+        const bearerToken = Cookies.get("token");
+        const headers = {
+          Authorization: "Bearer " + bearerToken,
+        };
         dispatch(
           reorderList({
             startIndex: source.index,
@@ -159,7 +164,7 @@ const Board = () => {
         );
         stompClient.send(
           "/action/update-index-todo-list/" + detailProject.id,
-          {},
+          headers,
           JSON.stringify(obj)
         );
       }
@@ -180,12 +185,16 @@ const Board = () => {
       let idTodoListNew = obj.idTodoListNew;
       let indexTodoNew = obj.indexAfter;
       let draggableId = obj.idTodo;
+      const bearerToken = Cookies.get("token");
+      const headers = {
+        Authorization: "Bearer " + bearerToken,
+      };
       stompClient.send(
         "/action/update-index-todo/" +
           detailProject.id +
           "/" +
           periodCurrent.id,
-        {},
+        headers,
         JSON.stringify(obj)
       );
       dispatch(
@@ -199,13 +208,18 @@ const Board = () => {
       toast.error("Tên danh sách không được để trống");
       return;
     }
+
     let obj = {
       name: newListTitle,
       idProject: detailProject.id,
     };
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     stompClient.send(
       "/action/create-todo-list/" + detailProject.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
     setIsAddingList(false);

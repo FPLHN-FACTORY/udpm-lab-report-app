@@ -15,6 +15,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import PopupListAction from "../popup/menu-list/PopupListAction";
 import { useLocation, useNavigate } from "react-router";
+import Cookies from "js-cookie";
 
 const List = ({ list, index }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -44,9 +45,13 @@ const List = ({ list, index }) => {
       idTodoList: list.id,
       name: listTitle,
     };
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     stompClient.send(
       "/action/update-name-todo-list/" + detailProject.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
     let data = {
@@ -89,9 +94,13 @@ const List = ({ list, index }) => {
       periodId: periodCurrent.id,
       projectId: detailProject.id,
     };
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     stompClient.send(
       "/action/create-todo/" + detailProject.id + "/" + periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
     setTaskName("");

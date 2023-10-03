@@ -24,6 +24,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import PopupCreateLabel from "./create-label/PopupCreateLabel";
 import PopupUpdateLabel from "./update-label/PopupUpdateLabel";
+import Cookies from "js-cookie";
 
 const { Option } = Select;
 
@@ -98,13 +99,17 @@ const PopupLabel = ({ position, onClose }) => {
       idTodo: detailTodo.id,
       idTodoList: detailTodo.todoListId,
     };
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     if (event.target.checked) {
       stompClient.send(
         "/action/create-label-todo/" +
           detailProject.id +
           "/" +
           periodCurrent.id,
-        {},
+        headers,
         JSON.stringify(obj)
       );
       setListLabelTodo([...listLabelTodo, { id }]);
@@ -114,7 +119,7 @@ const PopupLabel = ({ position, onClose }) => {
           detailProject.id +
           "/" +
           periodCurrent.id,
-        {},
+        headers,
         JSON.stringify(obj)
       );
       setListLabelTodo(listLabelTodo.filter((item) => item.id !== id));
@@ -130,14 +135,17 @@ const PopupLabel = ({ position, onClose }) => {
     };
 
     const check = listLabelTodo.find((item) => item.id === id);
-
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     if (check == null) {
       stompClient.send(
         "/action/create-label-todo/" +
           detailProject.id +
           "/" +
           periodCurrent.id,
-        {},
+        headers,
         JSON.stringify(obj)
       );
       setListLabelTodo([...listLabelTodo, { id }]);
@@ -147,7 +155,7 @@ const PopupLabel = ({ position, onClose }) => {
           detailProject.id +
           "/" +
           periodCurrent.id,
-        {},
+        headers,
         JSON.stringify(obj)
       );
       setListLabelTodo(listLabelTodo.filter((item) => item.id !== id));
@@ -238,10 +246,13 @@ const PopupLabel = ({ position, onClose }) => {
       id: id,
       projectId: detailProject.id,
     };
-
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     stompClient.send(
       "/action/delete-label/" + detailProject.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
   };

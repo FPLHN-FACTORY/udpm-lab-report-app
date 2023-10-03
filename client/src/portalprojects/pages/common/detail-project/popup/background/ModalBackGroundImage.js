@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImage } from "@fortawesome/free-solid-svg-icons";
 import { useAppSelector } from "../../../../../app/hook";
 import { getStompClient } from "../../stomp-client-config/StompClientManager";
+import Cookies from "js-cookie";
 
 const { TextArea } = Input;
 
@@ -21,10 +22,13 @@ const ModalBackGroundImage = ({ visible, onCancel }) => {
       name: url,
       type: "0",
     };
-
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     stompClient.send(
       "/action/update-background-project/" + detailProject.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
   };

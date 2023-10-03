@@ -8,7 +8,7 @@ import { GetDetailTodo } from "../../../../../../app/reducer/detail-project/DPDe
 import { getStompClient } from "../../../stomp-client-config/StompClientManager";
 import { GetProject } from "../../../../../../app/reducer/detail-project/DPProjectSlice.reducer";
 import { GetPeriodCurrent } from "../../../../../../app/reducer/detail-project/DPPeriodSlice.reducer";
-
+import Cookies from "js-cookie";
 const PopupUpdateAttachment = ({ position, onClose, item }) => {
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -60,10 +60,13 @@ const PopupUpdateAttachment = ({ position, onClose, item }) => {
       idTodo: detailTodo.id,
       idTodoList: detailTodo.todoListId,
     };
-
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     stompClient.send(
       "/action/update-resource/" + detailProject.id + "/" + periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
     onClose();

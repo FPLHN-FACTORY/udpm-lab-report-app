@@ -20,6 +20,7 @@ import com.labreportapp.portalprojects.infrastructure.constant.StatusImage;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.MessageHandlingException;
 import com.labreportapp.portalprojects.infrastructure.successnotification.ConstantMessageSuccess;
 import com.labreportapp.portalprojects.infrastructure.successnotification.SuccessNotificationSender;
+import com.labreportapp.portalprojects.infrastructure.wsconfigure.WebSocketSessionManager;
 import com.labreportapp.portalprojects.util.CloundinaryUtils;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -57,8 +58,8 @@ public class MeImageServiceImpl implements MeImageService {
     @Autowired
     private CloudinaryUploadImages cloudinaryUploadImages;
 
-    @Qualifier
-    private LabReportAppSession labReportAppSession;
+    @Autowired
+    private WebSocketSessionManager webSocketSessionManager;
 
     @Override
     @Synchronized
@@ -90,7 +91,7 @@ public class MeImageServiceImpl implements MeImageService {
         activityTodo.setTodoListId(request.getIdTodoList());
         activityTodo.setTodoId(request.getIdTodo());
         activityTodo.setImageId(newImage.getId());
-        activityTodo.setMemberCreatedId(labReportAppSession.getUserId());
+        activityTodo.setMemberCreatedId(webSocketSessionManager.getSessionInfo(headerAccessor.getSessionId()).getId());
         activityTodo.setContentAction("đã thêm " + request.getNameFileOld() + " vào thẻ này");
         activityTodo.setUrlImage(request.getUrlImage());
 
@@ -163,7 +164,7 @@ public class MeImageServiceImpl implements MeImageService {
         activityTodo.setProjectId(request.getProjectId());
         activityTodo.setTodoListId(request.getIdTodoList());
         activityTodo.setTodoId(request.getIdTodo());
-        activityTodo.setMemberCreatedId(labReportAppSession.getUserId());
+        activityTodo.setMemberCreatedId(webSocketSessionManager.getSessionInfo(headerAccessor.getSessionId()).getId());
         activityTodo.setContentAction("đã xóa " + request.getNameImage() + " khỏi thẻ này");
         ActivityTodo newActivityTodo = meActivityRepository.save(activityTodo);
 

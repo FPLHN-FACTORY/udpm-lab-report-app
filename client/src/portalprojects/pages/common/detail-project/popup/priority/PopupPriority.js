@@ -22,7 +22,7 @@ import {
   faAngleUp,
   faTurnUp,
 } from "@fortawesome/free-solid-svg-icons";
-
+import Cookies from "js-cookie";
 const { Option } = Select;
 
 const PopupPriority = ({ position, onClose }) => {
@@ -82,12 +82,16 @@ const PopupPriority = ({ position, onClose }) => {
       idTodo: detailTodo.id,
       idTodoList: detailTodo.todoListId,
     };
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     stompClient.send(
       "/action/update-priority-todo/" +
         detailProject.id +
         "/" +
         periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
   };

@@ -8,7 +8,7 @@ import { GetPeriodCurrent } from "../../../../../app/reducer/detail-project/DPPe
 import { getStompClient } from "../../stomp-client-config/StompClientManager";
 import { GetProject } from "../../../../../app/reducer/detail-project/DPProjectSlice.reducer";
 import PopupReport from "../../popup/report/PopupReport";
-
+import Cookies from "js-cookie";
 const TodoInCheckList = () => {
   const [showForm, setShowForm] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -45,13 +45,16 @@ const TodoInCheckList = () => {
       idTodo: detailTodo.id,
       idTodoList: detailTodo.todoListId,
     };
-
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     stompClient.send(
       "/action/create-todo-checklist/" +
         detailProject.id +
         "/" +
         periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
     setShowForm(false);

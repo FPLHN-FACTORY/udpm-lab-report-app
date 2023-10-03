@@ -15,7 +15,7 @@ import { useAppSelector } from "../../../../../app/hook";
 import { GetProject } from "../../../../../app/reducer/detail-project/DPProjectSlice.reducer";
 import { getStompClient } from "../../stomp-client-config/StompClientManager";
 import { toast } from "react-toastify";
-
+import Cookies from "js-cookie";
 const PopupListAction = ({ position, onClose, list }) => {
   const popupRef = useRef(null);
 
@@ -65,10 +65,13 @@ const PopupListAction = ({ position, onClose, list }) => {
       id: list.id,
       projectId: detailProject.id,
     };
-
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     stompClient.send(
       "/action/delete-todo-list/" + detailProject.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
   };

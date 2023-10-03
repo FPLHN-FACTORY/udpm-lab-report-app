@@ -23,7 +23,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import PopupCreateLabel from "../label/create-label/PopupCreateLabel";
 import PopupUpdateLabel from "../label/update-label/PopupUpdateLabel";
-
+import Cookies from "js-cookie";
 const { Option } = Select;
 
 const PopupLabelTable = ({ todo, onClose, isSelected }) => {
@@ -95,13 +95,17 @@ const PopupLabelTable = ({ todo, onClose, isSelected }) => {
       idTodo: todo.id,
       idTodoList: todo.todoListId,
     };
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     if (event.target.checked) {
       stompClient.send(
         "/action/create-label-todo/" +
           detailProject.id +
           "/" +
           periodCurrent.id,
-        {},
+        headers,
         JSON.stringify(obj)
       );
       setListLabelTodo([...listLabelTodo, { id }]);
@@ -111,7 +115,7 @@ const PopupLabelTable = ({ todo, onClose, isSelected }) => {
           detailProject.id +
           "/" +
           periodCurrent.id,
-        {},
+        headers,
         JSON.stringify(obj)
       );
       setListLabelTodo(listLabelTodo.filter((item) => item.id !== id));
@@ -127,14 +131,17 @@ const PopupLabelTable = ({ todo, onClose, isSelected }) => {
     };
 
     const check = listLabelTodo.find((item) => item.id === id);
-
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     if (check == null) {
       stompClient.send(
         "/action/create-label-todo/" +
           detailProject.id +
           "/" +
           periodCurrent.id,
-        {},
+        headers,
         JSON.stringify(obj)
       );
       setListLabelTodo([...listLabelTodo, { id }]);
@@ -144,7 +151,7 @@ const PopupLabelTable = ({ todo, onClose, isSelected }) => {
           detailProject.id +
           "/" +
           periodCurrent.id,
-        {},
+        headers,
         JSON.stringify(obj)
       );
       setListLabelTodo(listLabelTodo.filter((item) => item.id !== id));
@@ -235,10 +242,13 @@ const PopupLabelTable = ({ todo, onClose, isSelected }) => {
       id: id,
       projectId: detailProject.id,
     };
-
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     stompClient.send(
       "/action/delete-label/" + detailProject.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
   };

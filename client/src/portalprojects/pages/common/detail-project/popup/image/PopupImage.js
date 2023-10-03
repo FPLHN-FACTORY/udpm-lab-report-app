@@ -12,6 +12,7 @@ import { UploadOutlined } from "@ant-design/icons";
 import { v4 as uuidv4 } from "uuid";
 import { DetailTodoAPI } from "../../../../../api/detail-todo/detailTodo.api";
 import LoadingIndicatorNoOverlay from "../../../../../helper/loadingNoOverlay";
+import Cookies from "js-cookie";
 
 const PopupImage = ({ position, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -90,10 +91,13 @@ const PopupImage = ({ position, onClose }) => {
       idTodoList: detailTodo.todoListId,
       projectId: detailProject.id,
     };
-
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     stompClient.send(
       "/action/create-image/" + detailProject.id + "/" + periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
     setIsLoading(false);

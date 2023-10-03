@@ -1,6 +1,7 @@
 package com.labreportapp.labreport.infrastructure.security;
 
 import com.labreportapp.labreport.infrastructure.constant.SessionConstant;
+import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
@@ -29,6 +30,9 @@ public class JwtTokenProvider {
     @Autowired
     private HttpSession httpSession;
 
+    @Autowired
+    private LabReportAppSession labReportAppSession;
+
     public Authentication getAuthentication(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes()))
@@ -45,7 +49,7 @@ public class JwtTokenProvider {
         String storedEmail = (String) httpSession.getAttribute(SessionConstant.USER_CURRENT_EMAIL);
         String storedUserName = (String) httpSession.getAttribute(SessionConstant.USER_CURRENT_USERNAME);
         String storedName = (String) httpSession.getAttribute(SessionConstant.USER_CURRENT_NAME);
-
+        System.out.println(labReportAppSession.getUserId() + " ddddddd");
         if (id.equals(storedId)
                 && email.equals(storedEmail)
                 && userName.equals(storedUserName)

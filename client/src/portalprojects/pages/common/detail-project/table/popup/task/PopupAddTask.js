@@ -7,7 +7,7 @@ import { GetPeriodCurrent } from "../../../../../../app/reducer/detail-project/D
 import { GetProject } from "../../../../../../app/reducer/detail-project/DPProjectSlice.reducer";
 import { toast } from "react-toastify";
 import { getStompClient } from "../../../stomp-client-config/StompClientManager";
-
+import Cookies from "js-cookie";
 const { Option } = Select;
 
 const PopupAddTask = ({ onClose }) => {
@@ -84,9 +84,13 @@ const PopupAddTask = ({ onClose }) => {
       periodId: periodCurrent.id,
       projectId: detailProject.id,
     };
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     stompClient.send(
       "/action/create-todo/" + detailProject.id + "/" + periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
     setName("");

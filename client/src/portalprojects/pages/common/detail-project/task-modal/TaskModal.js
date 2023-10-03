@@ -61,7 +61,7 @@ import PopupImage from "../popup/image/PopupImage";
 import ListImage from "./image/ListImage";
 import PopupShowDetailImage from "../popup/popup-show-detail-image/PopupShowDetailImage";
 import { GetUserCurrent } from "../../../../../labreportapp/app/common/UserCurrent.reducer";
-
+import Cookies from "js-cookie";
 const TaskModal = memo(({ open, onCancel, id }) => {
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
@@ -85,7 +85,10 @@ const TaskModal = memo(({ open, onCancel, id }) => {
 
   const listMemberAPI = useAppSelector(GetMemberProject);
   const list = useAppSelector(GetAllList);
-
+  const bearerToken = Cookies.get("token");
+  const headers = {
+    Authorization: "Bearer " + bearerToken,
+  };
   const findNameTodoList = (id) => {
     const foundList = list.find((item) => item.id === id);
     return foundList ? foundList.name : null;
@@ -112,7 +115,7 @@ const TaskModal = memo(({ open, onCancel, id }) => {
         detailProject.id +
         "/" +
         periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
   };
@@ -277,7 +280,7 @@ const TaskModal = memo(({ open, onCancel, id }) => {
         detailProject.id +
         "/" +
         periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
     setShowDescriptions(false);
@@ -314,7 +317,7 @@ const TaskModal = memo(({ open, onCancel, id }) => {
 
     stompClient.send(
       "/action/update-type-todo/" + detailProject.id + "/" + periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
   };
@@ -341,7 +344,7 @@ const TaskModal = memo(({ open, onCancel, id }) => {
   const handleOutAssign = (obj) => {
     stompClient.send(
       "/action/join-assign/" + detailProject.id + "/" + periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
   };
@@ -349,7 +352,7 @@ const TaskModal = memo(({ open, onCancel, id }) => {
   const handleJoinAssign = (obj) => {
     stompClient.send(
       "/action/out-assign/" + detailProject.id + "/" + periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
   };
@@ -393,7 +396,7 @@ const TaskModal = memo(({ open, onCancel, id }) => {
     };
     stompClient.send(
       "/action/update-name-todo/" + detailProject.id + "/" + periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
   };
@@ -463,7 +466,7 @@ const TaskModal = memo(({ open, onCancel, id }) => {
 
     stompClient.send(
       "/action/delete-todo/" + detailProject.id + "/" + periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
     onCancel();

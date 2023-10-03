@@ -173,17 +173,19 @@ public class MeTodoController {
     @MessageMapping("/update-index-todo/{projectId}/{periodId}")
     @SendTo("/portal-projects/update-index-todo/{projectId}/{periodId}")
     public ResponseObject updateIndexTodo(@RequestBody MeUpdateIndexTodoRequest request,
-                                          @ModelAttribute DesVarProjectIdAndPeriodIdRequest des
+                                          @ModelAttribute DesVarProjectIdAndPeriodIdRequest des,
+                                          StompHeaderAccessor headerAccessor
     ) {
-        return new ResponseObject(meTodoService.updateIndexTodo(request));
+        return new ResponseObject(meTodoService.updateIndexTodo(request, headerAccessor));
     }
 
     @MessageMapping("/update-index-todo-view-table/{projectId}/{periodId}")
     @SendTo("/portal-projects/update-index-todo-view-table/{projectId}/{periodId}")
     public ResponseObject updateIndexTodoViewTable(@RequestBody MeUpdateIndexTodoRequest request,
-                                                   @ModelAttribute DesVarProjectIdAndPeriodIdRequest des
+                                                   @ModelAttribute DesVarProjectIdAndPeriodIdRequest des,
+                                                   StompHeaderAccessor headerAccessor
     ) {
-        return new ResponseObject(meTodoService.updateIndexTodoViewTable(request));
+        return new ResponseObject(meTodoService.updateIndexTodoViewTable(request, headerAccessor));
     }
 
     @MessageMapping("/update-name-todo/{projectId}/{periodId}")
@@ -197,9 +199,10 @@ public class MeTodoController {
     @MessageMapping("/update-complete-todo/{projectId}/{periodId}")
     @SendTo("/portal-projects/update-complete-todo/{projectId}/{periodId}")
     public ResponseObject updateCompleteTodo(@RequestBody MeUpdateCompleteTodoRequest request,
-                                             @ModelAttribute DesVarProjectIdAndPeriodIdRequest des
+                                             @ModelAttribute DesVarProjectIdAndPeriodIdRequest des,
+                                             StompHeaderAccessor headerAccessor
     ) {
-        return new ResponseObject(meTodoService.updateCompleteTodo(request));
+        return new ResponseObject(meTodoService.updateCompleteTodo(request, headerAccessor));
     }
 
     @MessageMapping("/delete-todo/{projectId}/{periodId}")

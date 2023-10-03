@@ -122,7 +122,7 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
              JOIN meeting m ON m.class_id = c.id
              JOIN activity ac ON ac.id = c.activity_id
              JOIN level l on l.id = ac.level_id
-             WHERE c.teacher_id = :#{#req.idTeacher} AND DATE(FROM_UNIXTIME(m.meeting_date / 1000)) = CURDATE()
+             WHERE m.teacher_id = :#{#req.idTeacher} AND DATE(FROM_UNIXTIME(m.meeting_date / 1000)) = CURDATE()
              ORDER BY m.meeting_date ASC
             """, nativeQuery = true)
     List<TeScheduleMeetingClassResponse> searchScheduleToDayByIdTeacherAndMeetingDate(@Param("req") TeFindScheduleMeetingClassRequest req);
@@ -143,7 +143,7 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
              JOIN meeting m ON m.class_id = c.id
              JOIN activity ac ON ac.id = c.activity_id
              JOIN level l on l.id = ac.level_id
-             WHERE c.teacher_id = :#{#req.idTeacher} AND 
+             WHERE m.teacher_id = :#{#req.idTeacher} AND 
              (
                      (:#{#req.time} LIKE '-7' AND m.meeting_date BETWEEN
                          UNIX_TIMESTAMP(DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY)) * 1000
@@ -176,7 +176,7 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                          JOIN meeting m ON m.class_id = c.id
                          JOIN activity ac ON ac.id = c.activity_id
                          JOIN level l on l.id = ac.level_id
-                         WHERE c.teacher_id = :#{#req.idTeacher} AND 
+                         WHERE m.teacher_id = :#{#req.idTeacher} AND 
                          (
                                  (:#{#req.time} LIKE '-7' AND m.meeting_date BETWEEN
                                      UNIX_TIMESTAMP(DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY)) * 1000

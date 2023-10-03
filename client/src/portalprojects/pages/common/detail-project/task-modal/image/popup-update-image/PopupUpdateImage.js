@@ -7,7 +7,7 @@ import { GetDetailTodo } from "../../../../../../app/reducer/detail-project/DPDe
 import { getStompClient } from "../../../stomp-client-config/StompClientManager";
 import { GetProject } from "../../../../../../app/reducer/detail-project/DPProjectSlice.reducer";
 import { GetPeriodCurrent } from "../../../../../../app/reducer/detail-project/DPPeriodSlice.reducer";
-
+import Cookies from "js-cookie";
 const PopupUpdateImage = ({ position, onClose, item }) => {
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -54,10 +54,13 @@ const PopupUpdateImage = ({ position, onClose, item }) => {
       id: item.id,
       nameImage: name,
     };
-
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     stompClient.send(
       "/action/update-name-image/" + detailProject.id + "/" + periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
     onClose();

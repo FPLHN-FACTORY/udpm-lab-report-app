@@ -15,7 +15,7 @@ import { GetProject } from "../../../../../app/reducer/detail-project/DPProjectS
 import { GetPeriodCurrent } from "../../../../../app/reducer/detail-project/DPPeriodSlice.reducer";
 import { getStompClient } from "../../stomp-client-config/StompClientManager";
 import { Popconfirm } from "antd";
-
+import Cookies from "js-cookie";
 const PopupShowDetailImage = ({ imageId, nameFile, onClose }) => {
   const [imageDetail, setImageDetail] = useState(null);
 
@@ -48,10 +48,13 @@ const PopupShowDetailImage = ({ imageId, nameFile, onClose }) => {
       idTodoList: detailTodo.todoListId,
       status: status,
     };
-
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     stompClient.send(
       "/action/change-cover-image/" + detailProject.id + "/" + periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
 
@@ -68,10 +71,13 @@ const PopupShowDetailImage = ({ imageId, nameFile, onClose }) => {
       idTodoList: detailTodo.todoListId,
       projectId: detailProject.id,
     };
-
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     stompClient.send(
       "/action/delete-image/" + detailProject.id + "/" + periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
 

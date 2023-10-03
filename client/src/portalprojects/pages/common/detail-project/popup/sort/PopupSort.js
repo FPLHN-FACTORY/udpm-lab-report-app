@@ -17,7 +17,7 @@ import { useAppSelector } from "../../../../../app/hook";
 import { GetPeriodCurrent } from "../../../../../app/reducer/detail-project/DPPeriodSlice.reducer";
 import { getStompClient } from "../../stomp-client-config/StompClientManager";
 import { GetProject } from "../../../../../app/reducer/detail-project/DPProjectSlice.reducer";
-
+import Cookies from "js-cookie";
 const PopupSort = ({ position, onClose }) => {
   const popupRef = useRef(null);
 
@@ -64,10 +64,13 @@ const PopupSort = ({ position, onClose }) => {
       idPeriod: periodCurrent.id,
       type: type,
     };
-
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     stompClient.send(
       "/action/sort-todo-priority/" + detailProject.id + "/" + periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
   };
@@ -77,10 +80,13 @@ const PopupSort = ({ position, onClose }) => {
       idPeriod: periodCurrent.id,
       type: type,
     };
-
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     stompClient.send(
       "/action/sort-todo-deadline/" + detailProject.id + "/" + periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
   };
@@ -90,17 +96,23 @@ const PopupSort = ({ position, onClose }) => {
       idPeriod: periodCurrent.id,
       type: type,
     };
-
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     stompClient.send(
       "/action/sort-todo-created-date/" +
         detailProject.id +
         "/" +
         periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
   };
-
+  const bearerToken = Cookies.get("token");
+  const headers = {
+    Authorization: "Bearer " + bearerToken,
+  };
   const sortName = (type) => {
     let obj = {
       idPeriod: periodCurrent.id,
@@ -109,7 +121,7 @@ const PopupSort = ({ position, onClose }) => {
 
     stompClient.send(
       "/action/sort-todo-name/" + detailProject.id + "/" + periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
   };
@@ -122,7 +134,7 @@ const PopupSort = ({ position, onClose }) => {
 
     stompClient.send(
       "/action/sort-todo-progress/" + detailProject.id + "/" + periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
   };

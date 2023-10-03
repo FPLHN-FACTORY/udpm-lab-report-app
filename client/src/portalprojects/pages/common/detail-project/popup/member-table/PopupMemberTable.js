@@ -15,7 +15,7 @@ import { getStompClient } from "../../stomp-client-config/StompClientManager";
 import debounce from "lodash/debounce";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUsers } from "@fortawesome/free-solid-svg-icons";
-
+import Cookies from "js-cookie";
 const { Option } = Select;
 
 const PopupMemberTable = ({ todo, position, onClose }) => {
@@ -87,11 +87,14 @@ const PopupMemberTable = ({ todo, position, onClose }) => {
       }
     }
   }, 350);
-
+  const bearerToken = Cookies.get("token");
+  const headers = {
+    Authorization: "Bearer " + bearerToken,
+  };
   const deleteAssign = (obj) => {
     stompClient.send(
       "/action/delete-assign/" + detailProject.id + "/" + periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
   };
@@ -99,7 +102,7 @@ const PopupMemberTable = ({ todo, position, onClose }) => {
   const createAssign = (obj) => {
     stompClient.send(
       "/action/create-assign/" + detailProject.id + "/" + periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
   };

@@ -9,7 +9,7 @@ import { GetPeriodCurrent } from "../../../../../app/reducer/detail-project/DPPe
 import { GetDetailTodo } from "../../../../../app/reducer/detail-project/DPDetailTodoSlice.reducer";
 import { getStompClient } from "../../stomp-client-config/StompClientManager";
 import PopupDetailImage from "../../popup/popup-show-detail-image/PopupDetailImage";
-
+import Cookies from "js-cookie";
 const ImageComponent = ({ item }) => {
   const [image, setImage] = useState(null);
   const [isOpenPopupUpdateImage, setIsOpenPopupUpdateImage] = useState(false);
@@ -47,10 +47,13 @@ const ImageComponent = ({ item }) => {
       idTodoList: detailTodo.todoListId,
       status: status,
     };
-
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     stompClient.send(
       "/action/change-cover-image/" + detailProject.id + "/" + periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
   };
@@ -65,10 +68,13 @@ const ImageComponent = ({ item }) => {
       idTodoList: detailTodo.todoListId,
       projectId: detailProject.id,
     };
-
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     stompClient.send(
       "/action/delete-image/" + detailProject.id + "/" + periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
   };

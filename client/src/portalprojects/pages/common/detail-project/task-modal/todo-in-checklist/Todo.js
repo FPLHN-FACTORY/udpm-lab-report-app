@@ -8,7 +8,7 @@ import { GetDetailTodo } from "../../../../../app/reducer/detail-project/DPDetai
 import { GetProject } from "../../../../../app/reducer/detail-project/DPProjectSlice.reducer";
 import { GetPeriodCurrent } from "../../../../../app/reducer/detail-project/DPPeriodSlice.reducer";
 import { getStompClient } from "../../stomp-client-config/StompClientManager";
-
+import Cookies from "js-cookie";
 const Todo = ({ item }) => {
   const [editing, setEditing] = useState(false);
   const [checked, setChecked] = useState(false);
@@ -24,6 +24,11 @@ const Todo = ({ item }) => {
       setName(item.name);
     }
   }, [item]);
+
+  const bearerToken = Cookies.get("token");
+  const headers = {
+    Authorization: "Bearer " + bearerToken,
+  };
 
   const handleToggleEdit = () => {
     setEditing(!editing);
@@ -43,7 +48,7 @@ const Todo = ({ item }) => {
         detailProject.id +
         "/" +
         periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
   };
@@ -63,7 +68,7 @@ const Todo = ({ item }) => {
         detailProject.id +
         "/" +
         periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
     setChecked(!checked);
@@ -82,7 +87,7 @@ const Todo = ({ item }) => {
         detailProject.id +
         "/" +
         periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
   };

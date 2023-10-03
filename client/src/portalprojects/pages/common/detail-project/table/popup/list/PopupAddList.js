@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useAppSelector } from "../../../../../../app/hook";
 import { GetProject } from "../../../../../../app/reducer/detail-project/DPProjectSlice.reducer";
 import { getStompClient } from "../../../stomp-client-config/StompClientManager";
-
+import Cookies from "js-cookie";
 const PopupAddList = ({ onClose }) => {
   const popupRef = useRef(null);
   const detailProject = useAppSelector(GetProject);
@@ -57,10 +57,13 @@ const PopupAddList = ({ onClose }) => {
       name: name,
       idProject: detailProject.id,
     };
-
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     stompClient.send(
       "/action/create-todo-list/" + detailProject.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
     onClose();

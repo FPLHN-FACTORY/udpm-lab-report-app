@@ -8,6 +8,7 @@ import com.labreportapp.portalprojects.core.member.service.MeAssignService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -38,31 +39,35 @@ public class MeAssignController {
     @MessageMapping("/create-assign/{projectId}/{periodId}")
     @SendTo("/portal-projects/assign/{projectId}/{periodId}")
     public ResponseObject create(@RequestBody MeCreateOrDeleteAssignRequest request,
-                                 @ModelAttribute DesVarProjectIdAndPeriodIdRequest des) {
-        return new ResponseObject(meAssignService.create(request));
+                                 @ModelAttribute DesVarProjectIdAndPeriodIdRequest des,
+                                 StompHeaderAccessor headerAccessor) {
+        return new ResponseObject(meAssignService.create(request, headerAccessor));
     }
 
 
     @MessageMapping("/delete-assign/{projectId}/{periodId}")
     @SendTo("/portal-projects/assign/{projectId}/{periodId}")
     public ResponseObject delete(@RequestBody MeCreateOrDeleteAssignRequest request,
-                                 @ModelAttribute DesVarProjectIdAndPeriodIdRequest des) {
-        return new ResponseObject(meAssignService.delete(request));
+                                 @ModelAttribute DesVarProjectIdAndPeriodIdRequest des,
+                                 StompHeaderAccessor headerAccessor) {
+        return new ResponseObject(meAssignService.delete(request, headerAccessor));
     }
 
     @MessageMapping("/join-assign/{projectId}/{periodId}")
     @SendTo("/portal-projects/assign/{projectId}/{periodId}")
     public ResponseObject joinAssign(@RequestBody MeCreateOrDeleteAssignRequest request,
-                                 @ModelAttribute DesVarProjectIdAndPeriodIdRequest des) {
+                                     @ModelAttribute DesVarProjectIdAndPeriodIdRequest des,
+                                     StompHeaderAccessor headerAccessor) {
         request.setIdMember(labReportAppSession.getUserId());
-        return new ResponseObject(meAssignService.create(request));
+        return new ResponseObject(meAssignService.create(request, headerAccessor));
     }
 
     @MessageMapping("/out-assign/{projectId}/{periodId}")
     @SendTo("/portal-projects/assign/{projectId}/{periodId}")
     public ResponseObject outAssign(@RequestBody MeCreateOrDeleteAssignRequest request,
-                                   @ModelAttribute DesVarProjectIdAndPeriodIdRequest des) {
+                                    @ModelAttribute DesVarProjectIdAndPeriodIdRequest des,
+                                    StompHeaderAccessor headerAccessor) {
         request.setIdMember(labReportAppSession.getUserId());
-        return new ResponseObject(meAssignService.delete(request));
+        return new ResponseObject(meAssignService.delete(request, headerAccessor));
     }
 }

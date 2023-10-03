@@ -15,6 +15,7 @@ import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.MessageHandlingException;
 import com.labreportapp.portalprojects.infrastructure.successnotification.ConstantMessageSuccess;
 import com.labreportapp.portalprojects.infrastructure.successnotification.SuccessNotificationSender;
+import com.labreportapp.portalprojects.infrastructure.wsconfigure.WebSocketSessionManager;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.Synchronized;
@@ -44,7 +45,7 @@ public class MeResourceServiceImpl implements MeResourceService {
     private SuccessNotificationSender successNotificationSender;
 
     @Autowired
-    private LabReportAppSession labReportAppSession;
+    private WebSocketSessionManager webSocketSessionManager;
 
     @Override
     public List<MeResourceResponse> getAll(String idTodo) {
@@ -69,7 +70,7 @@ public class MeResourceServiceImpl implements MeResourceService {
         resource.setTodoId(request.getIdTodo());
 
         ActivityTodo activityTodo = new ActivityTodo();
-        activityTodo.setMemberCreatedId(labReportAppSession.getUserId());
+        activityTodo.setMemberCreatedId(webSocketSessionManager.getSessionInfo(headerAccessor.getSessionId()).getId());
         activityTodo.setTodoId(request.getIdTodo());
         activityTodo.setTodoListId(request.getIdTodoList());
         activityTodo.setProjectId(request.getProjectId());
@@ -110,7 +111,7 @@ public class MeResourceServiceImpl implements MeResourceService {
         activityTodo.setProjectId(request.getProjectId());
         activityTodo.setTodoId(request.getIdTodo());
         activityTodo.setTodoListId(request.getIdTodoList());
-        activityTodo.setMemberCreatedId(labReportAppSession.getUserId());
+        activityTodo.setMemberCreatedId(webSocketSessionManager.getSessionInfo(headerAccessor.getSessionId()).getId());
         if (!request.getName().isEmpty() && request.getName() != null) {
             activityTodo.setContentAction("đã xóa link đính kèm " + request.getName() + " khỏi thẻ này");
         } else {

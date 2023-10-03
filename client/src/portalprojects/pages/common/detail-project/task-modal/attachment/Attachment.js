@@ -11,7 +11,7 @@ import { Popconfirm } from "antd";
 import { getStompClient } from "../../stomp-client-config/StompClientManager";
 import { useState } from "react";
 import PopupUpdateAttachment from "./popup-update-attachment/PopupUpdateAttachment";
-
+import Cookies from "js-cookie";
 const Attachment = ({ item }) => {
   const detailTodo = useAppSelector(GetDetailTodo);
   const detailProject = useAppSelector(GetProject);
@@ -28,10 +28,13 @@ const Attachment = ({ item }) => {
       idTodoList: detailTodo.todoListId,
       projectId: detailProject.id,
     };
-
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     stompClient.send(
       "/action/delete-resource/" + detailProject.id + "/" + periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
   };

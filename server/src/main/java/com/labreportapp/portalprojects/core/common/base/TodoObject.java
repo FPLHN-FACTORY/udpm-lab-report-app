@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * @author thangncph26123
@@ -13,6 +14,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @Builder
+@ToString
 public class TodoObject {
 
     private Object data;

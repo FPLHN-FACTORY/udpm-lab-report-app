@@ -53,7 +53,7 @@ import PopupLabelTable from "../popup/label-table/PopupLabelTable";
 import PopupMemberTable from "../popup/member-table/PopupMemberTable";
 import PopupDeadlineTable from "../popup/deadline-table/PopupDeadlineTable";
 import { useLocation, useNavigate } from "react-router";
-
+import Cookies from "js-cookie";
 const { Option } = Select;
 
 const Row = memo(({ children, ...props }) => {
@@ -176,12 +176,16 @@ const TableDragAndDrop = ({ data }) => {
     let idTodoListNew = obj.idTodoListNew;
     let indexTodoNew = 0;
     let draggableId = obj.idTodo;
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     stompClient.send(
       "/action/update-index-todo-view-table/" +
         detailProject.id +
         "/" +
         periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
     dispatch(
@@ -198,13 +202,16 @@ const TableDragAndDrop = ({ data }) => {
       projectId: detailProject.id,
       periodId: periodCurrent.id,
     };
-
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     stompClient.send(
       "/action/update-complete-todo/" +
         detailProject.id +
         "/" +
         periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
   };
@@ -650,9 +657,13 @@ const TableDragAndDrop = ({ data }) => {
     let idTodoListNew = obj.idTodoListNew;
     let indexTodoNew = obj.indexAfter;
     let draggableId = obj.idTodo;
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     stompClient.send(
       "/action/update-index-todo/" + detailProject.id + "/" + periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
     dispatch(

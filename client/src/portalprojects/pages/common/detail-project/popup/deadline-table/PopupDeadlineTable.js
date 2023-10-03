@@ -10,6 +10,7 @@ import { formatDateToString } from "../../../../../helper/convertDate";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock, faTimes } from "@fortawesome/free-solid-svg-icons";
+import Cookies from "js-cookie";
 
 const { Option } = Select;
 
@@ -78,13 +79,16 @@ const PopupDeadlineTable = ({ todo, position, onClose }) => {
       idTodo: todo.id,
       idTodoList: todo.todoListId,
     };
-
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     stompClient.send(
       "/action/update-deadline-todo/" +
         detailProject.id +
         "/" +
         periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
     onClose();
@@ -101,13 +105,16 @@ const PopupDeadlineTable = ({ todo, position, onClose }) => {
       idTodo: todo.id,
       idTodoList: todo.todoListId,
     };
-
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     stompClient.send(
       "/action/delete-deadline-todo/" +
         detailProject.id +
         "/" +
         periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
     onClose();

@@ -16,7 +16,7 @@ import { SearchOutlined } from "@ant-design/icons";
 import { CommonAPI } from "../../../../../api/commonAPI";
 import { GetProject } from "../../../../../app/reducer/detail-project/DPProjectSlice.reducer";
 import { getStompClient } from "../../stomp-client-config/StompClientManager";
-
+import Cookies from "js-cookie";
 const { Option } = Select;
 
 const PopupMemberManagement = ({ position, onClose }) => {
@@ -345,10 +345,13 @@ const PopupMemberManagement = ({ position, onClose }) => {
     };
 
     console.log(obj);
-
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     stompClient.send(
       "/action/update-member-project/" + detailProject.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
   };
@@ -360,10 +363,13 @@ const PopupMemberManagement = ({ position, onClose }) => {
       statusWork: parseInt(value),
       role: parseInt(item.role),
     };
-
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     stompClient.send(
       "/action/update-member-project/" + detailProject.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
   };
@@ -545,9 +551,13 @@ const PopupMemberManagement = ({ position, onClose }) => {
     let obj = {
       listMemberProject: listMemberAdd,
     };
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     stompClient.send(
       "/action/create-member-project/" + detailProject.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
     onClose();

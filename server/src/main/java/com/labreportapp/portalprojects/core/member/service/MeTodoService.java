@@ -68,11 +68,11 @@ public interface MeTodoService {
 
     Todo createTodo(@Valid MeCreateTodoRequest request, StompHeaderAccessor headerAccessor);
 
-    TodoAndTodoListObject updateIndexTodo(@Valid MeUpdateIndexTodoRequest request);
+    TodoAndTodoListObject updateIndexTodo(@Valid MeUpdateIndexTodoRequest request, StompHeaderAccessor headerAccessor);
 
-    TodoObject updateCompleteTodo(@Valid MeUpdateCompleteTodoRequest request);
+    TodoObject updateCompleteTodo(@Valid MeUpdateCompleteTodoRequest request, StompHeaderAccessor headerAccessor);
 
-    TodoAndTodoListObject updateIndexTodoViewTable(@Valid MeUpdateIndexTodoRequest request);
+    TodoAndTodoListObject updateIndexTodoViewTable(@Valid MeUpdateIndexTodoRequest request, StompHeaderAccessor headerAccessor);
 
     MeDeleteTodoResponse deleteTodo(@Valid MeDeleteTodoRequest request);
 

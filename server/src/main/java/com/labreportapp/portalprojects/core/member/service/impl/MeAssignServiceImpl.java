@@ -10,11 +10,13 @@ import com.labreportapp.portalprojects.entity.ActivityTodo;
 import com.labreportapp.portalprojects.entity.Assign;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.MessageHandlingException;
+import com.labreportapp.portalprojects.infrastructure.wsconfigure.WebSocketSessionManager;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.Synchronized;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -34,7 +36,7 @@ public class MeAssignServiceImpl implements MeAssignService {
     private MeActivityRepository meActivityRepository;
 
     @Autowired
-    private LabReportAppSession labReportAppSession;
+    private WebSocketSessionManager webSocketSessionManager;
 
     @Override
     public List<String> getAllMemberByIdTodo(String idTodo) {
@@ -45,7 +47,7 @@ public class MeAssignServiceImpl implements MeAssignService {
     @CacheEvict(value = {"todosByPeriodAndTodoList", "todosByFilter"}, allEntries = true)
     @Synchronized
     @Transactional
-    public TodoObject delete(@Valid MeCreateOrDeleteAssignRequest request) {
+    public TodoObject delete(@Valid MeCreateOrDeleteAssignRequest request, StompHeaderAccessor headerAccessor) {
         Assign assignFind = meAssignRepository.findByMemberIdAndTodoId(request.getIdMember(), request.getIdTodo());
         if (assignFind == null) {
             throw new MessageHandlingException(Message.ASSIGN_NOT_EXISTS);
@@ -53,17 +55,17 @@ public class MeAssignServiceImpl implements MeAssignService {
         meAssignRepository.delete(request.getIdMember(), request.getIdTodo());
         ActivityTodo activityTodo = new ActivityTodo();
 
-        if (request.getIdMember().equals(labReportAppSession.getUserId())) {
+        if (request.getIdMember().equals(webSocketSessionManager.getSessionInfo(headerAccessor.getSessionId()).getId())) {
             activityTodo.setProjectId(request.getProjectId());
             activityTodo.setTodoId(request.getIdTodo());
             activityTodo.setTodoListId(request.getIdTodoList());
-            activityTodo.setMemberCreatedId(labReportAppSession.getUserId());
+            activityTodo.setMemberCreatedId(webSocketSessionManager.getSessionInfo(headerAccessor.getSessionId()).getId());
             activityTodo.setContentAction("đã rời khỏi thẻ này");
         } else {
             activityTodo.setProjectId(request.getProjectId());
             activityTodo.setTodoId(request.getIdTodo());
             activityTodo.setTodoListId(request.getIdTodoList());
-            activityTodo.setMemberCreatedId(labReportAppSession.getUserId());
+            activityTodo.setMemberCreatedId(webSocketSessionManager.getSessionInfo(headerAccessor.getSessionId()).getId());
             activityTodo.setMemberId(request.getIdMember());
             activityTodo.setContentAction("đã xóa " + request.getNameMember() + " khỏi thẻ này");
         }
@@ -76,7 +78,7 @@ public class MeAssignServiceImpl implements MeAssignService {
     @Override
     @CacheEvict(value = {"todosByPeriodAndTodoList", "todosByFilter"}, allEntries = true)
     @Synchronized
-    public TodoObject create(@Valid MeCreateOrDeleteAssignRequest request) {
+    public TodoObject create(@Valid MeCreateOrDeleteAssignRequest request, StompHeaderAccessor headerAccessor) {
         Assign assignFind = meAssignRepository.findByMemberIdAndTodoId(request.getIdMember(), request.getIdTodo());
         if (assignFind != null) {
             throw new MessageHandlingException(Message.ASSIGN_EXISTS);
@@ -87,17 +89,17 @@ public class MeAssignServiceImpl implements MeAssignService {
         assign.setMemberId(request.getIdMember());
 
         ActivityTodo activityTodo = new ActivityTodo();
-        if (request.getIdMember().equals(labReportAppSession.getUserId())) {
+        if (request.getIdMember().equals(webSocketSessionManager.getSessionInfo(headerAccessor.getSessionId()).getId())) {
             activityTodo.setProjectId(request.getProjectId());
             activityTodo.setTodoId(request.getIdTodo());
             activityTodo.setTodoListId(request.getIdTodoList());
-            activityTodo.setMemberCreatedId(labReportAppSession.getUserId());
+            activityTodo.setMemberCreatedId(webSocketSessionManager.getSessionInfo(headerAccessor.getSessionId()).getId());
             activityTodo.setContentAction("đã tham gia thẻ này");
         } else {
             activityTodo.setProjectId(request.getProjectId());
             activityTodo.setTodoId(request.getIdTodo());
             activityTodo.setTodoListId(request.getIdTodoList());
-            activityTodo.setMemberCreatedId(labReportAppSession.getUserId());
+            activityTodo.setMemberCreatedId(webSocketSessionManager.getSessionInfo(headerAccessor.getSessionId()).getId());
             activityTodo.setMemberId(request.getIdMember());
             activityTodo.setContentAction("đã thêm " + request.getNameMember() + " vào thẻ này");
         }

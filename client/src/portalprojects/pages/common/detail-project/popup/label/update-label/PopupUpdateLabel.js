@@ -6,7 +6,7 @@ import { Button, Col, Input, Row } from "antd";
 import { useState } from "react";
 import { GetProject } from "../../../../../../app/reducer/detail-project/DPProjectSlice.reducer";
 import { useAppDispatch, useAppSelector } from "../../../../../../app/hook";
-import { getStompClient } from "../../../stomp-client-config/StompClientManager";
+import { getStompClient } from "../../../stomp-client-config/StompClientManager";import Cookies from "js-cookie";
 
 const PopupUpdateLabel = ({ position, onClose, item }) => {
   const popupRef = useRef(null);
@@ -95,10 +95,13 @@ const PopupUpdateLabel = ({ position, onClose, item }) => {
       name: title,
       color: color,
     };
-
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     stompClient.send(
       "/action/update-label/" + detailProject.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
 

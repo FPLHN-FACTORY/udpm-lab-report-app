@@ -25,7 +25,7 @@ import Image from "../../../../helper/img/Image";
 import { Tooltip } from "antd";
 import { formatDateTime } from "../../../../helper/convertDate";
 import { getStompClient } from "../stomp-client-config/StompClientManager";
-
+import Cookies from "js-cookie";
 const Task = ({ task, index, onClick }) => {
   const dispatch = useAppDispatch();
   const detailProject = useAppSelector(GetProject);
@@ -56,13 +56,16 @@ const Task = ({ task, index, onClick }) => {
       projectId: detailProject.id,
       periodId: periodCurrent.id,
     };
-
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     stompClient.send(
       "/action/update-complete-todo/" +
         detailProject.id +
         "/" +
         periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
   };

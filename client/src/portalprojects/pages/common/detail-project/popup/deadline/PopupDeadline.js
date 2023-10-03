@@ -11,6 +11,8 @@ import { formatDateToString } from "../../../../../helper/convertDate";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock, faTimes } from "@fortawesome/free-solid-svg-icons";
+import Cookies from "js-cookie";
+import { GetSessionId } from "../../../../../app/reducer/detail-project/StompClient.reducer";
 
 const { Option } = Select;
 
@@ -80,13 +82,16 @@ const PopupDeadline = ({ position, onClose }) => {
       idTodo: detailTodo.id,
       idTodoList: detailTodo.todoListId,
     };
-
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     stompClient.send(
       "/action/update-deadline-todo/" +
         detailProject.id +
         "/" +
         periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
     onClose();
@@ -103,13 +108,16 @@ const PopupDeadline = ({ position, onClose }) => {
       idTodo: detailTodo.id,
       idTodoList: detailTodo.todoListId,
     };
-
+    const bearerToken = Cookies.get("token");
+    const headers = {
+      Authorization: "Bearer " + bearerToken,
+    };
     stompClient.send(
       "/action/delete-deadline-todo/" +
         detailProject.id +
         "/" +
         periodCurrent.id,
-      {},
+      headers,
       JSON.stringify(obj)
     );
     onClose();

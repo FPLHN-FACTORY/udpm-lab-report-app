@@ -97,6 +97,7 @@ import {
   SetListNotification,
   SetToTalPages,
 } from "../../../../app/reducer/notification/NotificationSlice.reducer";
+import Cookies from "js-cookie";
 
 const BoardStompClient = (dispatch, useAppSelector) => {
   const stompClient = getStompClient();
@@ -132,6 +133,8 @@ const BoardStompClient = (dispatch, useAppSelector) => {
     detailTodoRef.current = detailTodo;
   }, [detailTodo]);
 
+  const bearerToken = Cookies.get("token");
+
   useEffect(() => {
     if (
       stompClient != null &&
@@ -141,6 +144,17 @@ const BoardStompClient = (dispatch, useAppSelector) => {
       Object.keys(periodCurrent).length > 0
     ) {
       stompClient.connect({}, () => {
+        stompClient.beforeSend = (frame) => {
+          // Fetch the token from where you have stored it (e.g., cookies)
+          const bearerToken = Cookies.get("token");
+
+          // Add the token to the "Authorization" header
+          frame.headers = {
+            Authorization: "Bearer " + bearerToken,
+            // You can add other headers if needed
+          };
+        };
+
         let sessionId = loadDataPeriodNotExists(stompClient);
         stompClient.subscribe(
           "/portal-projects/update-index-todo/" +
