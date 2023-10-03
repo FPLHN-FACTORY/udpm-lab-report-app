@@ -92,7 +92,6 @@ const ModalCreateProject = ({ visible, onCancel }) => {
         setSemesterDataAll(listSemester.data);
         setLoading(true);
       } catch (error) {
-        alert("Vui lòng F5 lại trang !");
       }
     };
     featchDataSemester();

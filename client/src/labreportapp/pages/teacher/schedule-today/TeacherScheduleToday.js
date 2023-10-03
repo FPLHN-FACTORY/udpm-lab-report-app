@@ -56,7 +56,7 @@ const TeacherScheduleToday = () => {
       });
       setLoading(true);
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   const featchDataTime = async () => {
@@ -74,7 +74,7 @@ const TeacherScheduleToday = () => {
       );
       setLoading(true);
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   const handleAddressChange = (idMeeting, value) => {
@@ -101,7 +101,7 @@ const TeacherScheduleToday = () => {
         }
       );
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   const convertLongToDate = (dateLong) => {

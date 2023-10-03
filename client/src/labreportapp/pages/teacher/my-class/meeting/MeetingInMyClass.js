@@ -39,7 +39,7 @@ const MeetingInMyClass = () => {
         document.title = "Buổi học | " + responese.data.data.code;
       });
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   const featchMeeting = async (idClass) => {
@@ -52,7 +52,7 @@ const MeetingInMyClass = () => {
         }
       );
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   const convertLongToDate = (dateLong) => {

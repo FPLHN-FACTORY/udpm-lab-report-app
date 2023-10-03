@@ -51,7 +51,6 @@ const ModalRandomClass = ({ visible, onCancel, fetchData }) => {
         }
         setSemesterDataAll(listSemester.data);
       } catch (error) {
-        alert("Vui lòng F5 lại trang !");
       }
     };
     featchDataSemester();

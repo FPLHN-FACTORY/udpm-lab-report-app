@@ -6,21 +6,39 @@ import {
 import { Badge, Dropdown, Menu, Switch } from "antd";
 import { Link } from "react-router-dom";
 import AvtDefault from "../../assets/img/328693761_727939795557043_1972102579202651860_n.jpg";
-import { useState } from "react";
-import { useAppSelector } from "../../app/hook";
+import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../app/hook";
 import { GetUserCurrent } from "../../app/common/UserCurrent.reducer";
+import Cookies from "js-cookie";
+import { portIdentity } from "../../helper/constants";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSignOut } from "@fortawesome/free-solid-svg-icons";
+import { DetailProjectAPI } from "../../../portalprojects/api/detail-project/detailProject.api";
+import {
+  GetCountNotification,
+  SetCountNotifications,
+  SetCurrentPage,
+  SetListNotification,
+  SetToTalPages,
+} from "../../../portalprojects/app/reducer/notification/NotificationSlice.reducer";
+import PopupNotification from "../../../portalprojects/component/notification/Notification";
 
 const CommonInforUser = () => {
   const handleMenuClick = (e) => {
-    if (e.key === "3") {
-      console.log("Logout clicked");
+    if (e.key === "0") {
+      Cookies.remove("token");
+      window.location.href = portIdentity;
     }
   };
 
   const userMenu = (
     <Menu onClick={handleMenuClick}>
-      <Menu.Item key="2">Thông tin người dùng</Menu.Item>
-      <Menu.Item key="3">Đăng xuất</Menu.Item>
+      <Menu.Item
+        key="0"
+        icon={<FontAwesomeIcon icon={faSignOut} style={{ marginRight: 5 }} />}
+      >
+        Hãy ra khỏi module này đi
+      </Menu.Item>
     </Menu>
   );
 
@@ -44,13 +62,72 @@ const CommonInforUser = () => {
 
   const userCurrent = useAppSelector(GetUserCurrent);
 
+  const [isOpenPopupNotification, setIsOpenPopupNotification] = useState(false);
+  const [popupPositionPopupNotification, setPopupPositionPopupNotification] =
+    useState({
+      top: 0,
+      left: 0,
+    });
+
+  const openPopupNotification = (event) => {
+    const buttonPosition = event.target.getBoundingClientRect();
+    setPopupPositionPopupNotification({
+      top: buttonPosition.bottom + 15,
+      left: buttonPosition.left - 130,
+    });
+    setIsOpenPopupNotification(true);
+  };
+
+  const closePopupNotification = () => {
+    setIsOpenPopupNotification(false);
+  };
+
+  const dispatch = useAppDispatch();
+
+  const loadCountNotification = () => {
+    DetailProjectAPI.countNotification(userCurrent.id).then((response) => {
+      dispatch(SetCountNotifications(response.data.data));
+    });
+  };
+
+  const loadDataNotification = () => {
+    DetailProjectAPI.fetchAllNotification(userCurrent.id, 0).then(
+      (response) => {
+        dispatch(SetListNotification(response.data.data.data));
+        dispatch(SetCurrentPage(response.data.data.currentPage));
+        dispatch(SetToTalPages(response.data.data.totalPages));
+      }
+    );
+  };
+
+  useEffect(() => {
+    if (userCurrent != null) {
+      loadCountNotification();
+      loadDataNotification();
+    }
+  }, [userCurrent]);
+
+  const countNotifications = useAppSelector(GetCountNotification);
+
   return (
-    <>
-      <Badge>
+    <div style={{ display: "flex", alignItems: "center" }}>
+      <Badge
+        count={countNotifications}
+        style={{ cursor: "pointer", marginRight: 20 }}
+      >
         <BellOutlined
-          style={{ fontSize: 20, marginRight: 16 }}
+          onClick={(e) => {
+            openPopupNotification(e);
+          }}
+          style={{ fontSize: 20, cursor: "pointer", marginRight: 20 }}
           className="box_notification"
-        />
+        />{" "}
+        {isOpenPopupNotification && (
+          <PopupNotification
+            position={popupPositionPopupNotification}
+            onClose={closePopupNotification}
+          />
+        )}{" "}
       </Badge>
       <div style={{ marginRight: 16 }}>
         <Switch
@@ -80,7 +157,7 @@ const CommonInforUser = () => {
           </span>
         </Link>
       </Dropdown>
-    </>
+    </div>
   );
 };
 

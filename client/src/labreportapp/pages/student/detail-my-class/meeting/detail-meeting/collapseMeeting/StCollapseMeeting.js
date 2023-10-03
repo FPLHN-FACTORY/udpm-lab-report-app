@@ -48,7 +48,7 @@ const CollapseMeeting = ({ items }) => {
         setTempalte(response.data.data);
       });
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   useEffect(() => {
@@ -97,7 +97,7 @@ const CollapseMeeting = ({ items }) => {
         setLoading(true);
       });
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   const update = async () => {
@@ -117,7 +117,7 @@ const CollapseMeeting = ({ items }) => {
         clear();
       });
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
 

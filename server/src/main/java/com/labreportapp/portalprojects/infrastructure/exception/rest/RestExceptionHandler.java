@@ -33,6 +33,12 @@ public final class RestExceptionHandler extends
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(CustomException.class)
+    public ResponseEntity<?> handlerExceptionUnProcess(CustomException customException) {
+        ApiError apiError = new ApiError(customException.getMessage());
+        return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
+    }
+
     @Override
     protected Object wrapApi(ConstraintViolationException ex) {
         Set<ConstraintViolation<?>> violations = ex.getConstraintViolations();

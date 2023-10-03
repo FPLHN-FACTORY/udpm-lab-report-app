@@ -61,7 +61,7 @@ const TeacherAttendanceClass = () => {
           toast.error(err.data.message);
         });
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   const featchClass = async (idClass) => {
@@ -71,7 +71,7 @@ const TeacherAttendanceClass = () => {
         document.title = "Điểm danh | " + responese.data.data.code;
       });
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   const convertLongToDate = (dateLong) => {

@@ -2,6 +2,7 @@ package com.labreportapp.labreport.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.labreportapp.labreport.core.common.response.RolesResponse;
 import com.labreportapp.labreport.core.common.response.SimpleResponse;
 import com.labreportapp.labreport.infrastructure.apiconstant.ApiConstants;
 import com.labreportapp.labreport.infrastructure.apiconstant.LabReportAppConstants;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author thangncph26123
@@ -91,6 +94,30 @@ public class ConvertRequestCallApiIdentity {
 
         SimpleResponse response = responseEntity.getBody();
         return response;
+    }
+
+    public Object handleCallApiGetRoleUserByIdUserAndModuleCode(String idUSer) {
+        String apiUrl = ApiConstants.API_GET_ROLES_USER_BY_ID_USER_AND_MODULE_CODE;
+        HttpHeaders headers = new HttpHeaders();
+        String authorizationToken = "Bearer " + labReportAppSession.getToken();
+        headers.set("Authorization", authorizationToken);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
+        ResponseEntity<List<RolesResponse>> responseEntity =
+                restTemplate.exchange(apiUrl + "/" + idUSer + "/" + LabReportAppConstants.MODULE_ID, HttpMethod.GET, httpEntity,
+                        new ParameterizedTypeReference<List<RolesResponse>>() {
+                        });
+
+        List<RolesResponse> response = responseEntity.getBody();
+        List<String> roles = response.stream()
+                .map(RolesResponse::getRoleCode)
+                .filter(Objects::nonNull)
+                .distinct()
+                .collect(Collectors.toList());
+        if (roles.size() > 1) {
+            return roles;
+        }
+        return roles.get(0);
     }
 
 }

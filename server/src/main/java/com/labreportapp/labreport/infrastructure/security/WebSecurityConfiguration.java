@@ -1,5 +1,6 @@
 package com.labreportapp.labreport.infrastructure.security;
 
+import com.labreportapp.labreport.infrastructure.apiconstant.ActorConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,9 +36,10 @@ public class WebSecurityConfiguration {
                 .disable()
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .requestMatchers("/", "/api/authentication/**").permitAll();
-//                .requestMatchers("/api/intern/**").hasAuthority(ActorConstants.INTERN)
-//                .requestMatchers("/api/mentor/**").hasAuthority(ActorConstants.MENTOR)
+                .requestMatchers("/roles").permitAll()
+                .requestMatchers("/admin/**").hasAuthority(ActorConstants.ACTOR_ADMIN)
+                .requestMatchers("/teacher/**").hasAuthority(ActorConstants.ACTOR_TEACHER)
+                .requestMatchers("/student/**").hasAuthority(ActorConstants.ACTOR_STUDENT);
         return http.build();
     }
 

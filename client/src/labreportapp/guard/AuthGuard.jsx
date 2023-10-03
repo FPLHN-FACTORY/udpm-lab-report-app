@@ -2,14 +2,13 @@ import { useEffect } from "react";
 import Cookies from "js-cookie";
 import { portIdentity } from "../helper/constants";
 import jwt_decode from "jwt-decode";
-import { useAppDispatch, useAppSelector } from "../app/hook";
-import {
-  GetUserCurrent,
-  SetUserCurrent,
-} from "../app/common/UserCurrent.reducer";
+import { useAppDispatch } from "../app/hook";
+import { SetUserCurrent } from "../app/common/UserCurrent.reducer";
+import { RolesAPI } from "../api/common/RolesAPI";
 
 const AuthGuard = ({ children }) => {
   const dispatch = useAppDispatch();
+
   useEffect(() => {
     const token = Cookies.get("token");
     window.scrollTo(0, 0);
@@ -22,9 +21,21 @@ const AuthGuard = ({ children }) => {
       Cookies.set("userCurrent", JSON.stringify(decodedToken), {
         expires: 365,
       });
+      getRolesUser(decodedToken);
     }
   }, [children]);
 
+  const getRolesUser = (decodedToken) => {
+    RolesAPI.getRolesUser(decodedToken.id).then(
+      (response) => {
+        return children;
+      },
+      (error) => {
+        return null;
+      }
+    );
+  };
+  
   return children;
 };
 

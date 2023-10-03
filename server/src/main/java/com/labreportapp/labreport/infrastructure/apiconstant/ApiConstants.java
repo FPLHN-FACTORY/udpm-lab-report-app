@@ -11,4 +11,6 @@ public class ApiConstants {
 
     public static final String API_GET_ALL_USER_BY_ROLE_AND_MODULE =  DomainIdentityConstants.DOMAIN +  "/api/UserSigns/GetUserFromRoleModuleAsync";
 
+    public static final String API_GET_ROLES_USER_BY_ID_USER_AND_MODULE_CODE =  DomainIdentityConstants.DOMAIN +  "/api/UserSigns/GetRoleFromUserModule";
+
 }

@@ -127,7 +127,7 @@ const MeetingManagment = () => {
         document.title = "Quản lý lịch học - " + responese.data.data.code;
       });
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
 

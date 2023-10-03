@@ -104,8 +104,8 @@ const StAttendanceDetailClass = () => {
           setIsLoading(false);
         }
       );
-    } catch {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+    } catch (error) {
+      console.log(error);
     }
   };
 

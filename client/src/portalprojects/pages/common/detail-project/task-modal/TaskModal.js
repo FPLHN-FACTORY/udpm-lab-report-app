@@ -81,7 +81,7 @@ const TaskModal = memo(({ open, onCancel, id }) => {
   const [descriptions, setDescriptions] = useState(null);
   const [typeTodo, setTypeTodo] = useState(null);
   const [isJoin, setIsJoin] = useState(false);
-  const userCurrent = useAppSelector(GetUserCurrent)
+  const userCurrent = useAppSelector(GetUserCurrent);
 
   const listMemberAPI = useAppSelector(GetMemberProject);
   const list = useAppSelector(GetAllList);
@@ -333,6 +333,7 @@ const TaskModal = memo(({ open, onCancel, id }) => {
         idTodo: detailTodo.id,
         idTodoList: detailTodo.todoListId,
       };
+      console.log(obj);
       if (!isJoin) {
         handleOutAssign(obj);
       } else {

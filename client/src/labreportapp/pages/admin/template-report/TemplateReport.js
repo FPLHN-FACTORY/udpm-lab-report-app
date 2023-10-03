@@ -29,7 +29,7 @@ const TemplateReport = () => {
         setIsLoading(false);
       });
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
 

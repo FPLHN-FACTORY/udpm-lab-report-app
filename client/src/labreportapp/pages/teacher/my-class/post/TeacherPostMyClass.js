@@ -114,7 +114,7 @@ const TeacherPostMyClass = () => {
         setLoading(true);
       });
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   const featchNextPost = async (idClass) => {
@@ -129,7 +129,7 @@ const TeacherPostMyClass = () => {
         setTotalPage(responese.data.data.totalPages);
       });
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   const featchClass = async (idClass) => {
@@ -139,7 +139,7 @@ const TeacherPostMyClass = () => {
         document.title = "Bài đăng | " + responese.data.data.code;
       });
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   const clickDelete = async (id) => {
@@ -149,7 +149,7 @@ const TeacherPostMyClass = () => {
         toast.success("Xóa bài viết thành công !");
       });
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   const handleRandomPass = async () => {
@@ -158,7 +158,7 @@ const TeacherPostMyClass = () => {
         dispatch(UpdateClass(respone.data.data));
       });
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   const handleUpdateStatusClass = async () => {
@@ -176,7 +176,7 @@ const TeacherPostMyClass = () => {
         dispatch(UpdateClass(respone.data.data));
       });
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   const copyToClipboard = () => {

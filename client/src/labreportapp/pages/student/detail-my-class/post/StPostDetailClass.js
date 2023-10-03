@@ -87,7 +87,7 @@ const StPostDetailClass = () => {
         console.log(responese.data.data);
       });
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   const convertLongToDate = (dateLong) => {

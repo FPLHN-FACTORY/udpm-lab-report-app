@@ -41,8 +41,8 @@ const TeModalDetailOneStudent = ({ onCancel, visible, objStudent }) => {
           setLoadingNo(false);
         }, 120);
       });
-    } catch {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+    } catch (error) {
+      console.log(error);
     }
   };
   const convertLongToDate = (dateLong) => {

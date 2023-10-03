@@ -81,10 +81,10 @@ function Editor({ idClass, showCreate }) {
         }
       );
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
-  const userRedux = useAppSelector(GetUserCurrent)
+  const userRedux = useAppSelector(GetUserCurrent);
   const featchSentMaillToStudent = async (body) => {
     try {
       let data = {
@@ -96,7 +96,7 @@ function Editor({ idClass, showCreate }) {
       };
       await TeacherMailAPI.sentMaillTeacherPostToStudent(data);
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   return (

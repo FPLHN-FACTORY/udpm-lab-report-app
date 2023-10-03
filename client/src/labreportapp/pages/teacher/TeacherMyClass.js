@@ -105,7 +105,7 @@ const TeacherMyClass = () => {
         setLoading(true);
       });
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
 
@@ -123,7 +123,7 @@ const TeacherMyClass = () => {
         setLoading(true);
       });
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
 
@@ -140,7 +140,7 @@ const TeacherMyClass = () => {
         setLoading(true);
       });
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
 
@@ -153,7 +153,7 @@ const TeacherMyClass = () => {
         }
       );
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
 

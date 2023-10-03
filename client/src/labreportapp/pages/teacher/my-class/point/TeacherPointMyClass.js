@@ -48,7 +48,7 @@ const TeacherPointMyClass = () => {
         setLoading(true);
       });
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   const featchClass = async (idClass) => {
@@ -59,7 +59,7 @@ const TeacherPointMyClass = () => {
         document.title = "Quản lý điểm | " + responese.data.data.code;
       });
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   const handleSave = async () => {
@@ -74,7 +74,7 @@ const TeacherPointMyClass = () => {
         toast.success("Lưu bảng điểm thành công !");
       });
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   const handleCancelImport = () => {

@@ -58,7 +58,6 @@ public class MeAssignController {
     public ResponseObject joinAssign(@RequestBody MeCreateOrDeleteAssignRequest request,
                                      @ModelAttribute DesVarProjectIdAndPeriodIdRequest des,
                                      StompHeaderAccessor headerAccessor) {
-        request.setIdMember(labReportAppSession.getUserId());
         return new ResponseObject(meAssignService.create(request, headerAccessor));
     }
 
@@ -67,7 +66,6 @@ public class MeAssignController {
     public ResponseObject outAssign(@RequestBody MeCreateOrDeleteAssignRequest request,
                                     @ModelAttribute DesVarProjectIdAndPeriodIdRequest des,
                                     StompHeaderAccessor headerAccessor) {
-        request.setIdMember(labReportAppSession.getUserId());
         return new ResponseObject(meAssignService.delete(request, headerAccessor));
     }
 }

@@ -34,7 +34,7 @@ const ButtonExportExcelTeam = ({ idClass }) => {
       }, 1500);
       toast.success("Export thành công !");
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   return (

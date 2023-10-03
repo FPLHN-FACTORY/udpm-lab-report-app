@@ -64,7 +64,7 @@ const TeamsInMyClass = () => {
         dispatch(SetTeams(responese.data.data));
       });
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   const featchClass = async (idClass) => {
@@ -74,7 +74,7 @@ const TeamsInMyClass = () => {
         document.title = "Quản lý nhóm | " + responese.data.data.code;
       });
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   const featchStudentClass = async (id) => {

@@ -110,7 +110,6 @@ const ClassManagement = () => {
         setLoading(false);
       });
     } catch (error) {
-      alert("Vui lòng F5 lại trang !");
     }
   };
   useEffect(() => {
@@ -170,7 +169,6 @@ const ClassManagement = () => {
         }
         setSemesterDataAll(listSemester.data);
       } catch (error) {
-        alert("Vui lòng F5 lại trang !");
       }
     };
     featchDataSemester();

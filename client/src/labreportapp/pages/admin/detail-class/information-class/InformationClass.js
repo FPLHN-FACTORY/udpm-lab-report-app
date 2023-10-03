@@ -42,7 +42,7 @@ const InformationClass = () => {
         document.title = "Thông tin lớp học - " + responese.data.data.code;
       });
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
 
@@ -130,11 +130,11 @@ const InformationClass = () => {
             }, 2000);
           })
           .catch((error) => {
-            alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+            console.log(error);
           });
       }
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
 
@@ -145,7 +145,7 @@ const InformationClass = () => {
         setIsLoading(false);
       });
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   const columns = [

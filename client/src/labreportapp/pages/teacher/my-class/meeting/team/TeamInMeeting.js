@@ -34,7 +34,7 @@ const TeamInMeeting = () => {
         }
       );
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   const featchTeams = async (idClass, listReport) => {
@@ -53,7 +53,7 @@ const TeamInMeeting = () => {
         setLoading(true);
       });
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
 

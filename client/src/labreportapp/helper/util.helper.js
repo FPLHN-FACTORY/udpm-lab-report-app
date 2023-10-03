@@ -150,3 +150,15 @@ export const convertStatusMeetingByDateAndPeriod = (
     }
   }
 };
+
+export const areRolesEqual = (roleOld, roleNew) => {
+  if (typeof roleOld === "string") {
+    roleOld = [roleOld];
+  }
+
+  if (typeof roleNew === "string") {
+    roleNew = [roleNew];
+  }
+
+  return JSON.stringify(roleOld) === JSON.stringify(roleNew);
+};

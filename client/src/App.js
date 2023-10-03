@@ -69,8 +69,9 @@ import AdFeedbackDetailClass from "./labreportapp/pages/admin/detail-class/feedb
 import DetailMeetingAttendance from "./labreportapp/pages/admin/detail-class/meeting-management/detail-meeting/DetailMeetingAttendance";
 import LevelManagement from "./labreportapp/pages/admin/level-management/LevelManagement";
 import RoleSelection from "./labreportapp/pages/role-selection/RoleSelection";
-import { useAppSelector } from "./labreportapp/app/hook";
-import { GetUserCurrent } from "./labreportapp/app/common/UserCurrent.reducer";
+import jwt_decode from "jwt-decode";
+import HeaderStudentComponent from "./labreportapp/component/student/HeaderStudent";
+import HeaderTeacherComponent from "./labreportapp/component/teacher/HeaderTeacher";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -88,8 +89,6 @@ function App() {
     audio.play();
   };
 
-  
-
   const previousURL = window.location.search;
   const previousURLParams = new URLSearchParams(previousURL);
   const tokenFromPreviousURL = previousURLParams.get("Token");
@@ -97,30 +96,35 @@ function App() {
     Cookies.set("token", tokenFromPreviousURL, { expires: 365 });
   }
 
-  // stompClientAll.connect({}, () => {
-  //   stompClientAll.subscribe(
-  //     "/portal-projects/create-notification/" + userCurrent.id,
-  //     (message) => {
-  //       toast.info("Bạn có thông báo mới", {
-  //         position: toast.POSITION.BOTTOM_RIGHT,
-  //       });
-  //       playNotificationSound();
+  let tokenCookies = Cookies.get("token");
+  if (tokenCookies) {
+    const userCurrent = jwt_decode(tokenCookies);
+    stompClientAll.connect({}, () => {
+      stompClientAll.subscribe(
+        "/portal-projects/create-notification/" + userCurrent.id,
+        (message) => {
+          toast.info("Bạn có thông báo mới", {
+            position: toast.POSITION.BOTTOM_RIGHT,
+          });
+          playNotificationSound();
 
-  //       DetailProjectAPI.countNotification(userCurrent.id).then((response) => {
-  //         dispatch(SetCountNotifications(response.data.data));
-  //       });
+          DetailProjectAPI.countNotification(userCurrent.id).then(
+            (response) => {
+              dispatch(SetCountNotifications(response.data.data));
+            }
+          );
 
-  //       DetailProjectAPI.fetchAllNotification(userCurrent.id, 0).then(
-  //         (response) => {
-  //           dispatch(SetListNotification(response.data.data.data));
-  //           dispatch(SetCurrentPage(response.data.data.currentPage));
-  //           dispatch(SetToTalPages(response.data.data.totalPages));
-  //         }
-  //       );
-  //     }
-  //   );
-  // });
-
+          DetailProjectAPI.fetchAllNotification(userCurrent.id, 0).then(
+            (response) => {
+              dispatch(SetListNotification(response.data.data.data));
+              dispatch(SetCurrentPage(response.data.data.currentPage));
+              dispatch(SetToTalPages(response.data.data.totalPages));
+            }
+          );
+        }
+      );
+    });
+  }
   return (
     <div className="App scroll-smooth md:scroll-auto">
       <ToastContainer />
@@ -131,7 +135,7 @@ function App() {
             <Route path="/layout-guard-roles" element={<NotAuthorized />} />
 
             <Route path="/not-found" element={<NotFound />} />
-            <Route path="/not-authorization" element={<NotFound />} />
+            <Route path="/not-authorization" element={<NotAuthorized />} />
 
             <Route
               path="/"
@@ -156,7 +160,7 @@ function App() {
               path="/role-selection"
               element={
                 <AuthGuard>
-                    <RoleSelection />
+                  <RoleSelection />
                 </AuthGuard>
               }
             />
@@ -549,7 +553,7 @@ function App() {
               path="/detail-project/:id"
               element={
                 <AuthGuard>
-                  <HeaderComponent />
+                  <HeaderTeacherComponent />
                   <DetailProject />
                 </AuthGuard>
               }
@@ -558,7 +562,7 @@ function App() {
               path="/detail-project/table/:id"
               element={
                 <AuthGuard>
-                  <HeaderComponent />
+                  <HeaderTeacherComponent />
                   <DetailProject />
                 </AuthGuard>
               }

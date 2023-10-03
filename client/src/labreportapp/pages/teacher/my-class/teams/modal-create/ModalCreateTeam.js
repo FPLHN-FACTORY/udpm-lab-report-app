@@ -101,7 +101,7 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
       setListStudentClass(listNotTeams);
       setVisitedCreate(false);
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   const featInforStudent = async () => {
@@ -113,7 +113,7 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
       setListStudentMulty(listNotFilter);
       setLoading(false);
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   const featchDataTable = () => {

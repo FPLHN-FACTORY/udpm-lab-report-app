@@ -119,7 +119,6 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
         setSemesterDataAll(listClassAll.data);
         setLoading(true);
       } catch (error) {
-        alert("Vui lòng F5 lại trang !");
       }
     };
     featchDataSemester();

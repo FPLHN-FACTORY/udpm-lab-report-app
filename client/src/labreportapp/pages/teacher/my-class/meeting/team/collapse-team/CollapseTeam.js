@@ -54,7 +54,7 @@ const CollapseTeam = ({ team, featchMeeting }) => {
         setTempalte(response.data.data);
       });
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   const featchHomeWorkNote = async (idTeam) => {
@@ -86,7 +86,7 @@ const CollapseTeam = ({ team, featchMeeting }) => {
         setLoading(true);
       });
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   const update = async () => {

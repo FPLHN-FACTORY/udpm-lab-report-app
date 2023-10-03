@@ -44,7 +44,7 @@ const StudentsInMyClass = () => {
         featchStudentClass(idClass);
       });
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   const featchStudentClass = async (id) => {
@@ -63,7 +63,7 @@ const StudentsInMyClass = () => {
         }
       );
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
 

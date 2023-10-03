@@ -42,7 +42,7 @@ const StMeetingMyClass = () => {
         }
       );
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   const featchCountMeeting = async (idClass) => {
@@ -55,7 +55,7 @@ const StMeetingMyClass = () => {
         }
       );
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
 

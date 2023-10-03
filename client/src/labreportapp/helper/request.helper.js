@@ -2,6 +2,7 @@ import axios from "axios";
 import { AppConfig } from "../../AppConfig";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
+import { portIdentity } from "./constants";
 // import { getToken } from "./userToken";
 
 export const request = axios.create({
@@ -28,10 +29,19 @@ request.interceptors.response.use(
     if (error.response != null && error.response.status === 400) {
       toast.error(error.response.data.message);
     }
-    // if (error.response && error.response.status === 404) {
-    //   window.location.href = "/not-found";
-    // }
-
+    if (error.response && error.response.status === 500) {
+      if (error.response.data.message === "2003") {
+        Cookies.remove("token");
+        Cookies.remove("userCurrent");
+        alert("Quyền của người dùng đã bị thay đổi. Vui lòng đăng nhập lại !");
+        window.location.href = portIdentity;
+      }
+      if (error.response.data.message === "2002") {
+        Cookies.remove("token");
+        Cookies.remove("userCurrent");
+        window.location.href = portIdentity;
+      }
+    }
     throw error;
   }
 );

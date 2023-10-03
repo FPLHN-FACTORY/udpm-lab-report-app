@@ -70,7 +70,7 @@ const TeacherAttendanceMeeting = () => {
         }
       );
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   const featInforStudent = async (idClass) => {
@@ -108,7 +108,7 @@ const TeacherAttendanceMeeting = () => {
       }
       setLoadingData(true);
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   const featchStudentClass = async (idClass) => {
@@ -122,7 +122,7 @@ const TeacherAttendanceMeeting = () => {
         }
       );
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   const featchMeetingCheckDate = async (id) => {
@@ -140,7 +140,7 @@ const TeacherAttendanceMeeting = () => {
         }
       );
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   useEffect(() => {
@@ -162,7 +162,7 @@ const TeacherAttendanceMeeting = () => {
         });
       });
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   const handleChangeNotes = (id, value) => {

@@ -25,7 +25,6 @@ const AdFeedbackDetailClass = () => {
         document.title = "Danh sách feedback - " + responese.data.data.code;
       });
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
     }
   };
 

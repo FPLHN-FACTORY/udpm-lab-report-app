@@ -64,7 +64,7 @@ const ModalSentStudent = ({
         }, 120);
       });
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   const handleSentStudent = async (idClassSent) => {
@@ -92,7 +92,7 @@ const ModalSentStudent = ({
         }
       );
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang !");
+      console.log(error);
     }
   };
   const columns = [
