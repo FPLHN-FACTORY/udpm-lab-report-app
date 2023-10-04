@@ -194,6 +194,11 @@ const TeModalDetailOneStudent = ({ onCancel, visible, objStudent }) => {
         </span>
       ),
     },
+    {
+      title: "Ghi chú",
+      dataIndex: "notes",
+      key: "notes",
+    },
   ];
 
   return (
@@ -201,7 +206,7 @@ const TeModalDetailOneStudent = ({ onCancel, visible, objStudent }) => {
       <Modal
         onCancel={onCancel}
         open={visible}
-        width={850}
+        width={1100}
         footer={null}
         style={{ top: "53px" }}
         bodyStyle={{ overflow: "hidden" }}

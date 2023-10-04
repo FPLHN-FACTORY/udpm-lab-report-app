@@ -129,6 +129,12 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
             }
         });
         List<Attendance> listReturn = teAttendanceRepository.saveAll(listNew);
+        Optional<Meeting> meeting = teMeetingRepository.findMeetingById(request.getIdMeeting());
+        if (meeting.isPresent()) {
+            Meeting meetingUp = meeting.get();
+            meetingUp.setNotes(request.getNotes());
+            teMeetingRepository.save(meetingUp);
+        }
         TeAttendanceMessageResponse teAttendanceMessageResponse = randomSetLeadToMember(listReturn, request.getIdMeeting());
         return teAttendanceMessageResponse;
     }
@@ -323,6 +329,7 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
             objNew.setMeetingPeriod(item.getMeetingPeriod());
             objNew.setNameMeeting(item.getLesson());
             objNew.setStatus(item.getStatus());
+            objNew.setNotes(item.getNotes());
             objNew.setIdTeacher(item.getTeacherId());
             if (item.getTeacherId() != null && listTeacher.size() != 0) {
                 listTeacher.forEach(user -> {

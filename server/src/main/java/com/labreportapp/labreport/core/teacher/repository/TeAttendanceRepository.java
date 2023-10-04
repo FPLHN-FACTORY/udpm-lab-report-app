@@ -72,7 +72,8 @@ public interface TeAttendanceRepository extends JpaRepository<Attendance, String
                     m.meeting_period AS meeting_period, 
                     m.type_meeting AS type_meeting, 
                     m.teacher_id AS teacher_id,
-                    a.status AS status
+                    a.status AS status,
+                    a.notes AS notes
             FROM attendance a
             RIGHT JOIN meeting m ON a.meeting_id = m.id
             JOIN class c ON m.class_id = c.id
@@ -81,7 +82,8 @@ public interface TeAttendanceRepository extends JpaRepository<Attendance, String
             JOIN semester s ON ac.semester_id = s.id
             WHERE (a.student_id IS NULL OR a.student_id = :#{#req.idStudent})
             AND st.class_id = :#{#req.idClass}
-            GROUP BY m.id,m.name, m.meeting_date, m.meeting_period, m.type_meeting, m.teacher_id, a.status
+            GROUP BY m.id,m.name, m.meeting_date, m.meeting_period, m.type_meeting, m.teacher_id,
+             a.status, a.notes
             ORDER BY m.meeting_date ASC 
               """, countQuery = """
              SELECT COUNT(DISTINCT m.id)
@@ -93,7 +95,8 @@ public interface TeAttendanceRepository extends JpaRepository<Attendance, String
                         JOIN semester s ON ac.semester_id = s.id
                         WHERE (a.student_id IS NULL OR a.student_id = :#{#req.idStudent})
                         AND st.class_id = :#{#req.idClass}
-                        GROUP BY m.id,m.name, m.meeting_date, m.meeting_period, m.type_meeting, m.teacher_id, a.status
+                        GROUP BY m.id,m.name, m.meeting_date, m.meeting_period, m.type_meeting, m.teacher_id, 
+                        a.status, a.notes
             """, nativeQuery = true)
     Page<TeStudentAttendanceRespone> getAllStudentAttendanceById(@Param("req") TeFindStudentAttendanceRequest req, Pageable pageable);
 }

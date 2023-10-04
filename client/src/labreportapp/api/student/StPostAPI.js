@@ -6,13 +6,13 @@ export class StudentPostAPI {
     return request({
       method: "GET",
       url:
-      url +
-      `?idClass=` +
-      data.idClass +
-      `&page=` +
-      data.page +
-      `&size=` +
-      data.size,
+        url +
+        `?idClass=` +
+        data.idClass +
+        `&page=` +
+        data.page +
+        `&size=` +
+        data.size,
     });
   }
 }

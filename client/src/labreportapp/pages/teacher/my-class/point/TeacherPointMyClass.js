@@ -6,7 +6,7 @@ import {
   faUpload,
 } from "@fortawesome/free-solid-svg-icons";
 import { ControlOutlined } from "@ant-design/icons";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Button, Row } from "antd";
 import { useEffect, useState } from "react";
 import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
@@ -32,6 +32,7 @@ const TeacherPointMyClass = () => {
   const [listPoint, setListPoint] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showModalImport, setShowModalImport] = useState(false);
+  const navigate = useNavigate();
   dispatch(SetTTrueToggle());
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -47,9 +48,7 @@ const TeacherPointMyClass = () => {
         dispatch(SetPoint(response.data.data));
         setLoading(true);
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   const featchClass = async (idClass) => {
     try {
@@ -59,7 +58,9 @@ const TeacherPointMyClass = () => {
         document.title = "Quản lý điểm | " + responese.data.data.code;
       });
     } catch (error) {
-      console.log(error);
+      setTimeout(() => {
+        navigate("/teacher/my-class");
+      }, [1000]);
     }
   };
   const handleSave = async () => {
@@ -73,9 +74,7 @@ const TeacherPointMyClass = () => {
         dispatch(UpdatePoint(respone.data.data));
         toast.success("Lưu bảng điểm thành công !");
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   const handleCancelImport = () => {
     setShowModalImport(false);

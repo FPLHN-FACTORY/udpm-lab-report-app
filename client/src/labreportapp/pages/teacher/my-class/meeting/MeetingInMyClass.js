@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "./styleMeetingInMyClass.css";
 import { Link } from "react-router-dom";
 import { BookOutlined, ControlOutlined } from "@ant-design/icons";
@@ -27,6 +27,7 @@ const MeetingInMyClass = () => {
   const [loading, setLoading] = useState(false);
   const { idClass } = useParams();
   const [classDetail, setClassDetail] = useState({});
+  const navigate = useNavigate();
   useEffect(() => {
     window.scrollTo(0, 0);
     featchMeeting(idClass);
@@ -39,7 +40,9 @@ const MeetingInMyClass = () => {
         document.title = "Buổi học | " + responese.data.data.code;
       });
     } catch (error) {
-      console.log(error);
+      setTimeout(() => {
+        navigate("/teacher/my-class");
+      }, [1000]);
     }
   };
   const featchMeeting = async (idClass) => {
@@ -51,9 +54,7 @@ const MeetingInMyClass = () => {
           setLoading(true);
         }
       );
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   const convertLongToDate = (dateLong) => {
     const date = new Date(dateLong);

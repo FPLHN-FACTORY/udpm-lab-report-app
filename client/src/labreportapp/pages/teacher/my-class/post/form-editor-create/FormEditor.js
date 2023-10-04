@@ -89,7 +89,11 @@ function Editor({ idClass, showCreate }) {
     try {
       let data = {
         titleEmail:
-          "Giảng viên " + userRedux.name + " đã thêm một thông báo mới.",
+          "Giảng viên " +
+          userRedux.name +
+          " - " +
+          userRedux.userName +
+          " đã thêm một thông báo mới.",
         subject: "Thông báo bài viết mới",
         toEmail: listMail,
         body: body,
@@ -108,11 +112,11 @@ function Editor({ idClass, showCreate }) {
           setDescriptionss(value);
         }}
       />
-      <div style={{ paddingTop: "15px", float: "right" }}>
+      <div style={{ paddingTop: "15px", float: "right", right: 0 }}>
         <Button
+          className="btn_filter"
           style={{
-            backgroundColor: "red",
-            color: "white",
+            width: "66px",
           }}
           onClick={(e) => {
             showCreate(false);
@@ -122,13 +126,14 @@ function Editor({ idClass, showCreate }) {
           Hủy
         </Button>
         <Button
+          className="btn_clean"
           style={{
-            backgroundColor: "rgb(61, 139, 227)",
-            color: "white",
+            width: "66px",
+            marginLeft: "10px",
           }}
           onClick={create}
         >
-          Đăng
+          Lưu
         </Button>
       </div>
     </div>

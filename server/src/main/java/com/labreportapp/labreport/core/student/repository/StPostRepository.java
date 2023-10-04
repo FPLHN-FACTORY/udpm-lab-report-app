@@ -14,7 +14,6 @@ import org.springframework.stereotype.Repository;
  * @author quynhncph26201
  */
 @Repository
-
 public interface StPostRepository extends JpaRepository<Post, String> {
 
     @Query(value = """
@@ -22,12 +21,12 @@ public interface StPostRepository extends JpaRepository<Post, String> {
             p.id as id, 
             p.descriptions as descriptions,
              p.created_date as created_date,
-             p.teacher_id,
+             p.teacher_id as teacher_id,
              p.class_id
             FROM post p 
             WHERE p.class_id = :#{#req.idClass}
             ORDER BY p.created_date DESC 
-            """,countQuery = """
+            """, countQuery = """
             SELECT COUNT(DISTINCT p.id)
             FROM post p 
             WHERE p.class_id = :#{#req.idClass}

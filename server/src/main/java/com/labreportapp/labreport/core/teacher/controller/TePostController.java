@@ -6,6 +6,7 @@ import com.labreportapp.labreport.core.teacher.model.request.TeCreatePostRequest
 import com.labreportapp.labreport.core.teacher.model.request.TeFindPostClassRepquest;
 import com.labreportapp.labreport.core.teacher.model.request.TeUpdatePostRequest;
 import com.labreportapp.labreport.core.teacher.model.response.TePostResponse;
+import com.labreportapp.labreport.core.teacher.model.response.TePostTeacherResponse;
 import com.labreportapp.labreport.core.teacher.service.TePostService;
 import com.labreportapp.labreport.entity.Post;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,19 +33,19 @@ public class TePostController {
 
     @GetMapping("")
     public ResponseObject searchTePost(final TeFindPostClassRepquest repquest) {
-        PageableObject<TePostResponse> pageList = tePostService.searchPagePost(repquest);
+        PageableObject<TePostTeacherResponse> pageList = tePostService.searchPagePost(repquest);
         return new ResponseObject(pageList);
     }
 
     @PostMapping("")
     public ResponseObject createPost(@RequestBody TeCreatePostRequest repquest) {
-        Post post = tePostService.create(repquest);
+        TePostTeacherResponse post = tePostService.create(repquest);
         return new ResponseObject(post);
     }
 
     @PutMapping("")
     public ResponseObject updatePost(@RequestBody TeUpdatePostRequest repquest) {
-        Post post = tePostService.update(repquest);
+        TePostTeacherResponse post = tePostService.update(repquest);
         return new ResponseObject(post);
     }
 

@@ -1,5 +1,5 @@
-import { Row, Col } from "antd";
-import { useParams } from "react-router";
+import { Row, Col, message } from "antd";
+import { useNavigate, useParams } from "react-router-dom";
 import "./styleTeamInMeeting.css";
 import { BookOutlined, ControlOutlined } from "@ant-design/icons";
 import LoadingIndicator from "../../../../../helper/loading";
@@ -16,6 +16,7 @@ const TeamInMeeting = () => {
   const [meeting, setMeeting] = useState({});
   const [team, setTeam] = useState([]);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   useEffect(() => {
     window.scrollTo(0, 0);
     featchMeeting(idMeeting);
@@ -34,7 +35,10 @@ const TeamInMeeting = () => {
         }
       );
     } catch (error) {
-      console.log(error);
+      setLoading(true);
+      setTimeout(() => {
+        navigate("/teacher/my-class");
+      }, [1000]);
     }
   };
   const featchTeams = async (idClass, listReport) => {
@@ -52,9 +56,7 @@ const TeamInMeeting = () => {
         setTeam(mergedList);
         setLoading(true);
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const convertLongToDate = (dateLong) => {

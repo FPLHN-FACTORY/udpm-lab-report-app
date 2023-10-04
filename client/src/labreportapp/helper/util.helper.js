@@ -162,3 +162,39 @@ export const areRolesEqual = (roleOld, roleNew) => {
 
   return JSON.stringify(roleOld) === JSON.stringify(roleNew);
 };
+
+export const convertCheckAttended = (meetingPeriod) => {
+  const currentDate = new Date();
+  const meetingPeriods = {
+    0: { start: "7:15", end: "9:15" },
+    1: { start: "9:25", end: "11:25" },
+    2: { start: "12:00", end: "14:00" },
+    3: { start: "14:10", end: "16:10" },
+    4: { start: "16:20", end: "18:20" },
+    5: { start: "18:30", end: "20:30" },
+    6: { start: "20:40", end: "22:40" },
+    7: { start: "22:50", end: "00:50" },
+    8: { start: "01:00", end: "3:00" },
+    9: { start: "03:10", end: "05:10" },
+  };
+  const caHocTime = meetingPeriods[meetingPeriod];
+  const caHocStartDate = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    currentDate.getDate(),
+    parseInt(caHocTime.start.split(":")[0]),
+    parseInt(caHocTime.start.split(":")[1])
+  );
+  const caHocEndDate = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    currentDate.getDate(),
+    parseInt(caHocTime.end.split(":")[0]),
+    parseInt(caHocTime.end.split(":")[1])
+  );
+  if (currentDate >= caHocStartDate && currentDate <= caHocEndDate) {
+    return true;
+  } else {
+    return false;
+  }
+};

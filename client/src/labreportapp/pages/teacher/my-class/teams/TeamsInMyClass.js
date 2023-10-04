@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import "./styleTeamsInMyClass.css";
 import { Row, Table, Button, Tooltip, Modal, Empty, Tag } from "antd";
 import { Link } from "react-router-dom";
@@ -46,6 +46,8 @@ const TeamsInMyClass = () => {
   const [showModalImport, setShowModalImport] = useState(false);
   const [teamDelete, setTeamDelete] = useState({});
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
   dispatch(SetTTrueToggle());
   const { idClass } = useParams();
   useEffect(() => {
@@ -63,10 +65,9 @@ const TeamsInMyClass = () => {
       await TeacherTeamsAPI.getTeamsByIdClass(id).then((responese) => {
         dispatch(SetTeams(responese.data.data));
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
+
   const featchClass = async (idClass) => {
     try {
       await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
@@ -74,9 +75,12 @@ const TeamsInMyClass = () => {
         document.title = "Quản lý nhóm | " + responese.data.data.code;
       });
     } catch (error) {
-      console.log(error);
+      setTimeout(() => {
+        navigate("/teacher/my-class");
+      }, [1000]);
     }
   };
+
   const featchStudentClass = async (id) => {
     setLoading(false);
     try {
@@ -88,9 +92,7 @@ const TeamsInMyClass = () => {
           setLoading(true);
         }
       );
-    } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang  !");
-    }
+    } catch (error) {}
   };
 
   const handleShowDeleteTeam = (team) => {
@@ -116,7 +118,6 @@ const TeamsInMyClass = () => {
       });
     } catch (error) {
       toast.warning("Xóa thất bại !");
-      alert("Lỗi hệ thống, vui lòng F5 lại trang  !");
     }
   };
   const handleCancelModalCreateSusscess = () => {

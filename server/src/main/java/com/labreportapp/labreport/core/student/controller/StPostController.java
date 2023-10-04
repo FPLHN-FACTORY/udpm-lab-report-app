@@ -3,7 +3,7 @@ package com.labreportapp.labreport.core.student.controller;
 import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.core.common.base.ResponseObject;
 import com.labreportapp.labreport.core.student.model.request.StFindPostRequest;
-import com.labreportapp.labreport.core.student.model.response.StPostResponse;
+import com.labreportapp.labreport.core.student.model.response.StPostTeacherResponse;
 import com.labreportapp.labreport.core.student.service.StPostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -24,7 +24,7 @@ public class StPostController {
 
     @GetMapping("")
     public ResponseObject searchStPost(final StFindPostRequest repquest) {
-        PageableObject<StPostResponse> pageList = stPostService.searchPagePost(repquest);
+        PageableObject<StPostTeacherResponse> pageList = stPostService.searchPagePost(repquest);
         return new ResponseObject(pageList);
     }
 }

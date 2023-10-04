@@ -15,4 +15,8 @@ public interface StPostResponse {
 
     @Value("#{target.created_date}")
     Long getCreatedDate();
+
+    @Value("#{target.teacher_id}")
+    String getIdTeacher();
+
 }

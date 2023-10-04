@@ -13,6 +13,7 @@ import {
   Select,
   Table,
   Tooltip,
+  message,
 } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -23,9 +24,15 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { TeacherScheduleTodayAPI } from "../../../api/teacher/meeting/schedule-today/TeacherScheduleToday.api";
 import { toast } from "react-toastify";
-import { convertMeetingPeriodToTime } from "../../../helper/util.helper";
+import {
+  convertCheckAttended,
+  convertMeetingPeriodToTime,
+  convertStatusMeetingByDateAndPeriod,
+} from "../../../helper/util.helper";
 import { SearchOutlined } from "@ant-design/icons";
-
+import { useNavigate } from "react-router-dom";
+import { TeacherAttendanceAPI } from "../../../api/teacher/attendance/TeacherAttendance.api";
+import { async } from "q";
 const { Option } = Select;
 
 const TeacherScheduleToday = () => {
@@ -35,7 +42,8 @@ const TeacherScheduleToday = () => {
   const [dataTime, setDataTime] = useState([]);
   const [current, setCurrent] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-
+  const [actionData, setActionData] = useState([]);
+  const navigate = useNavigate();
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Bảng điều khiển - Lịch dạy hôm nay";
@@ -47,7 +55,15 @@ const TeacherScheduleToday = () => {
   useEffect(() => {
     featchDataTime();
   }, [time, current]);
-
+  // const updateActionData = () => {
+  //   const updatedActionData = dataToday.map((item) => {
+  //     return {
+  //       idMeeting: item.idMeeting,
+  //       showButton: convertCheckAttended(item.meetingPeriod),
+  //     };
+  //   });
+  //   setActionData(updatedActionData);
+  // };
   const featchData = async () => {
     setLoading(false);
     try {
@@ -55,10 +71,9 @@ const TeacherScheduleToday = () => {
         setDataToday(response.data.data);
       });
       setLoading(true);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
+
   const featchDataTime = async () => {
     try {
       let dataFind = {
@@ -73,9 +88,7 @@ const TeacherScheduleToday = () => {
         }
       );
       setLoading(true);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   const handleAddressChange = (idMeeting, value) => {
     const listNew = dataToday.map((item) => {
@@ -100,9 +113,7 @@ const TeacherScheduleToday = () => {
           toast.success("Lưu link học thành công");
         }
       );
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   const convertLongToDate = (dateLong) => {
     const date = new Date(dateLong);
@@ -113,13 +124,23 @@ const TeacherScheduleToday = () => {
     return format;
   };
 
+  const handleDetailAttend = (idMeeting, meetingPeriod) => {
+    try {
+      let check = convertCheckAttended(meetingPeriod);
+      check
+        ? navigate(`/teacher/schedule-today/attendance/` + idMeeting)
+        : toast.warning(
+            "Không còn trong ca dạy, không thể xem hoặc sửa điểm danh !"
+          );
+    } catch (error) {}
+  };
+
   const data = dataToday;
   const columns = [
     {
       title: "#",
       dataIndex: "stt",
       key: "stt",
-      render: (text, record, index) => index + 1,
       width: "12px",
     },
     {
@@ -264,15 +285,15 @@ const TeacherScheduleToday = () => {
       title: "Điểm danh",
       dataIndex: "actions",
       key: "actions",
-      render: (text, record) => (
-        <>
-          <div className="box_icon" style={{ textAlign: "center" }}>
-            <Link
-              to={`/teacher/schedule-today/attendance/${record.idMeeting}`}
-              className="btn btn-success ml-4"
-            >
+      render: (text, record) => {
+        if (convertCheckAttended(record.meetingPeriod)) {
+          return (
+            <div className="box_icon" style={{ textAlign: "center" }}>
               <Tooltip title="Xem chi tiết">
                 <div
+                  onClick={() =>
+                    handleDetailAttend(record.idMeeting, record.meetingPeriod)
+                  }
                   className="box-center"
                   style={{
                     height: "30px",
@@ -282,13 +303,15 @@ const TeacherScheduleToday = () => {
                     borderRadius: "5px",
                   }}
                 >
-                  <span style={{ fontSize: "14px" }}> Xem - chỉnh sửa </span>
+                  <span style={{ fontSize: "14px" }}>Xem - chỉnh sửa</span>
                 </div>
               </Tooltip>
-            </Link>
-          </div>
-        </>
-      ),
+            </div>
+          );
+        } else {
+          return null;
+        }
+      },
       width: "10%",
     },
   ];
@@ -476,9 +499,7 @@ const TeacherScheduleToday = () => {
               ) : (
                 <Empty
                   imageStyle={{ height: 60 }}
-                  description={
-                    <span style={{ color: "#007bff" }}>Không có ca dạy</span>
-                  }
+                  description={<span>Không có ca dạy</span>}
                 />
               )}
             </div>

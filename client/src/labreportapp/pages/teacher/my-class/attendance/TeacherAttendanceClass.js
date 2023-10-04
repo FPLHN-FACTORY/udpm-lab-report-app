@@ -1,5 +1,5 @@
 import "./styleTeacherAttendance.css";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router-dom";
 import { ControlOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -25,6 +25,8 @@ const TeacherAttendanceClass = () => {
   const [loading, setLoading] = useState(false);
   const [objStudent, setObjStudent] = useState({});
   const [showDetailModal, setShowDetailModal] = useState(false);
+  const navigate = useNavigate();
+
   useEffect(() => {
     featchClass(idClass);
     featchColumn(idClass);
@@ -60,9 +62,7 @@ const TeacherAttendanceClass = () => {
         .catch((err) => {
           toast.error(err.data.message);
         });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   const featchClass = async (idClass) => {
     try {
@@ -71,7 +71,9 @@ const TeacherAttendanceClass = () => {
         document.title = "Điểm danh | " + responese.data.data.code;
       });
     } catch (error) {
-      console.log(error);
+      setTimeout(() => {
+        navigate("/teacher/my-class");
+      }, [1000]);
     }
   };
   const convertLongToDate = (dateLong) => {

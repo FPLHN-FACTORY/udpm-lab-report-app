@@ -21,16 +21,16 @@ public interface TePostRepository extends JpaRepository<Post, String> {
             p.id as id, 
             p.descriptions as descriptions,
              p.created_date as created_date,
-             p.teacher_id,
+             p.teacher_id as teacher_id,
              p.class_id
             FROM post p 
-            WHERE p.teacher_id = :#{#req.idTeacher} and p.class_id = :#{#req.idClass}
+            WHERE p.class_id = :#{#req.idClass}
             ORDER BY p.created_date DESC 
-            """,countQuery = """
+            """, countQuery = """
             SELECT COUNT(DISTINCT p.id)
             FROM post p 
-            WHERE p.teacher_id = :#{#req.idTeacher} and p.class_id = :#{#req.idClass}"""
-           , nativeQuery = true)
-    Page<TePostResponse> searchPostByIdTeacherIdClass(@Param("req")TeFindPostClassRepquest req, Pageable pageable);
+            WHERE p.class_id = :#{#req.idClass}"""
+            , nativeQuery = true)
+    Page<TePostResponse> searchPostByIdClass(@Param("req") TeFindPostClassRepquest req, Pageable pageable);
 
 }
