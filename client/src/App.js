@@ -513,9 +513,9 @@ function App() {
               path="/admin/project-management"
               element={
                 <AuthGuard>
-                  <Dashboard>
+                  <DashBoardAdmin>
                     <ProjectManagement />
-                  </Dashboard>
+                  </DashBoardAdmin>
                 </AuthGuard>
               }
             />
@@ -523,9 +523,9 @@ function App() {
               path="/admin/category-management"
               element={
                 <AuthGuard>
-                  <Dashboard>
+                  <DashBoardAdmin>
                     <CategoryManagement />
-                  </Dashboard>
+                  </DashBoardAdmin>
                 </AuthGuard>
               }
             />
@@ -533,9 +533,9 @@ function App() {
               path="/admin/label-management"
               element={
                 <AuthGuard>
-                  <Dashboard>
+                  <DashBoardAdmin>
                     <LabelManagement />
-                  </Dashboard>
+                  </DashBoardAdmin>
                 </AuthGuard>
               }
             />
@@ -543,9 +543,9 @@ function App() {
               path="/admin/stakeholder-management"
               element={
                 <AuthGuard>
-                  <Dashboard>
+                  <DashBoardAdmin>
                     <StakeholderManagement />
-                  </Dashboard>
+                  </DashBoardAdmin>
                 </AuthGuard>
               }
             />
@@ -571,9 +571,9 @@ function App() {
               path="/detail-project/dashboard/:id"
               element={
                 <AuthGuard>
-                  <Dashboard>
+                  <DashBoardTeacher>
                     <DetailProjectDashBoard />
-                  </Dashboard>
+                  </DashBoardTeacher>
                 </AuthGuard>
               }
             />
@@ -581,9 +581,9 @@ function App() {
               path="/projects/dashboard"
               element={
                 <AuthGuard>
-                  <Dashboard>
+                  <DashBoardTeacher>
                     <DashboardGeneral />
-                  </Dashboard>
+                  </DashBoardTeacher>
                 </AuthGuard>
               }
             />
@@ -591,9 +591,9 @@ function App() {
               path="/my-project"
               element={
                 <AuthGuard>
-                  <Dashboard>
+                  <DashBoardTeacher>
                     <MyProject />
-                  </Dashboard>
+                  </DashBoardTeacher>
                 </AuthGuard>
               }
             />
@@ -601,9 +601,8 @@ function App() {
               path="/period-project/:id"
               element={
                 <AuthGuard>
-                  <Dashboard>
-                    <PeriodProject />
-                  </Dashboard>
+                  <HeaderTeacherComponent />
+                  <PeriodProject />
                 </AuthGuard>
               }
             />

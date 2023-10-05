@@ -35,6 +35,7 @@ import com.labreportapp.labreport.util.ClassHelper;
 import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
 import com.labreportapp.labreport.util.FormUtils;
 import com.labreportapp.labreport.util.RandomString;
+import com.labreportapp.labreport.util.SemesterHelper;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import jakarta.servlet.http.HttpServletResponse;
@@ -88,6 +89,9 @@ public class AdClassManagerServiceImpl implements AdClassService {
 
     @Autowired
     private ClassHelper classHelper;
+
+    @Autowired
+    private SemesterHelper semesterHelper;
 
     @Autowired
     @Qualifier(ActivityRepository.NAME)
@@ -199,6 +203,22 @@ public class AdClassManagerServiceImpl implements AdClassService {
 
     @Override
     public PageableObject<AdListClassCustomResponse> searchClass(final AdFindClassRequest adFindClass) {
+        String idSemesterCurrent = semesterHelper.getSemesterCurrent();
+        if (adFindClass.getIdSemester() == null) {
+            if (idSemesterCurrent != null) {
+                adFindClass.setIdSemester(idSemesterCurrent);
+                adFindClass.setIdActivity("");
+            } else {
+                adFindClass.setIdSemester("");
+            }
+        } else if (adFindClass.getIdSemester().equalsIgnoreCase("")) {
+            if (idSemesterCurrent != null) {
+                adFindClass.setIdSemester(idSemesterCurrent);
+                adFindClass.setIdActivity("");
+            } else {
+                adFindClass.setIdSemester("");
+            }
+        }
         Pageable pageable = PageRequest.of(adFindClass.getPage() - 1, adFindClass.getSize());
         ClassConfiguration classConfiguration = adClassConfigurationRepository.findAll().get(0);
         adFindClass.setValueClassSize(classConfiguration.getClassSizeMin());

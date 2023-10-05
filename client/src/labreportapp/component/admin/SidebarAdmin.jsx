@@ -16,6 +16,7 @@ import {
   faTemperature0,
   faSyncAlt,
   faLevelUp,
+  faCaretLeft,
 } from "@fortawesome/free-solid-svg-icons";
 
 import "./style-sidebar.css";
@@ -140,6 +141,50 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
         >
           <Link to="/admin/template-report">Template báo cáo</Link>
         </Menu.Item>
+        <Menu.SubMenu
+          key="sub1"
+          title="Quản lý dự án"
+          icon={
+            <FontAwesomeIcon
+              icon={faCogs}
+              style={{ color: "rgb(226, 179, 87)" }}
+            />
+          }
+        >
+          <Menu.Item
+            key="sub11"
+            icon={
+              <FontAwesomeIcon
+                icon={faCogs}
+                style={{ color: "rgb(226, 179, 87)" }}
+              />
+            }
+          >
+            <Link to="/admin/project-management">Quản lý dự án</Link>
+          </Menu.Item>
+          <Menu.Item
+            key="sub12"
+            icon={
+              <FontAwesomeIcon
+                icon={faFolder}
+                style={{ color: "rgb(226, 179, 87)" }}
+              />
+            }
+          >
+            <Link to="/admin/category-management"> Quản lý thể loại</Link>
+          </Menu.Item>
+          <Menu.Item
+            key="sub13"
+            icon={
+              <FontAwesomeIcon
+                icon={faTags}
+                style={{ color: "rgb(226, 179, 87)" }}
+              />
+            }
+          >
+            <Link to="/admin/label-management">Quản lý nhãn</Link>
+          </Menu.Item>
+        </Menu.SubMenu>
       </Menu>
     </Sider>
   );

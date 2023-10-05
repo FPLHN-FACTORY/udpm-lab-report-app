@@ -22,4 +22,11 @@ public interface MeMemberProjectRepository extends MemberProjectRepository {
             SELECT * FROM member_project a WHERE a.project_id = :idProject AND a.member_id = :idMember
             """, nativeQuery = true)
     MemberProject findMemberProject(@Param("idProject") String idProject, @Param("idMember") String idMember);
+
+    @Query(value = """
+            SELECT b.student_id FROM team a 
+            JOIN student_classes b ON a.id = b.team_id
+            WHERE a.project_id = :idProject
+            """, nativeQuery = true)
+    List<String> getAllMemberTeam(@Param("idProject") String idProject);
 }

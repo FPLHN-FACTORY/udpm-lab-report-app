@@ -499,7 +499,11 @@ const ProjectManagement = () => {
           <Button className="btn_filter" onClick={handleSearch}>
             Tìm kiếm
           </Button>
-          <Button className="btn_clear" onClick={handleClear}>
+          <Button
+            className="btn_clear"
+            onClick={handleClear}
+            style={{ backgroundColor: "rgb(38, 144, 214)" }}
+          >
             Làm mới bộ lọc
           </Button>
         </div>
@@ -538,13 +542,12 @@ const ProjectManagement = () => {
             </Button>
           </div>
         </div>
-        <div>
+        <div style={{ marginTop: 15 }}>
           <Table
             dataSource={data}
             rowKey="id"
             columns={columns}
             pagination={false}
-            className="table_project_management"
           />
           <div className="pagination_box">
             <Pagination

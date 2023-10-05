@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from "../../../app/hook";
 import {
   SetProject,
   SetLoading,
+  GetProject,
 } from "../../../app/reducer/detail-project/DPProjectSlice.reducer";
 import { SetMemberProject } from "../../../app/reducer/detail-project/DPMemberProject.reducer";
 import {
@@ -82,6 +83,7 @@ const DetailProject = () => {
 
   const listPeriod = useAppSelector(GetMemberPeriod);
   const periodCurrent = useAppSelector(GetPeriodCurrent);
+  const detailProject = useAppSelector(GetProject);
 
   useEffect(() => {
     if (listPeriod != null && listPeriod.length > 0) {
@@ -174,6 +176,8 @@ const DetailProject = () => {
       ? `${location.pathname}?${newSearch}`
       : location.pathname;
     navigate(newPath, { replace: true });
+
+    document.title = detailProject.name + " | Portal-Projects";
   };
 
   const searchParams = new URLSearchParams(location.search);

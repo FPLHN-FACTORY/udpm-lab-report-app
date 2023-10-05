@@ -154,7 +154,7 @@ const CommonInforUser = () => {
             style={{ marginLeft: 8, fontWeight: 500, color: "#4f4f4f" }}
           >
             {userCurrent != null ? userCurrent.name : ""}
-          </span>
+          </span>{" "}
         </Link>
       </Dropdown>
     </div>

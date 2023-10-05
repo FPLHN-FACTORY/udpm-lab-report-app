@@ -93,6 +93,13 @@ public class MeMemberProjectServiceImpl implements MeMemberProjectService {
     }
 
     @Override
+    public List<SimpleResponse> getAllMemberTeam(String idProject) {
+        List<String> listIdStudent = meMemberProjectRepository.getAllMemberTeam(idProject);
+        List<SimpleResponse> listResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(listIdStudent);
+        return listResponse;
+    }
+
+    @Override
     @Transactional
     @Synchronized
     @CacheEvict(value = {"membersByProject"}, allEntries = true)

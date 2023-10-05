@@ -122,7 +122,18 @@ const HeaderDetailProject = () => {
   };
 
   const location = useLocation();
-  const isTableVisible = location.pathname.includes("/table");
+
+  const [isTableVisible, setIsTableVisible] = useState(0);
+
+  useEffect(() => {
+    if (location.pathname.includes("/table")) {
+      setIsTableVisible(1);
+    } else if (location.pathname.includes("period-project")) {
+      setIsTableVisible(2);
+    } else {
+      setIsTableVisible(0);
+    }
+  }, [location]);
 
   /*{" "}
         <span className="box_setting">
@@ -231,7 +242,7 @@ const HeaderDetailProject = () => {
             autoFocus={true}
             value={inputValue}
             onChange={handleInputChange}
-            onBlur={handleInputBlur}
+            onPressEnter={handleInputBlur}
           />
         ) : (
           <span
@@ -249,7 +260,9 @@ const HeaderDetailProject = () => {
           to={`/detail-project/${detailProject.id}`}
           style={{ color: "white", textDecoration: "none" }}
         >
-          <span className={`box_setting ${isTableVisible ? "" : "active"}`}>
+          <span
+            className={`box_setting ${isTableVisible === 0 ? "active" : ""}`}
+          >
             <ProjectOutlined /> Board
           </span>
         </Link>
@@ -258,13 +271,28 @@ const HeaderDetailProject = () => {
           style={{ color: "white", textDecoration: "none" }}
         >
           {" "}
-          <span className={`box_setting ${isTableVisible ? "active" : ""}`}>
+          <span
+            className={`box_setting ${isTableVisible === 1 ? "active" : ""}`}
+          >
             <TableOutlined /> Table
           </span>{" "}
         </Link>
-        <span className="box_setting" onClick={openPopupPeriod}>
+        <span
+          className={`box_setting ${isTableVisible === 2 ? "active" : ""}`}
+          onClick={openPopupPeriod}
+        >
           <FontAwesomeIcon icon={faRepeat} /> Giai đoạn
         </span>
+        {isTableVisible === 2 && (
+          <Link
+            style={{ color: "white", textDecoration: "none" }}
+            to={`/detail-project/dashboard/${detailProject.id}`}
+          >
+            <span className="box_setting">
+              <FontAwesomeIcon icon={faChartBar} /> Thống kê
+            </span>
+          </Link>
+        )}
         {isOpenPopupPeriod && (
           <PopupPeriod
             position={popupPositionPopupPeriod}
@@ -274,64 +302,68 @@ const HeaderDetailProject = () => {
       </div>
       <div className="right_header">
         {" "}
-        <Link
-          style={{ color: "white", textDecoration: "none" }}
-          to={`/detail-project/dashboard/${detailProject.id}`}
-        >
-          <span className="box_setting">
-            <FontAwesomeIcon icon={faChartBar} /> Thống kê
-          </span>
-        </Link>
-        <span className="box_setting" onClick={openPopupSort}>
-          <FontAwesomeIcon icon={faSort} /> Sắp xếp
-        </span>
-        <span className="box_setting" onClick={openPopupFilter}>
-          <FontAwesomeIcon icon={faFilter} /> Bộ lọc
-        </span>
-        <div style={{ marginLeft: "7px" }}> | </div>
-        <div className="box_setting_member">
-          {listMemberProject.slice(0, showMembers).map((item, index) => (
-            <Image
-              marginRight={-5}
-              name={item.name + " " + item.userName}
-              key={index}
-              url={item.picture}
-              picxel={30}
-            />
-          ))}
-
-          {extraMembers > 0 && (
-            <span className="extra_quantity_member">+{extraMembers}</span>
-          )}
-          <Tooltip title="Xem chi tiết thành viên trong dự án">
-            <span className="span_eye" onClick={openPopupMemberManagement}>
-              <FontAwesomeIcon icon={faEye} size="1x" />
+        {isTableVisible !== 2 && (
+          <>
+            <Link
+              style={{ color: "white", textDecoration: "none" }}
+              to={`/detail-project/dashboard/${detailProject.id}`}
+            >
+              <span className="box_setting">
+                <FontAwesomeIcon icon={faChartBar} /> Thống kê
+              </span>
+            </Link>
+            <span className="box_setting" onClick={openPopupSort}>
+              <FontAwesomeIcon icon={faSort} /> Sắp xếp
             </span>
-          </Tooltip>
-        </div>
-        <span> | </span>
-        <span className="box_setting_menu" onClick={handleToggleMenuRight}>
-          <FontAwesomeIcon icon={faBars} size="1x" />
-        </span>
-        {isMenuRightVisible && <MenuRight />}
-        {isOpenPopupFilter && (
-          <PopupFilter
-            position={popupPositionPopupFilter}
-            onClose={closePopupFilter}
-          />
-        )}{" "}
-        {isOpenPopupSort && (
-          <PopupSort
-            position={popupPositionPopupSort}
-            onClose={closePopupSort}
-          />
-        )}{" "}
-        {isOpenPopupMemberManagement && (
-          <PopupMemberManagement
-            position={popupPositionPopupMemberManagement}
-            onClose={closePopupMemberManagement}
-          />
-        )}{" "}
+            <span className="box_setting" onClick={openPopupFilter}>
+              <FontAwesomeIcon icon={faFilter} /> Bộ lọc
+            </span>
+            <div style={{ marginLeft: "7px" }}> | </div>
+            <div className="box_setting_member">
+              {listMemberProject.slice(0, showMembers).map((item, index) => (
+                <Image
+                  marginRight={-5}
+                  name={item.name + " " + item.userName}
+                  key={index}
+                  url={item.picture}
+                  picxel={30}
+                />
+              ))}
+
+              {extraMembers > 0 && (
+                <span className="extra_quantity_member">+{extraMembers}</span>
+              )}
+              <Tooltip title="Xem chi tiết thành viên trong dự án">
+                <span className="span_eye" onClick={openPopupMemberManagement}>
+                  <FontAwesomeIcon icon={faEye} size="1x" />
+                </span>
+              </Tooltip>
+            </div>
+            <span> | </span>
+            <span className="box_setting_menu" onClick={handleToggleMenuRight}>
+              <FontAwesomeIcon icon={faBars} size="1x" />
+            </span>
+            {isMenuRightVisible && <MenuRight />}
+            {isOpenPopupFilter && (
+              <PopupFilter
+                position={popupPositionPopupFilter}
+                onClose={closePopupFilter}
+              />
+            )}{" "}
+            {isOpenPopupSort && (
+              <PopupSort
+                position={popupPositionPopupSort}
+                onClose={closePopupSort}
+              />
+            )}{" "}
+            {isOpenPopupMemberManagement && (
+              <PopupMemberManagement
+                position={popupPositionPopupMemberManagement}
+                onClose={closePopupMemberManagement}
+              />
+            )}{" "}
+          </>
+        )}
       </div>
     </div>
   );

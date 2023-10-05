@@ -67,4 +67,11 @@ export class DetailProjectAPI {
       data: obj
     });
   };
+
+  static getAllMemberTeam = (idProject) => {
+    return request({
+      method: "GET",
+      url: `/member/member-project/get-all-member-team/` + idProject,
+    });
+  };
 }

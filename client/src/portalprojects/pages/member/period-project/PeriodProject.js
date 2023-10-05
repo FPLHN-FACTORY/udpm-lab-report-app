@@ -40,6 +40,7 @@ import ModalDetailPeriod from "./modal-detail/ModalDetailPeriod";
 import ModalUpdatePeriod from "./modal-update/ModalUpdatePeriod";
 import ModalCreatePeriod from "./modal-create/ModalCreatePeriod";
 import LoadingIndicator from "../../../helper/loading";
+import HeaderDetailProject from "../../common/detail-project/HeaderDetailProject";
 
 const { Option } = Select;
 
@@ -73,6 +74,13 @@ const PeriodProject = () => {
 
   useEffect(() => {
     fetchDataPeriod();
+    document.querySelector(".logo_project").src =
+      "https://raw.githubusercontent.com/FPLHN-FACTORY/udpm-common-resources/main/fpoly-udpm/logo-udpm-2.png";
+
+    return () => {
+      document.querySelector(".logo_project").src =
+        "https://raw.githubusercontent.com/FPLHN-FACTORY/udpm-common-resources/main/fpoly-udpm/logo-udpm-3.png";
+    };
   }, [current]);
 
   const fetchDataPeriod = () => {
@@ -283,124 +291,84 @@ const PeriodProject = () => {
   };
 
   return (
-    <div className="my_project">
+    <div className="detail-project">
       {loading && <LoadingIndicator />}
-      <div style={{ marginBottom: "15px" }}>
-        <Link
-          to="/my-project"
-          style={{ color: "black", textDecoration: "none" }}
-        >
-          <FontAwesomeIcon icon={faHome} /> Danh sách dự án{" "}
-        </Link>{" "}
-        <span style={{ marginLeft: "5px", marginRight: "5px" }}> / </span>{" "}
-        <span style={{ color: "black", textDecoration: "none" }}>
-          <FontAwesomeIcon icon={faCogs} />
-          <Link
-            to={`/detail-project/${id}`}
-            style={{ color: "black", textDecoration: "none" }}
-          >
-            {" "}
-            {detailProject.name}
-          </Link>
-        </span>
-        <span style={{ marginLeft: "5px", marginRight: "5px" }}> / </span>{" "}
-        <span style={{ color: "black", textDecoration: "none" }}>
-          <FontAwesomeIcon icon={faRepeat} /> Giai đoạn của dự án
-        </span>
+      <div>
+        {" "}
+        <HeaderDetailProject />
       </div>
-      <div className="filter">
-        <FontAwesomeIcon icon={faFilter} size="2x" />{" "}
-        <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
-        <hr />
-        <div className="content">
-          <div className="content-wrapper">
-            <div className="content-left">
-              Tên giai đoạn:{" "}
-              <Input
-                type="text"
-                value={name}
-                onChange={(e) => {
-                  setName(e.target.value);
-                }}
-                style={{ width: "50%", marginLeft: "10px" }}
-              />
-            </div>
-            <div className="content-right">
-              Trạng thái:{" "}
-              <Select
-                value={status}
-                onChange={(value) => {
-                  setStatus(value);
-                }}
-                style={{ width: "50%", marginLeft: "10px" }}
-              >
-                <Option value="">Tất cả</Option>
-                <Option value="0">Đã diễn ra</Option>
-                <Option value="1">Đang diễn ra</Option>
-                <Option value="2">Chưa diễn ra</Option>
-              </Select>
-            </div>
-          </div>
-        </div>
-        <div className="box_btn_filter">
-          <Button className="btn_filter" onClick={handleSearch}>
-            Tìm kiếm
-          </Button>
-          <Button className="btn_clear" onClick={clear}>
-            Làm mới bộ lọc
-          </Button>
-        </div>
-      </div>
-      <div className="table_project">
-        <div className="title_my_project">
-          <div style={{ float: "left" }}>
-            {" "}
-            <FontAwesomeIcon icon={faCogs} size="1x" />
-            <span style={{ fontSize: "18px", fontWeight: "500" }}>
-              {" "}
-              Danh sách giai đoạn
-            </span>
-          </div>
-          <div style={{ float: "right" }}>
-            <Button
+      <div className="period-project-box">
+        <div className="period-project-content">
+          <div style={{ padding: 15, paddingTop: 0 }}>
+            <div
               style={{
-                color: "white",
-                backgroundColor: "rgb(55, 137, 220)",
+                justifyContent: "center",
+                borderBottom: "1px solid gray",
+                display: "flex",
+                alignItems: "center",
+                height: "50px",
               }}
-              onClick={handlePeriodCreate}
             >
-              <FontAwesomeIcon
-                icon={faPlus}
-                size="1x"
-                style={{
-                  marginRight: "8x",
-                  backgroundColor: "rgb(55, 137, 220)",
-                }}
-              />{" "}
-              Thêm giai đoạn
-            </Button>
-          </div>
-        </div>
-        <br />
-        <div style={{ marginTop: "25px" }}>
-          <Table
-            dataSource={data}
-            rowKey="id"
-            columns={columns}
-            pagination={false}
-          />
-          <div className="pagination_box">
-            <Pagination
-              simple
-              current={current}
-              onChange={(value) => {
-                setCurrent(value);
-              }}
-              total={total * 10}
-            />
+              <span style={{ fontSize: 18 }}>
+                {" "}
+                <FontAwesomeIcon icon={faRepeat} style={{ marginRight: 7 }} />
+                Quản lý giai đoạn
+              </span>
+            </div>
+            <div className="table_project" style={{ marginTop: 5 }}>
+              <div className="title_my_project">
+                <div style={{ float: "left" }}>
+                  {" "}
+                  <FontAwesomeIcon icon={faCogs} size="1x" />
+                  <span style={{ fontSize: "18px", fontWeight: "500" }}>
+                    {" "}
+                    Danh sách giai đoạn
+                  </span>
+                </div>
+                <div style={{ float: "right" }}>
+                  <Button
+                    style={{
+                      color: "white",
+                      backgroundColor: "rgb(55, 137, 220)",
+                    }}
+                    onClick={handlePeriodCreate}
+                  >
+                    <FontAwesomeIcon
+                      icon={faPlus}
+                      size="1x"
+                      style={{
+                        marginRight: "8x",
+                        backgroundColor: "rgb(55, 137, 220)",
+                      }}
+                    />{" "}
+                    Thêm giai đoạn
+                  </Button>
+                </div>
+              </div>
+              <br />
+              <div style={{ marginTop: "25px" }}>
+                <Table
+                  dataSource={data}
+                  rowKey="id"
+                  columns={columns}
+                  pagination={false}
+                />
+                <div className="pagination_box">
+                  <Pagination
+                    simple
+                    current={current}
+                    onChange={(value) => {
+                      setCurrent(value);
+                    }}
+                    total={total * 10}
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+
       <ModalDetailPeriod
         visible={showDetailModal}
         onCancel={handleModalCancel}

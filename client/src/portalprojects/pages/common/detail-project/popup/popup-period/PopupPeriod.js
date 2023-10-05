@@ -106,9 +106,6 @@ const PopupPeriod = ({ position, onClose }) => {
             Xem chi tiết các giai đoạn
           </Button>
         </Link>
-        <Button style={{ marginTop: "15px", width: "100%" }}>
-          Giai đoạn đang diễn ra
-        </Button>
       </div>
     </div>
   );

@@ -70,12 +70,11 @@ const PopupTagComment = ({ position, onClose, onClick }) => {
     setSearchTerm(searchTerm);
 
     const filteredMembers = listMemberProject.filter((item) => {
-      const { name, code, username } = item;
+      const { name, userName } = item;
       const searchValue = searchTerm.toLowerCase();
       return (
         name.toLowerCase().includes(searchValue) ||
-        code.toLowerCase().includes(searchValue) ||
-        username.toLowerCase().includes(searchValue)
+        userName.toLowerCase().includes(searchValue)
       );
     });
 

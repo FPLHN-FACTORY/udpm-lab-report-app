@@ -3,8 +3,8 @@ body {
 }
 
 .project_management {
+  padding: 25px;
   padding-top: 50px;
-  padding-left: 10px;
 }
 
 .title_project_management_box {
@@ -21,12 +21,12 @@ body {
 
 /* filter */
 .filter_project_management {
-  margin-top: 15px;
+  margin-top: 20px;
   background-color: rgb(255, 255, 255);
-  width: 99%;
   height: auto;
+  box-shadow: 0px 0px 20px 1px rgba(148, 148, 148, 0.3) !important;
   border-radius: 5px;
-  padding: 10px;
+  padding: 20px;
 }
 
 .box_btn_filter {
@@ -51,12 +51,12 @@ body {
 }
 
 .table_project_management {
-  margin-top: 25px;
+  margin-top: 30px;
   background-color: rgb(255, 255, 255);
-  width: 99%;
   height: auto;
+  box-shadow: 0px 0px 20px 1px rgba(148, 148, 148, 0.3) !important;
   border-radius: 5px;
-  padding: 10px 5px 10px 10px;
+  padding: 20px;
 }
 .add_project {
   margin-left: 81%;
@@ -65,7 +65,6 @@ body {
 .filter {
   margin-top: 20px;
   background-color: rgb(255, 255, 255);
-  width: 99%;
   height: auto;
   border-radius: 5px;
   padding: 10px;

@@ -32,6 +32,11 @@ public class MeMemberProjectController {
         return new ResponseObject(meMemberProjectService.getAllMemberProject(id));
     }
 
+    @GetMapping("/get-all-member-team/{id}")
+    public ResponseObject getAllMemberTeam(@PathVariable("id") String id) {
+        return new ResponseObject(meMemberProjectService.getAllMemberTeam(id));
+    }
+
     @MessageMapping("/update-member-project/{projectId}")
     @SendTo("/portal-projects/update-member-project/{projectId}")
     public ResponseObject update(@RequestBody MeUpdateMemberProjectRequest request,

@@ -1,14 +1,15 @@
 .category {
+  padding: 25px;
   padding-top: 50px;
-  padding-left: 10px;
 }
-.filter {
+
+.filter_category {
   margin-top: 20px;
   background-color: rgb(255, 255, 255);
-  width: 99%;
   height: auto;
   border-radius: 5px;
-  padding: 10px;
+  box-shadow: 0px 0px 20px 1px rgba(148, 148, 148, 0.3) !important;
+  padding: 20px;
 }
 .btn__clear {
   background-color: rgb(248, 73, 73);
@@ -40,8 +41,8 @@ body {
 .table__category {
   margin-top: 30px;
   background-color: rgb(255, 255, 255);
-  width: 99%;
   height: auto;
   border-radius: 5px;
-  padding: 10px;
+  box-shadow: 0px 0px 20px 1px rgba(148, 148, 148, 0.3) !important;
+  padding: 20px;
 }

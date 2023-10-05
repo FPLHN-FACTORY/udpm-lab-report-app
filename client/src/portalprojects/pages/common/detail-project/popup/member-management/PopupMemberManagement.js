@@ -17,6 +17,7 @@ import { CommonAPI } from "../../../../../api/commonAPI";
 import { GetProject } from "../../../../../app/reducer/detail-project/DPProjectSlice.reducer";
 import { getStompClient } from "../../stomp-client-config/StompClientManager";
 import Cookies from "js-cookie";
+import { DetailProjectAPI } from "../../../../../api/detail-project/detailProject.api";
 const { Option } = Select;
 
 const PopupMemberManagement = ({ position, onClose }) => {
@@ -379,9 +380,9 @@ const PopupMemberManagement = ({ position, onClose }) => {
   };
 
   const loadDataMemberAll = () => {
-    CommonAPI.fetchAll().then((response) => {
-      setMemberAll(response.data);
-      fetchListMemberNoJoinProject(response.data);
+    DetailProjectAPI.getAllMemberTeam(detailProject.id).then((response) => {
+      setMemberAll(response.data.data);
+      fetchListMemberNoJoinProject(response.data.data);
     });
   };
 
@@ -393,7 +394,7 @@ const PopupMemberManagement = ({ position, onClose }) => {
     const memberProjectIds = memberProject.map((member) => member.memberId);
 
     const membersNotInProject = allMember.filter(
-      (member) => !memberProjectIds.includes(member.memberId)
+      (member) => !memberProjectIds.includes(member.id)
     );
     setListMemberNoJoinProject(membersNotInProject);
   };
@@ -402,9 +403,9 @@ const PopupMemberManagement = ({ position, onClose }) => {
 
   const fetchLoadListMemberAdd = () => {
     const listData = memberAll
-      .filter((member) => valueMultiMember.includes(member.memberId))
+      .filter((member) => valueMultiMember.includes(member.id))
       .map((member) => ({
-        memberId: member.memberId,
+        memberId: member.id,
         email: member.email,
         projectId: detailProject.id,
         role: 0,
@@ -517,7 +518,7 @@ const PopupMemberManagement = ({ position, onClose }) => {
         <Select
           style={{ width: "100%" }}
           value={record.role + ""}
-          onChange={(value) => handleRoleChangeAdd(record.memberId, value)}
+          onChange={(value) => handleRoleChangeAdd(record.id, value)}
         >
           <Option value="0">Quản lý</Option>
           <Option value="1">Trưởng nhóm</Option>
@@ -530,9 +531,9 @@ const PopupMemberManagement = ({ position, onClose }) => {
 
   const handleRoleChangeAdd = (id, value) => {
     let updatedListInfo = listMemberAdd.map((record) => {
-      if (record.memberId === id) {
+      if (record.id === id) {
         let newData = {
-          memberId: record.memberId,
+          memberId: record.id,
           email: record.email,
           projectId: detailProject.id,
           role: parseInt(value),
@@ -582,7 +583,10 @@ const PopupMemberManagement = ({ position, onClose }) => {
           className="box-member-management"
         >
           <div className="box_add_member">
-            <span style={{ fontSize: "15px" }}>Thêm thành viên: </span> <br />
+            <span style={{ fontSize: "15px" }}>
+              Thêm thành viên (danh sách thành viên trong nhóm):{" "}
+            </span>{" "}
+            <br />
             <div style={{ display: "flex", alignItems: "center" }}>
               <Select
                 value={valueMultiMember}
@@ -618,7 +622,11 @@ const PopupMemberManagement = ({ position, onClose }) => {
                 ))}
               </Select>
               <Button
-                style={{ marginLeft: "15px" }}
+                style={{
+                  marginLeft: "15px",
+                  backgroundColor: "rgb(38, 144, 214)",
+                  color: "white",
+                }}
                 onClick={handleClickAddMemberProject}
               >
                 Thêm thành viên

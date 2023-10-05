@@ -39,7 +39,8 @@ public class WebSecurityConfiguration {
                 .requestMatchers("/roles").permitAll()
                 .requestMatchers("/admin/**").hasAuthority(ActorConstants.ACTOR_ADMIN)
                 .requestMatchers("/teacher/**").hasAuthority(ActorConstants.ACTOR_TEACHER)
-                .requestMatchers("/student/**").hasAuthority(ActorConstants.ACTOR_STUDENT);
+                .requestMatchers("/student/**").hasAuthority(ActorConstants.ACTOR_STUDENT)
+                .requestMatchers("/member/**").hasAnyAuthority(ActorConstants.ACTOR_TEACHER, ActorConstants.ACTOR_STUDENT);
         return http.build();
     }
 

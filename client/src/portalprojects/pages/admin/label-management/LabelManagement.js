@@ -44,7 +44,7 @@ const LabelManagement = () => {
     };
   }, [current]);
 
-  const userCurrent = useAppSelector(GetUserCurrent)
+  const userCurrent = useAppSelector(GetUserCurrent);
 
   const fetchData = async () => {
     let filter = {
@@ -169,11 +169,11 @@ const LabelManagement = () => {
 
       <div className="title_label_management">
         {" "}
-        <FontAwesomeIcon icon={faTags} size="1x" />
+        <FontAwesomeIcon icon={faTags} style={{ fontSize: 20 }} />
         <span style={{ marginLeft: "10px" }}>Quản lý nhãn</span>
       </div>
-      <div className="filter">
-        <FontAwesomeIcon icon={faFilter} size="2x" />{" "}
+      <div className="filter-label">
+        <FontAwesomeIcon icon={faFilter} style={{ fontSize: 20 }} />{" "}
         <span style={{ fontSize: "25px", fontWeight: "500" }}>Bộ lọc</span>
         <hr />
         <div className="content">
@@ -193,7 +193,11 @@ const LabelManagement = () => {
           <Button className="btn_filter" onClick={handleSearch}>
             Tìm kiếm
           </Button>
-          <Button className="btn_clear" onClick={handleClear}>
+          <Button
+            className="btn_clear"
+            onClick={handleClear}
+            style={{ backgroundColor: "rgb(38, 144, 214)" }}
+          >
             Làm mới bộ lọc
           </Button>
         </div>
@@ -202,7 +206,7 @@ const LabelManagement = () => {
         <div className="title_label_management_table">
           <div>
             {" "}
-            {<FontAwesomeIcon icon={faList} size="2x" />}
+            {<FontAwesomeIcon icon={faList} style={{ fontSize: 20 }} />}
             <span style={{ fontSize: "18px", fontWeight: "500" }}>
               {" "}
               Danh sách nhãn

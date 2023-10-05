@@ -34,90 +34,110 @@ public class ConvertRequestCallApiIdentity {
     private RestTemplate restTemplate;
 
     public List<SimpleResponse> handleCallApiGetListUserByListId(List<String> listIdUser) {
-        String apiUrl = ApiConstants.API_GET_USER_BY_LIST_ID;
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        String authorizationToken = "Bearer " + labReportAppSession.getToken();
-        headers.set("Authorization", authorizationToken);
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        String jsonList = null;
         try {
-            jsonList = objectMapper.writeValueAsString(listIdUser);
-        } catch (JsonProcessingException e) {
+            String apiUrl = ApiConstants.API_GET_USER_BY_LIST_ID;
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+
+            String authorizationToken = "Bearer " + labReportAppSession.getToken();
+            headers.set("Authorization", authorizationToken);
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonList = null;
+            try {
+                jsonList = objectMapper.writeValueAsString(listIdUser);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+                return null;
+            }
+
+            HttpEntity<String> httpEntity = new HttpEntity<>(jsonList, headers);
+
+            ResponseEntity<List<SimpleResponse>> responseEntity =
+                    restTemplate.exchange(apiUrl, HttpMethod.POST, httpEntity,
+                            new ParameterizedTypeReference<List<SimpleResponse>>() {
+                            });
+
+            List<SimpleResponse> response = responseEntity.getBody();
+            return response;
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
-
-        HttpEntity<String> httpEntity = new HttpEntity<>(jsonList, headers);
-
-        ResponseEntity<List<SimpleResponse>> responseEntity =
-                restTemplate.exchange(apiUrl, HttpMethod.POST, httpEntity,
-                        new ParameterizedTypeReference<List<SimpleResponse>>() {
-                        });
-
-        List<SimpleResponse> response = responseEntity.getBody();
-        return response;
     }
 
     public List<SimpleResponse> handleCallApiGetUserByRoleAndModule(String roleCode) {
-        String apiUrl = ApiConstants.API_GET_ALL_USER_BY_ROLE_AND_MODULE;
+        try {
+            String apiUrl = ApiConstants.API_GET_ALL_USER_BY_ROLE_AND_MODULE;
 
-        HttpHeaders headers = new HttpHeaders();
-        String authorizationToken = "Bearer " + labReportAppSession.getToken();
-        headers.set("Authorization", authorizationToken);
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
+            HttpHeaders headers = new HttpHeaders();
+            String authorizationToken = "Bearer " + labReportAppSession.getToken();
+            headers.set("Authorization", authorizationToken);
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
 
-        ResponseEntity<List<SimpleResponse>> responseEntity =
-                restTemplate.exchange(apiUrl + "?roleCode=" + roleCode + "&moduleCode=" + LabReportAppConstants.MODULE_CODE, HttpMethod.GET, httpEntity,
-                        new ParameterizedTypeReference<List<SimpleResponse>>() {
-                        });
+            ResponseEntity<List<SimpleResponse>> responseEntity =
+                    restTemplate.exchange(apiUrl + "?roleCode=" + roleCode + "&moduleCode=" + LabReportAppConstants.MODULE_CODE, HttpMethod.GET, httpEntity,
+                            new ParameterizedTypeReference<List<SimpleResponse>>() {
+                            });
 
-        List<SimpleResponse> response = responseEntity.getBody();
-        return response;
+            List<SimpleResponse> response = responseEntity.getBody();
+            return response;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public SimpleResponse handleCallApiGetUserById(String idUSer) {
-        String apiUrl = ApiConstants.API_GET_USER_BY_ID;
-        HttpHeaders headers = new HttpHeaders();
-        String authorizationToken = "Bearer " + labReportAppSession.getToken();
-        headers.set("Authorization", authorizationToken);
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<SimpleResponse> responseEntity =
-                restTemplate.exchange(apiUrl + "/" + idUSer, HttpMethod.GET, httpEntity,
-                        new ParameterizedTypeReference<SimpleResponse>() {
-                        });
+        try {
+            String apiUrl = ApiConstants.API_GET_USER_BY_ID;
+            HttpHeaders headers = new HttpHeaders();
+            String authorizationToken = "Bearer " + labReportAppSession.getToken();
+            headers.set("Authorization", authorizationToken);
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
+            ResponseEntity<SimpleResponse> responseEntity =
+                    restTemplate.exchange(apiUrl + "/" + idUSer, HttpMethod.GET, httpEntity,
+                            new ParameterizedTypeReference<SimpleResponse>() {
+                            });
 
-        SimpleResponse response = responseEntity.getBody();
-        return response;
+            SimpleResponse response = responseEntity.getBody();
+            return response;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public Object handleCallApiGetRoleUserByIdUserAndModuleCode(String idUSer) {
-        String apiUrl = ApiConstants.API_GET_ROLES_USER_BY_ID_USER_AND_MODULE_CODE;
-        HttpHeaders headers = new HttpHeaders();
-        String authorizationToken = "Bearer " + labReportAppSession.getToken();
-        headers.set("Authorization", authorizationToken);
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<List<RolesResponse>> responseEntity =
-                restTemplate.exchange(apiUrl + "/" + idUSer + "/" + LabReportAppConstants.MODULE_ID, HttpMethod.GET, httpEntity,
-                        new ParameterizedTypeReference<List<RolesResponse>>() {
-                        });
+        try {
+            String apiUrl = ApiConstants.API_GET_ROLES_USER_BY_ID_USER_AND_MODULE_CODE;
+            HttpHeaders headers = new HttpHeaders();
+            String authorizationToken = "Bearer " + labReportAppSession.getToken();
+            headers.set("Authorization", authorizationToken);
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
+            ResponseEntity<List<RolesResponse>> responseEntity =
+                    restTemplate.exchange(apiUrl + "/" + idUSer + "/" + LabReportAppConstants.MODULE_ID, HttpMethod.GET, httpEntity,
+                            new ParameterizedTypeReference<List<RolesResponse>>() {
+                            });
 
-        List<RolesResponse> response = responseEntity.getBody();
-        List<String> roles = response.stream()
-                .map(RolesResponse::getRoleCode)
-                .filter(Objects::nonNull)
-                .distinct()
-                .collect(Collectors.toList());
-        if (roles.size() > 1) {
-            return roles;
+            List<RolesResponse> response = responseEntity.getBody();
+            List<String> roles = response.stream()
+                    .map(RolesResponse::getRoleCode)
+                    .filter(Objects::nonNull)
+                    .distinct()
+                    .collect(Collectors.toList());
+            if (roles.size() > 1) {
+                return roles;
+            }
+            return roles.get(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
-        return roles.get(0);
     }
 
 }

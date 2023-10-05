@@ -93,7 +93,7 @@ const TaskModal = memo(({ open, onCancel, id }) => {
     const foundList = list.find((item) => item.id === id);
     return foundList ? foundList.name : null;
   };
-  console.log("modal render");
+  
   const detailTodo = useAppSelector(GetDetailTodo);
   const periodCurrent = useAppSelector(GetPeriodCurrent);
   const detailProject = useAppSelector(GetProject);
@@ -162,7 +162,7 @@ const TaskModal = memo(({ open, onCancel, id }) => {
     setListImage(null);
     setNameFile(null);
     setImageId(null);
-    document.title = detailProject.name + " | Portal-Projects";
+    // document.title = detailProject.name + " | Portal-Projects";
   };
 
   useEffect(() => {
@@ -197,6 +197,8 @@ const TaskModal = memo(({ open, onCancel, id }) => {
       setDeadline(detailTodo.deadline);
       if (detailTodo.completionTime != null) {
         setStatusDeadline(true);
+      } else {
+        setStatusDeadline(false);
       }
       setCompletionTime(detailTodo.completionTime);
       setDescriptions(detailTodo.descriptions);
@@ -519,7 +521,7 @@ const TaskModal = memo(({ open, onCancel, id }) => {
                 value={name}
                 onChange={handleChange}
                 autoFocus={true}
-                onBlur={handleBlur}
+                onPressEnter={handleBlur}
                 style={{
                   width: "90%",
                   fontSize: "18px",

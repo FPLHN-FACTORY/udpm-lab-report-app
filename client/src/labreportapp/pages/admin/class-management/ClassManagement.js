@@ -48,12 +48,12 @@ import ModalImportClass from "./import-class/ModalImportClass";
 
 const ClassManagement = () => {
   const { Option } = Select;
-  const [listClassAll, setlistClassAll] = useState([]); //getAll
+  const [listClassAll, setListClassAll] = useState([]); //getAll
   const [teacherDataAll, setTeacherDataAll] = useState([]); // Dữ liệu teacherId và username
   const [semesterDataAll, setSemesterDataAll] = useState([]); // Dữ liệu semester
   const [activityDataAll, setActivityDataAll] = useState([]); // Dữ liệu activity
   const [idSemesterSeach, setIdSemesterSearch] = useState("");
-  const [idActivitiSearch, setIdActivitiSearch] = useState("");
+  const [idActivitiSearch, setIdActivitiSearch] = useState("none");
 
   const [selectedItems, setSelectedItems] = useState([]);
   const [code, setCode] = useState("");
@@ -78,7 +78,6 @@ const ClassManagement = () => {
 
   useEffect(() => {
     setIdSemesterSearch("");
-    featchAllMyClass();
   }, []);
 
   useEffect(() => {
@@ -104,17 +103,19 @@ const ClassManagement = () => {
     try {
       await ClassAPI.getAllMyClass(filter).then((respone) => {
         setTotalPages(parseInt(respone.data.data.totalPages));
-        setlistClassAll(respone.data.data.data);
+        setListClassAll(respone.data.data.data);
         dispatch(SetMyClass(respone.data.data.data));
 
         setLoading(false);
       });
-    } catch (error) {
-    }
+    } catch (error) {}
   };
-  useEffect(() => {
-    featchAllMyClass();
-  }, [clear]);
+
+  // useEffect(() => {
+  //   if (clear) {
+  //     featchAllMyClass();
+  //   }
+  // }, [clear]);
 
   useEffect(() => {
     const fetchTeacherData = async () => {
@@ -150,27 +151,15 @@ const ClassManagement = () => {
     }
   }, [idSemesterSeach]);
 
+  const featchDataSemester = async () => {
+    try {
+      const responseClassAll = await ClassAPI.fetchAllSemester();
+      const listSemester = responseClassAll.data;
+      setSemesterDataAll(listSemester.data);
+    } catch (error) {}
+  };
+
   useEffect(() => {
-    const featchDataSemester = async () => {
-      try {
-        const responseClassAll = await ClassAPI.fetchAllSemester();
-        const listSemester = responseClassAll.data;
-        if (listSemester.data.length > 0) {
-          listSemester.data.forEach((item) => {
-            if (
-              item.startTime <= new Date().getTime() &&
-              new Date().getTime() <= item.endTime
-            ) {
-              setIdSemesterSearch(item.id);
-            }
-          });
-        } else {
-          setIdSemesterSearch(null);
-        }
-        setSemesterDataAll(listSemester.data);
-      } catch (error) {
-      }
-    };
     featchDataSemester();
   }, []);
 
@@ -367,25 +356,14 @@ const ClassManagement = () => {
   };
 
   const handleClear = () => {
-    if (semesterDataAll.length > 0) {
-      semesterDataAll.forEach((item) => {
-        if (
-          item.startTime <= new Date().getTime() &&
-          new Date().getTime() <= item.endTime
-        ) {
-          setIdSemesterSearch(item.id);
-        }
-      });
-    } else {
-      setIdSemesterSearch(null);
-    }
+    setIdSemesterSearch("");
     setSelectedItems("");
     setCode("");
     setClassSize("");
     setLevel("");
     setStatusClass("");
     setStatusTeacherEdit("");
-    setIdActivitiSearch("");
+    setIdActivitiSearch("none");
     setSelectedItemsPerson("");
     setClear(true);
   };

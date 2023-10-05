@@ -100,7 +100,7 @@ const Todo = ({ item }) => {
             autoFocus={true}
             type="text"
             value={name}
-            onBlur={handleChangeName}
+            onPressEnter={handleChangeName}
             onChange={(e) => {
               setName(e.target.value);
             }}

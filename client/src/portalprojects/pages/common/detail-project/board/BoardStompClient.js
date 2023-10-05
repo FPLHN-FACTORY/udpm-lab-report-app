@@ -144,16 +144,16 @@ const BoardStompClient = (dispatch, useAppSelector) => {
       Object.keys(periodCurrent).length > 0
     ) {
       stompClient.connect({}, () => {
-        stompClient.beforeSend = (frame) => {
-          // Fetch the token from where you have stored it (e.g., cookies)
-          const bearerToken = Cookies.get("token");
+        // stompClient.beforeSend = (frame) => {
+        //   // Fetch the token from where you have stored it (e.g., cookies)
+        //   const bearerToken = Cookies.get("token");
 
-          // Add the token to the "Authorization" header
-          frame.headers = {
-            Authorization: "Bearer " + bearerToken,
-            // You can add other headers if needed
-          };
-        };
+        //   // Add the token to the "Authorization" header
+        //   frame.headers = {
+        //     Authorization: "Bearer " + bearerToken,
+        //     // You can add other headers if needed
+        //   };
+        // };
 
         let sessionId = loadDataPeriodNotExists(stompClient);
         stompClient.subscribe(

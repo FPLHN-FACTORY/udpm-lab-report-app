@@ -193,7 +193,7 @@ const List = ({ list, index }) => {
                 value={listTitle}
                 onChange={handleInputChange}
                 className="input_change_list_title"
-                onBlur={handleSaveTitle}
+                onPressEnter={handleSaveTitle}
                 autoFocus
               />
             ) : (

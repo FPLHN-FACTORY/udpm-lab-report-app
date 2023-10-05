@@ -1,8 +1,6 @@
 package com.labreportapp.labreport.infrastructure.security;
 
 import com.labreportapp.labreport.infrastructure.constant.SessionConstant;
-import com.labreportapp.portalprojects.infrastructure.constant.Message;
-import com.labreportapp.portalprojects.infrastructure.exception.rest.CustomException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
