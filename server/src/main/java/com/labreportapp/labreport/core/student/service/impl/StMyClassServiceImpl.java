@@ -17,6 +17,7 @@ import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.labreport.repository.LevelRepository;
 import com.labreportapp.labreport.repository.SemesterRepository;
 import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
+import com.labreportapp.labreport.util.SemesterHelper;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,8 +59,27 @@ public class StMyClassServiceImpl implements StMyClassService {
     @Autowired
     private LabReportAppSession labReportAppSession;
 
+    @Autowired
+    private SemesterHelper semesterHelper;
+
     @Override
     public List<StMyClassCustom> getAllClass(final StFindClassRequest req) {
+        String idSemesterCurrent = semesterHelper.getSemesterCurrent();
+        if (req.getSemesterId() == null) {
+            if (idSemesterCurrent != null) {
+                req.setSemesterId(idSemesterCurrent);
+                req.setActivityId("");
+            } else {
+                req.setSemesterId("");
+            }
+        } else if (req.getSemesterId().equalsIgnoreCase("")) {
+            if (idSemesterCurrent != null) {
+                req.setSemesterId(idSemesterCurrent);
+                req.setActivityId("");
+            } else {
+                req.setSemesterId("");
+            }
+        }
         List<StMyClassResponse> listMyClassResponse = stMyClassRepository.getAllClass(req);
         List<String> distinctTeacherIds = listMyClassResponse.stream()
                 .map(StMyClassResponse::getTeacherId)
@@ -90,6 +110,13 @@ public class StMyClassServiceImpl implements StMyClassService {
             listCustom.add(stMyClassCustom);
         }
         return listCustom;
+    }
+
+    @Override
+    public List<SimpleResponse> getAllStudentClasses(String idClass) {
+        List<String> idList = stMyClassRepository.getAllStudentClasses(idClass);
+        List<SimpleResponse> listResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idList);
+        return listResponse;
     }
 
     @Override

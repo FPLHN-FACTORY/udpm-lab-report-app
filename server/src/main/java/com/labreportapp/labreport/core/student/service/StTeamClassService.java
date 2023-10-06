@@ -6,7 +6,7 @@ import com.labreportapp.labreport.core.student.model.request.FindTeamClassReques
 import com.labreportapp.labreport.core.student.model.request.StJoinTeamRequest;
 import com.labreportapp.labreport.core.student.model.request.StOutTeamRequest;
 import com.labreportapp.labreport.core.student.model.response.StDetailClassCustomResponse;
-import com.labreportapp.labreport.core.student.model.response.StMyStudentTeamResponse;
+import com.labreportapp.labreport.core.student.model.response.StMyStudentTeamCustom;
 import com.labreportapp.labreport.core.student.model.response.StMyTeamInClassResponse;
 import com.labreportapp.labreport.core.student.model.response.StStudentCallApiResponse;
 import com.labreportapp.labreport.entity.Team;
@@ -21,7 +21,7 @@ public interface StTeamClassService {
 
     List<StMyTeamInClassResponse> getTeamInClass(final FindTeamByIdClass req);
 
-    List<StMyStudentTeamResponse> getStudentInMyTeam(final FindTeamClassRequest req);
+    List<StMyStudentTeamCustom> getStudentInMyTeam(final FindTeamClassRequest req);
 
     StDetailClassCustomResponse detailClass(String idClass);
 

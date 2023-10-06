@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import "./style-detail-my-class-team.css";
 import { Link, useNavigate } from "react-router-dom";
 import { ControlOutlined } from "@ant-design/icons";
-import { useAppDispatch } from "../../../../app/hook";
+import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import { useEffect, useState } from "react";
 import LoadingIndicator from "../../../../helper/loading";
 import { StMyTeamClassAPI } from "../../../../api/student/StTeamClass";
@@ -20,6 +20,7 @@ import LoadingIndicatorNoOverlay from "../../../../helper/loadingNoOverlay";
 import { SetTTrueToggle } from "../../../../app/student/StCollapsedSlice.reducer";
 import { StMyClassAPI } from "../../../../api/student/StMyClassAPI";
 import { toast } from "react-toastify";
+import { SetStStudentClasses } from "../../../../app/student/StStudentClasses.reducer";
 
 const DetailMyClassTeam = () => {
   const dispatch = useAppDispatch();
@@ -88,6 +89,11 @@ const DetailMyClassTeam = () => {
       render: (text, record, index) => <>{index + 1}</>,
     },
     {
+      title: "Họ và tên",
+      dataIndex: "name",
+      key: "name",
+    },
+    {
       title: "Email",
       dataIndex: "email",
       key: "email",
@@ -118,6 +124,12 @@ const DetailMyClassTeam = () => {
       title: "Tên đề tài",
       dataIndex: "subjectName",
       key: "subjectName",
+      render: (text, record, index) => {
+        if (record.subjectName === "" || record.subjectName == null) {
+          return <span>Chưa có</span>;
+        }
+        return <span>{record.subjectName}</span>;
+      },
     },
     {
       title: "Hành động",
@@ -193,6 +205,16 @@ const DetailMyClassTeam = () => {
       setIsLoadingOverlay(false);
     });
   };
+
+  const loadDataStudentClasses = () => {
+    StMyClassAPI.getAllStudentClasses(id).then((response) => {
+      dispatch(SetStStudentClasses(response.data.data));
+    });
+  };
+
+  useEffect(() => {
+    loadDataStudentClasses();
+  }, []);
 
   return (
     <div style={{ paddingTop: "35px" }}>
@@ -372,6 +394,7 @@ const DetailMyClassTeam = () => {
                       }}
                       okText="Có"
                       cancelText="Không"
+                      placement="topLeft"
                     >
                       <Button
                         style={{ backgroundColor: "#E2B357" }}

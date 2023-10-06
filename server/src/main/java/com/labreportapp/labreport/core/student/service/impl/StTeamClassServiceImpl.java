@@ -8,6 +8,7 @@ import com.labreportapp.labreport.core.student.model.request.FindTeamClassReques
 import com.labreportapp.labreport.core.student.model.request.StJoinTeamRequest;
 import com.labreportapp.labreport.core.student.model.request.StOutTeamRequest;
 import com.labreportapp.labreport.core.student.model.response.StDetailClassCustomResponse;
+import com.labreportapp.labreport.core.student.model.response.StMyStudentTeamCustom;
 import com.labreportapp.labreport.core.student.model.response.StMyStudentTeamResponse;
 import com.labreportapp.labreport.core.student.model.response.StMyTeamInClassResponse;
 import com.labreportapp.labreport.core.student.model.response.StStudentCallApiResponse;
@@ -43,6 +44,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author quynhncph26201
@@ -169,8 +172,33 @@ public class StTeamClassServiceImpl implements StTeamClassService {
     }
 
     @Override
-    public List<StMyStudentTeamResponse> getStudentInMyTeam(final FindTeamClassRequest req) {
-        return repository.getStudentInMyTeam(req);
+    public List<StMyStudentTeamCustom> getStudentInMyTeam(final FindTeamClassRequest req) {
+        List<StMyStudentTeamResponse> listRepo = repository.getStudentInMyTeam(req);
+        List<String> idList = listRepo.stream()
+                .map(StMyStudentTeamResponse::getStudentId)
+                .filter(Objects::nonNull)
+                .distinct()
+                .collect(Collectors.toList());
+        List<SimpleResponse> listResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idList);
+        List<StMyStudentTeamCustom> listCustom = new ArrayList<>();
+        listRepo.forEach(repo -> {
+            StMyStudentTeamCustom stMyStudentTeamCustom = new StMyStudentTeamCustom();
+            stMyStudentTeamCustom.setStudentId(repo.getStudentId());
+            stMyStudentTeamCustom.setClassId(repo.getClassId());
+            stMyStudentTeamCustom.setTeamId(repo.getTeamId());
+            stMyStudentTeamCustom.setEmail(repo.getEmail());
+            stMyStudentTeamCustom.setId(repo.getId());
+            stMyStudentTeamCustom.setRole(repo.getRole());
+            stMyStudentTeamCustom.setStatus(repo.getStatus());
+            for (SimpleResponse simpleResponse : listResponse) {
+                if (repo.getStudentId().equals(simpleResponse.getId())) {
+                    stMyStudentTeamCustom.setName(simpleResponse.getName());
+                    break;
+                }
+            }
+            listCustom.add(stMyStudentTeamCustom);
+        });
+        return listCustom;
     }
 
     @Override

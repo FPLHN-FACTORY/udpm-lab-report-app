@@ -4,6 +4,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { StMyTeamClassAPI } from "../../../../../api/student/StTeamClass";
 import { useState } from "react";
 import { useEffect } from "react";
+import { GetStStudentClasses } from "../../../../../app/student/StStudentClasses.reducer";
+import { useAppSelector } from "../../../../../app/hook";
 
 const { Option } = Select;
 
@@ -18,6 +20,7 @@ const ModalDetailTeam = ({ id, visible, onCancel, idClass }) => {
     }
     return () => {
       setDetailTeam(null);
+      setStudentMyTeam([]);
     };
   }, [id]);
 
@@ -27,9 +30,20 @@ const ModalDetailTeam = ({ id, visible, onCancel, idClass }) => {
     });
   };
 
+  const dataStudentClasses = useAppSelector(GetStStudentClasses);
+
   const loadDataMemberInTeam = () => {
     StMyTeamClassAPI.getStudentInMyTeam(idClass, id).then((response) => {
-      setStudentMyTeam(response.data.data);
+      let res = response.data.data;
+      res.forEach((item) => {
+        dataStudentClasses.forEach((st) => {
+          if (item.studentId === st.id) {
+            item.name = st.name;
+          }
+        });
+      });
+      console.log(res);
+      setStudentMyTeam(res);
     });
   };
 
@@ -39,6 +53,11 @@ const ModalDetailTeam = ({ id, visible, onCancel, idClass }) => {
       dataIndex: "stt",
       key: "stt",
       render: (text, record, index) => <>{index + 1}</>,
+    },
+    {
+      title: "Họ và tên",
+      dataIndex: "name",
+      key: "name",
     },
     {
       title: "Email",
@@ -57,13 +76,7 @@ const ModalDetailTeam = ({ id, visible, onCancel, idClass }) => {
 
   return (
     <>
-      <Modal
-        visible={visible}
-        onCancel={onCancel}
-        width={750}
-        footer={null}
-        className="modal_show_detail"
-      >
+      <Modal visible={visible} onCancel={onCancel} width={750} footer={null}>
         <div>
           <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
             <span style={{ fontSize: "18px" }}>Chi tiết nhóm</span>

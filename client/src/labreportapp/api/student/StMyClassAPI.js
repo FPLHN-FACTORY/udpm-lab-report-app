@@ -29,4 +29,11 @@ export class StMyClassAPI {
       params: obj,
     });
   }
+
+  static getAllStudentClasses(idClass) {
+    return request({
+      method: "GET",
+      url: "/student/my-class/get-all-student-classes?idClass=" + idClass,
+    });
+  }
 }
