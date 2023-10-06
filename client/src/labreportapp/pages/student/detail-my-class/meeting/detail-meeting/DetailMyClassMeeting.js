@@ -14,7 +14,6 @@ const StTeamMeeting = () => {
   const { idMeeting } = useParams();
   const [meeting, setMeeting] = useState({});
   const [team, setTeam] = useState(["a", "b"]);
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -22,7 +21,6 @@ const StTeamMeeting = () => {
   }, []);
 
   const featchMeeting = async (id) => {
-    setLoading(false);
     try {
       await StudentMeetingAPI.getDetailByIdMeeting(id).then((response) => {
         setMeeting(response.data.data);
@@ -33,13 +31,12 @@ const StTeamMeeting = () => {
       toast.error(error.response.data.message);
     }
   };
+
   const featchTeams = async (id) => {
     try {
       await StudentMeetingAPI.getTeamInMeeting(id).then((responese) => {
+        console.log(responese.data.data);
         setTeam(responese.data.data);
-        setTimeout(() => {
-          setLoading(true);
-        }, 250);
       });
     } catch (error) {
       console.log(error);
@@ -56,7 +53,6 @@ const StTeamMeeting = () => {
 
   return (
     <>
-      {!loading && <LoadingIndicator />}
       <div className="box-one">
         <Link style={{ color: "black" }}>
           <span style={{ fontSize: "18px", paddingLeft: "20px" }}>

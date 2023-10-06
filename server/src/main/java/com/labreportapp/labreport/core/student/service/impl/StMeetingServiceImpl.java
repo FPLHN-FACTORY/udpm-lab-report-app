@@ -12,6 +12,7 @@ import com.labreportapp.labreport.core.student.repository.StNoteRepository;
 import com.labreportapp.labreport.core.student.repository.StReportRepository;
 import com.labreportapp.labreport.core.student.service.StMeetingService;
 import com.labreportapp.labreport.entity.HomeWork;
+import com.labreportapp.labreport.entity.Meeting;
 import com.labreportapp.labreport.entity.Note;
 import com.labreportapp.labreport.entity.Report;
 import com.labreportapp.labreport.entity.StudentClasses;
@@ -92,7 +93,11 @@ public class StMeetingServiceImpl implements StMeetingService {
     @Transactional
     @Synchronized
     public StHomeWordAndNoteResponse updateDetailMeetingTeamByLeadTeam(StUpdateHomeWorkAndNotebyLeadTeamRequest request) {
-        Optional<StudentClasses> optionalStudentClasses = stLeadTeamRepository.findStudentClassesByStudentId(labReportAppSession.getUserId());
+        Optional<Meeting> meetingFind = stMeetingrepository.findById(request.getIdMeeting());
+        if (!meetingFind.isPresent()) {
+            throw new RestApiException(Message.MEETING_NOT_EXISTS);
+        }
+        Optional<StudentClasses> optionalStudentClasses = stLeadTeamRepository.findStudentClassesByStudentIdAndClassId(labReportAppSession.getUserId(), meetingFind.get().getClassId());
         if (optionalStudentClasses.isPresent()) {
             StudentClasses studentClasses = optionalStudentClasses.get();
             if (studentClasses.getRole().equals(RoleTeam.LEADER)) {

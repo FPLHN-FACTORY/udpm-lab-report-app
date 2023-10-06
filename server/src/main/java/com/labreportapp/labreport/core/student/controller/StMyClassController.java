@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -30,6 +31,11 @@ public class StMyClassController {
     public ResponseObject getAllClass(final StFindClassRequest request) {
         request.setStudentId(labReportAppSession.getUserId());
         return new ResponseObject(stMyClassService.getAllClass(request));
+    }
+
+    @GetMapping("/get-all-student-classes")
+    public ResponseObject getAllStudentClasses(@RequestParam("idClass") String idClass) {
+        return new ResponseObject(stMyClassService.getAllStudentClasses(idClass));
     }
 
     @DeleteMapping("/leave")

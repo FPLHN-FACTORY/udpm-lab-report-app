@@ -47,15 +47,15 @@ const StudentMyClass = () => {
   const loadDataSemester = () => {
     StMyClassAPI.getAllSemesters().then((response) => {
       setListSemester(response.data.data);
-      setSemester(response.data.data[0].id);
-      setLoading(false);
     });
   };
+
   const loadDataLevel = () => {
     StLevelAPI.getLevelAll().then((response) => {
       setListLevel(response.data.data);
     });
   };
+
   useEffect(() => {
     loadDataLevel();
     loadDataSemester();
@@ -171,9 +171,12 @@ const StudentMyClass = () => {
     StMyClassAPI.getAllActivityByIdSemester(semester).then((response) => {
       setListActivity(response.data.data);
       setActivity("");
-      loadDataClass("");
     });
   };
+
+  useEffect(() => {
+    loadDataClass("Không có hoạt động");
+  }, []);
 
   useEffect(() => {
     if (semester === "") {
@@ -205,6 +208,7 @@ const StudentMyClass = () => {
       classPeriod: classPeriod === "" ? null : parseInt(classPeriod),
       level: level,
     };
+    console.log(filter);
     StMyClassAPI.getAllClass(filter).then((response) => {
       setListClass(response.data.data);
       setLoading(false);

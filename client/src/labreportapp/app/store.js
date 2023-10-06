@@ -40,6 +40,7 @@ import StakeholderReducer from "../../portalprojects/app/reducer/admin/stakehold
 import NotificationSliceReducer from "../../portalprojects/app/reducer/notification/NotificationSlice.reducer";
 import AdAttendanceDetailMeetingReducer from "./admin/AdAttendanceDetailMeeting.reducer";
 import UserCurrentReducer from "./common/UserCurrent.reducer";
+import StStudentClassesReducer from "./student/StStudentClasses.reducer";
 
 export const store = configureStore({
   reducer: {
@@ -65,6 +66,7 @@ export const store = configureStore({
     teCollapsed: TeCollapsedSliceReducer,
     adAttendanceDetailMeeting: AdAttendanceDetailMeetingReducer,
     adLevel: adLevelSliceReducer,
+    StStudentClasses: StStudentClassesReducer,
     ////
     board: boardSliceReducer,
     myProject: myProjectSliceReducer,
@@ -82,7 +84,7 @@ export const store = configureStore({
     memberProjectManagement: memberProjectManagementReducer,
     categoryProjectManagement: categoryProjectManagementReducer,
     notification: NotificationSliceReducer,
-    userCurrent: UserCurrentReducer
+    userCurrent: UserCurrentReducer,
   },
 });
 

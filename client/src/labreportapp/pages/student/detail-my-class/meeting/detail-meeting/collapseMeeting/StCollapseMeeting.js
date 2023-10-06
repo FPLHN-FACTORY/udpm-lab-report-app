@@ -12,7 +12,6 @@ const CollapseMeeting = ({ items }) => {
   const [activePanel, setActivePanel] = useState(null);
   const [edit, setEdit] = useState(false);
   const { idMeeting } = useParams();
-  const [idTeamDetail, setIdTeamDetail] = useState("");
   const [objDetail, setObjDetail] = useState({});
   const [loading, setLoading] = useState(false);
   const [descriptionsHomeWork, setDescriptionsHomeWork] = useState("");
@@ -31,7 +30,6 @@ const CollapseMeeting = ({ items }) => {
   useEffect(() => {
     if (items[0].classId != null && items[0].classId != undefined) {
       const getRoleByIdStudent = () => {
-        setLoading(false);
         StudentMeetingAPI.getRoleByIdStudent(items[0].classId).then(
           (response) => {
             setRole(response.data.data);
@@ -51,26 +49,15 @@ const CollapseMeeting = ({ items }) => {
       console.log(error);
     }
   };
-  useEffect(() => {
-    featchHomeWorkNote(idTeamDetail);
-  }, [idTeamDetail, activePanel]);
-
-  const toggleCard = (index, item) => {
-    setEdit(false);
-    setActivePanel(index);
-    setIdTeamDetail(item.id);
-  };
-
-  const callToggleCardForAllItems = () => {
-    items.forEach((item, index) => toggleCard(index, item));
-  };
 
   useEffect(() => {
-    callToggleCardForAllItems();
-  }, [items]);
+    if (items[0].id != undefined) {
+      featchHomeWorkNote(items[0].id);
+    }
+  }, [items[0].id]);
 
   const featchHomeWorkNote = async (idTeam) => {
-    setLoading(false);
+    setLoading(true);
     try {
       let data = {
         idTeam: idTeam,
@@ -94,17 +81,18 @@ const CollapseMeeting = ({ items }) => {
           setDescriptionsReport(response.data.data.descriptionsReport);
           setObjDetail(response.data.data);
         }
-        setLoading(true);
+        setLoading(false);
       });
     } catch (error) {
       console.log(error);
     }
   };
+
   const update = async () => {
     try {
       let data = {
         idMeeting: idMeeting,
-        idTeam: idTeamDetail,
+        idTeam: items[0].id,
         idHomeWork: objDetail.idHomeWork,
         descriptionsHomeWork: descriptionsHomeWork,
         idNote: objDetail.idNote,
@@ -123,15 +111,15 @@ const CollapseMeeting = ({ items }) => {
 
   const handleCancel = () => {
     setEdit(false);
-    featchHomeWorkNote(idTeamDetail);
+    featchHomeWorkNote(items[0].id);
   };
+
   const clear = () => {
     setEdit(false);
     setActivePanel(null);
   };
   return (
     <div className="lesson-information">
-      {!loading && <LoadingIndicator />}
       {items.map((item, index) => (
         <div className="info-team">
           <div className="info-heading" style={{ marginLeft: "40px" }}>
@@ -201,37 +189,31 @@ const CollapseMeeting = ({ items }) => {
                 </Row>
                 {edit && role === 0 && (
                   <>
-                    <div
-                      style={{
-                        paddingTop: "15px",
-                        paddingLeft: "85%",
-                        marginLeft: "40px",
-                      }}
-                    >
+                    <div style={{ marginTop: 15, textAlign: "right" }}>
                       {" "}
-                      <Button
-                        style={{
-                          backgroundColor: "#E2B357",
-                          color: "white",
-                          marginRight: "15px",
-                        }}
-                        onClick={handleCancel}
-                      >
-                        Hủy
-                      </Button>
                       <Button
                         style={{
                           backgroundColor: "rgb(61, 139, 227)",
                           color: "white",
+                          marginRight: "8px",
                         }}
                         onClick={update}
                       >
                         Lưu
                       </Button>
+                      <Button
+                        style={{
+                          backgroundColor: "#E2B357",
+                          color: "white",
+                        }}
+                        onClick={handleCancel}
+                      >
+                        Hủy
+                      </Button>
                     </div>
                   </>
                 )}
-                <Row gutter={16}>
+                <Row style={{ marginTop: 10 }}>
                   <Col span={24}>
                     <span className="title-main">Template mẫu báo cáo:</span>
                     <TextArea rows={5} value={template.descriptions} />
@@ -273,13 +255,15 @@ const CollapseMeeting = ({ items }) => {
                       value={descriptionsReport}
                       readOnly
                     />
-                  </Col>
-                </Row>
-                <Row gutter={16}>
-                  <Col span={24}>
+                  </Col>{" "}
+                  <div style={{ marginBottom: 8 }}>
+                    {" "}
                     <span className="title-main">Template mẫu báo cáo:</span>
-                    <TextArea rows={5} value={template.descriptions} />
-                  </Col>
+                  </div>{" "}
+                </Row>
+
+                <Row style={{ marginTop: 8 }}>
+                  <TextArea rows={5} value={template.descriptions} />
                 </Row>
               </div>
             )}

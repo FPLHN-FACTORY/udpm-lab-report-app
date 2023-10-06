@@ -33,7 +33,7 @@ public interface StMyClassRepository extends ClassRepository {
             AND (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR a.class_period = :#{#req.classPeriod}) 
             AND (:#{#req.level} IS NULL OR :#{#req.level} LIKE '' OR e.id = :#{#req.level}) 
             AND (:#{#req.activityId} IS NULL OR :#{#req.activityId} LIKE '' OR b.id = :#{#req.activityId}) 
-            AND d.id = :#{#req.semesterId}
+            AND (:#{#req.semesterId} IS NULL OR :#{#req.semesterId} LIKE '' OR d.id = :#{#req.semesterId})  
             AND c.student_id = :#{#req.studentId}
             ORDER BY c.created_date DESC
             """, nativeQuery = true)
@@ -83,4 +83,9 @@ public interface StMyClassRepository extends ClassRepository {
             AND c.id = :#{#req.idClass}
             """, nativeQuery = true)
     StClassResponse checkTheFirstMeetingDateByClass(final StClassRequest req);
+
+    @Query(value = """
+            SELECT a.student_id FROM student_classes a WHERE a.class_id = :idClass
+            """, nativeQuery = true)
+    List<String> getAllStudentClasses(@Param("idClass") String idClass);
 }
