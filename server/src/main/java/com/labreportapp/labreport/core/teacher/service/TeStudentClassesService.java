@@ -25,6 +25,8 @@ public interface TeStudentClassesService {
 
     List<TeStudentCallApiResponse> callApiStudent(final TeFindStudentApiRequest teFindStudentApiRequest);
 
+    Boolean updateKickStudentClasses(TeSentStudentClassRequest request);
+
     Boolean updateSentStudentClassesToClass(@Valid final TeSentStudentClassRequest request);
 
 }

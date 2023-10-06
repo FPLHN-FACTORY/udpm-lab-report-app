@@ -8,6 +8,7 @@ import com.labreportapp.labreport.core.admin.model.request.AdRandomClassRequest;
 import com.labreportapp.labreport.core.admin.model.response.AdActivityClassResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdClassCustomResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdClassResponse;
+import com.labreportapp.labreport.core.admin.model.response.AdDetailClassCustomResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdDetailClassRespone;
 import com.labreportapp.labreport.core.admin.model.response.AdExportExcelClassCustom;
 import com.labreportapp.labreport.core.admin.model.response.AdExportExcelClassResponse;
@@ -291,12 +292,32 @@ public class AdClassManagerServiceImpl implements AdClassService {
     }
 
     @Override
-    public AdDetailClassRespone adFindClassById(String id) {
+    public AdDetailClassCustomResponse adFindClassById(String id) {
         Optional<AdDetailClassRespone> adDetailClassRespone = repository.adfindClassById(id);
         if (!adDetailClassRespone.isPresent()) {
             throw new RestApiException(Message.CLASS_NOT_EXISTS);
         }
-        return adDetailClassRespone.get();
+        AdDetailClassCustomResponse customResponse = new AdDetailClassCustomResponse();
+        AdDetailClassRespone getOptional = adDetailClassRespone.get();
+        SimpleResponse response = convertRequestCallApiIdentity.handleCallApiGetUserById(getOptional.getTeacherId());
+        customResponse.setId(getOptional.getId());
+        customResponse.setCode(getOptional.getCode());
+        customResponse.setClassPeriod(getOptional.getClassPeriod());
+        customResponse.setStartTime(getOptional.getStartTime());
+        customResponse.setPassWord(getOptional.getPassWord());
+        customResponse.setClassSize(getOptional.getClassSize());
+        customResponse.setDescriptions(getOptional.getDescriptions());
+        customResponse.setTeacherId(getOptional.getTeacherId());
+        customResponse.setActivityId(getOptional.getActivityId());
+        customResponse.setActivityLevel(getOptional.getActivityLevel());
+        customResponse.setActivityName(getOptional.getActivityName());
+        customResponse.setSemesterId(getOptional.getSemesterId());
+        customResponse.setSemesterName(getOptional.getSemesterName());
+        customResponse.setLevelId(getOptional.getLevelId());
+        customResponse.setStatusTeacherEdit(getOptional.getStatusTeacherEdit());
+        customResponse.setTeacherName(response.getName());
+        customResponse.setTeacherUserName(response.getUserName());
+        return customResponse;
     }
 
     @Override
