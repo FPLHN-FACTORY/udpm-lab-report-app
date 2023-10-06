@@ -4,13 +4,39 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fe93e581-5589-4bad-ba6a-389fa82a0816" name="Default Changelist" comment="update code trello">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="fe93e581-5589-4bad-ba6a-389fa82a0816" name="Default Changelist" comment="merge code quynhnc">
+      <change afterPath="$PROJECT_DIR$/client/src/labreportapp/app/student/StStudentClasses.reducer.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/student/model/response/StMyStudentTeamCustom.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/api/student/StMyClassAPI.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/api/student/StMyClassAPI.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/app/store.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/app/store.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/pages/student/detail-my-class/meeting/detail-meeting/DetailMyClassMeeting.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/pages/student/detail-my-class/meeting/detail-meeting/DetailMyClassMeeting.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/pages/student/detail-my-class/meeting/detail-meeting/collapseMeeting/StCollapseMeeting.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/pages/student/detail-my-class/meeting/detail-meeting/collapseMeeting/StCollapseMeeting.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/pages/student/detail-my-class/team/DetailMyClassTeam.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/pages/student/detail-my-class/team/DetailMyClassTeam.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/pages/student/detail-my-class/team/modal-detail-team/ModalDetailTeam.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/pages/student/detail-my-class/team/modal-detail-team/ModalDetailTeam.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/pages/student/my-class/StudentMyClass.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/pages/student/my-class/StudentMyClass.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/student/controller/StMyClassController.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/student/controller/StMyClassController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/student/repository/StLeadTeamRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/student/repository/StLeadTeamRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/student/repository/StMyClassRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/student/repository/StMyClassRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/student/service/StMyClassService.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/student/service/StMyClassService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/student/service/StTeamClassService.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/student/service/StTeamClassService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/student/service/impl/StMeetingServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/student/service/impl/StMeetingServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/student/service/impl/StMyClassServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/student/service/impl/StMyClassServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/student/service/impl/StTeamClassServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/student/service/impl/StTeamClassServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view />
+      </state>
+    </system>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -87,7 +113,14 @@
       <option name="project" value="LOCAL" />
       <updated>1696540478857</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="merge code quynhnc">
+      <created>1696621460435</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1696621460435</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -109,6 +142,7 @@
     <MESSAGE value="update code merge login, pending" />
     <MESSAGE value="update code merge login" />
     <MESSAGE value="update code trello" />
-    <option name="LAST_COMMIT_MESSAGE" value="update code trello" />
+    <MESSAGE value="merge code quynhnc" />
+    <option name="LAST_COMMIT_MESSAGE" value="merge code quynhnc" />
   </component>
 </project>
