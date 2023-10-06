@@ -217,6 +217,7 @@ const TeacherPointMyClass = () => {
                   style={{
                     backgroundColor: "rgb(38, 144, 214)",
                     color: "white",
+                    marginLeft: "10px",
                   }}
                   onClick={() => setShowModalImport(true)}
                 >

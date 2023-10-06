@@ -22,4 +22,7 @@ public interface TeMeetingCustomToAttendanceResponse {
     @Value("#{target.meeting_period}")
     Integer getMeetingPeriod();
 
+    @Value("#{target.status_meeting}")
+    Integer getStatusMeeting();
+
 }

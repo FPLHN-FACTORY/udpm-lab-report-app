@@ -34,4 +34,6 @@ public interface TeMeetingResponse {
     @Value("#{target.teacher_id}")
     String getIdTeacher();
 
+    @Value("#{target.status_meeting}")
+    Integer getStatusMeeting();
 }

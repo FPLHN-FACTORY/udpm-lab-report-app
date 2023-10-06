@@ -13,4 +13,10 @@ public interface TeActivityResponse {
     @Value("#{target.name}")
     String getName();
 
+    @Value("#{target.start_time}")
+    Long getStartTime();
+
+    @Value("#{target.end_time}")
+    Long getEndTime();
+
 }

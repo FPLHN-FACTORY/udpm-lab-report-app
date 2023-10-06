@@ -34,4 +34,10 @@ public interface TeHomeWorkAndNoteMeetingResponse {
     @Value("#{target.descriptionsReport}")
     String getDescriptionsReport();
 
+    @Value("#{target.meeting_date}")
+    Long getMeetingDate();
+
+    @Value("#{target.meeting_period}")
+    Integer getMeetingPeriod();
+
 }

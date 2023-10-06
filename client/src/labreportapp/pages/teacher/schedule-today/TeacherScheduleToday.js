@@ -13,7 +13,6 @@ import {
   Select,
   Table,
   Tooltip,
-  message,
 } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -27,12 +26,9 @@ import { toast } from "react-toastify";
 import {
   convertCheckAttended,
   convertMeetingPeriodToTime,
-  convertStatusMeetingByDateAndPeriod,
 } from "../../../helper/util.helper";
 import { SearchOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { TeacherAttendanceAPI } from "../../../api/teacher/attendance/TeacherAttendance.api";
-import { async } from "q";
 const { Option } = Select;
 
 const TeacherScheduleToday = () => {
@@ -42,12 +38,11 @@ const TeacherScheduleToday = () => {
   const [dataTime, setDataTime] = useState([]);
   const [current, setCurrent] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const [actionData, setActionData] = useState([]);
   const navigate = useNavigate();
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Bảng điều khiển - Lịch dạy hôm nay";
-    featchData();
+    featchDataToDay();
     setTime("7");
     featchDataTime();
   }, []);
@@ -55,23 +50,16 @@ const TeacherScheduleToday = () => {
   useEffect(() => {
     featchDataTime();
   }, [time, current]);
-  // const updateActionData = () => {
-  //   const updatedActionData = dataToday.map((item) => {
-  //     return {
-  //       idMeeting: item.idMeeting,
-  //       showButton: convertCheckAttended(item.meetingPeriod),
-  //     };
-  //   });
-  //   setActionData(updatedActionData);
-  // };
-  const featchData = async () => {
+
+  const featchDataToDay = async () => {
     setLoading(false);
     try {
       await TeacherScheduleTodayAPI.getAllByIdTe().then((response) => {
         setDataToday(response.data.data);
       });
+    } catch (error) {
       setLoading(true);
-    } catch (error) {}
+    }
   };
 
   const featchDataTime = async () => {
@@ -88,7 +76,9 @@ const TeacherScheduleToday = () => {
         }
       );
       setLoading(true);
-    } catch (error) {}
+    } catch (error) {
+      setLoading(true);
+    }
   };
   const handleAddressChange = (idMeeting, value) => {
     const listNew = dataToday.map((item) => {

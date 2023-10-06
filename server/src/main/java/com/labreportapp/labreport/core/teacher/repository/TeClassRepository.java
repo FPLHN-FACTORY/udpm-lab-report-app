@@ -2,7 +2,9 @@ package com.labreportapp.labreport.core.teacher.repository;
 
 import com.labreportapp.labreport.core.teacher.model.request.TeFindClassRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindClassSentStudentRequest;
+import com.labreportapp.labreport.core.teacher.model.request.TeFindClassStatisticalRequest;
 import com.labreportapp.labreport.core.teacher.model.response.TeClassResponse;
+import com.labreportapp.labreport.core.teacher.model.response.TeClassStatisticalResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeDetailClassResponse;
 import com.labreportapp.labreport.entity.Class;
 import org.springframework.data.domain.Page;
@@ -150,5 +152,85 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
             WHERE c.teacher_id = :#{#id}
              """, nativeQuery = true)
     List<TeClassResponse> getClassClosestToTheDateToSemester(@Param("id") String id);
+
+    @Query(value = """
+            WITH check_team AS (
+                SELECT c.id AS class_id, COUNT(t.class_id) AS count_team
+                FROM class c
+                JOIN activity a ON a.id = c.activity_id
+                JOIN semester s ON s.id = a.semester_id
+                LEFT JOIN team t ON t.class_id = c.id
+                WHERE c.teacher_id = :#{#req.idTeacher}
+                    and (:#{#req.idSemester} IS NULL OR :#{#req.idSemester} LIKE '' OR :#{#req.idSemester} LIKE s.id)
+                    and (:#{#req.idActivity} IS NULL OR :#{#req.idActivity} LIKE '' OR :#{#req.idActivity} LIKE a.id)
+                GROUP BY c.id ORDER BY c.class_size ASC
+            ), check_lesson AS(
+                SELECT DISTINCT  c.id AS class_id,
+                    COUNT(m.class_id) AS count_lesson,
+                    SUM(CASE WHEN m.status_meeting = 1 THEN 1 ELSE 0 END) AS count_lesson_off
+                FROM class c
+                JOIN activity a ON a.id = c.activity_id
+                JOIN semester s ON s.id = a.semester_id
+                LEFT JOIN meeting m ON c.id = m.class_id
+                WHERE c.teacher_id = :#{#req.idTeacher}
+                    and (:#{#req.idSemester} IS NULL OR :#{#req.idSemester} LIKE '' OR :#{#req.idSemester} LIKE s.id)
+                    and (:#{#req.idActivity} IS NULL OR :#{#req.idActivity} LIKE '' OR :#{#req.idActivity} LIKE a.id)
+                GROUP BY c.id  ORDER BY c.class_size ASC
+            ), check_post AS(
+                 SELECT DISTINCT  c.id AS class_id,
+                    COUNT(p.class_id) AS count_post
+                FROM class c
+                JOIN activity a ON a.id = c.activity_id
+                JOIN semester s ON s.id = a.semester_id
+                LEFT JOIN post p ON c.id = p.class_id
+                WHERE c.teacher_id = :#{#req.idTeacher}
+                    and (:#{#req.idSemester} IS NULL OR :#{#req.idSemester} LIKE '' OR :#{#req.idSemester} LIKE s.id)
+                    and (:#{#req.idActivity} IS NULL OR :#{#req.idActivity} LIKE '' OR :#{#req.idActivity} LIKE a.id)
+                GROUP BY c.id  ORDER BY c.class_size ASC
+            )
+                SELECT ROW_NUMBER() OVER(ORDER BY c.class_size ASC ) AS stt,
+                  c.id as id,
+                    c.code as code,
+                    c.start_time as start_time,
+                    c.class_period as class_period,
+                    c.class_size as class_size,
+                    c.teacher_id as teacher_id,
+                    c.activity_id as activity_id,
+                    c.created_date as created_date,
+                    c.descriptions as descriptions,
+                    l.name as level,
+                    a.name as activity,
+                    ct.count_team as count_team,
+                    cls.count_lesson as count_lesson,
+                    cls.count_lesson_off as count_lesson_off,
+                    cp.count_post as count_post
+                FROM activity a
+                JOIN level l ON l.id = a.level_id
+                JOIN class c ON c.activity_id = a.id
+                JOIN semester s ON s.id = a.semester_id
+                JOIN check_team ct On ct.class_id = c.id
+                JOIN check_lesson cls ON cls.class_id = c.id
+                JOIN check_post cp ON cp.class_id = c.id
+                where c.teacher_id = :#{#req.idTeacher}
+                and (:#{#req.idSemester} IS NULL OR :#{#req.idSemester} LIKE '' OR :#{#req.idSemester} LIKE s.id)
+                and (:#{#req.idActivity} IS NULL OR :#{#req.idActivity} LIKE '' OR :#{#req.idActivity} LIKE a.id)
+                GROUP BY  c.code,
+                    c.id ,
+                    c.start_time,
+                    c.class_period,
+                    c.class_size,
+                    c.teacher_id,
+                    c.activity_id,
+                    c.created_date,
+                    c.descriptions,
+                    l.name,
+                    a.name,
+                    ct.count_team,
+                    cls.count_lesson,
+                    cls.count_lesson_off,
+                    cp.count_post
+                ORDER BY c.class_size ASC
+            """, nativeQuery = true)
+    Page<TeClassStatisticalResponse> findClassStatistical(@Param("req") TeFindClassStatisticalRequest req, Pageable pageable);
 
 }

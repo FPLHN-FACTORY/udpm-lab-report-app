@@ -118,6 +118,7 @@ public class TeMeetingServiceImpl implements TeMeetingService {
                     obj.setTypeMeeting(reposi.getTypeMeeting());
                     obj.setIdTeacher(reposi.getIdTeacher());
                     obj.setUserNameTeacher(respone.getUserName());
+                    obj.setStatusMeeting(reposi.getStatusMeeting());
                     listReturn.add(obj);
                 }
             });

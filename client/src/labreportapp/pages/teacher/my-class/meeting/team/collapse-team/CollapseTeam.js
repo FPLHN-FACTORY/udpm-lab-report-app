@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Badge, Button, Col, Collapse, Empty, Row } from "antd";
+import { Badge, Button, Col, Collapse, Empty, Row, Spin } from "antd";
 import "./styleCollapseTeam.css";
 import TextArea from "antd/es/input/TextArea";
 import { TeacherMeetingAPI } from "../../../../../../api/teacher/meeting/TeacherMeeting.api";
@@ -9,6 +9,7 @@ import { useParams } from "react-router";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUsersRectangle } from "@fortawesome/free-solid-svg-icons";
+import { convertCheckTimeCurrentAndMeetingDate } from "../../../../../../helper/util.helper";
 const { Panel } = Collapse;
 
 const CollapseTeam = ({ team, featchMeeting }) => {
@@ -22,6 +23,8 @@ const CollapseTeam = ({ team, featchMeeting }) => {
   const [descriptionsHomeWork, setDescriptionsHomeWork] = useState("");
   const [descriptionsNote, setDescriptionsNote] = useState("");
   const [descriptionsReport, setDescriptionsReport] = useState("");
+  const [dowloading, setDownloading] = useState(false);
+  const [checkTime, setCheckTime] = useState(0);
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Bảng điều khiển - chi tiết buổi học";
@@ -31,9 +34,14 @@ const CollapseTeam = ({ team, featchMeeting }) => {
     setLoading(true);
     featchTemplateReport();
   }, []);
+
   useEffect(() => {
+    setDescriptionsHomeWork("");
+    setDescriptionsNote("");
+    setDescriptionsReport("");
     featchHomeWorkNote(idTeamDetail);
   }, [idTeamDetail, activePanel]);
+
   const toggleCard = (index, item) => {
     setEdit(false);
     setActivePanel(index);
@@ -58,7 +66,9 @@ const CollapseTeam = ({ team, featchMeeting }) => {
     }
   };
   const featchHomeWorkNote = async (idTeam) => {
-    setLoading(false);
+    setDescriptionsHomeWork("");
+    setDescriptionsNote("");
+    setDescriptionsReport("");
     try {
       let data = {
         idTeam: idTeam,
@@ -67,6 +77,7 @@ const CollapseTeam = ({ team, featchMeeting }) => {
       await TeacherMeetingAPI.getDetailHomeWorkAndNoteByIdMeetingandIdTeam(
         data
       ).then((response) => {
+        setDownloading(true);
         if (response.data.data === null) {
           const dataNew = {
             idHomeWork: null,
@@ -83,7 +94,15 @@ const CollapseTeam = ({ team, featchMeeting }) => {
           setDescriptionsReport(response.data.data.descriptionsReport);
           setObjDetail(response.data.data);
         }
-        setLoading(true);
+
+        setCheckTime(
+          convertCheckTimeCurrentAndMeetingDate(
+            response.data.data.meetingDate,
+            response.data.data.meetingPeriod
+          )
+        );
+
+        setDownloading(false);
       });
     } catch (error) {
       console.log(error);
@@ -115,6 +134,14 @@ const CollapseTeam = ({ team, featchMeeting }) => {
       alert(error.message);
     }
   };
+  const convertLongToDate = (dateLong) => {
+    const date = new Date(dateLong);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    const format = `${day}/${month}/${year}`;
+    return format;
+  };
   return (
     <div
       className="teacher-collapse"
@@ -129,11 +156,13 @@ const CollapseTeam = ({ team, featchMeeting }) => {
         ghost
         showArrow={true}
         className="panel-collap"
+        style={{ width: "auto", minWidth: "auto" }}
       >
         {team.map((item, index) => (
           <Panel
             style={{
-              width: "100%",
+              width: "auto",
+              minWidth: "auto",
               boxShadow:
                 activePanel === index
                   ? "0px 0px 10px rgba(0, 0, 0, 0.2)"
@@ -158,7 +187,7 @@ const CollapseTeam = ({ team, featchMeeting }) => {
                     <div className="box-icon" style={{ float: "left" }}>
                       <FontAwesomeIcon
                         icon={faUsersRectangle}
-                        style={{ color: "white", fontSize: 21 }}
+                        style={{ color: "white", fontSize: "21px" }}
                       />
                     </div>
 
@@ -174,8 +203,14 @@ const CollapseTeam = ({ team, featchMeeting }) => {
                     </span>
                   </div>
                   <div style={{ justifyContent: "right" }}>
-                    {item.report && (
-                      <Badge.Ribbon text={item.report} color="#E2B357" />
+                    {(checkTime === 1 && item.descriptionsReport === null) ||
+                    (checkTime === 1 && item.descriptionsReport === "") ? (
+                      <Badge.Ribbon text={"Chưa báo cáo"} color="#E2B357" />
+                    ) : (checkTime === 2 && item.descriptionsReport === null) ||
+                      (checkTime === 2 && item.descriptionsReport === "") ? (
+                      <Badge.Ribbon text={"Chưa báo cáo"} color="#E2B357" />
+                    ) : (
+                      ""
                     )}
                   </div>
                 </div>
@@ -183,84 +218,91 @@ const CollapseTeam = ({ team, featchMeeting }) => {
             }
             key={index}
           >
-            <div
-              className="info-content"
-              onClick={() => setEdit(true)}
-              style={{ minWidth: "80%" }}
-            >
-              <Row gutter={16}>
-                <Col span={8}>
-                  <span className="title-main">Nhận xét:</span>
-                  <TextArea
-                    rows={10}
-                    placeholder="Nhập nhận xét"
-                    value={descriptionsNote}
-                    onChange={(e) => setDescriptionsNote(e.target.value)}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setEdit(true);
-                    }}
-                  />
-                </Col>
-                <Col span={8}>
-                  <span className="title-main">Bài tập về nhà:</span>
-                  <TextArea
-                    rows={10}
-                    placeholder="Nhập bài tập"
-                    value={descriptionsHomeWork}
-                    style={{ readOnly: edit && "false" }}
-                    onChange={(e) => setDescriptionsHomeWork(e.target.value)}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setEdit(true);
-                    }}
-                  />
-                </Col>
-                <Col span={8}>
-                  <span className="title-main">Báo cáo:</span>
-                  <TextArea
-                    rows={10}
-                    placeholder="Báo cáo"
-                    value={descriptionsReport}
-                    style={{ readOnly: edit && "false" }}
-                    onChange={(e) => setDescriptionsReport(e.target.value)}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setEdit(true);
-                    }}
-                  />
-                </Col>
-              </Row>
-              <Row gutter={16}>
-                <Col span={24}>
-                  <span className="title-main">Template mẫu báo cáo:</span>
-                  <TextArea rows={4} value={template.descriptions} />
-                </Col>
-              </Row>
-              {edit && (
-                <>
-                  <div style={{ paddingTop: "15px", textAlign: "center" }}>
-                    <Button
-                      className="btn_filter"
-                      style={{
-                        marginRight: "15px",
+            <Spin spinning={dowloading} style={{ marginTop: "10px" }}>
+              <div
+                className="info-content"
+                onClick={() => setEdit(true)}
+                style={{ minWidth: "80%", width: "auto" }}
+              >
+                <Row gutter={16}>
+                  <Col span={8}>
+                    <span className="title-main">Nhận xét:</span>
+                    <TextArea
+                      rows={10}
+                      placeholder="Nhập nhận xét"
+                      value={descriptionsNote}
+                      onChange={(e) => setDescriptionsNote(e.target.value)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setEdit(true);
                       }}
-                      onClick={handleCancel}
-                    >
-                      Hủy
-                    </Button>{" "}
-                    <Button className="btn_clean" onClick={update}>
-                      Lưu
-                    </Button>
-                  </div>
-                </>
-              )}
-            </div>
+                    />
+                  </Col>
+                  <Col span={8}>
+                    <span className="title-main">Bài tập về nhà:</span>
+                    <TextArea
+                      rows={10}
+                      placeholder="Nhập bài tập"
+                      value={descriptionsHomeWork}
+                      style={{ readOnly: edit && "false" }}
+                      onChange={(e) => setDescriptionsHomeWork(e.target.value)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setEdit(true);
+                      }}
+                    />
+                  </Col>
+                  <Col span={8}>
+                    <span className="title-main">Báo cáo:</span>
+                    <TextArea
+                      rows={10}
+                      placeholder="Báo cáo"
+                      value={descriptionsReport}
+                      style={{ readOnly: edit && "false" }}
+                      onChange={(e) => setDescriptionsReport(e.target.value)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setEdit(true);
+                      }}
+                    />
+                  </Col>
+                </Row>
+                <Row gutter={16}>
+                  <Col span={24}>
+                    <span className="title-main">Template mẫu báo cáo:</span>
+                    <TextArea rows={4} value={template.descriptions} />
+                  </Col>
+                </Row>
+                {edit && (
+                  <>
+                    <div style={{ paddingTop: "15px", textAlign: "center" }}>
+                      <Button
+                        className="btn_filter"
+                        style={{
+                          marginRight: "15px",
+                          width: "100px",
+                        }}
+                        onClick={handleCancel}
+                      >
+                        Hủy
+                      </Button>{" "}
+                      <Button
+                        className="btn_clean"
+                        style={{ width: "100px" }}
+                        onClick={update}
+                      >
+                        Cập nhật
+                      </Button>
+                    </div>
+                  </>
+                )}
+              </div>
+            </Spin>
           </Panel>
         ))}
         {team.length === 0 && (
           <Empty
-            imageStyle={{ height: 60 }}
+            imageStyle={{ height: "60px" }}
             description={<span>Không có dữ liệu</span>}
           />
         )}

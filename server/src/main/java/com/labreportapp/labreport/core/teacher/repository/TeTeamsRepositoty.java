@@ -18,21 +18,31 @@ import java.util.List;
 @Repository
 public interface TeTeamsRepositoty extends JpaRepository<Team, String> {
     @Query(value = """
-            SELECT DISTINCT 
-            t.id as id,
-            t.code as code,
-            t.name as name,
-            t.subject_name as subjectName,
-            t.created_date as createdDate,
-            t.project_id as project_id
+            WITH MinReport AS (
+                SELECT MIN(r.id) as id, r.team_id
+                FROM report r
+                WHERE r.meeting_id = :#{#req.idMeeting}
+                GROUP BY team_id
+            )
+            SELECT
+                t.id as id,
+                t.name as name,
+                t.subject_name as subjectName,
+                t.created_date as createdDate,
+                t.project_id as project_id,
+                mr.id as report_id,
+                r.descriptions as descriptions_report
             FROM team t
+            LEFT JOIN MinReport mr ON mr.team_id = t.id
+            LEFT JOIN report r ON r.id = mr.id
             WHERE t.class_id = :#{#req.idClass}
             ORDER BY t.name ASC
-                     """, nativeQuery = true)
+                             """, nativeQuery = true)
     List<TeTeamsRespone> findTeamsByIdClass(@Param("req") TeFindStudentClasses req);
 
+
     @Query(value = """
-                SELECT t.code FROM team t WHERE t.code = :code
+                SELECT t.name FROM team t WHERE t.name = :code
             """, nativeQuery = true)
     String getTeamByCode(@Param("code") String code);
 

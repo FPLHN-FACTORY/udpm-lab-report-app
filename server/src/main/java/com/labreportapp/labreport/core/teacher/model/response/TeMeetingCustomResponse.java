@@ -30,4 +30,6 @@ public class TeMeetingCustomResponse {
 
     private String userNameTeacher;
 
+    private Integer statusMeeting;
+
 }

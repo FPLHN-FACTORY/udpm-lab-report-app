@@ -383,6 +383,7 @@ const StudentsInMyClass = () => {
                 )))}
           </>
         ),
+        width: "2%",
       },
       ...columns,
     ];

@@ -75,11 +75,11 @@ function EditorUpdate({ obj, showUpdate }) {
           setDescriptions(value);
         }}
       />
-      <div style={{ paddingTop: "15px", float: "right" }}>
+      <div style={{ paddingTop: "15px", float: "right", right: 0 }}>
         <Button
+          className="btn_filter"
           style={{
-            backgroundColor: "red",
-            color: "white",
+            width: "100px",
           }}
           onClick={(e) => {
             showUpdate(false);
@@ -88,9 +88,10 @@ function EditorUpdate({ obj, showUpdate }) {
           Hủy
         </Button>
         <Button
+          className="btn_clean"
           style={{
-            backgroundColor: "rgb(61, 139, 227)",
-            color: "white",
+            width: "100px",
+            marginLeft: "10px",
           }}
           onClick={update}
         >

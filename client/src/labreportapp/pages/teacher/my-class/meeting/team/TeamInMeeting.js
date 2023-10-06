@@ -16,6 +16,7 @@ const TeamInMeeting = () => {
   const [meeting, setMeeting] = useState({});
   const [team, setTeam] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [checkTime, setCheckTime] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -27,10 +28,7 @@ const TeamInMeeting = () => {
       await TeacherMeetingAPI.getDetailByIdMeeting(idMeeting).then(
         (response) => {
           setMeeting(response.data.data);
-          featchTeams(
-            response.data.data.idClass,
-            response.data.data.listTeamReport
-          );
+          featchTeams(response.data.data.idClass);
           document.title = "Bảng điều khiển - " + response.data.data.name;
         }
       );
@@ -41,21 +39,14 @@ const TeamInMeeting = () => {
       }, [1000]);
     }
   };
-  const featchTeams = async (idClass, listReport) => {
+  const featchTeams = async (idClass) => {
     try {
-      await TeacherTeamsAPI.getTeamsByIdClass(idClass).then((responese) => {
-        const mergedList = responese.data.data.map((item1) => {
-          const matchingItem2 = listReport.find(
-            (item2) => item2.idTeam === item1.id
-          );
-          if (matchingItem2) {
-            return { ...item1, report: "Chưa báo cáo" };
-          }
-          return item1;
-        });
-        setTeam(mergedList);
-        setLoading(true);
-      });
+      await TeacherTeamsAPI.getTeamsByIdClass(idClass, idMeeting).then(
+        (responese) => {
+          setTeam(responese.data.data);
+          setLoading(true);
+        }
+      );
     } catch (error) {}
   };
 
@@ -156,7 +147,9 @@ const TeamInMeeting = () => {
                 Danh sách nhóm
               </span>
             </div>
-            <CollapseTeam team={team} featchMeeting={featchMeeting} />
+            <div style={{ width: "auto" }}>
+              <CollapseTeam team={team} featchMeeting={featchMeeting} />
+            </div>
           </div>
         </div>
       </div>

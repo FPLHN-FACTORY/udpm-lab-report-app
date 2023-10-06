@@ -30,6 +30,7 @@ import com.labreportapp.labreport.entity.Meeting;
 import com.labreportapp.labreport.entity.StudentClasses;
 import com.labreportapp.labreport.infrastructure.constant.RoleTeam;
 import com.labreportapp.labreport.infrastructure.constant.StatusAttendance;
+import com.labreportapp.labreport.infrastructure.constant.StatusMeeting;
 import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
 import com.labreportapp.labreport.util.DateConverter;
 import lombok.Synchronized;
@@ -133,6 +134,7 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
         if (meeting.isPresent()) {
             Meeting meetingUp = meeting.get();
             meetingUp.setNotes(request.getNotes());
+            meetingUp.setStatusMeeting(StatusMeeting.BUOI_HOC);
             teMeetingRepository.save(meetingUp);
         }
         TeAttendanceMessageResponse teAttendanceMessageResponse = randomSetLeadToMember(listReturn, request.getIdMeeting());
@@ -171,7 +173,11 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
                         objAdd.setEmail(student.getEmail());
                         objAdd.setUsername(student.getUsername());
                         objAdd.setIdTeam(student.getIdTeam());
-                        objAdd.setRole(student.getRole().equals("0") ? RoleTeam.LEADER : RoleTeam.MEMBER);
+                        if (student.getRole() == null) {
+                            objAdd.setRole(RoleTeam.MEMBER);
+                        } else {
+                            objAdd.setRole(student.getRole().equals("0") ? RoleTeam.LEADER : RoleTeam.MEMBER);
+                        }
                         listStudentAttendance.add(objAdd);
                     }
                 });

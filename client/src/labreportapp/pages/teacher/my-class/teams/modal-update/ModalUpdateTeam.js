@@ -372,8 +372,9 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
             </Row>
           ) : (
             <Empty
+              style={{ paddingBottom: "15px" }}
               imageStyle={{ height: 60 }}
-              description={<span>Không có thành viên nào trong nhóm</span>}
+              description={<span>Không có sinh viên nào trong nhóm</span>}
             />
           )}
         </div>
@@ -384,11 +385,11 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
           }}
         >
           <>
-            <div style={{ paddingTop: "15px" }}>
+            <div>
               <Button
                 className="btn_filter"
                 style={{
-                  width: "66px",
+                  width: "100px",
                 }}
                 onClick={cancelFaild}
               >
@@ -397,12 +398,12 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
               <Button
                 className="btn_clean"
                 style={{
-                  width: "66px",
+                  width: "100px",
                   marginLeft: "10px",
                 }}
                 onClick={update}
               >
-                Sửa
+                Cập nhật
               </Button>
             </div>
           </>

@@ -12,8 +12,4 @@ import java.util.Optional;
  */
 public interface TeHomeWorkRepository extends JpaRepository<HomeWork, String> {
 
-//    @Query(value = """
-//            SELECT * FROM homework WHERE :id id = :id
-//            """, nativeQuery = true)
-//    Optional<HomeWork> findHomeWorkById(@Param("id") String id);
 }

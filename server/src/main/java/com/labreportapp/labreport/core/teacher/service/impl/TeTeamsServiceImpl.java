@@ -2,6 +2,7 @@ package com.labreportapp.labreport.core.teacher.service.impl;
 
 import com.labreportapp.labreport.core.teacher.excel.TeExcelImportService;
 import com.labreportapp.labreport.core.teacher.excel.TeExcelImportTeam;
+import com.labreportapp.labreport.core.teacher.model.request.TeCreateProjectToTeamRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeCreateTeamsRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindStudentClasses;
 import com.labreportapp.labreport.core.teacher.model.request.TeTeamUpdateStudentClassRequest;
@@ -21,6 +22,7 @@ import com.labreportapp.labreport.entity.Class;
 import com.labreportapp.labreport.entity.StudentClasses;
 import com.labreportapp.labreport.entity.Team;
 import com.labreportapp.labreport.infrastructure.constant.RoleTeam;
+import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.labreport.util.RandomString;
 import com.labreportapp.portalprojects.entity.MemberProject;
 import com.labreportapp.portalprojects.entity.Project;
@@ -89,6 +91,9 @@ public class TeTeamsServiceImpl implements TeTeamsService {
     @Autowired
     private TeMemberProjectRepository teMemberProjectRepository;
 
+    @Autowired
+    private LabReportAppSession labReportAppSession;
+
     @Override
     public List<TeTeamsRespone> getAllTeams(final TeFindStudentClasses teFindStudentClasses) {
         return teTeamsRepositoty.findTeamsByIdClass(teFindStudentClasses);
@@ -111,41 +116,6 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         team.setName("Nhóm " + teTeamsRepositoty.getNameNhomAuto(request.getClassId()));
         team.setSubjectName(request.getSubjectName());
         team.setClassId(request.getClassId());
-        Optional<TeDetailClassResponse> objClass = teClassRepository.findClassById(request.getClassId());
-        if (objClass.isPresent()) {
-            if (objClass.get().getAllowUseTrello() == 0) {
-                Project project = new Project();
-                project.setCode("PRJ_" + RandomString.random());
-                project.setName("Project" + RandomString.random());
-                project.setStartTime(new Date().getTime());
-                project.setEndTime(new Date().getTime() + 90 * 86400000);
-                project.setStatusProject(StatusProject.DANG_DIEN_RA);
-                project.setBackgroundColor("rgb(38, 144, 214)");
-                Project projectNew = teProjectRepository.save(project);
-                team.setProjectId(projectNew.getId());
-                TeFindStudentClasses teFindStudentClasses = new TeFindStudentClasses();
-                teFindStudentClasses.setIdClass(request.getClassId());
-                teFindStudentClasses.setIdTeam(team.getId());
-                List<TeTeamUpdateStudentClassRequest> listStudentClasses = request.getListStudentClasses();
-                List<MemberProject> listMemberProject = new ArrayList<>();
-                if (listStudentClasses != null) {
-                    listStudentClasses.forEach(student -> {
-                        MemberProject memberProject = new MemberProject();
-                        memberProject.setMemberId(student.getIdStudent());
-                        memberProject.setEmail(student.getEmail());
-                        memberProject.setProjectId(project.getId());
-                        if (student.getRole() == null) {
-                            memberProject.setRole(RoleMemberProject.DEV);
-                        } else {
-                            memberProject.setRole(student.getRole().equals("0") ? RoleMemberProject.MANAGER : RoleMemberProject.DEV);
-                        }
-                        memberProject.setStatusWork(StatusWork.DANG_LAM);
-                        listMemberProject.add(memberProject);
-                    });
-                    teMemberProjectRepository.saveAll(listMemberProject);
-                }
-            }
-        }
         Team teamCreate = teTeamsRepositoty.save(team);
         List<StudentClasses> listStudentClasses = teStudentClassesRepository.findStudentClassesByIdClass(request.getClassId());
         List<StudentClasses> studentClassesNew = new ArrayList<>();
@@ -193,84 +163,6 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         Optional<TeDetailClassResponse> objClass = teClassRepository.findClassById(team.getClassId());
         ConcurrentHashMap<String, StudentClasses> mapStudent = new ConcurrentHashMap<>();
         addDataStudentDB(mapStudent, team.getClassId());
-        if (objClass.isPresent()) {
-            if (objClass.get().getAllowUseTrello() == 0) {
-                List<MemberProject> listMemberProjectUpdate = new ArrayList<>();
-                if (team.getProjectId() == null || team.getProjectId().equals("")) {
-                    Project project = new Project();
-                    project.setCode("PRJ_" + RandomString.random());
-                    project.setName("Project" + RandomString.random());
-                    project.setStartTime(new Date().getTime());
-                    project.setEndTime(new Date().getTime() + 90 * 86400000);
-                    project.setStatusProject(StatusProject.DANG_DIEN_RA);
-                    project.setBackgroundColor("rgb(38, 144, 214)");
-                    Project projectNew = teProjectRepository.save(project);
-                    team.setProjectId(projectNew.getId());
-                    List<MemberProject> listMemberFind = teMemberProjectRepository.findMemberProjectByProjectId(team.getProjectId());
-                    studentClassesRequest.forEach(student -> {
-                        MemberProject memberProjectExist = listMemberFind.stream()
-                                .filter(db -> db.getMemberId().equals(mapStudent.get(student.getEmail()).getStudentId()))
-                                .findAny().orElse(null);
-                        MemberProject memberProject = new MemberProject();
-                        memberProject.setMemberId(mapStudent.get(student.getEmail()).getStudentId());
-                        memberProject.setEmail(student.getEmail());
-                        memberProject.setProjectId(project.getId());
-                        memberProject.setRole(student.getRole().equals("0") ? RoleMemberProject.MANAGER : RoleMemberProject.DEV);
-                        memberProject.setStatusWork(StatusWork.DANG_LAM);
-                        if (memberProjectExist != null) {
-                            memberProject.setId(memberProjectExist.getId());
-                        }
-                        listMemberProjectUpdate.add(memberProject);
-
-                    });
-                    teMemberProjectRepository.saveAll(listMemberProjectUpdate);
-                } else {
-                    Optional<Project> projectFind = teProjectRepository.findById(team.getProjectId());
-                    if (projectFind.isPresent()) {
-                        ConcurrentHashMap<String, MemberProject> mapMember = new ConcurrentHashMap<>();
-                        addDataMemberProject(mapMember, projectFind.get().getId());
-                        studentClassesRequest.forEach(student -> {
-                            StudentClasses studentClasses = mapStudent.get(student.getEmail());
-                            if (studentClasses != null) {
-                                MemberProject memberProject = mapMember.get(studentClasses.getStudentId());
-                                if (memberProject == null) {
-                                    MemberProject memberProjectNew = new MemberProject();
-                                    memberProjectNew.setMemberId(mapStudent.get(student.getEmail()).getStudentId());
-                                    memberProjectNew.setEmail(student.getEmail());
-                                    memberProjectNew.setProjectId(projectFind.get().getId());
-                                    memberProjectNew.setRole(student.getRole().equals("0") ? RoleMemberProject.MANAGER : RoleMemberProject.DEV);
-                                    memberProjectNew.setStatusWork(StatusWork.DANG_LAM);
-                                    listMemberProjectUpdate.add(memberProjectNew);
-                                } else {
-                                    memberProject.setId(memberProject.getId());
-                                    memberProject.setMemberId(mapStudent.get(student.getEmail()).getStudentId());
-                                    memberProject.setEmail(student.getEmail());
-                                    memberProject.setProjectId(projectFind.get().getId());
-                                    memberProject.setRole(student.getRole().equals("0") ? RoleMemberProject.MANAGER : RoleMemberProject.DEV);
-                                    memberProject.setStatusWork(StatusWork.DANG_LAM);
-                                    listMemberProjectUpdate.add(memberProject);
-                                }
-                            }
-                        });
-                        teMemberProjectRepository.saveAll(listMemberProjectUpdate);
-                        if (studentClassesDeleteIdTeamRequest.size() != 0) {
-                            List<MemberProject> listMemberFind = teMemberProjectRepository.findMemberProjectByProjectId(team.getProjectId());
-                            List<MemberProject> listMemberDelete = new ArrayList<>();
-                            studentClassesDeleteIdTeamRequest.forEach(student -> {
-                                listMemberFind.forEach(member -> {
-                                    if (member.getMemberId().equals(student.getIdStudent())) {
-                                        MemberProject memberProjectDele = new MemberProject();
-                                        memberProjectDele.setId(member.getId());
-                                        listMemberDelete.add(memberProjectDele);
-                                    }
-                                });
-                            });
-                            teMemberProjectRepository.deleteAll(listMemberDelete);
-                        }
-                    }
-                }
-            }
-        }
         List<StudentClasses> listStudentClassesUpdate = new ArrayList<>();
         List<StudentClasses> listStudentClass = teStudentClassesRepository.findStudentClassesByIdClass(team.getClassId());
         studentClassesRequest.forEach(item -> {
@@ -316,6 +208,34 @@ public class TeTeamsServiceImpl implements TeTeamsService {
 
     @Override
     @Transactional
+    @CacheEvict(value = {"membersByProject"}, allEntries = true)
+    public Team createProjectAddTeam(TeCreateProjectToTeamRequest request) {
+        Optional<Team> team = teTeamsRepositoty.findById(request.getIdTeam());
+        if (!team.isPresent()) {
+            throw new RestApiException(Message.TEAM_NOT_EXISTS);
+        }
+        Team teamUp = team.get();
+        Project project = new Project();
+        project.setCode("PRJ_" + RandomString.random());
+        project.setName("Project" + RandomString.random());
+        project.setStartTime(new Date().getTime());
+        project.setEndTime(new Date().getTime() + 90 * 86400000);
+        project.setStatusProject(StatusProject.DANG_DIEN_RA);
+        project.setBackgroundColor("rgb(38, 144, 214)");
+        Project projectNew = teProjectRepository.save(project);
+        teamUp.setProjectId(projectNew.getId());
+        MemberProject memberTeacher = new MemberProject();
+        memberTeacher.setMemberId(labReportAppSession.getUserId());
+        memberTeacher.setEmail(labReportAppSession.getEmail());
+        memberTeacher.setProjectId(projectNew.getId());
+        memberTeacher.setRole(RoleMemberProject.MANAGER);
+        memberTeacher.setStatusWork(StatusWork.DANG_LAM);
+        teMemberProjectRepository.save(memberTeacher);
+        return teTeamsRepositoty.save(teamUp);
+    }
+
+    @Override
+    @Transactional
     public String deleteTeamById(String idTeam) {
         Team team = teTeamsRepositoty.findById(idTeam).get();
         if (team != null) {
@@ -325,16 +245,16 @@ public class TeTeamsServiceImpl implements TeTeamsService {
                 teStudentClassesRepository.save(item);
             });
             teTeamsRepositoty.delete(team);
-            if (team.getProjectId() != null) {
-                Optional<Project> projectFind = teProjectRepository.findById(team.getProjectId());
-                if (projectFind.isPresent()) {
-                    List<MemberProject> listMemberFind = teMemberProjectRepository.findMemberProjectByProjectId(team.getProjectId());
-                    if (listMemberFind.size() != 0) {
-                        teMemberProjectRepository.deleteAll(listMemberFind);
-                    }
-                    teProjectRepository.delete(projectFind.get());
-                }
-            }
+//            if (team.getProjectId() != null) {
+//                Optional<Project> projectFind = teProjectRepository.findById(team.getProjectId());
+//                if (projectFind.isPresent()) {
+//                    List<MemberProject> listMemberFind = teMemberProjectRepository.findMemberProjectByProjectId(team.getProjectId());
+//                    if (listMemberFind.size() != 0) {
+//                        teMemberProjectRepository.deleteAll(listMemberFind);
+//                    }
+//                    teProjectRepository.delete(projectFind.get());
+//                }
+//            }
             return "Xóa nhóm thành công !";
         } else {
             return "Không tìm thấy nhóm, xóa thất bại !";
@@ -688,64 +608,60 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         ConcurrentHashMap<String, StudentClasses> mapStudent = new ConcurrentHashMap<>();
         addDataStudentDB(mapStudent, idClass);
         Optional<TeDetailClassResponse> objClass = teClassRepository.findClassById(idClass);
-        if (objClass.isPresent()) {
-            if (objClass.get().getAllowUseTrello() == 0) {
-                List<MemberProject> listMemberProjectUpdate = new ArrayList<>();
-                listTeam.forEach(team -> {
-                    if (team.getProjectId() == null || team.getProjectId().equals("")) {
-                        Project project = new Project();
-                        project.setCode("PRJ_" + RandomString.random());
-                        project.setName("Project" + RandomString.random());
-                        project.setStartTime(new Date().getTime());
-                        project.setEndTime(new Date().getTime() + 90 * 86400000);
-                        project.setStatusProject(StatusProject.DANG_DIEN_RA);
-                        project.setBackgroundColor("rgb(38, 144, 214)");
-                        Project projectNew = teProjectRepository.save(project);
-                        team.setProjectId(projectNew.getId());
-                        listInput.forEach(student -> {
-                            if (student.getNameTeam().equals(team.getName())) {
-                                MemberProject memberProject = new MemberProject();
-                                memberProject.setMemberId(mapStudent.get(student.getEmail()).getStudentId());
-                                memberProject.setEmail(student.getEmail());
-                                memberProject.setProjectId(project.getId());
-                                memberProject.setRole(student.getRole().equals("0") ? RoleMemberProject.MANAGER : RoleMemberProject.DEV);
-                                memberProject.setStatusWork(StatusWork.DANG_LAM);
-                                listMemberProjectUpdate.add(memberProject);
-                            }
-                        });
-                    } else {
-                        Optional<Project> projectFind = teProjectRepository.findById(team.getProjectId());
-                        if (projectFind.isPresent()) {
-                            ConcurrentHashMap<String, MemberProject> mapMember = new ConcurrentHashMap<>();
-                            addDataMemberProject(mapMember, projectFind.get().getId());
-                            listInput.forEach(student -> {
-                                if (student.getNameTeam().equals(team.getName())) {
-                                    StudentClasses studentClasses = mapStudent.get(student.getEmail());
-                                    if (studentClasses != null) {
-                                        MemberProject memberProject = mapMember.get(studentClasses.getStudentId());
-                                        if (memberProject == null) {
-                                            memberProject.setMemberId(mapStudent.get(student.getEmail()).getStudentId());
-                                            memberProject.setEmail(student.getEmail());
-                                            memberProject.setProjectId(projectFind.get().getId());
-                                            memberProject.setRole(student.getRole().equals("0") ? RoleMemberProject.MANAGER : RoleMemberProject.DEV);
-                                            memberProject.setStatusWork(StatusWork.DANG_LAM);
-                                        } else {
-                                            memberProject.setRole(student.getRole().equals("0") ? RoleMemberProject.MANAGER : RoleMemberProject.DEV);
-                                        }
-                                        listMemberProjectUpdate.add(memberProject);
-                                    }
-                                }
-                            });
-                        }
-                    }
-                });
-                teMemberProjectRepository.saveAll(listMemberProjectUpdate);
-            }
-        }
-//        else {
-//            return false;
+//        if (objClass.isPresent()) {
+//            if (objClass.get().getAllowUseTrello() == 0) {
+//                List<MemberProject> listMemberProjectUpdate = new ArrayList<>();
+//                listTeam.forEach(team -> {
+//                    if (team.getProjectId() == null || team.getProjectId().equals("")) {
+//                        Project project = new Project();
+//                        project.setCode("PRJ_" + RandomString.random());
+//                        project.setName("Project" + RandomString.random());
+//                        project.setStartTime(new Date().getTime());
+//                        project.setEndTime(new Date().getTime() + 90 * 86400000);
+//                        project.setStatusProject(StatusProject.DANG_DIEN_RA);
+//                        project.setBackgroundColor("rgb(38, 144, 214)");
+//                        Project projectNew = teProjectRepository.save(project);
+//                        team.setProjectId(projectNew.getId());
+//                        listInput.forEach(student -> {
+//                            if (student.getNameTeam().equals(team.getName())) {
+//                                MemberProject memberProject = new MemberProject();
+//                                memberProject.setMemberId(mapStudent.get(student.getEmail()).getStudentId());
+//                                memberProject.setEmail(student.getEmail());
+//                                memberProject.setProjectId(project.getId());
+//                                memberProject.setRole(student.getRole().equals("0") ? RoleMemberProject.MANAGER : RoleMemberProject.DEV);
+//                                memberProject.setStatusWork(StatusWork.DANG_LAM);
+//                                listMemberProjectUpdate.add(memberProject);
+//                            }
+//                        });
+//                    } else {
+//                        Optional<Project> projectFind = teProjectRepository.findById(team.getProjectId());
+//                        if (projectFind.isPresent()) {
+//                            ConcurrentHashMap<String, MemberProject> mapMember = new ConcurrentHashMap<>();
+//                            addDataMemberProject(mapMember, projectFind.get().getId());
+//                            listInput.forEach(student -> {
+//                                if (student.getNameTeam().equals(team.getName())) {
+//                                    StudentClasses studentClasses = mapStudent.get(student.getEmail());
+//                                    if (studentClasses != null) {
+//                                        MemberProject memberProject = mapMember.get(studentClasses.getStudentId());
+//                                        if (memberProject == null) {
+//                                            memberProject.setMemberId(mapStudent.get(student.getEmail()).getStudentId());
+//                                            memberProject.setEmail(student.getEmail());
+//                                            memberProject.setProjectId(projectFind.get().getId());
+//                                            memberProject.setRole(student.getRole().equals("0") ? RoleMemberProject.MANAGER : RoleMemberProject.DEV);
+//                                            memberProject.setStatusWork(StatusWork.DANG_LAM);
+//                                        } else {
+//                                            memberProject.setRole(student.getRole().equals("0") ? RoleMemberProject.MANAGER : RoleMemberProject.DEV);
+//                                        }
+//                                        listMemberProjectUpdate.add(memberProject);
+//                                    }
+//                                }
+//                            });
+//                        }
+//                    }
+//                });
+//                teMemberProjectRepository.saveAll(listMemberProjectUpdate);
+//            }
 //        }
-//        return true;
     }
 
     private void addDataMemberProject(ConcurrentHashMap<String, MemberProject> map, String idProject) {

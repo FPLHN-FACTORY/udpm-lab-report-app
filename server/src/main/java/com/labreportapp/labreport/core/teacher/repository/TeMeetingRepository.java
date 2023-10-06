@@ -9,9 +9,11 @@ import com.labreportapp.labreport.core.teacher.model.response.TeMeetingCustomToA
 import com.labreportapp.labreport.core.teacher.model.response.TeMeetingResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeScheduleMeetingClassResponse;
 import com.labreportapp.labreport.entity.Meeting;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -34,7 +36,8 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                 m.type_meeting as type_meeting,
                 m.meeting_period as meeting_period,
                 m.class_id as class_id,
-                m.teacher_id as teacher_id
+                m.teacher_id as teacher_id,
+                m.status_meeting as status_meeting
             FROM meeting m
             JOIN class c ON c.id = m.class_id
             WHERE m.class_id = :#{#req.idClass}
@@ -51,7 +54,8 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                 m.meeting_period as meeting_period,
                 m.notes as notes,
                 m.class_id as class_id,
-                m.teacher_id as teacher_id
+                m.teacher_id as teacher_id,
+                 m.status_meeting as status_meeting
             FROM meeting m
             WHERE m.id = :#{#req.idMeeting}
                      """, nativeQuery = true)
@@ -82,7 +86,9 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                 n.id AS idNote,
                 n.descriptions AS descriptionsNote,
                 r.id as idReport,
-                r.descriptions AS descriptionsReport
+                r.descriptions AS descriptionsReport,
+                m.meeting_date as meeting_date,
+                m.meeting_period as meeting_period
             FROM meeting m
             JOIN class c ON c.id = m.class_id
             JOIN team t ON t.class_id = c.id
@@ -99,7 +105,8 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                 m.name as name,
                 m.class_id as class_id,
                 m.meeting_date as meeting_date,
-                m.meeting_period as meeting_period
+                m.meeting_period as meeting_period,
+                m.status_meeting as status_meeting
             FROM meeting m
             JOIN class c ON c.id = m.class_id
             WHERE m.class_id = :#{#idClass}
@@ -215,5 +222,32 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
     Page<TeScheduleMeetingClassResponse> searchScheduleNowToTimeByIdTeacher(@Param("req") TeFindScheduleNowToTime req, Pageable pageable);
 
     Optional<Meeting> findMeetingById(String id);
+
+    @Transactional
+    @Modifying
+    @Query(value = """
+            UPDATE meeting AS m
+            SET m.status_meeting = 1, m.notes = "Buổi nghỉ của lớp"
+            WHERE DATE(FROM_UNIXTIME(m.meeting_date / 1000)) <= CURDATE() AND m.status_meeting = 0
+            AND (
+                (m.meeting_period = 0 AND TIME(FROM_UNIXTIME(m.meeting_date / 1000)) > '09:15:00')
+                OR
+                (m.meeting_period = 1 AND TIME(FROM_UNIXTIME(m.meeting_date / 1000)) > '11:25:00')
+                OR 
+                (m.meeting_period = 2 AND TIME(FROM_UNIXTIME(m.meeting_date / 1000)) > '14:00:00')
+                OR
+                (m.meeting_period = 3 AND TIME(FROM_UNIXTIME(m.meeting_date / 1000)) > '16:10:00')
+                OR
+                (m.meeting_period = 4 AND TIME(FROM_UNIXTIME(m.meeting_date / 1000)) > '18:20:00')
+                OR
+                (m.meeting_period = 5 AND TIME(FROM_UNIXTIME(m.meeting_date / 1000))> '20:30:00')
+            )
+            AND NOT EXISTS (
+                SELECT 1
+                FROM attendance a
+                WHERE a.meeting_id = m.id
+            )
+            """, nativeQuery = true)
+    int updateStatusMeetingRest();
 
 }

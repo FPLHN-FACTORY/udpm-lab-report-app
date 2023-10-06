@@ -125,6 +125,7 @@ function App() {
       );
     });
   }
+
   return (
     <div className="App scroll-smooth md:scroll-auto">
       <ToastContainer />
@@ -144,7 +145,7 @@ function App() {
 
             <Route
               path="/teacher"
-              element={<Navigate replace to="/teacher/my-class" />}
+              element={<Navigate replace to="/teacher/schedule-today" />}
             />
 
             <Route

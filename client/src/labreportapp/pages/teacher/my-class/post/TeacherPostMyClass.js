@@ -329,7 +329,7 @@ const TeacherPostMyClass = () => {
                     style={{ height: "140px", marginTop: "20px" }}
                   >
                     <div className="title-main">
-                      <div style={{ float: "left" }}>
+                      <div style={{ float: "left", paddingLeft: "3px" }}>
                         <span>Mã tham gia</span>
                       </div>
                       <div style={{ float: "right", paddingRight: "15%" }}>
@@ -406,7 +406,7 @@ const TeacherPostMyClass = () => {
                         </span>
                       </div>
                     </div>
-                    <p className="infor-main">
+                    <p className="infor-main" style={{ paddingTop: "20px" }}>
                       {classDetail.passWord}
                       <FontAwesomeIcon
                         style={{ paddingLeft: "12px" }}
