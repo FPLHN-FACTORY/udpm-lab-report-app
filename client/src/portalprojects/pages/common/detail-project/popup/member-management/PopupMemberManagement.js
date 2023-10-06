@@ -410,7 +410,7 @@ const PopupMemberManagement = ({ position, onClose }) => {
         projectId: detailProject.id,
         role: 0,
       }));
-
+    console.log(listData);
     setListMemberAdd(listData);
   };
 
@@ -518,7 +518,7 @@ const PopupMemberManagement = ({ position, onClose }) => {
         <Select
           style={{ width: "100%" }}
           value={record.role + ""}
-          onChange={(value) => handleRoleChangeAdd(record.id, value)}
+          onChange={(value) => handleRoleChangeAdd(record.memberId, value)}
         >
           <Option value="0">Quản lý</Option>
           <Option value="1">Trưởng nhóm</Option>
@@ -531,9 +531,9 @@ const PopupMemberManagement = ({ position, onClose }) => {
 
   const handleRoleChangeAdd = (id, value) => {
     let updatedListInfo = listMemberAdd.map((record) => {
-      if (record.id === id) {
+      if (record.memberId === id) {
         let newData = {
-          memberId: record.id,
+          memberId: record.memberId,
           email: record.email,
           projectId: detailProject.id,
           role: parseInt(value),
@@ -556,6 +556,7 @@ const PopupMemberManagement = ({ position, onClose }) => {
     const headers = {
       Authorization: "Bearer " + bearerToken,
     };
+
     stompClient.send(
       "/action/create-member-project/" + detailProject.id,
       headers,

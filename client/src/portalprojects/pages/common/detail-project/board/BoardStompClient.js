@@ -99,7 +99,7 @@ import {
 } from "../../../../app/reducer/notification/NotificationSlice.reducer";
 import Cookies from "js-cookie";
 
-const BoardStompClient = (dispatch, useAppSelector) => {
+const BoardStompClient = (dispatch, useAppSelector, id) => {
   const stompClient = getStompClient();
   const periodCurrent = useAppSelector(GetPeriodCurrent);
   const detailTodo = useAppSelector(GetDetailTodo);
@@ -133,9 +133,10 @@ const BoardStompClient = (dispatch, useAppSelector) => {
     detailTodoRef.current = detailTodo;
   }, [detailTodo]);
 
-  const bearerToken = Cookies.get("token");
-
   useEffect(() => {
+    const isStompConnected = () =>
+      stompClient?.ws?.readyState === WebSocket.OPEN;
+
     if (
       stompClient != null &&
       detailProject != null &&
@@ -143,860 +144,846 @@ const BoardStompClient = (dispatch, useAppSelector) => {
       Object.keys(detailProject).length > 0 &&
       Object.keys(periodCurrent).length > 0
     ) {
-      stompClient.connect({}, () => {
-        // stompClient.beforeSend = (frame) => {
-        //   // Fetch the token from where you have stored it (e.g., cookies)
-        //   const bearerToken = Cookies.get("token");
-
-        //   // Add the token to the "Authorization" header
-        //   frame.headers = {
-        //     Authorization: "Bearer " + bearerToken,
-        //     // You can add other headers if needed
-        //   };
-        // };
-
-        let sessionId = loadDataPeriodNotExists(stompClient);
-        stompClient.subscribe(
-          "/portal-projects/update-index-todo/" +
-            detailProject.id +
-            "/" +
-            periodCurrent.id,
-          (message) => {
-            let res = JSON.parse(message.body).data.sessionId;
-            if (res !== sessionId) {
-              let idTodoListOld = JSON.parse(message.body).data.idTodoListOld;
-              let data = JSON.parse(message.body).data.data;
-              let idTodoListNew = data.todoListId;
-              let indexTodoNew = JSON.parse(message.body).data.indexAfter;
-              let draggableId = data.id;
-              dispatch(
-                moveTask({
-                  idTodoListOld,
-                  idTodoListNew,
-                  indexTodoNew,
-                  draggableId,
-                })
-              );
-
-              if (
-                detailTodoRef.current != null &&
-                detailTodoRef.current.id === data.id
-              ) {
-                dispatch(UpdateTodoListDetailTodo(idTodoListNew));
-              }
-            }
-          }
-        );
-
-        stompClient.subscribe(
-          "/portal-projects/update-index-todo-view-table/" +
-            detailProject.id +
-            "/" +
-            periodCurrent.id,
-          (message) => {
-            let res = JSON.parse(message.body).data.sessionId;
-            if (res !== sessionId) {
-              let idTodoListOld = JSON.parse(message.body).data.idTodoListOld;
-              let data = JSON.parse(message.body).data.data;
-              let idTodoListNew = data.todoListId;
-              let indexTodoNew = JSON.parse(message.body).data.indexAfter;
-              let draggableId = data.id;
-              dispatch(
-                moveTask({
-                  idTodoListOld,
-                  idTodoListNew,
-                  indexTodoNew,
-                  draggableId,
-                })
-              );
-
-              if (
-                detailTodoRef.current != null &&
-                detailTodoRef.current.id === data.id
-              ) {
-                dispatch(UpdateTodoListDetailTodo(idTodoListNew));
-              }
-            }
-          }
-        );
-
-        stompClient.subscribe(
-          "/portal-projects/create-todo/" +
-            detailProject.id +
-            "/" +
-            periodCurrent.id,
-          (message) => {
-            let obj = JSON.parse(message.body).data;
-            dispatch(AddTask(obj));
-          }
-        );
-
-        stompClient.subscribe(
-          "/portal-projects/assign/" +
-            detailProject.id +
-            "/" +
-            periodCurrent.id,
-          (message) => {
-            let obj = JSON.parse(message.body).data.data;
-            let idTodo = JSON.parse(message.body).data.idTodo;
-            let idTodoList = JSON.parse(message.body).data.idTodoList;
-            if (typeof obj === "string") {
-              if (
-                detailTodoRef.current != null &&
-                detailTodoRef.current.id === idTodo
-              ) {
-                dispatch(DeleteMember(obj));
-              }
-              let data = {
-                idTodo: idTodo,
-                idTodoList: idTodoList,
-                memberId: obj,
-              };
-              dispatch(DeleteMemberBoard(data));
-            } else {
-              if (
-                detailTodoRef.current != null &&
-                detailTodoRef.current.id === idTodo
-              ) {
-                dispatch(CreateMember(obj.memberId));
-              }
-
-              let data = {
-                idTodo: idTodo,
-                idTodoList: idTodoList,
-                member: listMemberProjectRef.current.find(
-                  (item) => item.memberId === obj.memberId
-                ),
-              };
-              dispatch(CreateMemberBoard(data));
-            }
-          }
-        );
-
-        stompClient.subscribe(
-          "/portal-projects/label-todo/" +
-            detailProject.id +
-            "/" +
-            periodCurrent.id,
-          (message) => {
-            let obj = JSON.parse(message.body).data.data;
-            let idTodo = JSON.parse(message.body).data.idTodo;
-            let idTodoList = JSON.parse(message.body).data.idTodoList;
-
-            if (typeof obj === "string") {
-              if (
-                detailTodoRef.current != null &&
-                detailTodoRef.current.id === idTodo
-              ) {
-                dispatch(DeleteLabel(obj));
-              }
-              let data = {
-                idTodo: idTodo,
-                idTodoList: idTodoList,
-                labelId: obj,
-              };
-              dispatch(DeleteLabelBoard(data));
-            } else {
-              if (
-                detailTodoRef.current != null &&
-                detailTodoRef.current.id === idTodo
-              ) {
-                let data = listLabelProjectRef.current.find(
-                  (item) => item.id === obj.labelProjectId
-                );
-                dispatch(CreateLabel(data));
-              }
-              let data = {
-                idTodo: idTodo,
-                idTodoList: idTodoList,
-                label: listLabelProjectRef.current.find(
-                  (item) => item.id === obj.labelProjectId
-                ),
-              };
-              console.log(data);
-              dispatch(CreateLabelBoard(data));
-            }
-          }
-        );
-
-        stompClient.subscribe(
-          "/portal-projects/update-descriptions-todo/" +
-            detailProject.id +
-            "/" +
-            periodCurrent.id,
-          (message) => {
-            let data = JSON.parse(message.body).data.data;
-            let idTodo = JSON.parse(message.body).data.idTodo;
-            let idTodoList = JSON.parse(message.body).data.idTodoList;
-            let obj = {
-              idTodo: idTodo,
-              idTodoList: idTodoList,
-              todo: data,
-            };
-
-            if (
-              detailTodoRef.current != null &&
-              detailTodoRef.current.id === idTodo
-            ) {
-              dispatch(UpdateDescriptionsDetailTodo(data.descriptions));
-            }
-
-            dispatch(UpdateDescriptions(obj));
-          }
-        );
-
-        stompClient.subscribe(
-          "/portal-projects/todo/" + detailProject.id + "/" + periodCurrent.id,
-          (message) => {
-            let data = JSON.parse(message.body).data.data;
-            let idTodo = JSON.parse(message.body).data.idTodo;
-            let idTodoList = JSON.parse(message.body).data.idTodoList;
-            data.priorityLevel =
-              data.priorityLevel === "QUAN_TRONG"
-                ? 0
-                : data.priorityLevel === "CAO"
-                ? 1
-                : data.priorityLevel === "TRUNG_BINH"
-                ? 2
-                : 3;
-            let obj = {
-              idTodo: idTodo,
-              idTodoList: idTodoList,
-              todo: data,
-            };
-            console.log(data);
-            if (
-              detailTodoRef.current != null &&
-              detailTodoRef.current.id === idTodo
-            ) {
-              dispatch(UpdatePriorityLevelDetailTodo(data.priorityLevel));
-            }
-
-            dispatch(UpdatePriorityLevel(obj));
-          }
-        );
-
-        stompClient.subscribe(
-          "/portal-projects/update-type-todo/" +
-            detailProject.id +
-            "/" +
-            periodCurrent.id,
-          (message) => {
-            let data = JSON.parse(message.body).data.data;
-            let idTodo = JSON.parse(message.body).data.idTodo;
-            let idTodoList = JSON.parse(message.body).data.idTodoList;
-            if (
-              detailTodoRef.current != null &&
-              detailTodoRef.current.id === idTodo
-            ) {
-              dispatch(UpdateTypeDetailTodo(data.type === "TAI_LIEU" ? 0 : 1));
-            }
-          }
-        );
-
-        stompClient.subscribe(
-          "/portal-projects/create-todo-checklist/" +
-            detailProject.id +
-            "/" +
-            periodCurrent.id,
-          (message) => {
-            let data = JSON.parse(message.body).data.data;
-            let idTodo = JSON.parse(message.body).data.idTodo;
-            let idTodoList = JSON.parse(message.body).data.idTodoList;
-            let numberTodo = JSON.parse(message.body).data.numberTodo;
-            let numberTodoComplete = JSON.parse(message.body).data
-              .numberTodoComplete;
-            let progress = parseInt((numberTodoComplete / numberTodo) * 100);
-            if (
-              detailTodoRef.current != null &&
-              detailTodoRef.current.id === idTodo
-            ) {
-              let todoInCheckList = {
-                todo: {
-                  id: data.id,
-                  code: data.code,
-                  name: data.name,
-                  statusTodo: 0,
-                },
-                progress: progress,
-              };
-              dispatch(CreateTodoInCheckList(todoInCheckList));
-            }
-            let dataTask = {
-              idTodo: idTodo,
-              idTodoList: idTodoList,
-              numberTodo: numberTodo,
-              numberTodoComplete: numberTodoComplete,
-              progress: progress,
-            };
-            dispatch(UpdateTodoInCheckListAndProgress(dataTask));
-          }
-        );
-
-        stompClient.subscribe(
-          "/portal-projects/update-todo-checklist/" +
-            detailProject.id +
-            "/" +
-            periodCurrent.id,
-          (message) => {
-            let data = JSON.parse(message.body).data;
-            if (
-              detailTodoRef.current != null &&
-              detailTodoRef.current.id === data.todoId
-            ) {
-              dispatch(UpdateTodoInCheckList(data));
-            }
-          }
-        );
-
-        stompClient.subscribe(
-          "/portal-projects/delete-todo-checklist/" +
-            detailProject.id +
-            "/" +
-            periodCurrent.id,
-          (message) => {
-            let data = JSON.parse(message.body).data.data;
-            let idTodo = JSON.parse(message.body).data.idTodo;
-            let idTodoList = JSON.parse(message.body).data.idTodoList;
-            let numberTodo = JSON.parse(message.body).data.numberTodo;
-            let numberTodoComplete = JSON.parse(message.body).data
-              .numberTodoComplete;
-            let progress = parseInt((numberTodoComplete / numberTodo) * 100);
-            if (
-              detailTodoRef.current != null &&
-              detailTodoRef.current.id === idTodo
-            ) {
-              let obj = {
-                id: data,
-                progress: progress,
-              };
-              dispatch(DeleteTodoInCheckList(obj));
-            }
-            let dataTask = {
-              idTodo: idTodo,
-              idTodoList: idTodoList,
-              numberTodo: numberTodo,
-              numberTodoComplete: numberTodoComplete,
-              progress: progress,
-            };
-            dispatch(UpdateTodoInCheckListAndProgress(dataTask));
-          }
-        );
-
-        stompClient.subscribe(
-          "/portal-projects/update-statustodo-todo-checklist/" +
-            detailProject.id +
-            "/" +
-            periodCurrent.id,
-          (message) => {
-            let data = JSON.parse(message.body).data.data;
-            let idTodo = JSON.parse(message.body).data.idTodo;
-            let idTodoList = JSON.parse(message.body).data.idTodoList;
-            let numberTodo = JSON.parse(message.body).data.numberTodo;
-            let numberTodoComplete = JSON.parse(message.body).data
-              .numberTodoComplete;
-            let progress = parseInt((numberTodoComplete / numberTodo) * 100);
-            if (
-              detailTodoRef.current != null &&
-              detailTodoRef.current.id === idTodo
-            ) {
-              let obj = {
-                id: data.id,
-                status: data.statusTodo,
-                progress: progress,
-              };
-              dispatch(UpdateStatusTodoInCheckList(obj));
-            }
-            let dataTask = {
-              idTodo: idTodo,
-              idTodoList: idTodoList,
-              numberTodo: numberTodo,
-              numberTodoComplete: numberTodoComplete,
-              progress: progress,
-            };
-            dispatch(UpdateTodoInCheckListAndProgress(dataTask));
-          }
-        );
-
-        stompClient.subscribe(
-          "/portal-projects/create-comment/" +
-            detailProject.id +
-            "/" +
-            periodCurrent.id,
-          (message) => {
-            let obj = JSON.parse(message.body).data.data;
-            let idTodo = JSON.parse(message.body).data.idTodo;
-            let idTodoList = JSON.parse(message.body).data.idTodoList;
-            if (
-              detailTodoRef.current != null &&
-              detailTodoRef.current.id === idTodo
-            ) {
-              let objComment = {
-                comment: obj,
-              };
-              dispatch(CreateCommentDetailTodo(objComment));
-            }
-            dispatch(
-              UpdateCountCommentCreate({
-                idTodo: idTodo,
-                idTodoList: idTodoList,
-              })
-            );
-          }
-        );
-
-        stompClient.subscribe(
-          "/portal-projects/delete-comment/" +
-            detailProject.id +
-            "/" +
-            periodCurrent.id,
-          (message) => {
-            let idComment = JSON.parse(message.body).data.data;
-            let idTodo = JSON.parse(message.body).data.idTodo;
-            let idTodoList = JSON.parse(message.body).data.idTodoList;
-            if (
-              detailTodoRef.current != null &&
-              detailTodoRef.current.id === idTodo
-            ) {
-              dispatch(DeleteCommentDetailTodo(idComment));
-            }
-            dispatch(
-              UpdateCountCommentDelete({
-                idTodo: idTodo,
-                idTodoList: idTodoList,
-              })
-            );
-          }
-        );
-
-        stompClient.subscribe(
-          "/portal-projects/update-comment/" +
-            detailProject.id +
-            "/" +
-            periodCurrent.id,
-          (message) => {
-            let data = JSON.parse(message.body).data.data;
-            let idTodo = JSON.parse(message.body).data.idTodo;
-            let idTodoList = JSON.parse(message.body).data.idTodoList;
-            if (
-              detailTodoRef.current != null &&
-              detailTodoRef.current.id === idTodo
-            ) {
-              dispatch(UpdateCommentDetailTodo(data));
-            }
-          }
-        );
-
-        stompClient.subscribe(
-          "/portal-projects/update-deadline-todo/" +
-            detailProject.id +
-            "/" +
-            periodCurrent.id,
-          (message) => {
-            let data = JSON.parse(message.body).data.data;
-            let idTodo = JSON.parse(message.body).data.idTodo;
-            let idTodoList = JSON.parse(message.body).data.idTodoList;
-
-            if (
-              detailTodoRef.current != null &&
-              detailTodoRef.current.id === idTodo
-            ) {
-              dispatch(UpdateDeadlineDetailTodo(data));
-            }
-            let obj = {
-              data: data,
-              idTodo: idTodo,
-              idTodoList: idTodoList,
-            };
-            dispatch(UpdateDeadline(obj));
-          }
-        );
-
-        stompClient.subscribe(
-          "/portal-projects/delete-deadline-todo/" +
-            detailProject.id +
-            "/" +
-            periodCurrent.id,
-          (message) => {
-            let data = JSON.parse(message.body).data.data;
-            let idTodo = JSON.parse(message.body).data.idTodo;
-            let idTodoList = JSON.parse(message.body).data.idTodoList;
-
-            if (
-              detailTodoRef.current != null &&
-              detailTodoRef.current.id === idTodo
-            ) {
-              dispatch(DeleteDeadlineDetailTodo(data));
-            }
-            let obj = {
-              data: data,
-              idTodo: idTodo,
-              idTodoList: idTodoList,
-            };
-            dispatch(DeleteDeadline(obj));
-          }
-        );
-
-        stompClient.subscribe(
-          "/portal-projects/update-name-todo/" +
-            detailProject.id +
-            "/" +
-            periodCurrent.id,
-          (message) => {
-            let data = JSON.parse(message.body).data.data;
-            let idTodo = JSON.parse(message.body).data.idTodo;
-            let idTodoList = JSON.parse(message.body).data.idTodoList;
-
-            if (
-              detailTodoRef.current != null &&
-              detailTodoRef.current.id === idTodo
-            ) {
-              dispatch(UpdateNameDetailTodo(data));
-            }
-            let obj = {
-              data: data,
-              idTodo: idTodo,
-              idTodoList: idTodoList,
-            };
-            dispatch(UpdateNameTask(obj));
-          }
-        );
-
-        stompClient.subscribe(
-          "/portal-projects/delete-name-todo/" +
-            detailProject.id +
-            "/" +
-            periodCurrent.id,
-          (message) => {
-            let data = JSON.parse(message.body).data.data;
-            let idTodo = JSON.parse(message.body).data.idTodo;
-            let idTodoList = JSON.parse(message.body).data.idTodoList;
-
-            if (
-              detailTodoRef.current != null &&
-              detailTodoRef.current.id === idTodo
-            ) {
-              dispatch(UpdateNameDetailTodo(data));
-            }
-            let obj = {
-              data: data,
-              idTodo: idTodo,
-              idTodoList: idTodoList,
-            };
-            dispatch(UpdateNameTask(obj));
-          }
-        );
-
-        stompClient.subscribe(
-          "/portal-projects/update-complete-todo/" +
-            detailProject.id +
-            "/" +
-            periodCurrent.id,
-          (message) => {
-            let data = JSON.parse(message.body).data.data;
-            let idTodo = JSON.parse(message.body).data.idTodo;
-            let idTodoList = JSON.parse(message.body).data.idTodoList;
-
-            if (
-              detailTodoRef.current != null &&
-              detailTodoRef.current.id === idTodo
-            ) {
-              dispatch(UpdateCompletionDetailTodo(data));
-            }
-            let obj = {
-              data: data,
-              idTodo: idTodo,
-              idTodoList: idTodoList,
-            };
-            dispatch(UpdateCompletion(obj));
-          }
-        );
-
-        stompClient.subscribe(
-          "/portal-projects/create-resource/" +
-            detailProject.id +
-            "/" +
-            periodCurrent.id,
-          (message) => {
-            let data = JSON.parse(message.body).data.data;
-            let idTodo = JSON.parse(message.body).data.idTodo;
-            let idTodoList = JSON.parse(message.body).data.idTodoList;
-
-            if (
-              detailTodoRef.current != null &&
-              detailTodoRef.current.id === idTodo
-            ) {
-              dispatch(CreateAttachmentDetailTodo(data));
-            }
-            let obj = {
-              idTodo: idTodo,
-              idTodoList: idTodoList,
-            };
-            dispatch(UpdateCountAttachmentCreate(obj));
-          }
-        );
-
-        stompClient.subscribe(
-          "/portal-projects/delete-resource/" +
-            detailProject.id +
-            "/" +
-            periodCurrent.id,
-          (message) => {
-            let data = JSON.parse(message.body).data.data;
-            let idTodo = JSON.parse(message.body).data.idTodo;
-            let idTodoList = JSON.parse(message.body).data.idTodoList;
-
-            if (
-              detailTodoRef.current != null &&
-              detailTodoRef.current.id === idTodo
-            ) {
-              dispatch(DeleteAttachmentDetailTodo(data));
-            }
-            let obj = {
-              idTodo: idTodo,
-              idTodoList: idTodoList,
-            };
-            dispatch(UpdateCountAttachmentDelete(obj));
-          }
-        );
-
-        stompClient.subscribe(
-          "/portal-projects/update-resource/" +
-            detailProject.id +
-            "/" +
-            periodCurrent.id,
-          (message) => {
-            let data = JSON.parse(message.body).data.data;
-            let idTodo = JSON.parse(message.body).data.idTodo;
-            let idTodoList = JSON.parse(message.body).data.idTodoList;
-
-            if (
-              detailTodoRef.current != null &&
-              detailTodoRef.current.id === idTodo
-            ) {
-              dispatch(UpdateAttachmentDetailTodo(data));
-            }
-          }
-        );
-
-        stompClient.subscribe(
-          "/portal-projects/delete-todo/" +
-            detailProject.id +
-            "/" +
-            periodCurrent.id,
-          (message) => {
-            let idTodo = JSON.parse(message.body).data.idTodo;
-            let idTodoList = JSON.parse(message.body).data.idTodoList;
-            let obj = {
-              idTodo: idTodo,
-              idTodoList: idTodoList,
-            };
-            dispatch(DeleteTodo(obj));
-          }
-        );
-
-        stompClient.subscribe(
-          "/portal-projects/update-progress-todo/" +
-            detailProject.id +
-            "/" +
-            periodCurrent.id,
-          (message) => {
-            let data = JSON.parse(message.body).data.data;
-            let idTodo = JSON.parse(message.body).data.idTodo;
-            let idTodoList = JSON.parse(message.body).data.idTodoList;
-            if (
-              detailTodoRef.current != null &&
-              detailTodoRef.current.id === idTodo
-            ) {
-              dispatch(UpdateProgressDetailTodo(data));
-            }
-            let obj = {
-              data: data,
-              idTodo: idTodo,
-              idTodoList: idTodoList,
-            };
-            dispatch(UpdateProgress(obj));
-          }
-        );
-
-        stompClient.subscribe(
-          "/portal-projects/sort-todo-priority/" +
-            detailProject.id +
-            "/" +
-            periodCurrent.id,
-          (message) => {
-            let idPeriod = JSON.parse(message.body).data;
-            fetchDataBoard(idPeriod);
-          }
-        );
-
-        stompClient.subscribe(
-          "/portal-projects/sort-todo-deadline/" +
-            detailProject.id +
-            "/" +
-            periodCurrent.id,
-          (message) => {
-            let idPeriod = JSON.parse(message.body).data;
-            fetchDataBoard(idPeriod);
-          }
-        );
-
-        stompClient.subscribe(
-          "/portal-projects/sort-todo-created-date/" +
-            detailProject.id +
-            "/" +
-            periodCurrent.id,
-          (message) => {
-            let idPeriod = JSON.parse(message.body).data;
-            fetchDataBoard(idPeriod);
-          }
-        );
-
-        stompClient.subscribe(
-          "/portal-projects/sort-todo-name/" +
-            detailProject.id +
-            "/" +
-            periodCurrent.id,
-          (message) => {
-            let idPeriod = JSON.parse(message.body).data;
-            fetchDataBoard(idPeriod);
-          }
-        );
-
-        stompClient.subscribe(
-          "/portal-projects/sort-todo-progress/" +
-            detailProject.id +
-            "/" +
-            periodCurrent.id,
-          (message) => {
-            let idPeriod = JSON.parse(message.body).data;
-            fetchDataBoard(idPeriod);
-          }
-        );
-
-        stompClient.subscribe(
-          "/portal-projects/create-image/" +
-            detailProject.id +
-            "/" +
-            periodCurrent.id,
-          (message) => {
-            let data = JSON.parse(message.body).data.data;
-            let idTodo = JSON.parse(message.body).data.idTodo;
-            let idTodoList = JSON.parse(message.body).data.idTodoList;
-            let objDetailTodo = {
-              image: data,
-              idTodo: idTodo,
-              idTodoList: idTodoList,
-            };
-            if (
-              detailTodoRef.current != null &&
-              detailTodoRef.current.id === idTodo
-            ) {
-              dispatch(CreateImageDetailTodo(objDetailTodo));
-            }
-            dispatch(CreateImageCover(objDetailTodo));
-          }
-        );
-
-        stompClient.subscribe(
-          "/portal-projects/update-name-image/" +
-            detailProject.id +
-            "/" +
-            periodCurrent.id,
-          (message) => {
-            let data = JSON.parse(message.body).data;
-            if (
-              detailTodoRef.current != null &&
-              detailTodoRef.current.id === data.todoId
-            ) {
-              dispatch(UpdateNameImageDetailTodo(data));
-            }
-          }
-        );
-
-        stompClient.subscribe(
-          "/portal-projects/change-cover-image/" +
-            detailProject.id +
-            "/" +
-            periodCurrent.id,
-          (message) => {
-            let todo = JSON.parse(message.body).data.data;
-            let image = JSON.parse(message.body).data.dataImage;
-            let idTodo = JSON.parse(message.body).data.idTodo;
-            let idTodoList = JSON.parse(message.body).data.idTodoList;
-            if (
-              detailTodoRef.current != null &&
-              detailTodoRef.current.id === idTodo
-            ) {
-              let obj = {
-                image: image,
-              };
-              dispatch(ChangeCoverImageDetailTodo(obj));
-            }
-            let objBoard = {
-              idTodo: idTodo,
-              idTodoList: idTodoList,
-              todo: todo,
-            };
-            dispatch(ChangeCoverImage(objBoard));
-          }
-        );
-
-        stompClient.subscribe(
-          "/portal-projects/delete-image/" +
-            detailProject.id +
-            "/" +
-            periodCurrent.id,
-          (message) => {
-            let todo = JSON.parse(message.body).data.data;
-            let idImage = JSON.parse(message.body).data.dataImage;
-            let idTodo = JSON.parse(message.body).data.idTodo;
-            let idTodoList = JSON.parse(message.body).data.idTodoList;
-            if (
-              detailTodoRef.current != null &&
-              detailTodoRef.current.id === idTodo
-            ) {
-              let obj = {
-                idImage: idImage,
-                todo: todo,
-              };
-              dispatch(DeleteImageDetailTodo(obj));
-            }
-            let objBoard = {
-              idTodo: idTodo,
-              idTodoList: idTodoList,
-              todo: todo,
-            };
-            dispatch(DeleteCoverImage(objBoard));
-          }
-        );
-      });
-    }
-  }, [stompClient, periodCurrent, detailProject]);
-
-  useEffect(() => {
-    if (
-      stompClient != null &&
-      detailProject != null &&
-      Object.keys(detailProject).length > 0 &&
-      periodCurrent == null
-    ) {
-      stompClient.connect({}, () => {
-        loadDataPeriodNotExists(stompClient);
-        fetchDataBoard(null);
-      });
+      if (isStompConnected()) {
+        loadDataStompClient();
+      } else {
+        stompClient.connect({}, () => {
+          loadDataStompClient();
+        });
+      }
     } else if (
       stompClient != null &&
       detailProject != null &&
       Object.keys(detailProject).length > 0 &&
-      Object.keys(periodCurrent).length === 0
+      (periodCurrentRef.current == null ||
+        Object.keys(periodCurrentRef.current).length === 0)
     ) {
-      stompClient.connect({}, () => {
+      if (isStompConnected()) {
         loadDataPeriodNotExists(stompClient);
         fetchDataBoard(null);
-      });
+      } else {
+        stompClient.connect({}, () => {
+          loadDataPeriodNotExists(stompClient);
+          fetchDataBoard(null);
+        });
+      }
     }
-  }, [stompClient, detailProject, periodCurrent]);
+  }, [stompClient, detailProject, periodCurrent, id]);
+
+  const loadDataStompClient = () => {
+    let sessionId = loadDataPeriodNotExists(stompClient);
+    stompClient.subscribe(
+      "/portal-projects/update-index-todo/" +
+        detailProject.id +
+        "/" +
+        periodCurrent.id,
+      (message) => {
+        let res = JSON.parse(message.body).data.sessionId;
+        if (res !== sessionId) {
+          let idTodoListOld = JSON.parse(message.body).data.idTodoListOld;
+          let data = JSON.parse(message.body).data.data;
+          let idTodoListNew = data.todoListId;
+          let indexTodoNew = JSON.parse(message.body).data.indexAfter;
+          let draggableId = data.id;
+          dispatch(
+            moveTask({
+              idTodoListOld,
+              idTodoListNew,
+              indexTodoNew,
+              draggableId,
+            })
+          );
+
+          if (
+            detailTodoRef.current != null &&
+            detailTodoRef.current.id === data.id
+          ) {
+            dispatch(UpdateTodoListDetailTodo(idTodoListNew));
+          }
+        }
+      }
+    );
+
+    stompClient.subscribe(
+      "/portal-projects/update-index-todo-view-table/" +
+        detailProject.id +
+        "/" +
+        periodCurrent.id,
+      (message) => {
+        let res = JSON.parse(message.body).data.sessionId;
+        if (res !== sessionId) {
+          let idTodoListOld = JSON.parse(message.body).data.idTodoListOld;
+          let data = JSON.parse(message.body).data.data;
+          let idTodoListNew = data.todoListId;
+          let indexTodoNew = JSON.parse(message.body).data.indexAfter;
+          let draggableId = data.id;
+          dispatch(
+            moveTask({
+              idTodoListOld,
+              idTodoListNew,
+              indexTodoNew,
+              draggableId,
+            })
+          );
+
+          if (
+            detailTodoRef.current != null &&
+            detailTodoRef.current.id === data.id
+          ) {
+            dispatch(UpdateTodoListDetailTodo(idTodoListNew));
+          }
+        }
+      }
+    );
+
+    stompClient.subscribe(
+      "/portal-projects/create-todo/" +
+        detailProject.id +
+        "/" +
+        periodCurrent.id,
+      (message) => {
+        let obj = JSON.parse(message.body).data;
+        dispatch(AddTask(obj));
+      }
+    );
+
+    stompClient.subscribe(
+      "/portal-projects/assign/" + detailProject.id + "/" + periodCurrent.id,
+      (message) => {
+        let obj = JSON.parse(message.body).data.data;
+        let idTodo = JSON.parse(message.body).data.idTodo;
+        let idTodoList = JSON.parse(message.body).data.idTodoList;
+        if (typeof obj === "string") {
+          if (
+            detailTodoRef.current != null &&
+            detailTodoRef.current.id === idTodo
+          ) {
+            dispatch(DeleteMember(obj));
+          }
+          let data = {
+            idTodo: idTodo,
+            idTodoList: idTodoList,
+            memberId: obj,
+          };
+          dispatch(DeleteMemberBoard(data));
+        } else {
+          if (
+            detailTodoRef.current != null &&
+            detailTodoRef.current.id === idTodo
+          ) {
+            dispatch(CreateMember(obj.memberId));
+          }
+
+          let data = {
+            idTodo: idTodo,
+            idTodoList: idTodoList,
+            member: listMemberProjectRef.current.find(
+              (item) => item.memberId === obj.memberId
+            ),
+          };
+          dispatch(CreateMemberBoard(data));
+        }
+      }
+    );
+
+    stompClient.subscribe(
+      "/portal-projects/label-todo/" +
+        detailProject.id +
+        "/" +
+        periodCurrent.id,
+      (message) => {
+        let obj = JSON.parse(message.body).data.data;
+        let idTodo = JSON.parse(message.body).data.idTodo;
+        let idTodoList = JSON.parse(message.body).data.idTodoList;
+
+        if (typeof obj === "string") {
+          if (
+            detailTodoRef.current != null &&
+            detailTodoRef.current.id === idTodo
+          ) {
+            dispatch(DeleteLabel(obj));
+          }
+          let data = {
+            idTodo: idTodo,
+            idTodoList: idTodoList,
+            labelId: obj,
+          };
+          dispatch(DeleteLabelBoard(data));
+        } else {
+          if (
+            detailTodoRef.current != null &&
+            detailTodoRef.current.id === idTodo
+          ) {
+            let data = listLabelProjectRef.current.find(
+              (item) => item.id === obj.labelProjectId
+            );
+            dispatch(CreateLabel(data));
+          }
+          let data = {
+            idTodo: idTodo,
+            idTodoList: idTodoList,
+            label: listLabelProjectRef.current.find(
+              (item) => item.id === obj.labelProjectId
+            ),
+          };
+          console.log(data);
+          dispatch(CreateLabelBoard(data));
+        }
+      }
+    );
+
+    stompClient.subscribe(
+      "/portal-projects/update-descriptions-todo/" +
+        detailProject.id +
+        "/" +
+        periodCurrent.id,
+      (message) => {
+        let data = JSON.parse(message.body).data.data;
+        let idTodo = JSON.parse(message.body).data.idTodo;
+        let idTodoList = JSON.parse(message.body).data.idTodoList;
+        let obj = {
+          idTodo: idTodo,
+          idTodoList: idTodoList,
+          todo: data,
+        };
+
+        if (
+          detailTodoRef.current != null &&
+          detailTodoRef.current.id === idTodo
+        ) {
+          dispatch(UpdateDescriptionsDetailTodo(data.descriptions));
+        }
+
+        dispatch(UpdateDescriptions(obj));
+      }
+    );
+
+    stompClient.subscribe(
+      "/portal-projects/todo/" + detailProject.id + "/" + periodCurrent.id,
+      (message) => {
+        let data = JSON.parse(message.body).data.data;
+        let idTodo = JSON.parse(message.body).data.idTodo;
+        let idTodoList = JSON.parse(message.body).data.idTodoList;
+        data.priorityLevel =
+          data.priorityLevel === "QUAN_TRONG"
+            ? 0
+            : data.priorityLevel === "CAO"
+            ? 1
+            : data.priorityLevel === "TRUNG_BINH"
+            ? 2
+            : 3;
+        let obj = {
+          idTodo: idTodo,
+          idTodoList: idTodoList,
+          todo: data,
+        };
+        console.log(data);
+        if (
+          detailTodoRef.current != null &&
+          detailTodoRef.current.id === idTodo
+        ) {
+          dispatch(UpdatePriorityLevelDetailTodo(data.priorityLevel));
+        }
+
+        dispatch(UpdatePriorityLevel(obj));
+      }
+    );
+
+    stompClient.subscribe(
+      "/portal-projects/update-type-todo/" +
+        detailProject.id +
+        "/" +
+        periodCurrent.id,
+      (message) => {
+        let data = JSON.parse(message.body).data.data;
+        let idTodo = JSON.parse(message.body).data.idTodo;
+        let idTodoList = JSON.parse(message.body).data.idTodoList;
+        if (
+          detailTodoRef.current != null &&
+          detailTodoRef.current.id === idTodo
+        ) {
+          dispatch(UpdateTypeDetailTodo(data.type === "TAI_LIEU" ? 0 : 1));
+        }
+      }
+    );
+
+    stompClient.subscribe(
+      "/portal-projects/create-todo-checklist/" +
+        detailProject.id +
+        "/" +
+        periodCurrent.id,
+      (message) => {
+        let data = JSON.parse(message.body).data.data;
+        let idTodo = JSON.parse(message.body).data.idTodo;
+        let idTodoList = JSON.parse(message.body).data.idTodoList;
+        let numberTodo = JSON.parse(message.body).data.numberTodo;
+        let numberTodoComplete = JSON.parse(message.body).data
+          .numberTodoComplete;
+        let progress = parseInt((numberTodoComplete / numberTodo) * 100);
+        if (
+          detailTodoRef.current != null &&
+          detailTodoRef.current.id === idTodo
+        ) {
+          let todoInCheckList = {
+            todo: {
+              id: data.id,
+              code: data.code,
+              name: data.name,
+              statusTodo: 0,
+            },
+            progress: progress,
+          };
+          dispatch(CreateTodoInCheckList(todoInCheckList));
+        }
+        let dataTask = {
+          idTodo: idTodo,
+          idTodoList: idTodoList,
+          numberTodo: numberTodo,
+          numberTodoComplete: numberTodoComplete,
+          progress: progress,
+        };
+        dispatch(UpdateTodoInCheckListAndProgress(dataTask));
+      }
+    );
+
+    stompClient.subscribe(
+      "/portal-projects/update-todo-checklist/" +
+        detailProject.id +
+        "/" +
+        periodCurrent.id,
+      (message) => {
+        let data = JSON.parse(message.body).data;
+        if (
+          detailTodoRef.current != null &&
+          detailTodoRef.current.id === data.todoId
+        ) {
+          dispatch(UpdateTodoInCheckList(data));
+        }
+      }
+    );
+
+    stompClient.subscribe(
+      "/portal-projects/delete-todo-checklist/" +
+        detailProject.id +
+        "/" +
+        periodCurrent.id,
+      (message) => {
+        let data = JSON.parse(message.body).data.data;
+        let idTodo = JSON.parse(message.body).data.idTodo;
+        let idTodoList = JSON.parse(message.body).data.idTodoList;
+        let numberTodo = JSON.parse(message.body).data.numberTodo;
+        let numberTodoComplete = JSON.parse(message.body).data
+          .numberTodoComplete;
+        let progress = parseInt((numberTodoComplete / numberTodo) * 100);
+        if (
+          detailTodoRef.current != null &&
+          detailTodoRef.current.id === idTodo
+        ) {
+          let obj = {
+            id: data,
+            progress: progress,
+          };
+          dispatch(DeleteTodoInCheckList(obj));
+        }
+        let dataTask = {
+          idTodo: idTodo,
+          idTodoList: idTodoList,
+          numberTodo: numberTodo,
+          numberTodoComplete: numberTodoComplete,
+          progress: progress,
+        };
+        dispatch(UpdateTodoInCheckListAndProgress(dataTask));
+      }
+    );
+
+    stompClient.subscribe(
+      "/portal-projects/update-statustodo-todo-checklist/" +
+        detailProject.id +
+        "/" +
+        periodCurrent.id,
+      (message) => {
+        let data = JSON.parse(message.body).data.data;
+        let idTodo = JSON.parse(message.body).data.idTodo;
+        let idTodoList = JSON.parse(message.body).data.idTodoList;
+        let numberTodo = JSON.parse(message.body).data.numberTodo;
+        let numberTodoComplete = JSON.parse(message.body).data
+          .numberTodoComplete;
+        let progress = parseInt((numberTodoComplete / numberTodo) * 100);
+        if (
+          detailTodoRef.current != null &&
+          detailTodoRef.current.id === idTodo
+        ) {
+          let obj = {
+            id: data.id,
+            status: data.statusTodo,
+            progress: progress,
+          };
+          dispatch(UpdateStatusTodoInCheckList(obj));
+        }
+        let dataTask = {
+          idTodo: idTodo,
+          idTodoList: idTodoList,
+          numberTodo: numberTodo,
+          numberTodoComplete: numberTodoComplete,
+          progress: progress,
+        };
+        dispatch(UpdateTodoInCheckListAndProgress(dataTask));
+      }
+    );
+
+    stompClient.subscribe(
+      "/portal-projects/create-comment/" +
+        detailProject.id +
+        "/" +
+        periodCurrent.id,
+      (message) => {
+        let obj = JSON.parse(message.body).data.data;
+        let idTodo = JSON.parse(message.body).data.idTodo;
+        let idTodoList = JSON.parse(message.body).data.idTodoList;
+        if (
+          detailTodoRef.current != null &&
+          detailTodoRef.current.id === idTodo
+        ) {
+          let objComment = {
+            comment: obj,
+          };
+          dispatch(CreateCommentDetailTodo(objComment));
+        }
+        dispatch(
+          UpdateCountCommentCreate({
+            idTodo: idTodo,
+            idTodoList: idTodoList,
+          })
+        );
+      }
+    );
+
+    stompClient.subscribe(
+      "/portal-projects/delete-comment/" +
+        detailProject.id +
+        "/" +
+        periodCurrent.id,
+      (message) => {
+        let idComment = JSON.parse(message.body).data.data;
+        let idTodo = JSON.parse(message.body).data.idTodo;
+        let idTodoList = JSON.parse(message.body).data.idTodoList;
+        if (
+          detailTodoRef.current != null &&
+          detailTodoRef.current.id === idTodo
+        ) {
+          dispatch(DeleteCommentDetailTodo(idComment));
+        }
+        dispatch(
+          UpdateCountCommentDelete({
+            idTodo: idTodo,
+            idTodoList: idTodoList,
+          })
+        );
+      }
+    );
+
+    stompClient.subscribe(
+      "/portal-projects/update-comment/" +
+        detailProject.id +
+        "/" +
+        periodCurrent.id,
+      (message) => {
+        let data = JSON.parse(message.body).data.data;
+        let idTodo = JSON.parse(message.body).data.idTodo;
+        let idTodoList = JSON.parse(message.body).data.idTodoList;
+        if (
+          detailTodoRef.current != null &&
+          detailTodoRef.current.id === idTodo
+        ) {
+          dispatch(UpdateCommentDetailTodo(data));
+        }
+      }
+    );
+
+    stompClient.subscribe(
+      "/portal-projects/update-deadline-todo/" +
+        detailProject.id +
+        "/" +
+        periodCurrent.id,
+      (message) => {
+        let data = JSON.parse(message.body).data.data;
+        let idTodo = JSON.parse(message.body).data.idTodo;
+        let idTodoList = JSON.parse(message.body).data.idTodoList;
+
+        if (
+          detailTodoRef.current != null &&
+          detailTodoRef.current.id === idTodo
+        ) {
+          dispatch(UpdateDeadlineDetailTodo(data));
+        }
+        let obj = {
+          data: data,
+          idTodo: idTodo,
+          idTodoList: idTodoList,
+        };
+        dispatch(UpdateDeadline(obj));
+      }
+    );
+
+    stompClient.subscribe(
+      "/portal-projects/delete-deadline-todo/" +
+        detailProject.id +
+        "/" +
+        periodCurrent.id,
+      (message) => {
+        let data = JSON.parse(message.body).data.data;
+        let idTodo = JSON.parse(message.body).data.idTodo;
+        let idTodoList = JSON.parse(message.body).data.idTodoList;
+
+        if (
+          detailTodoRef.current != null &&
+          detailTodoRef.current.id === idTodo
+        ) {
+          dispatch(DeleteDeadlineDetailTodo(data));
+        }
+        let obj = {
+          data: data,
+          idTodo: idTodo,
+          idTodoList: idTodoList,
+        };
+        dispatch(DeleteDeadline(obj));
+      }
+    );
+
+    stompClient.subscribe(
+      "/portal-projects/update-name-todo/" +
+        detailProject.id +
+        "/" +
+        periodCurrent.id,
+      (message) => {
+        let data = JSON.parse(message.body).data.data;
+        let idTodo = JSON.parse(message.body).data.idTodo;
+        let idTodoList = JSON.parse(message.body).data.idTodoList;
+
+        if (
+          detailTodoRef.current != null &&
+          detailTodoRef.current.id === idTodo
+        ) {
+          dispatch(UpdateNameDetailTodo(data));
+        }
+        let obj = {
+          data: data,
+          idTodo: idTodo,
+          idTodoList: idTodoList,
+        };
+        dispatch(UpdateNameTask(obj));
+      }
+    );
+
+    stompClient.subscribe(
+      "/portal-projects/delete-name-todo/" +
+        detailProject.id +
+        "/" +
+        periodCurrent.id,
+      (message) => {
+        let data = JSON.parse(message.body).data.data;
+        let idTodo = JSON.parse(message.body).data.idTodo;
+        let idTodoList = JSON.parse(message.body).data.idTodoList;
+
+        if (
+          detailTodoRef.current != null &&
+          detailTodoRef.current.id === idTodo
+        ) {
+          dispatch(UpdateNameDetailTodo(data));
+        }
+        let obj = {
+          data: data,
+          idTodo: idTodo,
+          idTodoList: idTodoList,
+        };
+        dispatch(UpdateNameTask(obj));
+      }
+    );
+
+    stompClient.subscribe(
+      "/portal-projects/update-complete-todo/" +
+        detailProject.id +
+        "/" +
+        periodCurrent.id,
+      (message) => {
+        let data = JSON.parse(message.body).data.data;
+        let idTodo = JSON.parse(message.body).data.idTodo;
+        let idTodoList = JSON.parse(message.body).data.idTodoList;
+
+        if (
+          detailTodoRef.current != null &&
+          detailTodoRef.current.id === idTodo
+        ) {
+          dispatch(UpdateCompletionDetailTodo(data));
+        }
+        let obj = {
+          data: data,
+          idTodo: idTodo,
+          idTodoList: idTodoList,
+        };
+        dispatch(UpdateCompletion(obj));
+      }
+    );
+
+    stompClient.subscribe(
+      "/portal-projects/create-resource/" +
+        detailProject.id +
+        "/" +
+        periodCurrent.id,
+      (message) => {
+        let data = JSON.parse(message.body).data.data;
+        let idTodo = JSON.parse(message.body).data.idTodo;
+        let idTodoList = JSON.parse(message.body).data.idTodoList;
+
+        if (
+          detailTodoRef.current != null &&
+          detailTodoRef.current.id === idTodo
+        ) {
+          dispatch(CreateAttachmentDetailTodo(data));
+        }
+        let obj = {
+          idTodo: idTodo,
+          idTodoList: idTodoList,
+        };
+        dispatch(UpdateCountAttachmentCreate(obj));
+      }
+    );
+
+    stompClient.subscribe(
+      "/portal-projects/delete-resource/" +
+        detailProject.id +
+        "/" +
+        periodCurrent.id,
+      (message) => {
+        let data = JSON.parse(message.body).data.data;
+        let idTodo = JSON.parse(message.body).data.idTodo;
+        let idTodoList = JSON.parse(message.body).data.idTodoList;
+
+        if (
+          detailTodoRef.current != null &&
+          detailTodoRef.current.id === idTodo
+        ) {
+          dispatch(DeleteAttachmentDetailTodo(data));
+        }
+        let obj = {
+          idTodo: idTodo,
+          idTodoList: idTodoList,
+        };
+        dispatch(UpdateCountAttachmentDelete(obj));
+      }
+    );
+
+    stompClient.subscribe(
+      "/portal-projects/update-resource/" +
+        detailProject.id +
+        "/" +
+        periodCurrent.id,
+      (message) => {
+        let data = JSON.parse(message.body).data.data;
+        let idTodo = JSON.parse(message.body).data.idTodo;
+        let idTodoList = JSON.parse(message.body).data.idTodoList;
+
+        if (
+          detailTodoRef.current != null &&
+          detailTodoRef.current.id === idTodo
+        ) {
+          dispatch(UpdateAttachmentDetailTodo(data));
+        }
+      }
+    );
+
+    stompClient.subscribe(
+      "/portal-projects/delete-todo/" +
+        detailProject.id +
+        "/" +
+        periodCurrent.id,
+      (message) => {
+        let idTodo = JSON.parse(message.body).data.idTodo;
+        let idTodoList = JSON.parse(message.body).data.idTodoList;
+        let obj = {
+          idTodo: idTodo,
+          idTodoList: idTodoList,
+        };
+        dispatch(DeleteTodo(obj));
+      }
+    );
+
+    stompClient.subscribe(
+      "/portal-projects/update-progress-todo/" +
+        detailProject.id +
+        "/" +
+        periodCurrent.id,
+      (message) => {
+        let data = JSON.parse(message.body).data.data;
+        let idTodo = JSON.parse(message.body).data.idTodo;
+        let idTodoList = JSON.parse(message.body).data.idTodoList;
+        if (
+          detailTodoRef.current != null &&
+          detailTodoRef.current.id === idTodo
+        ) {
+          dispatch(UpdateProgressDetailTodo(data));
+        }
+        let obj = {
+          data: data,
+          idTodo: idTodo,
+          idTodoList: idTodoList,
+        };
+        dispatch(UpdateProgress(obj));
+      }
+    );
+
+    stompClient.subscribe(
+      "/portal-projects/sort-todo-priority/" +
+        detailProject.id +
+        "/" +
+        periodCurrent.id,
+      (message) => {
+        let idPeriod = JSON.parse(message.body).data;
+        fetchDataBoard(idPeriod);
+      }
+    );
+
+    stompClient.subscribe(
+      "/portal-projects/sort-todo-deadline/" +
+        detailProject.id +
+        "/" +
+        periodCurrent.id,
+      (message) => {
+        let idPeriod = JSON.parse(message.body).data;
+        fetchDataBoard(idPeriod);
+      }
+    );
+
+    stompClient.subscribe(
+      "/portal-projects/sort-todo-created-date/" +
+        detailProject.id +
+        "/" +
+        periodCurrent.id,
+      (message) => {
+        let idPeriod = JSON.parse(message.body).data;
+        fetchDataBoard(idPeriod);
+      }
+    );
+
+    stompClient.subscribe(
+      "/portal-projects/sort-todo-name/" +
+        detailProject.id +
+        "/" +
+        periodCurrent.id,
+      (message) => {
+        let idPeriod = JSON.parse(message.body).data;
+        fetchDataBoard(idPeriod);
+      }
+    );
+
+    stompClient.subscribe(
+      "/portal-projects/sort-todo-progress/" +
+        detailProject.id +
+        "/" +
+        periodCurrent.id,
+      (message) => {
+        let idPeriod = JSON.parse(message.body).data;
+        fetchDataBoard(idPeriod);
+      }
+    );
+
+    stompClient.subscribe(
+      "/portal-projects/create-image/" +
+        detailProject.id +
+        "/" +
+        periodCurrent.id,
+      (message) => {
+        let data = JSON.parse(message.body).data.data;
+        let idTodo = JSON.parse(message.body).data.idTodo;
+        let idTodoList = JSON.parse(message.body).data.idTodoList;
+        let objDetailTodo = {
+          image: data,
+          idTodo: idTodo,
+          idTodoList: idTodoList,
+        };
+        if (
+          detailTodoRef.current != null &&
+          detailTodoRef.current.id === idTodo
+        ) {
+          dispatch(CreateImageDetailTodo(objDetailTodo));
+        }
+        dispatch(CreateImageCover(objDetailTodo));
+      }
+    );
+
+    stompClient.subscribe(
+      "/portal-projects/update-name-image/" +
+        detailProject.id +
+        "/" +
+        periodCurrent.id,
+      (message) => {
+        let data = JSON.parse(message.body).data;
+        if (
+          detailTodoRef.current != null &&
+          detailTodoRef.current.id === data.todoId
+        ) {
+          dispatch(UpdateNameImageDetailTodo(data));
+        }
+      }
+    );
+
+    stompClient.subscribe(
+      "/portal-projects/change-cover-image/" +
+        detailProject.id +
+        "/" +
+        periodCurrent.id,
+      (message) => {
+        let todo = JSON.parse(message.body).data.data;
+        let image = JSON.parse(message.body).data.dataImage;
+        let idTodo = JSON.parse(message.body).data.idTodo;
+        let idTodoList = JSON.parse(message.body).data.idTodoList;
+        if (
+          detailTodoRef.current != null &&
+          detailTodoRef.current.id === idTodo
+        ) {
+          let obj = {
+            image: image,
+          };
+          dispatch(ChangeCoverImageDetailTodo(obj));
+        }
+        let objBoard = {
+          idTodo: idTodo,
+          idTodoList: idTodoList,
+          todo: todo,
+        };
+        dispatch(ChangeCoverImage(objBoard));
+      }
+    );
+
+    stompClient.subscribe(
+      "/portal-projects/delete-image/" +
+        detailProject.id +
+        "/" +
+        periodCurrent.id,
+      (message) => {
+        let todo = JSON.parse(message.body).data.data;
+        let idImage = JSON.parse(message.body).data.dataImage;
+        let idTodo = JSON.parse(message.body).data.idTodo;
+        let idTodoList = JSON.parse(message.body).data.idTodoList;
+        if (
+          detailTodoRef.current != null &&
+          detailTodoRef.current.id === idTodo
+        ) {
+          let obj = {
+            idImage: idImage,
+            todo: todo,
+          };
+          dispatch(DeleteImageDetailTodo(obj));
+        }
+        let objBoard = {
+          idTodo: idTodo,
+          idTodoList: idTodoList,
+          todo: todo,
+        };
+        dispatch(DeleteCoverImage(objBoard));
+      }
+    );
+  };
 
   const loadDataPeriodNotExists = (stompC) => {
     let sessionId = /\/([^\/]+)\/websocket/.exec(stompC.ws._transport.url)[1];

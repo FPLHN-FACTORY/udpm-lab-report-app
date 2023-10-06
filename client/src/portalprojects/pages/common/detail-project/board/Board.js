@@ -26,10 +26,12 @@ import { getStompClient } from "../stomp-client-config/StompClientManager";
 import BoardStompClient from "./BoardStompClient";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
+import { useParams } from "react-router";
 
 const Board = () => {
+  const { id } = useParams();
   const dispatch = useAppDispatch();
-  BoardStompClient(dispatch, useAppSelector);
+  BoardStompClient(dispatch, useAppSelector, id);
   const board = useAppSelector((state) => state.board);
   const [newListTitle, setNewListTitle] = useState("");
   const [isAddingList, setIsAddingList] = useState(false);

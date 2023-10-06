@@ -152,7 +152,7 @@ const StPointDetailClass = () => {
           </div>
           <div>
             <>
-              <div className="info-team">
+              <div className="info-team" style={{ marginTop: 15 }}>
                 <span className="info-heading">Danh sách đầu điểm:</span>
               </div>
               <Table

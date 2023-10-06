@@ -186,13 +186,13 @@ public class MePeriodServiceImpl implements MePeriodService {
                 throw new RestApiException(Message.PERIOD_OVERLAP);
             }
         }
-        Optional<Project> projectFind = meProjectRepository.findById(request.getProjectId());
-        if (startTimeLong < projectFind.get().getStartTime()) {
-            throw new RestApiException(Message.START_TIME_OF_PERIOD_NO_SMALL_BETTER_START_TIME_OF_PROJECT);
-        }
-        if (endTimeLong > projectFind.get().getEndTime()) {
-            throw new RestApiException(Message.END_TIME_OF_PERIOD_NO_BIG_BETTER_END_TIME_OF_PROJECT);
-        }
+//        Optional<Project> projectFind = meProjectRepository.findById(request.getProjectId());
+//        if (startTimeLong < projectFind.get().getStartTime()) {
+//            throw new RestApiException(Message.START_TIME_OF_PERIOD_NO_SMALL_BETTER_START_TIME_OF_PROJECT);
+//        }
+//        if (endTimeLong > projectFind.get().getEndTime()) {
+//            throw new RestApiException(Message.END_TIME_OF_PERIOD_NO_BIG_BETTER_END_TIME_OF_PROJECT);
+//        }
         Period result = new Period();
         result.setStartTime(startTimeLong);
         result.setEndTime(endTimeLong);

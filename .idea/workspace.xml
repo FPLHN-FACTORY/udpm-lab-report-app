@@ -4,25 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fe93e581-5589-4bad-ba6a-389fa82a0816" name="Default Changelist" comment="merge code quynhnc">
-      <change afterPath="$PROJECT_DIR$/client/src/labreportapp/app/student/StStudentClasses.reducer.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/student/model/response/StMyStudentTeamCustom.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/api/student/StMyClassAPI.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/api/student/StMyClassAPI.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/app/store.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/app/store.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/pages/student/detail-my-class/meeting/detail-meeting/DetailMyClassMeeting.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/pages/student/detail-my-class/meeting/detail-meeting/DetailMyClassMeeting.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/pages/student/detail-my-class/meeting/detail-meeting/collapseMeeting/StCollapseMeeting.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/pages/student/detail-my-class/meeting/detail-meeting/collapseMeeting/StCollapseMeeting.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/pages/student/detail-my-class/team/DetailMyClassTeam.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/pages/student/detail-my-class/team/DetailMyClassTeam.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/pages/student/detail-my-class/team/modal-detail-team/ModalDetailTeam.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/pages/student/detail-my-class/team/modal-detail-team/ModalDetailTeam.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/pages/student/my-class/StudentMyClass.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/pages/student/my-class/StudentMyClass.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/student/controller/StMyClassController.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/student/controller/StMyClassController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/student/repository/StLeadTeamRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/student/repository/StLeadTeamRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/student/repository/StMyClassRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/student/repository/StMyClassRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/student/service/StMyClassService.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/student/service/StMyClassService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/student/service/StTeamClassService.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/student/service/StTeamClassService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/student/service/impl/StMeetingServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/student/service/impl/StMeetingServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/student/service/impl/StMyClassServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/student/service/impl/StMyClassServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/student/service/impl/StTeamClassServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/student/service/impl/StTeamClassServiceImpl.java" afterDir="false" />
-    </list>
+    <list default="true" id="fe93e581-5589-4bad-ba6a-389fa82a0816" name="Default Changelist" comment="merge code quynhnc" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -39,6 +21,11 @@
     </system>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="hieundph25894_v2" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -53,6 +40,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
+    <property name="nodejs_package_manager_path" value="npm" />
   </component>
   <component name="RunManager">
     <configuration name="C:/Users/final/Documents/JavaProject/udpm-lab-report/udpm-lab-report-app" type="GradleRunConfiguration" factoryName="Gradle" nameIsGenerated="true">
