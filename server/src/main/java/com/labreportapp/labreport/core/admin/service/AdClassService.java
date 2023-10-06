@@ -7,6 +7,7 @@ import com.labreportapp.labreport.core.admin.model.request.AdRandomClassRequest;
 import com.labreportapp.labreport.core.admin.model.response.AdActivityClassResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdClassCustomResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdClassResponse;
+import com.labreportapp.labreport.core.admin.model.response.AdDetailClassCustomResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdDetailClassRespone;
 import com.labreportapp.labreport.core.admin.model.response.AdListClassCustomResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdSemesterAcResponse;
@@ -45,7 +46,7 @@ public interface AdClassService {
 
     ByteArrayOutputStream exportExcelClass(HttpServletResponse response, final AdFindClassRequest request);
 
-    AdDetailClassRespone adFindClassById(final String id);
+    AdDetailClassCustomResponse adFindClassById(final String id);
 
     Boolean randomClass(@Valid AdRandomClassRequest request);
 

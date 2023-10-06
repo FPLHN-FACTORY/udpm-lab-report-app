@@ -80,6 +80,8 @@ public class AdStudentClassServiceImpl implements AdStudentClassService {
                     obj.setRole(reposi.getRole());
                     obj.setStatusStudent(reposi.getStatusStudent());
                     obj.setIdTeam(reposi.getIdTeam());
+                    obj.setIdFeedBack(reposi.getIdFeedBack());
+                    obj.setIdAttendance(reposi.getIdAttendance());
                     obj.setCodeTeam(reposi.getCodeTeam());
                     obj.setNameTeam(reposi.getNameTeam());
                     listReturn.add(obj);

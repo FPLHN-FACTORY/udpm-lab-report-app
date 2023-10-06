@@ -26,6 +26,10 @@ public class AdStudentCallApiRespone {
 
     private String idTeam;
 
+    private String idFeedBack;
+
+    private String idAttendance;
+
     private String codeTeam;
 
     private String nameTeam;

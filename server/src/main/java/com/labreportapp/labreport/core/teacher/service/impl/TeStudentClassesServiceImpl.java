@@ -174,6 +174,35 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
     @Override
     @Transactional
     @Synchronized
+    public Boolean updateKickStudentClasses(TeSentStudentClassRequest request) {
+        Optional<Class> classCurrent = teClassRepository.findById(request.getIdClassOld());
+        if (!classCurrent.isPresent()) {
+            throw new RestApiException(Message.CLASS_NOT_EXISTS);
+        }
+        List<StudentClasses> studentClasses = teStudentClassesRepository.findStudentClassesByIdClass(request.getIdClassOld());
+        List<String> idStudents = request.getListIdStudent();
+        List<StudentClasses> studentClassesFinal = new ArrayList<>();
+        if (request.getListIdStudent().size() == 0 || studentClasses.size() == 0) {
+            return false;
+        }
+        studentClasses.forEach(item -> {
+            idStudents.forEach(id -> {
+                if (id.equals(item.getStudentId())) {
+                    StudentClasses studentKich = new StudentClasses();
+                    studentKich.setId(item.getId());
+                    studentClassesFinal.add(studentKich);
+                }
+            });
+        });
+        classCurrent.get().setClassSize(classCurrent.get().getClassSize() - idStudents.size());
+        teClassRepository.save(classCurrent.get());
+        teStudentClassesRepository.deleteAll(studentClassesFinal);
+        return true;
+    }
+
+    @Override
+    @Transactional
+    @Synchronized
     public Boolean updateSentStudentClassesToClass(TeSentStudentClassRequest request) {
         boolean check = false;
         Optional<Class> classSent = teClassRepository.findById(request.getIdClassSent());

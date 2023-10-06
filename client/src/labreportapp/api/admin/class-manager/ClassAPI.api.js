@@ -1,7 +1,48 @@
 import { request } from "../../../helper/request.helper";
 import { apiDanhSachGiangVien } from "../../../helper/request.helper";
 
+const url = `/admin/class-managerment`;
 export class ClassAPI {
+
+  static kickStudentClassesToClass(data) {
+    return request({
+      method: "PUT",
+      url: `/admin/class-managerment` + `/kick-st`,
+      data: data,
+    });
+  }
+
+  static sentStudentClassesToClass(data) {
+    return request({
+      method: "PUT",
+      url: `/admin/class-managerment` + `/sent-st`,
+      data: data,
+    });
+  }
+
+  static getClassSentStudent(filter) {
+    return request({
+      method: "GET",
+      url:
+        url +
+        `/class-sent` +
+        `?idSemester=` +
+        filter.idSemester +
+        `&idActivity=` +
+        filter.idActivity +
+        `&idLevel=` +
+        filter.idLevel +
+        `&idClass=` +
+        filter.idClass +
+        `&countStudent=` +
+        filter.countStudent +
+        `&page=` +
+        filter.page +
+        `&size=` +
+        filter.size,
+    });
+  }
+
   static fetchAllClass = () => {
     return request({
       method: "GET",

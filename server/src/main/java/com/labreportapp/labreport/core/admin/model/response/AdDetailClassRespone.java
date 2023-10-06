@@ -39,6 +39,9 @@ public interface AdDetailClassRespone {
     @Value("#{target.semesterId}")
     String getSemesterId();
 
+    @Value("#{target.level_id}")
+    String getLevelId();
+
     @Value("#{target.semesterName}")
     String getSemesterName();
 

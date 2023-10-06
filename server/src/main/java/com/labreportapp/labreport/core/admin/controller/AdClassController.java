@@ -10,6 +10,11 @@ import com.labreportapp.labreport.core.admin.service.AdClassService;
 import com.labreportapp.labreport.core.common.base.ImportExcelResponse;
 import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.core.common.base.ResponseObject;
+import com.labreportapp.labreport.core.teacher.model.request.TeFindClassSentStudentRequest;
+import com.labreportapp.labreport.core.teacher.model.request.TeSentStudentClassRequest;
+import com.labreportapp.labreport.core.teacher.model.response.TeClassSentStudentRespone;
+import com.labreportapp.labreport.core.teacher.service.TeClassService;
+import com.labreportapp.labreport.core.teacher.service.TeStudentClassesService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -38,6 +43,12 @@ import java.util.List;
 @RequestMapping("/admin/class-managerment")
 @CrossOrigin("*")
 public class AdClassController {
+
+    @Autowired
+    private TeClassService teClassService;
+
+    @Autowired
+    private TeStudentClassesService teStudentClassesService;
 
     @Autowired
     private AdClassService service;
@@ -124,4 +135,21 @@ public class AdClassController {
         ImportExcelResponse importExcelResponse = service.importExcelClass(multipartFile, idSemester);
         return new ResponseObject(importExcelResponse);
     }
+
+    @PutMapping("/sent-st")
+    public ResponseObject sentStudentClassesToClass(@RequestBody TeSentStudentClassRequest request) {
+        return new ResponseObject(teStudentClassesService.updateSentStudentClassesToClass(request));
+    }
+
+    @PutMapping("/kick-st")
+    public ResponseObject kichStudentClasses(@RequestBody TeSentStudentClassRequest request) {
+        return new ResponseObject(teStudentClassesService.updateKickStudentClasses(request));
+    }
+
+    @GetMapping("/class-sent")
+    public ResponseObject classSentStudent(final TeFindClassSentStudentRequest request) {
+        PageableObject<TeClassSentStudentRespone> pageList = teClassService.findClassBySentStudent(request);
+        return new ResponseObject(pageList);
+    }
+
 }
