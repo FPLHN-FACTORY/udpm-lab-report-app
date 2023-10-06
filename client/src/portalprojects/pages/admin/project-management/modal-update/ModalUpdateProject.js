@@ -493,7 +493,6 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
         onCancel={cancelUpdateFaild}
         width={750}
         footer={null}
-        className="modal_show_detail"
       >
         {" "}
         <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>

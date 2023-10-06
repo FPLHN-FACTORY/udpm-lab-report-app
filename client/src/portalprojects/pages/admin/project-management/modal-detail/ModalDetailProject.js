@@ -159,7 +159,6 @@ const ModalDetailProject = ({ visible, onCancel, idProject }) => {
       visible={visible}
       width={750}
       footer={null}
-      className="modal_project_show_detail"
     >
       <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
         <span style={{ fontSize: "18px" }}>Chi tiết dự án</span>

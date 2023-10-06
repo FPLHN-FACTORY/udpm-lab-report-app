@@ -5,3 +5,41 @@
 .ant-progress-bg {
   background-color: #1890ff;
 }
+.dashboard-project-box {
+  padding-top: 111px;
+  padding-left: 10px;
+  padding-right: 10px !important;
+  padding-bottom: 10px;
+}
+
+.dashboard-project-content {
+  background-color: white;
+  border-radius: 15px;
+  width: 100%;
+}
+
+.dashboard-custom-v2 {
+  max-height: calc(100vh - 121px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(9, 30, 66, 0.3) transparent;
+  border-radius: 10px !important;
+}
+
+.dashboard-custom-v2::-webkit-scrollbar {
+  width: 7px;
+  border-radius: 10px !important;
+}
+
+.dashboard-custom-v2::-webkit-scrollbar-thumb {
+  background-color: rgba(9, 30, 66, 0.3);
+  border-radius: 10px !important;
+}
+
+.dashboard-custom-v2::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.custom-dashboard-content {
+  padding: 20px;
+}

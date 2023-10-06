@@ -389,7 +389,6 @@ const ModalCreateProject = ({ visible, onCancel }) => {
         width={750}
         footer={null}
         bodyStyle={{ overflow: "hidden" }}
-        className="modal_show_create"
       >
         {" "}
         <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>

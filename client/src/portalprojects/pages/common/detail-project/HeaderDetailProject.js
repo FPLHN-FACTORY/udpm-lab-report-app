@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./styleHeaderDetailProject.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHome, faCogs, faRepeat } from "@fortawesome/free-solid-svg-icons";
@@ -130,6 +130,8 @@ const HeaderDetailProject = () => {
       setIsTableVisible(1);
     } else if (location.pathname.includes("period-project")) {
       setIsTableVisible(2);
+    } else if (location.pathname.includes("detail-project/dashboard")) {
+      setIsTableVisible(3);
     } else {
       setIsTableVisible(0);
     }
@@ -224,6 +226,12 @@ const HeaderDetailProject = () => {
     setIsOpenPopupMemberManagement(false);
   };
 
+  const navigate = useNavigate();
+
+  const handlePeriodProject = () => {
+    navigate("/period-project/" + detailProject.id);
+  };
+
   return (
     <div className="header-style">
       <div className="left_header">
@@ -277,18 +285,29 @@ const HeaderDetailProject = () => {
             <TableOutlined /> Table
           </span>{" "}
         </Link>
-        <span
-          className={`box_setting ${isTableVisible === 2 ? "active" : ""}`}
-          onClick={openPopupPeriod}
-        >
-          <FontAwesomeIcon icon={faRepeat} /> Giai đoạn
-        </span>
-        {isTableVisible === 2 && (
+        {isTableVisible === 2 || isTableVisible === 3 ? (
+          <span
+            className={`box_setting ${isTableVisible === 2 ? "active" : ""}`}
+            onClick={handlePeriodProject}
+          >
+            <FontAwesomeIcon icon={faRepeat} /> Giai đoạn
+          </span>
+        ) : (
+          <span
+            className={`box_setting ${isTableVisible === 2 ? "active" : ""}`}
+            onClick={openPopupPeriod}
+          >
+            <FontAwesomeIcon icon={faRepeat} /> Giai đoạn
+          </span>
+        )}
+        {(isTableVisible === 2 || isTableVisible === 3) && (
           <Link
             style={{ color: "white", textDecoration: "none" }}
             to={`/detail-project/dashboard/${detailProject.id}`}
           >
-            <span className="box_setting">
+            <span
+              className={`box_setting ${isTableVisible === 3 ? "active" : ""}`}
+            >
               <FontAwesomeIcon icon={faChartBar} /> Thống kê
             </span>
           </Link>
@@ -302,7 +321,7 @@ const HeaderDetailProject = () => {
       </div>
       <div className="right_header">
         {" "}
-        {isTableVisible !== 2 && (
+        {isTableVisible !== 2 && isTableVisible !== 3 && (
           <>
             <Link
               style={{ color: "white", textDecoration: "none" }}

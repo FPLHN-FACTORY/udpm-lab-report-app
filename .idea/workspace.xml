@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fe93e581-5589-4bad-ba6a-389fa82a0816" name="Default Changelist" comment="update code merge login" />
+    <list default="true" id="fe93e581-5589-4bad-ba6a-389fa82a0816" name="Default Changelist" comment="update code trello">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -61,6 +63,8 @@
       <workItem from="1696288734507" duration="201000" />
       <workItem from="1696312052688" duration="18000" />
       <workItem from="1696354035750" duration="99000" />
+      <workItem from="1696540452169" duration="87000" />
+      <workItem from="1696566826150" duration="49000" />
     </task>
     <task id="LOCAL-00001" summary="update code merge login, pending">
       <created>1696288841421</created>
@@ -76,7 +80,14 @@
       <option name="project" value="LOCAL" />
       <updated>1696354080918</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="update code trello">
+      <created>1696540478857</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1696540478857</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -97,6 +108,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="update code merge login, pending" />
     <MESSAGE value="update code merge login" />
-    <option name="LAST_COMMIT_MESSAGE" value="update code merge login" />
+    <MESSAGE value="update code trello" />
+    <option name="LAST_COMMIT_MESSAGE" value="update code trello" />
   </component>
 </project>

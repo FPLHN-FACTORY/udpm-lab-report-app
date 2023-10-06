@@ -6,7 +6,7 @@
   padding-right: 0 !important;
   padding-bottom: 0 !important;
   padding-top: 0 !important;
-  color: rgb(51, 51, 51) !important;
+  color: rgb(51, 51, 51);
   z-index: 1;
 }
 

@@ -23,6 +23,7 @@ import {
 } from "recharts";
 import { Col, Progress, Row, Select } from "antd";
 import { DashboardApi } from "../../../api/dashboard/Dashboard.api";
+import HeaderDetailProject from "../detail-project/HeaderDetailProject";
 
 const { Option } = Select;
 
@@ -43,6 +44,13 @@ const DetailProjectDashBoard = () => {
     fetchData();
     loadDataPeriod();
     loadDataLineChartAllProject();
+    document.querySelector(".logo_project").src =
+      "https://raw.githubusercontent.com/FPLHN-FACTORY/udpm-common-resources/main/fpoly-udpm/logo-udpm-2.png";
+
+    return () => {
+      document.querySelector(".logo_project").src =
+        "https://raw.githubusercontent.com/FPLHN-FACTORY/udpm-common-resources/main/fpoly-udpm/logo-udpm-3.png";
+    };
   }, []);
 
   const fetchData = () => {
@@ -242,144 +250,155 @@ const DetailProjectDashBoard = () => {
   };
 
   return (
-    <div className="my_project">
+    <div className="detail-project">
       {loading && <LoadingIndicator />}
-      <div style={{ marginBottom: "15px" }}>
-        <Link
-          to="/my-project"
-          style={{ color: "black", textDecoration: "none" }}
-        >
-          <FontAwesomeIcon icon={faHome} /> Danh sách dự án{" "}
-        </Link>{" "}
-        <span style={{ marginLeft: "5px", marginRight: "5px" }}> / </span>{" "}
-        <span style={{ color: "black", textDecoration: "none" }}>
-          <FontAwesomeIcon icon={faCogs} />
-          <Link
-            to={`/detail-project/${id}`}
-            style={{ color: "black", textDecoration: "none" }}
-          >
-            {" "}
-            {detailProject != null ? detailProject.name : ""}
-          </Link>
-        </span>
-        <span style={{ marginLeft: "5px", marginRight: "5px" }}> / </span>{" "}
-        <span style={{ color: "black", textDecoration: "none" }}>
-          <FontAwesomeIcon icon={faLineChart} /> Thống kê
-        </span>
+      <div>
+        {" "}
+        <HeaderDetailProject />
       </div>
-
-      <div className="table_project">
-        <div
-          style={{
-            borderBottom: "1px solid gray",
-            display: "flex",
-            alignItems: "center",
-            paddingBottom: "10px",
-          }}
-        >
-          <span style={{ fontSize: "18px", fontWeight: "700" }}>
-            <FontAwesomeIcon
-              icon={faLineChart}
-              style={{ marginRight: "7px" }}
-            />
-            Thống kê
-          </span>
-        </div>
-        <div style={{ marginTop: "30px", marginBottom: "25px" }}>
-          <Row>
-            <Col
-              span={12}
-              style={{
-                textAlign: "center",
-                justifyContent: "center",
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <span>Bộ lọc:</span>
-              <Select
-                value={idPeriodChange}
-                onChange={handleChangeIdPeriod}
-                style={{ marginLeft: "10px", width: "250px" }}
-              >
-                <Option value="none">Tất cả dự án</Option>
-                {listPeriod != null &&
-                  listPeriod.map((item) => (
-                    <Option value={item.id} key={item.id}>
-                      {item.name}
-                    </Option>
-                  ))}
-              </Select>
-            </Col>
-            <Col
-              span={12}
-              style={{ textAlign: "center", justifyContent: "center" }}
-            >
-              {" "}
-              <span>Tiến độ chung:</span>
-              <Progress
-                type="circle"
-                percent={progress}
-                strokeColor={{
-                  "0%": "#108ee9",
-                  "100%": "#87d068",
-                }}
-                strokeWidth={6}
-                width={100}
-                trailColor="#f0f0f0"
-                strokeLinecap="round"
+      <div className="dashboard-project-box">
+        <div className="dashboard-project-content">
+          <div className="dashboard-custom-v2">
+            {" "}
+            <div className="custom-dashboard-content">
+              <div
                 style={{
-                  boxShadow: "0 0 10px rgba(82, 196, 26, 0.6)",
-                  borderRadius: "50%",
-                  marginLeft: "10px",
+                  borderBottom: "1px solid gray",
+                  display: "flex",
+                  alignItems: "center",
+                  paddingBottom: "10px",
                 }}
-              />
-            </Col>
-          </Row>
-        </div>
-        <div style={{ marginBottom: "15px" }}>
-          <h3>Thống kê thẻ theo danh sách</h3>
-          <BarChart width={1150} height={400} data={dataList}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="list" fill="rgb(190, 190, 59)" />
-          </BarChart>
-        </div>
-        <div style={{ marginBottom: "15px" }}>
-          <h3>Thống kê thẻ theo ngày hạn</h3>
-          <BarChart width={1150} height={400} data={dataDueDate}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="duedate" fill="rgb(190, 190, 59)" />
-          </BarChart>
-        </div>
-        <div style={{ marginBottom: "15px" }}>
-          <h3>Thống kê thẻ theo thành viên</h3>
-          <BarChart width={1150} height={400} data={dataMember}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="member" fill="rgb(190, 190, 59)" />
-          </BarChart>
-        </div>
-        <div style={{ marginBottom: "15px" }}>
-          <h3>Thống kê thẻ theo nhãn</h3>
-          <BarChart width={1150} height={400} data={dataLabel}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="label" fill="rgb(190, 190, 59)" />
-          </BarChart>
+              >
+                <span style={{ fontSize: "18px", fontWeight: "700" }}>
+                  <FontAwesomeIcon
+                    icon={faLineChart}
+                    style={{ marginRight: "7px" }}
+                  />
+                  Thống kê
+                </span>
+              </div>
+              <div style={{ marginTop: "30px", marginBottom: "25px" }}>
+                <Row>
+                  <Col
+                    span={12}
+                    style={{
+                      textAlign: "center",
+                      justifyContent: "center",
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <span>Bộ lọc:</span>
+                    <Select
+                      value={idPeriodChange}
+                      onChange={handleChangeIdPeriod}
+                      style={{ marginLeft: "10px", width: "250px" }}
+                    >
+                      <Option value="none">Tất cả dự án</Option>
+                      {listPeriod != null &&
+                        listPeriod.map((item) => (
+                          <Option value={item.id} key={item.id}>
+                            {item.name}
+                          </Option>
+                        ))}
+                    </Select>
+                  </Col>
+                  <Col
+                    span={12}
+                    style={{ textAlign: "center", justifyContent: "center" }}
+                  >
+                    {" "}
+                    <span>Tiến độ chung:</span>
+                    <Progress
+                      type="circle"
+                      percent={progress}
+                      strokeColor={{
+                        "0%": "#108ee9",
+                        "100%": "#87d068",
+                      }}
+                      strokeWidth={6}
+                      width={100}
+                      trailColor="#f0f0f0"
+                      strokeLinecap="round"
+                      style={{
+                        boxShadow: "0 0 10px rgba(82, 196, 26, 0.6)",
+                        borderRadius: "50%",
+                        marginLeft: "10px",
+                      }}
+                    />
+                  </Col>
+                </Row>
+              </div>
+              <h4>Thống kê thẻ theo danh sách</h4>
+              <div
+                style={{
+                  marginBottom: "15px",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <BarChart width={1150} height={400} data={dataList}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="list" fill="rgb(190, 190, 59)" />
+                </BarChart>
+              </div>{" "}
+              <h4>Thống kê thẻ theo ngày hạn</h4>
+              <div
+                style={{
+                  marginBottom: "15px",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <BarChart width={1150} height={400} data={dataDueDate}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="duedate" fill="rgb(190, 190, 59)" />
+                </BarChart>
+              </div>{" "}
+              <h4>Thống kê thẻ theo thành viên</h4>
+              <div
+                style={{
+                  marginBottom: "15px",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <BarChart width={1150} height={400} data={dataMember}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="member" fill="rgb(190, 190, 59)" />
+                </BarChart>
+              </div>{" "}
+              <h4>Thống kê thẻ theo nhãn</h4>
+              <div
+                style={{
+                  marginBottom: "15px",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <BarChart width={1150} height={400} data={dataLabel}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="label" fill="rgb(190, 190, 59)" />
+                </BarChart>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

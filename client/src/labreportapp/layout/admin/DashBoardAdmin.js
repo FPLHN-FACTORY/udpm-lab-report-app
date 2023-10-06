@@ -28,9 +28,10 @@ const DashBoardAdmin = ({ children }) => {
           width={250}
           collapsed={collapsed}
           style={{
-            height: "100vh",
+            height: "calc(100vh - 121px)",
             position: "fixed",
             left: 0,
+            paddingBottom: "20px",
           }}
         >
           <SidebarAdminComponent

@@ -571,9 +571,8 @@ function App() {
               path="/detail-project/dashboard/:id"
               element={
                 <AuthGuard>
-                  <DashBoardTeacher>
-                    <DetailProjectDashBoard />
-                  </DashBoardTeacher>
+                  <HeaderTeacherComponent />
+                  <DetailProjectDashBoard />
                 </AuthGuard>
               }
             />

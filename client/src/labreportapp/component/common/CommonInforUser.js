@@ -12,7 +12,12 @@ import { GetUserCurrent } from "../../app/common/UserCurrent.reducer";
 import Cookies from "js-cookie";
 import { portIdentity } from "../../helper/constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSignOut } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPerson,
+  faPersonSwimming,
+  faSignOut,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
 import { DetailProjectAPI } from "../../../portalprojects/api/detail-project/detailProject.api";
 import {
   GetCountNotification,
@@ -35,9 +40,23 @@ const CommonInforUser = () => {
     <Menu onClick={handleMenuClick}>
       <Menu.Item
         key="0"
+        icon={<FontAwesomeIcon icon={faUser} style={{ marginRight: 5 }} />}
+      >
+        <Link to="/profile">Trang cá nhân</Link>
+      </Menu.Item>
+      <Menu.Item
+        key="1"
+        icon={
+          <FontAwesomeIcon icon={faPersonSwimming} style={{ marginRight: 5 }} />
+        }
+      >
+        <Link to="/role-selection">Đổi quyền</Link>
+      </Menu.Item>
+      <Menu.Item
+        key="2"
         icon={<FontAwesomeIcon icon={faSignOut} style={{ marginRight: 5 }} />}
       >
-        Hãy ra khỏi module này đi
+        Đăng xuất
       </Menu.Item>
     </Menu>
   );

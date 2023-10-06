@@ -225,7 +225,7 @@ const TableDragAndDrop = ({ data }) => {
       },
       {
         title: (
-          <div>
+          <div style={{ color: "rgb(51, 51, 51)" }}>
             <ProjectOutlined style={{ fontSize: "18px" }} /> Thẻ
           </div>
         ),
@@ -277,7 +277,7 @@ const TableDragAndDrop = ({ data }) => {
       },
       {
         title: (
-          <div>
+          <div style={{ color: "rgb(51, 51, 51)" }}>
             <BarsOutlined style={{ fontSize: "18px" }} /> Danh sách
           </div>
         ),
@@ -309,7 +309,7 @@ const TableDragAndDrop = ({ data }) => {
       },
       {
         title: (
-          <div>
+          <div style={{ color: "rgb(51, 51, 51)" }}>
             <TagsOutlined style={{ fontSize: "18px" }} /> Nhãn
           </div>
         ),
@@ -347,7 +347,7 @@ const TableDragAndDrop = ({ data }) => {
       },
       {
         title: (
-          <div>
+          <div style={{ color: "rgb(51, 51, 51)" }}>
             <UserOutlined style={{ fontSize: "18px" }} /> Thành viên
           </div>
         ),
@@ -379,7 +379,7 @@ const TableDragAndDrop = ({ data }) => {
       },
       {
         title: (
-          <div>
+          <div style={{ color: "rgb(51, 51, 51)" }}>
             <ClockCircleOutlined style={{ fontSize: "18px" }} /> Ngày hạn |{" "}
             <LineChartOutlined style={{ fontSize: "18px" }} /> Tiến độ
           </div>
