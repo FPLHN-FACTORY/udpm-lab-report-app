@@ -9,7 +9,7 @@ import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyCla
 import { TeacherMeetingAPI } from "../../../../api/teacher/meeting/TeacherMeeting.api";
 import { Link } from "react-router-dom";
 import CustomSwitch from "./CustomSwitch";
-import { Button, Empty, Input, Table } from "antd";
+import { Button, Empty, Input, Row, Table } from "antd";
 import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import {
@@ -33,10 +33,12 @@ const TeacherAttendanceMeeting = () => {
   const [idClass, setIdClass] = useState("");
   const [checkAttendance, setCheckAttendance] = useState(false);
   const [listAttendance, setListAttendance] = useState([]);
+  const [notes, setNotes] = useState("");
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Bảng điều khiển - điểm danh";
     featchMeetingCheckDate(idMeeting);
+    setNotes("");
   }, []);
   const fetchData = async (idClass) => {
     await Promise.all([
@@ -69,9 +71,7 @@ const TeacherAttendanceMeeting = () => {
           }
         }
       );
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   const featInforStudent = async (idClass) => {
     try {
@@ -107,9 +107,7 @@ const TeacherAttendanceMeeting = () => {
         setLoading(true);
       }
       setLoadingData(true);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   const featchStudentClass = async (idClass) => {
     try {
@@ -121,9 +119,7 @@ const TeacherAttendanceMeeting = () => {
           setListStudentClassAPI(listAPI);
         }
       );
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   const featchMeetingCheckDate = async (id) => {
     setLoading(false);
@@ -131,6 +127,7 @@ const TeacherAttendanceMeeting = () => {
       await TeacherMeetingAPI.getAndCheckMeetingById(id).then(
         (response) => {
           setMeeting(response.data.data);
+          setNotes(response.data.data.notes);
           setIdClass(response.data.data.idClass);
           fetchData(response.data.data.idClass);
         },
@@ -139,18 +136,22 @@ const TeacherAttendanceMeeting = () => {
           navigate("/teacher/schedule-today");
         }
       );
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
+
   useEffect(() => {
     if (loadingData === true) {
       fetchData(idClass);
     }
   }, [loadingData]);
+
   const handleSave = async () => {
     try {
-      let dataFind = { listAttendance: data, idMeeting: idMeeting };
+      let dataFind = {
+        listAttendance: data,
+        idMeeting: idMeeting,
+        notes: notes,
+      };
       await TeacherAttendanceAPI.createOrUpdate(dataFind).then((respone) => {
         dispatch(UpdateAttendanceMeeting(respone.data.data.listAttendance));
         let className =
@@ -161,9 +162,7 @@ const TeacherAttendanceMeeting = () => {
           className: className,
         });
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   const handleChangeNotes = (id, value) => {
     let dataUpdate = data.map((item) => {
@@ -278,6 +277,7 @@ const TeacherAttendanceMeeting = () => {
         return (
           <Input
             type="text"
+            style={{ minWidth: "100px" }}
             value={text}
             onChange={(e) =>
               handleChangeNotes(record.idStudent, e.target.value)
@@ -469,19 +469,60 @@ const TeacherAttendanceMeeting = () => {
                   columns={columns}
                   pagination={false}
                 />
+                <div className="notes_attendance">
+                  <Row
+                    style={{
+                      padding: "5px 0px 7px 10%",
+                      paddingLeft: "10%",
+                      fontWeight: "bold",
+                      color: "red",
+                      fontSize: "16px",
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontWeight: 500,
+                        color: "red",
+                      }}
+                    >
+                      Đánh giá buổi học :
+                    </span>
+                  </Row>
+                  <Row
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
+                    <div />
+
+                    <Input.TextArea
+                      value={notes}
+                      onChange={(e) => setNotes(e.target.value)}
+                      placeholder="Ghi chú cho buổi học"
+                      style={{ width: "80%" }}
+                      autoSize={{
+                        minRows: 5,
+                      }}
+                    />
+                  </Row>
+                </div>
               </div>
             ) : (
               <Empty
                 imageStyle={{ height: 60 }}
-                description={<span>Không có thông tin sinh viên</span>}
+                description={<span>Không có dữ liệu</span>}
               />
             )}
           </div>
           <div className="box-button-center">
             {data.length > 0 && (
-              <div className="box-button" onClick={handleSave}>
-                Lưu điểm danh
-              </div>
+              <>
+                <div className="box-button" onClick={handleSave}>
+                  Lưu điểm danh
+                </div>
+              </>
             )}
           </div>
         </div>

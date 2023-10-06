@@ -52,7 +52,8 @@
     "sockjs-client": "^1.6.1",
     "twemoji": "^14.0.2",
     "uuid": "^9.0.0",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "websocket": "^1.0.34"
   },
   "scripts": {
     "start": "react-scripts start --port 4000",

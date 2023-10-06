@@ -20,6 +20,9 @@ const tePostSlice = createSlice({
         id: data.id,
         descriptions: data.descriptions,
         createdDate: data.createdDate,
+        teacherId: data.teacherId,
+        teacherUsername: data.teacherUsername,
+        teacherName: data.teacherName,
       };
       state.unshift(newTeam);
       return state;
@@ -32,6 +35,9 @@ const tePostSlice = createSlice({
         update.id = team.id;
         update.descriptions = team.descriptions;
         update.createdDate = team.createdDate;
+        update.teacherId = team.teacherId;
+        update.teacherUsername = team.teacherUsername;
+        update.teacherName = team.teacherName;
       }
       return state;
     },

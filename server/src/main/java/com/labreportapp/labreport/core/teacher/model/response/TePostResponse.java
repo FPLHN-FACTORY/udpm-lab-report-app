@@ -16,4 +16,7 @@ public interface TePostResponse {
     @Value("#{target.created_date}")
     Long getCreatedDate();
 
+    @Value("#{target.teacher_id}")
+    String getIdTeacher();
+
 }

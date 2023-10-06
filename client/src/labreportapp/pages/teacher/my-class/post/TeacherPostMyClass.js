@@ -2,7 +2,6 @@ import "./styleTeacherPostMyClass.css";
 import {
   Button,
   Card,
-  Col,
   Dropdown,
   Empty,
   Menu,
@@ -47,6 +46,7 @@ import {
 } from "../../../../app/teacher/my-class/teClassSlice.reduce";
 import ModalFullScreen from "./modal-full-screen/ModalFullScreen";
 import { GetUserCurrent } from "../../../../app/common/UserCurrent.reducer";
+import { useNavigate } from "react-router-dom";
 
 const TeacherPostMyClass = () => {
   const dispatch = useAppDispatch();
@@ -62,6 +62,8 @@ const TeacherPostMyClass = () => {
   const [totalPage, setTotalPage] = useState(0);
   const [seeMore, setSeeMore] = useState(true);
   const [dowloading, setDownloading] = useState(false);
+  const navigate = useNavigate();
+
   useEffect(() => {
     window.scrollTo(0, 0);
     featchClass(idClass);
@@ -113,9 +115,7 @@ const TeacherPostMyClass = () => {
         }
         setLoading(true);
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   const featchNextPost = async (idClass) => {
     try {
@@ -128,9 +128,7 @@ const TeacherPostMyClass = () => {
         dispatch(NextPagePost(responese.data.data.data));
         setTotalPage(responese.data.data.totalPages);
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   const featchClass = async (idClass) => {
     try {
@@ -139,7 +137,9 @@ const TeacherPostMyClass = () => {
         document.title = "Bài đăng | " + responese.data.data.code;
       });
     } catch (error) {
-      console.log(error);
+      setTimeout(() => {
+        navigate("/teacher/my-class");
+      }, [1000]);
     }
   };
   const clickDelete = async (id) => {
@@ -148,18 +148,14 @@ const TeacherPostMyClass = () => {
         dispatch(DeletePost(respone.data.data));
         toast.success("Xóa bài viết thành công !");
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   const handleRandomPass = async () => {
     try {
       await TeacherMyClassAPI.randomPass(idClass).then((respone) => {
         dispatch(UpdateClass(respone.data.data));
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   const handleUpdateStatusClass = async () => {
     try {
@@ -175,9 +171,7 @@ const TeacherPostMyClass = () => {
         }
         dispatch(UpdateClass(respone.data.data));
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   const copyToClipboard = () => {
     const tempInput = document.createElement("input");
@@ -210,6 +204,11 @@ const TeacherPostMyClass = () => {
   const classDetail = useAppSelector(GetClass);
   const data = useAppSelector(GetPost);
   const userRedux = useAppSelector(GetUserCurrent);
+
+  const imageUrl =
+    "https://png.pngtree.com/background/20220714/original/pngtree-hand-drawn-blackboard-background-at-the-beginning-of-school-picture-image_1620722.jpg";
+  const isOnlineImage =
+    imageUrl.startsWith("http") || imageUrl.startsWith("https");
   return (
     <div className="teacher-post">
       {!loading && <LoadingIndicator />}
@@ -305,310 +304,334 @@ const TeacherPostMyClass = () => {
               <hr />
             </div>
           </div>
-          <div className="box-image" style={{ marginBottom: "20px" }}>
-            <span className="textCode"> {classDetail.code}</span>
-          </div>
-          <div className="box-post">
-            <div className="box-post-left">
-              <div className="box-infor" style={{ height: "140px" }}>
-                <Row>
-                  {" "}
-                  <span className="title-main">Tên lớp</span>
-                </Row>
-                <p className="infor-main">
-                  {classDetail.code}
-                  <FontAwesomeIcon
-                    style={{ paddingLeft: "12px" }}
-                    icon={faExpand}
-                    onClick={() => handleFullScreen(0)}
-                  />
-                </p>
+          <div>
+            <div className="box-all">
+              <div className="box-image">
+                <span className="textCode"> {classDetail.code}</span>
               </div>
-              <div
-                className="box-infor"
-                style={{ height: "140px", marginTop: "20px" }}
-              >
-                <div className="title-main">
-                  <Row gutter={24}>
-                    <Col span={20}>
-                      <span>Mã tham gia</span>
-                    </Col>
-                    <Col span={4}>
-                      <span>
-                        <Dropdown
-                          overlay={
-                            <Menu>
-                              <Menu.Item
-                                key="1"
-                                onClick={() => handleRandomPass()}
-                              >
-                                <FontAwesomeIcon
-                                  icon={faArrowsRotate}
-                                  style={{ paddingRight: 10 }}
-                                  className="icon"
-                                />
-                                <span>Đặt lại mật khẩu</span>
-                              </Menu.Item>
-                              <Popconfirm
-                                title="Thông báo"
-                                description={
-                                  classDetail.statusClass === 0
-                                    ? "Bạn có chắc chắn muốn khóa lớp không ?"
-                                    : "Bạn có chắc chắn muốn mở lớp không ?"
-                                }
-                                onConfirm={() => {
-                                  handleUpdateStatusClass();
-                                }}
-                                okText="Có"
-                                cancelText="Không"
-                              >
-                                <Menu.Item key="2">
-                                  {classDetail.statusClass === 0 ? (
-                                    <>
-                                      <FontAwesomeIcon
-                                        icon={faLock}
-                                        style={{ paddingRight: 10 }}
-                                        className="icon"
-                                      />
-                                      <span>Khóa lớp</span>
-                                    </>
-                                  ) : (
-                                    <>
-                                      <FontAwesomeIcon
-                                        icon={faLockOpen}
-                                        style={{ paddingRight: 10 }}
-                                        className="icon"
-                                      />
-                                      <span>Mở lớp</span>
-                                    </>
-                                  )}
-                                </Menu.Item>
-                              </Popconfirm>
-                              <Menu.Item key="3">
-                                <div onClick={copyToClipboard}>
-                                  <FontAwesomeIcon
-                                    icon={faCopy}
-                                    className="icon"
-                                    style={{ paddingRight: 10 }}
-                                  />
-                                  <span>Sao chép</span>
-                                </div>
-                              </Menu.Item>
-                            </Menu>
-                          }
-                          trigger={["click"]}
-                          className="box-drop"
-                          style={{ marginTop: 1 }}
-                        >
-                          <div style={{ backgroundColor: "white" }}>
-                            <FontAwesomeIcon icon={faEllipsisVertical} />
-                          </div>
-                        </Dropdown>
-                      </span>
-                    </Col>
-                  </Row>
-                </div>
-                <p className="infor-main">
-                  {classDetail.passWord}
-                  <FontAwesomeIcon
-                    style={{ paddingLeft: "12px" }}
-                    icon={faExpand}
-                    onClick={() => handleFullScreen(1)}
-                  />
-                </p>
-              </div>
-            </div>
-            <div className="box-post-right">
-              {showCreate === true ? (
-                <div className="box-create-post">
-                  <div className="rich-text-editor" style={{ width: "100%" }}>
-                    <div
-                      style={{
-                        width: "100%",
-                        height: "auto",
-                      }}
-                    >
-                      <Editor
-                        idClass={idClass}
-                        showCreate={showHandleCreate}
-                        style={{
-                          color: "black !important",
-                          fontSize: "13px",
-                          display: "block",
-                          width: "100%",
-                          height: "300px",
-                        }}
+              <div className="box-post">
+                <div className="box-post-left">
+                  <div className="box-infor" style={{ height: "140px" }}>
+                    <Row>
+                      <span className="title-main">Tên lớp</span>
+                    </Row>
+                    <p className="infor-main">
+                      {classDetail.code}
+                      <FontAwesomeIcon
+                        style={{ paddingLeft: "12px" }}
+                        icon={faExpand}
+                        onClick={() => handleFullScreen(0)}
                       />
+                    </p>
+                  </div>
+                  <div
+                    className="box-infor"
+                    style={{ height: "140px", marginTop: "20px" }}
+                  >
+                    <div className="title-main">
+                      <div style={{ float: "left", paddingLeft: "3px" }}>
+                        <span>Mã tham gia</span>
+                      </div>
+                      <div style={{ float: "right", paddingRight: "15%" }}>
+                        <span>
+                          <Dropdown
+                            overlay={
+                              <Menu>
+                                <Menu.Item
+                                  key="1"
+                                  onClick={() => handleRandomPass()}
+                                >
+                                  <FontAwesomeIcon
+                                    icon={faArrowsRotate}
+                                    style={{ paddingRight: 10 }}
+                                    className="icon"
+                                  />
+                                  <span>Đặt lại mật khẩu</span>
+                                </Menu.Item>
+                                <Popconfirm
+                                  title="Thông báo"
+                                  description={
+                                    classDetail.statusClass === 0
+                                      ? "Bạn có chắc chắn muốn khóa lớp không ?"
+                                      : "Bạn có chắc chắn muốn mở lớp không ?"
+                                  }
+                                  onConfirm={() => {
+                                    handleUpdateStatusClass();
+                                  }}
+                                  okText="Có"
+                                  cancelText="Không"
+                                >
+                                  <Menu.Item key="2">
+                                    {classDetail.statusClass === 0 ? (
+                                      <>
+                                        <FontAwesomeIcon
+                                          icon={faLock}
+                                          style={{ paddingRight: 10 }}
+                                          className="icon"
+                                        />
+                                        <span>Khóa lớp</span>
+                                      </>
+                                    ) : (
+                                      <>
+                                        <FontAwesomeIcon
+                                          icon={faLockOpen}
+                                          style={{ paddingRight: 10 }}
+                                          className="icon"
+                                        />
+                                        <span>Mở lớp</span>
+                                      </>
+                                    )}
+                                  </Menu.Item>
+                                </Popconfirm>
+                                <Menu.Item key="3">
+                                  <div onClick={copyToClipboard}>
+                                    <FontAwesomeIcon
+                                      icon={faCopy}
+                                      className="icon"
+                                      style={{ paddingRight: 10 }}
+                                    />
+                                    <span>Sao chép</span>
+                                  </div>
+                                </Menu.Item>
+                              </Menu>
+                            }
+                            trigger={["click"]}
+                            className="box-drop"
+                            style={{ marginTop: 1 }}
+                          >
+                            <div style={{ backgroundColor: "white" }}>
+                              <FontAwesomeIcon icon={faEllipsisVertical} />
+                            </div>
+                          </Dropdown>
+                        </span>
+                      </div>
                     </div>
+                    <p className="infor-main" style={{ paddingTop: "20px" }}>
+                      {classDetail.passWord}
+                      <FontAwesomeIcon
+                        style={{ paddingLeft: "12px" }}
+                        icon={faExpand}
+                        onClick={() => handleFullScreen(1)}
+                      />
+                    </p>
                   </div>
                 </div>
-              ) : (
-                <div
-                  className="box-create-post"
-                  onClick={(e) => {
-                    setShowCreate(true);
-                  }}
-                >
+                <div className="box-post-right">
+                  {showCreate === true ? (
+                    <div className="box-create-post">
+                      <div
+                        className="rich-text-editor"
+                        style={{ width: "100%" }}
+                      >
+                        <div
+                          style={{
+                            width: "100%",
+                            height: "auto",
+                          }}
+                        >
+                          <Editor
+                            idClass={idClass}
+                            showCreate={showHandleCreate}
+                            style={{
+                              color: "black !important",
+                              fontSize: "13px",
+                              display: "block",
+                              width: "100%",
+                              height: "300px",
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div
+                      className="box-create-post"
+                      onClick={(e) => {
+                        setShowCreate(true);
+                      }}
+                    >
+                      <div
+                        style={{
+                          height: "80px",
+                          paddingLeft: "25px",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <span
+                          className="link-create"
+                          style={{
+                            fontSize: "16px",
+                          }}
+                        >
+                          Thông báo nội dung nào đó cho lớp học của bạn
+                        </span>
+                      </div>
+                    </div>
+                  )}
                   <div
                     style={{
-                      height: "80px",
-                      paddingLeft: "25px",
-                      display: "flex",
-                      alignItems: "center",
+                      height: "auto",
+                      margin: "20px 0 20px 0",
+                      width: "100%",
                     }}
                   >
-                    <span
-                      className="link-create"
-                      style={{
-                        fontSize: "16px",
-                      }}
-                    >
-                      Thông báo nội dung nào đó cho lớp học của bạn
-                    </span>
-                  </div>
-                </div>
-              )}
-              <div
-                style={{
-                  height: "auto",
-                  margin: "20px 0 20px 0",
-                  width: "100%",
-                }}
-              >
-                {data.length > 0 ? (
-                  data.map((item, index) => {
-                    return (
-                      <div key={item.id} style={{ marginBottom: "20px" }}>
-                        {showUpdateIndex === index ? (
-                          <div className="box-create-post">
-                            <div
-                              className="rich-text-editor"
-                              style={{ width: "100%" }}
-                            >
-                              <div
-                                style={{
-                                  width: "100%",
-                                  height: "auto",
-                                }}
-                              >
-                                <EditorUpdate
-                                  obj={item}
-                                  showUpdate={showHandleUpdate}
-                                  style={{
-                                    color: "black !important",
-                                    fontSize: "13px",
-                                    display: "block",
-                                    width: "100%",
-                                    minHeight: "100px",
-                                  }}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        ) : (
-                          <Card
-                            className="box-card-one"
-                            style={{
-                              margin: "20px 0 20px 0",
-                              height: "auto",
-                            }}
-                            title={
-                              <>
-                                <div style={{ width: "100%" }}>
-                                  <div style={{ width: "95%", float: "left" }}>
-                                    <span style={{ lineHeight: "50px" }}>
-                                      {userRedux.name}
-                                      <span
-                                        style={{
-                                          color: "gray",
-                                          fontWeight: "initial",
-                                          fontSize: "13px",
-                                          marginLeft: "7px",
-                                        }}
-                                      >
-                                        {convertLongToDate(item.createdDate)}
-                                      </span>
-                                    </span>
-                                  </div>
+                    {data.length > 0 ? (
+                      data.map((item, index) => {
+                        return (
+                          <div key={item.id} style={{ marginBottom: "20px" }}>
+                            {showUpdateIndex === index ? (
+                              <div className="box-create-post">
+                                <div
+                                  className="rich-text-editor"
+                                  style={{ width: "100%" }}
+                                >
                                   <div
-                                    style={{ float: "left" }}
-                                    className="title-icon-drop"
+                                    style={{
+                                      width: "100%",
+                                      height: "auto",
+                                    }}
                                   >
-                                    <Dropdown
-                                      overlay={
-                                        <Menu>
-                                          <Menu.Item
-                                            key="1"
-                                            onClick={() => handleUpdate(index)}
-                                          >
-                                            Chỉnh sửa
-                                          </Menu.Item>{" "}
-                                          <Popconfirm
-                                            title="Xóa bài viết"
-                                            description="Bạn có chắc chắn muốn xóa bài viết này không ?"
-                                            onConfirm={() => {
-                                              clickDelete(item.id);
-                                            }}
-                                            okText="Có"
-                                            cancelText="Không"
-                                          >
-                                            <Menu.Item key="2">Xóa</Menu.Item>
-                                          </Popconfirm>
-                                        </Menu>
-                                      }
-                                      trigger={["click"]}
-                                      className="box-drop"
-                                    >
-                                      <div
-                                        className="box-icon-drop"
-                                        style={{ backgroundColor: "white" }}
-                                      >
-                                        <FontAwesomeIcon
-                                          icon={faEllipsisVertical}
-                                        />
-                                      </div>
-                                    </Dropdown>
+                                    <EditorUpdate
+                                      obj={item}
+                                      showUpdate={showHandleUpdate}
+                                      style={{
+                                        color: "black !important",
+                                        fontSize: "13px",
+                                        display: "block",
+                                        width: "100%",
+                                        minHeight: "100px",
+                                      }}
+                                    />
                                   </div>
                                 </div>
-                              </>
-                            }
-                          >
-                            <ViewEditorJodit value={item.descriptions} />
-                          </Card>
-                        )}
+                              </div>
+                            ) : (
+                              <Card
+                                className="box-card-one"
+                                style={{
+                                  margin: "20px 0 20px 0",
+                                  height: "auto",
+                                }}
+                                title={
+                                  <>
+                                    <div style={{ width: "100%" }}>
+                                      <div
+                                        style={{
+                                          float: "left",
+                                        }}
+                                      >
+                                        <span style={{ lineHeight: "50px" }}>
+                                          {item.teacherName}
+                                          <span
+                                            style={{
+                                              color: "gray",
+                                              fontWeight: "initial",
+                                              fontSize: "13px",
+                                              marginLeft: "7px",
+                                            }}
+                                          >
+                                            {convertLongToDate(
+                                              item.createdDate
+                                            )}
+                                          </span>
+                                        </span>
+                                      </div>
+                                      <div
+                                        style={{ float: "right" }}
+                                        className="title-icon-drop"
+                                      >
+                                        <Dropdown
+                                          overlay={
+                                            <Menu>
+                                              <Menu.Item
+                                                key="1"
+                                                onClick={() =>
+                                                  handleUpdate(index)
+                                                }
+                                              >
+                                                Chỉnh sửa
+                                              </Menu.Item>{" "}
+                                              <Popconfirm
+                                                title="Xóa bài viết"
+                                                description="Bạn có chắc chắn muốn xóa bài viết này không ?"
+                                                onConfirm={() => {
+                                                  clickDelete(item.id);
+                                                }}
+                                                okText="Có"
+                                                cancelText="Không"
+                                              >
+                                                <Menu.Item key="2">
+                                                  Xóa
+                                                </Menu.Item>
+                                              </Popconfirm>
+                                            </Menu>
+                                          }
+                                          trigger={["click"]}
+                                          className="box-drop"
+                                        >
+                                          <div
+                                            className="box-icon-drop"
+                                            style={{ backgroundColor: "white" }}
+                                          >
+                                            <FontAwesomeIcon
+                                              icon={faEllipsisVertical}
+                                            />
+                                          </div>
+                                        </Dropdown>
+                                      </div>
+                                    </div>
+                                  </>
+                                }
+                              >
+                                <ViewEditorJodit value={item.descriptions} />
+                              </Card>
+                            )}
+                          </div>
+                        );
+                      })
+                    ) : (
+                      <div style={{ paddingTop: "50px" }}>
+                        <Empty
+                          imageStyle={{ height: "60px" }}
+                          description={
+                            <span>Chưa có bài viết nào được đăng</span>
+                          }
+                        />
                       </div>
-                    );
-                  })
-                ) : (
-                  <div style={{ paddingTop: "50px" }}>
-                    <Empty
-                      imageStyle={{ height: "60px" }}
-                      description={<span>Chưa có bài viết nào được đăng</span>}
-                    />
+                    )}
+                    {seeMore && (
+                      <Spin spinning={dowloading} style={{ marginTop: "10px" }}>
+                        <Button
+                          className="see-more"
+                          style={{
+                            float: "right",
+                            backgroundColor: "rgb(38, 144, 214)",
+                            color: "white",
+                          }}
+                          onClick={() => {
+                            setDownloading(true);
+                            setTimeout(() => {
+                              setDownloading(false);
+                              handleSeeMore();
+                            }, 1000);
+                          }}
+                        >
+                          <span
+                            style={{
+                              paddingRight: "7px",
+                              color: "white",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            Xem thêm{" "}
+                          </span>
+                          <FontAwesomeIcon icon={faAnglesRight} size="lg" />
+                        </Button>{" "}
+                      </Spin>
+                    )}
                   </div>
-                )}
-                {seeMore && (
-                  <Spin spinning={dowloading} style={{ marginTop: "10px" }}>
-                    <Button
-                      className="see-more"
-                      style={{
-                        float: "right",
-                        backgroundColor: "rgb(38, 144, 214)",
-                        color: "white",
-                      }}
-                      onClick={() => {
-                        setDownloading(true);
-                        setTimeout(() => {
-                          setDownloading(false);
-                          handleSeeMore();
-                        }, 1000);
-                      }}
-                    >
-                      <span style={{ paddingRight: "10px" }}>Xem thêm </span>
-                      <FontAwesomeIcon icon={faAnglesRight} size="lg" />
-                    </Button>{" "}
-                  </Spin>
-                )}
+                </div>
               </div>
             </div>
           </div>

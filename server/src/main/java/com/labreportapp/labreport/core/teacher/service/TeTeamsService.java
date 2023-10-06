@@ -1,5 +1,6 @@
 package com.labreportapp.labreport.core.teacher.service;
 
+import com.labreportapp.labreport.core.teacher.model.request.TeCreateProjectToTeamRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeCreateTeamsRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindStudentClasses;
 import com.labreportapp.labreport.core.teacher.model.request.TeUpdateTeamsRequest;
@@ -23,6 +24,8 @@ public interface TeTeamsService {
     Team createTeam(@Valid final TeCreateTeamsRequest request);
 
     Team updateTeam(@Valid TeUpdateTeamsRequest request);
+
+    Team createProjectAddTeam(final TeCreateProjectToTeamRequest request);
 
     String deleteTeamById(String idTeam);
 

@@ -1,5 +1,5 @@
 import "./styleTeacherAttendance.css";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router-dom";
 import { ControlOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -25,6 +25,9 @@ const TeacherAttendanceClass = () => {
   const [loading, setLoading] = useState(false);
   const [objStudent, setObjStudent] = useState({});
   const [showDetailModal, setShowDetailModal] = useState(false);
+  const [countLesson, setCountLesson] = useState(0);
+  const navigate = useNavigate();
+
   useEffect(() => {
     featchClass(idClass);
     featchColumn(idClass);
@@ -44,6 +47,12 @@ const TeacherAttendanceClass = () => {
       await TeacherMeetingAPI.getColumnMeetingByIdClass(idClass).then(
         (response) => {
           setColumn(response.data.data);
+          if (response.data.data != null) {
+            let countLesson = response.data.data.filter(
+              (item) => item.statusMeeting === 0
+            );
+            setCountLesson(countLesson.length);
+          }
         }
       );
     } catch (error) {
@@ -60,9 +69,7 @@ const TeacherAttendanceClass = () => {
         .catch((err) => {
           toast.error(err.data.message);
         });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   const featchClass = async (idClass) => {
     try {
@@ -71,7 +78,9 @@ const TeacherAttendanceClass = () => {
         document.title = "Điểm danh | " + responese.data.data.code;
       });
     } catch (error) {
-      console.log(error);
+      setTimeout(() => {
+        navigate("/teacher/my-class");
+      }, [1000]);
     }
   };
   const convertLongToDate = (dateLong) => {
@@ -213,6 +222,26 @@ const TeacherAttendanceClass = () => {
                   Chi tiết điểm danh :
                 </span>
               </div>
+              <div className="content-class">
+                <div
+                  style={{
+                    height: "auto",
+                    margin: "20px 10px 20px 10px",
+                  }}
+                >
+                  <span
+                    style={{
+                      paddingTop: "15px",
+                      fontWeight: 500,
+                      color: "red",
+                    }}
+                  >
+                    Lưu ý: Điểm danh có 3 trạng thái chính là Có mặt(P), Vắng
+                    mặt(A) và Chưa điểm danh (-)
+                  </span>
+                  <br />
+                </div>
+              </div>
               {data !== null ? (
                 <table
                   className="custom-table-teacher"
@@ -272,9 +301,9 @@ const TeacherAttendanceClass = () => {
                                 );
                               })}
                             <td>
-                              {parseFloat(countAbsent / countMeeting) * 100}%
+                              {parseFloat(countAbsent / countLesson) * 100}%
                             </td>
-                            <td>{countAbsent + `/` + countMeeting}</td>
+                            <td>{countAbsent + `/` + countLesson}</td>
                             <td>
                               <Tooltip
                                 title="Xem chi tiết"

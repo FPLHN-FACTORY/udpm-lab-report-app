@@ -258,20 +258,6 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
           <>
             <div style={{ marginTop: "15px", borderBottom: "1px solid black" }}>
               <Row gutter={16} style={{ marginBottom: "15px" }}>
-                {/* <Col span={12}>
-                  {" "}
-                  <span className="notBlank">*</span>
-                  <span>Tên nhóm:</span> <br />
-                  <Input
-                    placeholder="Nhập tên"
-                    value={name}
-                    onChange={(e) => {
-                      setName(e.target.value);
-                    }}
-                    type="text"
-                  />
-                  <span className="error">{errorName}</span>
-                </Col> */}
                 <Col span={24}>
                   {" "}
                   <span>Chủ đề:</span> <br />
@@ -356,13 +342,13 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
         >
           {listStudentClass.length > 0 ? (
             <>
-              <div style={{ paddingTop: "15px" }}>
+              <div>
                 <Button
                   className="btn_filter"
                   style={{
                     backgroundColor: "red",
                     color: "white",
-                    width: "66px",
+                    width: "100px",
                   }}
                   onClick={cancelFaild}
                 >
@@ -370,33 +356,36 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
                 </Button>{" "}
                 <Button
                   className="btn_clean"
-                  style={{ width: "66px", marginLeft: "10px" }}
+                  style={{ width: "100px", marginLeft: "10px" }}
                   onClick={create}
                 >
-                  Thêm
+                  Lưu
                 </Button>
               </div>
             </>
           ) : (
             <>
-              <div style={{ paddingTop: "15px" }}>
+              <div>
                 <Button
-                  style={{
-                    backgroundColor: "gray",
-                    color: "white",
-                  }}
-                >
-                  Thêm
-                </Button>
-                <Button
+                  className="btn_filter"
                   style={{
                     backgroundColor: "red",
                     color: "white",
-                    marginLeft: "10px",
+                    width: "100px",
                   }}
                   onClick={cancelFaild}
                 >
                   Hủy
+                </Button>{" "}
+                <Button
+                  className="btn_clean"
+                  style={{
+                    width: "100px",
+                    marginLeft: "10px",
+                    backgroundColor: "grey",
+                  }}
+                >
+                  Lưu
                 </Button>
               </div>
             </>

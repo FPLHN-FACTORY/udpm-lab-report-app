@@ -27,7 +27,7 @@ public class TeEmailSender {
     @Value("${spring.mail.username}")
     private String sender;
 
-    public static final String LOGO_PATH_SMALL = "../..//static/images/logo.png";
+    public static final String LOGO_PATH_SMALL = "/static/images/logo.png";
 
     public void convertHtmlSendEmail(String[] toEmails, String subject, String titleEmail, String bodyEmail) {
         String htmlBody = MailConstant.BODY_STARTS +

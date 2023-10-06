@@ -1,28 +1,28 @@
-.card {
+.student-post .card {
   border: 1px solid #ddd;
   border-radius: 5px;
   padding: 10px;
 }
-.box-image {
+.student-post .box-image {
   width: auto;
   height: 255px;
   background-image: url("../../../../assets/img/banner-post2.png");
-  border-radius: 5px;
+  border-radius: 10px;
   background-size: cover;
   text-align: center;
   justify-content: center;
   display: flex;
   align-items: center;
 }
-.box-create {
+.student-post .box-create {
   border-radius: 5px;
   height: 100px;
   box-shadow: 0 0 10px rgb(228, 227, 227);
 }
-.box-card-one {
+.student-post .box-card-one {
   box-shadow: 0 0 10px rgb(228, 227, 227);
 }
-.box-create-post {
+.student-post .box-create-post {
   width: 100%;
   display: flex;
   height: auto;
@@ -33,7 +33,7 @@
   box-shadow: 0 0 10px rgb(192, 183, 183);
   cursor: pointer;
 }
-.box-infor {
+.student-post .box-infor {
   padding-top: 10px;
   width: 100%;
   align-items: center;
@@ -43,7 +43,7 @@
   box-shadow: 0 0 10px rgb(225, 224, 224);
   cursor: pointer;
 }
-.box-post {
+.student-post .box-post {
   margin: 20px 0px 0px 0px;
   display: flex;
   width: 100%;
@@ -51,27 +51,27 @@
   justify-content: center;
 }
 
-.box-post-left {
+.student-post .box-post-left {
   width: 20%;
 }
 
-.box-background {
+.student-post .box-background {
   background-color: white;
   padding: 20px;
   box-shadow: 0px 0px 20px 1px rgba(148, 148, 148, 0.3);
   border-radius: 5px;
 }
-.card-title {
+.student-post .card-title {
   font-size: 18px;
   font-weight: bold;
 }
-.title-icon-drop {
+.student-post .title-icon-drop {
   height: auto;
 }
-.title-text {
+.student-post .title-text {
   height: auto;
 }
-.box-icon-drop {
+.student-post .box-icon-drop {
   display: inline-block;
   width: 40px;
   height: 40px;
@@ -82,27 +82,35 @@
   border: 2px solid white;
   background-color: #4285f4;
 }
-.box-icon-drop:hover {
+.student-post .box-icon-drop:hover {
   background-color: pink;
   cursor: pointer;
 }
 
-.rich-text-editor {
+.student-post .rich-text-editor {
   padding: 10px;
 }
-.box-create-post:hover div > .link-create {
+.student-post .box-create-post:hover div > .link-create {
   color: #0b6cd3;
 }
 
-.ant-card-body {
+.student-post .ant-card-body {
   padding-left: 7px !important;
   padding-right: 7px !important;
   padding-top: 0 !important;
   padding-bottom: 0 !important;
 }
-.textCode {
+.student-post .textCode {
   color: #ffffff;
   position: absolute;
   font-size: 50px;
   font-weight: 700;
+}
+.student-post .box-all {
+  width: 80%;
+  align-items: center;
+  justify-content: center;
+  align-items: flex-start;
+  margin: 0 auto;
+  position: relative;
 }

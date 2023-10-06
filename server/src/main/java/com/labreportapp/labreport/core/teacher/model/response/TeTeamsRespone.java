@@ -10,9 +10,6 @@ public interface TeTeamsRespone {
     @Value("#{target.id}")
     String getId();
 
-    @Value("#{target.code}")
-    String getCode();
-
     @Value("#{target.name}")
     String getName();
 
@@ -24,5 +21,11 @@ public interface TeTeamsRespone {
 
     @Value("#{target.project_id}")
     String getIdProject();
+
+    @Value("#{target.report_id}")
+    String getIdReport();
+
+    @Value("#{target.descriptions_report}")
+    String getDescriptionsReport();
 
 }

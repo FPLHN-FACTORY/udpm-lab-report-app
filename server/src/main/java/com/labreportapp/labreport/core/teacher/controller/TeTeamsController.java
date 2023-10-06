@@ -1,6 +1,7 @@
 package com.labreportapp.labreport.core.teacher.controller;
 
 import com.labreportapp.labreport.core.common.base.ResponseObject;
+import com.labreportapp.labreport.core.teacher.model.request.TeCreateProjectToTeamRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeCreateTeamsRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindStudentClasses;
 import com.labreportapp.labreport.core.teacher.model.request.TeUpdateTeamsRequest;
@@ -54,6 +55,11 @@ public class TeTeamsController {
     @PutMapping("")
     public ResponseObject updateTeam(@RequestBody TeUpdateTeamsRequest request) {
         return new ResponseObject(teTeamsService.updateTeam(request));
+    }
+
+    @PutMapping("/create-project")
+    public ResponseObject createProjectToTeam(@RequestBody TeCreateProjectToTeamRequest request) {
+        return new ResponseObject(teTeamsService.createProjectAddTeam(request));
     }
 
     @DeleteMapping("/{id}")

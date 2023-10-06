@@ -246,7 +246,8 @@ public class DBGenerator implements CommandLineRunner {
         class1.setClassSize(19);
         class1.setPassword("123456");
         class1.setActivityId(activity1.getId());
-        class1.setTeacherId("FA2BAD81-93A5-4F02-B1B7-08DBB743DD7D".toLowerCase());
+        //class1.setTeacherId("FA2BAD81-93A5-4F02-B1B7-08DBB743DD7D".toLowerCase());
+        class1.setTeacherId("71090c89-f618-41ae-2a8d-08dbb201efe8".toLowerCase());
         class1.setDescriptions("Lớp làm trước đồ án tốt nghiệp bán hàng");
         class1.setStatusClass(StatusClass.OPEN);
         class1.setStatusTeacherEdit(StatusTeacherEdit.CHO_PHEP);
@@ -778,6 +779,7 @@ public class DBGenerator implements CommandLineRunner {
         meeting1Class.setTeacherId(class2.getTeacherId());
         meeting1Class.setDescriptions("Buổi 1 lớp thầy Nguyên VV4 _ 001 J5_NGUYENVV4_001");
         meeting1Class.setClassId(class2.getId());
+        meeting1Class.setNotes("Buổi 1 đã điểm danh");
         meeting1Class.setStatusMeeting(StatusMeeting.BUOI_HOC);
         meeting1Class.setTypeMeeting(TypeMeeting.ONLINE);
         meeting1Class.setAddress("https://meet.google.com/kea-hhgi-yix");
@@ -1185,48 +1187,197 @@ public class DBGenerator implements CommandLineRunner {
                 👋👋Hãy nhanh tay đăng ký tham gia sự kiện
                 LINK ĐĂNG KÝ: https://forms.gle/qER6gWqWfGDrrDoP9
                 """);
-        post1.setTeacherId(class1.getTeacherId());
+        // post1.setTeacherId(class1.getTeacherId());
+        post1.setTeacherId("FA2BAD81-93A5-4F02-B1B7-08DBB743DD7D".toLowerCase());
         post1.setClassId(class1.getId());
-        post1.setCreatedDate(new Date().getTime() - 3 * 86400000);
+        post1.setCreatedDate(1696221098000L);
         post1.setId(postRepository.save(post1).getId());
 
+        Post post12 = new Post();
+        post12.setDescriptions("""
+                Chào mừng đến với workshop "Hành trình Khám phá Hàm"!
+                📣 Workshop này sẽ giúp bạn:
+                ✅ Hiểu rõ cách sử dụng hàm trong lập trình.
+                ✅ Nắm vững cách viết các loại hàm.
+                ✅ Áp dụng kiến thức vào viết mã nguồn tối ưu hơn.
+                📣 Hãy tham gia để:
+                ✍️ Nắm vững cú pháp và khai báo hàm.
+                ✍️ Hiểu cách truyền tham số và nhận giá trị trả về từ hàm.
+                ✍️ Tìm hiểu các khái niệm quan trọng như biến cục bộ và biến toàn cục trong hàm.
+                🗓️ Thời gian: Thứ 5, ngày 05/10/2023
+                🕒 Từ 20:30 - 22:30
+                🏠 Địa điểm: Zoom
+                🎤 Diễn giả:
+                1️⃣ Cô HuyenNK6
+                2️⃣ Cô HangNT169
+                3️⃣ Cô NganCT4
+                🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡
+                🔑Workshop "Hành trình Khám phá Hàm" sẽ mang lại cho bạn những kiến thức, kỹ năng cần thiết để nâng cao chất lượng và hiệu quả của mã nguồn lập trình.
+                🔑Đừng bỏ lỡ cơ hội này! Đăng ký ngay để tham gia workshop và mở ra cánh cửa mới cho sự phát triển và thành công trong lĩnh vực lập trình!
+                👋🔥🔥🔥🔥🔥🔥🔥🔥🔥
+                📩📩Link đăng ký: https://forms.gle/pG2sBXuPkSngnFNE8 """);
+        // post1.setTeacherId(class1.getTeacherId());
+        post12.setTeacherId("FA2BAD81-93A5-4F02-B1B7-08DBB743DD7D".toLowerCase());
+        post12.setClassId(class1.getId());
+        post12.setCreatedDate(new Date().getTime() - 10000);
+        post12.setId(postRepository.save(post12).getId());
+
         Post post2 = new Post();
-        post2.setDescriptions("Hôm nay được nghỉ nhé mọi người, quẫy đii 2 !");
+        post2.setDescriptions("""
+                📢📢📢Cuộc thi Ý tưởng khởi nghiệp sinh viên - Startup Kite 2023  – ƯƠM MẦM TƯƠNG LAI đang dần bước vào Bán kết
+                👉👉👉Cùng với sự góp sức của các thầy cô bộ môn UDPM, 2 đội dự thi đã đứng TOP đầu vòng loại, tiến thẳng vào vòng Bán kết Quốc gia. Với 2 dự án tiêu biểu sau:
+                🏖Dự án: TripS - Ứng dụng hướng dẫn viên du lịch thông minh
+                ⛵️Nhóm lĩnh vực dự thi: Du lịch
+                🏋️Dự án: SportLS - Ứng dụng tìm kiếm địa điểm thể thao
+                🏙Nhóm lĩnh vực dự thi: Công nghệ cho xã hội và phát triển cộng đồng
+                🍻🥂🍺Cùng chúc mừng 🎊🎊, cổ vũ tất cả các thành viên trong đội tiến bước vào BÁN KẾT và dành tấm vé vào vòng Chung kết Quốc gia🏅🏅🏅
+                """);
         post2.setTeacherId(class1.getTeacherId());
         post2.setClassId(class1.getId());
-        post2.setCreatedDate(new Date().getTime() - 2 * 86400020);
+        post2.setCreatedDate(new Date().getTime() - 20000);
         post2.setId(postRepository.save(post2).getId());
 
         Post post3 = new Post();
-        post3.setDescriptions("Mai đi học kiểm tra nhé, nhắc toàn thể các bạn 3 !");
+        post3.setDescriptions("""
+                📝Nắm bắt bí kíp qua môn với Tutor - Đăng ký ngay! 📝
+                Nhanh tay đăng ký ngay Tutor để không bỏ lỡ những kiến thực cực kỳ bổ ích nào các bạn🥰🥰
+                Kỳ FALL 2023 - Block 1 này , các bạn nhanh tay đăng ký các môn Tutor để các thầy cô truyền bí kíp qua môn
+                1.COM108:
+                Ngày: 21/09/2023- 13/10/2023
+                Thời gian: 12:00-14:00
+                Form đăng ký: https://forms.gle/9w966vnJuHqm3KTr9
+                2. MOB1014:
+                Ngày: 21/09/2023- 13/10/2023
+                Thời gian: 12:00-14:00
+                Form đăng ký: https://forms.gle/9w966vnJuHqm3KTr9
+                3. SOF2041:
+                Ngày: 21/09/2023- 13/10/2023
+                Thời gian: 12:00-14:00
+                Form đăng ký: https://forms.gle/9w966vnJuHqm3KTr9
+                4. SOF3021:
+                Ngày: 21/09/2023- 13/10/2023
+                Thời gian: 12:00-14:00
+                Form đăng ký: https://forms.gle/9w966vnJuHqm3KTr9
+                5. COM2034:
+                Ngày: 21/09/2023- 13/10/2023
+                Thời gian: 12:00-14:00
+                Form đăng ký: https://forms.gle/9w966vnJuHqm3KTr9
+                6. COM2012:
+                Ngày: 21/09/2023- 13/10/2023
+                Thời gian: 12:00-14:00
+                Form đăng ký: https://forms.gle/9w966vnJuHqm3KTr9
+                7. MOB1023:
+                Ngày: 21/09/2023- 13/10/2023
+                Thời gian: 12:00-14:00
+                Form đăng ký: https://forms.gle/9w966vnJuHqm3KTr9
+                8. NET101:
+                Ngày: 21/09/2023- 13/10/2023
+                Thời gian: 12:00-14:00
+                Form đăng ký: https://forms.gle/9w966vnJuHqm3KTr9
+                9. NET102:
+                Ngày: 21/09/2023- 13/10/2023
+                Thời gian: 12:00-14:00
+                Form đăng ký: https://forms.gle/9w966vnJuHqm3KTr9
+                10. SOF205:
+                Ngày: 21/09/2023- 13/10/2023
+                Thời gian: 12:00-14:00
+                Form đăng ký: https://forms.gle/9w966vnJuHqm3KTr9
+                11. SOA101:
+                Ngày: 21/09/2023- 13/10/2023
+                Thời gian: 12:00-14:00
+                Form đăng ký: https://forms.gle/9w966vnJuHqm3KTr9
+                #fptpolytechnic #cntt #ptpm #udpm #seminar #workshop #tutor
+                """);
         post3.setTeacherId(class1.getTeacherId());
         post3.setClassId(class1.getId());
-        post3.setCreatedDate(new Date().getTime() - 1 * 86409000);
+        post3.setCreatedDate(1696221098000L);
         post3.setId(postRepository.save(post3).getId());
 
         Post post4 = new Post();
         post4.setDescriptions("Giá trị đức tính “Cần, Kiệm, Liêm, Chính” trong tư tưởng Hồ Chí Minh về xây dựng đạo đức cách mạng của đội ngũ cán bộ, đảng viên hiện nay !");
         post4.setTeacherId(class1.getTeacherId());
         post4.setClassId(class1.getId());
-        post4.setCreatedDate(new Date().getTime());
+        post4.setCreatedDate(new Date().getTime() - 86400000 - 500);
         post4.setId(postRepository.save(post4).getId());
 
         Post post5 = new Post();
-        post5.setDescriptions("Tất cả sinh viên hôm nay học offline trên xưởng nhé, lưu ý giúp tôi 5 !");
+        post5.setDescriptions("""
+                📖 VUI CHƠI ĐỪNG BỎ RƠI WORKSHOP📖
+                                
+                🧡🧡Trong buổi này chúng ta sẽ cùng nhau chỉ rõ hơn về vai trò của CODING CONVENTION trong khi lập trình
+                Với sự tham gia của của các GV:
+                1️⃣ Cô Nguyễn Khánh Huyền - HuyenNK6
+                2️⃣ Cô Nguyễn Thuý Hằng - HangNT169
+                3️⃣ Cô Chu Thị Ngân - NganCT4
+                                
+                ✔️Workshop CODING CONVENTIONS sẽ có các nội dung chính sau đây:
+                ✍️Khái niệm coding conventions
+                ✍️ Tầm quan trọng của convetion trong code như nào
+                ✍️ Các tiêu chí của coding convention trong lập trình
+                ✍️ Quy tắc đặt tên (camelCase, PascalCase, snake_case)…
+                                
+                🔥🔥🔥 ĐẶC BIỆT 🔥🔥🔥
+                ✅ Vận dụng với CẤU TRÚC RẼ NHÁNH & VÒNG LẶP theo quy tiêu chuẩn code
+                ✔️Buổi WORKSHOP này sẽ là bước đệm hoàn hảo giúp các bạn CHUẨN HÓA HOÀN HẢO
+                                
+                🧡🧡🧡🧡🧡 WORKSHOP 🧡🧡🧡🧡🧡
+                🕘 Thời gian: 20:30 - 22:30
+                🗓 Ngày: 18-09-2023
+                🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡
+                🔑Tất cả sẽ sẽ được bật mí tại workshop “CODING CONVENTIONS”
+                👋🔥🔥🔥🔥🔥🔥🔥🔥🔥
+                📩📩Link đăng ký: https://forms.gle/vcg2sVSfgKU4ytvB6
+                #fptpolytechnic #cntt #ptpm #udpm #seminar #workshop
+                """);
         post5.setTeacherId(class1.getTeacherId());
         post5.setClassId(class1.getId());
         post5.setCreatedDate(new Date().getTime() - 1 * 86400000);
         post5.setId(postRepository.save(post5).getId());
 
         Post post6 = new Post();
-        post6.setDescriptions("Tất cả sinh viên hôm nay học offline trên xưởng nhé, lưu ý giúp tôi 6 !");
+        post6.setDescriptions("""
+                ✍ ✍ ✍ HỌC ĂN, HỌC NÓI, HỌC GÓI, HỌC MỞ ..... HỌC GÌ Ở XƯỞNG NHỈ ???
+                💥 LIVESTREAM HỌC GÌ Ở XƯỞNG RA MẮT💥
+                😍😍😍 Bật mí những Dự án trong xưởng:\s
+                       👉Dự án Swing nâng cao\s
+                       👉Dự án Winform nâng cao\s
+                       👉Dự án java web nâng cao \s
+                       👉Dự án C# web nâng cao\s
+                       👉 Dự án kiểm thử nâng cao
+                       👉Dự án IT helpdesk cho sinh viên ngành UDPM
+                        ...............CONTINUE.........
+                📢📢ĐỂ BIẾT CỤ THỂ VÀ CHI TIẾT HƠN NỮA THÌ CÁC BẠN HÃY JOIN BUỔI LIVESTREAM VÔ CÙNG HỮU ÍCH NÀY NHÉ 💪💪💪
+                🔥VỚI SỰ GÓP MẶT CỦA 2 THẦY: 🔥
+                👨🏻‍💼 Thầy DungNA29- CNBM UPDM Dung Anh Nguyen
+                👨🏻‍🔧 Thầy NguyenVV4- Giám đốc Xưởng TH Vũ Nguyên
+                💢Hãy nhanh tay đăng ký ngay TẠI ĐƯỜNG LINK:  https://forms.gle/74F4SqUk38wZAqUi6\s
+                👉Link tham gia nhóm Xưởng thực hành: https://zalo.me/g/epztrt410
+                ⏰ Thời gian:  20h30
+                📅 Ngày: 16-09-2023
+                💻 Hình thức tham gia: Online Livestream qua Facebook
+                """);
         post6.setTeacherId(class1.getTeacherId());
         post6.setClassId(class1.getId());
         post6.setCreatedDate(new Date().getTime() - 2 * 86400000);
         post6.setId(postRepository.save(post6).getId());
 
         Post post7 = new Post();
-        post7.setDescriptions("<p><span style=\"color: rgb(32, 33, 34); font-family: sans-serif; font-size: 14px; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; float: none; display: inline !important;\"><em>Để</em></span><span style=\"color: rgb(32, 33, 34); font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\"> dựng nước và giữ nước tồn tại trong suốt lịch sử của dân tộc. Đồng thời, trong quá trình dựng nước, giữ nước,<span>&nbsp;</span></span><em style=\"color: rgb(32, 33, 34); font-family: sans-serif; font-size: 14px; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\">tinh thần đoàn kết và ý thức dân chủ</em><span style=\"color: rgb(32, 33, 34); font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\"><span>&nbsp;</span>cũng xuất hiện. T</span><em style=\"color: rgb(32, 33, 34); font-family: sans-serif; font-size: 14px; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\">inh thần đoàn kết và ý thức dân chủ</em><span style=\"color: rgb(32, 33, 34); font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\"><span>&nbsp;</span>làm cho mối quan hệ Cá nhân - Gia đình - Làng - Nước ngày càng trở nên bền chặt và nương tựa vào nhau để sinh tồn và phát triển. Giá trị truyền thống của người Việt là<span>&nbsp;</span></span><em style=\"color: rgb(32, 33, 34); font-family: sans-serif; font-size: 14px; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\">dũng cảm, cần cù, dẻo dai</em><span style=\"color: rgb(32, 33, 34); font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\"><span>&nbsp;</span>trong lao động sản xuất, chiến đấu để sinh tồn và phát triển trước thiên nhiên và kẻ thù xâm lược. Nhưng đồng thời, trong quá trình đó, dân tộc Việt Nam cũng tiếp nhận những giá trị văn hóa, văn minh của nhân loại. Người Việt có tư duy mở và mềm dẻo khiến họ dễ dàng tiếp nhận những tư tưởng bên ngoài. Trong khi là đảng viên<span>&nbsp;</span></span><a href=\"https://vi.wikipedia.org/wiki/%C4%90%E1%BA%A3ng_X%C3%A3_h%E1%BB%99i_(Ph%C3%A1p)\" title=\"Đảng Xã hội (Pháp)\" style=\"text-decoration: none; color: rgb(51, 102, 204); background: none rgb(255, 255, 255); overflow-wrap: break-word; font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal;\">Đảng xã hội Pháp</a><span style=\"color: rgb(32, 33, 34); font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">, Hồ Chí Minh đã tiếp nhận<span>&nbsp;</span></span><a href=\"https://vi.wikipedia.org/wiki/Ch%E1%BB%A7_ngh%C4%A9a_Lenin\" title=\"Chủ nghĩa Lenin\" style=\"text-decoration: none; color: rgb(51, 102, 204); background: none rgb(255, 255, 255); overflow-wrap: break-word; font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal;\">chủ nghĩa Lenin</a><span style=\"color: rgb(32, 33, 34); font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\"><span>&nbsp;</span>với mục tiêu giải phóng dân tộc trong lúc nhiều đồng chí Pháp của ông chọn con đường<span>&nbsp;</span></span><a href=\"https://vi.wikipedia.org/wiki/D%C3%A2n_ch%E1%BB%A7_x%C3%A3_h%E1%BB%99i\" title=\"Dân chủ xã hội\" style=\"text-decoration: none; color: rgb(51, 102, 204); background: none rgb(255, 255, 255); overflow-wrap: break-word; font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal;\">dân chủ xã hội</a><span style=\"color: rgb(32, 33, 34); font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\"><span>&nbsp;</span>với chủ trương cải cách xã hội nhưng chấp nhận nền dân chủ.<span>&nbsp;</span></span><em style=\"color: rgb(32, 33, 34); font-family: sans-serif; font-size: 14px; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\">Chủ nghĩa yêu nước là điểm xuất phát, là cơ sở để Hồ Chí Minh tiếp nhận<span>&nbsp;</span><a href=\"https://vi.wikipedia.org/wiki/Ch%E1%BB%A7_ngh%C4%A9a_Marx_-_Lenin\" class=\"mw-redirect\" title=\"Chủ nghĩa Marx - Lenin\" style=\"text-decoration: none; color: rgb(51, 102, 204); background: none; overflow-wrap: break-word;\">chủ nghĩa Marx - Lenin</a>;</em><span style=\"color: rgb(32, 33, 34); font-family: sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\"><span>&nbsp;</span>là một trong những nguồn gốc chủ yếu hình thành tư tưởng Hồ Chí Minh.</span><br></p>");
+        post7.setDescriptions("""
+                [LIVESTREAM TRỰC TIẾP]
+                📌 NGÀNH XỬ LÝ DỮ LIỆU - CƠ HỘI & THÁCH THỨC
+                📢📢 HOT HOT📢📢
+                🔑 Sắp tới có 1 buổi livestream chia sẻ về ngành XỬ LÝ DỮ LIỆU cùng các diễn giả. Các bạn sinh viên nhanh tay đăng ký tham gia và đón xem!\s
+                🥰 GV1: Nguyễn Anh Dũng - CNBM UDPM
+                🥰 GV2: Trần Tuấn Phong - TM XLDL
+                🥰 GV3: Vũ Thị Kim Thư - GV XLDL
+                🥰 GV4: Đỗ Bảo Linh - GV XLDL
+                🥰 GV5: Chu Thị Ngân - GV XLDL
+                🎯 Bạn nhận được gì từ buổi OR NGÀNH???
+                ✔ Được chia sẻ, lắng nghe tâm tư nguyện vọng của các bạn về ngành
+                ✔ Giúp các bạn tìm định hướng nghề nghiệp và thách thức trong ngành Xử lý dữ liệu
+                ✔ Cơ hội tiếp cận nguồn học tập hiệu quả, ring về những phần quà hấp dẫn
+                ✔ Và còn nhiều thứ hay ho và hấp dẫn khác,...
+                """);
         post7.setTeacherId(class1.getTeacherId());
         post7.setClassId(class1.getId());
         post7.setCreatedDate(new Date().getTime());
@@ -1255,28 +1406,13 @@ public class DBGenerator implements CommandLineRunner {
 
         Post post11 = new Post();
         post11.setDescriptions("""
-                🔥🔥🔥HOT HOT HOT🔥🔥🔥
-                🔥🔥🔥Một sự kiện không thể bỏ lỡ dành cho các bạn sinh viên Java 3-4-5 & Dự Án Mẫu- Dự Án 1 - SEMINIAR TẤT TẦN TẬT CÁC CÁCH LÀM VIỆC GIỮA JAVA VỚI CSDL đang chờ đón các bạn đây:🔥🔥🔥
-                                
-                💥Nội dung chính của seminar bao gồm:
-                ⁉️ HIỂU Lợi ích của việc kết nối với CSDL
-                ⁉️ BIẾT Các cách kết nối với CSDL như là JDBC, Hibernate, JPA
-                ⁉️ HIỂU Cơ chế của mỗi cách kết nối và cách hoạt động của từng loại
-                                
-                💥 Chắn chắn rằng SEMINIAR sẽ giúp các bạn có thể giúp các bạn hiểu rõ hơn về 3 khái niệm JDBC/Hibernate/JPA . Nó là nền tảng giúp các bạn sau học lên Java 4,5,6 một cách dễ dàng hơn ✅
-                🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡
-                🕘 Thời gian: 20h30- 22h30
-                🗓 Ngày: 27-07-2023
-                                
-                🧡🧡🧡Giảng viên tham gia:🧡🧡🧡
-                🥰 GV1: Nguyễn Thúy Hằng
-                🥰 GV2: Vũ Văn Nguyên
-                🥰 GV3: Nguyễn Hoàng Tiến
-                🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡
-                                
-                👋👋Hãy nhanh tay đăng ký tham gia sự kiện
-                LINK ĐĂNG KÝ: https://forms.gle/qER6gWqWfGDrrDoP9
-                """);
+                GÓC FLEX 😀😅😂
+                🥉🥉🥉Cuộc thi Game Việt Hackathon 2023 đang dần bước vào chung kết
+                💯Góp mặt cùng với cuộc thi là đội thi FLEXCODE 💯💯💯đến từ bộ môn Ứng dụng phần mềm
+                ⚡️⚡️Vượt qua hàng trăm đội thi khác trên cả nước, từ ngày lập đội, đến khi lên ý tưởng vào vòng bán kết và bây giờ chuẩn bị bước vào Chung kết trong khoảng thời gian 3 tháng. Đó là sự nỗ lực không ngừng nghỉ, chăm chỉ từ cả thầy và trò.
+                👉👉👉 Nhờ sự hướng dẫn tận tình từ thầy cô BM UDPM cùng với sự tham gia của đội Flexcode bao gồm 5 thành viên 👨‍👩‍👦‍👦👨‍👨‍👦. Flexcode đã chính thức đưa UDPM flex khi lọt vào top14 cuộc thi gameviet hackathon 😍😍😍
+                Cùng chúc mừng 🎊🎊tất cả các thành viên trong đội và cỗ vũ các bạn tiến bước chung kết🏅🏅🏅Không có giải không về 💪💪💪
+                 """);
         post11.setTeacherId(class1.getTeacherId());
         post11.setClassId(class1.getId());
         post11.setCreatedDate(new Date().getTime() + 3 * 86400300);

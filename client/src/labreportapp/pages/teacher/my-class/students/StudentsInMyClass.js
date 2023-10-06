@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "./styleStudentsInMyClass.css";
 import { Button, Checkbox, Empty, Input, Table, Tag } from "antd";
 import { Link } from "react-router-dom";
@@ -31,12 +31,14 @@ const StudentsInMyClass = () => {
   const { idClass } = useParams();
   const [listIdStudent, setListIdStudent] = useState([]);
   const [showModalSent, setShowModalSent] = useState(false);
+  const navigate = useNavigate();
   useEffect(() => {
     window.scrollTo(0, 0);
     dispatch(SetStudentClasses([]));
     featchClass(idClass);
   }, []);
   const featchClass = async (idClass) => {
+    setLoading(false);
     try {
       await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
         setClassDetail(responese.data.data);
@@ -44,11 +46,13 @@ const StudentsInMyClass = () => {
         featchStudentClass(idClass);
       });
     } catch (error) {
-      console.log(error);
+      setLoading(true);
+      setTimeout(() => {
+        navigate(`/teacher/my-class`);
+      }, [1000]);
     }
   };
   const featchStudentClass = async (id) => {
-    setLoading(false);
     try {
       await TeacherStudentClassesAPI.getStudentInClasses(id).then(
         (responese) => {
@@ -62,9 +66,7 @@ const StudentsInMyClass = () => {
           setLoading(true);
         }
       );
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const data = useAppSelector(GetStudentClasses);
@@ -381,6 +383,7 @@ const StudentsInMyClass = () => {
                 )))}
           </>
         ),
+        width: "2%",
       },
       ...columns,
     ];

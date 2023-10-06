@@ -23,6 +23,9 @@ public interface TeStudentAttendanceRespone extends TeIsIdentified {
     @Value("#{target.type_meeting}")
     Integer getTypeMeeting();
 
+    @Value("#{target.notes}")
+    String getNotes();
+
     @Value("#{target.teacher_id}")
     String getTeacherId();
 

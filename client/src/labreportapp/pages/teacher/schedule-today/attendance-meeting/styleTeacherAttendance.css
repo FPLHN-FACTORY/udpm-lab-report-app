@@ -1,5 +1,5 @@
 .box-button-center {
-  margin: 40px 0px 30px 0px;
+  margin: 20px 0px 30px 0px;
   width: 100%;
   height: auto;
   display: flex;
@@ -28,6 +28,7 @@
 .box-button:hover {
   box-shadow: 0 0 15px rgba(11, 99, 251, 0.3);
   transition: box-shadow 0.3s, background-color 0.3s;
+  background-color: rgb(56, 156, 106);
   cursor: pointer;
 }
 .custom-toast-short {
@@ -35,4 +36,7 @@
 }
 .custom-toast-long {
   font-size: 13px;
+}
+.notes_attendance {
+  padding: 25px;
 }

@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import "./styleTeamsInMyClass.css";
 import { Row, Table, Button, Tooltip, Modal, Empty, Tag } from "antd";
 import { Link } from "react-router-dom";
@@ -14,12 +14,15 @@ import {
   SetTeams,
   GetTeams,
   DeleteTeam,
+  UpdateTeam,
 } from "../../../../app/teacher/teams/teamsSlice.reduce";
 import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import LoadingIndicator from "../../../../helper/loading";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faCirclePlus,
   faEye,
+  faFolderPlus,
   faMattressPillow,
   faPenToSquare,
   faTrashCan,
@@ -46,12 +49,15 @@ const TeamsInMyClass = () => {
   const [showModalImport, setShowModalImport] = useState(false);
   const [teamDelete, setTeamDelete] = useState({});
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   dispatch(SetTTrueToggle());
+
   const { idClass } = useParams();
   useEffect(() => {
     window.scrollTo(0, 0);
     fetchData(idClass);
   }, []);
+
   const fetchData = async (idClass) => {
     await featchClass(idClass);
     await featchTeams(idClass);
@@ -63,10 +69,9 @@ const TeamsInMyClass = () => {
       await TeacherTeamsAPI.getTeamsByIdClass(id).then((responese) => {
         dispatch(SetTeams(responese.data.data));
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
+
   const featchClass = async (idClass) => {
     try {
       await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
@@ -74,9 +79,12 @@ const TeamsInMyClass = () => {
         document.title = "Quản lý nhóm | " + responese.data.data.code;
       });
     } catch (error) {
-      console.log(error);
+      setTimeout(() => {
+        navigate("/teacher/my-class");
+      }, [1000]);
     }
   };
+
   const featchStudentClass = async (id) => {
     setLoading(false);
     try {
@@ -88,9 +96,7 @@ const TeamsInMyClass = () => {
           setLoading(true);
         }
       );
-    } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang  !");
-    }
+    } catch (error) {}
   };
 
   const handleShowDeleteTeam = (team) => {
@@ -116,8 +122,20 @@ const TeamsInMyClass = () => {
       });
     } catch (error) {
       toast.warning("Xóa thất bại !");
-      alert("Lỗi hệ thống, vui lòng F5 lại trang  !");
     }
+  };
+  const handleCreateproject = async (idTeam) => {
+    try {
+      let dataUp = {
+        idClass: idClass,
+        idTeam: idTeam,
+      };
+      await TeacherTeamsAPI.createProjectToTeam(dataUp).then((response) => {
+        console.log(response);
+        dispatch(UpdateTeam(response.data.data));
+        toast.success("Tạo trello thành công !");
+      });
+    } catch (error) {}
   };
   const handleCancelModalCreateSusscess = () => {
     document.querySelector("body").style.overflowX = "hidden";
@@ -208,7 +226,7 @@ const TeamsInMyClass = () => {
       render: (text, record) => (
         <>
           <div>
-            {record.idProject != null && (
+            {record.idProject != null ? (
               <Tooltip title="Xem trello dự án">
                 <Link
                   to={`/detail-project/${record.idProject}`}
@@ -224,6 +242,19 @@ const TeamsInMyClass = () => {
                     }}
                   />
                 </Link>
+              </Tooltip>
+            ) : (
+              <Tooltip title="Tạo trello">
+                <span>
+                  <FontAwesomeIcon
+                    icon={faFolderPlus}
+                    className="icon"
+                    style={{ width: "19px" }}
+                    onClick={() => {
+                      handleCreateproject(record.id);
+                    }}
+                  />
+                </span>
               </Tooltip>
             )}
             <Tooltip title="Chi tiết">
@@ -393,6 +424,7 @@ const TeamsInMyClass = () => {
                 style={{
                   backgroundColor: "rgb(38, 144, 214)",
                   color: "white",
+                  marginLeft: "10px",
                 }}
                 onClick={() => setShowModalImport(true)}
               >
@@ -420,7 +452,11 @@ const TeamsInMyClass = () => {
                   setShowCreateModal(true);
                 }}
               >
-                Tạo nhóm
+                <FontAwesomeIcon
+                  icon={faCirclePlus}
+                  style={{ fontSize: "16px", paddingRight: "7px" }}
+                />
+                Thêm nhóm
               </Button>
             </Row>
           </div>
@@ -467,7 +503,7 @@ const TeamsInMyClass = () => {
             <>
               <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
                 <span style={{ fontSize: "18px" }}>
-                  Bạn có muốn xóa nhóm {teamDelete.name} không ?{" "}
+                  Bạn có chắc chắn muốn xóa nhóm {teamDelete.name} không ?
                 </span>
               </div>
               <div
@@ -479,7 +515,8 @@ const TeamsInMyClass = () => {
                 <Button
                   className="btn_filter"
                   style={{
-                    width: "66px",
+                    width: "100px",
+                    marginRight: "10px",
                   }}
                   onClick={handleCancelModalCreateFaild}
                 >
@@ -488,12 +525,11 @@ const TeamsInMyClass = () => {
                 <Button
                   className="btn_clean"
                   style={{
-                    width: "66px",
-                    marginLeft: "10px",
+                    width: "100px",
                   }}
                   onClick={handleDeleteTeam}
                 >
-                  Xóa
+                  Đồng ý
                 </Button>
               </div>
             </>

@@ -4,9 +4,11 @@ import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.core.common.response.SimpleResponse;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindClassRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindClassSentStudentRequest;
+import com.labreportapp.labreport.core.teacher.model.request.TeFindClassStatisticalRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindUpdateStatusClassRequest;
 import com.labreportapp.labreport.core.teacher.model.response.TeClassResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeClassSentStudentRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TeClassStatisticalResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeDetailClassResponse;
 import com.labreportapp.labreport.core.teacher.repository.TeClassConfigurationRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeClassRepository;
@@ -15,6 +17,7 @@ import com.labreportapp.labreport.entity.Class;
 import com.labreportapp.labreport.entity.ClassConfiguration;
 import com.labreportapp.labreport.infrastructure.constant.StatusClass;
 import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
+import com.labreportapp.labreport.util.SemesterHelper;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,8 +46,20 @@ public class TeClassServiceImpl implements TeClassService {
     @Autowired
     private TeClassConfigurationRepository teClassConfigurationRepository;
 
+    @Autowired
+    private SemesterHelper semesterHelper;
+
     @Override
     public PageableObject<TeClassResponse> searchTeacherClass(final TeFindClassRequest teFindClass) {
+        String idSemesterCurrent = semesterHelper.getSemesterCurrent();
+        if (teFindClass.getIdSemester().equalsIgnoreCase("")) {
+            if (idSemesterCurrent != null) {
+                teFindClass.setIdSemester(idSemesterCurrent);
+                teFindClass.setIdActivity("");
+            } else {
+                teFindClass.setIdSemester("");
+            }
+        }
         Pageable pageable = PageRequest.of(teFindClass.getPage() - 1, teFindClass.getSize());
         Page<TeClassResponse> pageList = teClassRepository.findClassBySemesterAndActivity(teFindClass, pageable);
         return new PageableObject<>(pageList);
@@ -121,6 +136,22 @@ public class TeClassServiceImpl implements TeClassService {
         Class classUp = classFind.get();
         classUp.setPassword(generateRandomPassword());
         return teClassRepository.save(classUp);
+    }
+
+    @Override
+    public PageableObject<TeClassStatisticalResponse> searchClassStatistical(TeFindClassStatisticalRequest request) {
+        String idSemesterCurrent = semesterHelper.getSemesterCurrent();
+        if (request.getIdSemester().equalsIgnoreCase("")) {
+            if (idSemesterCurrent != null) {
+                request.setIdSemester(idSemesterCurrent);
+                request.setIdActivity("");
+            } else {
+                request.setIdSemester("");
+            }
+        }
+        Pageable pageable = PageRequest.of(request.getPage() - 1, request.getSize());
+        Page<TeClassStatisticalResponse> pageList = teClassRepository.findClassStatistical(request, pageable);
+        return new PageableObject<>(pageList);
     }
 
     public String generateRandomPassword() {

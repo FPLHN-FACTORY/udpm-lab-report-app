@@ -22,6 +22,8 @@ public class TeStudentAttendedDetailRespone {
 
     private Integer typeMeeting;
 
+    private String notes;
+
     private Integer status;
 
     private String idTeacher;

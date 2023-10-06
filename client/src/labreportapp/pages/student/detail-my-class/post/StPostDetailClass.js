@@ -1,8 +1,8 @@
 import "./style-post-detail-class.css";
-import { Button, Card, Empty } from "antd";
+import { Button, Card, Empty, Spin } from "antd";
 import { useEffect } from "react";
 import { useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import { StudentPostAPI } from "../../../../api/student/StPostAPI";
 import LoadingIndicator from "../../../../helper/loading";
@@ -17,6 +17,8 @@ import ViewEditorJodit from "../../../../helper/editor/ViewEditorJodit";
 import { ControlOutlined } from "@ant-design/icons";
 import { SetTTrueToggle } from "../../../../app/student/StCollapsedSlice.reducer";
 import { GetUserCurrent } from "../../../../app/common/UserCurrent.reducer";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAnglesRight } from "@fortawesome/free-solid-svg-icons";
 
 const StPostDetailClass = () => {
   const dispatch = useAppDispatch();
@@ -27,6 +29,8 @@ const StPostDetailClass = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
   const [seeMore, setSeeMore] = useState(true);
+  const [dowloading, setDownloading] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -45,13 +49,10 @@ const StPostDetailClass = () => {
       };
       await StudentPostAPI.getPagePost(data).then((responese) => {
         dispatch(SetPost(responese.data.data.data));
-
         setTotalPage(responese.data.data.totalPages);
         setLoading(true);
       });
-    } catch (error) {
-      alert(error.message);
-    }
+    } catch (error) {}
   };
   useEffect(() => {
     if (currentPage < totalPage) {
@@ -65,6 +66,7 @@ const StPostDetailClass = () => {
     }
     featchNextPost(id);
   }, [currentPage]);
+
   const featchNextPost = async (id) => {
     try {
       let data = {
@@ -76,18 +78,17 @@ const StPostDetailClass = () => {
         dispatch(NextPagePost(responese.data.data.data));
         setTotalPage(responese.data.data.totalPages);
       });
-    } catch (error) {
-      alert(error.message);
-    }
+    } catch (error) {}
   };
   const featchClass = async (idClass) => {
     try {
       await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
         setClassDetail(responese.data.data);
-        console.log(responese.data.data);
       });
     } catch (error) {
-      console.log(error);
+      setTimeout(() => {
+        navigate(`/student/my-class`);
+      }, [1000]);
     }
   };
   const convertLongToDate = (dateLong) => {
@@ -100,6 +101,7 @@ const StPostDetailClass = () => {
     const format = `${day}/${month}/${year}` + ` ${hour}:${minute}`;
     return format;
   };
+
   const handleSeeMore = () => {
     if (currentPage < totalPage) {
       setCurrentPage((pre) => pre + 1);
@@ -114,7 +116,7 @@ const StPostDetailClass = () => {
   return (
     <>
       {!loading && <LoadingIndicator />}
-      <div style={{ paddingTop: "35px" }}>
+      <div style={{ paddingTop: "35px" }} className="student-post">
         <div className="title-student-my-class">
           <span style={{ paddingLeft: "20px" }}>
             <ControlOutlined style={{ fontSize: "22px" }} />
@@ -201,82 +203,113 @@ const StPostDetailClass = () => {
               </Link>
               <hr />
             </div>
-            <div className="box-image">
-              <span className="textCode"> {classDetail.code}</span>
-            </div>
-            <div className="box-post">
-              <div className="box-post">
-                <div
-                  style={{
-                    height: "auto",
-                    margin: "20px 0 20px 0",
-                    width: "100%",
-                  }}
-                >
-                  {data.length > 0 ? (
-                    data.map((item) => {
-                      return (
-                        <div key={item.id} style={{ marginBottom: "20px" }}>
-                          <Card
-                            className="box-card-one"
-                            style={{
-                              margin: "20px 0 20px 0",
-                              height: "auto",
-                            }}
-                            key={item.id}
-                            title={
-                              <>
-                                <div style={{ width: "100%" }}>
-                                  <div style={{ width: "95%", float: "left" }}>
-                                    <span style={{ lineHeight: "50px" }}>
-                                      {" "}
-                                      {userRedux.name}{" "}
-                                      <span
-                                        style={{
-                                          color: "gray",
-                                          fontWeight: "initial",
-                                          fontSize: "13px",
-                                          marginLeft: "7px",
-                                        }}
-                                      >
-                                        {convertLongToDate(item.createdDate)}
-                                      </span>
-                                    </span>
-                                  </div>{" "}
-                                  <div
-                                    style={{ float: "left" }}
-                                    className="title-icon-drop"
-                                  ></div>
-                                </div>
-                              </>
-                            }
-                          >
-                            <ViewEditorJodit value={item.descriptions} />
-                          </Card>
-                        </div>
-                      );
-                    })
-                  ) : (
-                    <Empty
-                      imageStyle={{ height: 60 }}
-                      description={<span>Chưa có bài viết nào được đăng</span>}
-                    />
-                  )}
-                  {seeMore && totalPage > 1 && (
-                    <Button
-                      style={{ float: "right" }}
-                      type="primary"
-                      icon={<i className="fas fa-arrow-down" />}
-                      onClick={() => {
-                        handleSeeMore();
+            <div>
+              <div className="box-all">
+                <div className="box-image">
+                  <span className="textCode"> {classDetail.code}</span>
+                </div>
+                <div className="box-post">
+                  <div className="box-post">
+                    <div
+                      style={{
+                        height: "auto",
+                        margin: "5px 0 20px 0",
+                        width: "100%",
                       }}
                     >
-                      Xem thêm
-                    </Button>
-                  )}
-                </div>
-              </div>{" "}
-            </div>{" "}
+                      {data.length > 0 ? (
+                        data.map((item) => {
+                          return (
+                            <div key={item.id} style={{ marginBottom: "20px" }}>
+                              <Card
+                                className="box-card-one"
+                                style={{
+                                  margin: "20px 0 20px 0",
+                                  height: "auto",
+                                }}
+                                key={item.id}
+                                title={
+                                  <>
+                                    <div style={{ width: "100%" }}>
+                                      <div
+                                        style={{ width: "95%", float: "left" }}
+                                      >
+                                        <span style={{ lineHeight: "50px" }}>
+                                          {" "}
+                                          {item.teacherName}
+                                          <span
+                                            style={{
+                                              color: "gray",
+                                              fontWeight: "initial",
+                                              fontSize: "13px",
+                                              marginLeft: "7px",
+                                            }}
+                                          >
+                                            {convertLongToDate(
+                                              item.createdDate
+                                            )}
+                                          </span>
+                                        </span>
+                                      </div>{" "}
+                                      <div
+                                        style={{ float: "left" }}
+                                        className="title-icon-drop"
+                                      ></div>
+                                    </div>
+                                  </>
+                                }
+                              >
+                                <ViewEditorJodit value={item.descriptions} />
+                              </Card>
+                            </div>
+                          );
+                        })
+                      ) : (
+                        <Empty
+                          imageStyle={{ height: 60 }}
+                          description={
+                            <span>Chưa có bài viết nào được đăng</span>
+                          }
+                        />
+                      )}
+                      {seeMore && (
+                        <Spin
+                          spinning={dowloading}
+                          style={{ marginTop: "10px" }}
+                        >
+                          <Button
+                            className="see-more"
+                            style={{
+                              float: "right",
+                              backgroundColor: "rgb(38, 144, 214)",
+                              color: "white",
+                            }}
+                            onClick={() => {
+                              setDownloading(true);
+                              setTimeout(() => {
+                                setDownloading(false);
+                                handleSeeMore();
+                              }, 1000);
+                            }}
+                          >
+                            <span
+                              style={{
+                                paddingRight: "7px",
+                                color: "white",
+                                fontWeight: "bold",
+                              }}
+                            >
+                              Xem thêm{" "}
+                            </span>
+                            <FontAwesomeIcon icon={faAnglesRight} size="lg" />
+                          </Button>{" "}
+                        </Spin>
+                      )}
+                    </div>
+                  </div>{" "}
+                </div>{" "}
+              </div>
+            </div>
           </div>
         </div>
       </div>

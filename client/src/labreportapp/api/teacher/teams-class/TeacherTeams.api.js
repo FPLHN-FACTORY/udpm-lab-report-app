@@ -3,10 +3,17 @@ import { request } from "../../../helper/request.helper";
 const url = `/teacher/teams`;
 
 export class TeacherTeamsAPI {
-  static getTeamsByIdClass(idClass) {
+  static getTeamsByIdClass(idClass, idMeeting) {
     return request({
       method: "GET",
-      url: url + `?idClass=` + idClass,
+      url: url + `?idClass=` + idClass + `&idMeeting=` + idMeeting,
+    });
+  }
+  static createProjectToTeam(data) {
+    return request({
+      method: "PUT",
+      url: url + `/create-project`,
+      data: data,
     });
   }
   static createTeam = (data) => {

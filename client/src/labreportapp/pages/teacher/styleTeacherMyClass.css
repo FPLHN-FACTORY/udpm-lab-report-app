@@ -30,6 +30,8 @@
   box-shadow: 0 0 10px rgb(228, 227, 227);
 }
 .box-four {
+  box-shadow: 0px 0px 20px 1px rgba(148, 148, 148, 0.3);
+  border-radius: 5px;
   padding: 25px;
   padding-top: 5px;
 }
@@ -41,6 +43,8 @@
   border-radius: 5px;
 }
 .box-three {
+  box-shadow: 0px 0px 20px 1px rgba(148, 148, 148, 0.3);
+  border-radius: 5px;
   height: auto;
   padding: 25px;
 }
@@ -53,6 +57,13 @@
   border-radius: 5px;
 }
 
+.box-son-dash-board {
+  background-color: rgb(255, 255, 255);
+  padding-top: 10px;
+  height: auto;
+  box-shadow: 0px 0px 20px 1px rgba(148, 148, 148, 0.3);
+  border-radius: 5px;
+}
 .box-center {
   text-align: center;
   display: flex;
@@ -76,11 +87,10 @@
 
 .box_btn_filter {
   text-align: center;
-  padding: 20px 0 20px 0;
+  padding: 5px 0 5px 0;
 }
 
 .btn_filter {
-  /* background-color: #e1af4a; */
   background-color: #e2b357;
   color: white;
   margin-right: 15px;

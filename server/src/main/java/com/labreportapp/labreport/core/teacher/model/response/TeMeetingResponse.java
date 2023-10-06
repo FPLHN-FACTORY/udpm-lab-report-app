@@ -16,6 +16,9 @@ public interface TeMeetingResponse {
     @Value("#{target.descriptions}")
     String getDescriptions();
 
+    @Value("#{target.notes}")
+    String getNotes();
+
     @Value("#{target.meeting_date}")
     Long getMeetingDate();
 
@@ -31,4 +34,6 @@ public interface TeMeetingResponse {
     @Value("#{target.teacher_id}")
     String getIdTeacher();
 
+    @Value("#{target.status_meeting}")
+    Integer getStatusMeeting();
 }

@@ -3,9 +3,11 @@ package com.labreportapp.labreport.core.teacher.service;
 import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindClassRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindClassSentStudentRequest;
+import com.labreportapp.labreport.core.teacher.model.request.TeFindClassStatisticalRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindUpdateStatusClassRequest;
 import com.labreportapp.labreport.core.teacher.model.response.TeClassResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeClassSentStudentRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TeClassStatisticalResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeDetailClassResponse;
 import com.labreportapp.labreport.entity.Class;
 
@@ -27,4 +29,6 @@ public interface TeClassService {
     Class updateStatusClass(final TeFindUpdateStatusClassRequest request);
 
     Class randomPassword(String idClass);
+
+    PageableObject<TeClassStatisticalResponse> searchClassStatistical(final TeFindClassStatisticalRequest request);
 }
