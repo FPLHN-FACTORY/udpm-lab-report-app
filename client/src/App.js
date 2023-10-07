@@ -13,7 +13,6 @@ import DashBoardStudent from "./labreportapp/layout/student/DashBoardStudent";
 import SemesterManagement from "./labreportapp/pages/admin/semester-management/SemesterManagement";
 import ActivityManagement from "./labreportapp/pages/admin/activity-management/ActivityManagement";
 import ClassManagement from "./labreportapp/pages/admin/class-management/ClassManagement";
-import AdminDashboard from "./labreportapp/pages/admin/admin-factory-deployment-statistics/AdFactoryDeploymentStatistics";
 import TeacherScheduleToday from "./labreportapp/pages/teacher/schedule-today/TeacherScheduleToday";
 import TeacherAttendanceMeeting from "./labreportapp/pages/teacher/schedule-today/attendance-meeting/TeacherAttendanceMeeting";
 import TeacherMyClass from "./labreportapp/pages/teacher/TeacherMyClass";
@@ -53,15 +52,12 @@ import {
 } from "./portalprojects/app/reducer/notification/NotificationSlice.reducer";
 import ProjectManagement from "./portalprojects/pages/admin/project-management/ProjectManagement";
 import { DetailProjectAPI } from "./portalprojects/api/detail-project/detailProject.api";
-import Dashboard from "./portalprojects/layout/DashBoard";
 import CategoryManagement from "./portalprojects/pages/admin/category-management/CategoryManagement";
 import LabelManagement from "./portalprojects/pages/admin/label-management/LabelManagement";
 import StakeholderManagement from "./portalprojects/pages/admin/stakeholder-management/StakeholderManagement";
-import HeaderComponent from "./portalprojects/component/Header";
 import DetailProject from "./portalprojects/pages/common/detail-project/DetailProject";
 import DetailProjectDashBoard from "./portalprojects/pages/common/detail-project-dashboard/DetailProjectDashBoard";
 import DashboardGeneral from "./portalprojects/pages/common/dashboard/Dashboard";
-import MyProject from "./portalprojects/pages/member/my-project/MyProject";
 import PeriodProject from "./portalprojects/pages/member/period-project/PeriodProject";
 import Cookies from "js-cookie";
 import TemplateReport from "./labreportapp/pages/admin/template-report/TemplateReport";
@@ -70,7 +66,6 @@ import DetailMeetingAttendance from "./labreportapp/pages/admin/detail-class/mee
 import LevelManagement from "./labreportapp/pages/admin/level-management/LevelManagement";
 import RoleSelection from "./labreportapp/pages/role-selection/RoleSelection";
 import jwt_decode from "jwt-decode";
-import HeaderStudentComponent from "./labreportapp/component/student/HeaderStudent";
 import HeaderTeacherComponent from "./labreportapp/component/teacher/HeaderTeacher";
 import TeacherMyProject from "./labreportapp/pages/teacher/my-project/TeacherMyProject";
 import StudentMyProject from "./labreportapp/pages/student/my-project/StudentMyProject";
@@ -80,7 +75,10 @@ function App() {
   const socket = new SockJS(
     "http://localhost:2509/portal-projects-websocket-endpoint"
   );
-  let stompClientAll = Stomp.over(socket);
+  let stompClientAll = Stomp.over(socket, {
+    heartbeatIncoming: 10000,
+    heartbeatOutgoing: 10000,
+  });
 
   stompClientAll.onWebSocketClose(() => {
     toast.info("Mất kết nối đến máy chủ !");

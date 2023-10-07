@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fe93e581-5589-4bad-ba6a-389fa82a0816" name="Default Changelist" comment="merge code quynhnc">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="fe93e581-5589-4bad-ba6a-389fa82a0816" name="Default Changelist" comment="fix merge code all member" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -84,6 +82,7 @@
       <workItem from="1696566826150" duration="49000" />
       <workItem from="1696632052100" duration="51000" />
       <workItem from="1696653139521" duration="7000" />
+      <workItem from="1696665726372" duration="103000" />
     </task>
     <task id="LOCAL-00001" summary="update code merge login, pending">
       <created>1696288841421</created>
@@ -120,7 +119,14 @@
       <option name="project" value="LOCAL" />
       <updated>1696632084510</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="fix merge code all member">
+      <created>1696665801594</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1696665801594</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -143,6 +149,7 @@
     <MESSAGE value="update code merge login" />
     <MESSAGE value="update code trello" />
     <MESSAGE value="merge code quynhnc" />
-    <option name="LAST_COMMIT_MESSAGE" value="merge code quynhnc" />
+    <MESSAGE value="fix merge code all member" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix merge code all member" />
   </component>
 </project>

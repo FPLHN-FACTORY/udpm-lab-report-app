@@ -8,18 +8,12 @@ export const connectStompClient = () => {
   const socket = new SockJS(
     "http://localhost:2509/portal-projects-websocket-endpoint"
   );
-  stompClient = Stomp.over(socket);
-
-  stompClient.onWebSocketClose(() => {
-    toast.info("Mất kết nối đến máy chủ !");
-
-    setTimeout(() => {
-      toast.info("Đang kết nối lại với máy chủ ...");
-      connectStompClient();
-    }, 5000);
+  stompClient = Stomp.over(socket, {
+    heartbeatIncoming: 10000,
+    heartbeatOutgoing: 10000,
   });
 
-  stompClient.activate();
+  // stompClient.activate();
 };
 
 export const getStompClient = () => stompClient;
