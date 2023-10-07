@@ -168,7 +168,7 @@ const BoardStompClient = (dispatch, useAppSelector, id) => {
         });
       }
     }
-  }, [stompClient, detailProject, periodCurrent, id]);
+  }, [stompClient, detailProject, periodCurrentRef, id]);
 
   const loadDataStompClient = () => {
     let sessionId = loadDataPeriodNotExists(stompClient);
@@ -1129,27 +1129,9 @@ const BoardStompClient = (dispatch, useAppSelector, id) => {
 
   const fetchDataMemberProject = async () => {
     try {
-      const responMemberAPI = await CommonAPI.fetchAll();
-      const listMemberAPI = responMemberAPI.data;
-
       const resMP = await MemberProjectAPI.fetchAll(detailProject.id);
       const listMemberProject = resMP.data.data;
-
-      const memberPromises = listMemberProject.map((lmp) => {
-        const member = listMemberAPI.find((m) => m.id === lmp.memberId);
-        if (member) {
-          let obj = { ...member };
-          obj.statusWork = lmp.statusWork;
-          obj.role = lmp.role;
-          return obj;
-        }
-        return null;
-      });
-
-      const members = await Promise.all(memberPromises);
-      const filteredMembers = members.filter((m) => m !== null);
-
-      dispatch(SetMemberProject(filteredMembers));
+      dispatch(SetMemberProject(listMemberProject));
     } catch (error) {
       dispatch(SetError("Lỗi hệ thống, vui lòng ấn F5 để tải lại trang"));
     }

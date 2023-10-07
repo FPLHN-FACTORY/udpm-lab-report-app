@@ -7,7 +7,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Button, Select, Table, Tooltip } from "antd";
+import { Button, Empty, Select, Table, Tooltip } from "antd";
 import React, { useEffect, useMemo, useState } from "react";
 import "./styleDragDropTable.css";
 import { useAppDispatch, useAppSelector } from "../../../../app/hook";
@@ -776,20 +776,43 @@ const TableDragAndDrop = ({ data }) => {
               items={dataSource.map((item) => item.id)}
               strategy={verticalListSortingStrategy}
             >
-              <Table
-                components={{
-                  body: {
-                    row: Row,
-                  },
-                }}
-                rowKey="id"
-                scroll={{ y: "calc(100vh - 170px)" }}
-                columns={columns}
-                pagination={false}
-                dataSource={dataSource}
-                className="table_view_drag_drop"
-                rowClassName={() => "table-row"}
-              />
+              {dataSource.length > 0 && (
+                <Table
+                  components={{
+                    body: {
+                      row: Row,
+                    },
+                  }}
+                  rowKey="id"
+                  scroll={{ y: "calc(100vh - 170px)" }}
+                  columns={columns}
+                  pagination={false}
+                  dataSource={dataSource}
+                  className="table_view_drag_drop"
+                  rowClassName={() => "table-row"}
+                />
+              )}
+              {dataSource.length === 0 && (
+                <>
+                  <p
+                    style={{
+                      textAlign: "center",
+                      marginTop: "100px",
+                      fontSize: "15px",
+                      color: "red",
+                    }}
+                  >
+                    <Empty
+                      imageStyle={{ height: 60 }}
+                      description={
+                        <span style={{ color: "#007bff" }}>
+                          Không có dữ liệu !
+                        </span>
+                      }
+                    />{" "}
+                  </p>
+                </>
+              )}
               <Button className="btn_add_table" onClick={openPopupGeneral}>
                 <FontAwesomeIcon icon={faPlus} /> Thêm
               </Button>

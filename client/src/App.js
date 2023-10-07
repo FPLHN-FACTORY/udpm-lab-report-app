@@ -72,6 +72,8 @@ import RoleSelection from "./labreportapp/pages/role-selection/RoleSelection";
 import jwt_decode from "jwt-decode";
 import HeaderStudentComponent from "./labreportapp/component/student/HeaderStudent";
 import HeaderTeacherComponent from "./labreportapp/component/teacher/HeaderTeacher";
+import TeacherMyProject from "./labreportapp/pages/teacher/my-project/TeacherMyProject";
+import StudentMyProject from "./labreportapp/pages/student/my-project/StudentMyProject";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -588,12 +590,22 @@ function App() {
               }
             />
             <Route
-              path="/my-project"
+              path="/teacher/my-project"
               element={
                 <AuthGuard>
                   <DashBoardTeacher>
-                    <MyProject />
+                    <TeacherMyProject />
                   </DashBoardTeacher>
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/student/my-project"
+              element={
+                <AuthGuard>
+                  <DashBoardStudent>
+                    <StudentMyProject />
+                  </DashBoardStudent>
                 </AuthGuard>
               }
             />

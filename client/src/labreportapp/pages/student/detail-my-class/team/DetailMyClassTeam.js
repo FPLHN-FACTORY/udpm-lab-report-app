@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import "./style-detail-my-class-team.css";
 import { Link, useNavigate } from "react-router-dom";
-import { ControlOutlined } from "@ant-design/icons";
+import { ControlOutlined, ProjectOutlined } from "@ant-design/icons";
 import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import { useEffect, useState } from "react";
 import LoadingIndicator from "../../../../helper/loading";
@@ -45,7 +45,6 @@ const DetailMyClassTeam = () => {
   const loadDataDetailClass = () => {
     StMyTeamClassAPI.detailClass(id).then((response) => {
       setDetailClass(response.data.data);
-      setIsLoading(false);
     });
   };
 
@@ -57,11 +56,13 @@ const DetailMyClassTeam = () => {
         StMyTeamClassAPI.getStudentInMyTeam(id, response.data.data.id).then(
           (response) => {
             setStudentMyTeam(response.data.data);
+            setIsLoading(false);
           }
         );
       } else {
         StMyTeamClassAPI.getTeamInClass(id).then((response) => {
           setListTeam(response.data.data);
+          setIsLoading(false);
         });
       }
     });
@@ -351,12 +352,6 @@ const DetailMyClassTeam = () => {
                 <div className="info-team">
                   <span className="info-heading">Thông tin nhóm:</span>
                   <div className="group-info">
-                    <span
-                      className="group-info-item"
-                      style={{ marginTop: "10px", marginBottom: "15px" }}
-                    >
-                      Mã nhóm: {detailTeam != null ? detailTeam.code : ""}
-                    </span>
                     <span className="group-info-item">
                       Tên nhóm: {detailTeam != null ? detailTeam.name : ""}{" "}
                     </span>
@@ -372,12 +367,39 @@ const DetailMyClassTeam = () => {
 
                 <>
                   <div
-                    className="table-member-team"
-                    style={{ marginBottom: "7px" }}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      marginBottom: 5,
+                    }}
                   >
-                    <span className="info-heading" style={{ fontSize: "16px" }}>
-                      Danh sách thành viên trong nhóm:
-                    </span>
+                    <div
+                      className="table-member-team"
+                      style={{ marginBottom: "15px" }}
+                    >
+                      <span
+                        className="info-heading"
+                        style={{ fontSize: "16px" }}
+                      >
+                        Danh sách thành viên trong nhóm:
+                      </span>
+                    </div>
+                    <div>
+                      {detailTeam != null && detailTeam.projectId != null && (
+                        <Link to={`/detail-project/${detailTeam.projectId}`}>
+                          <Button
+                            style={{
+                              backgroundColor: "rgb(38, 144, 214)",
+                              color: "white",
+                            }}
+                          >
+                            <ProjectOutlined />
+                            Chi tiết dự án của nhóm
+                          </Button>
+                        </Link>
+                      )}
+                    </div>
                   </div>
                   <Table
                     columns={columns}

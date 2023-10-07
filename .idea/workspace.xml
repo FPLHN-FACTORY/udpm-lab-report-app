@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fe93e581-5589-4bad-ba6a-389fa82a0816" name="Default Changelist" comment="merge code quynhnc" />
+    <list default="true" id="fe93e581-5589-4bad-ba6a-389fa82a0816" name="Default Changelist" comment="merge code quynhnc">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -40,6 +42,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../tool-datn/fplhn-capstone-register" />
     <property name="nodejs_package_manager_path" value="npm" />
   </component>
   <component name="RunManager">
@@ -79,6 +82,8 @@
       <workItem from="1696354035750" duration="99000" />
       <workItem from="1696540452169" duration="87000" />
       <workItem from="1696566826150" duration="49000" />
+      <workItem from="1696632052100" duration="51000" />
+      <workItem from="1696653139521" duration="7000" />
     </task>
     <task id="LOCAL-00001" summary="update code merge login, pending">
       <created>1696288841421</created>
@@ -108,7 +113,14 @@
       <option name="project" value="LOCAL" />
       <updated>1696621460435</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="merge code quynhnc">
+      <created>1696632084510</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1696632084510</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

@@ -344,6 +344,9 @@ const StudentsInMyClass = () => {
     }
     setShowModalSent(true);
   };
+  const clearCheckedList = () => {
+    setCheckedList([]);
+  };
   if (classDetail.statusTeacherEdit === 0 && data != null && data.length > 0) {
     const checkAll = listIdStudent.length === checkedList.length;
     const indeterminate =
@@ -396,6 +399,7 @@ const StudentsInMyClass = () => {
         onCancel={() => setShowModalSent(!showModalSent)}
         listIdStudent={checkedList}
         classDetail={classDetail}
+        clearCheckedList={clearCheckedList}
       />
       <div className="box-one">
         <Link to="/teacher/my-class" style={{ color: "black" }}>

@@ -94,6 +94,7 @@ const Board = () => {
         });
       });
       dispatch(SetBoard(obj));
+      setIsLoading(false);
     } catch (error) {
     } finally {
       setIsLoading(false);
@@ -124,7 +125,7 @@ const Board = () => {
   };
 
   useEffect(() => {
-    if (board.lists != null && board.lists.length > 0) {
+    if (board.lists != null) {
       loadDataViewTable(board.lists);
     }
   }, [board.lists]);

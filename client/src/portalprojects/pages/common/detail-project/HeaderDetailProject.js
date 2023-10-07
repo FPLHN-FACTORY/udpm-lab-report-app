@@ -33,6 +33,7 @@ import { ProjectOutlined, TableOutlined } from "@ant-design/icons";
 import PopupFilter from "./popup/filter/PopupFilter";
 import PopupSort from "./popup/sort/PopupSort";
 import PopupMemberManagement from "./popup/member-management/PopupMemberManagement";
+import { GetUserCurrent } from "../../../../labreportapp/app/common/UserCurrent.reducer";
 
 const HeaderDetailProject = () => {
   const dispatch = useAppDispatch();
@@ -232,13 +233,25 @@ const HeaderDetailProject = () => {
     navigate("/period-project/" + detailProject.id);
   };
 
+  const userCurrent = useAppSelector(GetUserCurrent);
+  const [checkUrl, setCheckUrl] = useState("");
+
+  useEffect(() => {
+    if (userCurrent != null) {
+      if (userCurrent.role.includes("TEACHER")) {
+        setCheckUrl("/teacher/my-project");
+        return;
+      } else {
+        setCheckUrl("/student/my-project");
+        return;
+      }
+    }
+  }, [userCurrent]);
+
   return (
     <div className="header-style">
       <div className="left_header">
-        <Link
-          to="/my-project"
-          style={{ color: "white", textDecoration: "none" }}
-        >
+        <Link to={checkUrl} style={{ color: "white", textDecoration: "none" }}>
           <FontAwesomeIcon icon={faHome} /> Danh sách dự án{" "}
         </Link>{" "}
         <span style={{ marginLeft: "5px", marginRight: "5px" }}> / </span>{" "}

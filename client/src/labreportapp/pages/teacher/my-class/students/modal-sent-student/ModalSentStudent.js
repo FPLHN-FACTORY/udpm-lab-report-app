@@ -27,6 +27,7 @@ const ModalSentStudent = ({
   onCancel,
   listIdStudent,
   classDetail,
+  clearCheckedList,
 }) => {
   const [currentModal, setCurrentModal] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
@@ -82,6 +83,7 @@ const ModalSentStudent = ({
               const objFilter = dataStudentClasses.filter(
                 (item) => !listIdStudent.includes(item.idStudent)
               );
+              clearCheckedList();
               dispatch(SetStudentClasses(objFilter));
             }
             onCancel();

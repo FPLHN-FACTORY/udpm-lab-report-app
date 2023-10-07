@@ -1,5 +1,6 @@
 package com.labreportapp.portalprojects.core.member.service.impl;
 
+import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.portalprojects.core.common.base.PageableObject;
 import com.labreportapp.portalprojects.core.member.model.request.MeFindProjectRequest;
 import com.labreportapp.portalprojects.core.member.model.request.MeUpdateBackgroundProjectRequest;
@@ -33,8 +34,12 @@ public class MeProjectServiceImpl implements MeProjectService {
     @Autowired
     private MeProjectRepository meProjectRepository;
 
+    @Autowired
+    private LabReportAppSession labReportAppSession;
+
     @Override
     public PageableObject<MeProjectResponse> getAllProjectByIdUser(final MeFindProjectRequest request) {
+        request.setIdUser(labReportAppSession.getUserId());
         Pageable pageable = PageRequest.of(request.getPage(), request.getSize());
         Page<MeProjectResponse> res = meProjectRepository.getAllProjectById(pageable, request);
         return new PageableObject(res);

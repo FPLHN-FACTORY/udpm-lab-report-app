@@ -16,6 +16,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import "./style-sidebar.css";
+import { ProjectOutlined } from "@ant-design/icons";
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -71,6 +72,13 @@ const SidebarStudentComponent = ({ collapsed, toggleCollapsed }) => {
           }
         >
           <Link to="/student/my-class">Lớp của tôi</Link>
+        </Menu.Item>
+        <Menu.Item
+          key="9"
+          className="menu_custom"
+          icon={<ProjectOutlined style={{ color: "rgb(226, 179, 87)" }} />}
+        >
+          <Link to="/student/my-project">Dự án của tôi</Link>
         </Menu.Item>
         <Menu.Item
           key="3"

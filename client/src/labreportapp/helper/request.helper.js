@@ -3,7 +3,7 @@ import { AppConfig } from "../../AppConfig";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 import { portIdentity } from "./constants";
-// import { getToken } from "./userToken";
+import store from "../app/store";
 
 export const request = axios.create({
   baseURL: AppConfig.apiUrl,
