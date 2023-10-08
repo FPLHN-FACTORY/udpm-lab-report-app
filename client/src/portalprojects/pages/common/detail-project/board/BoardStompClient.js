@@ -159,11 +159,11 @@ const BoardStompClient = (dispatch, useAppSelector, id) => {
         Object.keys(periodCurrentRef.current).length === 0)
     ) {
       if (isStompConnected()) {
-        loadDataPeriodNotExists(stompClient);
+        loadDataPeriodNotExists();
         fetchDataBoard(null);
       } else {
         stompClient.connect({}, () => {
-          loadDataPeriodNotExists(stompClient);
+          loadDataPeriodNotExists();
           fetchDataBoard(null);
         });
       }
@@ -171,7 +171,7 @@ const BoardStompClient = (dispatch, useAppSelector, id) => {
   }, [stompClient, detailProject, periodCurrentRef, id]);
 
   const loadDataStompClient = () => {
-    let sessionId = loadDataPeriodNotExists(stompClient);
+    let sessionId = loadDataPeriodNotExists();
     stompClient.subscribe(
       "/portal-projects/update-index-todo/" +
         detailProject.id +
@@ -985,10 +985,10 @@ const BoardStompClient = (dispatch, useAppSelector, id) => {
     );
   };
 
-  const loadDataPeriodNotExists = (stompC) => {
-    let sessionId = /\/([^\/]+)\/websocket/.exec(stompC.ws._transport.url)[1];
+  const loadDataPeriodNotExists = () => {
+    let sessionId = /\/([^\/]+)\/websocket/.exec(stompClient.ws._transport.url)[1];
     dispatch(SetSessionId(sessionId));
-    stompC.subscribe(
+    stompClient.subscribe(
       "/portal-projects/update-index-todo-list/" + detailProject.id,
       (message) => {
         let res = JSON.parse(message.body).data.sessionId;
@@ -1006,7 +1006,7 @@ const BoardStompClient = (dispatch, useAppSelector, id) => {
         }
       }
     );
-    stompC.subscribe(
+    stompClient.subscribe(
       "/portal-projects/create-todo-list/" + detailProject.id,
       (message) => {
         let obj = JSON.parse(message.body).data;
@@ -1014,17 +1014,17 @@ const BoardStompClient = (dispatch, useAppSelector, id) => {
       }
     );
 
-    stompC.subscribe("/portal-projects/success/" + sessionId, (message) => {
+    stompClient.subscribe("/portal-projects/success/" + sessionId, (message) => {
       let successObject = JSON.parse(message.body);
       toast.success(successObject.successMessage);
     });
 
-    stompC.subscribe("/portal-projects/error/" + sessionId, (message) => {
+    stompClient.subscribe("/portal-projects/error/" + sessionId, (message) => {
       var errorObject = JSON.parse(message.body).data;
       toast.error("Lỗi hệ thống");
     });
 
-    stompC.subscribe(
+    stompClient.subscribe(
       "/portal-projects/update-background-project/" + detailProject.id,
       (message) => {
         let data = JSON.parse(message.body).data;
@@ -1032,7 +1032,7 @@ const BoardStompClient = (dispatch, useAppSelector, id) => {
       }
     );
 
-    stompC.subscribe(
+    stompClient.subscribe(
       "/portal-projects/update-name-todo-list/" + detailProject.id,
       (message) => {
         let data = JSON.parse(message.body).data;
@@ -1040,7 +1040,7 @@ const BoardStompClient = (dispatch, useAppSelector, id) => {
       }
     );
 
-    stompC.subscribe(
+    stompClient.subscribe(
       "/portal-projects/create-label/" + detailProject.id,
       (message) => {
         let data = JSON.parse(message.body).data;
@@ -1048,7 +1048,7 @@ const BoardStompClient = (dispatch, useAppSelector, id) => {
       }
     );
 
-    stompC.subscribe(
+    stompClient.subscribe(
       "/portal-projects/delete-label/" + detailProject.id,
       (message) => {
         let data = JSON.parse(message.body).data;
@@ -1058,7 +1058,7 @@ const BoardStompClient = (dispatch, useAppSelector, id) => {
       }
     );
 
-    stompC.subscribe(
+    stompClient.subscribe(
       "/portal-projects/update-label/" + detailProject.id,
       (message) => {
         let data = JSON.parse(message.body).data;
@@ -1068,14 +1068,14 @@ const BoardStompClient = (dispatch, useAppSelector, id) => {
       }
     );
 
-    stompC.subscribe(
+    stompClient.subscribe(
       "/portal-projects/create-member-project/" + detailProject.id,
       (message) => {
         fetchDataMemberProject();
       }
     );
 
-    stompC.subscribe(
+    stompClient.subscribe(
       "/portal-projects/delete-todo-list/" + detailProject.id,
       (message) => {
         let id = JSON.parse(message.body).data;
@@ -1083,7 +1083,7 @@ const BoardStompClient = (dispatch, useAppSelector, id) => {
       }
     );
 
-    stompC.subscribe(
+    stompClient.subscribe(
       "/portal-projects/update-member-project/" + detailProject.id,
       (message) => {
         dispatch(UpdateMemberProject(JSON.parse(message.body).data));
