@@ -1168,23 +1168,23 @@ public class DBGenerator implements CommandLineRunner {
         post1.setDescriptions("""
                 🔥🔥🔥HOT HOT HOT🔥🔥🔥
                 🔥🔥🔥Một sự kiện không thể bỏ lỡ dành cho các bạn sinh viên Java 3-4-5 & Dự Án Mẫu- Dự Án 1 - SEMINIAR TẤT TẦN TẬT CÁC CÁCH LÀM VIỆC GIỮA JAVA VỚI CSDL đang chờ đón các bạn đây:🔥🔥🔥
-                                
+
                 💥Nội dung chính của seminar bao gồm:
                 ⁉️ HIỂU Lợi ích của việc kết nối với CSDL
                 ⁉️ BIẾT Các cách kết nối với CSDL như là JDBC, Hibernate, JPA
                 ⁉️ HIỂU Cơ chế của mỗi cách kết nối và cách hoạt động của từng loại
-                                
+
                 💥 Chắn chắn rằng SEMINIAR sẽ giúp các bạn có thể giúp các bạn hiểu rõ hơn về 3 khái niệm JDBC/Hibernate/JPA . Nó là nền tảng giúp các bạn sau học lên Java 4,5,6 một cách dễ dàng hơn ✅
                 🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡
                 🕘 Thời gian: 20h30- 22h30
                 🗓 Ngày: 27-07-2023
-                                
+
                 🧡🧡🧡Giảng viên tham gia:🧡🧡🧡
                 🥰 GV1: Nguyễn Thúy Hằng
                 🥰 GV2: Vũ Văn Nguyên
                 🥰 GV3: Nguyễn Hoàng Tiến
                 🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡
-                                
+
                 👋👋Hãy nhanh tay đăng ký tham gia sự kiện
                 LINK ĐĂNG KÝ: https://forms.gle/qER6gWqWfGDrrDoP9
                 """);
@@ -1304,23 +1304,23 @@ public class DBGenerator implements CommandLineRunner {
         Post post5 = new Post();
         post5.setDescriptions("""
                 📖 VUI CHƠI ĐỪNG BỎ RƠI WORKSHOP📖
-                                
+
                 🧡🧡Trong buổi này chúng ta sẽ cùng nhau chỉ rõ hơn về vai trò của CODING CONVENTION trong khi lập trình
                 Với sự tham gia của của các GV:
                 1️⃣ Cô Nguyễn Khánh Huyền - HuyenNK6
                 2️⃣ Cô Nguyễn Thuý Hằng - HangNT169
                 3️⃣ Cô Chu Thị Ngân - NganCT4
-                                
+
                 ✔️Workshop CODING CONVENTIONS sẽ có các nội dung chính sau đây:
                 ✍️Khái niệm coding conventions
                 ✍️ Tầm quan trọng của convetion trong code như nào
                 ✍️ Các tiêu chí của coding convention trong lập trình
                 ✍️ Quy tắc đặt tên (camelCase, PascalCase, snake_case)…
-                                
+
                 🔥🔥🔥 ĐẶC BIỆT 🔥🔥🔥
                 ✅ Vận dụng với CẤU TRÚC RẼ NHÁNH & VÒNG LẶP theo quy tiêu chuẩn code
                 ✔️Buổi WORKSHOP này sẽ là bước đệm hoàn hảo giúp các bạn CHUẨN HÓA HOÀN HẢO
-                                
+
                 🧡🧡🧡🧡🧡 WORKSHOP 🧡🧡🧡🧡🧡
                 🕘 Thời gian: 20:30 - 22:30
                 🗓 Ngày: 18-09-2023

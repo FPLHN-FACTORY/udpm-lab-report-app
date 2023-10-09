@@ -30,7 +30,7 @@ import PopupNotification from "../../../portalprojects/component/notification/No
 
 const CommonInforUser = () => {
   const handleMenuClick = (e) => {
-    if (e.key === "0") {
+    if (e.key === "2") {
       Cookies.remove("token");
       window.location.href = portIdentity;
     }
