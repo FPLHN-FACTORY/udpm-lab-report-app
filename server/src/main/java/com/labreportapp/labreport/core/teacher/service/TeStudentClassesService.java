@@ -6,6 +6,7 @@ import com.labreportapp.labreport.core.teacher.model.request.TeFindStudentClasse
 import com.labreportapp.labreport.core.teacher.model.request.TeSentStudentClassRequest;
 import com.labreportapp.labreport.core.teacher.model.response.TeStudentCallApiResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeStudentStatusApiResponse;
+import com.labreportapp.labreport.entity.StudentClasses;
 import jakarta.validation.Valid;
 
 import java.util.List;
@@ -27,6 +28,6 @@ public interface TeStudentClassesService {
 
     Boolean updateKickStudentClasses(TeSentStudentClassRequest request);
 
-    Boolean updateSentStudentClassesToClass(@Valid final TeSentStudentClassRequest request);
+    List<StudentClasses> updateSentStudentClassesToClass(@Valid final TeSentStudentClassRequest request);
 
 }

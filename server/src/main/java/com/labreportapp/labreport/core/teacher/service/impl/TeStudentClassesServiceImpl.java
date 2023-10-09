@@ -14,6 +14,7 @@ import com.labreportapp.labreport.core.teacher.service.TeStudentClassesService;
 import com.labreportapp.labreport.entity.Class;
 import com.labreportapp.labreport.entity.StudentClasses;
 import com.labreportapp.labreport.infrastructure.apiconstant.ApiConstants;
+import com.labreportapp.labreport.infrastructure.constant.RoleTeam;
 import com.labreportapp.labreport.infrastructure.constant.StatusTeam;
 import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
@@ -203,7 +204,7 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
     @Override
     @Transactional
     @Synchronized
-    public Boolean updateSentStudentClassesToClass(TeSentStudentClassRequest request) {
+    public List<StudentClasses> updateSentStudentClassesToClass(TeSentStudentClassRequest request) {
         boolean check = false;
         Optional<Class> classSent = teClassRepository.findById(request.getIdClassSent());
         Optional<Class> classOld = teClassRepository.findById(request.getIdClassOld());
@@ -215,7 +216,7 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
         List<StudentClasses> studentClassesUp = new ArrayList<>();
         List<Class> classUp = new ArrayList<>();
         if (request.getListIdStudent().size() == 0 || studentClasses.size() == 0) {
-            return false;
+            return null;
         }
         studentClasses.forEach(item -> {
             idStudents.forEach(id -> {
@@ -226,7 +227,7 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
                     studentSent.setStudentId(item.getStudentId());
                     studentSent.setStatus(item.getStatus());
                     studentSent.setStatusStudentFeedBack(item.getStatusStudentFeedBack());
-                    studentSent.setRole(null);
+                    studentSent.setRole(RoleTeam.MEMBER);
                     studentSent.setTeamId(null);
                     studentSent.setClassId(request.getIdClassSent());
                     studentClassesUp.add(studentSent);
@@ -240,8 +241,7 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
         old.setClassSize(classOld.get().getClassSize() - idStudents.size());
         classUp.add(old);
         teClassRepository.saveAll(classUp);
-        teStudentClassesRepository.saveAll(studentClassesUp);
-        return true;
+        return teStudentClassesRepository.saveAll(studentClassesUp);
     }
 
 

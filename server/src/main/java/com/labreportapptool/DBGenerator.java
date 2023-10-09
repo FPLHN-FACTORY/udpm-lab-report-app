@@ -263,7 +263,7 @@ public class DBGenerator implements CommandLineRunner {
         class2.setActivityId(activity2.getId());
         class2.setTeacherId("FA2BAD81-93A5-4F02-B1B7-08DBB743DD7D".toLowerCase());
         class2.setDescriptions("Lớp làm đồ án tốt nghiệp web bán hàng");
-        class2.setStatusTeacherEdit(StatusTeacherEdit.KHONG_CHO_PHEP);
+        class2.setStatusTeacherEdit(StatusTeacherEdit.CHO_PHEP);
         class2.setId(classRepository.save(class2).getId());
 
         Class class3 = new Class();
@@ -274,7 +274,8 @@ public class DBGenerator implements CommandLineRunner {
         class3.setStatusClass(StatusClass.OPEN);
         class3.setPassword("123456");
         class3.setActivityId(activity1.getId());
-        class3.setTeacherId("1243F96A-42BD-49B3-8E45-08DBB2F9FEB4".toLowerCase());
+//        class3.setTeacherId("1243F96A-42BD-49B3-8E45-08DBB2F9FEB4".toLowerCase());
+        class3.setTeacherId("71090c89-f618-41ae-2a8d-08dbb201efe8".toLowerCase());
         class3.setDescriptions("Lớp làm trước dự án 1 bán hàng");
         class3.setId(classRepository.save(class3).getId());
 

@@ -179,6 +179,11 @@ const TeModalDetailOneStudent = ({ onCancel, visible, objStudent }) => {
         typeMeeting === 0 ? <span>Online</span> : <span>Offline</span>,
     },
     {
+      title: "Ghi chú",
+      dataIndex: "notes",
+      key: "notes",
+    },
+    {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
@@ -193,11 +198,6 @@ const TeModalDetailOneStudent = ({ onCancel, visible, objStudent }) => {
           )}
         </span>
       ),
-    },
-    {
-      title: "Ghi chú",
-      dataIndex: "notes",
-      key: "notes",
     },
   ];
 

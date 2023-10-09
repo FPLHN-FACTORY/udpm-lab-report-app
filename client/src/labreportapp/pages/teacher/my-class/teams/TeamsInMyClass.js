@@ -244,7 +244,7 @@ const TeamsInMyClass = () => {
                 </Link>
               </Tooltip>
             ) : (
-              <Tooltip title="Tạo trello">
+              <Tooltip title="Thêm trello">
                 <span>
                   <FontAwesomeIcon
                     icon={faFolderPlus}

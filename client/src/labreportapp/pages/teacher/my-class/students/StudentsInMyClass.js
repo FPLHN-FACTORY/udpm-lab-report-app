@@ -339,15 +339,24 @@ const StudentsInMyClass = () => {
   const [checkedList, setCheckedList] = useState([]);
   const handleSentStudent = () => {
     if (checkedList.length === 0) {
-      toast.warning("Vui lòng chọn sinh viên cần chuyển lớp !");
+      toast.info("Vui lòng chọn sinh viên cần chuyển lớp !");
       return;
     }
     setShowModalSent(true);
   };
-  const clearCheckedList = () => {
+  const clearCheckedList = (listStuNotSent) => {
+    let listIdNotSent = listIdStudent.filter(
+      (id) => !listStuNotSent.includes(id)
+    );
+    setListIdStudent(listIdNotSent);
     setCheckedList([]);
   };
-  if (classDetail.statusTeacherEdit === 0 && data != null && data.length > 0) {
+  if (
+    classDetail.statusTeacherEdit === 0 &&
+    data != null &&
+    data.length > 0 &&
+    listIdStudent.length > 0
+  ) {
     const checkAll = listIdStudent.length === checkedList.length;
     const indeterminate =
       checkedList.length > 0 && checkedList.length < listIdStudent.length;
@@ -640,7 +649,6 @@ const StudentsInMyClass = () => {
                 )}
             </div>
           </span>
-
           <div
             style={{ minHeight: "140px", marginTop: "20px" }}
             className="table-teacher"

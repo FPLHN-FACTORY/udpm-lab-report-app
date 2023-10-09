@@ -1,5 +1,7 @@
 package com.labreportapp.labreport.core.student.controller;
 
+import com.labreportapp.labreport.core.common.base.PageableObject;
+import com.labreportapp.labreport.core.common.base.ResponseObject;
 import com.labreportapp.labreport.core.student.model.request.StFindAttendanceRequest;
 import com.labreportapp.labreport.core.student.model.response.StAttendanceCallApiRespone;
 import com.labreportapp.labreport.core.student.model.response.StAttendanceRespone;
@@ -16,6 +18,7 @@ import java.util.List;
 @RequestMapping("/student/my-class")
 @CrossOrigin("*")
 public class StAttendanceController {
+
     @Autowired
     private StAttendanceService stAttendanceService;
 
@@ -24,8 +27,9 @@ public class StAttendanceController {
         return stAttendanceService.getAllAttendanceById(req);
     }
 
-    @GetMapping("/attendance1")
-    public List<StAttendanceCallApiRespone> getAllAttendanceStudentById(final StFindAttendanceRequest request) {
-        return stAttendanceService.getAllAttendanceStudentById(request);
+    @GetMapping("/attendance-me")
+    public ResponseObject getAllAttendanceStudentById(final StFindAttendanceRequest request) {
+        PageableObject<StAttendanceCallApiRespone> pageList = stAttendanceService.getAllAttendanceStudentById(request);
+        return new ResponseObject(pageList);
     }
 }

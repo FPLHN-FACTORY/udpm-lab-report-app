@@ -25,4 +25,7 @@ public interface StAttendanceRespone extends IsIdentified {
 
     @Value("#{target.status}")
     Integer getStatus();
+
+    @Value("#{target.notes}")
+    String getNotes();
 }

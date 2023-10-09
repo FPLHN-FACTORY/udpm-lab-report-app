@@ -78,12 +78,14 @@ const ModalSentStudent = ({
       await TeacherStudentClassesAPI.sentStudentClassesToClass(dataSent).then(
         (response) => {
           if (response.data.data) {
+            console.log("aaaaaaaaaaaaaaaaaa");
+            console.log(response.data.data);
             toast.success("Trao đổi sinh viên thành công !");
             if (dataStudentClasses != null) {
               const objFilter = dataStudentClasses.filter(
                 (item) => !listIdStudent.includes(item.idStudent)
               );
-              clearCheckedList();
+              clearCheckedList(listIdStudent);
               dispatch(SetStudentClasses(objFilter));
             }
             onCancel();
@@ -213,6 +215,15 @@ const ModalSentStudent = ({
           <span style={{ fontSize: "18px" }}>Danh sách lớp có thể chuyển</span>
         </div>
         <div style={{ marginTop: "15px" }}>
+          <span
+            style={{
+              paddingTop: "15px",
+              color: "red",
+            }}
+          >
+            *Lưu ý: Danh sách số sinh viên muốn chuyển sẽ được tự động lọc danh
+            sách những lớp thỏa mãn cấu hình sinh viên tối đa.
+          </span>
           <Spin spinning={loadingNo}>
             {data.length > 0 ? (
               <div

@@ -19,6 +19,7 @@ const CollapseMeeting = ({ items }) => {
   const [descriptionsReport, setDescriptionsReport] = useState("");
   const [template, setTempalte] = useState({});
   const [role, setRole] = useState(1);
+
   useEffect(() => {
     window.scrollTo(0, 0);
     setDescriptionsHomeWork("");
@@ -28,7 +29,8 @@ const CollapseMeeting = ({ items }) => {
   }, [items]);
 
   useEffect(() => {
-    if (items[0].classId != null && items[0].classId != undefined) {
+    setLoading(false);
+    if (items[0].classId != null && items[0].classId !== undefined) {
       const getRoleByIdStudent = () => {
         StudentMeetingAPI.getRoleByIdStudent(items[0].classId).then(
           (response) => {
@@ -41,23 +43,28 @@ const CollapseMeeting = ({ items }) => {
   }, [items]);
 
   const featchTemplateReport = async () => {
+    setLoading(false);
     try {
       await StudentTempalteReportAPI.getTemplateReport().then((response) => {
         setTempalte(response.data.data);
+        setTimeout(() => {
+          setLoading(true);
+        }, 2000);
       });
     } catch (error) {
+      setLoading(true);
       console.log(error);
     }
   };
 
   useEffect(() => {
-    if (items[0].id != undefined) {
+    if (items[0].id !== undefined) {
       featchHomeWorkNote(items[0].id);
     }
   }, [items[0].id]);
 
   const featchHomeWorkNote = async (idTeam) => {
-    setLoading(true);
+    setLoading(false);
     try {
       let data = {
         idTeam: idTeam,
@@ -81,7 +88,7 @@ const CollapseMeeting = ({ items }) => {
           setDescriptionsReport(response.data.data.descriptionsReport);
           setObjDetail(response.data.data);
         }
-        setLoading(false);
+        setLoading(true);
       });
     } catch (error) {
       console.log(error);
@@ -101,7 +108,7 @@ const CollapseMeeting = ({ items }) => {
         descriptionsReport: descriptionsReport,
       };
       await StudentMeetingAPI.updateHomeWorkAndNote(data).then((response) => {
-        toast.success("Lưu thành công");
+        toast.success("Cập nhật thành công");
         clear();
       });
     } catch (error) {
@@ -120,6 +127,7 @@ const CollapseMeeting = ({ items }) => {
   };
   return (
     <div className="lesson-information">
+      {!loading && <LoadingIndicator />}
       {items.map((item, index) => (
         <div className="info-team">
           <div className="info-heading" style={{ marginLeft: "40px" }}>
@@ -193,22 +201,25 @@ const CollapseMeeting = ({ items }) => {
                       {" "}
                       <Button
                         style={{
-                          backgroundColor: "rgb(61, 139, 227)",
-                          color: "white",
-                          marginRight: "8px",
-                        }}
-                        onClick={update}
-                      >
-                        Lưu
-                      </Button>
-                      <Button
-                        style={{
                           backgroundColor: "#E2B357",
                           color: "white",
+                          marginRight: "15px",
+                          width: "100px",
                         }}
                         onClick={handleCancel}
                       >
                         Hủy
+                      </Button>
+                      <Button
+                        style={{
+                          backgroundColor: "rgb(61, 139, 227)",
+                          color: "white",
+
+                          width: "100px",
+                        }}
+                        onClick={update}
+                      >
+                        Cập nhật
                       </Button>
                     </div>
                   </>
@@ -246,7 +257,7 @@ const CollapseMeeting = ({ items }) => {
                       readOnly
                     />
                   </Col>
-                  <Col span={8} style={{ marginTop: "15px" }}>
+                  <Col span={8}>
                     {" "}
                     <span className="title-main">Báo cáo:</span>
                     <TextArea
@@ -256,13 +267,12 @@ const CollapseMeeting = ({ items }) => {
                       readOnly
                     />
                   </Col>{" "}
+                </Row>
+                <Row style={{ marginTop: 8 }}>
                   <div style={{ marginBottom: 8 }}>
                     {" "}
                     <span className="title-main">Template mẫu báo cáo:</span>
                   </div>{" "}
-                </Row>
-
-                <Row style={{ marginTop: 8 }}>
                   <TextArea rows={5} value={template.descriptions} />
                 </Row>
               </div>

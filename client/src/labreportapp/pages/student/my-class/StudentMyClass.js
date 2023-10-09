@@ -208,7 +208,6 @@ const StudentMyClass = () => {
       classPeriod: classPeriod === "" ? null : parseInt(classPeriod),
       level: level,
     };
-    console.log(filter);
     StMyClassAPI.getAllClass(filter).then((response) => {
       setListClass(response.data.data);
       setLoading(false);
@@ -236,18 +235,15 @@ const StudentMyClass = () => {
         <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
         <hr />
         <div className="content_filter">
-          <Row gutter={16} style={{ marginBottom: "10px", paddingTop: "10px" }}>
-            <Col span={6}>
+          <Row gutter={24} style={{ padding: "5px 2% 0" }}>
+            <Col span={8}>
               <span>Học kỳ:</span>
-
               <br />
               <Select
                 showSearch
                 filterOption={filterOptions}
                 style={{
-                  width: "263px",
-                  minWidth: "120px",
-                  maxWidth: "263px",
+                  width: "100%",
                   margin: "6px 0 10px 0",
                 }}
                 onChange={(e) => {
@@ -264,7 +260,7 @@ const StudentMyClass = () => {
                   ))}
               </Select>
             </Col>
-            <Col span={14}>
+            <Col span={16}>
               <span>Hoạt động:</span>
 
               <br />
@@ -272,7 +268,7 @@ const StudentMyClass = () => {
                 showSearch
                 filterOption={filterOptions}
                 style={{
-                  width: "868px",
+                  width: "100%",
                   margin: "6px 0 10px 0",
                 }}
                 value={activity}
@@ -290,26 +286,24 @@ const StudentMyClass = () => {
               </Select>
             </Col>
           </Row>
-          <Row gutter={16} style={{ marginBottom: "0px", paddingTop: "10px" }}>
-            <Col span={6}>
+          <Row gutter={24} style={{ padding: "5px 2% 0" }}>
+            <Col span={8}>
               <span>Mã lớp:</span> <br />
               <Input
                 onChange={(e) => {
                   setCode(e.target.value);
                 }}
                 value={code}
-                style={{ width: "94%", marginTop: "6px" }}
+                style={{ marginTop: "6px" }}
                 type="text"
                 placeholder="Nhập mã lớp"
               />
             </Col>
-
-            <Col span={6}>
+            <Col span={8}>
               <span>Ca học:</span>
-
               <br />
               <Select
-                style={{ width: "94%", marginTop: "6px" }}
+                style={{ width: "100%", marginTop: "6px" }}
                 onChange={(e) => {
                   setClassPeriod(e);
                 }}
@@ -330,10 +324,10 @@ const StudentMyClass = () => {
                 <Option value="9">Ca 10</Option>
               </Select>
             </Col>
-            <Col span={6}>
+            <Col span={8}>
               <span>Level:</span> <br />
               <Select
-                style={{ width: "94%", marginTop: "6px" }}
+                style={{ width: "100%", marginTop: "6px" }}
                 onChange={(e) => {
                   setLevel(e);
                 }}
@@ -354,10 +348,14 @@ const StudentMyClass = () => {
           </Row>
         </div>
         <div className="box_btn_filter">
-          <Button className="btn_filter" onClick={handleClickFilter}>
+          <Button
+            className="btn_filter"
+            onClick={handleClickFilter}
+            style={{ marginRight: "15px" }}
+          >
             <FontAwesomeIcon
               icon={faFilterCircleDollar}
-              style={{ marginRight: 5 }}
+              style={{ marginRight: "8px" }}
             />{" "}
             Tìm kiếm
           </Button>
@@ -369,7 +367,7 @@ const StudentMyClass = () => {
             {" "}
             <FontAwesomeIcon
               icon={faChainSlash}
-              style={{ marginRight: 5 }}
+              style={{ marginRight: "8px" }}
             />{" "}
             Làm mới bộ lọc
           </Button>
@@ -390,28 +388,19 @@ const StudentMyClass = () => {
         {listClass.length > 0 && (
           <div style={{ marginTop: "25px" }}>
             {" "}
-            <Table dataSource={listClass} columns={columns} />
+            <Table dataSource={listClass} rowKey="id" columns={columns} />
           </div>
         )}
         {listClass.length === 0 && (
           <>
-            <p
-              style={{
-                textAlign: "center",
-                marginTop: "100px",
-                fontSize: "15px",
-                color: "red",
-              }}
-            >
-              <Empty
-                imageStyle={{ height: 60 }}
-                description={
-                  <span style={{ color: "#007bff" }}>
-                    Không tìm thấy lớp học nào !
-                  </span>
-                }
-              />{" "}
-            </p>
+            <Empty
+              imageStyle={{ height: 60 }}
+              description={
+                <span style={{ color: "#007bff" }}>
+                  Không tìm thấy lớp học nào !
+                </span>
+              }
+            />{" "}
           </>
         )}
       </div>

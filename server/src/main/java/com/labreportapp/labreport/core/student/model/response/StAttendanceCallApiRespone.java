@@ -27,4 +27,6 @@ public class StAttendanceCallApiRespone {
     private String teacherId;
 
     private Integer status;
+
+    private String notes;
 }

@@ -214,7 +214,7 @@ const StPostDetailClass = () => {
                       style={{
                         height: "auto",
                         margin: "5px 0 20px 0",
-                        width: "100%",
+                        width: "80%",
                       }}
                     >
                       {data.length > 0 ? (

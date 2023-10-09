@@ -1,5 +1,6 @@
 package com.labreportapp.labreport.core.student.service.impl;
 
+import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.core.common.response.SimpleResponse;
 import com.labreportapp.labreport.core.student.model.request.StFindAttendanceRequest;
 import com.labreportapp.labreport.core.student.model.response.StAttendanceCallApiRespone;
@@ -9,6 +10,9 @@ import com.labreportapp.labreport.core.student.service.StAttendanceService;
 import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -34,36 +38,38 @@ public class StAttendanceServiceImpl implements StAttendanceService {
     }
 
     @Override
-    public List<StAttendanceCallApiRespone> getAllAttendanceStudentById(StFindAttendanceRequest request) {
+    public PageableObject<StAttendanceCallApiRespone> getAllAttendanceStudentById(StFindAttendanceRequest request) {
         request.setIdStudent(labReportAppSession.getUserId());
-        List<StAttendanceRespone> stAttendanceResponeList = stAttendanceRepository.getAllAttendanceById(request);
-        List<String> idTeacherList = stAttendanceResponeList.stream()
+        Pageable pageable = PageRequest.of(request.getPage() - 1, request.getSize());
+        Page<StAttendanceRespone> stAttendanceResponeList = stAttendanceRepository.getPageAllAttendanceById(request, pageable);
+        List<String> idTeacherList = stAttendanceResponeList.getContent().stream()
                 .map(StAttendanceRespone::getTeacherId)
                 .distinct()
                 .collect(Collectors.toList());
         List<SimpleResponse> listRespone = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idTeacherList);
         List<StAttendanceCallApiRespone> listReturn = new ArrayList<>();
-        stAttendanceResponeList.forEach(reposi -> {
-            listRespone.forEach(respone -> {
-                System.out.println(reposi.getTeacherId());
-                System.out.println(respone.getId());
-                if (reposi.getTeacherId().equals(respone.getId())) {
-                    StAttendanceCallApiRespone obj = new StAttendanceCallApiRespone();
-                    obj.setId(respone.getId());
-                    obj.setName(respone.getName());
-                    obj.setUserName(respone.getUserName());
-                    obj.setEmail(respone.getEmail());
-                    obj.setStt(reposi.getStt());
-                    obj.setLesson(reposi.getLesson());
-                    obj.setMeetingDate(reposi.getMeetingDate());
-                    obj.setMeetingPeriod(reposi.getMeetingPeriod());
-                    obj.setTypeMeeting(reposi.getTypeMeeting());
-                    obj.setTeacherId(reposi.getTeacherId());
-                    obj.setStatus(reposi.getStatus());
-                    listReturn.add(obj);
-                }
-            });
+        Page<StAttendanceCallApiRespone> pageReturn = stAttendanceResponeList.map(reposi -> {
+            StAttendanceCallApiRespone obj = new StAttendanceCallApiRespone();
+            obj.setStt(reposi.getStt());
+            obj.setLesson(reposi.getLesson());
+            obj.setMeetingDate(reposi.getMeetingDate());
+            obj.setMeetingPeriod(reposi.getMeetingPeriod());
+            obj.setTypeMeeting(reposi.getTypeMeeting());
+            obj.setTeacherId(reposi.getTeacherId());
+            obj.setStatus(reposi.getStatus());
+            obj.setNotes(reposi.getNotes());
+            if (reposi.getTeacherId() != null && listRespone.size() != 0) {
+                listRespone.forEach(user -> {
+                    if (user.getId().equals(reposi.getTeacherId())) {
+                        obj.setId(user.getId());
+                        obj.setName(user.getName());
+                        obj.setUserName(user.getUserName());
+                        obj.setEmail(user.getEmail());
+                    }
+                });
+            }
+            return obj;
         });
-        return listReturn;
+        return new PageableObject<>(pageReturn);
     }
 }

@@ -56,7 +56,6 @@ public class TeAttendanceController {
         PageableObject<TeStudentAttendedDetailRespone> pageList = teAttendanceSevice.getAllAttendanceStudentById(req);
         return new ResponseObject(pageList);
     }
-
 }
 
 
