@@ -122,7 +122,7 @@ const CollapseTeam = ({ team, featchMeeting }) => {
       };
       await TeacherMeetingHomeWorkNoteAPI.updateHomeWorkAndNote(data).then(
         (response) => {
-          toast.success("Lưu thành công !");
+          toast.success("Cập nhật thành công !");
           setDescriptionsHomeWork(response.data.data.descriptionsHomeWork);
           setDescriptionsNote(response.data.data.descriptionsNote);
           setDescriptionsReport(response.data.data.descriptionsReport);
@@ -134,14 +134,7 @@ const CollapseTeam = ({ team, featchMeeting }) => {
       alert(error.message);
     }
   };
-  const convertLongToDate = (dateLong) => {
-    const date = new Date(dateLong);
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const year = date.getFullYear();
-    const format = `${day}/${month}/${year}`;
-    return format;
-  };
+
   return (
     <div
       className="teacher-collapse"

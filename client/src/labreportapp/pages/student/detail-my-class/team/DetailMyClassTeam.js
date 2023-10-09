@@ -8,10 +8,11 @@ import LoadingIndicator from "../../../../helper/loading";
 import { StMyTeamClassAPI } from "../../../../api/student/StTeamClass";
 import {
   faEye,
+  faRightFromBracket,
   faSignOut,
   faUserPlus,
 } from "@fortawesome/free-solid-svg-icons";
-import { Table, Button, Tooltip, Space, Popconfirm } from "antd";
+import { Table, Button, Tooltip, Space, Popconfirm, Tag } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { convertMeetingPeriodToNumber } from "../../../../helper/util.helper";
 import { convertLongToDate } from "../../../../helper/convertDate";
@@ -48,8 +49,8 @@ const DetailMyClassTeam = () => {
     });
   };
 
-  const checkStatusStudentInClass = () => {
-    StMyTeamClassAPI.checkStatusStudentInClass(id).then((response) => {
+  const checkStatusStudentInClass = async () => {
+    await StMyTeamClassAPI.checkStatusStudentInClass(id).then((response) => {
       setCheckStatus(response.data.data != null ? true : false);
       if (response.data.data != null) {
         setDetailTeam(response.data.data);
@@ -127,7 +128,7 @@ const DetailMyClassTeam = () => {
       key: "subjectName",
       render: (text, record, index) => {
         if (record.subjectName === "" || record.subjectName == null) {
-          return <span>Chưa có</span>;
+          return <Tag color="processing">Chưa có chủ đề</Tag>;
         }
         return <span>{record.subjectName}</span>;
       },
@@ -140,6 +141,7 @@ const DetailMyClassTeam = () => {
         <Space>
           <Tooltip title="Xem chi tiết nhóm">
             <FontAwesomeIcon
+              className="icon"
               icon={faEye}
               style={{ marginRight: "10px", cursor: "pointer" }}
               onClick={() => {
@@ -158,6 +160,7 @@ const DetailMyClassTeam = () => {
           >
             <Tooltip title="Tham gia nhóm">
               <FontAwesomeIcon
+                className="icon"
                 style={{ marginRight: "10px", cursor: "pointer" }}
                 icon={faUserPlus}
               />{" "}
@@ -355,16 +358,16 @@ const DetailMyClassTeam = () => {
                     <span className="group-info-item">
                       Tên nhóm: {detailTeam != null ? detailTeam.name : ""}{" "}
                     </span>
-                    <span
-                      className="group-info-item"
-                      style={{ marginTop: "13px", marginBottom: "15px" }}
-                    >
+                    <span className="group-info-item">
                       Tên đề tài:{" "}
-                      {detailTeam != null ? detailTeam.subjectName : ""}
+                      {detailTeam != null
+                        ? detailTeam.subjectName === ""
+                          ? "Chưa có chủ đề"
+                          : detailTeam.subjectName
+                        : "Chưa có chủ đề"}
                     </span>
                   </div>
                 </div>
-
                 <>
                   <div
                     style={{
@@ -422,6 +425,10 @@ const DetailMyClassTeam = () => {
                         style={{ backgroundColor: "#E2B357" }}
                         className="btnRoiNhom"
                       >
+                        <FontAwesomeIcon
+                          icon={faRightFromBracket}
+                          style={{ paddingRight: "8px" }}
+                        />
                         Rời nhóm
                       </Button>
                     </Popconfirm>

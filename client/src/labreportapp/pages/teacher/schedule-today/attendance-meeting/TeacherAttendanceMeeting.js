@@ -438,25 +438,25 @@ const TeacherAttendanceMeeting = () => {
               <span
                 style={{
                   paddingTop: "15px",
-                  fontWeight: 500,
+
                   color: "red",
                 }}
               >
                 Mặc định trạng thái điểm danh của sinh viên là "Có mặt". Giảng
-                viên chuyển từ "Có mặt" thành "Vắng mặt" nếu sinh viên vi phạm
-                một trong những nội quy như ra ngoài không lý do, mất trật
-                tự,...
+                viên chuyển từ <b>"Có mặt"</b> thành <b>"Vắng mặt"</b> nếu sinh
+                viên vi phạm một trong những nội quy như ra ngoài không lý do,
+                mất trật tự,...
               </span>
               <br />
               <span
                 style={{
                   paddingTop: "15px",
-                  fontWeight: 500,
+
                   color: "red",
                 }}
               >
-                Lưu ý: Nếu trưởng nhóm "Vắng mặt", quyền trưởng nhóm của sinh
-                viên sẽ được thay đổi ngẫu nhiên cho thành viên trong nhóm.
+                Lưu ý: Nếu trưởng nhóm <b>"Vắng mặt"</b>, quyền trưởng nhóm của
+                sinh viên sẽ được thay đổi ngẫu nhiên cho thành viên trong nhóm.
               </span>
             </div>
           </div>

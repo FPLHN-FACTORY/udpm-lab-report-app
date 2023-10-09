@@ -70,7 +70,10 @@ const StMeetingMyClass = () => {
 
   return (
     <>
-      <div style={{ paddingTop: "35px", minHeight: "580px" }}>
+      <div
+        className="st-meeting"
+        style={{ paddingTop: "35px", minHeight: "580px" }}
+      >
         {!loading && <LoadingIndicator />}
         <div className="title-student-my-class">
           <span style={{ paddingLeft: "20px" }}>

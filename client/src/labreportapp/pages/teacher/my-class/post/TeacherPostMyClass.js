@@ -50,6 +50,7 @@ import { useNavigate } from "react-router-dom";
 
 const TeacherPostMyClass = () => {
   const dispatch = useAppDispatch();
+  const userRedux = useAppSelector(GetUserCurrent);
   dispatch(SetTTrueToggle());
   const { idClass } = useParams();
   const [loading, setLoading] = useState(false);
@@ -203,7 +204,6 @@ const TeacherPostMyClass = () => {
   };
   const classDetail = useAppSelector(GetClass);
   const data = useAppSelector(GetPost);
-  const userRedux = useAppSelector(GetUserCurrent);
 
   const imageUrl =
     "https://png.pngtree.com/background/20220714/original/pngtree-hand-drawn-blackboard-background-at-the-beginning-of-school-picture-image_1620722.jpg";

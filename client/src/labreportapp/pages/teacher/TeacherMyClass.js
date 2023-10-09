@@ -18,7 +18,6 @@ import {
   Pagination,
   Tooltip,
   Empty,
-  message,
 } from "antd";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -397,14 +396,10 @@ const TeacherMyClass = () => {
             </Link>
             <hr />
           </div>
-          <div className="title-box-two" style={{ paddingRight: "30px" }}>
-            <Row
-              gutter={24}
-              style={{ marginBottom: "15px", paddingTop: "20px" }}
-            >
+          <div className="title-box-two">
+            <Row gutter={24} style={{ padding: "5px 2% 0" }}>
               <Col span={8}>
                 <span>Học kỳ</span>
-
                 <br />
                 {listSemester.length > 0 ? (
                   <Select
@@ -442,7 +437,6 @@ const TeacherMyClass = () => {
               </Col>
               <Col span={16}>
                 <span>Hoạt động</span>
-
                 <br />
                 {listActivity.length > 0 ? (
                   <Select
@@ -473,10 +467,7 @@ const TeacherMyClass = () => {
                 )}
               </Col>
             </Row>
-            <Row
-              gutter={24}
-              style={{ marginBottom: "15px", paddingTop: "20px" }}
-            >
+            <Row gutter={24} style={{ padding: "5px 2% 0" }}>
               <Col span={8}>
                 <span>Mã lớp</span>
 
@@ -540,7 +531,7 @@ const TeacherMyClass = () => {
                 )}
               </Col>
             </Row>
-            <div className="box_btn_filter">
+            <div className="box-btn">
               <Button
                 className="btn_filter"
                 onClick={handleSearch}

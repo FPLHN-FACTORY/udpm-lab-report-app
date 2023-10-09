@@ -1,9 +1,9 @@
 import { useParams } from "react-router-dom";
 import "./style-attendance-detail-class.css";
 import { Link } from "react-router-dom";
-import { ControlOutlined } from "@ant-design/icons";
+import { ControlOutlined, SearchOutlined } from "@ant-design/icons";
 import { useAppDispatch } from "../../../../app/hook";
-import { Table } from "antd";
+import { Button, Input, Pagination, Table } from "antd";
 import { useEffect, useState } from "react";
 import { StAttendanceAPI } from "../../../../api/student/StAttendanceAPI";
 import { convertMeetingPeriodToTime } from "../../../../helper/util.helper";
@@ -15,11 +15,38 @@ const StAttendanceDetailClass = () => {
   dispatch(SetTTrueToggle());
   const { id } = useParams();
   const [listAttendance, setListAttendance] = useState([]);
-  const [attendanceRequest, setAttendanceRequest] = useState({
-    idClass: id,
-  });
-  const [isLoading, setIsLoading] = useState(false);
 
+  const [currentDetail, setCurrentDetail] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  useEffect(() => {
+    document.title = "Bảng điều khiển - Điểm danh";
+    setIsLoading(true);
+  }, [id]);
+
+  useEffect(() => {
+    fetchData(id);
+  }, [currentDetail]);
+
+  const fetchData = async (id) => {
+    setIsLoading(true);
+    try {
+      let dataFind = {
+        idClass: id,
+        page: currentDetail,
+        size: 8,
+      };
+      await StAttendanceAPI.getAllAttendanceById(dataFind).then((respone) => {
+        setListAttendance(respone.data.data.data);
+        console.log(respone.data.data.data);
+        setTotalPages(respone.data.data.totalPages);
+        setIsLoading(false);
+      });
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error);
+    }
+  };
   const convertLongToDate = (dateLong) => {
     const date = new Date(dateLong);
     const format = `${date.getDate()}/${
@@ -30,15 +57,54 @@ const StAttendanceDetailClass = () => {
 
   const columns = [
     {
-      title: "STT",
+      title: "#",
       dataIndex: "stt",
       key: "stt",
-      render: (text, record, index) => <>{index + 1}</>,
     },
     {
       title: "Buổi học",
       dataIndex: "lesson",
-      key: "name",
+      key: "lesson",
+      sorter: (a, b) => a.lesson.localeCompare(b.lesson),
+      filterDropdown: ({
+        setSelectedKeys,
+        selectedKeys,
+        confirm,
+        clearFilters,
+      }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="Tìm kiếm"
+            value={selectedKeys[0]}
+            onChange={(e) =>
+              setSelectedKeys(e.target.value ? [e.target.value] : [])
+            }
+            onPressEnter={confirm}
+            style={{ width: 188, marginBottom: 8, display: "block" }}
+          />
+          <Button
+            type="primary"
+            className="btn_search_member"
+            onClick={confirm}
+            size="small"
+            style={{ width: 90, marginRight: 8 }}
+          >
+            Tìm
+          </Button>
+          <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
+            Đặt lại
+          </Button>
+        </div>
+      ),
+      filterIcon: (filtered) => (
+        <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+      ),
+      onFilter: (value, record) => {
+        if (record.lesson === null) {
+          return false;
+        }
+        return record.lesson.toLowerCase().includes(value.toLowerCase());
+      },
     },
     {
       title: "Ngày học",
@@ -51,6 +117,7 @@ const StAttendanceDetailClass = () => {
       dataIndex: "meetingPeriod",
       key: "meetingPeriod",
       render: (meetingPeriod) => <span>{meetingPeriod + 1}</span>,
+      sorter: (a, b) => a.meetingPeriod - b.meetingPeriod,
     },
     {
       title: "Thời gian",
@@ -64,6 +131,45 @@ const StAttendanceDetailClass = () => {
       title: "Giảng viên",
       dataIndex: "userName",
       key: "userName",
+      filterDropdown: ({
+        setSelectedKeys,
+        selectedKeys,
+        confirm,
+        clearFilters,
+      }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="Tìm kiếm"
+            value={selectedKeys[0]}
+            onChange={(e) =>
+              setSelectedKeys(e.target.value ? [e.target.value] : [])
+            }
+            onPressEnter={confirm}
+            style={{ width: 188, marginBottom: 8, display: "block" }}
+          />
+          <Button
+            type="primary"
+            className="btn_search_member"
+            onClick={confirm}
+            size="small"
+            style={{ width: 90, marginRight: 8 }}
+          >
+            Tìm
+          </Button>
+          <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
+            Đặt lại
+          </Button>
+        </div>
+      ),
+      filterIcon: (filtered) => (
+        <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+      ),
+      onFilter: (value, record) => {
+        if (record.userName === null) {
+          return "";
+        }
+        return record.userName.toLowerCase().includes(value.toLowerCase());
+      },
     },
     {
       title: "Hình thức",
@@ -71,6 +177,11 @@ const StAttendanceDetailClass = () => {
       key: "typeMeeting",
       render: (typeMeeting) =>
         typeMeeting === 0 ? <span>Online</span> : <span>Offline</span>,
+    },
+    {
+      title: "Ghi chú",
+      dataIndex: "notes",
+      key: "notes",
     },
     {
       title: "Trạng thái",
@@ -89,26 +200,6 @@ const StAttendanceDetailClass = () => {
       ),
     },
   ];
-
-  useEffect(() => {
-    document.title = "Bảng điều khiển - Điểm danh";
-    setIsLoading(true);
-    fetchData(id);
-  }, [id]);
-
-  const fetchData = async (id) => {
-    try {
-      await StAttendanceAPI.getAllAttendanceById(attendanceRequest).then(
-        (respone) => {
-          setListAttendance(respone.data);
-          setIsLoading(false);
-        }
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
     <div style={{ paddingTop: "35px" }}>
       {isLoading && <LoadingIndicator />}
@@ -201,8 +292,18 @@ const StAttendanceDetailClass = () => {
               dataSource={listAttendance}
               columns={columns}
               key={"key"}
-              pagination={{ pageSize: 8 }}
+              pagination={false}
             />
+            <div className="pagination-box" style={{ alignContent: "center" }}>
+              <Pagination
+                simple
+                current={currentDetail}
+                onChange={(value) => {
+                  setCurrentDetail(value);
+                }}
+                total={totalPages * 10}
+              />
+            </div>
           </div>
         </div>
       </div>

@@ -27,16 +27,13 @@ const StPointDetailClass = () => {
     StPointDetailAPI.getPointDetail(id)
       .then((response) => {
         if (response.data.data) {
-          // Kiểm tra nếu có dữ liệu điểm
           setPointStudent(response.data.data);
           setIsLoading(false);
         } else {
-          // Nếu không có điểm, cập nhật thông báo
           setNoPointMessage("Bạn chưa có điểm.");
         }
       })
       .catch((error) => {
-        // Xử lý lỗi nếu có
         console.error("Lỗi khi tải dữ liệu điểm:", error);
       });
   };

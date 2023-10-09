@@ -45,6 +45,7 @@ public interface StMyClassRepository extends ClassRepository {
              (:#{#req.idClass} IS NULL
              OR :#{#req.idClass} = ''
              OR a.class_id = :#{#req.idClass})
+              ORDER BY a.name ASC
             """, nativeQuery = true)
     List<StMyTeamInClassResponse> getTeamInClass(@Param("req") FindTeamByIdClass req);
 
@@ -52,6 +53,7 @@ public interface StMyClassRepository extends ClassRepository {
             SELECT a.id, a.student_id , a.class_id , a.team_id , a.email , a.role ,a.status FROM student_classes a
             JOIN team b ON b.id = a.team_id
             WHERE a.class_id = :#{#req.idClass} AND a.team_id = :#{#req.idTeam}
+            ORDER BY b.name ASC
             """, nativeQuery = true)
     List<StMyStudentTeamResponse> getStudentInMyTeam(@Param("req") FindTeamClassRequest req);
 

@@ -32,8 +32,7 @@
 .box-four {
   box-shadow: 0px 0px 20px 1px rgba(148, 148, 148, 0.3);
   border-radius: 5px;
-  padding: 25px;
-  padding-top: 5px;
+  margin: 25px;
 }
 .box-four-son {
   background-color: rgb(255, 255, 255);
@@ -46,12 +45,12 @@
   box-shadow: 0px 0px 20px 1px rgba(148, 148, 148, 0.3);
   border-radius: 5px;
   height: auto;
-  padding: 25px;
+  margin: 25px;
 }
 
 .box-three-son {
   background-color: rgb(255, 255, 255);
-  padding: 20px;
+  padding: 10px;
   height: auto;
   box-shadow: 0px 0px 20px 1px rgba(148, 148, 148, 0.3);
   border-radius: 5px;
@@ -82,12 +81,17 @@
 }
 
 .title-box-two {
-  padding-left: 20px;
+  padding: 5px;
 }
 
 .box_btn_filter {
   text-align: center;
-  padding: 5px 0 5px 0;
+  padding-top: 5px;
+}
+.box-btn {
+  text-align: center;
+  padding-top: 15px;
+  padding: 15px 10px 15px;
 }
 
 .btn_filter {
