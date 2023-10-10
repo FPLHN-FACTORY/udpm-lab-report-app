@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./style-point.css";
-import { faList, faMarker } from "@fortawesome/free-solid-svg-icons";
+import { faList, faMarker, faSchool } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { Empty, Select, Table } from "antd";
 import { Option } from "antd/es/mentions";
@@ -110,7 +110,7 @@ const StPoint = () => {
             </Select>
           </div>
           <span style={{ marginLeft: "3px", fontSize: "13.5px" }}>
-            Lựa chọn học kỳ để hiện thị chi tiết điểm
+            Lựa chọn học kỳ để xem chi tiết điểm
           </span>
         </div>
       </div>
@@ -128,7 +128,7 @@ const StPoint = () => {
                 }}
               >
                 <span className="header-icon">
-                  <FontAwesomeIcon icon={faList} />
+                  <FontAwesomeIcon icon={faSchool} />
                 </span>
                 <span className="header-title" style={{ marginLeft: "12px" }}>
                   Lớp {item.classCode}
@@ -145,6 +145,17 @@ const StPoint = () => {
                 dataSource={item.points}
                 key="stt"
                 pagination={false}
+                locale={{
+                  emptyText: (
+                    <Empty
+                      imageStyle={{ height: 60 }}
+                      style={{
+                        padding: "20px 0px 20px 0",
+                      }}
+                      description={<span>Không có dữ liệu</span>}
+                    />
+                  ),
+                }}
               />
             </div>
           </>
@@ -162,23 +173,10 @@ const StPoint = () => {
           }}
         >
           <>
-            <p
-              style={{
-                textAlign: "center",
-                marginTop: "100px",
-                fontSize: "15px",
-                color: "red",
-              }}
-            >
-              <Empty
-                imageStyle={{ height: 60 }}
-                description={
-                  <span style={{ color: "#007bff" }}>
-                    Không tìm thấy lớp học nào !
-                  </span>
-                }
-              />{" "}
-            </p>
+            <Empty
+              imageStyle={{ height: 60 }}
+              description={<span>Không có dữ liệu</span>}
+            />
           </>
         </div>
       )}

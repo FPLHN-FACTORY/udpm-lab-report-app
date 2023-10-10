@@ -144,7 +144,7 @@ const ModalDetailTeam = ({ id, visible, onCancel, idClass }) => {
                 ) : (
                   <Empty
                     imageStyle={{ height: 60 }}
-                    description={<span>Không có thành viên</span>}
+                    description={<span>Không có dữ liệu</span>}
                   />
                 )}
               </>
@@ -152,9 +152,9 @@ const ModalDetailTeam = ({ id, visible, onCancel, idClass }) => {
             <div style={{ textAlign: "right" }}>
               <div style={{ paddingTop: "15px" }}>
                 <Button
+                  className="btn_clean"
                   style={{
-                    backgroundColor: "red",
-                    color: "white",
+                    width: "80px",
                   }}
                   onClick={onCancel}
                 >

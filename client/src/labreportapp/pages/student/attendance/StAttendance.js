@@ -1,27 +1,10 @@
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./style-attendance.css";
-import {
-  Button,
-  Col,
-  Input,
-  Row,
-  Select,
-  Table,
-  Tooltip,
-  Pagination,
-  Empty,
-} from "antd";
-import {
-  faAtlas,
-  faLineChart,
-  faRegistered,
-  faList,
-} from "@fortawesome/free-solid-svg-icons";
+import { Select, Table, Empty } from "antd";
+import { faAtlas, faList, faSchool } from "@fortawesome/free-solid-svg-icons";
 import { StMyClassAPI } from "../../../api/student/StMyClassAPI";
 import { StAttendenceAPI } from "../../../api/student/StAttendenceAllAPI";
-import axios from "axios";
-import { green } from "@ant-design/colors";
 import { convertMeetingPeriodToTime } from "../../../helper/util.helper";
 import LoadingIndicator from "../../../helper/loading";
 
@@ -69,7 +52,7 @@ const StAttendance = () => {
 
   const columns = [
     {
-      title: "STT",
+      title: "#",
       dataIndex: "stt",
       sorter: (a, b) => a.stt - b.stt,
       key: "stt",
@@ -196,7 +179,7 @@ const StAttendance = () => {
                 }}
               >
                 <span className="header-icon">
-                  <FontAwesomeIcon icon={faList} />
+                  <FontAwesomeIcon icon={faSchool} />
                 </span>
                 <span className="header-title" style={{ marginLeft: "12px" }}>
                   Lớp {item.classCode}
@@ -229,7 +212,7 @@ const StAttendance = () => {
                         style={{
                           padding: "20px 0px 20px 0",
                         }}
-                        description={<span>Không có thông tin buổi học</span>}
+                        description={<span>Không có dữ liệu</span>}
                       />
                     ),
                   }}
@@ -251,23 +234,10 @@ const StAttendance = () => {
           }}
         >
           <>
-            <p
-              style={{
-                textAlign: "center",
-                marginTop: "100px",
-                fontSize: "15px",
-                color: "red",
-              }}
-            >
-              <Empty
-                imageStyle={{ height: 60 }}
-                description={
-                  <span style={{ color: "#007bff" }}>
-                    Không tìm thấy lớp học nào !
-                  </span>
-                }
-              />{" "}
-            </p>
+            <Empty
+              imageStyle={{ height: 60 }}
+              description={" Không có dữ liệu"}
+            />
           </>
         </div>
       )}

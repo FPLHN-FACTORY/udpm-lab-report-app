@@ -1,9 +1,17 @@
 .app {
-  font-family: "Open Sans", sans-serif;
+  /* font-family: "Open Sans", sans-serif; */
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
-
+.App span {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+.App td {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+.App th {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
 body {
-  /* CSS cho thanh cuộn dọc */
   scrollbar-width: thin;
   scrollbar-color: rgba(9, 30, 66, 0.3) transparent;
 }

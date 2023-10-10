@@ -185,7 +185,11 @@ const LevelManagement = () => {
           />
         </div>
         <div className="box_btn_filter">
-          <Button className="btn_filter" onClick={buttonSearch}>
+          <Button
+            className="btn_filter"
+            onClick={buttonSearch}
+            style={{ marginRight: "15px" }}
+          >
             <FontAwesomeIcon
               icon={faFilterCircleDollar}
               style={{ marginRight: 5 }}

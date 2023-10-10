@@ -86,8 +86,6 @@ public class StClassServiceImpl implements StClassService {
     @Override
     @Synchronized
     public StClassCustomResponse joinClass(final StClassRequest req) {
-        //Note: Check student exists and conditions for entering class then =>
-
         Optional<Class> findClass = stClassRepository.findById(req.getIdClass());
         if (!findClass.isPresent()) {
             throw new RestApiException(Message.CLASS_NOT_EXISTS);

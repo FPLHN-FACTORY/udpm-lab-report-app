@@ -2,7 +2,6 @@ import "./style-student-schedule.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFilter,
-  faCalendar,
   faCalendarAlt,
   faChainSlash,
   faFilterCircleDollar,
@@ -16,12 +15,11 @@ import {
   SetSchedule,
   GetSchedule,
 } from "../../../app/student/StSchedule.reduce";
-import { toast } from "react-toastify";
 import { StScheduleAPI } from "../../../api/student/StScheduleAPI";
-import moment from "moment";
 import React, { useCallback } from "react";
 import LoadingIndicator from "../../../helper/loading";
 import { convertMeetingPeriodToTime } from "../../../helper/util.helper";
+import { SearchOutlined } from "@ant-design/icons";
 
 const StudentSchedule = () => {
   const [current, setCurrent] = useState(1);
@@ -61,6 +59,47 @@ const StudentSchedule = () => {
       dataIndex: "stt",
       key: "stt",
       render: (text, record, index) => (current - 1) * 10 + index + 1,
+    },
+    {
+      title: "Lớp",
+      dataIndex: "classCode",
+      key: "classCode",
+      sorter: (a, b) => a.classCode.localeCompare(b.classCode),
+      filterDropdown: ({
+        setSelectedKeys,
+        selectedKeys,
+        confirm,
+        clearFilters,
+      }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="Tìm kiếm"
+            value={selectedKeys[0]}
+            onChange={(e) =>
+              setSelectedKeys(e.target.value ? [e.target.value] : [])
+            }
+            onPressEnter={confirm}
+            style={{ width: 188, marginBottom: 8, display: "block" }}
+          />
+          <Button
+            type="primary"
+            className="btn_search_member"
+            onClick={confirm}
+            size="small"
+            style={{ width: 90, marginRight: 8 }}
+          >
+            Tìm
+          </Button>
+          <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
+            Đặt lại
+          </Button>
+        </div>
+      ),
+      filterIcon: (filtered) => (
+        <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+      ),
+      onFilter: (value, record) =>
+        record.classCode.toLowerCase().includes(value.toLowerCase()),
     },
     {
       title: "Buổi học",
@@ -114,12 +153,6 @@ const StudentSchedule = () => {
         <span>{record.typeMeeting === 0 ? "Online" : "Offline"}</span>
       ),
     },
-    {
-      title: "Lớp",
-      dataIndex: "classCode",
-      key: "classCode",
-      sorter: (a, b) => a.classCode.localeCompare(b.classCode),
-    },
   ];
   const buttonSearch = () => {
     fetchData();
@@ -127,7 +160,7 @@ const StudentSchedule = () => {
   };
 
   const clearData = () => {
-    setSearchTime("");
+    setSearchTime("7");
   };
 
   const handleOptionChange = (value) => {
@@ -135,7 +168,7 @@ const StudentSchedule = () => {
   };
 
   return (
-    <div className="shedule" style={{ paddingTop: 50 }}>
+    <div className="shedule" style={{ paddingTop: "50px" }}>
       {loading && <LoadingIndicator />}
       <div className="title_activity_management">
         {" "}
@@ -143,7 +176,7 @@ const StudentSchedule = () => {
         <span style={{ marginLeft: "10px" }}>Lịch học</span>
       </div>
       <div className="filter-semester">
-        <FontAwesomeIcon icon={faFilter} style={{ fontSize: 20 }} />{" "}
+        <FontAwesomeIcon icon={faFilter} style={{ fontSize: "20px" }} />{" "}
         <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
         <hr />
         <div className="title__search">
@@ -165,11 +198,15 @@ const StudentSchedule = () => {
             <Option value="-90">90 ngày trước</Option>
           </Select>
         </div>
-        <div className="box_btn_filter">
-          <Button className="btn_filter" onClick={buttonSearch}>
+        <div className="box_btn_filter_st">
+          <Button
+            className="btn_filter"
+            onClick={buttonSearch}
+            style={{ marginRight: "15px" }}
+          >
             <FontAwesomeIcon
               icon={faFilterCircleDollar}
-              style={{ marginRight: 5 }}
+              style={{ marginRight: "5px" }}
             />{" "}
             Tìm kiếm
           </Button>
@@ -178,12 +215,14 @@ const StudentSchedule = () => {
             style={{ backgroundColor: "rgb(38, 144, 214)" }}
             onClick={clearData}
           >
-            <FontAwesomeIcon icon={faChainSlash} style={{ marginRight: 5 }} />{" "}
+            <FontAwesomeIcon
+              icon={faChainSlash}
+              style={{ marginRight: "5px" }}
+            />{" "}
             Làm mới bộ lọc
           </Button>
         </div>
       </div>
-
       <div
         className="table__category_custom"
         style={{ marginTop: "30px", padding: "20px" }}

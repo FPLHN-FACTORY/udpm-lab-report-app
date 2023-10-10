@@ -202,7 +202,6 @@ public class StTeamClassServiceImpl implements StTeamClassService {
     }
 
     @Override
-    // detail class có idTeacher, call api identity để lấy thêm name, username của teacher
     public StDetailClassCustomResponse detailClass(String idClass) {
         Class classFind = repository.findById(idClass).get();
 

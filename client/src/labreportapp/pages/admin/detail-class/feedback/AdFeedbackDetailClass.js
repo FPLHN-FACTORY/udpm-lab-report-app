@@ -24,8 +24,7 @@ const AdFeedbackDetailClass = () => {
         setClassDetail(responese.data.data);
         document.title = "Danh sách feedback - " + responese.data.data.code;
       });
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -245,7 +244,13 @@ const AdFeedbackDetailClass = () => {
                   float: "right",
                 }}
               >
-                <span style={{ fontSize: "14px", padding: "10px" }}>
+                <span
+                  style={{
+                    fontSize: "14px",
+                    padding: "15px",
+                    fontWeight: 500,
+                  }}
+                >
                   {classDetail != null ? classDetail.code : ""}
                 </span>
               </div>

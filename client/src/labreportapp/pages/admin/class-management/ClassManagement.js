@@ -461,7 +461,7 @@ const ClassManagement = () => {
         <Row>
           <Col span={12} style={{ padding: "10px" }}>
             <div>
-              <span>Học kỳ:</span>
+              <span>Học kỳ</span>
               <br />
               <Select
                 showSearch
@@ -484,7 +484,7 @@ const ClassManagement = () => {
           </Col>
           <Col span={12} style={{ padding: "10px" }}>
             <div className="selectSearch3">
-              <span>Hoạt Động:</span>
+              <span>Hoạt động</span>
               <br />
               <Select
                 showSearch
@@ -511,7 +511,7 @@ const ClassManagement = () => {
         <Row>
           <Col span={12} style={{ padding: "10px" }}>
             <div>
-              <span>Ca học dự kiến:</span>
+              <span>Ca học dự kiến</span>
               <br />
               <Select
                 showSearch
@@ -533,7 +533,7 @@ const ClassManagement = () => {
           </Col>
           <Col span={12} style={{ padding: "10px" }}>
             <div>
-              <span>Giảng viên:</span>
+              <span>Giảng viên</span>
               <br />
               <Select
                 showSearch
@@ -556,7 +556,7 @@ const ClassManagement = () => {
         <Row>
           <Col span={12} style={{ padding: "10px" }}>
             <div className="inputCode">
-              <span>Mã Lớp:</span>
+              <span>Mã Lớp</span>
               <br />
               <Input
                 placeholder="Nhập mã lớp"
@@ -568,7 +568,7 @@ const ClassManagement = () => {
           </Col>
           <Col span={12} style={{ padding: "10px" }}>
             <div className="inputCode">
-              <span>Level:</span>
+              <span>Cấp độ</span>
               <br />
               <Select
                 onChange={(e) => {
@@ -591,7 +591,7 @@ const ClassManagement = () => {
           </Col>
           <Col span={12} style={{ padding: "10px" }}>
             <div>
-              <span>Sĩ số lớp:</span>
+              <span>Sĩ số lớp</span>
               <br />
               <Input
                 type="number"
@@ -605,7 +605,7 @@ const ClassManagement = () => {
           </Col>
           <Col span={12} style={{ padding: "10px" }}>
             <div>
-              <span>Quyền giảng viên chỉnh sửa:</span>
+              <span>Quyền giảng viên chỉnh sửa</span>
               <br />
               <Select
                 value={statusTeacherEdit}
@@ -622,7 +622,7 @@ const ClassManagement = () => {
           </Col>
           <Col span={24} style={{ padding: "10px" }}>
             <div>
-              <span>Trạng thái:</span>
+              <span>Trạng thái</span>
               <br />
               <Select
                 value={statusClass}
@@ -639,7 +639,11 @@ const ClassManagement = () => {
           </Col>
         </Row>
         <div className="box_btn_filter" style={{ paddingBottom: "15px" }}>
-          <Button className="btn_filter" onClick={handleSearchAllByFilter}>
+          <Button
+            className="btn_filter"
+            onClick={handleSearchAllByFilter}
+            style={{ marginRight: "15px" }}
+          >
             <FontAwesomeIcon
               icon={faFilterCircleDollar}
               style={{ marginRight: "5px" }}
@@ -811,11 +815,7 @@ const ClassManagement = () => {
                 >
                   <Empty
                     imageStyle={{ height: 60 }}
-                    description={
-                      <span style={{ color: "#007bff" }}>
-                        Không tìm thấy lớp học nào !
-                      </span>
-                    }
+                    description={<span>Không tìm thấy lớp học</span>}
                   />{" "}
                 </p>
               </>

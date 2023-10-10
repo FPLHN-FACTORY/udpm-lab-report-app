@@ -505,7 +505,7 @@ const TeacherMyClass = () => {
                 </Select>
               </Col>
               <Col span={8}>
-                <span>Level</span>
+                <span>Cấp độ</span>
                 <br />
                 {listLevel.length > 0 ? (
                   <Select

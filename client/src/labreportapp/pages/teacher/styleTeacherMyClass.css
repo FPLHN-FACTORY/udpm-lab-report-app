@@ -100,6 +100,11 @@
   margin-right: 15px;
 }
 
+.btn_clean {
+  background-color: rgb(38, 144, 214);
+  color: white;
+  margin-right: 5px;
+}
 .btn_filter:hover {
   background-color: #e1af4b !important;
   color: white !important;
@@ -107,12 +112,6 @@
   border-color: transparent !important;
   outline: #e2ac3f !important;
   box-shadow: 0 0 10px rgb(228, 227, 227);
-}
-
-.btn_clean {
-  background-color: rgb(38, 144, 214);
-  color: white;
-  margin-right: 5px;
 }
 
 .btn_clean:hover {

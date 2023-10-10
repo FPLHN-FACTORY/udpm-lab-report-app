@@ -232,12 +232,15 @@ const TeacherAttendanceClass = () => {
                   <span
                     style={{
                       paddingTop: "15px",
-                      fontWeight: 500,
                       color: "red",
                     }}
                   >
-                    Lưu ý: Điểm danh có 3 trạng thái chính là Có mặt(P), Vắng
-                    mặt(A) và Chưa điểm danh (-)
+                    Lưu ý: Điểm danh có 3 trạng thái chính là{" "}
+                    <span style={{ fontWeight: "bold" }}>"Có mặt(P)"</span>,{" "}
+                    <span style={{ fontWeight: "bold" }}>"Vắng mặt(A)"</span> và{" "}
+                    <span style={{ fontWeight: "bold" }}>
+                      " Chưa điểm danh (-)"
+                    </span>
                   </span>
                   <br />
                 </div>
@@ -259,9 +262,10 @@ const TeacherAttendanceClass = () => {
                       {column.length > 0 &&
                         column.map((item, index) => (
                           <th className="column-AP-teacher" key={index}>
-                            {convertLongToDate(item.meetingDate)}
-                            <br />
-                            <span>Ca {item.meetingPeriod + 1}</span>
+                            <span style={{ whiteSpace: "nowrap" }}>
+                              {" "}
+                              {convertLongToDate(item.meetingDate)}
+                            </span>
                             <br />
                             <span>{item.nameMeeting}</span>
                           </th>

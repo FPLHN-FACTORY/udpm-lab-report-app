@@ -274,6 +274,7 @@ const ModalCreateMeetingAuto = ({ visible, onCancel, fetchData }) => {
                 style={{
                   backgroundColor: "red",
                   color: "white",
+                  width: "88px",
                 }}
                 onClick={onCancel}
               >

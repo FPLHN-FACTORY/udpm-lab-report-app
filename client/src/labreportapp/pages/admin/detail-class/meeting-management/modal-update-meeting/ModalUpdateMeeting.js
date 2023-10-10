@@ -7,7 +7,10 @@ import { useAppDispatch, useAppSelector } from "../../../../../app/hook";
 import { toast } from "react-toastify";
 import { MeetingManagementAPI } from "../../../../../api/admin/meeting-management/MeetingManagementAPI";
 import { UpdateMeeting } from "../../../../../app/admin/AdMeetingManagement.reducer";
-import { convertMeetingPeriodToNumber } from "../../../../../helper/util.helper";
+import {
+  convertMeetingPeriodToNumber,
+  convertMeetingPeriodToTime,
+} from "../../../../../helper/util.helper";
 import { GetAdTeacher } from "../../../../../app/admin/AdTeacherSlice.reducer";
 
 const { Option } = Select;
@@ -125,16 +128,36 @@ const ModalUpdateMeeting = ({ item, visible, onCancel }) => {
                   }}
                   style={{ width: "100%" }}
                 >
-                  <Option value="0">Ca 1</Option>
-                  <Option value="1">Ca 2</Option>
-                  <Option value="2">Ca 3</Option>
-                  <Option value="3">Ca 4</Option>
-                  <Option value="4">Ca 5</Option>
-                  <Option value="5">Ca 6</Option>
-                  <Option value="6">Ca 7</Option>
-                  <Option value="7">Ca 8</Option>
-                  <Option value="8">Ca 9</Option>
-                  <Option value="9">Ca 10</Option>
+                  <Option value="0">
+                    Ca 1 ({"" + convertMeetingPeriodToTime(0)})
+                  </Option>
+                  <Option value="1">
+                    Ca 2 ({"" + convertMeetingPeriodToTime(1)})
+                  </Option>
+                  <Option value="2">
+                    Ca 3 ({"" + convertMeetingPeriodToTime(2)})
+                  </Option>
+                  <Option value="3">
+                    Ca 4 ({"" + convertMeetingPeriodToTime(3)})
+                  </Option>
+                  <Option value="4">
+                    Ca 5 ({"" + convertMeetingPeriodToTime(4)})
+                  </Option>
+                  <Option value="5">
+                    Ca 6 ({"" + convertMeetingPeriodToTime(5)})
+                  </Option>
+                  <Option value="6">
+                    Ca 7 ({"" + convertMeetingPeriodToTime(6)})
+                  </Option>
+                  <Option value="7">
+                    Ca 8 ({"" + convertMeetingPeriodToTime(7)})
+                  </Option>
+                  <Option value="8">
+                    Ca 9 ({"" + convertMeetingPeriodToTime(8)})
+                  </Option>
+                  <Option value="9">
+                    Ca 10 ({"" + convertMeetingPeriodToTime(9)})
+                  </Option>
                 </Select>
               </Col>
               <Col span={12} style={{ padding: "5px" }}>
@@ -176,7 +199,7 @@ const ModalUpdateMeeting = ({ item, visible, onCancel }) => {
 
                   {teacherDataAll.map((teacher) => (
                     <Option key={teacher.id} value={teacher.id}>
-                    {teacher.userName + " - " + teacher.name}
+                      {teacher.userName + " - " + teacher.name}
                     </Option>
                   ))}
                 </Select>{" "}
@@ -202,6 +225,7 @@ const ModalUpdateMeeting = ({ item, visible, onCancel }) => {
                   marginRight: "5px",
                   backgroundColor: "rgb(61, 139, 227)",
                   color: "white",
+                  width: "88px",
                 }}
                 onClick={update}
               >
@@ -211,6 +235,7 @@ const ModalUpdateMeeting = ({ item, visible, onCancel }) => {
                 style={{
                   backgroundColor: "red",
                   color: "white",
+                  width: "88px",
                 }}
                 onClick={onCancel}
               >

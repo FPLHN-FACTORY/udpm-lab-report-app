@@ -17,6 +17,7 @@ import LoadingIndicator from "../../../../helper/loading";
 import React from "react";
 import { SetTTrueToggle } from "../../../../app/student/StCollapsedSlice.reducer";
 import { Empty } from "antd";
+import { convertMeetingPeriodToTime } from "../../../../helper/util.helper";
 const StMeetingMyClass = () => {
   const dispatch = useAppDispatch();
   dispatch(SetTTrueToggle());
@@ -190,7 +191,10 @@ const StMeetingMyClass = () => {
                                   <div className="title-icon">
                                     <div className="box-icon">
                                       <BookOutlined
-                                        style={{ color: "white", fontSize: 21 }}
+                                        style={{
+                                          color: "white",
+                                          fontSize: "21px",
+                                        }}
                                       />
                                     </div>
                                   </div>
@@ -215,8 +219,23 @@ const StMeetingMyClass = () => {
                                   {" "}
                                   <span>
                                     Thời gian:{" "}
-                                    {convertLongToDate(record.meetingDate)} - Ca{" "}
-                                    {record.meetingPeriod + 1}
+                                    <span
+                                      style={{
+                                        color: "red",
+                                        fontWeight: "500",
+                                      }}
+                                    >
+                                      {" "}
+                                      {convertLongToDate(record.meetingDate)} -
+                                      Ca {record.meetingPeriod + 1}{" "}
+                                      <span>
+                                        (
+                                        {convertMeetingPeriodToTime(
+                                          record.meetingPeriod
+                                        )}
+                                        )
+                                      </span>
+                                    </span>
                                   </span>
                                 </div>
                               </div>
