@@ -241,6 +241,14 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                 (m.meeting_period = 4 AND TIME(FROM_UNIXTIME(m.meeting_date / 1000)) > '18:20:00')
                 OR
                 (m.meeting_period = 5 AND TIME(FROM_UNIXTIME(m.meeting_date / 1000))> '20:30:00')
+                 OR
+                (m.meeting_period = 6 AND TIME(FROM_UNIXTIME(m.meeting_date / 1000))> '22:40:00')
+                 OR
+                (m.meeting_period = 7 AND TIME(FROM_UNIXTIME(m.meeting_date / 1000))> '00:50:00')
+                 OR
+                (m.meeting_period = 8 AND TIME(FROM_UNIXTIME(m.meeting_date / 1000))> '03:00:00')
+                OR
+                (m.meeting_period = 9 AND TIME(FROM_UNIXTIME(m.meeting_date / 1000))> '05:10:00')
             )
             AND NOT EXISTS (
                 SELECT 1

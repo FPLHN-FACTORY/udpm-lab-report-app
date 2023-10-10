@@ -72,6 +72,26 @@ public class TeCronJob {
         updateStatusMeetingJob();
     }
 
+    @Scheduled(cron = "40 22 * * * *")
+    public void runJobPeriod7() {
+        updateStatusMeetingJob();
+    }
+
+    @Scheduled(cron = "50 0 * * * *")
+    public void runJobPeriod8() {
+        updateStatusMeetingJob();
+    }
+
+    @Scheduled(cron = "0 3 * * * *")
+    public void runJobPeriod9() {
+        updateStatusMeetingJob();
+    }
+
+    @Scheduled(cron = "10 5 * * * *")
+    public void runJobPeriod10() {
+        updateStatusMeetingJob();
+    }
+
     private void playCustomSound() {
         try {
             InputStream inputStream = getClass().getClassLoader().getResourceAsStream(SOUND);
