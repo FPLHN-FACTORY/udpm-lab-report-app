@@ -55,7 +55,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
               icon={faMagicWandSparkles}
               style={{ marginRight: 7, fontSize: 18 }}
             />
-            {!collapsed && <span style={{ fontSize: 15 }}>Quản lý xưởng</span>}
+            {!collapsed && <span style={{ fontSize: 15 }}>Quản lý hoạt động xưởng</span>}
           </span>
         </div>
         <Menu.SubMenu
