@@ -46,46 +46,46 @@ public class TeStatisticalServiceImpl implements TeStatisticalService {
     public ByteArrayOutputStream exportExcel(HttpServletResponse response, String idClass) {
         try (Workbook workbook = new XSSFWorkbook();
              ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-            List<TePointStudentInforRespone> listPointIdClass = getPointStudentByIdClass(idClass);
-            List<TeStudentCallApiResponse> listStudent = teStudentClassesService.searchApiStudentClassesByIdClass(idClass);
-            List<TePointExcel> listExcel = new ArrayList<>();
-            listPointIdClass.forEach((item1) -> {
-                listStudent.forEach((item2) -> {
-                    if (item2.getIdStudent().equals(item1.getIdStudent())) {
-                        TePointExcel point = new TePointExcel();
-                        point.setIdPoint(item1.getIdPoint());
-                        point.setIdStudent(item1.getIdStudent());
-                        point.setName(item2.getName());
-                        point.setEmail(item2.getEmail());
-                        point.setCheckPointPhase1(item1.getCheckPointPhase1());
-                        point.setCheckPointPhase2(item1.getCheckPointPhase2());
-                        point.setFinalPoint(item1.getFinalPoint());
-                        listExcel.add(point);
-                    }
-                });
-            });
-            Class objClass = teClassRepository.findById(idClass).get();
-            Sheet sheet = configTitle(workbook, objClass.getCode());
-            int rowIndex = 3;
-            int index = 1;
-            for (TePointExcel data : listExcel) {
-                Row dataRow = sheet.createRow(rowIndex++);
-                dataRow.createCell(0).setCellValue(index++);
-                dataRow.getCell(0).setCellStyle(chooseCellStyle("dataCenterTable", workbook));
-                dataRow.createCell(1).setCellValue(data.getName());
-                dataRow.getCell(1).setCellStyle(chooseCellStyle("dataTable", workbook));
-                dataRow.createCell(2).setCellValue(data.getEmail());
-                dataRow.getCell(2).setCellStyle(chooseCellStyle("dataTable", workbook));
-                dataRow.createCell(3).setCellValue(data.getCheckPointPhase1());
-                dataRow.getCell(3).setCellStyle(chooseCellStyle("dataCenterTable", workbook));
-                dataRow.createCell(4).setCellValue(data.getCheckPointPhase2());
-                dataRow.getCell(4).setCellStyle(chooseCellStyle("dataCenterTable", workbook));
-                dataRow.createCell(5).setCellValue(data.getFinalPoint());
-                dataRow.getCell(5).setCellStyle(chooseCellStyle("dataCenterTable", workbook));
-            }
-            for (int i = 0; i < 6; i++) {
-                sheet.autoSizeColumn(i, true);
-            }
+//            List<TePointStudentInforRespone> listPointIdClass = getPointStudentByIdClass(idClass);
+//            List<TeStudentCallApiResponse> listStudent = teStudentClassesService.searchApiStudentClassesByIdClass(idClass);
+//            List<TePointExcel> listExcel = new ArrayList<>();
+//            listPointIdClass.forEach((item1) -> {
+//                listStudent.forEach((item2) -> {
+//                    if (item2.getIdStudent().equals(item1.getIdStudent())) {
+//                        TePointExcel point = new TePointExcel();
+//                        point.setIdPoint(item1.getIdPoint());
+//                        point.setIdStudent(item1.getIdStudent());
+//                        point.setName(item2.getName());
+//                        point.setEmail(item2.getEmail());
+//                        point.setCheckPointPhase1(item1.getCheckPointPhase1());
+//                        point.setCheckPointPhase2(item1.getCheckPointPhase2());
+//                        point.setFinalPoint(item1.getFinalPoint());
+//                        listExcel.add(point);
+//                    }
+//                });
+//            });
+//            Class objClass = teClassRepository.findById(idClass).get();
+//            Sheet sheet = configTitle(workbook, objClass.getCode());
+//            int rowIndex = 3;
+//            int index = 1;
+//            for (TePointExcel data : listExcel) {
+//                Row dataRow = sheet.createRow(rowIndex++);
+//                dataRow.createCell(0).setCellValue(index++);
+//                dataRow.getCell(0).setCellStyle(chooseCellStyle("dataCenterTable", workbook));
+//                dataRow.createCell(1).setCellValue(data.getName());
+//                dataRow.getCell(1).setCellStyle(chooseCellStyle("dataTable", workbook));
+//                dataRow.createCell(2).setCellValue(data.getEmail());
+//                dataRow.getCell(2).setCellStyle(chooseCellStyle("dataTable", workbook));
+//                dataRow.createCell(3).setCellValue(data.getCheckPointPhase1());
+//                dataRow.getCell(3).setCellStyle(chooseCellStyle("dataCenterTable", workbook));
+//                dataRow.createCell(4).setCellValue(data.getCheckPointPhase2());
+//                dataRow.getCell(4).setCellStyle(chooseCellStyle("dataCenterTable", workbook));
+//                dataRow.createCell(5).setCellValue(data.getFinalPoint());
+//                dataRow.getCell(5).setCellStyle(chooseCellStyle("dataCenterTable", workbook));
+//            }
+//            for (int i = 0; i < 6; i++) {
+//                sheet.autoSizeColumn(i, true);
+//            }
             workbook.write(response.getOutputStream());
             workbook.close();
             return outputStream;
