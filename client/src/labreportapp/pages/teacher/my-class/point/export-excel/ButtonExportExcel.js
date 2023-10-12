@@ -4,6 +4,7 @@ import { TeacherExcelPointAPI } from "../../../../../api/teacher/point/excel/Tea
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
+import LoadingIndicatorNoOverlay from "../../../../../helper/loadingNoOverlay";
 
 const ButtonExportExcel = ({ idClass }) => {
   const [downloading, setDownloading] = useState(false);

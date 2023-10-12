@@ -33,4 +33,11 @@ export class TeacherStatisticalAPI {
         data.size,
     });
   }
+  static export = (idClass) => {
+    return request({
+      method: "GET",
+      url: url + `/export-excel-class?idClass=` + idClass,
+      responseType: "blob",
+    });
+  };
 }

@@ -27,6 +27,9 @@ import { useEffect } from "react";
 import { convertMeetingPeriodToTime } from "../../../helper/util.helper";
 import { TeacherStatisticalAPI } from "../../../api/teacher/statistical/TeacherStatistical.api";
 import LoadingIndicator from "../../../helper/loading";
+import { toast } from "react-toastify";
+import { Loading3QuartersOutlined, LoadingOutlined } from "@ant-design/icons";
+import LoadingIndicatorNoOverlay from "../../../helper/loadingNoOverlay";
 const { Option } = Select;
 
 const TeacherDashboard = () => {
@@ -46,14 +49,19 @@ const TeacherDashboard = () => {
     classLesson: 0,
     classNumber: 0,
   });
+  const [loadingExport, setLoadingExport] = useState(false);
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Thống kê";
-    featchDataSemester();
   }, []);
 
   useEffect(() => {
+    featchDataSemester();
     featchAllMyClass();
+    // setLoadingExport(true);
+    // setTimeout(() => {
+    //   setLoadingExport(false);
+    // }, 15000);
   }, [current]);
 
   useEffect(() => {
@@ -75,10 +83,7 @@ const TeacherDashboard = () => {
       setLoadOne(true);
     }
   }, [loadOne]);
-  useEffect(() => {
-    featchDataActivity(idSemesterSearch);
-    setIdActivitiSearch("");
-  }, [idSemesterSearch]);
+
   useEffect(() => {
     featchDataActivity(idSemesterSearch);
   }, [idSemesterSearch]);
@@ -89,6 +94,7 @@ const TeacherDashboard = () => {
     }
     setClear(false);
   }, [clear]);
+
   const featchAllMyClass = async () => {
     setLoading(false);
     const currentTime = new Date();
@@ -150,7 +156,26 @@ const TeacherDashboard = () => {
     try {
       await TeacherActivityAPI.getAllActivityByIdSemester(idSemesterSeach).then(
         (respone) => {
-          setListActivity(respone.data.data);
+          const currentTime = new Date();
+          const selectedObject = listSemester.find((item) => {
+            const startTime = new Date(item.startTime).getTime();
+            const endTime = new Date(item.endTime).getTime();
+            return currentTime >= startTime && currentTime <= endTime;
+          });
+          if (selectedObject !== undefined && idSemesterSeach === "") {
+            setSemesterOne(selectedObject);
+            setIdSemesterSearch(selectedObject.id);
+            setIdActivitiSearch("");
+            setListActivity(respone.data.data);
+          }
+          if (idSemesterSeach === "" && selectedObject === undefined) {
+            setListActivity([]);
+            setIdActivitiSearch("");
+          }
+          if (idSemesterSeach !== "") {
+            setListActivity(respone.data.data);
+            setIdActivitiSearch("");
+          }
         }
       );
     } catch (error) {
@@ -179,6 +204,31 @@ const TeacherDashboard = () => {
     }
     setClear(true);
   };
+
+  const handleExport = async (idClass) => {
+    try {
+      const response = await TeacherStatisticalAPI.export(idClass);
+      const blob = new Blob([response.data], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download =
+        "ThongKeTongHop_" + convertLongToDate(new Date().getTime()) + ".xlsx";
+      link.click();
+      window.URL.revokeObjectURL(url);
+      console.log(response);
+      setLoadingExport(true);
+      setTimeout(() => {
+        setLoadingExport(false);
+      }, 1500);
+      toast.success("Export thành công !");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const dataTable = listClass;
   const columns = [
     {
@@ -275,11 +325,12 @@ const TeacherDashboard = () => {
       render: (text, record) => (
         <>
           <div className="box_icon" style={{ textAlign: "center" }}>
-            <Tooltip title="Export chi tiết lớp học">
+            <Tooltip title="Export chi tiết">
               <FontAwesomeIcon
                 icon={faDownload}
                 style={{ marginRight: "7px" }}
                 className="icon"
+                onClick={() => handleExport(record.id)}
               />
             </Tooltip>
           </div>
@@ -302,6 +353,7 @@ const TeacherDashboard = () => {
   return (
     <>
       {!loading && <LoadingIndicator />}
+      {loadingExport && <LoadingIndicatorNoOverlay />}
       <div className="box-one">
         <div
           className="heading-box"
@@ -318,7 +370,6 @@ const TeacherDashboard = () => {
       </div>
       <div className="box-dash-board">
         <Row>
-          {" "}
           <FontAwesomeIcon
             icon={faFilter}
             style={{ fontSize: "20px", paddingRight: "8px" }}
@@ -343,6 +394,10 @@ const TeacherDashboard = () => {
                     margin: "6px 0 10px 0",
                   }}
                 >
+                  {" "}
+                  {semesterOne === null && (
+                    <Option value="">Chọn 1 học kỳ</Option>
+                  )}
                   {listSemester.map((item) => {
                     return (
                       <Option
@@ -361,7 +416,6 @@ const TeacherDashboard = () => {
             </Col>
             <Col span={16}>
               <span>Hoạt động</span>
-
               <br />
               {listActivity.length > 0 ? (
                 <Select

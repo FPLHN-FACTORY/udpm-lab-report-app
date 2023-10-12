@@ -55,12 +55,12 @@ export const convertMeetingPeriodToNumber = (meetingPeriodStr) => {
       return 5;
     case "CA_7":
       return 6;
-    case "CA_8":
-      return 7;
-    case "CA_9":
-      return 8;
-    case "CA_10":
-      return 9;
+    // case "CA_8":
+    //   return 7;
+    // case "CA_9":
+    //   return 8;
+    // case "CA_10":
+    //   return 9;
     default:
       return -1;
   }
@@ -91,15 +91,15 @@ export const convertMeetingPeriodToTime = (meetingPeriod) => {
     case 6:
       meetingPeriodStr = "20:40 - 22:40";
       break;
-    case 7:
-      meetingPeriodStr = "22:50 - 00:50";
-      break;
-    case 8:
-      meetingPeriodStr = "01:00 - 03:00";
-      break;
-    case 9:
-      meetingPeriodStr = "03:10 - 05:10";
-      break;
+    // case 7:
+    //   meetingPeriodStr = "22:50 - 00:50";
+    //   break;
+    // case 8:
+    //   meetingPeriodStr = "01:00 - 03:00";
+    //   break;
+    // case 9:
+    //   meetingPeriodStr = "03:10 - 05:10";
+    //   break;
     default:
       meetingPeriodStr = "";
   }
@@ -119,9 +119,9 @@ export const convertStatusMeetingByDateAndPeriod = (
     4: { start: "16:20", end: "18:20" },
     5: { start: "18:30", end: "20:30" },
     6: { start: "20:40", end: "22:40" },
-    7: { start: "22:50", end: "00:50" },
-    8: { start: "01:00", end: "3:00" },
-    9: { start: "03:10", end: "05:10" },
+    // 7: { start: "22:50", end: "00:50" },
+    // 8: { start: "01:00", end: "3:00" },
+    // 9: { start: "03:10", end: "05:10" },
   };
   if (meetingDate > currentDate) {
     return true;
@@ -173,9 +173,9 @@ export const convertCheckAttended = (meetingPeriod) => {
     4: { start: "16:20", end: "18:20" },
     5: { start: "18:30", end: "20:30" },
     6: { start: "20:40", end: "22:40" },
-    7: { start: "22:50", end: "00:50" },
-    8: { start: "01:00", end: "3:00" },
-    9: { start: "03:10", end: "05:10" },
+    // 7: { start: "22:50", end: "00:50" },
+    // 8: { start: "01:00", end: "3:00" },
+    // 9: { start: "03:10", end: "05:10" },
   };
   const caHocTime = meetingPeriods[meetingPeriod];
   const caHocStartDate = new Date(
@@ -213,9 +213,9 @@ export const convertCheckTimeCurrentAndMeetingDate = (
     4: { start: "16:20", end: "18:20" },
     5: { start: "18:30", end: "20:30" },
     6: { start: "20:40", end: "22:40" },
-    7: { start: "22:50", end: "00:50" },
-    8: { start: "01:00", end: "3:00" },
-    9: { start: "03:10", end: "05:10" },
+    // 7: { start: "22:50", end: "00:50" },
+    // 8: { start: "01:00", end: "3:00" },
+    // 9: { start: "03:10", end: "05:10" },
   };
   const caHocTime = meetingPeriods[meetingPeriod];
   const caHocEndDate = new Date(
