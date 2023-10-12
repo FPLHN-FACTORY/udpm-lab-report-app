@@ -149,15 +149,6 @@ const ModalUpdateMeeting = ({ item, visible, onCancel }) => {
                   <Option value="6">
                     Ca 7 ({"" + convertMeetingPeriodToTime(6)})
                   </Option>
-                  <Option value="7">
-                    Ca 8 ({"" + convertMeetingPeriodToTime(7)})
-                  </Option>
-                  <Option value="8">
-                    Ca 9 ({"" + convertMeetingPeriodToTime(8)})
-                  </Option>
-                  <Option value="9">
-                    Ca 10 ({"" + convertMeetingPeriodToTime(9)})
-                  </Option>
                 </Select>
               </Col>
               <Col span={12} style={{ padding: "5px" }}>

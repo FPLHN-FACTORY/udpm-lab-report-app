@@ -49,7 +49,7 @@ const ModalCreateProject = ({ visible, onCancel }) => {
 
   const listClassPeriod = [];
 
-  for (let i = 0; i <= 9; i++) {
+  for (let i = 0; i <= 6; i++) {
     listClassPeriod.push("" + i);
   }
 
@@ -91,8 +91,7 @@ const ModalCreateProject = ({ visible, onCancel }) => {
         }
         setSemesterDataAll(listSemester.data);
         setLoading(true);
-      } catch (error) {
-      }
+      } catch (error) {}
     };
     featchDataSemester();
   }, []);

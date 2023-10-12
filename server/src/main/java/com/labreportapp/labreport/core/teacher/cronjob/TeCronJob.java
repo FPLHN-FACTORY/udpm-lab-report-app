@@ -3,6 +3,7 @@ package com.labreportapp.labreport.core.teacher.cronjob;
 import com.labreportapp.labreport.core.teacher.repository.TeMeetingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +16,7 @@ import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * @author hieundph25894
@@ -27,68 +29,57 @@ public class TeCronJob {
     @Autowired
     private TeMeetingRepository teMeetingRepository;
 
-    @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
+    @Autowired
+    public TeCronJob(SimpMessagingTemplate messagingTemplate) {
+        this.messagingTemplate = messagingTemplate;
+    }
+
+    @Async
     public void updateStatusMeetingJob() {
         int countUpdateMeeting = teMeetingRepository.updateStatusMeetingRest();
         if (countUpdateMeeting >= 1) {
-            messagingTemplate.convertAndSend("/lesson/messageBE", "Do bạn không điểm danh buổi học " +
-                    "nên các buổi học không điểm danh đã được chuyển thành buổi nghỉ !");
-            // playCustomSound();
-        } else {
-            messagingTemplate.convertAndSend("/lesson/messageBE", "FAILD DIEM DANNh !");
+            CompletableFuture<Void> sendNotificationFuture = CompletableFuture.runAsync(() -> {
+                messagingTemplate.convertAndSend("/portal-projects/update-meeting", "Do bạn không điểm danh buổi học hôm nay " +
+                        "nên buổi học đã được chuyển thành buổi nghỉ !");
+            });
+            sendNotificationFuture.thenRun(this::playCustomSound);
         }
-        // playCustomSound();
     }
 
-    @Scheduled(cron = "15 9 * * * *")
+    @Scheduled(cron = "16 9 * * * *")
     public void runJobPeriod1() {
         updateStatusMeetingJob();
     }
 
-    @Scheduled(cron = "25 11 * * * *")
+    @Scheduled(cron = "26 11 * * * *")
     public void runJobPeriod2() {
         updateStatusMeetingJob();
     }
 
-    @Scheduled(cron = "0 14 * * * *")
+    @Scheduled(cron = "1 14 * * * *")
     public void runJobPeriod3() {
         updateStatusMeetingJob();
     }
 
-    @Scheduled(cron = "10 16 * * * *")
+    @Scheduled(cron = "11 16 * * * *")
     public void runJobPeriod4() {
         updateStatusMeetingJob();
     }
 
-    @Scheduled(cron = "20 18 * * * *")
+    @Scheduled(cron = "21 18 * * * *")
     public void runJobPeriod5() {
         updateStatusMeetingJob();
     }
 
-    @Scheduled(cron = "30 20 * * * *")
+    @Scheduled(cron = "31 20 * * * *")
     public void runJobPeriod6() {
         updateStatusMeetingJob();
     }
 
-    @Scheduled(cron = "40 22 * * * *")
+    @Scheduled(cron = "41 22 * * * *")
     public void runJobPeriod7() {
-        updateStatusMeetingJob();
-    }
-
-    @Scheduled(cron = "50 0 * * * *")
-    public void runJobPeriod8() {
-        updateStatusMeetingJob();
-    }
-
-    @Scheduled(cron = "0 3 * * * *")
-    public void runJobPeriod9() {
-        updateStatusMeetingJob();
-    }
-
-    @Scheduled(cron = "10 5 * * * *")
-    public void runJobPeriod10() {
         updateStatusMeetingJob();
     }
 

@@ -138,12 +138,7 @@ const StudentSchedule = () => {
         return <span>{convertMeetingPeriodToTime(record.meetingPeriod)}</span>;
       },
     },
-    {
-      title: "Địa điểm học",
-      dataIndex: "address",
-      key: "address",
-      sorter: (a, b) => a.address.localeCompare(b.address),
-    },
+
     {
       title: "Hình thức học",
       dataIndex: "typeMeeting",
@@ -152,6 +147,29 @@ const StudentSchedule = () => {
       render: (text, record) => (
         <span>{record.typeMeeting === 0 ? "Online" : "Offline"}</span>
       ),
+    },
+    {
+      title: "Địa điểm",
+      dataIndex: "addressCustom",
+      key: "addressCustom",
+      render: (text, record) => {
+        return (
+          <span>{record.typeMeeting === 0 ? "Google Meet" : "Xưởng"}</span>
+        );
+      },
+    },
+    {
+      title: "Link học trực tuyến",
+      dataIndex: "address",
+      key: "address",
+      render: (text, record) =>
+        record.typeMeeting === 0 ? (
+          <a href={text} target="_blank">
+            {text}
+          </a>
+        ) : (
+          text
+        ),
     },
   ];
   const buttonSearch = () => {

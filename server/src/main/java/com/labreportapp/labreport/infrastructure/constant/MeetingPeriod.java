@@ -11,7 +11,4 @@ public enum MeetingPeriod {
     CA_5,
     CA_6,
     CA_7,
-    CA_8,
-    CA_9,
-    CA_10
 }

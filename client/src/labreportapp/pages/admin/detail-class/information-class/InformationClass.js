@@ -123,7 +123,6 @@ const InformationClass = () => {
     try {
       await ClassAPI.getAdClassDetailById(idClass).then((responese) => {
         setClassDetail(responese.data.data);
-        console.log(responese.data.data);
         document.title = "Thông tin lớp học - " + responese.data.data.code;
       });
     } catch (error) {

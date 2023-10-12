@@ -39,4 +39,7 @@ public interface TeScheduleMeetingClassResponse {
     @Value("#{target.level}")
     String getLevel();
 
+    @Value("#{target.notes}")
+    String getNotes();
+
 }

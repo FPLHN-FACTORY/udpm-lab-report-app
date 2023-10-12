@@ -18,6 +18,7 @@ import {
   Pagination,
   Tooltip,
   Empty,
+  message,
 } from "antd";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -56,7 +57,7 @@ const TeacherMyClass = () => {
   const [clear, setClear] = useState(false);
   const listClassPeriod = [];
 
-  for (let i = 1; i <= 10; i++) {
+  for (let i = 1; i <= 7; i++) {
     listClassPeriod.push("" + i);
   }
   const [current, setCurrent] = useState(1);
@@ -160,11 +161,9 @@ const TeacherMyClass = () => {
 
   const featchDataSemester = async () => {
     try {
-      setLoading(false);
       await TeacherSemesterAPI.getAllSemesters().then((respone) => {
         dispatch(SetTeacherSemester(respone.data.data));
         setListSemester(respone.data.data);
-        setLoading(true);
       });
     } catch (error) {
       console.log(error);
@@ -173,7 +172,6 @@ const TeacherMyClass = () => {
 
   const featchDataLevel = async () => {
     try {
-      setLoading(false);
       await TeacherLevelAPI.getAllLevel().then((respone) => {
         if (respone.data.data.length > 0) {
           setIdLevelSearch(respone.data.data[0].id);
@@ -181,7 +179,6 @@ const TeacherMyClass = () => {
           setIdLevelSearch("");
         }
         setListLevel(respone.data.data);
-        setLoading(true);
       });
     } catch (error) {
       console.log(error);
@@ -212,8 +209,6 @@ const TeacherMyClass = () => {
             setListActivity(respone.data.data);
             setIdActivitiSearch("");
           }
-
-          setLoading(true);
         }
       );
     } catch (error) {
@@ -254,23 +249,6 @@ const TeacherMyClass = () => {
     const format = `${day}/${month}/${year}`;
     return format;
   };
-
-  // const socketTeacher = new SockJS("http://localhost:2509/teacher-ws");
-  // let stompClientTeacher = Stomp.over(socketTeacher);
-
-  // stompClientTeacher.onWebSocketClose(() => {
-  //   toast.error("Mất kết nối đến máy chủ !");
-  // });
-  // stompClientTeacher.connect({}, () => {
-  //   message.success("okk");
-  //   stompClientTeacher.subscribe("/lesson/messageBE", (message) => {
-  //     toast.warning("Thông báo : " + message, {
-  //       position: toast.POSITION.BOTTOM_RIGHT,
-  //     });
-  //     toast.info("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-  //     console.log(message + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-  //   });
-  // });
 
   const data = useAppSelector(GetTeacherMyClass);
   const columns = [
@@ -555,7 +533,7 @@ const TeacherMyClass = () => {
         </div>
       </div>
       <div className="box-four">
-        <div className="box-four-son">
+        <div className="box-four-son" style={{ minHeight: "262px" }}>
           <div className="title-table">
             <div>
               <span style={{ fontSize: "17px", fontWeight: "500" }}>

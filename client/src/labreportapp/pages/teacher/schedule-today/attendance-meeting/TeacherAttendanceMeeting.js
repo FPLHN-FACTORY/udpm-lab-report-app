@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import "./styleTeacherAttendance.css";
-import { useNavigate, useParams } from "react-router";
+import { useParams, useNavigate } from "react-router-dom";
 import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/TeacherStudentClasses.api";
 import { TeacherAttendanceAPI } from "../../../../api/teacher/attendance/TeacherAttendance.api";
 import { useState } from "react";
@@ -20,6 +20,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBook, faHome } from "@fortawesome/free-solid-svg-icons";
 import { SearchOutlined } from "@ant-design/icons";
+import { convertCheckAttended } from "../../../../helper/util.helper";
 
 const TeacherAttendanceMeeting = () => {
   const dispatch = useAppDispatch();
@@ -150,8 +151,16 @@ const TeacherAttendanceMeeting = () => {
       let dataFind = {
         listAttendance: data,
         idMeeting: idMeeting,
-        notes: notes,
+        notes: notes.trim(),
       };
+      let checkTime = convertCheckAttended(classFind.meetingPeriod);
+      if (!checkTime) {
+        toast.warning(
+          "Không còn trong ca dạy, không thể xem hoặc sửa điểm danh !"
+        );
+        navigate("/teacher/schedule-today");
+        return;
+      }
       await TeacherAttendanceAPI.createOrUpdate(dataFind).then((respone) => {
         dispatch(UpdateAttendanceMeeting(respone.data.data.listAttendance));
         let className =
@@ -496,7 +505,6 @@ const TeacherAttendanceMeeting = () => {
                     }}
                   >
                     <div />
-
                     <Input.TextArea
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}

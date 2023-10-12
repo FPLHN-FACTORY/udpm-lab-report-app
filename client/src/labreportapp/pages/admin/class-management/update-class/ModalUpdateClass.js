@@ -56,7 +56,7 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
 
   const listClassPeriod = [];
 
-  for (let i = 0; i <= 9; i++) {
+  for (let i = 0; i <= 6; i++) {
     listClassPeriod.push("" + i);
   }
 
@@ -118,8 +118,7 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
         const listClassAll = responseClassAll.data;
         setSemesterDataAll(listClassAll.data);
         setLoading(true);
-      } catch (error) {
-      }
+      } catch (error) {}
     };
     featchDataSemester();
   }, []);
