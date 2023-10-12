@@ -28,22 +28,33 @@ public class Project extends PrimaryEntity {
 
     @Column(length = EntityProperties.LENGTH_CODE, nullable = false)
     private String code; // PORTAL_PROJECT
+
     @Column(length = EntityProperties.LENGTH_NAME)
     @Nationalized
     private String name;
+
     @Column(length = EntityProperties.LENGTH_DESCRIPTION)
     @Nationalized
     private String descriptions;
+
     @Column(nullable = false)
     private Long startTime;
+
     @Column(nullable = false)
     private Long endTime;
+
     private Float progress;
+
     @Column(length = EntityProperties.LENGTH_DESCRIPTION)
     private String backgroundImage;
-    @Column(length =  EntityProperties.LENGTH_NAME)
+
+    @Column(length = EntityProperties.LENGTH_NAME)
     private String backgroundColor;
+
     @Column(nullable = false)
     private StatusProject statusProject;
+
+//    @Column(length = EntityProperties.LENGTH_ID)
+//    private String groupProjectId;
 
 }

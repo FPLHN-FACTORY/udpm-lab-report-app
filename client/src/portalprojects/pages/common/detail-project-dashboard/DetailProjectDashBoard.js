@@ -48,8 +48,10 @@ const DetailProjectDashBoard = () => {
       "https://raw.githubusercontent.com/FPLHN-FACTORY/udpm-common-resources/main/fpoly-udpm/logo-udpm-2.png";
 
     return () => {
-      document.querySelector(".logo_project").src =
-        "https://raw.githubusercontent.com/FPLHN-FACTORY/udpm-common-resources/main/fpoly-udpm/logo-udpm-3.png";
+      if (document.querySelector(".logo_project") != null) {
+        document.querySelector(".logo_project").src =
+          "https://raw.githubusercontent.com/FPLHN-FACTORY/udpm-common-resources/main/fpoly-udpm/logo-udpm-3.png";
+      }
     };
   }, []);
 

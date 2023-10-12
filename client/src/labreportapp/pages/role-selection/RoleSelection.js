@@ -20,8 +20,7 @@ const RoleSelection = () => {
       <div className="role-selection-background"></div>
       <div className="role-selection-content">
         <h1 style={{ color: "white" }}>
-          Vai trò của bạn trong Hệ thống cổng thông tư / Quản lý xưởng bộ môn
-          UDPM:
+          Hệ thống quản lý xưởng bộ môn UDPM:
         </h1>
         <Radio.Group onChange={handleRoleChange} value={selectedRole}>
           {userCurrent != null && userCurrent.role.includes("ADMIN") && (

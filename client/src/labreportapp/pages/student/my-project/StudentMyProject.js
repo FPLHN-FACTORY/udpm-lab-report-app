@@ -194,8 +194,10 @@ const StudentMyProject = () => {
 
       <div className="title_my_project">
         {" "}
-        <ProjectOutlined style={{ fontSize: "26px" }} />
-        <span style={{ marginLeft: "10px" }}>Dự án của tôi</span>
+        <ProjectOutlined style={{ fontSize: "22px" }} />
+        <span style={{ marginLeft: "10px", fontSize: 20, fontWeight: 500 }}>
+          Dự án tại xưởng
+        </span>
       </div>
       <div className="filter-my-project-teacher">
         <FontAwesomeIcon icon={faFilter} style={{ fontSize: 18 }} />{" "}
