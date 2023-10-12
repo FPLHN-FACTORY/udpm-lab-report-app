@@ -12,11 +12,12 @@ import { UpdateClass } from "../../../../app/admin/ClassManager.reducer";
 import { CreateClass } from "../../../../app/admin/ClassManager.reducer";
 import { GetAdTeacher } from "../../../../app/admin/AdTeacherSlice.reducer";
 import { parseInt } from "lodash";
+import LoadingIndicatorNoOverlay from "../../../../helper/loadingNoOverlay";
 
 const { Option } = Select;
 
 const ModalUpdateClass = ({ visible, onCancel, id }) => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
   const [idSemesterSeach, setIdSemesterSearch] = useState("");
   const [semesterDataAll, setSemesterDataAll] = useState([]); // Dữ liệu semester
@@ -81,45 +82,46 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
   }, [visible]);
 
   useEffect(() => {
-    const fetchDetail = (id) => {
-      ClassAPI.getAdClassDetailById(id).then(
-        (respone) => {
-          console.log(respone.data.data);
-          setClassDetail(respone.data.data);
-          setIdSemesterSearch(respone.data.data.semesterId);
-          setIdActivitiSearch(respone.data.data.activityId);
-          setSelectedItemsPerson(
-            respone.data.data.teacherId == null
-              ? ""
-              : respone.data.data.teacherId
-          );
-          setStartTime(
-            moment(respone.data.data.startTime).format("YYYY-MM-DD")
-          );
-          setCode(respone.data.data.code);
-          setClassPeriod(
-            respone.data.data.classPeriod == null
-              ? ""
-              : respone.data.data.classPeriod + ""
-          );
-          setStatusTeacherEdit(respone.data.data.statusTeacherEdit + "");
-        },
-        (error) => {}
-      );
-    };
-    fetchDetail(id);
+    if (visible) {
+      setLoading(true);
+      const fetchDetail = (id) => {
+        ClassAPI.getAdClassDetailById(id).then(
+          (respone) => {
+            console.log(respone.data.data);
+            setClassDetail(respone.data.data);
+            setIdSemesterSearch(respone.data.data.semesterId);
+            setIdActivitiSearch(respone.data.data.activityId);
+            setSelectedItemsPerson(
+              respone.data.data.teacherId == null
+                ? ""
+                : respone.data.data.teacherId
+            );
+            setStartTime(
+              moment(respone.data.data.startTime).format("YYYY-MM-DD")
+            );
+            setCode(respone.data.data.code);
+            setClassPeriod(
+              respone.data.data.classPeriod == null
+                ? ""
+                : respone.data.data.classPeriod + ""
+            );
+            setStatusTeacherEdit(respone.data.data.statusTeacherEdit + "");
+            setLoading(false);
+          },
+          (error) => {}
+        );
+      };
+      fetchDetail(id);
+    }
   }, [id, visible]);
 
   useEffect(() => {
     const featchDataSemester = async () => {
       try {
-        setLoading(false);
         const responseClassAll = await ClassAPI.fetchAllSemester();
         const listClassAll = responseClassAll.data;
         setSemesterDataAll(listClassAll.data);
-        setLoading(true);
-      } catch (error) {
-      }
+      } catch (error) {}
     };
     featchDataSemester();
   }, []);
@@ -131,7 +133,6 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
         await ClassAPI.getAllActivityByIdSemester(idSemesterSeach).then(
           (respone) => {
             setActivityDataAll(respone.data.data);
-            setLoading(true);
           }
         );
       };
@@ -196,6 +197,7 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
 
   return (
     <>
+      {loading && <LoadingIndicatorNoOverlay />}
       <Modal
         visible={visible}
         onCancel={onCancel}

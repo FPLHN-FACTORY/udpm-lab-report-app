@@ -55,7 +55,9 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
               icon={faMagicWandSparkles}
               style={{ marginRight: 7, fontSize: 18 }}
             />
-            {!collapsed && <span style={{ fontSize: 15 }}>Quản lý hoạt động xưởng</span>}
+            {!collapsed && (
+              <span style={{ fontSize: 15 }}>Hoạt động xưởng</span>
+            )}
           </span>
         </div>
         <Menu.SubMenu
@@ -199,9 +201,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             icon={faCog}
             style={{ marginRight: 7, fontSize: 18 }}
           />
-          {!collapsed && (
-            <span style={{ fontSize: 15 }}>Quản lý dự án xưởng</span>
-          )}
+          {!collapsed && <span style={{ fontSize: 15 }}>Dự án xưởng</span>}
         </span>
       </div>
       <Menu theme="light" mode="inline" style={{ paddingBottom: 100 }}>
@@ -304,6 +304,39 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             <Link to="/admin/project-management">Quản lý dự án</Link>
           </Menu.Item>
         </Menu.SubMenu>
+        <div style={{ marginBottom: 18, marginTop: 15 }}>
+          <span style={{ marginLeft: 28 }}>
+            <FontAwesomeIcon
+              icon={faUsers}
+              style={{ marginRight: 7, fontSize: 18 }}
+            />
+            {!collapsed && (
+              <span style={{ fontSize: 15 }}>Thành viên xưởng</span>
+            )}
+          </span>
+        </div>
+        <Menu.Item
+          key="21"
+          icon={
+            <FontAwesomeIcon
+              icon={faCogs}
+              style={{ color: "rgb(226, 179, 87)" }}
+            />
+          }
+        >
+          <Link to="/admin/team-management">Quản lý team</Link>
+        </Menu.Item>
+        <Menu.Item
+          key="22"
+          icon={
+            <FontAwesomeIcon
+              icon={faCogs}
+              style={{ color: "rgb(226, 179, 87)" }}
+            />
+          }
+        >
+          <Link to="/admin/member-management">Quản lý thành viên</Link>
+        </Menu.Item>
       </Menu>
     </Sider>
   );
