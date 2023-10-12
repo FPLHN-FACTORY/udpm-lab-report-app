@@ -10,7 +10,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.Nationalized;
 
 /**
  * @author thangncph26123
@@ -27,11 +26,16 @@ public class MeetingPeriod extends PrimaryEntity {
     @Column(length = EntityProperties.LENGTH_ID)
     private String name;
 
-    @Column(length = EntityProperties.LENGTH_NAME)
-    @Nationalized
-    private String startTime;
+    @Column(length = EntityProperties.LENGTH_TIME)
+    private Integer startHour;
 
-    @Column(length = EntityProperties.LENGTH_NAME)
-    @Nationalized
-    private String endTime;
+    @Column(length = EntityProperties.LENGTH_TIME)
+    private Integer startMinute;
+
+    @Column(length = EntityProperties.LENGTH_TIME)
+    private Integer endHour;
+
+    @Column(length = EntityProperties.LENGTH_TIME)
+    private Integer endMinute;
+
 }

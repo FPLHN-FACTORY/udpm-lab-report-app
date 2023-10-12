@@ -13,7 +13,7 @@ public class StAttendenceAllCustomResponse {
 
   private Long meetingDate;
 
-  private Integer meetingPeriod;
+  private String meetingPeriod;
 
   private Integer typeMeeting;
 

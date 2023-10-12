@@ -87,12 +87,12 @@ public class TeMeetingServiceImpl implements TeMeetingService {
         } else if (dateNow.isAfter(dateMeeting)) {
             throw new RestApiException(Message.MEETING_IS_OVER);
         } else {
-            int checkPeriord = checkPeriod(meetingFind.getMeetingPeriod());
-            if (checkPeriord == 11) {//11 is outside the study shift
-                throw new RestApiException(Message.MEETING_EDIT_ATTENDANCE_FAILD);
-            } else {
+//            int checkPeriord = checkPeriod(meetingFind.getMeetingPeriod());
+//            if (checkPeriord == 11) {//11 is outside the study shift
+//                throw new RestApiException(Message.MEETING_EDIT_ATTENDANCE_FAILD);
+//            } else {
                 return meetingFind;
-            }
+        //    }
         }
     }
 
@@ -153,12 +153,12 @@ public class TeMeetingServiceImpl implements TeMeetingService {
         } else if (dateNow.isAfter(dateMeeting)) {
             objReturn.setListTeamReport(listTeam);
         } else {
-            Integer checkPeriod = checkPeriod(meetingResponse.getMeetingPeriod());
-            if (checkPeriod < meetingResponse.getMeetingPeriod()) {
-                objReturn.setListTeamReport(new ArrayList<>());
-            } else {
+//            Integer checkPeriod = checkPeriod(meetingResponse.getMeetingPeriod());
+//            if (checkPeriod < meetingResponse.getMeetingPeriod()) {
+//                objReturn.setListTeamReport(new ArrayList<>());
+//            } else {
                 objReturn.setListTeamReport(listTeam);
-            }
+         //   }
         }
         return objReturn;
     }

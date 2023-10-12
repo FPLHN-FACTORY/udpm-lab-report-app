@@ -30,7 +30,7 @@ import StMeetingMyClass from "./labreportapp/pages/student/detail-my-class/meeti
 import StTeamMeeting from "./labreportapp/pages/student/detail-my-class/meeting/detail-meeting/DetailMyClassMeeting";
 import AdFactoryDeploymentStatistics from "./labreportapp/pages/admin/admin-factory-deployment-statistics/AdFactoryDeploymentStatistics";
 import AdminTrackActivityMetrics from "./labreportapp/pages/admin/admin-track-activity-metrics/AdminTrackActivityMetrics";
-import ClassConfiguration from "./labreportapp/pages/admin/class-configuration/ClassConfiguration";
+import ClassConfiguration from "./labreportapp/pages/admin/configuration/class-configuration/ClassConfiguration";
 import InformationClass from "./labreportapp/pages/admin/detail-class/information-class/InformationClass";
 import TeacherPointMyClass from "./labreportapp/pages/teacher/my-class/point/TeacherPointMyClass";
 import StRegisterClass from "./labreportapp/pages/student/register-class/StRegisterClass";
@@ -60,7 +60,7 @@ import DetailProjectDashBoard from "./portalprojects/pages/common/detail-project
 import DashboardGeneral from "./portalprojects/pages/common/dashboard/Dashboard";
 import PeriodProject from "./portalprojects/pages/member/period-project/PeriodProject";
 import Cookies from "js-cookie";
-import TemplateReport from "./labreportapp/pages/admin/template-report/TemplateReport";
+import TemplateReport from "./labreportapp/pages/admin/configuration/template-report/TemplateReport";
 import AdFeedbackDetailClass from "./labreportapp/pages/admin/detail-class/feedback/AdFeedbackDetailClass";
 import DetailMeetingAttendance from "./labreportapp/pages/admin/detail-class/meeting-management/detail-meeting/DetailMeetingAttendance";
 import LevelManagement from "./labreportapp/pages/admin/level-management/LevelManagement";
@@ -69,6 +69,12 @@ import jwt_decode from "jwt-decode";
 import HeaderTeacherComponent from "./labreportapp/component/teacher/HeaderTeacher";
 import TeacherMyProject from "./labreportapp/pages/teacher/my-project/TeacherMyProject";
 import StudentMyProject from "./labreportapp/pages/student/my-project/StudentMyProject";
+import ProjectTypeManagement from "./labreportapp/pages/admin/genera-management/project-type-management/ProjectTypeManagement";
+import RoleManagement from "./labreportapp/pages/admin/role-management/RoleManagemen";
+import GroupProjectManagement from "./labreportapp/pages/admin/workshop-project/group-project-management/GroupProjectManagement";
+import TeamManagement from "./labreportapp/pages/admin/workshop-member/team-management/TeamManagement";
+import MemberManagement from "./labreportapp/pages/admin/workshop-member/member-management/MemberManagement";
+import MeetingPeriodConfiguration from "./labreportapp/pages/admin/configuration/meeting-period-configuration/MeetingPeriodConfiguration";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -244,6 +250,16 @@ function App() {
                 <AuthGuard>
                   <DashBoardAdmin>
                     <TemplateReport />
+                  </DashBoardAdmin>
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/admin/meeting-period-configuration"
+              element={
+                <AuthGuard>
+                  <DashBoardAdmin>
+                    <MeetingPeriodConfiguration />
                   </DashBoardAdmin>
                 </AuthGuard>
               }
@@ -558,6 +574,56 @@ function App() {
                 <AuthGuard>
                   <DashBoardAdmin>
                     <StakeholderManagement />
+                  </DashBoardAdmin>
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/admin/type-project-management"
+              element={
+                <AuthGuard>
+                  <DashBoardAdmin>
+                    <ProjectTypeManagement />
+                  </DashBoardAdmin>
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/admin/role-management"
+              element={
+                <AuthGuard>
+                  <DashBoardAdmin>
+                    <RoleManagement />
+                  </DashBoardAdmin>
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/admin/group-project-management"
+              element={
+                <AuthGuard>
+                  <DashBoardAdmin>
+                    <GroupProjectManagement />
+                  </DashBoardAdmin>
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/admin/team-management"
+              element={
+                <AuthGuard>
+                  <DashBoardAdmin>
+                    <TeamManagement />
+                  </DashBoardAdmin>
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/admin/member-management"
+              element={
+                <AuthGuard>
+                  <DashBoardAdmin>
+                    <MemberManagement />
                   </DashBoardAdmin>
                 </AuthGuard>
               }

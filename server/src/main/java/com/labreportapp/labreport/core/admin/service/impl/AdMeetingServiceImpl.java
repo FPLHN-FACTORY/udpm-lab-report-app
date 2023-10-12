@@ -15,7 +15,6 @@ import com.labreportapp.labreport.core.common.response.SimpleResponse;
 import com.labreportapp.labreport.entity.Activity;
 import com.labreportapp.labreport.entity.Class;
 import com.labreportapp.labreport.entity.Meeting;
-import com.labreportapp.labreport.infrastructure.constant.MeetingPeriod;
 import com.labreportapp.labreport.infrastructure.constant.StatusMeeting;
 import com.labreportapp.labreport.infrastructure.constant.TypeMeeting;
 import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
@@ -99,7 +98,7 @@ public class AdMeetingServiceImpl implements AdMeetingService {
         meeting.setName("Buổi học");
         meeting.setMeetingDate(request.getMeetingDate());
         meeting.setTypeMeeting(TypeMeeting.values()[request.getTypeMeeting()]);
-        meeting.setMeetingPeriod(MeetingPeriod.values()[request.getMeetingPeriod()]);
+       // meeting.setMeetingPeriod(MeetingPeriod.values()[request.getMeetingPeriod()]);
         meeting.setAddress(request.getAddress());
         meeting.setClassId(request.getClassId());
         meeting.setStatusMeeting(StatusMeeting.BUOI_HOC);
@@ -135,7 +134,7 @@ public class AdMeetingServiceImpl implements AdMeetingService {
         }
         meetingFind.get().setMeetingDate(request.getMeetingDate());
         meetingFind.get().setTypeMeeting(TypeMeeting.values()[request.getTypeMeeting()]);
-        meetingFind.get().setMeetingPeriod(MeetingPeriod.values()[request.getMeetingPeriod()]);
+        //meetingFind.get().setMeetingPeriod(MeetingPeriod.values()[request.getMeetingPeriod()]);
         meetingFind.get().setAddress(request.getAddress());
         meetingFind.get().setDescriptions(request.getDescriptions());
         SimpleResponse simple = null;
@@ -209,7 +208,7 @@ public class AdMeetingServiceImpl implements AdMeetingService {
             for (int i = 0; i < request.getNumberMeeting(); i++) {
                 Meeting meeting = new Meeting();
                 meeting.setStatusMeeting(StatusMeeting.BUOI_HOC);
-                meeting.setMeetingPeriod(MeetingPeriod.values()[request.getMeetingPeriod()]);
+              //  meeting.setMeetingPeriod(MeetingPeriod.values()[request.getMeetingPeriod()]);
                 meeting.setMeetingDate(meetingDateInMillis);
                 meeting.setTypeMeeting(TypeMeeting.values()[request.getTypeMeeting()]);
                 if (request.getTeacherId() != null && !request.getTeacherId().equals("")) {

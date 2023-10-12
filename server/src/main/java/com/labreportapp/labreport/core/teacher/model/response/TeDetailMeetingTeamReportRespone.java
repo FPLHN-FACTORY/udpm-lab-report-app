@@ -22,7 +22,7 @@ public class TeDetailMeetingTeamReportRespone {
 
     private Integer typeMeeting;
 
-    private Integer meetingPeriod;
+    private String meetingPeriod;
 
     private String idClass;
 

@@ -17,4 +17,6 @@ public class EntityProperties {
     public static final byte LENGTH_EMAIL = 50;
     public static final byte LENGTH_PHONE = 20;
     public static final short LENGTH_DESCRIPTION = 10000;
+
+    public static final byte LENGTH_TIME = 2;
 }

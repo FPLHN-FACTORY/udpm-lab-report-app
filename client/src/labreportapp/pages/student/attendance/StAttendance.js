@@ -82,9 +82,6 @@ const StAttendance = () => {
       dataIndex: "meetingPeriod",
       key: "meetingPeriod",
       sorter: (a, b) => a.meetingPeriod - b.meetingPeriod,
-      render: (text, record) => {
-        return <span>{parseInt(record.meetingPeriod) + 1}</span>;
-      },
     },
     {
       title: "Thời gian",

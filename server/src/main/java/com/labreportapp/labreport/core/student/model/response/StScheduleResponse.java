@@ -11,7 +11,7 @@ public interface StScheduleResponse {
     Long getMeetingDate();
 
     @Value("#{target.meeting_period}")
-    Integer getMeetingPeriod();
+    String getMeetingPeriod();
 
     @Value("#{target.type_meeting}")
     Integer getTypeMeeting();

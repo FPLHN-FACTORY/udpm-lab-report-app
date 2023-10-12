@@ -15,9 +15,10 @@ public interface StAttendenceAllRepository extends JpaRepository<Attendance, Str
 
   @Query(value = """
           SELECT DISTINCT m.id, ROW_NUMBER() OVER(ORDER BY m.meeting_date ASC) AS stt, m.name, m.meeting_date,
-          m.meeting_period, m.type_meeting, m.teacher_id, a.status AS status
+          mp.name as meeting_periods, m.type_meeting, m.teacher_id, a.status AS status
           FROM attendance a
           RIGHT JOIN meeting m ON a.meeting_id = m.id
+          Right JOIN meeting_period mp ON mp.id = m.meeting_period
           JOIN class c ON m.class_id = c.id
           JOIN student_classes st ON c.id = st.class_id
           JOIN activity ac ON c.activity_id = ac.id
@@ -25,7 +26,7 @@ public interface StAttendenceAllRepository extends JpaRepository<Attendance, Str
           WHERE (a.student_id IS NULL OR a.student_id = :#{#req.idStudent})
           AND st.class_id = :#{#req.idClass}
           AND s.id = :#{#req.idSemester}
-          GROUP BY m.id, m.name, m.meeting_date, m.meeting_period, m.type_meeting, m.teacher_id, a.status
+          GROUP BY m.id, m.name, m.meeting_date, mp.name, m.type_meeting, m.teacher_id, a.status
           ORDER BY m.meeting_date ASC 
           """, nativeQuery = true)
   List<StAttendenceAllResponse> getAttendenceListByStudentInClassAndSemester(@Param("req") StFindAttendenceAllRequest req);

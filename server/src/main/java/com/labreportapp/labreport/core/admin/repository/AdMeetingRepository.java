@@ -24,12 +24,14 @@ public interface AdMeetingRepository extends JpaRepository<Meeting, String> {
                 WHERE a.class_id = :idClass 
                 GROUP BY a.id
             )
-            SELECT a.id, a.name, a.meeting_date, a.meeting_period,
+            SELECT a.id, a.name, a.meeting_date, mp.name,
             a.type_meeting, a.address, a.teacher_id, a.descriptions, 
             meetingAtten.so_diem_danh
-            FROM meeting a LEFT JOIN class b ON a.class_id = b.id
+            FROM meeting a
+              JOIN meeting_period mp ON mp.id = a.meeting_period
+             LEFT JOIN class b ON a.class_id = b.id
             LEFT JOIN MeetingAttendance meetingAtten ON meetingAtten.id = a.id
-            WHERE b.id = :idClass ORDER BY a.meeting_date DESC, a.meeting_period DESC
+            WHERE b.id = :idClass ORDER BY a.meeting_date DESC, mp.name DESC
             """, nativeQuery = true)
     List<AdMeetingResponse> getAllMeetingByIdClass(@Param("idClass") String idClass);
 
@@ -58,8 +60,9 @@ public interface AdMeetingRepository extends JpaRepository<Meeting, String> {
     @Query(value = """
               UPDATE meeting a
               JOIN (
-                  SELECT id, ROW_NUMBER() OVER (ORDER BY meeting_date ASC, meeting_period ASC) AS row_num
-                  FROM meeting
+                  SELECT m.id, ROW_NUMBER() OVER (ORDER BY m.meeting_date ASC, mp.name ASC) AS row_num
+                  FROM meeting m
+                   JOIN meeting_period mp ON mp.id = m.meeting_period
                   WHERE class_id = :idClass
               ) AS subquery
               ON a.id = subquery.id

@@ -1,12 +1,11 @@
 import { faTemperature0 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
-import { AdTemplateReportAPI } from "../../../api/admin/AdTemplateReportAPI";
-import { Button, Card, Tooltip } from "antd";
+import { AdTemplateReportAPI } from "../../../../api/admin/AdTemplateReportAPI";
+import { Button } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import { faPencil, faSave } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
-import LoadingIndicator from "../../../helper/loading";
+import LoadingIndicator from "../../../../helper/loading";
 
 const TemplateReport = () => {
   const [templateReport, setTemplateReport] = useState({ descriptions: "" });

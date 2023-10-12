@@ -26,7 +26,7 @@ public interface TeMeetingResponse {
     Integer getTypeMeeting();
 
     @Value("#{target.meeting_period}")
-    Integer getMeetingPeriod();
+    String getMeetingPeriod();
 
     @Value("#{target.class_id}")
     String getIdClass();

@@ -1,6 +1,5 @@
 package com.labreportapp.labreport.core.admin.model.response;
 
-import com.labreportapp.labreport.infrastructure.constant.MeetingPeriod;
 import com.labreportapp.labreport.infrastructure.constant.StatusMeeting;
 import com.labreportapp.labreport.infrastructure.constant.TypeMeeting;
 import lombok.AllArgsConstructor;
@@ -23,7 +22,7 @@ public class AdDetailMeetingResponse {
 
     private Long meetingDate;
 
-    private MeetingPeriod meetingPeriod;
+    private String meetingPeriod;
 
     private String descriptions;
 

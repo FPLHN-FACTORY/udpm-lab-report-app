@@ -14,8 +14,8 @@ public interface StAttendanceRespone extends IsIdentified {
     @Value("#{target.meeting_date}")
     Long getMeetingDate();
 
-    @Value("#{target.meeting_period}")
-    Integer getMeetingPeriod();
+    @Value("#{target.meeting_periods}")
+    String getMeetingPeriod();
 
     @Value("#{target.type_meeting}")
     Integer getTypeMeeting();

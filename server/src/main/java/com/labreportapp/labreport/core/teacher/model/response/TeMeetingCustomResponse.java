@@ -22,7 +22,7 @@ public class TeMeetingCustomResponse {
 
     private Integer typeMeeting;
 
-    private Integer meetingPeriod;
+    private String meetingPeriod;
 
     private String idClass;
 

@@ -7,9 +7,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { Button, Table } from "antd";
-import { AdClassCongigurationAPI } from "../../../api/admin/AdClassConfigurationAPI";
+import { AdClassCongigurationAPI } from "../../../../api/admin/AdClassConfigurationAPI";
 import ModalUpdateClassConfiguration from "./modal-update/ModalUpdateClassConfiguration";
-import LoadingIndicator from "../../../helper/loading";
+import LoadingIndicator from "../../../../helper/loading";
 
 const ClassConfiguration = () => {
   const [adClassConfiguration, setAdClassConfiguration] = useState([]);

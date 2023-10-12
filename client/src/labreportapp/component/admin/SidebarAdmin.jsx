@@ -1,22 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
 import { Layout, Menu } from "antd";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFolder,
   faTags,
-  faChartLine,
   faUsers,
   faCogs,
   faBook,
   faLayerGroup,
-  faArrowRightToCity,
   faFolderOpen,
   faLineChart,
   faTemperature0,
-  faSyncAlt,
   faLevelUp,
-  faCaretLeft,
   faPersonMilitaryPointing,
   faTeletype,
   faGroupArrowsRotate,
@@ -25,6 +21,9 @@ import {
   faConciergeBell,
   faGripLinesVertical,
   faCog,
+  faPeopleGroup,
+  faPeopleLine,
+  faClock,
 } from "@fortawesome/free-solid-svg-icons";
 
 import "./style-sidebar.css";
@@ -135,6 +134,20 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             className="menu_custom"
             icon={
               <FontAwesomeIcon
+                icon={faClock}
+                style={{ color: "rgb(226, 179, 87)" }}
+              />
+            }
+          >
+            <Link to="/admin/meeting-period-configuration">
+              Cấu hình ca học
+            </Link>
+          </Menu.Item>
+          <Menu.Item
+            key="8"
+            className="menu_custom"
+            icon={
+              <FontAwesomeIcon
                 icon={faTemperature0}
                 style={{ color: "rgb(226, 179, 87)" }}
               />
@@ -144,7 +157,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           </Menu.Item>
         </Menu.SubMenu>
         <Menu.Item
-          key="8"
+          key="9"
           className="menu_custom"
           icon={
             <FontAwesomeIcon
@@ -156,7 +169,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           <Link to="/admin/class-management">Quản lý lớp học</Link>
         </Menu.Item>
         <Menu.SubMenu
-          key="9"
+          key="10"
           title="Thống kê"
           icon={
             <FontAwesomeIcon
@@ -166,7 +179,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           }
         >
           <Menu.Item
-            key="10"
+            key="11"
             className="menu_custom"
             icon={
               <FontAwesomeIcon
@@ -180,7 +193,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             </Link>
           </Menu.Item>
           <Menu.Item
-            key="11"
+            key="12"
             className="menu_custom"
             icon={
               <FontAwesomeIcon
@@ -206,7 +219,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
       </div>
       <Menu theme="light" mode="inline" style={{ paddingBottom: 100 }}>
         <Menu.SubMenu
-          key="12"
+          key="13"
           title="Quản lý chung"
           icon={
             <FontAwesomeIcon
@@ -216,7 +229,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           }
         >
           <Menu.Item
-            key="13"
+            key="14"
             icon={
               <FontAwesomeIcon
                 icon={faTeletype}
@@ -227,7 +240,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             <Link to="/admin/type-project-management">Quản lý loại dự án</Link>
           </Menu.Item>
           <Menu.Item
-            key="14"
+            key="15"
             icon={
               <FontAwesomeIcon
                 icon={faFolder}
@@ -238,7 +251,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             <Link to="/admin/category-management"> Quản lý thể loại</Link>
           </Menu.Item>
           <Menu.Item
-            key="15"
+            key="16"
             icon={
               <FontAwesomeIcon
                 icon={faTags}
@@ -250,7 +263,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           </Menu.Item>
         </Menu.SubMenu>
         <Menu.SubMenu
-          key="16"
+          key="17"
           title="Cấu hình"
           icon={
             <FontAwesomeIcon
@@ -260,7 +273,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           }
         >
           <Menu.Item
-            key="17"
+            key="18"
             icon={
               <FontAwesomeIcon
                 icon={faPersonMilitaryPointing}
@@ -272,7 +285,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           </Menu.Item>
         </Menu.SubMenu>
         <Menu.SubMenu
-          key="18"
+          key="19"
           title="Dự án xưởng"
           icon={
             <FontAwesomeIcon
@@ -282,7 +295,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           }
         >
           <Menu.Item
-            key="19"
+            key="20"
             icon={
               <FontAwesomeIcon
                 icon={faGroupArrowsRotate}
@@ -293,7 +306,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             <Link to="/admin/group-project-management">Quản lý nhóm dự án</Link>
           </Menu.Item>
           <Menu.Item
-            key="20"
+            key="21"
             icon={
               <FontAwesomeIcon
                 icon={faCogs}
@@ -316,10 +329,10 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           </span>
         </div>
         <Menu.Item
-          key="21"
+          key="22"
           icon={
             <FontAwesomeIcon
-              icon={faCogs}
+              icon={faPeopleLine}
               style={{ color: "rgb(226, 179, 87)" }}
             />
           }
@@ -327,10 +340,10 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           <Link to="/admin/team-management">Quản lý team</Link>
         </Menu.Item>
         <Menu.Item
-          key="22"
+          key="23"
           icon={
             <FontAwesomeIcon
-              icon={faCogs}
+              icon={faPeopleGroup}
               style={{ color: "rgb(226, 179, 87)" }}
             />
           }

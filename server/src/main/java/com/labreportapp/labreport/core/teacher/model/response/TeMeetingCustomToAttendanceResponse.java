@@ -20,7 +20,7 @@ public interface TeMeetingCustomToAttendanceResponse {
     Long getMeetingDate();
 
     @Value("#{target.meeting_period}")
-    Integer getMeetingPeriod();
+    String getMeetingPeriod();
 
     @Value("#{target.status_meeting}")
     Integer getStatusMeeting();

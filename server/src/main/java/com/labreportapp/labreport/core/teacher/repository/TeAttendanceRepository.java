@@ -69,13 +69,14 @@ public interface TeAttendanceRepository extends JpaRepository<Attendance, String
                     ROW_NUMBER() OVER(ORDER BY m.meeting_date ASC) AS stt,
                     m.name AS name, 
                     m.meeting_date AS meeting_date,
-                    m.meeting_period AS meeting_period, 
+                    mp.name AS meeting_period, 
                     m.type_meeting AS type_meeting, 
                     m.teacher_id AS teacher_id,
                     a.status AS status,
                     a.notes AS notes
             FROM attendance a
             RIGHT JOIN meeting m ON a.meeting_id = m.id
+            JOIN meeting_period mp ON mp.id = m.meeting_period
             JOIN class c ON m.class_id = c.id
             JOIN student_classes st ON c.id = st.class_id
             JOIN activity ac ON c.activity_id = ac.id

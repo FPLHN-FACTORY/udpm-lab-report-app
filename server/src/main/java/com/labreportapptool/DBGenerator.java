@@ -7,6 +7,7 @@ import com.labreportapp.labreport.entity.ClassConfiguration;
 import com.labreportapp.labreport.entity.FeedBack;
 import com.labreportapp.labreport.entity.HomeWork;
 import com.labreportapp.labreport.entity.Meeting;
+import com.labreportapp.labreport.entity.MeetingPeriod;
 import com.labreportapp.labreport.entity.Note;
 import com.labreportapp.labreport.entity.Point;
 import com.labreportapp.labreport.entity.Post;
@@ -17,7 +18,6 @@ import com.labreportapp.labreport.entity.Team;
 import com.labreportapp.labreport.entity.TemplateReport;
 import com.labreportapp.labreport.infrastructure.constant.AllowUseTrello;
 import com.labreportapp.labreport.infrastructure.constant.ClassPeriod;
-import com.labreportapp.labreport.infrastructure.constant.MeetingPeriod;
 import com.labreportapp.labreport.infrastructure.constant.RoleTeam;
 import com.labreportapp.labreport.infrastructure.constant.StatusAttendance;
 import com.labreportapp.labreport.infrastructure.constant.StatusClass;
@@ -34,6 +34,7 @@ import com.labreportapp.labreport.repository.ClassRepository;
 import com.labreportapp.labreport.repository.FeedBackRepository;
 import com.labreportapp.labreport.repository.HomeWorkRepository;
 import com.labreportapp.labreport.repository.LevelRepository;
+import com.labreportapp.labreport.repository.MeetingPeriodRepository;
 import com.labreportapp.labreport.repository.MeetingRepository;
 import com.labreportapp.labreport.repository.NoteRepository;
 import com.labreportapp.labreport.repository.PointRepository;
@@ -184,6 +185,9 @@ public class DBGenerator implements CommandLineRunner {
     @Autowired
     private TemplateReportRepository templateReportRepository;
 
+    @Autowired
+    private MeetingPeriodRepository meetingPeriodRepository;
+
     @Override
     public void run(String... args) throws Exception {
 
@@ -238,6 +242,62 @@ public class DBGenerator implements CommandLineRunner {
         activity2.setAllowUseTrello(AllowUseTrello.KHONG_CHO_PHEP);
         activity2.setDescriptions("https://docs.google.com/spreadsheets/d/1Gop11N-inh_I-TegG3OyGZpfKu4Ls1-qTY1IAMHSCY4/edit#gid=1799431034");
         activity2.setId(activityRepository.save(activity2).getId());
+
+        MeetingPeriod meetingPeriod1 = new MeetingPeriod();
+        meetingPeriod1.setName("Ca 1");
+        meetingPeriod1.setStartHour(7);
+        meetingPeriod1.setStartMinute(15);
+        meetingPeriod1.setEndHour(9);
+        meetingPeriod1.setEndMinute(15);
+        meetingPeriod1.setId(meetingPeriodRepository.save(meetingPeriod1).getId());
+
+        MeetingPeriod meetingPeriod2 = new MeetingPeriod();
+        meetingPeriod2.setName("Ca 2");
+        meetingPeriod2.setStartHour(9);
+        meetingPeriod2.setStartMinute(25);
+        meetingPeriod2.setEndHour(11);
+        meetingPeriod2.setEndMinute(25);
+        meetingPeriod2.setId(meetingPeriodRepository.save(meetingPeriod2).getId());
+
+        MeetingPeriod meetingPeriod3 = new MeetingPeriod();
+        meetingPeriod3.setName("Ca 3");
+        meetingPeriod3.setStartHour(12);
+        meetingPeriod3.setStartMinute(0);
+        meetingPeriod3.setEndHour(14);
+        meetingPeriod3.setEndMinute(0);
+        meetingPeriod3.setId(meetingPeriodRepository.save(meetingPeriod3).getId());
+
+        MeetingPeriod meetingPeriod4 = new MeetingPeriod();
+        meetingPeriod4.setName("Ca 4");
+        meetingPeriod4.setStartHour(14);
+        meetingPeriod4.setStartMinute(10);
+        meetingPeriod4.setEndHour(16);
+        meetingPeriod4.setEndMinute(10);
+        meetingPeriod4.setId(meetingPeriodRepository.save(meetingPeriod4).getId());
+
+        MeetingPeriod meetingPeriod5 = new MeetingPeriod();
+        meetingPeriod5.setName("Ca 5");
+        meetingPeriod5.setStartHour(16);
+        meetingPeriod5.setStartMinute(20);
+        meetingPeriod5.setEndHour(18);
+        meetingPeriod5.setEndMinute(20);
+        meetingPeriod5.setId(meetingPeriodRepository.save(meetingPeriod5).getId());
+
+        MeetingPeriod meetingPeriod6 = new MeetingPeriod();
+        meetingPeriod6.setName("Ca 6");
+        meetingPeriod6.setStartHour(18);
+        meetingPeriod6.setStartMinute(30);
+        meetingPeriod6.setEndHour(20);
+        meetingPeriod6.setEndMinute(30);
+        meetingPeriod6.setId(meetingPeriodRepository.save(meetingPeriod6).getId());
+
+        MeetingPeriod meetingPeriod7 = new MeetingPeriod();
+        meetingPeriod7.setName("Ca 7");
+        meetingPeriod7.setStartHour(20);
+        meetingPeriod7.setStartMinute(40);
+        meetingPeriod7.setEndHour(22);
+        meetingPeriod7.setEndMinute(40);
+        meetingPeriod7.setId(meetingPeriodRepository.save(meetingPeriod7).getId());
 
         Class class1 = new Class();
         class1.setCode("JAVA_WEB_1");
@@ -751,7 +811,7 @@ public class DBGenerator implements CommandLineRunner {
         Meeting meeting1 = new Meeting();
         meeting1.setName("Buổi 1");
         meeting1.setMeetingDate(new Date().getTime() - 86400000);
-        meeting1.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting1.setMeetingPeriod(meetingPeriod1.getId());
         meeting1.setDescriptions("Học tập và làm theo tấm gương đạo đức HỒ CHÍ MINH");
         meeting1.setClassId(class1.getId());
         meeting1.setTypeMeeting(TypeMeeting.ONLINE);
@@ -764,7 +824,7 @@ public class DBGenerator implements CommandLineRunner {
         Meeting meeting2 = new Meeting();
         meeting2.setName("Buổi 2");
         meeting2.setMeetingDate(new Date().getTime());
-        meeting2.setMeetingPeriod(MeetingPeriod.CA_2);
+        meeting2.setMeetingPeriod(meetingPeriod2.getId());
         meeting2.setDescriptions("TÁC HẠI CỦA VIỆC THỨC KHUYA, NGỦ MUỘN");
         meeting2.setClassId(class1.getId());
         meeting2.setTeacherId(class1.getTeacherId());
@@ -776,7 +836,7 @@ public class DBGenerator implements CommandLineRunner {
         Meeting meeting1Class = new Meeting();
         meeting1Class.setName("Buổi 1");
         meeting1Class.setMeetingDate(new Date().getTime() - 86400000);
-        meeting1Class.setMeetingPeriod(MeetingPeriod.CA_2);
+        meeting1Class.setMeetingPeriod(meetingPeriod2.getId());
         meeting1Class.setTeacherId(class2.getTeacherId());
         meeting1Class.setDescriptions("Buổi 1 lớp thầy Nguyên VV4 _ 001 J5_NGUYENVV4_001");
         meeting1Class.setClassId(class2.getId());
@@ -796,7 +856,7 @@ public class DBGenerator implements CommandLineRunner {
         Meeting meeting2Class = new Meeting();
         meeting2Class.setName("Buổi 2");
         meeting2Class.setMeetingDate(new Date().getTime());
-        meeting2Class.setMeetingPeriod(MeetingPeriod.CA_2);
+        meeting2Class.setMeetingPeriod(meetingPeriod2.getId());
         meeting2Class.setDescriptions("Kỷ luật tốt Giữ gìn vệ sinh thật tốt Khiêm tốn, thật thà, dũng cảm");
         meeting2Class.setClassId(class2.getId());
         meeting2Class.setTeacherId(class2.getTeacherId());
@@ -808,7 +868,7 @@ public class DBGenerator implements CommandLineRunner {
         Meeting meeting3 = new Meeting();
         meeting3.setName("Buổi 3");
         meeting3.setMeetingDate(new Date().getTime() + 3);
-        meeting3.setMeetingPeriod(MeetingPeriod.CA_6);
+        meeting3.setMeetingPeriod(meetingPeriod6.getId());
         meeting3.setDescriptions("Câu chuyện về 5 điều Bác Hồ dạy cũng nhắc nhở chúng ta, không chỉ các cơ quan báo chí mà nhiều ngành, nhiều lĩnh vực khác hiện nay cũng đang đơn giản, dễ dãi trong dùng từ ");
         meeting3.setClassId(class1.getId());
         meeting3.setTeacherId(class1.getTeacherId());
@@ -820,7 +880,7 @@ public class DBGenerator implements CommandLineRunner {
         Meeting meeting4 = new Meeting();
         meeting4.setName("Buổi 4");
         meeting4.setMeetingDate(new Date().getTime() + 86400000);
-        meeting4.setMeetingPeriod(MeetingPeriod.CA_2);
+        meeting4.setMeetingPeriod(meetingPeriod2.getId());
         meeting4.setDescriptions("5 Điều Bác Hồ Dạy Thiếu niên, Nhi đồng");
         meeting4.setClassId(class1.getId());
         meeting4.setTeacherId(class1.getTeacherId());
@@ -832,7 +892,7 @@ public class DBGenerator implements CommandLineRunner {
         Meeting meeting5 = new Meeting();
         meeting5.setName("Buổi 5");
         meeting5.setMeetingDate(new Date().getTime() + 2 * 86400000);
-        meeting5.setMeetingPeriod(MeetingPeriod.CA_3);
+        meeting5.setMeetingPeriod(meetingPeriod3.getId());
         meeting5.setDescriptions("");
         meeting5.setClassId(class1.getId());
         meeting5.setTeacherId(class1.getTeacherId());
@@ -844,7 +904,7 @@ public class DBGenerator implements CommandLineRunner {
         Meeting meeting6 = new Meeting();
         meeting6.setName("Buổi 6");
         meeting6.setMeetingDate(new Date().getTime() + 3 * 86400000 + 5);
-        meeting6.setMeetingPeriod(MeetingPeriod.CA_4);
+        meeting6.setMeetingPeriod(meetingPeriod4.getId());
         meeting6.setDescriptions("Xét từ góc độ chủ thể sáng tạo và phát triển (ai làm nên nó): là hệ thống quan điểm và học thuyết đó được sáng lập bởi C. Mác, Ph. Ăngghen và sự phát triển, vận dụng vào thực tiễn của V.I. Lênin");
         meeting6.setClassId(class1.getId());
         meeting6.setTeacherId(class1.getTeacherId());
@@ -856,7 +916,7 @@ public class DBGenerator implements CommandLineRunner {
         Meeting meeting7 = new Meeting();
         meeting7.setName("Buổi 7  ");
         meeting7.setMeetingDate(new Date().getTime() + 3 * 86400000 + 300);
-        meeting7.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting7.setMeetingPeriod(meetingPeriod2.getId());
         meeting7.setDescriptions("Xét từ góc độ cấu tạo (nó gồm có những cái gì): Chủ nghĩa Mác - Lênin có ba bộ phận lý luận cơ bản hợp thành");
         meeting7.setClassId(class1.getId());
         meeting7.setTeacherId(class1.getTeacherId());
@@ -868,7 +928,7 @@ public class DBGenerator implements CommandLineRunner {
         Meeting meeting8 = new Meeting();
         meeting8.setName("Buổi 8");
         meeting8.setMeetingDate(new Date().getTime() + 4 * 86400000);
-        meeting8.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting8.setMeetingPeriod(meetingPeriod1.getId());
         meeting8.setDescriptions("Triết học là bộ phận lý luận nghiên cứu những quy luật vận động, phát triển chung nhất của tự nhiên, xã hội và tư duy");
         meeting8.setClassId(class1.getId());
         meeting8.setTeacherId(class1.getTeacherId());
@@ -880,7 +940,7 @@ public class DBGenerator implements CommandLineRunner {
         Meeting meeting9 = new Meeting();
         meeting9.setName("Buổi 9");
         meeting9.setMeetingDate(new Date().getTime() + 6 * 86400000);
-        meeting9.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting9.setMeetingPeriod(meetingPeriod2.getId());
         meeting9.setDescriptions("Triết học là bộ phận lý luận nghiên cứu những quy luật vận động, phát triển chung nhất của tự nhiên, xã hội và tư duy");
         meeting9.setClassId(class1.getId());
         meeting9.setStatusMeeting(StatusMeeting.BUOI_HOC);
@@ -893,7 +953,7 @@ public class DBGenerator implements CommandLineRunner {
         meeting10.setName("Buổi 10");
         meeting10.setTeacherId(class1.getTeacherId());
         meeting10.setMeetingDate(new Date().getTime() + 7 * 86400000);
-        meeting10.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting10.setMeetingPeriod(meetingPeriod2.getId());
         meeting10.setDescriptions("Triết học là bộ phận lý luận nghiên cứu những quy luật vận động, phát triển chung nhất của tự nhiên, xã hội và tư duy");
         meeting10.setClassId(class1.getId());
         meeting10.setStatusMeeting(StatusMeeting.BUOI_HOC);
@@ -904,7 +964,7 @@ public class DBGenerator implements CommandLineRunner {
         Meeting meeting11 = new Meeting();
         meeting11.setName("Buổi 11");
         meeting11.setMeetingDate(new Date().getTime() + 8 * 86400000);
-        meeting11.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting11.setMeetingPeriod(meetingPeriod2.getId());
         meeting11.setDescriptions("Chủ nghĩa Mác-Lênin là hệ thống quan điểm và học thuyết khoa học của C.Mác, Ph.Ăngghen và sự phát triển của V.I.Lênin");
         meeting11.setClassId(class1.getId());
         meeting11.setTeacherId(class1.getTeacherId());
@@ -916,7 +976,7 @@ public class DBGenerator implements CommandLineRunner {
         Meeting meeting12 = new Meeting();
         meeting12.setName("Buổi 12");
         meeting12.setMeetingDate(new Date().getTime() + 9 * 86400000);
-        meeting12.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting12.setMeetingPeriod(meetingPeriod2.getId());
         meeting12.setDescriptions("Chủ nghĩa cộng sản được xây dựng bởi các nhà sáng lập chủ nghĩa cộng sản Marx");
         meeting12.setClassId(class1.getId());
         meeting12.setTeacherId(class1.getTeacherId());
@@ -929,7 +989,7 @@ public class DBGenerator implements CommandLineRunner {
         meeting13.setName("Buổi 13 ");
         meeting13.setStatusMeeting(StatusMeeting.BUOI_HOC);
         meeting13.setMeetingDate(new Date().getTime() + 13 * 86400000);
-        meeting13.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting13.setMeetingPeriod(meetingPeriod2.getId());
         meeting13.setDescriptions("Nhà sử học Marx–Lenin đương đại Eric Hobsbawm");
         meeting13.setClassId(class1.getId());
         meeting13.setTeacherId(class1.getTeacherId());
@@ -941,7 +1001,7 @@ public class DBGenerator implements CommandLineRunner {
         meeting14.setName("Buổi 14 ");
         meeting14.setStatusMeeting(StatusMeeting.BUOI_HOC);
         meeting14.setMeetingDate(new Date().getTime() + 14 * 86400000);
-        meeting14.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting14.setMeetingPeriod(meetingPeriod2.getId());
         meeting14.setDescriptions("Sau sự ly khai của những người vô chính phủ, quốc tế thứ nhất tan vỡ");
         meeting14.setClassId(class1.getId());
         meeting14.setTeacherId(class1.getTeacherId());
@@ -952,7 +1012,7 @@ public class DBGenerator implements CommandLineRunner {
         Meeting meeting15 = new Meeting();
         meeting15.setName("Buổi 15");
         meeting15.setMeetingDate(new Date().getTime() + 15 * 86400000);
-        meeting15.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting15.setMeetingPeriod(meetingPeriod2.getId());
         meeting15.setDescriptions("Không có giải pháp nào là vĩnh cửu");
         meeting15.setClassId(class1.getId());
         meeting15.setStatusMeeting(StatusMeeting.BUOI_HOC);
@@ -964,7 +1024,7 @@ public class DBGenerator implements CommandLineRunner {
         Meeting meeting16 = new Meeting();
         meeting16.setName("Buổi 16");
         meeting16.setMeetingDate(new Date().getTime() + 16 * 86400000);
-        meeting16.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting16.setMeetingPeriod(meetingPeriod2.getId());
         meeting16.setDescriptions("Sự sụp đổ của Liên Xô và Đông Âu (do kinh tế gặp nhiều khó khăn, trong khi nhà nước không có dấu hiệu tự triệt tiêu như ý tưởng của Marx)");
         meeting16.setClassId(class1.getId());
         meeting16.setStatusMeeting(StatusMeeting.BUOI_HOC);
@@ -976,7 +1036,7 @@ public class DBGenerator implements CommandLineRunner {
         Meeting meeting17 = new Meeting();
         meeting17.setName("Buổi 17");
         meeting17.setMeetingDate(new Date().getTime() + 17 * 86400000);
-        meeting17.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting17.setMeetingPeriod(meetingPeriod2.getId());
         meeting17.setDescriptions("Lời kêu gọi này được phát ra vào sáng ngày 20 tháng 12 năm 1946");
         meeting17.setClassId(class1.getId());
         meeting17.setTeacherId(class1.getTeacherId());
@@ -988,7 +1048,7 @@ public class DBGenerator implements CommandLineRunner {
         Meeting meeting18 = new Meeting();
         meeting18.setName("Buổi 18");
         meeting18.setMeetingDate(new Date().getTime() + 18 * 86400000);
-        meeting18.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting18.setMeetingPeriod(meetingPeriod2.getId());
         meeting18.setDescriptions("Ngày 19 tháng 12, khi chiến sự bùng nổ - là ngày được gọi là Toàn quốc kháng chiến");
         meeting18.setClassId(class1.getId());
         meeting18.setTeacherId(class1.getTeacherId());
@@ -1000,7 +1060,7 @@ public class DBGenerator implements CommandLineRunner {
         Meeting meeting19 = new Meeting();
         meeting19.setName("Buổi 19");
         meeting19.setMeetingDate(new Date().getTime() + 19 * 86400000);
-        meeting19.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting19.setMeetingPeriod(meetingPeriod2.getId());
         meeting19.setDescriptions("Thức khuya hay ngủ ít có thể dẫn tới nguy cơ tăng cân theo chiều hướng tiêu cực, có thể gây thêm các tác dụng khác là nguy cơ mắc bệnh tiểu đường, tăng huyết áp…");
         meeting19.setClassId(class1.getId());
         meeting19.setTeacherId(class1.getTeacherId());
@@ -1012,7 +1072,7 @@ public class DBGenerator implements CommandLineRunner {
         Meeting meeting20 = new Meeting();
         meeting20.setName("Buổi 20");
         meeting20.setMeetingDate(new Date().getTime() + 20 * 86400000);
-        meeting20.setMeetingPeriod(MeetingPeriod.CA_1);
+        meeting20.setMeetingPeriod(meetingPeriod2.getId());
         meeting20.setDescriptions("75 năm trôi qua, nhưng khí thế hào hùng của Lời kêu gọi toàn quốc kháng chiến đã trở thành ngày lịch sử, là dấu son chói lọi trong cuộc đấu tranh bảo vệ độc lập, chủ quyền, thống nhất và toàn vẹn lãnh thổ.");
         meeting20.setClassId(class1.getId());
         meeting20.setTeacherId(class1.getTeacherId());

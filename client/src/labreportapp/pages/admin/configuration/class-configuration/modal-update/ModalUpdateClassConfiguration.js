@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { AdClassCongigurationAPI } from "../../../../api/admin/AdClassConfigurationAPI";
+import { AdClassCongigurationAPI } from "../../../../../api/admin/AdClassConfigurationAPI";
 import { toast } from "react-toastify";
 import { Button, Col, Input, Modal, Row } from "antd";
 

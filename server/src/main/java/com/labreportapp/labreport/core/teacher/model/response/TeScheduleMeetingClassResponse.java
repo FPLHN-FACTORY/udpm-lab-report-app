@@ -22,7 +22,7 @@ public interface TeScheduleMeetingClassResponse {
     Long getMeetingDate();
 
     @Value("#{target.meeting_period}")
-    Integer getMeetingPeriod();
+    String getMeetingPeriod();
 
     @Value("#{target.name_meeting}")
     String getMeetingName();

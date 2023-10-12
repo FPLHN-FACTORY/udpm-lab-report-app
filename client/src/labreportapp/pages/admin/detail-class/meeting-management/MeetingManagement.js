@@ -64,9 +64,8 @@ const MeetingManagment = () => {
   };
 
   useEffect(() => {
-    setIsLoading(true);
+    // setIsLoading(true);
     loadDataMeeting(0);
-
     return () => {
       dispatch(SetMeeting([]));
     };

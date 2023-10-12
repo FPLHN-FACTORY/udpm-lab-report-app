@@ -41,7 +41,6 @@ const DetailMeetingAttendance = () => {
   const detailMeeting = () => {
     MeetingManagementAPI.detailMeeting(id).then((response) => {
       setMeeting(response.data.data);
-      console.log(response.data.data);
       document.title =
         response.data.data.name + " | " + response.data.data.codeClass;
       loadDataAttendance(response.data.data.classId);

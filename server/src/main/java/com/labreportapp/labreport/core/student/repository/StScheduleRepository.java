@@ -23,7 +23,7 @@ public interface StScheduleRepository extends JpaRepository<Meeting, String> {
               m.id,
               m.name as meeting_name,
               m.meeting_date as meeting_date,
-              m.meeting_period as meeting_period,
+              mp.name as meeting_period,
               m.address as address,
               m.type_meeting as type_meeting,
               c.code AS class_code,
@@ -31,6 +31,7 @@ public interface StScheduleRepository extends JpaRepository<Meeting, String> {
               m.descriptions as descriptions,
               sc.student_id
             FROM meeting AS m
+            JOIN meeting_period AS mp ON mp.id = m.meeting_period
             JOIN class AS c ON m.class_id = c.id
             JOIN student_classes AS sc ON c.id = sc.class_id
             WHERE
@@ -67,9 +68,3 @@ public interface StScheduleRepository extends JpaRepository<Meeting, String> {
     Page<StScheduleResponse> findScheduleByStudent(@Param("req") StFindScheduleRequest req, Pageable pageable);
 }
 
-// ( :#{#req.searchTime} IS NULL
-//                    OR :#{#req.searchTime} LIKE 'null'
-//                    OR :#{#req.searchTime} LIKE ''
-//                    OR :#{#req.searchTime} = 0
-//                    OR DATE(FROM_UNIXTIME(c.start_time / 1000)) between CURDATE() and
-//                    DATE_ADD(CURDATE() , INTERVAL :#{#req.searchTime} DAY) )
