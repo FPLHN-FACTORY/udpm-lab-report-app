@@ -3,7 +3,6 @@ import { apiDanhSachGiangVien } from "../../../helper/request.helper";
 
 const url = `/admin/class-managerment`;
 export class ClassAPI {
-
   static kickStudentClassesToClass(data) {
     return request({
       method: "PUT",
@@ -194,8 +193,7 @@ export class ClassAPI {
   static importExcelStudentsInClass(formData, id) {
     return request({
       method: "POST",
-      url:
-        `/admin/student-classes/import-excel/${id}`,
+      url: `/admin/student-classes/import-excel/${id}`,
       data: formData,
       headers: {
         "Content-Type": "multipart/form-data",
@@ -207,10 +205,8 @@ export class ClassAPI {
     return request({
       method: "GET",
       url:
-        `/admin/student-classes/export-excel/${id}` +
-        `?isSample=${isSample}`,
+        `/admin/student-classes/export-excel/${id}` + `?isSample=${isSample}`,
       responseType: "blob",
     });
   }
-
 }

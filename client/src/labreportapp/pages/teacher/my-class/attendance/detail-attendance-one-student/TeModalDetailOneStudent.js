@@ -37,9 +37,7 @@ const TeModalDetailOneStudent = ({ onCancel, visible, objStudent }) => {
       ).then((response) => {
         setData(response.data.data.data);
         setTotalPages(response.data.data.totalPages);
-        setTimeout(() => {
-          setLoadingNo(false);
-        }, 120);
+        setLoadingNo(false);
       });
     } catch (error) {
       console.log(error);

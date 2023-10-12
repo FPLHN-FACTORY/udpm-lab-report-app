@@ -32,15 +32,15 @@ public class LabReportUtils {
             case 6:
                 meetingPeriodStr = "20:40 - 22:40";
                 break;
-            case 7:
-                meetingPeriodStr = "22:50 - 00:50";
-                break;
-            case 8:
-                meetingPeriodStr = "01:00 - 3:00";
-                break;
-            case 9:
-                meetingPeriodStr = "03:10 - 05:10";
-                break;
+//            case 7:
+//                meetingPeriodStr = "22:50 - 00:50";
+//                break;
+//            case 8:
+//                meetingPeriodStr = "01:00 - 3:00";
+//                break;
+//            case 9:
+//                meetingPeriodStr = "03:10 - 05:10";
+//                break;
             default:
                 meetingPeriodStr = "";
         }
@@ -73,15 +73,17 @@ public class LabReportUtils {
             case CA_7:
                 meetingPeriodInt = 6;
                 break;
-            case CA_8:
-                meetingPeriodInt = 7;
-                break;
-            case CA_9:
-                meetingPeriodInt = 8;
-                break;
-            case CA_10:
-                meetingPeriodInt = 9;
-                break;
+//            case CA_8:
+//                meetingPeriodInt = 7;
+//                break;
+//            case CA_9:
+//                meetingPeriodInt = 8;
+//                break;
+//            case CA_10:
+//                meetingPeriodInt = 9;
+//                break;
+            default:
+                meetingPeriodInt = 0;
         }
 
         return meetingPeriodInt;

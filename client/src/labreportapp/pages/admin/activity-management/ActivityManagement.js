@@ -304,7 +304,7 @@ const ActivityManagement = () => {
         <div className="content">
           <div className="content-wrapper">
             <div className="content-center">
-              Tên hoạt động:{" "}
+              Tên hoạt động{" "}
               <Input
                 type="text"
                 value={searchName}
@@ -315,7 +315,7 @@ const ActivityManagement = () => {
           </div>
           <div className="content-wrapper">
             <div className="content-center">
-              Cấp độ:{" "}
+              Cấp độ{" "}
               <Select
                 value={levelSearch}
                 style={{ width: "50%", marginLeft: "10px" }}
@@ -332,7 +332,7 @@ const ActivityManagement = () => {
           </div>
           <div className="content-wrapper">
             <div className="content-center">
-              Học kỳ:{" "}
+              Học kỳ{" "}
               <Select
                 style={{ width: "50%", marginLeft: "10px" }}
                 value={semesterSearch}
@@ -349,7 +349,11 @@ const ActivityManagement = () => {
           </div>
         </div>
         <div className="box_btn_filter">
-          <Button className="btn_filter" onClick={handleSearch}>
+          <Button
+            className="btn_filter"
+            onClick={handleSearch}
+            style={{ marginRight: "15px" }}
+          >
             {" "}
             <FontAwesomeIcon
               icon={faFilterCircleDollar}
@@ -362,10 +366,7 @@ const ActivityManagement = () => {
             style={{ backgroundColor: "rgb(38, 144, 214)", color: "white" }}
             onClick={handleClear}
           >
-            <FontAwesomeIcon
-              icon={faChainSlash}
-              style={{ marginRight: 5 }}
-            />
+            <FontAwesomeIcon icon={faChainSlash} style={{ marginRight: 5 }} />
             Làm mới bộ lọc
           </Button>
         </div>

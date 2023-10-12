@@ -125,12 +125,14 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                  m.type_meeting as type_meeting,
                  m.address as address_meeting,
                  m.descriptions as descriptions_meeting,
-                 l.name as level
+                 l.name as level,
+                 m.notes as notes
              FROM class c
              JOIN meeting m ON m.class_id = c.id
              JOIN activity ac ON ac.id = c.activity_id
              JOIN level l on l.id = ac.level_id
              WHERE m.teacher_id = :#{#req.idTeacher} AND DATE(FROM_UNIXTIME(m.meeting_date / 1000)) = CURDATE()
+             and m.status_meeting = 0
              ORDER BY m.meeting_date ASC
             """, countQuery = """
             SELECT DISTINCT(m.id)
@@ -154,12 +156,13 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                  m.type_meeting as type_meeting,
                  m.address as address_meeting,
                  m.descriptions as descriptions_meeting,
-                 l.name as level
+                 l.name as level,
+                 m.notes as notes
              FROM class c
              JOIN meeting m ON m.class_id = c.id
              JOIN activity ac ON ac.id = c.activity_id
              JOIN level l on l.id = ac.level_id
-             WHERE m.teacher_id = :#{#req.idTeacher} AND 
+             WHERE m.teacher_id = :#{#req.idTeacher} AND
              (
                      (:#{#req.time} LIKE '-7' AND m.meeting_date BETWEEN
                          UNIX_TIMESTAMP(DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY)) * 1000
@@ -241,6 +244,8 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                 (m.meeting_period = 4 AND TIME(FROM_UNIXTIME(m.meeting_date / 1000)) > '18:20:00')
                 OR
                 (m.meeting_period = 5 AND TIME(FROM_UNIXTIME(m.meeting_date / 1000))> '20:30:00')
+                 OR
+                (m.meeting_period = 6 AND TIME(FROM_UNIXTIME(m.meeting_date / 1000))> '22:40:00')
             )
             AND NOT EXISTS (
                 SELECT 1

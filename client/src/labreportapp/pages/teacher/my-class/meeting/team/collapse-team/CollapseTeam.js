@@ -195,13 +195,19 @@ const CollapseTeam = ({ team, featchMeeting }) => {
                       {item.name}
                     </span>
                   </div>
-                  <div style={{ justifyContent: "right" }}>
+                  <div style={{ justifyContent: "right", marginLeft: "100px" }}>
                     {(checkTime === 1 && item.descriptionsReport === null) ||
                     (checkTime === 1 && item.descriptionsReport === "") ? (
-                      <Badge.Ribbon text={"Chưa báo cáo"} color="#E2B357" />
+                      <Badge.Ribbon
+                        text={"Chưa báo cáo"}
+                        color="rgb(38, 144, 214)"
+                      />
                     ) : (checkTime === 2 && item.descriptionsReport === null) ||
                       (checkTime === 2 && item.descriptionsReport === "") ? (
-                      <Badge.Ribbon text={"Chưa báo cáo"} color="#E2B357" />
+                      <Badge.Ribbon
+                        text={"Chưa báo cáo"}
+                        color="rgb(38, 144, 214)"
+                      />
                     ) : (
                       ""
                     )}

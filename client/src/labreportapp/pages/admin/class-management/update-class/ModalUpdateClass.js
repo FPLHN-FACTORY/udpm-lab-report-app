@@ -57,7 +57,7 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
 
   const listClassPeriod = [];
 
-  for (let i = 0; i <= 9; i++) {
+  for (let i = 0; i <= 6; i++) {
     listClassPeriod.push("" + i);
   }
 

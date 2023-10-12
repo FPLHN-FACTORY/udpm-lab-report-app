@@ -184,7 +184,7 @@ const TeacherScheduleToday = () => {
       },
     },
     {
-      title: "Tên buổi học",
+      title: "Buổi học",
       dataIndex: "meetingName",
       key: "meetingName",
     },
@@ -229,7 +229,7 @@ const TeacherScheduleToday = () => {
       sorter: (a, b) => a.meetingPeriod - b.meetingPeriod,
     },
     {
-      title: "Level",
+      title: "Cấp độ",
       dataIndex: "level",
       key: "level",
       sorter: (a, b) => a.level.localeCompare(b.level),
@@ -270,6 +270,11 @@ const TeacherScheduleToday = () => {
           </div>
         );
       },
+    },
+    {
+      title: "Ghi chú",
+      dataIndex: "notes",
+      key: "notes",
     },
     {
       title: "Điểm danh",
@@ -363,7 +368,7 @@ const TeacherScheduleToday = () => {
       sorter: (a, b) => a.meetingDate - b.meetingDate,
     },
     {
-      title: "Tên buổi học",
+      title: "Buổi học",
       dataIndex: "meetingName",
       key: "meetingName",
     },
@@ -375,7 +380,6 @@ const TeacherScheduleToday = () => {
         return <span>{text === 0 ? "Online" : "Offline"}</span>;
       },
     },
-
     {
       title: "Địa điểm",
       dataIndex: "addressCustom",
@@ -407,9 +411,8 @@ const TeacherScheduleToday = () => {
       },
       sorter: (a, b) => a.meetingPeriod - b.meetingPeriod,
     },
-
     {
-      title: "Level",
+      title: "Cấp độ",
       dataIndex: "level",
       key: "level",
       sorter: (a, b) => a.level - b.level,
@@ -418,6 +421,14 @@ const TeacherScheduleToday = () => {
       title: "Link học trực tuyến",
       dataIndex: "meetingAddress",
       key: "meetingAddress",
+      render: (text, record) =>
+        record.typeMeeting === 0 ? (
+          <a href={text} target="_blank">
+            {text}
+          </a>
+        ) : (
+          text
+        ),
     },
   ];
   return (

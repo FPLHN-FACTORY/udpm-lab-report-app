@@ -124,6 +124,18 @@ function App() {
         }
       );
     });
+    if (userCurrent != null && userCurrent.role.includes("TEACHER")) {
+      stompClientAll.connect({}, () => {
+        stompClientAll.subscribe(
+          "/portal-projects/update-meeting",
+          (message) => {
+            toast.info("Thông báo : " + message.body, {
+              position: toast.POSITION.TOP_CENTER,
+            });
+          }
+        );
+      });
+    }
   }
 
   return (

@@ -13,7 +13,7 @@ import { SetTTrueToggle } from "../../../../app/admin/AdCollapsedSlice.reducer";
 import { useEffect, useState } from "react";
 import { ClassAPI } from "../../../../api/admin/class-manager/ClassAPI.api";
 import moment from "moment";
-import { Button, Empty, Input, Popconfirm, Spin, Table } from "antd";
+import { Button, Empty, Input, Popconfirm, Spin, Table, Tag } from "antd";
 import LoadingIndicator from "../../../../helper/loading";
 import LoadingIndicatorNoOverlay from "../../../../helper/loadingNoOverlay";
 import { toast } from "react-toastify";
@@ -52,31 +52,31 @@ const InformationClass = () => {
   const handleShowStudentsCouldKick = () => {
     if (students.length === 0) {
       toast.warning("Hiện tại lớp học chưa có sinh viên!");
-    }
-    else if (!isKickStudent) {
+    } else if (!isKickStudent) {
       setIsKickStudent(true);
       setIsMoveStudent(false);
-      toast.success("Đã chuyển sang chế độ xóa sinh viên khỏi lớp, hãy chọn sinh viên cần xóa!");
+      toast.success(
+        "Đã chuyển sang chế độ xóa sinh viên khỏi lớp, hãy chọn sinh viên cần xóa!"
+      );
     }
-  }
+  };
   const handleOpenModalClass = () => {
     if (students.length === 0) {
       toast.warning("Hiện tại lớp học chưa có sinh viên!");
-    }
-    else if (!isMoveStudent) {
+    } else if (!isMoveStudent) {
       setIsMoveStudent(true);
       setIsKickStudent(false);
-      toast.success("Đã chuyển sang chế độ di chuyển sinh viên, hãy chọn sinh viên cần chuyển lớp!");
-    }
-    else if (isMoveStudent) {
+      toast.success(
+        "Đã chuyển sang chế độ di chuyển sinh viên, hãy chọn sinh viên cần chuyển lớp!"
+      );
+    } else if (isMoveStudent) {
       if (selectedRowKeys.length === 0) {
         toast.warning("Vui lòng chọn sinh viên cần xóa khỏi lớp!");
-      }
-      else {
+      } else {
         setModalClass(true);
       }
     }
-  }
+  };
 
   useEffect(() => {
     setSelectedRowKeys([]);
@@ -99,8 +99,7 @@ const InformationClass = () => {
           disabled: record.nameTeam !== null,
         }),
       };
-    }
-    else if (isKickStudent) {
+    } else if (isKickStudent) {
       rowSelection = {
         renderCell: (checked, record, index, originNode) => {
           if (record.idFeedBack != null || record.idAttendance != null) {
@@ -115,8 +114,7 @@ const InformationClass = () => {
           disabled: record.idFeedBack != null || record.idAttendance != null,
         }),
       };
-    }
-    else {
+    } else {
       rowSelection = null;
     }
   }
@@ -125,7 +123,6 @@ const InformationClass = () => {
     try {
       await ClassAPI.getAdClassDetailById(idClass).then((responese) => {
         setClassDetail(responese.data.data);
-        console.log(responese.data.data);
         document.title = "Thông tin lớp học - " + responese.data.data.code;
       });
     } catch (error) {
@@ -198,8 +195,8 @@ const InformationClass = () => {
               } else {
                 toast.error(
                   "Import thất bại, " +
-                  response.data.data.message +
-                  ", vui lòng chờ !",
+                    response.data.data.message +
+                    ", vui lòng chờ !",
                   {
                     position: toast.POSITION.TOP_CENTER,
                   }
@@ -210,7 +207,7 @@ const InformationClass = () => {
             setTimeout(() => {
               window.open(
                 `http://localhost:3000/admin/class-management/information-class/` +
-                id,
+                  id,
                 "_self"
               );
               setDownloading(false);
@@ -245,58 +242,12 @@ const InformationClass = () => {
       width: "12px",
     },
     {
-      title: "Tên tài khoản",
-      dataIndex: "username",
-      key: "username",
-      sorter: (a, b) => a.username.localeCompare(b.username),
-      filterDropdown: ({
-        setSelectedKeys,
-        selectedKeys,
-        confirm,
-        clearFilters,
-      }) => (
-        <div style={{ padding: 8 }}>
-          <Input
-            placeholder="Tìm kiếm"
-            value={selectedKeys[0]}
-            autoFocus={true}
-            onChange={(e) =>
-              setSelectedKeys(e.target.value ? [e.target.value] : [])
-            }
-            onPressEnter={confirm}
-            style={{ width: 188, marginBottom: 8, display: "block" }}
-          />
-          <Button
-            type="primary"
-            className="btn_search_member"
-            onClick={confirm}
-            size="small"
-            style={{ width: 90, marginRight: 8 }}
-          >
-            Tìm
-          </Button>
-          <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
-            Đặt lại
-          </Button>
-        </div>
-      ),
-      filterIcon: (filtered) => (
-        <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
-      ),
-      onFilter: (value, record) => {
-        if (record.username === null) {
-          return false;
-        }
-        return record.username.toLowerCase().includes(value.toLowerCase());
-      },
-    },
-    {
       title: "Nhóm",
       dataIndex: "nameTeam",
       key: "nameTeam",
       render: (text, record) => {
-        if (text === null) {
-          return <span style={{ color: "blue" }}>Chưa vào nhóm</span>;
+        if (text === null || text === "") {
+          return <Tag color="processing">Chưa vào nhóm</Tag>;
         } else {
           return <span>{text}</span>;
         }
@@ -354,6 +305,53 @@ const InformationClass = () => {
         return record.nameTeam.toLowerCase().includes(value.toLowerCase());
       },
     },
+    {
+      title: "Tên tài khoản",
+      dataIndex: "username",
+      key: "username",
+      sorter: (a, b) => a.username.localeCompare(b.username),
+      filterDropdown: ({
+        setSelectedKeys,
+        selectedKeys,
+        confirm,
+        clearFilters,
+      }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="Tìm kiếm"
+            value={selectedKeys[0]}
+            autoFocus={true}
+            onChange={(e) =>
+              setSelectedKeys(e.target.value ? [e.target.value] : [])
+            }
+            onPressEnter={confirm}
+            style={{ width: 188, marginBottom: 8, display: "block" }}
+          />
+          <Button
+            type="primary"
+            className="btn_search_member"
+            onClick={confirm}
+            size="small"
+            style={{ width: 90, marginRight: 8 }}
+          >
+            Tìm
+          </Button>
+          <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
+            Đặt lại
+          </Button>
+        </div>
+      ),
+      filterIcon: (filtered) => (
+        <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+      ),
+      onFilter: (value, record) => {
+        if (record.username === null) {
+          return false;
+        }
+        return record.username.toLowerCase().includes(value.toLowerCase());
+      },
+    },
+
     {
       title: "Họ và tên",
       dataIndex: "name",
@@ -466,35 +464,37 @@ const InformationClass = () => {
   const getSelectedRowKeysNotKickOrMove = (selected, selectedRowKeys) => {
     setSelected(selected);
     setSelectedRowKeys(selectedRowKeys);
-  }
+  };
 
-  const getSelectedRowKeys = (selected, selectedRowKeys, isMoveStudent, isKickStudent) => {
+  const getSelectedRowKeys = (
+    selected,
+    selectedRowKeys,
+    isMoveStudent,
+    isKickStudent
+  ) => {
     setSelected(selected);
     setSelectedRowKeys(selectedRowKeys);
     setIsKickStudent(isKickStudent);
     setIsMoveStudent(isMoveStudent);
-  }
+  };
 
   const handleKickStudent = async () => {
     if (selectedRowKeys.length === 0) {
       toast.warning("Vui lòng chọn sinh viên cần chuyển lớp!");
-    }
-    else {
+    } else {
       try {
         let data = {
           listIdStudent: selectedRowKeys,
           idClassOld: classDetail.id,
         };
-        await ClassAPI.kickStudentClassesToClass(data).then(
-          (response) => {
-            if (response.data.data) {
-              toast.success("Xóa sinh viên thành công!");
-              setSelected([]);
-            } else {
-              toast.error("Xóa sinh viên thất bại !");
-            }
+        await ClassAPI.kickStudentClassesToClass(data).then((response) => {
+          if (response.data.data) {
+            toast.success("Xóa sinh viên thành công!");
+            setSelected([]);
+          } else {
+            toast.error("Xóa sinh viên thất bại !");
           }
-        );
+        });
       } catch (error) {
         console.log(error);
       }
@@ -575,7 +575,13 @@ const InformationClass = () => {
                 float: "right",
               }}
             >
-              <span style={{ fontSize: "14px", padding: "10px" }}>
+              <span
+                style={{
+                  fontSize: "14px",
+                  padding: "15px",
+                  fontWeight: 500,
+                }}
+              >
                 {classDetail.code}
               </span>
             </div>
@@ -758,9 +764,11 @@ const InformationClass = () => {
                     />{" "}
                     Tải mẫu
                   </Button>
-                  {classDetail.statusTeacherEdit === 0 ?
+                  {classDetail.statusTeacherEdit === 0 ? (
                     <Button
-                      onClick={() => { handleOpenModalClass() }}
+                      onClick={() => {
+                        handleOpenModalClass();
+                      }}
                       style={{
                         backgroundColor: "rgb(38, 144, 214)",
                         color: "white",
@@ -772,14 +780,21 @@ const InformationClass = () => {
                         color="white"
                         style={{ paddingRight: "5px" }}
                       />
-                      {isMoveStudent === false ? "Trao đổi sinh viên" : "Chọn lớp cần chuyển"}</Button>
-                    : ""}
+                      {isMoveStudent === false
+                        ? "Trao đổi sinh viên"
+                        : "Chọn lớp cần chuyển"}
+                    </Button>
+                  ) : (
+                    ""
+                  )}
 
-                  {classDetail.statusTeacherEdit === 0 ?
+                  {classDetail.statusTeacherEdit === 0 ? (
                     <Popconfirm
                       disabled={!isKickStudent}
                       placement={"topRight"}
-                      description={"Bạn có chắc chắn muốn xóa những sinh viên này khỏi lớp không?"}
+                      description={
+                        "Bạn có chắc chắn muốn xóa những sinh viên này khỏi lớp không?"
+                      }
                       okText="Có"
                       cancelText="Không"
                       onConfirm={() => {
@@ -802,20 +817,28 @@ const InformationClass = () => {
                             marginRight: "7px",
                           }}
                         />{" "}
-                        {isKickStudent === false ? "Xóa sinh viên khỏi lớp" : "Xác nhận xóa"}
+                        {isKickStudent === false
+                          ? "Xóa sinh viên khỏi lớp"
+                          : "Xác nhận xóa"}
                       </Button>
                     </Popconfirm>
-                    : ""}
+                  ) : (
+                    ""
+                  )}
                   <Button
                     onClick={() => {
                       if (!isKickStudent && !isMoveStudent) {
-                        toast.success("Đang ở chế độ chỉ xem danh sách sinh viên!")
+                        toast.success(
+                          "Đang ở chế độ chỉ xem danh sách sinh viên !"
+                        );
+                      } else {
+                        setIsMoveStudent(false);
+                        setIsKickStudent(false);
+                        toast.success(
+                          "Đã chuyển sang chế độ chỉ xem danh sách sinh viên! "
+                        );
                       }
-                      else {
-                        setIsMoveStudent(false); setIsKickStudent(false); toast.success("Đã chuyển sang chế độ chỉ xem danh sách sinh viên!")
-                      }
-                    }
-                    }
+                    }}
                     style={{
                       backgroundColor: "rgb(38, 144, 214)",
                       color: "white",

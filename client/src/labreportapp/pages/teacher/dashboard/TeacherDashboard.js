@@ -5,6 +5,7 @@ import {
   faDownload,
   faFilter,
   faLineChart,
+  faTableList,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   Button,
@@ -41,6 +42,10 @@ const TeacherDashboard = () => {
   const [listClass, setListClass] = useState([]);
   const [loadOne, setLoadOne] = useState(false);
   const [semesterOne, setSemesterOne] = useState(null);
+  const [countClass, setCountClass] = useState({
+    classLesson: 0,
+    classNumber: 0,
+  });
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Thống kê";
@@ -111,11 +116,14 @@ const TeacherDashboard = () => {
       };
     }
     try {
-      await TeacherStatisticalAPI.getStatistical(filter).then((respone) => {
-        setTotalPages(parseInt(respone.data.data.totalPages));
-        setListClass(respone.data.data.data);
-        setLoading(true);
+      await TeacherStatisticalAPI.getCountClass(filter).then((response) => {
+        setCountClass(response.data.data);
+      });
+      await TeacherStatisticalAPI.getStatistical(filter).then((response) => {
+        setTotalPages(parseInt(response.data.data.totalPages));
+        setListClass(response.data.data.data);
         setLoadOne(true);
+        setLoading(true);
       });
     } catch (error) {
       console.log(error);
@@ -133,7 +141,6 @@ const TeacherDashboard = () => {
           setIdSemesterSearch("");
         }
         setListSemester(respone.data.data);
-        setLoading(true);
       });
     } catch (error) {
       console.log(error);
@@ -144,7 +151,6 @@ const TeacherDashboard = () => {
       await TeacherActivityAPI.getAllActivityByIdSemester(idSemesterSeach).then(
         (respone) => {
           setListActivity(respone.data.data);
-          setLoading(true);
         }
       );
     } catch (error) {
@@ -310,18 +316,6 @@ const TeacherDashboard = () => {
           </span>
         </div>
       </div>
-      {/* <div className="box-general">
-        <div className="heading-box">
-          <span style={{ fontSize: "20px", fontWeight: "500" }}>
-            <FontAwesomeIcon
-              icon={faLineChart}
-              style={{ marginRight: "8px" }}
-            />{" "}
-            Thống kê
-          </span>
-        </div>
-        <div className="box-son-general"></div>
-      </div> */}
       <div className="box-dash-board">
         <Row>
           {" "}
@@ -423,9 +417,33 @@ const TeacherDashboard = () => {
         style={{ marginTop: "10px", minHeight: "56%" }}
       >
         <Row>
-          <Col span={22}></Col>
+          <Col span={22}>
+            {" "}
+            <div style={{ paddingTop: "30px" }}>
+              <span style={{ fontSize: "17px", fontWeight: "500" }}>
+                <FontAwesomeIcon
+                  icon={faTableList}
+                  style={{
+                    marginRight: "10px",
+                    fontSize: "20px",
+                  }}
+                />
+                Danh sách lớp học
+              </span>
+            </div>
+          </Col>
           <Col span={2}>
-            <Statistic title="Số lớp dạy" value={93} suffix="/ 100" />
+            <Statistic
+              title="Số lớp dạy"
+              value={
+                countClass.classLesson !== null ? countClass.classLesson : 0
+              }
+              suffix={
+                countClass.classNumber !== null
+                  ? "/" + countClass.classNumber
+                  : "/" + 0
+              }
+            />
           </Col>
         </Row>
         <div>

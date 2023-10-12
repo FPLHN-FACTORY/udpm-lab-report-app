@@ -237,7 +237,7 @@ const StudentMyClass = () => {
         <div className="content_filter">
           <Row gutter={24} style={{ padding: "5px 2% 0" }}>
             <Col span={8}>
-              <span>Học kỳ:</span>
+              <span>Học kỳ</span>
               <br />
               <Select
                 showSearch
@@ -261,7 +261,7 @@ const StudentMyClass = () => {
               </Select>
             </Col>
             <Col span={16}>
-              <span>Hoạt động:</span>
+              <span>Hoạt động</span>
 
               <br />
               <Select
@@ -288,7 +288,7 @@ const StudentMyClass = () => {
           </Row>
           <Row gutter={24} style={{ padding: "5px 2% 0" }}>
             <Col span={8}>
-              <span>Mã lớp:</span> <br />
+              <span>Mã lớp</span> <br />
               <Input
                 onChange={(e) => {
                   setCode(e.target.value);
@@ -300,7 +300,7 @@ const StudentMyClass = () => {
               />
             </Col>
             <Col span={8}>
-              <span>Ca học:</span>
+              <span>Ca học</span>
               <br />
               <Select
                 style={{ width: "100%", marginTop: "6px" }}
@@ -325,7 +325,7 @@ const StudentMyClass = () => {
               </Select>
             </Col>
             <Col span={8}>
-              <span>Level:</span> <br />
+              <span>Cấp độ</span> <br />
               <Select
                 style={{ width: "100%", marginTop: "6px" }}
                 onChange={(e) => {
@@ -347,7 +347,7 @@ const StudentMyClass = () => {
             </Col>
           </Row>
         </div>
-        <div className="box_btn_filter">
+        <div className="box_btn_filter_st">
           <Button
             className="btn_filter"
             onClick={handleClickFilter}

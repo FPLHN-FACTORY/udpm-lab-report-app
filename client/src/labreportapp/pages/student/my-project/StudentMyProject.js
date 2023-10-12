@@ -8,7 +8,12 @@ import { useAppDispatch, useAppSelector } from "../../../app/hook";
 import { Button, Input, Pagination, Select, Table, Tooltip } from "antd";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faFilter } from "@fortawesome/free-solid-svg-icons";
+import {
+  faChainSlash,
+  faEye,
+  faFilter,
+  faFilterCircleDollar,
+} from "@fortawesome/free-solid-svg-icons";
 import LoadingIndicator from "../../../helper/loading";
 import { ProjectOutlined } from "@ant-design/icons";
 
@@ -226,8 +231,16 @@ const StudentMyProject = () => {
             </div>
           </div>
         </div>
-        <div className="box_btn_filter">
-          <Button className="btn_filter" onClick={search}>
+        <div className="box_btn_filter_st">
+          <Button
+            className="btn_filter"
+            onClick={search}
+            style={{ marginRight: "15px" }}
+          >
+            <FontAwesomeIcon
+              icon={faFilterCircleDollar}
+              style={{ marginRight: "8px" }}
+            />{" "}
             Tìm kiếm
           </Button>
           <Button
@@ -235,6 +248,11 @@ const StudentMyProject = () => {
             onClick={clear}
             style={{ backgroundColor: "rgb(38, 144, 214)" }}
           >
+            {" "}
+            <FontAwesomeIcon
+              icon={faChainSlash}
+              style={{ marginRight: "8px" }}
+            />{" "}
             Làm mới bộ lọc
           </Button>
         </div>

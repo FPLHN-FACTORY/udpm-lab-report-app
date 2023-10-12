@@ -5,7 +5,7 @@ import { ControlOutlined } from "@ant-design/icons";
 import { useAppDispatch } from "../../../../app/hook";
 import { useState, useEffect } from "react"; // Import useState và useEffect
 import { StPointDetailAPI } from "../../../../api/student/StPointDetailAPI";
-import { Table } from "antd";
+import { Empty, Table } from "antd";
 import LoadingIndicator from "../../../../helper/loading";
 import { SetTTrueToggle } from "../../../../app/student/StCollapsedSlice.reducer";
 
@@ -152,12 +152,20 @@ const StPointDetailClass = () => {
               <div className="info-team" style={{ marginTop: 15 }}>
                 <span className="info-heading">Danh sách đầu điểm:</span>
               </div>
-              <Table
-                columns={columns}
-                dataSource={pointStudent}
-                key="stt"
-                pagination={{ pageSize: 8 }}
-              />
+
+              {pointStudent.length > 0 ? (
+                <Table
+                  columns={columns}
+                  dataSource={pointStudent}
+                  key="stt"
+                  pagination={{ pageSize: 8 }}
+                />
+              ) : (
+                <Empty
+                  imageStyle={{ height: 60 }}
+                  description={<span>Không có dữ liệu</span>}
+                />
+              )}
             </>
           </div>
         </div>

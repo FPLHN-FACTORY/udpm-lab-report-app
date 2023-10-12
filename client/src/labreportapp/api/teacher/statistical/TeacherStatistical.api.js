@@ -18,4 +18,19 @@ export class TeacherStatisticalAPI {
         data.size,
     });
   }
+  static getCountClass(data) {
+    return request({
+      method: "GET",
+      url:
+        url +
+        `/count-class?idSemester=` +
+        data.idSemester +
+        `&idActivity=` +
+        data.idActivity +
+        `&page=` +
+        data.page +
+        `&size=` +
+        data.size,
+    });
+  }
 }

@@ -19,7 +19,7 @@ import {
 } from "../../../../helper/util.helper";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTableList } from "@fortawesome/free-solid-svg-icons";
-import { Badge, Empty, Tag } from "antd";
+import { Badge, Col, Empty, Row, Tag } from "antd";
 
 const MeetingInMyClass = () => {
   const dispatch = useAppDispatch();
@@ -178,54 +178,51 @@ const MeetingInMyClass = () => {
             </div>
           </div>
           <div className="menu-teacher-search">
-            <div>
-              <div style={{ margin: "15px 0px 15px 15px" }}>
-                <span style={{ fontSize: "17px", fontWeight: 500 }}>
-                  <FontAwesomeIcon
-                    icon={faTableList}
-                    style={{
-                      marginRight: "10px",
-                      fontSize: "20px",
-                    }}
-                  />
-                  Danh sách buổi học :{" "}
-                  <span
-                    style={{
-                      padding: "5px",
-                      backgroundColor: "rgb(38, 144, 214)",
-                      color: "white",
-                      fontSize: "15px",
-                      borderRadius: "5px",
-                      fontWeight: "400",
-                    }}
-                  >
-                    {dataMeeting != null ? dataMeeting.length : 0} buổi học
-                  </span>
+            <div style={{ margin: "15px 0px 15px 15px" }}>
+              <span style={{ fontSize: "17px", fontWeight: 500 }}>
+                <FontAwesomeIcon
+                  icon={faTableList}
+                  style={{
+                    marginRight: "10px",
+                    fontSize: "20px",
+                  }}
+                />
+                Danh sách buổi học :{" "}
+                <span
+                  style={{
+                    padding: "5px",
+                    backgroundColor: "rgb(38, 144, 214)",
+                    color: "white",
+                    fontSize: "15px",
+                    borderRadius: "5px",
+                    fontWeight: "400",
+                  }}
+                >
+                  {dataMeeting != null ? dataMeeting.length : 0} buổi học
                 </span>
-              </div>
-              <div className="data-table" style={{ minHeight: "380px" }}>
-                {dataMeeting.length > 0 ? (
-                  <>
-                    {dataMeeting.map((record) => (
+              </span>
+            </div>
+            <div
+              className="data-table-te"
+              style={{
+                height: "auto",
+                minHeight: "380px",
+              }}
+            >
+              {dataMeeting.length > 0 ? (
+                <>
+                  {dataMeeting.map((record) => (
+                    <div className="box-card-te">
                       <Link
                         to={`/teacher/my-class/meeting/detail/${record.id}`}
                         key={record.id}
                       >
-                        {!convertStatusMeetingByDateAndPeriod(
-                          record.meetingDate,
-                          record.meetingPeriod
-                        ) && (
-                          <Badge.Ribbon
-                            color="#E2B357"
-                            text={"Học xong"}
-                            style={{
-                              marginRight: "205px",
-                            }}
-                          />
-                        )}
-                        <div className="box-card">
-                          <div className="title-left">
-                            <div className="box-icon">
+                        <Row gutter={24}>
+                          <Col span={15}>
+                            <div
+                              className="box-icon"
+                              style={{ marginLeft: "30px" }}
+                            >
                               <BookOutlined
                                 style={{ color: "white", fontSize: "21px" }}
                               />
@@ -270,50 +267,61 @@ const MeetingInMyClass = () => {
                                 )}
                               </span>
                             </span>
-                          </div>
-                          <div
-                            className="title-right"
-                            style={{ marginTop: "12px" }}
+                          </Col>
+                          <Col
+                            span={9}
+                            style={{
+                              fontSize: "13px",
+                            }}
                           >
-                            <div>
-                              <span>
-                                Ngày dạy:
-                                <span
-                                  style={{
-                                    color: "red",
-                                    fontWeight: "500",
-                                  }}
-                                >
-                                  <span>
-                                    {" "}
-                                    {convertLongToDate(
-                                      record.meetingDate
-                                    )}-{" "}
-                                  </span>
-                                  <span>Ca </span>
-                                  {record.meetingPeriod + 1 + " "}
-                                  <span>
-                                    (
-                                    {convertMeetingPeriodToTime(
-                                      record.meetingPeriod
-                                    )}
-                                    )
-                                  </span>
+                            {!convertStatusMeetingByDateAndPeriod(
+                              record.meetingDate,
+                              record.meetingPeriod
+                            ) && (
+                              <div>
+                                <Badge.Ribbon
+                                  color="rgb(38, 144, 214)"
+                                  text={"Học xong"}
+                                />
+                              </div>
+                            )}
+                            <div style={{ color: "grey", paddingTop: "3px" }}>
+                              {" "}
+                              Ngày dạy:{" "}
+                              <span
+                                style={{
+                                  color: "red",
+                                  fontWeight: "500",
+                                }}
+                              >
+                                <span>
+                                  {" "}
+                                  {convertLongToDate(record.meetingDate)}-{" "}
+                                </span>
+                                <span>Ca </span>
+                                {record.meetingPeriod + 1 + " "}
+                                <span>
+                                  (
+                                  {convertMeetingPeriodToTime(
+                                    record.meetingPeriod
+                                  )}
+                                  )
                                 </span>
                               </span>
                             </div>
-                          </div>
-                        </div>
+                          </Col>
+                        </Row>
                       </Link>
-                    ))}
-                  </>
-                ) : (
-                  <Empty
-                    imageStyle={{ height: 60 }}
-                    description={<span>Không có dữ liệu</span>}
-                  />
-                )}
-              </div>
+                    </div>
+                    // </div>
+                  ))}
+                </>
+              ) : (
+                <Empty
+                  imageStyle={{ height: 60 }}
+                  description={<span>Không có dữ liệu</span>}
+                />
+              )}
             </div>
           </div>
         </div>

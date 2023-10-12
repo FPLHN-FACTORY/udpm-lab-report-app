@@ -5,6 +5,7 @@ import com.labreportapp.labreport.core.teacher.model.request.TeFindClassSentStud
 import com.labreportapp.labreport.core.teacher.model.request.TeFindClassStatisticalRequest;
 import com.labreportapp.labreport.core.teacher.model.response.TeClassResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeClassStatisticalResponse;
+import com.labreportapp.labreport.core.teacher.model.response.TeCountClassReponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeDetailClassResponse;
 import com.labreportapp.labreport.entity.Class;
 import org.springframework.data.domain.Page;
@@ -24,7 +25,7 @@ import java.util.Optional;
 public interface TeClassRepository extends JpaRepository<Class, String> {
 
     @Query(value = """
-            SELECT ROW_NUMBER() OVER(ORDER BY c.class_size ASC ) AS stt,
+            SELECT ROW_NUMBER() OVER(ORDER BY c.code ASC ) AS stt,
             c.code as code,
             c.id as id,
             c.start_time as start_time,
@@ -47,7 +48,7 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
             and (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR :#{#req.code} = '_' AND c.code LIKE '%\\_%' ESCAPE '\\\\')
             and (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR  c.class_period = :#{#req.classPeriod})
             and (:#{#req.level} IS NULL OR :#{#req.level} LIKE '' OR l.id = :#{#req.level})
-            ORDER BY c.class_size ASC
+                 ORDER BY c.code ASC
                      """, countQuery = """
             SELECT COUNT(c.id) 
               FROM activity a
@@ -59,12 +60,12 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
             and (:#{#req.idActivity} IS NULL OR :#{#req.idActivity} LIKE '' OR :#{#req.idActivity} LIKE a.id)
             and (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR :#{#req.code} = '_' AND c.code LIKE '%\\_%' ESCAPE '\\\\')
             and (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR  c.class_period = :#{#req.classPeriod})
-            and (:#{#req.level} IS NULL OR :#{#req.level} LIKE '' OR l.id = :#{#req.level})
+            and (:#{#req.level} IS NULL OR :#{#req.level} LIKE '' OR l.id = :#{#req.level})   
             """, nativeQuery = true)
     Page<TeClassResponse> findClassBySemesterAndActivity(@Param("req") TeFindClassRequest req, Pageable pageable);
 
     @Query(value = """
-            SELECT ROW_NUMBER() OVER(ORDER BY c.class_size ASC) AS stt,
+            SELECT ROW_NUMBER() OVER(ORDER BY c.code ASC) AS stt,
                 c.code as code,
                 c.id as id,
                 c.start_time as start_time,
@@ -88,7 +89,7 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
                 AND a.id = :#{#req.idActivity}
                 AND l.id = :#{#req.idLevel}
                 AND c.id <> :#{#req.idClass}
-            ORDER BY c.class_size ASC
+            ORDER BY c.code ASC
                      """, countQuery = """
             SELECT COUNT(c.id)
               FROM activity a
@@ -186,9 +187,9 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
                 WHERE c.teacher_id = :#{#req.idTeacher}
                     and (:#{#req.idSemester} IS NULL OR :#{#req.idSemester} LIKE '' OR :#{#req.idSemester} LIKE s.id)
                     and (:#{#req.idActivity} IS NULL OR :#{#req.idActivity} LIKE '' OR :#{#req.idActivity} LIKE a.id)
-                GROUP BY c.id  ORDER BY c.class_size ASC
+                GROUP BY c.id  ORDER BY c.code ASC
             )
-                SELECT ROW_NUMBER() OVER(ORDER BY c.class_size ASC ) AS stt,
+                SELECT ROW_NUMBER() OVER(ORDER BY c.code ASC ) AS stt,
                   c.id as id,
                     c.code as code,
                     c.start_time as start_time,
@@ -214,23 +215,34 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
                 where c.teacher_id = :#{#req.idTeacher}
                 and (:#{#req.idSemester} IS NULL OR :#{#req.idSemester} LIKE '' OR :#{#req.idSemester} LIKE s.id)
                 and (:#{#req.idActivity} IS NULL OR :#{#req.idActivity} LIKE '' OR :#{#req.idActivity} LIKE a.id)
-                GROUP BY  c.code,
-                    c.id ,
-                    c.start_time,
-                    c.class_period,
-                    c.class_size,
-                    c.teacher_id,
-                    c.activity_id,
-                    c.created_date,
-                    c.descriptions,
-                    l.name,
-                    a.name,
-                    ct.count_team,
-                    cls.count_lesson,
-                    cls.count_lesson_off,
-                    cp.count_post
-                ORDER BY c.class_size ASC
+                GROUP BY c.code, c.id, c.start_time, c.class_period, c.class_size, c.teacher_id, c.activity_id,
+                    c.created_date, c.descriptions, l.name, a.name, ct.count_team, cls.count_lesson,
+                    cls.count_lesson_off, cp.count_post
+                ORDER BY c.code ASC
             """, nativeQuery = true)
     Page<TeClassStatisticalResponse> findClassStatistical(@Param("req") TeFindClassStatisticalRequest req, Pageable pageable);
+
+    @Query(value = """
+            WITH count_teacher AS (
+                SELECT COUNT(c.teacher_id) as class_lesson  
+                FROM class c
+                JOIN activity a ON a.id = c.activity_id
+                JOIN semester s ON s.id = a.semester_id
+                WHERE c.teacher_id = :#{#req.idTeacher}
+                    and (:#{#req.idSemester} IS NULL OR :#{#req.idSemester} LIKE '' OR :#{#req.idSemester} LIKE s.id)
+                    and (:#{#req.idActivity} IS NULL OR :#{#req.idActivity} LIKE '' OR :#{#req.idActivity} LIKE a.id)
+            ),
+             count_class AS (
+                  SELECT COUNT(c.id) as class_number
+                  FROM class c
+                  JOIN activity a ON a.id = c.activity_id
+                  JOIN semester s ON s.id = a.semester_id
+                  WHERE (:#{#req.idSemester} IS NULL OR :#{#req.idSemester} LIKE '' OR :#{#req.idSemester} LIKE s.id)
+                            and (:#{#req.idActivity} IS NULL OR :#{#req.idActivity} LIKE '' OR :#{#req.idActivity} LIKE a.id)
+                        )
+             SELECT ct.class_lesson, cc.class_number
+             FROM count_teacher ct JOIN count_class cc
+            """, nativeQuery = true)
+    TeCountClassReponse findCount(@Param("req") TeFindClassStatisticalRequest req);
 
 }

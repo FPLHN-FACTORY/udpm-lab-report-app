@@ -3,7 +3,7 @@ import "./style-attendance-detail-class.css";
 import { Link } from "react-router-dom";
 import { ControlOutlined, SearchOutlined } from "@ant-design/icons";
 import { useAppDispatch } from "../../../../app/hook";
-import { Button, Input, Pagination, Table } from "antd";
+import { Button, Empty, Input, Pagination, Table } from "antd";
 import { useEffect, useState } from "react";
 import { StAttendanceAPI } from "../../../../api/student/StAttendanceAPI";
 import { convertMeetingPeriodToTime } from "../../../../helper/util.helper";
@@ -38,7 +38,6 @@ const StAttendanceDetailClass = () => {
       };
       await StAttendanceAPI.getAllAttendanceById(dataFind).then((respone) => {
         setListAttendance(respone.data.data.data);
-        console.log(respone.data.data.data);
         setTotalPages(respone.data.data.totalPages);
         setIsLoading(false);
       });
@@ -287,24 +286,35 @@ const StAttendanceDetailClass = () => {
           >
             Danh sách điểm danh:
           </div>
-          <div>
-            <Table
-              dataSource={listAttendance}
-              columns={columns}
-              key={"key"}
-              pagination={false}
-            />
-            <div className="pagination-box" style={{ alignContent: "center" }}>
-              <Pagination
-                simple
-                current={currentDetail}
-                onChange={(value) => {
-                  setCurrentDetail(value);
-                }}
-                total={totalPages * 10}
+          {listAttendance.length > 0 ? (
+            <div>
+              <Table
+                dataSource={listAttendance}
+                columns={columns}
+                key={"key"}
+                pagination={false}
               />
+
+              <div
+                className="pagination-box"
+                style={{ alignContent: "center" }}
+              >
+                <Pagination
+                  simple
+                  current={currentDetail}
+                  onChange={(value) => {
+                    setCurrentDetail(value);
+                  }}
+                  total={totalPages * 10}
+                />
+              </div>
             </div>
-          </div>
+          ) : (
+            <Empty
+              imageStyle={{ height: 60 }}
+              description={<span>Không có dữ liệu</span>}
+            />
+          )}
         </div>
       </div>
     </div>

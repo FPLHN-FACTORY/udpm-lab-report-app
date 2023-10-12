@@ -28,7 +28,11 @@ import {
   Modal,
   Empty,
 } from "antd";
-import { QuestionCircleFilled, ProjectOutlined } from "@ant-design/icons";
+import {
+  QuestionCircleFilled,
+  ProjectOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
 import { StMyClassAPI } from "../../../api/student/StMyClassAPI";
 import { StClassAPI } from "../../../api/student/StClassAPI";
 import { StLevelAPI } from "../../../api/student/StLevelAPI";
@@ -157,7 +161,7 @@ const StRegisterClass = () => {
 
   const columns = [
     {
-      title: "STT",
+      title: "#",
       dataIndex: "stt",
       sorter: (a, b) => a.stt - b.stt,
       key: "stt",
@@ -167,6 +171,41 @@ const StRegisterClass = () => {
       dataIndex: "classCode",
       sorter: (a, b) => a.classCode.localeCompare(b.classCode),
       key: "classCode",
+      filterDropdown: ({
+        setSelectedKeys,
+        selectedKeys,
+        confirm,
+        clearFilters,
+      }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="Tìm kiếm"
+            value={selectedKeys[0]}
+            onChange={(e) =>
+              setSelectedKeys(e.target.value ? [e.target.value] : [])
+            }
+            onPressEnter={confirm}
+            style={{ width: 188, marginBottom: 8, display: "block" }}
+          />
+          <Button
+            type="primary"
+            className="btn_search_member"
+            onClick={confirm}
+            size="small"
+            style={{ width: 90, marginRight: 8 }}
+          >
+            Tìm
+          </Button>
+          <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
+            Đặt lại
+          </Button>
+        </div>
+      ),
+      filterIcon: (filtered) => (
+        <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+      ),
+      onFilter: (value, record) =>
+        record.classCode.toLowerCase().includes(value.toLowerCase()),
     },
     {
       title: "Thời gian bắt đầu",
@@ -221,7 +260,7 @@ const StRegisterClass = () => {
       },
     },
     {
-      title: "Level",
+      title: "Cấp độ",
       dataIndex: "level",
       key: "level",
     },
@@ -314,22 +353,16 @@ const StRegisterClass = () => {
           <FontAwesomeIcon icon={faFilter} style={{ fontSize: "18px" }} />{" "}
           <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
           <hr />
-          <div className="content_filter">
-            <Row
-              gutter={16}
-              style={{ marginBottom: "10px", paddingTop: "10px" }}
-            >
-              <Col span={6}>
-                <span>Học kỳ:</span>
-
+          <div className="content_filter" style={{ padding: "0px 15px 15px" }}>
+            <Row gutter={24} style={{ marginBottom: "5px", paddingTop: "5px" }}>
+              <Col span={8}>
+                <span>Học kỳ</span>
                 <br />
                 <Select
                   showSearch
                   filterOption={filterOptions}
                   style={{
-                    width: "263px",
-                    minWidth: "120px",
-                    maxWidth: "263px",
+                    width: "100%",
                     margin: "6px 0 10px 0",
                   }}
                   onChange={(e) => {
@@ -339,22 +372,21 @@ const StRegisterClass = () => {
                 >
                   <Option value="">Chọn học kỳ</Option>
                   {listSemester.length > 0 &&
-                    listSemester.slice(0, 1).map((item) => (
+                    listSemester.map((item) => (
                       <Option value={item.id} key={item.id}>
                         {item.name}
                       </Option>
                     ))}
                 </Select>
               </Col>
-              <Col span={14}>
-                <span>Hoạt động:</span>
-
+              <Col span={16}>
+                <span>Hoạt động</span>
                 <br />
                 <Select
                   showSearch
                   filterOption={filterOptions}
                   style={{
-                    width: "868px",
+                    width: "100%",
                     margin: "6px 0 10px 0",
                   }}
                   value={activity}
@@ -372,29 +404,24 @@ const StRegisterClass = () => {
                 </Select>
               </Col>
             </Row>
-            <Row
-              gutter={16}
-              style={{ marginBottom: "0px", paddingTop: "10px" }}
-            >
-              <Col span={6}>
-                <span>Mã lớp:</span> <br />
+            <Row gutter={24} style={{ marginBottom: "0px", paddingTop: "5px" }}>
+              <Col span={8}>
+                <span>Mã lớp</span> <br />
                 <Input
                   onChange={(e) => {
                     setClassCode(e.target.value);
                   }}
                   value={classCode}
-                  style={{ width: "94%", marginTop: "6px" }}
+                  style={{ marginTop: "6px" }}
                   type="text"
                   placeholder="Nhập mã lớp"
                 />
               </Col>
-
-              <Col span={6}>
-                <span>Ca học:</span>
-
+              <Col span={8}>
+                <span>Ca học</span>
                 <br />
                 <Select
-                  style={{ width: "94%", marginTop: "6px" }}
+                  style={{ width: "100%", marginTop: "6px" }}
                   onChange={(e) => {
                     setClassPeriod(e);
                   }}
@@ -415,10 +442,10 @@ const StRegisterClass = () => {
                   <Option value="9">Ca 10</Option>
                 </Select>
               </Col>
-              <Col span={6}>
-                <span>Level:</span> <br />
+              <Col span={8}>
+                <span>Cấp độ</span> <br />
                 <Select
-                  style={{ width: "94%", marginTop: "6px" }}
+                  style={{ width: "100%", marginTop: "6px" }}
                   onChange={(e) => {
                     setLevel(e);
                   }}
@@ -437,11 +464,15 @@ const StRegisterClass = () => {
               </Col>
             </Row>
           </div>
-          <div className="box_btn_filter">
-            <Button className="btn_filter" onClick={handleClickFilter}>
+          <div className="box_btn_filter_st">
+            <Button
+              className="btn_filter"
+              onClick={handleClickFilter}
+              style={{ marginRight: "15px" }}
+            >
               <FontAwesomeIcon
                 icon={faFilterCircleDollar}
-                style={{ marginRight: 5 }}
+                style={{ marginRight: "5px" }}
               />{" "}
               Tìm kiếm
             </Button>

@@ -12,7 +12,7 @@ import {
   faSignOut,
   faUserPlus,
 } from "@fortawesome/free-solid-svg-icons";
-import { Table, Button, Tooltip, Space, Popconfirm, Tag } from "antd";
+import { Table, Button, Tooltip, Space, Popconfirm, Tag, Empty } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { convertMeetingPeriodToNumber } from "../../../../helper/util.helper";
 import { convertLongToDate } from "../../../../helper/convertDate";
@@ -404,12 +404,20 @@ const DetailMyClassTeam = () => {
                       )}
                     </div>
                   </div>
-                  <Table
-                    columns={columns}
-                    dataSource={listStudentMyTeam}
-                    pagination={false}
-                    rowKey="id"
-                  />
+                  {listStudentMyTeam.length > 0 ? (
+                    <Table
+                      columns={columns}
+                      dataSource={listStudentMyTeam}
+                      pagination={false}
+                      rowKey="id"
+                    />
+                  ) : (
+                    <Empty
+                      imageStyle={{ height: 60 }}
+                      description={<span>Không có dữ liệu</span>}
+                    />
+                  )}
+
                   <div style={{ marginTop: "8px", paddingBottom: "40px" }}>
                     <Popconfirm
                       title="Rời nhóm"
@@ -447,12 +455,20 @@ const DetailMyClassTeam = () => {
                       Danh sách nhóm trong lớp:
                     </span>
                   </div>
-                  <Table
-                    columns={columnsTeam}
-                    dataSource={listTeam}
-                    pagination={false}
-                    rowKey="id"
-                  />
+                  {listTeam.length > 0 ? (
+                    <Table
+                      columns={columnsTeam}
+                      dataSource={listTeam}
+                      pagination={false}
+                      rowKey="id"
+                    />
+                  ) : (
+                    <Empty
+                      imageStyle={{ height: 60 }}
+                      description={<span>Không có dữ liệu</span>}
+                    />
+                  )}
+
                   <div
                     className="button-leave"
                     style={{ marginTop: "11px", textAlign: "right" }}
