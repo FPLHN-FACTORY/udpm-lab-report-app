@@ -11,6 +11,7 @@ import {
   faBook,
   faLineChart,
   faHome,
+  faMagicWandSparkles,
 } from "@fortawesome/free-solid-svg-icons";
 
 import "./style-sidebar.css";
@@ -38,6 +39,17 @@ const SidebarTeacherComponent = ({ collapsed, toggleCollapsed }) => {
       }}
     >
       <Menu theme="light" mode="inline">
+        <div style={{ marginBottom: 13, marginTop: 15 }}>
+          <span style={{ marginLeft: 28 }}>
+            <FontAwesomeIcon
+              icon={faMagicWandSparkles}
+              style={{ marginRight: 7, fontSize: 18 }}
+            />
+            {!collapsed && (
+              <span style={{ fontSize: 15 }}>Hoạt động xưởng</span>
+            )}
+          </span>
+        </div>
         <Menu.Item
           key="1"
           className="menu_custom"
@@ -62,13 +74,7 @@ const SidebarTeacherComponent = ({ collapsed, toggleCollapsed }) => {
         >
           <Link to="/teacher/my-class">Lớp của tôi</Link>
         </Menu.Item>
-        <Menu.Item
-          key="3"
-          className="menu_custom"
-          icon={<ProjectOutlined style={{ color: "rgb(226, 179, 87)" }} />}
-        >
-          <Link to="/teacher/my-project">Dự án của tôi</Link>
-        </Menu.Item>
+
         <Menu.Item
           key="4"
           className="menu_custom"
@@ -80,6 +86,22 @@ const SidebarTeacherComponent = ({ collapsed, toggleCollapsed }) => {
           }
         >
           <Link to="/teacher/dashboard">Thống kê</Link>
+        </Menu.Item>
+        <div style={{ marginBottom: 17, marginTop: 15 }}>
+          <span style={{ marginLeft: 28 }}>
+            <FontAwesomeIcon
+              icon={faMagicWandSparkles}
+              style={{ marginRight: 7, fontSize: 18 }}
+            />
+            {!collapsed && <span style={{ fontSize: 15 }}>Dự án xưởng</span>}
+          </span>
+        </div>
+        <Menu.Item
+          key="3"
+          className="menu_custom"
+          icon={<ProjectOutlined style={{ color: "rgb(226, 179, 87)" }} />}
+        >
+          <Link to="/teacher/my-project">Dự án tại xưởng</Link>
         </Menu.Item>
       </Menu>
     </Sider>

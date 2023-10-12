@@ -13,6 +13,7 @@ import {
   faCheckCircle,
   faMarker,
   faRegistered,
+  faMagicWandSparkles,
 } from "@fortawesome/free-solid-svg-icons";
 
 import "./style-sidebar.css";
@@ -37,6 +38,17 @@ const SidebarStudentComponent = ({ collapsed, toggleCollapsed }) => {
       }}
     >
       <Menu theme="light" mode="inline">
+        <div style={{ marginBottom: 13, marginTop: 15 }}>
+          <span style={{ marginLeft: 28 }}>
+            <FontAwesomeIcon
+              icon={faMagicWandSparkles}
+              style={{ marginRight: 7, fontSize: 18 }}
+            />
+            {!collapsed && (
+              <span style={{ fontSize: 15 }}>Hoạt động xưởng</span>
+            )}
+          </span>
+        </div>
         <Menu.Item
           key="0"
           className="menu_custom"
@@ -73,13 +85,7 @@ const SidebarStudentComponent = ({ collapsed, toggleCollapsed }) => {
         >
           <Link to="/student/my-class">Lớp của tôi</Link>
         </Menu.Item>
-        <Menu.Item
-          key="9"
-          className="menu_custom"
-          icon={<ProjectOutlined style={{ color: "rgb(226, 179, 87)" }} />}
-        >
-          <Link to="/student/my-project">Dự án của tôi</Link>
-        </Menu.Item>
+
         <Menu.Item
           key="3"
           className="menu_custom"
@@ -103,6 +109,22 @@ const SidebarStudentComponent = ({ collapsed, toggleCollapsed }) => {
           }
         >
           <Link to="/student/point">Điểm</Link>
+        </Menu.Item>
+        <div style={{ marginBottom: 16, marginTop: 15 }}>
+          <span style={{ marginLeft: 28 }}>
+            <FontAwesomeIcon
+              icon={faCogs}
+              style={{ marginRight: 7, fontSize: 18 }}
+            />
+            {!collapsed && <span style={{ fontSize: 15 }}>Dự án xưởng</span>}
+          </span>
+        </div>
+        <Menu.Item
+          key="9"
+          className="menu_custom"
+          icon={<ProjectOutlined style={{ color: "rgb(226, 179, 87)" }} />}
+        >
+          <Link to="/student/my-project">Dự án tại xưởng</Link>
         </Menu.Item>
       </Menu>
     </Sider>

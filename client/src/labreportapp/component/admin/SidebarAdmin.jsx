@@ -304,7 +304,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             <Link to="/admin/project-management">Quản lý dự án</Link>
           </Menu.Item>
         </Menu.SubMenu>
-        <div style={{ marginBottom: 18, marginTop: 15 }}>
+        <div style={{ marginBottom: 16, marginTop: 15 }}>
           <span style={{ marginLeft: 28 }}>
             <FontAwesomeIcon
               icon={faUsers}

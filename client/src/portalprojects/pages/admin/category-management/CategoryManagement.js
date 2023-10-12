@@ -121,7 +121,9 @@ const CategoryManagement = () => {
       <div className="title_my_project">
         {" "}
         <FontAwesomeIcon icon={faFolder} style={{ fontSize: 20 }} />
-        <span style={{ marginLeft: "10px" }}>Danh sách thể loại</span>
+        <span style={{ marginLeft: "10px", fontSize: 20, fontWeight: "500" }}>
+          Quản lý thể loại
+        </span>
       </div>
       <div className="filter_category">
         <FontAwesomeIcon icon={faFilter} style={{ fontSize: 20 }} />{" "}

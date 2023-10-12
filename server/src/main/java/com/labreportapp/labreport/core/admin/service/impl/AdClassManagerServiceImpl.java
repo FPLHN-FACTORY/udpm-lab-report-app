@@ -319,7 +319,10 @@ public class AdClassManagerServiceImpl implements AdClassService {
         }
         AdDetailClassCustomResponse customResponse = new AdDetailClassCustomResponse();
         AdDetailClassRespone getOptional = adDetailClassRespone.get();
-        SimpleResponse response = convertRequestCallApiIdentity.handleCallApiGetUserById(getOptional.getTeacherId());
+        SimpleResponse response = null;
+        if (getOptional.getTeacherId() != null) {
+            response = convertRequestCallApiIdentity.handleCallApiGetUserById(getOptional.getTeacherId());
+        }
         customResponse.setId(getOptional.getId());
         customResponse.setCode(getOptional.getCode());
         customResponse.setClassPeriod(getOptional.getClassPeriod());
@@ -335,8 +338,10 @@ public class AdClassManagerServiceImpl implements AdClassService {
         customResponse.setSemesterName(getOptional.getSemesterName());
         customResponse.setLevelId(getOptional.getLevelId());
         customResponse.setStatusTeacherEdit(getOptional.getStatusTeacherEdit());
-        customResponse.setTeacherName(response.getName());
-        customResponse.setTeacherUserName(response.getUserName());
+        if (!Objects.isNull(response)) {
+            customResponse.setTeacherName(response.getName());
+            customResponse.setTeacherUserName(response.getUserName());
+        }
         return customResponse;
     }
 
