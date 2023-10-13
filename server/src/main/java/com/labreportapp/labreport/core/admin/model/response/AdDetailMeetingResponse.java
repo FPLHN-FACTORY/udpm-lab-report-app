@@ -22,7 +22,17 @@ public class AdDetailMeetingResponse {
 
     private Long meetingDate;
 
-    private String meetingPeriod;
+    private String meetingPeriodId;
+
+    private String nameMeetingPeriod;
+
+    private Integer startHour;
+
+    private Integer startMinute;
+
+    private Integer endHour;
+
+    private Integer endMinute;
 
     private String descriptions;
 

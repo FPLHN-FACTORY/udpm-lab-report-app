@@ -38,9 +38,7 @@ public class AdImportExcelClass {
             AdImportExcelClassResponse classNew = new AdImportExcelClassResponse();
             classNew.setCode(String.valueOf(getCellValue(row.getCell(1))).trim());
             String classPeriodStr = String.valueOf(getCellValue(row.getCell(3))).trim();
-            if (!classPeriodStr.isEmpty()) {
-                classNew.setClassPeriod((int) Float.parseFloat(classPeriodStr));
-            }
+            classNew.setClassPeriod(classPeriodStr);
             classNew.setUsernameTeacher(String.valueOf(getCellValue(row.getCell(7))).trim());
             listClass.add(classNew);
         }

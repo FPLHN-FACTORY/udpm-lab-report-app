@@ -9,12 +9,16 @@ import { useAppDispatch, useAppSelector } from "../../../../../app/hook";
 import { toast } from "react-toastify";
 import { CreateMeeting } from "../../../../../app/admin/AdMeetingManagement.reducer";
 import { GetAdTeacher } from "../../../../../app/admin/AdTeacherSlice.reducer";
-import { convertMeetingPeriodToTime } from "../../../../../helper/util.helper";
+import {
+  convertHourAndMinuteToString,
+  convertMeetingPeriodToTime,
+} from "../../../../../helper/util.helper";
+import { GetAdMeetingPeriod } from "../../../../../app/admin/AdMeetingPeriodSlice.reducer";
 
 const { Option } = Select;
 
 const ModalCreateMeeting = ({ visible, onCancel }) => {
-  const [meetingPeriod, setMeetingPeriod] = useState("0");
+  const [meetingPeriod, setMeetingPeriod] = useState("");
   const [typeMeeting, setTypeMeeting] = useState("0");
   const [meetingDate, setMeetingDate] = useState("");
   const [address, setAddress] = useState("");
@@ -22,15 +26,19 @@ const ModalCreateMeeting = ({ visible, onCancel }) => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const [errorMeetingDate, setErrorMeetingDate] = useState("");
+  const [errorMeetingPeriod, setErrorMeetingPeriod] = useState("");
+
+  const dataMeetingPeriod = useAppSelector(GetAdMeetingPeriod);
 
   useEffect(() => {
     setTypeMeeting("0");
-    setMeetingPeriod("0");
+    setMeetingPeriod("");
     setMeetingDate("");
     setAddress("");
     setDescriptions("");
     setErrorTeacher("");
     setErrorMeetingDate("");
+    setErrorMeetingPeriod("");
   }, [visible]);
 
   const create = () => {
@@ -41,10 +49,16 @@ const ModalCreateMeeting = ({ visible, onCancel }) => {
     } else {
       setErrorMeetingDate("");
     }
+    if (meetingPeriod === "") {
+      setErrorMeetingPeriod("Ca học không được để trống");
+      ++check;
+    } else {
+      setErrorMeetingPeriod("");
+    }
     if (check === 0) {
       let obj = {
         meetingDate: moment(meetingDate, "YYYY-MM-DD").valueOf(),
-        meetingPeriod: parseInt(meetingPeriod),
+        meetingPeriod: meetingPeriod,
         typeMeeting: parseInt(typeMeeting),
         address: address,
         descriptions: descriptions,
@@ -109,28 +123,22 @@ const ModalCreateMeeting = ({ visible, onCancel }) => {
                   }}
                   style={{ width: "100%" }}
                 >
-                  <Option value="0">
-                    Ca 1 ({"" + convertMeetingPeriodToTime(0)})
-                  </Option>
-                  <Option value="1">
-                    Ca 2 ({"" + convertMeetingPeriodToTime(1)})
-                  </Option>
-                  <Option value="2">
-                    Ca 3 ({"" + convertMeetingPeriodToTime(2)})
-                  </Option>
-                  <Option value="3">
-                    Ca 4 ({"" + convertMeetingPeriodToTime(3)})
-                  </Option>
-                  <Option value="4">
-                    Ca 5 ({"" + convertMeetingPeriodToTime(4)})
-                  </Option>
-                  <Option value="5">
-                    Ca 6 ({"" + convertMeetingPeriodToTime(5)})
-                  </Option>
-                  <Option value="6">
-                    Ca 7 ({"" + convertMeetingPeriodToTime(6)})
-                  </Option>
+                  <Option value="">Chọn ca học dự kiến</Option>
+                  {dataMeetingPeriod.map((item) => {
+                    return (
+                      <Option value={item.id} key={item.id}>
+                        {item.name} -{" "}
+                        {convertHourAndMinuteToString(
+                          item.startHour,
+                          item.startMinute,
+                          item.endHour,
+                          item.endMinute
+                        )}
+                      </Option>
+                    );
+                  })}
                 </Select>
+                <span style={{ color: "red" }}>{errorMeetingPeriod}</span>
               </Col>
               <Col span={12} style={{ padding: "5px" }}>
                 <span style={{ color: "red" }}>(*) </span>Hình thức:

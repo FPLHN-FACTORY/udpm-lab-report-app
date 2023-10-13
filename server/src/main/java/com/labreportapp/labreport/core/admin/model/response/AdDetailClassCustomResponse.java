@@ -10,39 +10,50 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AdDetailClassCustomResponse {
-  private String id;
 
-  private String code;
+    private String id;
 
-  private Long startTime;
+    private String code;
 
-  private String passWord;
+    private Long startTime;
 
-  private Integer classPeriod;
+    private String passWord;
 
-  private Integer classSize;
+    private String classPeriodId;
 
-  private String descriptions;
+    private String classPeriod;
 
-  private String teacherId;
+    private Integer startHour;
 
-  private String teacherName;
+    private Integer startMinute;
 
-  private String teacherUserName;
+    private Integer endHour;
 
-  private String activityId;
+    private Integer endMinute;
 
-  private String activityName;
+    private Integer classSize;
 
-  private String activityLevel;
+    private String descriptions;
 
-  private String semesterId;
+    private String teacherId;
 
-  private String semesterName;
+    private String teacherName;
 
-  private Integer statusTeacherEdit;
+    private String teacherUserName;
 
-  private String levelId;
+    private String activityId;
+
+    private String activityName;
+
+    private String activityLevel;
+
+    private String semesterId;
+
+    private String semesterName;
+
+    private Integer statusTeacherEdit;
+
+    private String levelId;
 
 
 }

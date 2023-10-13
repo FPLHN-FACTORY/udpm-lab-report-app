@@ -12,6 +12,7 @@ import {
 } from "../../../../app/admin/AdMeetingManagement.reducer";
 import { convertLongToDate } from "../../../../helper/convertDate";
 import {
+  convertHourAndMinuteToString,
   convertMeetingPeriod,
   convertMeetingPeriodToTime,
 } from "../../../../helper/util.helper";
@@ -36,6 +37,8 @@ import {
   SetAdTeacher,
 } from "../../../../app/admin/AdTeacherSlice.reducer";
 import ModalCreateMeetingAuto from "./modal-create-meeting-auto/ModalCreateMeetingAuto";
+import { AdMeetingPeriodAPI } from "../../../../api/admin/AdMeetingPeriodAPI";
+import { SetAdMeetingPeriod } from "../../../../app/admin/AdMeetingPeriodSlice.reducer";
 const { Option } = Select;
 
 const MeetingManagment = () => {
@@ -64,7 +67,7 @@ const MeetingManagment = () => {
   };
 
   useEffect(() => {
-    // setIsLoading(true);
+    setIsLoading(true);
     loadDataMeeting(0);
     return () => {
       dispatch(SetMeeting([]));
@@ -141,6 +144,7 @@ const MeetingManagment = () => {
       dispatch(SetAdTeacher(teacherData));
     };
     fetchTeacherData();
+    loadDataMeetingPeriod();
   }, []);
 
   const [selectedIds, setSelectedIds] = useState([]);
@@ -175,6 +179,12 @@ const MeetingManagment = () => {
     }
     setIsChangeTeacher(!isChangeTeacher);
     setSelectedItemsPerson("");
+  };
+
+  const loadDataMeetingPeriod = () => {
+    AdMeetingPeriodAPI.getAll().then((response) => {
+      dispatch(SetAdMeetingPeriod(response.data.data));
+    });
   };
 
   const [errorChangeTeacher, setErrorChangeTeacher] = useState("");
@@ -437,7 +447,15 @@ const MeetingManagment = () => {
                 data.length > 0 &&
                 data.map((item) => (
                   <div>
-                    <div tabIndex={0} role="button" className="box-card">
+                    <div
+                      tabIndex={0}
+                      role="button"
+                      className="box-card"
+                      style={{
+                        paddingLeft: 20,
+                        paddingRight: 20,
+                      }}
+                    >
                       <div className="title-left" style={{ paddingLeft: 0 }}>
                         <Link>
                           {item.soDiemDanh != null && (
@@ -519,9 +537,13 @@ const MeetingManagment = () => {
                               }}
                             >
                               {convertLongToDate(item.meetingDate)} -{" "}
-                              {convertMeetingPeriod(item.meetingPeriod) + " "}(
-                              {"" +
-                                convertMeetingPeriodToTime(item.meetingPeriod)}
+                              {item.nameMeetingPeriod} (
+                              {convertHourAndMinuteToString(
+                                item.startHour,
+                                item.startMinute,
+                                item.endHour,
+                                item.endMinute
+                              )}
                               )
                             </span>
                           </span>

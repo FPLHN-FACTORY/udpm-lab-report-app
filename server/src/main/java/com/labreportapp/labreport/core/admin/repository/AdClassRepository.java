@@ -88,13 +88,13 @@ public interface AdClassRepository extends ClassRepository {
             c.status_teacher_edit
             FROM activity a
             JOIN class c ON c.activity_id = a.id
-            JOIN meeting_period mp ON c.class_period = mp.id
+            LEFT JOIN meeting_period mp ON c.class_period = mp.id
             JOIN level d ON d.id = a.level_id
             JOIN semester s ON s.id = a.semester_id
             where (:#{#req.idSemester} IS NULL OR :#{#req.idSemester} LIKE '' OR s.id = :#{#req.idSemester})
             and (:#{#req.idActivity} IS NULL OR :#{#req.idActivity} LIKE '' OR a.id = :#{#req.idActivity})
             and (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR c.code LIKE %:#{#req.code}%)
-            and (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR  c.class_period = :#{#req.classPeriod}
+            and (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR mp.id = :#{#req.classPeriod}
             OR IF(:#{#req.classPeriod} = 'none', c.class_period IS NULL, ''))
             and (:#{#req.idTeacher} IS NULL OR :#{#req.idTeacher} LIKE '' OR c.teacher_id = :#{#req.idTeacher} 
             OR IF(:#{#req.idTeacher} = 'none', c.teacher_id IS NULL, ''))
@@ -109,11 +109,12 @@ public interface AdClassRepository extends ClassRepository {
             FROM activity a
             JOIN class c ON c.activity_id = a.id
             JOIN level d ON d.id = a.level_id
+            LEFT JOIN meeting_period mp ON c.class_period = mp.id
             JOIN semester s ON s.id = a.semester_id
             where (:#{#req.idSemester} IS NULL OR :#{#req.idSemester} LIKE '' OR s.id = :#{#req.idSemester})
             and (:#{#req.idActivity} IS NULL OR :#{#req.idActivity} LIKE '' OR a.id = :#{#req.idActivity})
             and (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR c.code LIKE %:#{#req.code}%)
-            and (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR  c.class_period = :#{#req.classPeriod}
+            and (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR mp.id = :#{#req.classPeriod}
             OR IF(:#{#req.classPeriod} = 'none', c.class_period IS NULL, ''))
             and (:#{#req.idTeacher} IS NULL OR :#{#req.idTeacher} LIKE '' OR c.teacher_id = :#{#req.idTeacher} 
             OR IF(:#{#req.idTeacher} = 'none', c.teacher_id IS NULL, ''))
@@ -130,7 +131,12 @@ public interface AdClassRepository extends ClassRepository {
             c.code as code,
             c.start_time as start_time,
             c.password as password,
-            c.class_period as class_period,
+            mp.id as class_period_id,
+            mp.name as class_period,
+            mp.start_hour,
+            mp.start_minute,
+            mp.end_hour,
+            mp.end_minute,
             c.class_size as class_size,
             c.descriptions as descriptions,
             c.teacher_id as teacherId,
@@ -145,10 +151,11 @@ public interface AdClassRepository extends ClassRepository {
             FROM activity a
             JOIN level d ON a.level_id = d.id
             JOIN class c ON c.activity_id = a.id
+            LEFT JOIN meeting_period mp ON mp.id = c.class_period
             JOIN semester s ON s.id = a.semester_id
             where c.id = :#{#id}
              """, nativeQuery = true)
-    Optional<AdDetailClassRespone> adfindClassById(@Param("id") String id);
+    AdDetailClassRespone adfindClassById(@Param("id") String id);
 
     @Query(value = """
             SELECT a.id FROM class a WHERE a.activity_id = :activityId AND a.code = :code
@@ -157,23 +164,25 @@ public interface AdClassRepository extends ClassRepository {
 
     @Query(value = """
             SELECT ROW_NUMBER() OVER(ORDER BY b.code) AS stt,
-            a.code, a.start_time, a.class_period, a.class_size, a.teacher_id, c.name as name_level,
+            a.code, a.start_time, mp.name AS name_class_period, mp.start_hour, mp.start_minute, mp.end_hour, mp.end_minute, 
+            a.class_size, a.teacher_id, c.name as name_level,
             b.name as name_activity
             FROM class a JOIN activity b ON a.activity_id = b.id
             JOIN level c ON c.id = b.level_id
             JOIN semester d ON d.id = b.semester_id
+            LEFT JOIN meeting_period mp ON mp.id = a.class_period
             WHERE (:#{#req.idSemester} IS NULL OR :#{#req.idSemester} LIKE '' OR d.id = :#{#req.idSemester})
             AND (:#{#req.idActivity} IS NULL OR :#{#req.idActivity} LIKE '' OR b.id = :#{#req.idActivity})
             AND (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR a.code LIKE %:#{#req.code}%)
-            and (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR  a.class_period = :#{#req.classPeriod}
+            AND (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR mp.id = :#{#req.classPeriod}
             OR IF(:#{#req.classPeriod} = 'none', a.class_period IS NULL, ''))
-            and (:#{#req.idTeacher} IS NULL OR :#{#req.idTeacher} LIKE '' OR a.teacher_id = :#{#req.idTeacher} 
+            AND (:#{#req.idTeacher} IS NULL OR :#{#req.idTeacher} LIKE '' OR a.teacher_id = :#{#req.idTeacher} 
             OR IF(:#{#req.idTeacher} = 'none', a.teacher_id IS NULL, ''))
-            and (:#{#req.levelId} IS NULL OR :#{#req.levelId} LIKE '' OR c.id = :#{#req.levelId})
-            and (:#{#req.classSize} IS NULL OR :#{#req.classSize} LIKE '' OR a.class_size = :#{#req.classSize})
-            and (:#{#req.statusClass} IS NULL OR :#{#req.statusClass} LIKE '' 
+            AND (:#{#req.levelId} IS NULL OR :#{#req.levelId} LIKE '' OR c.id = :#{#req.levelId})
+            AND (:#{#req.classSize} IS NULL OR :#{#req.classSize} LIKE '' OR a.class_size = :#{#req.classSize})
+            AND (:#{#req.statusClass} IS NULL OR :#{#req.statusClass} LIKE '' 
             OR IF(:#{#req.statusClass} = 'yes', a.class_size >= :#{#req.valueClassSize}, a.class_size < :#{#req.valueClassSize}))
-            and (:#{#req.statusTeacherEdit} IS NULL OR :#{#req.statusTeacherEdit} LIKE '' OR a.status_teacher_edit = :#{#req.statusTeacherEdit})
+            AND (:#{#req.statusTeacherEdit} IS NULL OR :#{#req.statusTeacherEdit} LIKE '' OR a.status_teacher_edit = :#{#req.statusTeacherEdit})
             ORDER BY b.code
             """, nativeQuery = true)
     List<AdExportExcelClassResponse> findClassExportExcel(@Param("req") AdFindClassRequest req);

@@ -37,6 +37,18 @@ public class DateConverter {
         return formattedTime;
     }
 
+    public static String formatTime(int hour, int minute) {
+        String formattedHour = hour < 10 ? "0" + hour : String.valueOf(hour);
+        String formattedMinute = minute < 10 ? "0" + minute : String.valueOf(minute);
+        return formattedHour + ":" + formattedMinute;
+    }
+
+    public static String convertHourAndMinuteToString(Integer startHour, Integer startMinute, Integer endHour, Integer endMinute) {
+        String startTime = formatTime(startHour, startMinute);
+        String endTime = formatTime(endHour, endMinute);
+        return startTime + " : " + endTime;
+    }
+
     public static void main(String[] args) {
         long dateInMillis = new Date().getTime();
         String formattedDate = DateConverter.convertDateToString(dateInMillis);

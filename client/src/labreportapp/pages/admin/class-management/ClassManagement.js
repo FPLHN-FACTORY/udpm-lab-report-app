@@ -37,7 +37,10 @@ import ModalCreateProject from "../../admin/class-management/create-class/ModalC
 import { Link } from "react-router-dom";
 import { SetAdTeacher } from "../../../app/admin/AdTeacherSlice.reducer";
 import ModalUpdateClass from "./update-class/ModalUpdateClass";
-import { convertMeetingPeriodToTime } from "../../../helper/util.helper";
+import {
+  convertHourAndMinuteToString,
+  convertMeetingPeriodToTime,
+} from "../../../helper/util.helper";
 import {
   GetAdClassManagement,
   SetMyClass,
@@ -45,6 +48,11 @@ import {
 import LoadingIndicatorNoOverlay from "../../../helper/loadingNoOverlay";
 import ModalRandomClass from "./random-class/ModalRandomClass";
 import ModalImportClass from "./import-class/ModalImportClass";
+import { AdMeetingPeriodAPI } from "../../../api/admin/AdMeetingPeriodAPI";
+import {
+  GetAdMeetingPeriod,
+  SetAdMeetingPeriod,
+} from "../../../app/admin/AdMeetingPeriodSlice.reducer";
 
 const ClassManagement = () => {
   const { Option } = Select;
@@ -161,11 +169,18 @@ const ClassManagement = () => {
 
   useEffect(() => {
     featchDataSemester();
+    loadDataMeetingPeriod();
   }, []);
 
   const loadDataLevel = () => {
     ClassAPI.getAllLevel().then((response) => {
       setListLevel(response.data.data);
+    });
+  };
+
+  const loadDataMeetingPeriod = () => {
+    AdMeetingPeriodAPI.getAll().then((response) => {
+      dispatch(SetAdMeetingPeriod(response.data.data));
     });
   };
 
@@ -176,6 +191,8 @@ const ClassManagement = () => {
     loadDataLevel();
     setSelectedItemsPerson("");
   }, []);
+
+  const dataMeetingPeriod = useAppSelector(GetAdMeetingPeriod);
 
   const columns = [
     {
@@ -227,7 +244,16 @@ const ClassManagement = () => {
         if (record.startHour == null) {
           return <span>Chưa có</span>;
         } else {
-          return <span>{convert(record.classPeriod)}</span>;
+          return (
+            <span>
+              {convertHourAndMinuteToString(
+                record.startHour,
+                record.startMinute,
+                record.endHour,
+                record.endMinute
+              )}
+            </span>
+          );
         }
       },
     },
@@ -407,6 +433,7 @@ const ClassManagement = () => {
       statusClass: statusClass,
       statusTeacherEdit: statusTeacherEdit,
     };
+
     ClassAPI.exportExcel(filter).then((response) => {
       setLoadingOverLay(false);
       const blob = new Blob([response.data], {
@@ -521,10 +548,16 @@ const ClassManagement = () => {
               >
                 <Option value="">Tất Cả</Option>
                 <Option value="none">Chưa có ca học</Option>
-                {listClassPeriod.map((value) => {
+                {dataMeetingPeriod.map((item) => {
                   return (
-                    <Option value={value} key={value}>
-                      {parseInt(value) + 1}
+                    <Option value={item.id} key={item.id}>
+                      {item.name} -{" "}
+                      {convertHourAndMinuteToString(
+                        item.startHour,
+                        item.startMinute,
+                        item.endHour,
+                        item.endMinute
+                      )}
                     </Option>
                   );
                 })}
