@@ -10,6 +10,7 @@ import {
   faRegistered,
 } from "@fortawesome/free-solid-svg-icons";
 import {
+  convertHourAndMinuteToString,
   convertMeetingPeriod,
   convertMeetingPeriodToTime,
 } from "../../../helper/util.helper";
@@ -38,6 +39,7 @@ import { StClassAPI } from "../../../api/student/StClassAPI";
 import { StLevelAPI } from "../../../api/student/StLevelAPI";
 import { convertLongToDate } from "../../../helper/convertDate";
 import { constant } from "lodash";
+import { StMeetingPeriodAPI } from "../../../api/student/StMeetingPeriodAPI";
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -59,7 +61,7 @@ const StRegisterClass = () => {
   const [endTimeStudent, setEndTimeStudent] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
-
+  const [listMeetingPeriod, setListMeetingPeriod] = useState([]);
   const loadDataLevel = () => {
     StLevelAPI.getLevelAll().then((response) => {
       setListLevel(response.data.data);
@@ -80,9 +82,19 @@ const StRegisterClass = () => {
       setActivity("");
     });
   };
+  const loadMeetingPeriod = async () => {
+    try {
+      await StMeetingPeriodAPI.getPeriod().then((respone) => {
+        setListMeetingPeriod(respone.data.data);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     loadDataLevel();
     loadDataSemester();
+    loadMeetingPeriod();
     document.title = "Đăng ký lớp học | Lab-Report-App";
   }, []);
 
@@ -131,7 +143,7 @@ const StRegisterClass = () => {
       semesterId: semester,
       activityId: activity,
       code: classCode,
-      classPeriod: classPeriod === "" ? null : parseInt(classPeriod),
+      classPeriod: classPeriod,
       level: level,
       page: currentPage,
       size: 10,
@@ -158,7 +170,14 @@ const StRegisterClass = () => {
     setClassPeriod("");
     setLevel("");
   };
-
+  const convertLongToDate = (dateLong) => {
+    const date = new Date(dateLong);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    const format = `${day}/${month}/${year}`;
+    return format;
+  };
   const columns = [
     {
       title: "#",
@@ -212,15 +231,7 @@ const StRegisterClass = () => {
       dataIndex: "startTime",
       key: "startTime",
       sorter: (a, b) => a.startTime - b.startTime,
-      render: (text, record) => {
-        const startTime = new Date(record.startTime);
-
-        const formattedStartTime = `${startTime.getDate()}/${
-          startTime.getMonth() + 1
-        }/${startTime.getFullYear()}`;
-
-        return <span>{formattedStartTime}</span>;
-      },
+      render: (text, record) => convertLongToDate(text),
     },
     {
       title: "Sĩ số",
@@ -420,26 +431,34 @@ const StRegisterClass = () => {
               <Col span={8}>
                 <span>Ca học</span>
                 <br />
+
                 <Select
-                  style={{ width: "100%", marginTop: "6px" }}
+                  showSearch
+                  filterOption={filterOptions}
+                  style={{
+                    width: "100%",
+                    margin: "6px 0 10px 0",
+                  }}
                   onChange={(e) => {
                     setClassPeriod(e);
                   }}
-                  showSearch
-                  filterOption={filterOptions}
                   value={classPeriod}
                 >
                   <Option value="">Tất cả</Option>
-                  <Option value="0">Ca 1</Option>
-                  <Option value="1">Ca 2</Option>
-                  <Option value="2">Ca 3</Option>
-                  <Option value="3">Ca 4</Option>
-                  <Option value="4">Ca 5</Option>
-                  <Option value="5">Ca 6</Option>
-                  <Option value="6">Ca 7</Option>
-                  <Option value="7">Ca 8</Option>
-                  <Option value="8">Ca 9</Option>
-                  <Option value="9">Ca 10</Option>
+                  {listMeetingPeriod.length > 0 &&
+                    listMeetingPeriod.map((item) => (
+                      <Option value={item.id} key={item.id}>
+                        {item.name}
+                        {" - "}(
+                        {convertHourAndMinuteToString(
+                          item.startHour,
+                          item.startMinute,
+                          item.endHour,
+                          item.endMinute
+                        )}
+                        )
+                      </Option>
+                    ))}
                 </Select>
               </Col>
               <Col span={8}>

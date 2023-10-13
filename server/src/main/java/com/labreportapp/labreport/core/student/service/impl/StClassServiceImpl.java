@@ -67,7 +67,11 @@ public class StClassServiceImpl implements StClassService {
             stClassCustomResponse.setStt(stClassResponse.getStt());
             stClassCustomResponse.setClassCode(stClassResponse.getCode());
             stClassCustomResponse.setClassSize(stClassResponse.getClassSize());
-           // stClassCustomResponse.setClassPeriod(stClassResponse.getClassPeriod());
+            stClassCustomResponse.setClassPeriod(stClassResponse.getClassPeriod());
+            stClassCustomResponse.setStartHour(stClassResponse.getStartHour());
+            stClassCustomResponse.setStartMinute(stClassResponse.getStartMinute());
+            stClassCustomResponse.setEndHour(stClassResponse.getEndHour());
+            stClassCustomResponse.setEndMinute(stClassResponse.getEndMinute());
             stClassCustomResponse.setStartTime(stClassResponse.getStartTime());
             stClassCustomResponse.setLevel(stClassResponse.getLevel());
             stClassCustomResponse.setActivityName(stClassResponse.getActivityName());

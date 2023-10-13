@@ -9,20 +9,12 @@ import "./style-student-my-class.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import LoadingIndicator from "../../../helper/loading";
-import {
-  Button,
-  Col,
-  Input,
-  Row,
-  Select,
-  Table,
-  Tooltip,
-  Empty,
-} from "antd";
+import { Button, Col, Input, Row, Select, Table, Tooltip, Empty } from "antd";
 import { StMyClassAPI } from "../../../api/student/StMyClassAPI";
 import { Link } from "react-router-dom";
 import { convertHourAndMinuteToString } from "../../../helper/util.helper";
 import { StLevelAPI } from "../../../api/student/StLevelAPI";
+import { StMeetingPeriodAPI } from "../../../api/student/StMeetingPeriodAPI";
 
 const { Option } = Select;
 
@@ -36,6 +28,7 @@ const StudentMyClass = () => {
   const [listSemester, setListSemester] = useState([]);
   const [listLevel, setListLevel] = useState([]);
   const [listActivity, setListActivity] = useState([]);
+  const [listMeetingPeriod, setListMeetingPeriod] = useState([]);
   const [listClass, setListClass] = useState([]);
 
   const loadDataSemester = () => {
@@ -49,10 +42,20 @@ const StudentMyClass = () => {
       setListLevel(response.data.data);
     });
   };
+  const loadMeetingPeriod = async () => {
+    try {
+      await StMeetingPeriodAPI.getPeriod().then((respone) => {
+        setListMeetingPeriod(respone.data.data);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     loadDataLevel();
     loadDataSemester();
+    loadMeetingPeriod();
     document.title = "Lớp của tôi | Lab-Report-App";
   }, []);
 
@@ -88,19 +91,17 @@ const StudentMyClass = () => {
     return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
   };
 
-  const loadDataClass = (activityParams) => {
+  const loadDataClass = (activityParams, classPeriodParams) => {
     setLoading(true);
     let filter = {
       semesterId: semester,
       activityId: activityParams !== "" ? activity : activityParams,
       code: code,
-      classPeriod: classPeriod === "" ? null : parseInt(classPeriod),
+      classPeriod: classPeriod,
       level: level,
     };
     StMyClassAPI.getAllClass(filter).then((response) => {
       setListClass(response.data.data);
-      console.log("aaaaaaaaaa");
-      console.log(response.data.data);
       setLoading(false);
     });
   };
@@ -266,7 +267,6 @@ const StudentMyClass = () => {
             </Col>
             <Col span={16}>
               <span>Hoạt động</span>
-
               <br />
               <Select
                 showSearch
@@ -306,26 +306,34 @@ const StudentMyClass = () => {
             <Col span={8}>
               <span>Ca học</span>
               <br />
+
               <Select
-                style={{ width: "100%", marginTop: "6px" }}
+                showSearch
+                filterOption={filterOptions}
+                style={{
+                  width: "100%",
+                  margin: "6px 0 10px 0",
+                }}
                 onChange={(e) => {
                   setClassPeriod(e);
                 }}
-                showSearch
-                filterOption={filterOptions}
                 value={classPeriod}
               >
                 <Option value="">Tất cả</Option>
-                <Option value="0">Ca 1</Option>
-                <Option value="1">Ca 2</Option>
-                <Option value="2">Ca 3</Option>
-                <Option value="3">Ca 4</Option>
-                <Option value="4">Ca 5</Option>
-                <Option value="5">Ca 6</Option>
-                <Option value="6">Ca 7</Option>
-                <Option value="7">Ca 8</Option>
-                <Option value="8">Ca 9</Option>
-                <Option value="9">Ca 10</Option>
+                {listMeetingPeriod.length > 0 &&
+                  listMeetingPeriod.map((item) => (
+                    <Option value={item.id} key={item.id}>
+                      {item.name}
+                      {" - "}(
+                      {convertHourAndMinuteToString(
+                        item.startHour,
+                        item.startMinute,
+                        item.endHour,
+                        item.endMinute
+                      )}
+                      )
+                    </Option>
+                  ))}
               </Select>
             </Col>
             <Col span={8}>
@@ -377,7 +385,7 @@ const StudentMyClass = () => {
           </Button>
         </div>
       </div>
-      <div className="table_myclass">
+      <div className="table_myclass" style={{ minHeight: "273px" }}>
         <div className="title_table_myclass">
           <div style={{ float: "left" }}>
             {" "}
@@ -399,11 +407,7 @@ const StudentMyClass = () => {
           <>
             <Empty
               imageStyle={{ height: 60 }}
-              description={
-                <span style={{ color: "#007bff" }}>
-                  Không tìm thấy lớp học nào !
-                </span>
-              }
+              description={<span>Không tìm thấy lớp học nào !</span>}
             />{" "}
           </>
         )}
