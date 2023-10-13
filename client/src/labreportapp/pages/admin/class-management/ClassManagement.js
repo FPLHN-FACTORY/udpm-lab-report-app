@@ -208,14 +208,14 @@ const ClassManagement = () => {
     },
     {
       title: "Ca",
-      dataIndex: "classPeriod",
-      key: "classPeriod",
-      sorter: (a, b) => a.classPeriod - b.classPeriod,
+      dataIndex: "nameClassPeriod",
+      key: "nameClassPeriod",
+      sorter: (a, b) => a.nameClassPeriod.localeCompare(b.nameClassPeriod),
       render: (text, record) => {
-        if (record.classPeriod == null) {
+        if (record.nameClassPeriod == null) {
           return <span>Chưa có</span>;
         } else {
-          return <span>{record.classPeriod + 1}</span>;
+          return <span>{record.nameClassPeriod}</span>;
         }
       },
     },
@@ -224,10 +224,10 @@ const ClassManagement = () => {
       dataIndex: "timePeriod",
       key: "timePeriod",
       render: (text, record) => {
-        if (record.classPeriod == null) {
+        if (record.startHour == null) {
           return <span>Chưa có</span>;
         } else {
-          return <span>{convertMeetingPeriodToTime(record.classPeriod)}</span>;
+          return <span>{convert(record.classPeriod)}</span>;
         }
       },
     },

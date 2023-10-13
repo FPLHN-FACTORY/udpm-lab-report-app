@@ -21,8 +21,20 @@ public interface AdClassResponse extends IsIdentified {
     @Value("#{target.start_time}")
     Long getStartTime();
 
-    @Value("#{target.class_period}")
-    Long getClassPeriod();
+    @Value("#{target.name_class_period}")
+    String getNameClassPeriod();
+
+    @Value("#{target.start_hour}")
+    Integer getStartHour();
+
+    @Value("#{target.start_minute}")
+    Integer getStartMinute();
+
+    @Value("#{target.end_hour}")
+    Integer getEndHour();
+
+    @Value("#{target.end_minute}")
+    Integer getEndMinute();
 
     @Value("#{target.class_size}")
     Integer getClassSize();

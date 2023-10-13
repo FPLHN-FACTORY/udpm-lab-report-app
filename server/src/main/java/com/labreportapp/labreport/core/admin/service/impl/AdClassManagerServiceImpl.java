@@ -236,7 +236,11 @@ public class AdClassManagerServiceImpl implements AdClassService {
             AdListClassCustomResponse adListClassCustomResponse = new AdListClassCustomResponse();
             adListClassCustomResponse.setId(adClassResponse.getId());
             adListClassCustomResponse.setClassSize(adClassResponse.getClassSize());
-            adListClassCustomResponse.setClassPeriod(adClassResponse.getClassPeriod());
+            adListClassCustomResponse.setNameClassPeriod(adClassResponse.getNameClassPeriod());
+            adListClassCustomResponse.setStartHour(adClassResponse.getStartHour());
+            adListClassCustomResponse.setStartMinute(adClassResponse.getStartMinute());
+            adListClassCustomResponse.setEndHour(adClassResponse.getEndHour());
+            adListClassCustomResponse.setEndMinute(adClassResponse.getEndMinute());
             adListClassCustomResponse.setStartTime(adClassResponse.getStartTime());
             adListClassCustomResponse.setCode(adClassResponse.getCode());
             adListClassCustomResponse.setTeacherId(adClassResponse.getTeacherId());

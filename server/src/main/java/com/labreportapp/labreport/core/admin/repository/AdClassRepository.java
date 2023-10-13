@@ -82,11 +82,13 @@ public interface AdClassRepository extends ClassRepository {
     @Query(value = """
             SELECT ROW_NUMBER() OVER(ORDER BY c.last_modified_date DESC ) AS stt,
             c.id,
-            c.code, c.start_time
-            , c.class_period, c.class_size, c.teacher_id,a.name as nameActivity, d.name AS nameLevel,
+            c.code, c.start_time, mp.name as name_class_period
+            , mp.start_hour, mp.start_minute, mp.end_hour, mp.end_minute
+            , c.class_size, c.teacher_id,a.name as nameActivity, d.name AS nameLevel,
             c.status_teacher_edit
             FROM activity a
             JOIN class c ON c.activity_id = a.id
+            JOIN meeting_period mp ON c.class_period = mp.id
             JOIN level d ON d.id = a.level_id
             JOIN semester s ON s.id = a.semester_id
             where (:#{#req.idSemester} IS NULL OR :#{#req.idSemester} LIKE '' OR s.id = :#{#req.idSemester})
