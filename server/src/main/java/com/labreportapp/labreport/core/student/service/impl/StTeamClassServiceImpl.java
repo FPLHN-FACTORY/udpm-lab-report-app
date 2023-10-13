@@ -211,7 +211,7 @@ public class StTeamClassServiceImpl implements StTeamClassService {
         stDetailClassCustomResponse.setId(classFind.getId());
         stDetailClassCustomResponse.setCode(classFind.getCode());
         stDetailClassCustomResponse.setClassSize(classFind.getClassSize());
-        stDetailClassCustomResponse.setClassPeriod(classFind.getClassPeriod());
+      //  stDetailClassCustomResponse.setClassPeriod(classFind.getClassPeriod());
         stDetailClassCustomResponse.setDescriptions(classFind.getDescriptions());
         stDetailClassCustomResponse.setActivityId(classFind.getActivityId());
         stDetailClassCustomResponse.setNameTeacher(response.getName());

@@ -136,7 +136,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
         Class classNew = new Class();
         classNew.setCode(classHelper.genMaLopTheoHoatDong(request.getActivityId()));
         classNew.setClassSize(0);
-        classNew.setClassPeriod(ClassPeriod.values()[Math.toIntExact(request.getClassPeriod())]);
+        classNew.setClassPeriod(null);//ClassPeriod.values()[Math.toIntExact(request.getClassPeriod())]
         classNew.setPassword(RandomString.random());
         classNew.setStatusTeacherEdit(StatusTeacherEdit.values()[request.getStatusTeacherEdit()]);
         Optional<Activity> activityFind = adActivityRepository.findById(request.getActivityId());
@@ -173,7 +173,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
     public AdClassCustomResponse updateClass(@Valid AdCreateClassRequest request, String id) {
         Class classNew = repository.findById(id).get();
         classNew.setStartTime(request.getStartTime());
-        classNew.setClassPeriod(ClassPeriod.values()[Math.toIntExact(request.getClassPeriod())]);
+       // classNew.setClassPeriod(ClassPeriod.values()[Math.toIntExact(request.getClassPeriod())]);
         classNew.setStatusTeacherEdit(StatusTeacherEdit.values()[request.getStatusTeacherEdit()]);
         Optional<Activity> activityFind = adActivityRepository.findById(request.getActivityId());
         if (!activityFind.isPresent()) {
@@ -401,7 +401,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
                     return;
                 }
                 if (classExcel.getClassPeriod() != null) {
-                    classFind.setClassPeriod(ClassPeriod.values()[classExcel.getClassPeriod() - 1]);
+                    //classFind.setClassPeriod(ClassPeriod.values()[classExcel.getClassPeriod() - 1]);
                 } else {
                     classFind.setClassPeriod(null);
                 }

@@ -301,7 +301,7 @@ public class DBGenerator implements CommandLineRunner {
 
         Class class1 = new Class();
         class1.setCode("JAVA_WEB_1");
-        class1.setClassPeriod(ClassPeriod.CA_3);
+        class1.setClassPeriod(meetingPeriod3.getId());
         class1.setStartTime(new Date().getTime() + 50000);
         class1.setClassSize(19);
         class1.setPassword("123456");
@@ -315,7 +315,7 @@ public class DBGenerator implements CommandLineRunner {
 
         Class class2 = new Class();
         class2.setCode("JAVA_SWING_1");
-        class2.setClassPeriod(ClassPeriod.CA_5);
+        class2.setClassPeriod(meetingPeriod5.getId());
         class2.setStartTime(new Date().getTime() + 50000);
         class2.setClassSize(1);
         class2.setPassword("000000");
@@ -328,7 +328,7 @@ public class DBGenerator implements CommandLineRunner {
 
         Class class3 = new Class();
         class3.setCode("JAVA_WEB_2");
-        class3.setClassPeriod(ClassPeriod.CA_5);
+        class3.setClassPeriod(meetingPeriod5.getId());
         class3.setStartTime(new Date().getTime() + 50000);
         class3.setClassSize(1);
         class3.setStatusClass(StatusClass.OPEN);
@@ -341,7 +341,7 @@ public class DBGenerator implements CommandLineRunner {
 
         Class class4 = new Class();// check sent class FAIL do quá số lượng sinh viên
         class4.setCode("JAVA_WEB_3");
-        class4.setClassPeriod(ClassPeriod.CA_3);
+        class4.setClassPeriod(meetingPeriod3.getId());
         class4.setStartTime(new Date().getTime() + 50000);
         class4.setClassSize(0);
         class4.setPassword("123456");
@@ -354,7 +354,7 @@ public class DBGenerator implements CommandLineRunner {
 
         Class class5 = new Class();// check sent class FAIL do Khác ACtiviti 1quá số lượng sinh viên
         class5.setCode("JAVA_WEB_4");
-        class5.setClassPeriod(ClassPeriod.CA_3);
+        class5.setClassPeriod(meetingPeriod3.getId());
         class5.setStartTime(new Date().getTime() + 50000);
         class5.setClassSize(0);
         class5.setPassword("123456");
@@ -367,7 +367,7 @@ public class DBGenerator implements CommandLineRunner {
 
         Class class6 = new Class();
         class6.setCode("JAVA_WEB_5");
-        class6.setClassPeriod(ClassPeriod.CA_3);
+        class6.setClassPeriod(meetingPeriod3.getId());
         class6.setStartTime(new Date().getTime() + 50000);
         class6.setClassSize(0);
         class6.setPassword("123456");
@@ -380,7 +380,7 @@ public class DBGenerator implements CommandLineRunner {
 
         Class class7 = new Class();
         class7.setCode("JAVA_WEB_6");
-        class7.setClassPeriod(ClassPeriod.CA_3);
+        class7.setClassPeriod(meetingPeriod3.getId());
         class7.setStartTime(new Date().getTime() + 50000);
         class7.setClassSize(0);
         class7.setPassword("123456");

@@ -36,8 +36,8 @@ public class Class extends PrimaryEntity {
     @Column(length = EntityProperties.LENGTH_NAME)
     private String password;
 
-    @Column
-    private ClassPeriod classPeriod;
+    @Column(length = EntityProperties.LENGTH_ID)
+    private String classPeriod;
 
     @Column
     private Integer classSize;
