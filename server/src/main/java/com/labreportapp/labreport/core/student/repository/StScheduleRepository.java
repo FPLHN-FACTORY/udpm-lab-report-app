@@ -26,6 +26,8 @@ public interface StScheduleRepository extends JpaRepository<Meeting, String> {
               mp.name as meeting_period,
               m.address as address,
               m.type_meeting as type_meeting,
+              mp.name as meeting_period, mp.start_hour as start_hour, mp.start_minute as start_minute ,
+              mp.end_hour as end_hour, mp.end_minute as end_minute,
               c.code AS class_code,
               c.start_time as start_time,
               m.descriptions as descriptions,

@@ -82,7 +82,54 @@ const DetailMyClassTeam = () => {
         toast.error(error.response.data);
       });
   };
+  const [showDetailTeam, setShowDetailTeam] = useState(false);
+  const [idSelected, setIdSelected] = useState(null);
 
+  const openModalDetailTeam = (id) => {
+    setShowDetailTeam(true);
+    setIdSelected(id);
+  };
+
+  const handleDetailTeamCancel = () => {
+    setShowDetailTeam(false);
+    setIdSelected(null);
+  };
+
+  const joinTeam = (idTeam) => {
+    setIsLoadingOverlay(true);
+    let obj = {
+      idClass: id,
+      idTeam: idTeam,
+    };
+
+    StMyTeamClassAPI.joinTeam(obj).then((response) => {
+      checkStatusStudentInClass();
+      setIsLoadingOverlay(false);
+    });
+  };
+
+  const outTeam = () => {
+    setIsLoadingOverlay(true);
+
+    let obj = {
+      idClass: id,
+    };
+
+    StMyTeamClassAPI.outTeam(obj).then((response) => {
+      checkStatusStudentInClass();
+      setIsLoadingOverlay(false);
+    });
+  };
+
+  const loadDataStudentClasses = () => {
+    StMyClassAPI.getAllStudentClasses(id).then((response) => {
+      dispatch(SetStStudentClasses(response.data.data));
+    });
+  };
+
+  useEffect(() => {
+    loadDataStudentClasses();
+  }, []);
   const columns = [
     {
       title: "STT",
@@ -170,55 +217,6 @@ const DetailMyClassTeam = () => {
       ),
     },
   ];
-
-  const [showDetailTeam, setShowDetailTeam] = useState(false);
-  const [idSelected, setIdSelected] = useState(null);
-
-  const openModalDetailTeam = (id) => {
-    setShowDetailTeam(true);
-    setIdSelected(id);
-  };
-
-  const handleDetailTeamCancel = () => {
-    setShowDetailTeam(false);
-    setIdSelected(null);
-  };
-
-  const joinTeam = (idTeam) => {
-    setIsLoadingOverlay(true);
-    let obj = {
-      idClass: id,
-      idTeam: idTeam,
-    };
-
-    StMyTeamClassAPI.joinTeam(obj).then((response) => {
-      checkStatusStudentInClass();
-      setIsLoadingOverlay(false);
-    });
-  };
-
-  const outTeam = () => {
-    setIsLoadingOverlay(true);
-
-    let obj = {
-      idClass: id,
-    };
-
-    StMyTeamClassAPI.outTeam(obj).then((response) => {
-      checkStatusStudentInClass();
-      setIsLoadingOverlay(false);
-    });
-  };
-
-  const loadDataStudentClasses = () => {
-    StMyClassAPI.getAllStudentClasses(id).then((response) => {
-      dispatch(SetStStudentClasses(response.data.data));
-    });
-  };
-
-  useEffect(() => {
-    loadDataStudentClasses();
-  }, []);
 
   return (
     <div style={{ paddingTop: "35px" }}>
@@ -321,14 +319,7 @@ const DetailMyClassTeam = () => {
                   className="group-info-item"
                   style={{ marginTop: "13px", marginBottom: "15px" }}
                 >
-                  Ca học:{" "}
-                  {detailClass != null
-                    ? "Ca " +
-                      parseInt(
-                        convertMeetingPeriodToNumber(detailClass.classPeriod) +
-                          1
-                      )
-                    : ""}
+                  Ca học: {detailClass != null ? detailClass.classPeriod : ""}
                 </span>
                 <span
                   className="group-info-item"

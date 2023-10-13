@@ -19,6 +19,7 @@ import java.util.Optional;
  */
 @Repository
 public interface StMeetingRepository extends JpaRepository<Meeting, String> {
+
     @Query(value = """
             SELECT  
             m.id as id,
@@ -26,10 +27,11 @@ public interface StMeetingRepository extends JpaRepository<Meeting, String> {
             m.descriptions as descriptions,
             m.meeting_date as meeting_date,
             m.type_meeting as type_meeting,
-            mp.name as meeting_period,
+            mp.name as meeting_period, mp.start_hour as start_hour, mp.start_minute as start_minute ,
+            mp.end_hour as end_hour, mp.end_minute as end_minute,
             m.class_id as class_id
             FROM meeting m
-             JOIN meeting_period mp ON mp.id = m.meeting_period
+            JOIN meeting_period mp ON mp.id = m.meeting_period
             JOIN class c ON c.id = m.class_id
             WHERE m.class_id = :#{#req.idClass}
             AND m.meeting_date < :#{#req.currentTime}
@@ -45,10 +47,11 @@ public interface StMeetingRepository extends JpaRepository<Meeting, String> {
             m.descriptions as descriptions,
             m.meeting_date as meeting_date,
             m.type_meeting as type_meeting,
-            mp.name as meeting_period,
-             m.class_id as class_id
+             mp.name as meeting_period, mp.start_hour as start_hour, mp.start_minute as start_minute ,
+            mp.end_hour as end_hour, mp.end_minute as end_minute,
+            m.class_id as class_id
             FROM meeting m
-             JOIN meeting_period mp ON mp.id = m.meeting_period
+            JOIN meeting_period mp ON mp.id = m.meeting_period
             WHERE m.id = :#{#req.idMeeting}
                      """, nativeQuery = true)
     Optional<StMeetingResponse> searchMeetingByIdMeeting(@Param("req") StFindMeetingRequest req);
@@ -87,4 +90,5 @@ public interface StMeetingRepository extends JpaRepository<Meeting, String> {
             WHERE a.student_id = :#{#req.idStudent} AND a.class_id = :#{#req.idClass}
             """, nativeQuery = true)
     Integer getRoleByIdStudent(@Param("req") StFindMeetingRequest req);
+
 }

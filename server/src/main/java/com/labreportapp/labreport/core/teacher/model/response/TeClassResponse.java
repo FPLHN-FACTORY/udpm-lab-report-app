@@ -20,7 +20,19 @@ public interface TeClassResponse {
     Long getStartTime();
 
     @Value("#{target.class_period}")
-    Integer getClassPeriod();
+    String getClassPeriod();
+
+    @Value("#{target.start_hour}")
+    Integer getStartHour();
+
+    @Value("#{target.start_minute}")
+    Integer getStartMinute();
+
+    @Value("#{target.end_hour}")
+    Integer getEndHour();
+
+    @Value("#{target.end_minute}")
+    Integer getEndMinute();
 
     @Value("#{target.class_size}")
     Integer getClassSize();

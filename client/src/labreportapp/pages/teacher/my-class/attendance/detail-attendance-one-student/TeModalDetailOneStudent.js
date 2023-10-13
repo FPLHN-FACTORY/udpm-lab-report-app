@@ -1,7 +1,10 @@
 import { useParams } from "react-router-dom";
 import { Button, Empty, Input, Modal, Pagination, Spin, Table } from "antd";
 import { useEffect, useState } from "react";
-import { convertMeetingPeriodToTime } from "../../../../../helper/util.helper";
+import {
+  convertHourAndMinuteToString,
+  convertMeetingPeriodToTime,
+} from "../../../../../helper/util.helper";
 import { TeacherAttendanceAPI } from "../../../../../api/teacher/attendance/TeacherAttendance.api";
 import { SearchOutlined } from "@ant-design/icons";
 
@@ -112,16 +115,29 @@ const TeModalDetailOneStudent = ({ onCancel, visible, objStudent }) => {
       title: "Ca",
       dataIndex: "meetingPeriod",
       key: "meetingPeriod",
-      render: (meetingPeriod) => <span>{meetingPeriod + 1}</span>,
-      sorter: (a, b) => a.meetingPeriod - b.meetingPeriod,
+      sorter: (a, b) => a.meetingPeriod.localeCompare(b.meetingPeriod),
     },
     {
       title: "Thời gian",
       dataIndex: "timePeriod",
       key: "timePeriod",
       render: (text, record) => {
-        return <span>{convertMeetingPeriodToTime(record.meetingPeriod)}</span>;
+        if (record.meetingPeriod == null) {
+          return <span>Chưa có</span>;
+        } else {
+          return (
+            <span>
+              {convertHourAndMinuteToString(
+                record.startHour,
+                record.startMinute,
+                record.endHour,
+                record.endMinute
+              )}
+            </span>
+          );
+        }
       },
+      align: "center",
     },
     {
       title: "Giảng viên",

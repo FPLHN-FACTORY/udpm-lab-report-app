@@ -14,6 +14,7 @@ import React from "react";
 import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
 import { SetTTrueToggle } from "../../../../app/teacher/TeCollapsedSlice.reducer";
 import {
+  convertHourAndMinuteToString,
   convertMeetingPeriodToTime,
   convertStatusMeetingByDateAndPeriod,
 } from "../../../../helper/util.helper";
@@ -295,25 +296,27 @@ const MeetingInMyClass = () => {
                                 }}
                               >
                                 <span>
-                                  {" "}
-                                  {convertLongToDate(record.meetingDate)}-{" "}
+                                  {convertLongToDate(record.meetingDate)}
                                 </span>
-                                <span>Ca </span>
-                                {record.meetingPeriod + 1 + " "}
-                                <span>
-                                  (
-                                  {convertMeetingPeriodToTime(
-                                    record.meetingPeriod
-                                  )}
-                                  )
-                                </span>
+                                {record.meetingPeriod !== null && (
+                                  <span>
+                                    {" "}
+                                    - {record.meetingPeriod} (
+                                    {convertHourAndMinuteToString(
+                                      record.startHour,
+                                      record.startMinute,
+                                      record.endHour,
+                                      record.endMinute
+                                    )}
+                                    )
+                                  </span>
+                                )}
                               </span>
                             </div>
                           </Col>
                         </Row>
                       </Link>
                     </div>
-                    // </div>
                   ))}
                 </>
               ) : (

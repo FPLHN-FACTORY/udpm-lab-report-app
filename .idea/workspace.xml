@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fe93e581-5589-4bad-ba6a-389fa82a0816" name="Default Changelist" comment="fix merge code all member">
-      <change beforePath="$PROJECT_DIR$/server/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/resources/application.properties" afterDir="false" />
-    </list>
+    <list default="true" id="fe93e581-5589-4bad-ba6a-389fa82a0816" name="Default Changelist" comment="fix merge code all member update code ultil convert" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -42,7 +40,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../tool-datn/fplhn-capstone-register" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
   </component>
   <component name="RunManager">
@@ -89,6 +87,7 @@
       <workItem from="1697058980697" duration="33000" />
       <workItem from="1697087068876" duration="20000" />
       <workItem from="1697089991332" duration="297000" />
+      <workItem from="1697187822102" duration="109000" />
     </task>
     <task id="LOCAL-00001" summary="update code merge login, pending">
       <created>1696288841421</created>
@@ -146,7 +145,14 @@
       <option name="project" value="LOCAL" />
       <updated>1697090007403</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="fix merge code all member update code ultil convert">
+      <created>1697187868127</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1697187868127</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -170,6 +176,7 @@
     <MESSAGE value="update code trello" />
     <MESSAGE value="merge code quynhnc" />
     <MESSAGE value="fix merge code all member" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix merge code all member" />
+    <MESSAGE value="fix merge code all member update code ultil convert" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix merge code all member update code ultil convert" />
   </component>
 </project>

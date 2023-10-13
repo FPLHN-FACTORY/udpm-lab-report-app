@@ -20,7 +20,7 @@ public interface TeDetailClassResponse {
     String getPassWord();
 
     @Value("#{target.class_period}")
-    Integer getClassPeriod();
+    String getClassPeriod();
 
     @Value("#{target.class_size}")
     Integer getClassSize();

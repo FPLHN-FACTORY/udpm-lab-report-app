@@ -12,10 +12,12 @@ import com.labreportapp.labreport.core.student.model.response.StMyStudentTeamCus
 import com.labreportapp.labreport.core.student.model.response.StMyStudentTeamResponse;
 import com.labreportapp.labreport.core.student.model.response.StMyTeamInClassResponse;
 import com.labreportapp.labreport.core.student.model.response.StStudentCallApiResponse;
+import com.labreportapp.labreport.core.student.repository.StMeetingPeriodRepository;
 import com.labreportapp.labreport.core.student.repository.StMyClassRepository;
 import com.labreportapp.labreport.core.student.repository.StStudentClassesRepository;
 import com.labreportapp.labreport.core.student.service.StTeamClassService;
 import com.labreportapp.labreport.entity.Class;
+import com.labreportapp.labreport.entity.MeetingPeriod;
 import com.labreportapp.labreport.entity.StudentClasses;
 import com.labreportapp.labreport.entity.Team;
 import com.labreportapp.labreport.infrastructure.apiconstant.ApiConstants;
@@ -45,6 +47,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -76,6 +79,9 @@ public class StTeamClassServiceImpl implements StTeamClassService {
 
     @Autowired
     private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
+
+    @Autowired
+    private StMeetingPeriodRepository stMeetingPeriodRepository;
 
     public List<StStudentCallApiResponse> callApi() {
         String apiUrl = ApiConstants.API_GET_USER_BY_ID;
@@ -204,14 +210,19 @@ public class StTeamClassServiceImpl implements StTeamClassService {
     @Override
     public StDetailClassCustomResponse detailClass(String idClass) {
         Class classFind = repository.findById(idClass).get();
-
         SimpleResponse response = convertRequestCallApiIdentity.handleCallApiGetUserById(classFind.getTeacherId());
-
         StDetailClassCustomResponse stDetailClassCustomResponse = new StDetailClassCustomResponse();
         stDetailClassCustomResponse.setId(classFind.getId());
         stDetailClassCustomResponse.setCode(classFind.getCode());
         stDetailClassCustomResponse.setClassSize(classFind.getClassSize());
-      //  stDetailClassCustomResponse.setClassPeriod(classFind.getClassPeriod());
+        stDetailClassCustomResponse.setClassPeriod(classFind.getClassPeriod());
+        if (classFind.getClassPeriod() != null) {
+            Optional<MeetingPeriod> meetingPeriod = stMeetingPeriodRepository
+                    .findById(classFind.getClassPeriod());
+          if(meetingPeriod.isPresent()){
+              stDetailClassCustomResponse.setClassPeriod(meetingPeriod.get().getName());
+          }
+        }
         stDetailClassCustomResponse.setDescriptions(classFind.getDescriptions());
         stDetailClassCustomResponse.setActivityId(classFind.getActivityId());
         stDetailClassCustomResponse.setNameTeacher(response.getName());

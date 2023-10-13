@@ -22,6 +22,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 import ModalSentStudent from "./modal-sent-student/ModalSentStudent";
+import { convertDateLongToString } from "../../../../helper/util.helper";
 
 const StudentsInMyClass = () => {
   const dispatch = useAppDispatch();
@@ -536,29 +537,34 @@ const StudentsInMyClass = () => {
                 className="group-info-item"
                 style={{ marginTop: "10px", marginBottom: "15px" }}
               >
-                Hoạt động: &nbsp;{classDetail.activityName}
+                Hoạt động: &nbsp;
+                {classDetail != null ? classDetail.activityName : ""}
               </span>
               <span className="group-info-item">
-                Level: &nbsp; {classDetail.activityLevel}
+                Cấp độ: &nbsp;{" "}
+                {classDetail != null ? classDetail.activityLevel : ""}
               </span>
               <span
                 className="group-info-item"
                 style={{ marginTop: "13px", marginBottom: "15px" }}
               >
                 Thời gian bắt đầu: &nbsp;
-                {moment(classDetail.startTime).format("DD-MM-YYYY")}
+                {classDetail != null
+                  ? convertDateLongToString(classDetail.startTime)
+                  : ""}
               </span>
               <span
                 className="group-info-item"
                 style={{ marginTop: "13px", marginBottom: "15px" }}
               >
-                Tên lớp: &nbsp;{classDetail.code}
+                Tên lớp: &nbsp; {classDetail != null ? classDetail.code : ""}
               </span>
               <span
                 className="group-info-item"
                 style={{ marginTop: "13px", marginBottom: "15px" }}
               >
-                Ca học: &nbsp; {classDetail.classPeriod + 1}
+                Ca học: &nbsp;{" "}
+                {classDetail != null ? classDetail.classPeriod : ""}
               </span>
               <span
                 className="group-info-item"
@@ -571,13 +577,15 @@ const StudentsInMyClass = () => {
                 className="group-info-item"
                 style={{ marginTop: "13px", marginBottom: "15px" }}
               >
-                Mô tả: &nbsp;{classDetail.descriptions}
+                Mô tả: &nbsp;{" "}
+                {classDetail != null ? classDetail.descriptions : ""}
               </span>
               <span
                 className="group-info-item"
                 style={{ marginTop: "13px", marginBottom: "15px" }}
               >
-                Mã tham gia: &nbsp;{classDetail.passWord}
+                Mã tham gia: &nbsp;{" "}
+                {classDetail != null ? classDetail.passWord : ""}
               </span>
               <span
                 className="group-info-item"
@@ -588,7 +596,11 @@ const StudentsInMyClass = () => {
                 }}
               >
                 Trạng thái lớp: &nbsp;
-                {classDetail.statusClass === 0 ? "Đã mở" : "Đã khóa"}
+                {classDetail != null
+                  ? classDetail.statusClass === 0
+                    ? "Đã mở"
+                    : "Đã khóa"
+                  : ""}
               </span>
               <span
                 className="group-info-item"
@@ -599,9 +611,11 @@ const StudentsInMyClass = () => {
                 }}
               >
                 Trello: &nbsp;
-                {classDetail.allowUseTrello === 0
-                  ? "Cho phép"
-                  : "Không cho phép"}
+                {classDetail != null
+                  ? classDetail.allowUseTrello === 0
+                    ? "Cho phép"
+                    : "Không cho phép"
+                  : ""}
               </span>
               <span
                 className="group-info-item"
@@ -612,9 +626,11 @@ const StudentsInMyClass = () => {
                 }}
               >
                 Trao đổi sinh viên: &nbsp;
-                {classDetail.statusTeacherEdit === 0
-                  ? "Cho phép"
-                  : "Không cho phép"}
+                {classDetail != null
+                  ? classDetail.statusTeacherEdit === 0
+                    ? "Cho phép"
+                    : "Không cho phép"
+                  : ""}
               </span>
             </div>
           </div>

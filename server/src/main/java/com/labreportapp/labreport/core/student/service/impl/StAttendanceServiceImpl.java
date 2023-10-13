@@ -54,6 +54,10 @@ public class StAttendanceServiceImpl implements StAttendanceService {
             obj.setLesson(reposi.getLesson());
             obj.setMeetingDate(reposi.getMeetingDate());
             obj.setMeetingPeriod(reposi.getMeetingPeriod());
+            obj.setStartHour(reposi.getStartHour());
+            obj.setStartMinute(reposi.getStartMinute());
+            obj.setEndHour(reposi.getEndHour());
+            obj.setEndMinute(reposi.getEndMinute());
             obj.setTypeMeeting(reposi.getTypeMeeting());
             obj.setTeacherId(reposi.getTeacherId());
             obj.setStatus(reposi.getStatus());

@@ -25,6 +25,7 @@ import { TeacherScheduleTodayAPI } from "../../../api/teacher/meeting/schedule-t
 import { toast } from "react-toastify";
 import {
   convertCheckAttended,
+  convertHourAndMinuteToString,
   convertMeetingPeriodToTime,
 } from "../../../helper/util.helper";
 import { SearchOutlined } from "@ant-design/icons";
@@ -182,6 +183,7 @@ const TeacherScheduleToday = () => {
           <div style={{ textAlign: "center" }}>{convertLongToDate(text)}</div>
         );
       },
+      align: "center",
     },
     {
       title: "Buổi học",
@@ -196,7 +198,6 @@ const TeacherScheduleToday = () => {
         return <span>{text === 0 ? "Online" : "Offline"}</span>;
       },
     },
-
     {
       title: "Địa điểm",
       dataIndex: "addressCustom",
@@ -208,25 +209,33 @@ const TeacherScheduleToday = () => {
       },
     },
     {
+      title: "Ca học",
+      dataIndex: "meetingPeriod",
+      key: "meetingPeriod",
+      sorter: (a, b) => a.meetingPeriod.localeCompare(b.meetingPeriod),
+      align: "center",
+    },
+    {
       title: "Thời gian",
       dataIndex: "timePeriod",
       key: "timePeriod",
       render: (text, record) => {
-        return (
-          <div style={{ textAlign: "center" }}>
-            {convertMeetingPeriodToTime(record.meetingPeriod)}
-          </div>
-        );
+        if (record.meetingPeriod == null) {
+          return <span>Chưa có</span>;
+        } else {
+          return (
+            <span>
+              {convertHourAndMinuteToString(
+                record.startHour,
+                record.startMinute,
+                record.endHour,
+                record.endMinute
+              )}
+            </span>
+          );
+        }
       },
-    },
-    {
-      title: "Ca học",
-      dataIndex: "meetingPeriod",
-      key: "meetingPeriod",
-      render: (text, record) => {
-        return <div style={{ textAlign: "center" }}>{text + 1}</div>;
-      },
-      sorter: (a, b) => a.meetingPeriod - b.meetingPeriod,
+      align: "center",
     },
     {
       title: "Cấp độ",
@@ -280,33 +289,33 @@ const TeacherScheduleToday = () => {
       title: "Điểm danh",
       dataIndex: "actions",
       key: "actions",
-      render: (text, record) => {
-        if (convertCheckAttended(record.meetingPeriod)) {
-          return (
-            <div className="box_icon" style={{ textAlign: "center" }}>
-              <Tooltip title="Xem chi tiết">
-                <div
-                  onClick={() =>
-                    handleDetailAttend(record.idMeeting, record.meetingPeriod)
-                  }
-                  className="box-center"
-                  style={{
-                    height: "30px",
-                    width: "120px",
-                    backgroundColor: "#007bff",
-                    color: "white",
-                    borderRadius: "5px",
-                  }}
-                >
-                  <span style={{ fontSize: "14px" }}>Xem - chỉnh sửa</span>
-                </div>
-              </Tooltip>
-            </div>
-          );
-        } else {
-          return null;
-        }
-      },
+      // render: (text, record) => {
+      //   if (convertCheckAttended(record.meetingPeriod)) {
+      //     return (
+      //       <div className="box_icon" style={{ textAlign: "center" }}>
+      //         <Tooltip title="Xem chi tiết">
+      //           <div
+      //             onClick={() =>
+      //               handleDetailAttend(record.idMeeting, record.meetingPeriod)
+      //             }
+      //             className="box-center"
+      //             style={{
+      //               height: "30px",
+      //               width: "120px",
+      //               backgroundColor: "#007bff",
+      //               color: "white",
+      //               borderRadius: "5px",
+      //             }}
+      //           >
+      //             <span style={{ fontSize: "14px" }}>Xem - chỉnh sửa</span>
+      //           </div>
+      //         </Tooltip>
+      //       </div>
+      //     );
+      //   } else {
+      //     return null;
+      //   }
+      // },
       width: "10%",
     },
   ];
@@ -391,25 +400,33 @@ const TeacherScheduleToday = () => {
       },
     },
     {
+      title: "Ca học",
+      dataIndex: "meetingPeriod",
+      key: "meetingPeriod",
+      sorter: (a, b) => a.meetingPeriod.localeCompare(b.meetingPeriod),
+      align: "center",
+    },
+    {
       title: "Thời gian",
       dataIndex: "timePeriod",
       key: "timePeriod",
       render: (text, record) => {
-        return (
-          <div style={{ textAlign: "center" }}>
-            {convertMeetingPeriodToTime(record.meetingPeriod)}
-          </div>
-        );
+        if (record.meetingPeriod == null) {
+          return <span>Chưa có</span>;
+        } else {
+          return (
+            <span>
+              {convertHourAndMinuteToString(
+                record.startHour,
+                record.startMinute,
+                record.endHour,
+                record.endMinute
+              )}
+            </span>
+          );
+        }
       },
-    },
-    {
-      title: "Ca học",
-      dataIndex: "meetingPeriod",
-      key: "meetingPeriod",
-      render: (text, record) => {
-        return <div style={{ textAlign: "center" }}>{text + 1}</div>;
-      },
-      sorter: (a, b) => a.meetingPeriod - b.meetingPeriod,
+      align: "center",
     },
     {
       title: "Cấp độ",

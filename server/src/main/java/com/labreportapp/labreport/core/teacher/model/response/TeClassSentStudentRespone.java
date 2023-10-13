@@ -16,7 +16,7 @@ public class TeClassSentStudentRespone {
 
     private String code;
 
-    private Integer classPeriod;
+    private String classPeriod;
 
     private Integer classSize;
 

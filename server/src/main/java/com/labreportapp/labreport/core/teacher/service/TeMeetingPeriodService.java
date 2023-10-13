@@ -1,6 +1,6 @@
 package com.labreportapp.labreport.core.teacher.service;
 
-import com.labreportapp.labreport.core.teacher.model.response.TeMeetingPeriodCustomResponse;
+import com.labreportapp.labreport.entity.MeetingPeriod;
 
 import java.util.List;
 
@@ -9,5 +9,5 @@ import java.util.List;
  */
 public interface TeMeetingPeriodService {
 
-    List<TeMeetingPeriodCustomResponse> listMeetingPeriod();
+    List<MeetingPeriod> listMeetingPeriod();
 }

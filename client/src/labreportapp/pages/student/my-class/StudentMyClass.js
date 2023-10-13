@@ -174,6 +174,7 @@ const StudentMyClass = () => {
           );
         }
       },
+      align: "center",
     },
     {
       title: "Giảng viên",
@@ -306,7 +307,6 @@ const StudentMyClass = () => {
             <Col span={8}>
               <span>Ca học</span>
               <br />
-
               <Select
                 showSearch
                 filterOption={filterOptions}
@@ -323,8 +323,7 @@ const StudentMyClass = () => {
                 {listMeetingPeriod.length > 0 &&
                   listMeetingPeriod.map((item) => (
                     <Option value={item.id} key={item.id}>
-                      {item.name}
-                      {" - "}(
+                      {item.name} (
                       {convertHourAndMinuteToString(
                         item.startHour,
                         item.startMinute,

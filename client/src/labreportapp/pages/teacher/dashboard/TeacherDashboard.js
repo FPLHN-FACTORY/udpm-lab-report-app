@@ -24,7 +24,10 @@ import { TeacherSemesterAPI } from "../../../api/teacher/semester/TeacherSemeste
 import { SetTeacherSemester } from "../../../app/teacher/semester/teacherSemesterSlice.reduce";
 import { TeacherActivityAPI } from "../../../api/teacher/activity/TeacherActivity.api";
 import { useEffect } from "react";
-import { convertMeetingPeriodToTime } from "../../../helper/util.helper";
+import {
+  convertHourAndMinuteToString,
+  convertMeetingPeriodToTime,
+} from "../../../helper/util.helper";
 import { TeacherStatisticalAPI } from "../../../api/teacher/statistical/TeacherStatistical.api";
 import LoadingIndicator from "../../../helper/loading";
 import { toast } from "react-toastify";
@@ -257,15 +260,7 @@ const TeacherDashboard = () => {
       title: <div style={{ textAlign: "center" }}>Ca học</div>,
       dataIndex: "classPeriod",
       key: "classPeriod",
-      render: (text) => <span>{text + 1}</span>,
-      sorter: (a, b) => a.classPeriod - b.classPeriod,
-      align: "center",
-    },
-    {
-      title: <div style={{ textAlign: "center" }}>Sĩ số</div>,
-      dataIndex: "classSize",
-      key: "classSize",
-      sorter: (a, b) => a.classSize - b.classSize,
+      sorter: (a, b) => a.classPeriod.localeCompare(b.classPeriod),
       align: "center",
     },
     {
@@ -273,8 +268,24 @@ const TeacherDashboard = () => {
       dataIndex: "timePeriod",
       key: "timePeriod",
       render: (text, record) => {
-        return <span>{convertMeetingPeriodToTime(record.classPeriod)}</span>;
+        return (
+          <span>
+            {convertHourAndMinuteToString(
+              record.startHour,
+              record.startMinute,
+              record.endHour,
+              record.endMinute
+            )}
+          </span>
+        );
       },
+      align: "center",
+    },
+    {
+      title: <div style={{ textAlign: "center" }}>Sĩ số</div>,
+      dataIndex: "classSize",
+      key: "classSize",
+      sorter: (a, b) => a.classSize - b.classSize,
       align: "center",
     },
     {

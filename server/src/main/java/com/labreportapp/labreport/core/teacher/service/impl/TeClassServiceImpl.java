@@ -12,9 +12,11 @@ import com.labreportapp.labreport.core.teacher.model.response.TeClassStatistical
 import com.labreportapp.labreport.core.teacher.model.response.TeDetailClassResponse;
 import com.labreportapp.labreport.core.teacher.repository.TeClassConfigurationRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeClassRepository;
+import com.labreportapp.labreport.core.teacher.repository.TeMeetingPeriodRepository;
 import com.labreportapp.labreport.core.teacher.service.TeClassService;
 import com.labreportapp.labreport.entity.Class;
 import com.labreportapp.labreport.entity.ClassConfiguration;
+import com.labreportapp.labreport.entity.MeetingPeriod;
 import com.labreportapp.labreport.infrastructure.constant.StatusClass;
 import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
 import com.labreportapp.labreport.util.SemesterHelper;

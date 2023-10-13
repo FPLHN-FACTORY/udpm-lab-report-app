@@ -60,7 +60,8 @@ public class StAttendenceAllServiceImpl implements StAttendenceAllService {
             classAttendenceResponse.setClassCode(classResponse.getCode());
 
             req.setIdClass(classAttendenceResponse.getId());
-            List<StAttendenceAllResponse> getAttendenceListByStudentInClassAndSemester = stAttendenceAllRepository.getAttendenceListByStudentInClassAndSemester(req);
+            List<StAttendenceAllResponse> getAttendenceListByStudentInClassAndSemester = stAttendenceAllRepository
+                    .getAttendenceListByStudentInClassAndSemester(req);
 
             List<StAttendenceAllCustomResponse> customAttendenceListResponses = new ArrayList<>();
             getAttendenceListByStudentInClassAndSemester.forEach(att -> {
@@ -72,7 +73,10 @@ public class StAttendenceAllServiceImpl implements StAttendenceAllService {
                         attendenceInClass.setTypeMeeting(att.getTypeMeeting());
                         attendenceInClass.setName(att.getName());
                         attendenceInClass.setTeacherId(att.getTeacherId());
-
+                        attendenceInClass.setStartHour(att.getStartHour());
+                        attendenceInClass.setStartMinute(att.getStartMinute());
+                        attendenceInClass.setEndHour(att.getEndHour());
+                        attendenceInClass.setEndMinute(att.getEndMinute());
                         SimpleResponse simpleResponse = simpleMap.get(att.getTeacherId());
                         attendenceInClass.setTeacherUsername(att.getTeacherId().equals(simpleResponse.getId())
                                 ? simpleResponse.getUserName() : null);
@@ -82,7 +86,6 @@ public class StAttendenceAllServiceImpl implements StAttendenceAllService {
             classAttendenceResponse.setAttendences(customAttendenceListResponses);
             response.add(classAttendenceResponse);
         }
-
         return response;
     }
 }

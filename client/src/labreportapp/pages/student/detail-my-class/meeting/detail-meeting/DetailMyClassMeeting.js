@@ -118,8 +118,8 @@ const StTeamMeeting = () => {
                   style={{ lineHeight: "42px", color: "grey", float: "right" }}
                 >
                   <span>
-                    Thời gian: {convertLongToDate(meeting.meetingDate)} - Ca{" "}
-                    {meeting.meetingPeriod + 1}
+                    Thời gian: {convertLongToDate(meeting.meetingDate)} -{" "}
+                    {meeting.meetingPeriod}
                   </span>
                 </div>
               </Col>

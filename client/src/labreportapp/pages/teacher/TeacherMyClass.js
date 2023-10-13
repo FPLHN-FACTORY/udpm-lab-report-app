@@ -18,7 +18,6 @@ import {
   Pagination,
   Tooltip,
   Empty,
-  message,
 } from "antd";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -32,11 +31,7 @@ import {
   GetTeacherMyClass,
   SetTeacherMyClass,
 } from "../../app/teacher/my-class/teacherMyClassSlice.reduce";
-import { convertMeetingPeriodToTime } from "../../helper/util.helper";
-import { toast } from "react-toastify";
-import SockJS from "sockjs-client";
-import { Stomp } from "@stomp/stompjs";
-import Cookies from "js-cookie";
+import { convertHourAndMinuteToString } from "../../helper/util.helper";
 import { TeacherMeetingPeriodAPI } from "../../api/teacher/meeting-period/TeacherMeetingPeriod.api";
 const { Option } = Select;
 
@@ -50,22 +45,17 @@ const TeacherMyClass = () => {
   const [idSemesterSeach, setIdSemesterSearch] = useState("");
   const [idActivitiSearch, setIdActivitiSearch] = useState("");
   const [idLevelSearch, setIdLevelSearch] = useState("");
-  const [idMeetingPeriodSearch, setIdMeetingPeriodSearch] = useState("");
+
   const [codeSearch, setCodeSearch] = useState("");
   const [classPeriodSearch, setClassPeriodSearch] = useState("");
   const [levelSearch, setLevelSearch] = useState("");
   const [clear, setClear] = useState(false);
-
-  const listClassPeriod = [];
-
-  for (let i = 1; i <= 7; i++) {
-    listClassPeriod.push("" + i);
-  }
   const [current, setCurrent] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(false);
   const [loadOne, setLoadOne] = useState(false);
   const [semesterOne, setSemesterOne] = useState(null);
+
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Bảng điều khiển - Lớp của tôi";
@@ -174,11 +164,6 @@ const TeacherMyClass = () => {
   const featchDataLevel = async () => {
     try {
       await TeacherLevelAPI.getAllLevel().then((respone) => {
-        if (respone.data.data.length > 0) {
-          setIdLevelSearch(respone.data.data[0].id);
-        } else {
-          setIdLevelSearch("");
-        }
         setListLevel(respone.data.data);
       });
     } catch (error) {
@@ -216,21 +201,17 @@ const TeacherMyClass = () => {
       console.log(error);
     }
   };
+
   const featchDataMeetingPeriod = async () => {
     try {
       await TeacherMeetingPeriodAPI.getPeriod().then((respone) => {
-        if (respone.data.data != null) {
-          setIdMeetingPeriodSearch(respone.data.data[0].id);
-        } else {
-          setIdLevelSearch("");
-        }
-        console.log(respone);
         setListMeetingPeriod(respone.data.data);
       });
     } catch (error) {
       console.log(error);
     }
   };
+
   const handleSearch = async () => {
     await featchAllMyClass();
   };
@@ -292,8 +273,7 @@ const TeacherMyClass = () => {
       title: <div style={{ textAlign: "center" }}>Ca học</div>,
       dataIndex: "classPeriod",
       key: "classPeriod",
-      render: (text) => <span>{text + 1}</span>,
-      sorter: (a, b) => a.classPeriod - b.classPeriod,
+      sorter: (a, b) => a.classPeriod.localeCompare(b.classPeriod),
       align: "center",
     },
     {
@@ -308,7 +288,16 @@ const TeacherMyClass = () => {
       dataIndex: "timePeriod",
       key: "timePeriod",
       render: (text, record) => {
-        return <span>{convertMeetingPeriodToTime(record.classPeriod)}</span>;
+        return (
+          <span>
+            {convertHourAndMinuteToString(
+              record.startHour,
+              record.startMinute,
+              record.endHour,
+              record.endMinute
+            )}
+          </span>
+        );
       },
       align: "center",
     },
@@ -487,10 +476,17 @@ const TeacherMyClass = () => {
                   style={{ width: "100%", marginTop: "6px" }}
                 >
                   <Option value="">Tất cả</Option>
-                  {listClassPeriod.map((value) => {
+                  {listMeetingPeriod.map((item) => {
                     return (
-                      <Option value={value} key={value}>
-                        {value}
+                      <Option value={item.id} key={item.id}>
+                        {item.name} (
+                        {convertHourAndMinuteToString(
+                          item.startHour,
+                          item.startMinute,
+                          item.endHour,
+                          item.endMinute
+                        )}
+                        )
                       </Option>
                     );
                   })}

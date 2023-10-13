@@ -18,7 +18,15 @@ public class TeStudentAttendedDetailRespone {
 
     private Long meetingDate;
 
-    private Integer meetingPeriod;
+    private String meetingPeriod;
+
+    private Integer startHour;
+
+    private Integer startMinute;
+
+    private Integer endHour;
+
+    private Integer endMinute;
 
     private Integer typeMeeting;
 

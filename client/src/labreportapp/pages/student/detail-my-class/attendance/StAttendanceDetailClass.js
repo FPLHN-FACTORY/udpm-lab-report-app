@@ -6,7 +6,10 @@ import { useAppDispatch } from "../../../../app/hook";
 import { Button, Empty, Input, Pagination, Table } from "antd";
 import { useEffect, useState } from "react";
 import { StAttendanceAPI } from "../../../../api/student/StAttendanceAPI";
-import { convertMeetingPeriodToTime } from "../../../../helper/util.helper";
+import {
+  convertHourAndMinuteToString,
+  convertMeetingPeriodToTime,
+} from "../../../../helper/util.helper";
 import LoadingIndicator from "../../../../helper/loading";
 import { SetTTrueToggle } from "../../../../app/student/StCollapsedSlice.reducer";
 
@@ -48,9 +51,10 @@ const StAttendanceDetailClass = () => {
   };
   const convertLongToDate = (dateLong) => {
     const date = new Date(dateLong);
-    const format = `${date.getDate()}/${
-      date.getMonth() + 1
-    }/${date.getFullYear()}`;
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    const format = `${day}/${month}/${year}`;
     return format;
   };
 
@@ -59,6 +63,7 @@ const StAttendanceDetailClass = () => {
       title: "#",
       dataIndex: "stt",
       key: "stt",
+      align: "center",
     },
     {
       title: "Buổi học",
@@ -110,21 +115,39 @@ const StAttendanceDetailClass = () => {
       dataIndex: "meetingDate",
       key: "meetingDate",
       render: (meetingDate) => <span>{convertLongToDate(meetingDate)}</span>,
+      align: "center",
     },
     {
       title: "Ca",
       dataIndex: "meetingPeriod",
       key: "meetingPeriod",
-      render: (meetingPeriod) => <span>{meetingPeriod + 1}</span>,
-      sorter: (a, b) => a.meetingPeriod - b.meetingPeriod,
+      sorter: (a, b) => a.meetingPeriod.localeCompare(b.meetingPeriod),
+      render: (text, record) => {
+        if (text == null) {
+          return <span>Chưa có</span>;
+        } else {
+          return <span>{text}</span>;
+        }
+      },
+      align: "center",
     },
     {
       title: "Thời gian",
       dataIndex: "timePeriod",
       key: "timePeriod",
       render: (text, record) => {
-        return <span>{convertMeetingPeriodToTime(record.meetingPeriod)}</span>;
+        return (
+          <span>
+            {convertHourAndMinuteToString(
+              record.startHour,
+              record.startMinute,
+              record.endHour,
+              record.endMinute
+            )}
+          </span>
+        );
       },
+      align: "center",
     },
     {
       title: "Giảng viên",

@@ -333,6 +333,10 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
             objNew.setMeetingDate(item.getMeetingDate());
             objNew.setTypeMeeting(item.getTypeMeeting());
             objNew.setMeetingPeriod(item.getMeetingPeriod());
+            objNew.setStartHour(item.getStartHour());
+            objNew.setStartMinute(item.getStartMinute());
+            objNew.setEndHour(item.getEndHour());
+            objNew.setEndMinute(item.getEndMinute());
             objNew.setNameMeeting(item.getLesson());
             objNew.setStatus(item.getStatus());
             objNew.setNotes(item.getNotes());

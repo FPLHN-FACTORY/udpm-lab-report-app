@@ -18,7 +18,11 @@ import {
 import { StScheduleAPI } from "../../../api/student/StScheduleAPI";
 import React, { useCallback } from "react";
 import LoadingIndicator from "../../../helper/loading";
-import { convertMeetingPeriodToTime } from "../../../helper/util.helper";
+import {
+  convertDateLongToString,
+  convertHourAndMinuteToString,
+  convertMeetingPeriodToTime,
+} from "../../../helper/util.helper";
 import { SearchOutlined } from "@ant-design/icons";
 
 const StudentSchedule = () => {
@@ -47,7 +51,6 @@ const StudentSchedule = () => {
       dispatch(SetSchedule(response.data.data.data));
       setTotal(response.data.data.totalPages);
       setLoading(false);
-      console.log(response.data.data.data);
     });
   };
 
@@ -113,12 +116,7 @@ const StudentSchedule = () => {
       key: "meetingDate",
       sorter: (a, b) => a.meetingDate - b.meetingDate,
       render: (text, record) => {
-        const time = new Date(record.meetingDate);
-        const formattedTime = `${time.getDate()}/${
-          time.getMonth() + 1
-        }/${time.getFullYear()}`;
-
-        return <span>{formattedTime}</span>;
+        return <span>{convertDateLongToString(text)}</span>;
       },
     },
     {
@@ -126,19 +124,30 @@ const StudentSchedule = () => {
       dataIndex: "meetingPeriod",
       key: "meetingPeriod",
       sorter: (a, b) => a.meetingPeriod.localeCompare(b.meetingPeriod),
-      render: (text, record) => {
-        return <span>{parseInt(record.meetingPeriod) + 1}</span>;
-      },
+      align: "center",
     },
     {
       title: "Thời gian",
       dataIndex: "timePeriod",
       key: "timePeriod",
       render: (text, record) => {
-        return <span>{convertMeetingPeriodToTime(record.meetingPeriod)}</span>;
+        if (record.meetingPeriod == null) {
+          return <span>Chưa có</span>;
+        } else {
+          return (
+            <span>
+              {convertHourAndMinuteToString(
+                record.startHour,
+                record.startMinute,
+                record.endHour,
+                record.endMinute
+              )}
+            </span>
+          );
+        }
       },
+      align: "center",
     },
-
     {
       title: "Hình thức học",
       dataIndex: "typeMeeting",

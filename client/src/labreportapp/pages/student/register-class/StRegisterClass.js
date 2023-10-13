@@ -245,35 +245,46 @@ const StRegisterClass = () => {
       ),
     },
     {
-      title: "Ca học",
+      title: "Ca",
       dataIndex: "classPeriod",
       key: "classPeriod",
-      sorter: (a, b) => a.classPeriod - b.classPeriod,
-      render: (text) => {
-        if (text != null) {
-          return <span>{convertMeetingPeriod(text)}</span>;
-        } else {
+      sorter: (a, b) => a.classPeriod.localeCompare(b.classPeriod),
+      render: (text, record) => {
+        if (text == null) {
           return <span>Chưa có</span>;
+        } else {
+          return <span>{text}</span>;
         }
       },
+      align: "center",
     },
     {
       title: "Thời gian",
       dataIndex: "timePeriod",
       key: "timePeriod",
-      sorter: (a, b) => a.classPeriod - b.classPeriod,
       render: (text, record) => {
-        if (text != null) {
-          return <span>{convertMeetingPeriodToTime(record.classPeriod)}</span>;
-        } else {
+        if (record.classPeriod == null) {
           return <span>Chưa có</span>;
+        } else {
+          return (
+            <span>
+              {convertHourAndMinuteToString(
+                record.startHour,
+                record.startMinute,
+                record.endHour,
+                record.endMinute
+              )}
+            </span>
+          );
         }
       },
+      align: "center",
     },
     {
       title: "Cấp độ",
       dataIndex: "level",
       key: "level",
+      align: "center",
     },
     {
       title: "Hoạt động",
@@ -290,7 +301,7 @@ const StRegisterClass = () => {
       title: "Hành động",
       dataIndex: "action",
       key: "action",
-      align: "",
+      align: "center",
       render: (text, record) => (
         <>
           <Popconfirm
