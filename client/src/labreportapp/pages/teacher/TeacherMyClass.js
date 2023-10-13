@@ -36,9 +36,8 @@ import { convertMeetingPeriodToTime } from "../../helper/util.helper";
 import { toast } from "react-toastify";
 import SockJS from "sockjs-client";
 import { Stomp } from "@stomp/stompjs";
-
-import notiCusTom from "../../../portalprojects/assets/sounds/notification.mp3";
 import Cookies from "js-cookie";
+import { TeacherMeetingPeriodAPI } from "../../api/teacher/meeting-period/TeacherMeetingPeriod.api";
 const { Option } = Select;
 
 const TeacherMyClass = () => {
@@ -46,15 +45,17 @@ const TeacherMyClass = () => {
   const [listSemester, setListSemester] = useState([]);
   const [listActivity, setListActivity] = useState([]);
   const [listLevel, setListLevel] = useState([]);
+  const [listMeetingPeriod, setListMeetingPeriod] = useState([]);
   const [listMyClass, setListMyClass] = useState([]);
   const [idSemesterSeach, setIdSemesterSearch] = useState("");
   const [idActivitiSearch, setIdActivitiSearch] = useState("");
   const [idLevelSearch, setIdLevelSearch] = useState("");
+  const [idMeetingPeriodSearch, setIdMeetingPeriodSearch] = useState("");
   const [codeSearch, setCodeSearch] = useState("");
-  const [nameSearch, setNameSearch] = useState("");
   const [classPeriodSearch, setClassPeriodSearch] = useState("");
   const [levelSearch, setLevelSearch] = useState("");
   const [clear, setClear] = useState(false);
+
   const listClassPeriod = [];
 
   for (let i = 1; i <= 7; i++) {
@@ -71,12 +72,12 @@ const TeacherMyClass = () => {
     setIdSemesterSearch("");
     setIdActivitiSearch("");
     setCodeSearch("");
-    setNameSearch("");
     setClassPeriodSearch("");
     setLevelSearch("");
     dispatch(SetTeacherMyClass([]));
     featchDataLevel();
     featchDataSemester();
+    featchDataMeetingPeriod();
   }, []);
 
   useEffect(() => {
@@ -215,7 +216,21 @@ const TeacherMyClass = () => {
       console.log(error);
     }
   };
-
+  const featchDataMeetingPeriod = async () => {
+    try {
+      await TeacherMeetingPeriodAPI.getPeriod().then((respone) => {
+        if (respone.data.data != null) {
+          setIdMeetingPeriodSearch(respone.data.data[0].id);
+        } else {
+          setIdLevelSearch("");
+        }
+        console.log(respone);
+        setListMeetingPeriod(respone.data.data);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const handleSearch = async () => {
     await featchAllMyClass();
   };
@@ -236,7 +251,6 @@ const TeacherMyClass = () => {
       setListActivity([]);
     }
     setCodeSearch("");
-    setNameSearch("");
     setClassPeriodSearch("");
     setLevelSearch("");
     setClear(true);
