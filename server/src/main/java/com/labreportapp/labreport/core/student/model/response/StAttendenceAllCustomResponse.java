@@ -1,26 +1,38 @@
 package com.labreportapp.labreport.core.student.model.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class StAttendenceAllCustomResponse {
 
-  private Integer stt;
+    private Integer stt;
 
-  private String name;
+    private String name;
 
-  private Long meetingDate;
+    private Long meetingDate;
 
-  private String meetingPeriod;
+    private String meetingPeriod;
 
-  private Integer typeMeeting;
+    private Integer startHour;
 
-  private Integer status;
+    private Integer startMinute;
 
-  private String teacherId;
+    private Integer endHour;
 
-  private String teacherUsername;
+    private Integer endMinute;
+
+    private Integer typeMeeting;
+
+    private Integer status;
+
+    private String teacherId;
+
+    private String teacherUsername;
 
 }

@@ -22,6 +22,14 @@ public class StAttendanceCallApiRespone {
 
     private String meetingPeriod;
 
+    private Integer startHour;
+
+    private Integer startMinute;
+
+    private Integer endHour;
+
+    private Integer endMinute;
+
     private Integer typeMeeting;
 
     private String teacherId;

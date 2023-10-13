@@ -1,6 +1,5 @@
 package com.labreportapp.labreport.core.teacher.service.impl;
 
-import com.labreportapp.labreport.core.teacher.model.response.TeMeetingPeriodCustomResponse;
 import com.labreportapp.labreport.core.teacher.repository.TeMeetingPeriodRepository;
 import com.labreportapp.labreport.core.teacher.service.TeMeetingPeriodService;
 import com.labreportapp.labreport.entity.MeetingPeriod;
@@ -20,8 +19,8 @@ public class TeMeetingPeriodServiceImpl implements TeMeetingPeriodService {
     private TeMeetingPeriodRepository teMeetingPeriodRepository;
 
     @Override
-    public List<TeMeetingPeriodCustomResponse> listMeetingPeriod() {
+    public List<MeetingPeriod> listMeetingPeriod() {
         List<MeetingPeriod> list = teMeetingPeriodRepository.findAll(Sort.by("name"));
-        return null;
+        return list;
     }
 }

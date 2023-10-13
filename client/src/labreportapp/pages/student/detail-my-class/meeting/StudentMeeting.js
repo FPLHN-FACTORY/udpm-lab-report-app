@@ -17,7 +17,10 @@ import LoadingIndicator from "../../../../helper/loading";
 import React from "react";
 import { SetTTrueToggle } from "../../../../app/student/StCollapsedSlice.reducer";
 import { Empty } from "antd";
-import { convertMeetingPeriodToTime } from "../../../../helper/util.helper";
+import {
+  convertHourAndMinuteToString,
+  convertMeetingPeriodToTime,
+} from "../../../../helper/util.helper";
 const StMeetingMyClass = () => {
   const dispatch = useAppDispatch();
   dispatch(SetTTrueToggle());
@@ -227,11 +230,14 @@ const StMeetingMyClass = () => {
                                     >
                                       {" "}
                                       {convertLongToDate(record.meetingDate)} -
-                                      Ca {record.meetingPeriod + 1}{" "}
                                       <span>
-                                        (
-                                        {convertMeetingPeriodToTime(
-                                          record.meetingPeriod
+                                        {" "}
+                                        {record.meetingPeriod} (
+                                        {convertHourAndMinuteToString(
+                                          record.startHour,
+                                          record.startMinute,
+                                          record.endHour,
+                                          record.endMinute
                                         )}
                                         )
                                       </span>

@@ -14,8 +14,20 @@ public interface StAttendenceAllResponse extends IsIdentified {
     @Value("#{target.meeting_date}")
     Long getMeetingDate();
 
-    @Value("#{target.meeting_periods}")
+    @Value("#{target.meeting_period}")
     String getMeetingPeriod();
+
+    @Value("#{target.start_hour}")
+    Integer getStartHour();
+
+    @Value("#{target.start_minute}")
+    Integer getStartMinute();
+
+    @Value("#{target.end_hour}")
+    Integer getEndHour();
+
+    @Value("#{target.end_minute}")
+    Integer getEndMinute();
 
     @Value("#{target.type_meeting}")
     Integer getTypeMeeting();

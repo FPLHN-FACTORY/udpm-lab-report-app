@@ -238,6 +238,15 @@ export const convertCheckTimeCurrentAndMeetingDate = (
   }
 };
 
+export const convertDateLongToString = (long) => {
+  const date = new Date(long);
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const year = date.getFullYear();
+  const format = `${day}/${month}/${year}`;
+  return format;
+};
+
 function formatTime(hour, minute) {
   const formattedHour = hour < 10 ? `0${hour}` : hour;
   const formattedMinute = minute < 10 ? `0${minute}` : minute;
@@ -252,5 +261,5 @@ export function convertHourAndMinuteToString(
 ) {
   const startTime = formatTime(startHour, startMinute);
   const endTime = formatTime(endHour, endMinute);
-  return `${startTime} : ${endTime}`;
+  return `${startTime} - ${endTime}`;
 }

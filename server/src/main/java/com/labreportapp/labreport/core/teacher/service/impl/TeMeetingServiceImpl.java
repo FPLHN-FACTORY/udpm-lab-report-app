@@ -91,8 +91,8 @@ public class TeMeetingServiceImpl implements TeMeetingService {
 //            if (checkPeriord == 11) {//11 is outside the study shift
 //                throw new RestApiException(Message.MEETING_EDIT_ATTENDANCE_FAILD);
 //            } else {
-                return meetingFind;
-        //    }
+            return meetingFind;
+            //    }
         }
     }
 
@@ -114,6 +114,10 @@ public class TeMeetingServiceImpl implements TeMeetingService {
                     obj.setDescriptions(reposi.getDescriptions());
                     obj.setMeetingDate(reposi.getMeetingDate());
                     obj.setMeetingPeriod(reposi.getMeetingPeriod());
+                    obj.setStartHour(reposi.getStartHour());
+                    obj.setStartMinute(reposi.getStartMinute());
+                    obj.setEndHour(reposi.getEndHour());
+                    obj.setEndMinute(reposi.getEndMinute());
                     obj.setIdClass(reposi.getIdClass());
                     obj.setTypeMeeting(reposi.getTypeMeeting());
                     obj.setIdTeacher(reposi.getIdTeacher());
@@ -157,8 +161,8 @@ public class TeMeetingServiceImpl implements TeMeetingService {
 //            if (checkPeriod < meetingResponse.getMeetingPeriod()) {
 //                objReturn.setListTeamReport(new ArrayList<>());
 //            } else {
-                objReturn.setListTeamReport(listTeam);
-         //   }
+            objReturn.setListTeamReport(listTeam);
+            //   }
         }
         return objReturn;
     }

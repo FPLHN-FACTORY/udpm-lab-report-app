@@ -30,7 +30,8 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
             c.id as id,
             c.start_time as start_time,
             c.password as password,
-            c.class_period as class_period,
+            mp.name as class_period, mp.start_hour as start_hour, mp.start_minute as start_minute ,
+            mp.end_hour as end_hour, mp.end_minute as end_minute,
             c.class_size as class_size,
             c.teacher_id as teacher_id,
             c.activity_id as activity_id,
@@ -41,6 +42,7 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
             FROM activity a
             JOIN level l ON l.id = a.level_id
             JOIN class c ON c.activity_id = a.id
+             JOIN meeting_period mp ON mp.id = c.class_period
             JOIN semester s ON s.id = a.semester_id
             where c.teacher_id = :#{#req.idTeacher}
             and (:#{#req.idSemester} IS NULL OR :#{#req.idSemester} LIKE '' OR :#{#req.idSemester} LIKE s.id)
@@ -54,6 +56,7 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
               FROM activity a
             JOIN level l ON l.id = a.level_id
             JOIN class c ON c.activity_id = a.id
+              JOIN meeting_period mp ON c.class_period = mp.id 
             JOIN semester s ON s.id = a.semester_id
             where c.teacher_id = :#{#req.idTeacher}
             and (:#{#req.idSemester} IS NULL OR :#{#req.idSemester} LIKE '' OR :#{#req.idSemester} LIKE s.id)
@@ -70,7 +73,7 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
                 c.id as id,
                 c.start_time as start_time,
                 c.password as password,
-                c.class_period as class_period,
+                mp.name as class_period,
                 c.class_size as class_size,
                 c.teacher_id as teacher_id,
                 c.activity_id as activity_id,
@@ -82,6 +85,7 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
             FROM activity a
             JOIN level l ON l.id = a.level_id
             JOIN class c ON c.activity_id = a.id
+            JOIN meeting_period mp ON c.class_period = mp.id 
             JOIN semester s ON s.id = a.semester_id
             WHERE DATE(FROM_UNIXTIME(c.start_time / 1000)) <= CURDATE() 
                 AND c.class_size + :#{#req.countStudent} <= :#{#size}
@@ -95,6 +99,7 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
               FROM activity a
             JOIN level l ON l.id = a.level_id
             JOIN class c ON c.activity_id = a.id
+              JOIN meeting_period mp ON c.class_period = mp.id 
             JOIN semester s ON s.id = a.semester_id
             WHERE DATE(FROM_UNIXTIME(c.start_time / 1000)) <= CURDATE() 
                 AND c.class_size + :#{#req.countStudent} <= :#{#size}
@@ -111,7 +116,7 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
             c.code as code,
             c.start_time as start_time,
             c.password as password,
-            c.class_period as class_period,
+          mp.name as class_period,
             c.class_size as class_size,
             a.name as activityName,
             c.descriptions as descriptions,
@@ -125,6 +130,7 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
             s.id as semester_id
             FROM activity a
             JOIN class c ON c.activity_id = a.id
+             JOIN meeting_period mp ON c.class_period = mp.id 
             JOIN semester s ON s.id = a.semester_id
             JOIN level d ON d.id = a.level_id
             where c.id = :#{#id}
@@ -145,9 +151,10 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
             c.code AS code,
             l.start_time as start_time,
             l.end_time as end_time,
-            c.class_period as class_period,
+            mp.name as class_period,
             a.level as level
             FROM class c
+            JOIN meeting_period mp ON mp.id = c.class_period
             JOIN activity a ON a.id = c.activity_id
             JOIN LatestSemester l ON l.id = a.semester_id
             WHERE c.teacher_id = :#{#id}
@@ -193,7 +200,8 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
                   c.id as id,
                     c.code as code,
                     c.start_time as start_time,
-                    c.class_period as class_period,
+                    mp.name as class_period, mp.start_hour as start_hour, mp.start_minute as start_minute,
+                    mp.end_hour as end_hour, mp.end_minute as end_minute,
                     c.class_size as class_size,
                     c.teacher_id as teacher_id,
                     c.activity_id as activity_id,
@@ -208,6 +216,7 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
                 FROM activity a
                 JOIN level l ON l.id = a.level_id
                 JOIN class c ON c.activity_id = a.id
+                JOIN meeting_period mp ON mp.id = c.class_period
                 JOIN semester s ON s.id = a.semester_id
                 JOIN check_team ct On ct.class_id = c.id
                 JOIN check_lesson cls ON cls.class_id = c.id
@@ -215,9 +224,9 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
                 where c.teacher_id = :#{#req.idTeacher}
                 and (:#{#req.idSemester} IS NULL OR :#{#req.idSemester} LIKE '' OR :#{#req.idSemester} LIKE s.id)
                 and (:#{#req.idActivity} IS NULL OR :#{#req.idActivity} LIKE '' OR :#{#req.idActivity} LIKE a.id)
-                GROUP BY c.code, c.id, c.start_time, c.class_period, c.class_size, c.teacher_id, c.activity_id,
-                    c.created_date, c.descriptions, l.name, a.name, ct.count_team, cls.count_lesson,
-                    cls.count_lesson_off, cp.count_post
+                GROUP BY c.code, c.id, c.start_time,  mp.name, mp.start_hour, mp.start_minute,mp.end_hour, mp.end_minute,
+                    c.class_size, c.teacher_id, c.activity_id, c.created_date, c.descriptions, l.name, a.name, 
+                    ct.count_team, cls.count_lesson, cls.count_lesson_off, cp.count_post
                 ORDER BY c.code ASC
             """, nativeQuery = true)
     Page<TeClassStatisticalResponse> findClassStatistical(@Param("req") TeFindClassStatisticalRequest req, Pageable pageable);

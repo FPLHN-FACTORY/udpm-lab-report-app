@@ -34,12 +34,13 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                 m.descriptions as descriptions,
                 m.meeting_date as meeting_date,
                 m.type_meeting as type_meeting,
-                mp.name as meeting_period,
+                mp.name as meeting_period, mp.start_hour as start_hour, mp.start_minute as start_minute ,
+                mp.end_hour as end_hour, mp.end_minute as end_minute,
                 m.class_id as class_id,
                 m.teacher_id as teacher_id,
                 m.status_meeting as status_meeting
             FROM meeting m
-             JOIN meeting_period mp ON mp.id = m.meeting_period
+            JOIN meeting_period mp ON mp.id = m.meeting_period
             JOIN class c ON c.id = m.class_id
             WHERE m.class_id = :#{#req.idClass}
             ORDER BY m.meeting_date DESC
@@ -51,6 +52,8 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                 m.name as name,
                 m.descriptions as descriptions,
                 m.meeting_date as meeting_date,
+                mp.name as meeting_period, mp.start_hour as start_hour, mp.start_minute as start_minute ,
+                mp.end_hour as end_hour, mp.end_minute as end_minute,
                 m.type_meeting as type_meeting,
                 mp.name as meeting_period,
                 m.notes as notes,
@@ -58,7 +61,7 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                 m.teacher_id as teacher_id,
                  m.status_meeting as status_meeting
             FROM meeting m
-             JOIN meeting_period mp ON mp.id = m.meeting_period
+            JOIN meeting_period mp ON mp.id = m.meeting_period
             WHERE m.id = :#{#req.idMeeting}
                      """, nativeQuery = true)
     Optional<TeMeetingResponse> searchMeetingByIdMeeting(@Param("req") TeFindMeetingRequest req);
@@ -108,10 +111,11 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                 m.name as name,
                 m.class_id as class_id,
                 m.meeting_date as meeting_date,
-                mp.name as meeting_period,
+                mp.name as meeting_period, mp.start_hour as start_hour, mp.start_minute as start_minute ,
+                mp.end_hour as end_hour, mp.end_minute as end_minute,             
                 m.status_meeting as status_meeting
             FROM meeting m
-             JOIN meeting_period mp ON mp.id = m.meeting_period
+            JOIN meeting_period mp ON mp.id = m.meeting_period
             JOIN class c ON c.id = m.class_id
             WHERE m.class_id = :#{#idClass}
             ORDER BY m.meeting_date ASC
@@ -124,7 +128,8 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                  c.code as code_class,
                  m.id as id_meeting,
                  m.meeting_date as meeting_date,
-                 mp.name as meeting_period,
+                 mp.name as meeting_period, mp.start_hour as start_hour, mp.start_minute as start_minute ,
+                 mp.end_hour as end_hour, mp.end_minute as end_minute,
                  m.name as name_meeting,
                  m.type_meeting as type_meeting,
                  m.address as address_meeting,
@@ -133,7 +138,7 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                  m.notes as notes
              FROM class c
              JOIN meeting m ON m.class_id = c.id
-              JOIN meeting_period mp ON mp.id = m.meeting_period
+             JOIN meeting_period mp ON mp.id = m.meeting_period
              JOIN activity ac ON ac.id = c.activity_id
              JOIN level l on l.id = ac.level_id
              WHERE m.teacher_id = :#{#req.idTeacher} AND DATE(FROM_UNIXTIME(m.meeting_date / 1000)) = CURDATE()
@@ -143,6 +148,7 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
             SELECT DISTINCT(m.id)
                          FROM class c
                          JOIN meeting m ON m.class_id = c.id
+                         JOIN meeting_period mp ON mp.id = m.meeting_period
                          JOIN activity ac ON ac.id = c.activity_id
                          JOIN level l on l.id = ac.level_id
                          WHERE m.teacher_id = :#{#req.idTeacher} AND DATE(FROM_UNIXTIME(m.meeting_date / 1000)) = CURDATE()
@@ -156,7 +162,8 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                  c.code as code_class,
                  m.id as id_meeting,
                  m.meeting_date as meeting_date,
-                 mp.name as meeting_period,
+                 mp.name as meeting_period, mp.start_hour as start_hour, mp.start_minute as start_minute ,
+                 mp.end_hour as end_hour, mp.end_minute as end_minute,
                  m.name as name_meeting,
                  m.type_meeting as type_meeting,
                  m.address as address_meeting,
@@ -165,7 +172,7 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                  m.notes as notes
              FROM class c
              JOIN meeting m ON m.class_id = c.id
-              JOIN meeting_period mp ON mp.id = m.meeting_period
+             JOIN meeting_period mp ON mp.id = m.meeting_period
              JOIN activity ac ON ac.id = c.activity_id
              JOIN level l on l.id = ac.level_id
              WHERE m.teacher_id = :#{#req.idTeacher} AND
@@ -199,6 +206,7 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
               SELECT COUNT(m.id)
                          FROM class c
                          JOIN meeting m ON m.class_id = c.id
+                         JOIN meeting_period mp ON mp.id = m.meeting_period
                          JOIN activity ac ON ac.id = c.activity_id
                          JOIN level l on l.id = ac.level_id
                          WHERE m.teacher_id = :#{#req.idTeacher} AND 

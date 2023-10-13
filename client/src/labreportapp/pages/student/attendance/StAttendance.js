@@ -2,10 +2,13 @@ import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./style-attendance.css";
 import { Select, Table, Empty } from "antd";
-import { faAtlas, faList, faSchool } from "@fortawesome/free-solid-svg-icons";
+import { faAtlas, faSchool } from "@fortawesome/free-solid-svg-icons";
 import { StMyClassAPI } from "../../../api/student/StMyClassAPI";
 import { StAttendenceAPI } from "../../../api/student/StAttendenceAllAPI";
-import { convertMeetingPeriodToTime } from "../../../helper/util.helper";
+import {
+  convertDateLongToString,
+  convertHourAndMinuteToString,
+} from "../../../helper/util.helper";
 import LoadingIndicator from "../../../helper/loading";
 
 const StAttendance = () => {
@@ -69,27 +72,37 @@ const StAttendance = () => {
       key: "meetingDate",
       sorter: (a, b) => a.meetingDate - b.meetingDate,
       render: (text, record) => {
-        const time = new Date(record.meetingDate);
-        const formattedTime = `${time.getDate()}/${
-          time.getMonth() + 1
-        }/${time.getFullYear()}`;
-
-        return <span>{formattedTime}</span>;
+        return <span>{convertDateLongToString(text)}</span>;
       },
     },
     {
       title: "Ca",
       dataIndex: "meetingPeriod",
       key: "meetingPeriod",
-      sorter: (a, b) => a.meetingPeriod - b.meetingPeriod,
+      sorter: (a, b) => a.meetingPeriod.localeCompare(b.meetingPeriod),
+      align: "center",
     },
     {
       title: "Thời gian",
       dataIndex: "timePeriod",
       key: "timePeriod",
       render: (text, record) => {
-        return <span>{convertMeetingPeriodToTime(record.meetingPeriod)}</span>;
+        if (record.meetingPeriod == null) {
+          return <span>Chưa có</span>;
+        } else {
+          return (
+            <span>
+              {convertHourAndMinuteToString(
+                record.startHour,
+                record.startMinute,
+                record.endHour,
+                record.endMinute
+              )}
+            </span>
+          );
+        }
       },
+      align: "center",
     },
     {
       title: "Giảng viên",
@@ -107,7 +120,7 @@ const StAttendance = () => {
       ),
     },
     {
-      title: "Trạng thái đi học",
+      title: "Trạng thái",
       dataIndex: "status",
       key: "status",
       sorter: (a, b) => a.status - b.status,
@@ -223,11 +236,12 @@ const StAttendance = () => {
         <div
           style={{
             backgroundColor: "white",
-            borderRadius: 5,
-            paddingTop: 10,
-            paddingBottom: 30,
-            marginTop: 25,
+            borderRadius: "5px",
+            paddingTop: "10px",
+            paddingBottom: "30px",
+            marginTop: "25px",
             boxShadow: "0px 0px 20px 1px rgba(148, 148, 148, 0.3)",
+            minHeight: "423px",
           }}
         >
           <>

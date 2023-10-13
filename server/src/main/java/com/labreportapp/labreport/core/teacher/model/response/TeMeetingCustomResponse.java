@@ -24,6 +24,14 @@ public class TeMeetingCustomResponse {
 
     private String meetingPeriod;
 
+    private Integer startHour;
+
+    private Integer startMinute;
+
+    private Integer endHour;
+
+    private Integer endMinute;
+
     private String idClass;
 
     private String idTeacher;
