@@ -24,13 +24,17 @@ public interface StMyClassRepository extends ClassRepository {
 
     @Query(value = """
             SELECT a.id, ROW_NUMBER() OVER(ORDER BY c.created_date DESC) AS stt,
-            a.code, a.start_time, a.class_period, a.teacher_id, e.name, b.name AS nameActivity
-            FROM class a JOIN activity b ON a.activity_id = b.id 
+            a.code, a.start_time, 
+            mp.name as class_period, mp.start_hour as start_hour, mp.start_minute as start_minute, 
+            mp.end_hour as end_hour, mp.end_minute as end_minute,
+            a.teacher_id, e.name, b.name AS nameActivity
+            FROM class a JOIN activity b ON a.activity_id = b.id
+            JOIN meeting_period mp ON mp.id = a.class_period
             JOIN semester d ON b.semester_id = d.id
             JOIN student_classes c ON a.id = c.class_id
             JOIN level e ON e.id = b.level_id
             WHERE (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR a.code LIKE %:#{#req.code}%) 
-            AND (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR a.class_period = :#{#req.classPeriod}) 
+            AND (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR mp.id= :#{#req.classPeriod}) 
             AND (:#{#req.level} IS NULL OR :#{#req.level} LIKE '' OR e.id = :#{#req.level}) 
             AND (:#{#req.activityId} IS NULL OR :#{#req.activityId} LIKE '' OR b.id = :#{#req.activityId}) 
             AND (:#{#req.semesterId} IS NULL OR :#{#req.semesterId} LIKE '' OR d.id = :#{#req.semesterId})  
@@ -73,9 +77,10 @@ public interface StMyClassRepository extends ClassRepository {
     Integer countMemberInTeam(@Param("idClass") String idClass, @Param("idTeam") String idTeam);
 
     @Query(value = """
-            SELECT c.id, c.code, c.class_size, c.class_period,
+            SELECT c.id, c.code, c.class_size, mp.name as class_period,
             m.name AS meeting_name, m.meeting_date
             FROM class c
+            JOIN meeting_period mp ON mp.id = a.class_period
             JOIN (SELECT m.class_id, m.name, m.meeting_date
             FROM meeting m
             WHERE m.meeting_date IN (SELECT MIN(meeting_date)

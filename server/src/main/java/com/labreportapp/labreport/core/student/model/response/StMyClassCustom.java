@@ -18,7 +18,15 @@ public class StMyClassCustom {
 
     private Long startTime;
 
-    private Short classPeriod;
+    private String classPeriod;
+
+    private Integer startHour;
+
+    private Integer startMinute;
+
+    private Integer endHour;
+
+    private Integer endMinute;
 
     private String teacherId;
 

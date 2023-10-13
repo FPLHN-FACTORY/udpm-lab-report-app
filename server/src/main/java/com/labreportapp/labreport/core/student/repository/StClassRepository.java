@@ -17,15 +17,19 @@ public interface StClassRepository extends ClassRepository {
 
     @Query(value = """
             SELECT c.id, ROW_NUMBER() OVER(ORDER BY c.created_date DESC) as stt, c.code,
-            c.class_size, c.start_time, c.class_period, g.name, ac.name as activityName,
+            c.class_size, c.start_time, 
+            mp.name as class_period, mp.start_hour as start_hour, mp.start_minute as start_minute 
+            mp.end_hour as end_hour, mp.end_minute as end_minute
+            ,g.name, ac.name as activityName,
             s.start_time_student, s.end_time_student, c.descriptions
             FROM class c
+            JOIN meeting_period mp ON mp.id = c.meeting_period
             JOIN activity ac ON c.activity_id = ac.id
             JOIN level g ON g.id = ac.level_id
             JOIN semester s ON ac.semester_id = s.id
             WHERE curdate() >= FROM_UNIXTIME(s.start_time_student / 1000) and curdate() <= FROM_UNIXTIME(s.end_time_student / 1000)
             AND (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR c.code LIKE %:#{#req.code}%) 
-            AND (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR c.class_period = :#{#req.classPeriod}) 
+            AND (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR mp.id = :#{#req.classPeriod}) 
             AND (:#{#req.level} IS NULL OR :#{#req.level} LIKE '' OR g.id = :#{#req.level}) 
             AND (:#{#req.activityId} IS NULL OR :#{#req.activityId} LIKE '' OR ac.id = :#{#req.activityId}) 
             AND s.id = :#{#req.semesterId}
@@ -33,12 +37,13 @@ public interface StClassRepository extends ClassRepository {
             """, countQuery = """
               SELECT COUNT(1)
               FROM class c
+                JOIN meeting_period mp ON mp.id = c.meeting_period
               JOIN activity ac ON c.activity_id = ac.id
               JOIN level g ON g.id = ac.level_id
               JOIN semester s ON ac.semester_id = s.id
               WHERE curdate() >= FROM_UNIXTIME(s.start_time_student / 1000) and curdate() <= FROM_UNIXTIME(s.end_time_student / 1000)
               AND (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR c.code LIKE %:#{#req.code}%) 
-              AND (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR c.class_period = :#{#req.classPeriod}) 
+              AND (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR mp.id = :#{#req.classPeriod}) 
               AND (:#{#req.level} IS NULL OR :#{#req.level} LIKE '' OR g.id = :#{#req.level}) 
               AND (:#{#req.activityId} IS NULL OR :#{#req.activityId} LIKE '' OR ac.id = :#{#req.activityId}) 
               AND s.id = :#{#req.semesterId}
@@ -49,6 +54,7 @@ public interface StClassRepository extends ClassRepository {
     @Query(value = """
             SELECT c.code
             FROM class c
+              JOIN meeting_period mp ON mp.id = c.meeting_period
             JOIN activity ac ON c.activity_id = ac.id
             JOIN semester s ON ac.semester_id = s.id
             WHERE curdate() >= FROM_UNIXTIME(s.start_time_student / 1000)

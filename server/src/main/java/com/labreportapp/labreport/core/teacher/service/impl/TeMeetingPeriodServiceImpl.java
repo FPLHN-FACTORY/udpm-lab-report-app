@@ -22,7 +22,6 @@ public class TeMeetingPeriodServiceImpl implements TeMeetingPeriodService {
     @Override
     public List<TeMeetingPeriodCustomResponse> listMeetingPeriod() {
         List<MeetingPeriod> list = teMeetingPeriodRepository.findAll(Sort.by("name"));
-        System.err.println(list.toString());
         return null;
     }
 }

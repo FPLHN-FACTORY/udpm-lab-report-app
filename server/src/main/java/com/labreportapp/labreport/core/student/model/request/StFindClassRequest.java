@@ -20,7 +20,7 @@ public class StFindClassRequest extends PageableRequest {
 
     private String code;
 
-    private Short classPeriod;
+    private String classPeriod;
 
     private String level;
 

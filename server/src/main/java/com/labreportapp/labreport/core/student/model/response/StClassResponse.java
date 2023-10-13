@@ -18,7 +18,19 @@ public interface StClassResponse extends IsIdentified {
     Long getStartTime();
 
     @Value("#{target.class_period}")
-    Short getClassPeriod();
+    String getClassPeriod();
+
+    @Value("#{target.start_hour}")
+    Integer getStartHour();
+
+    @Value("#{target.start_minute}")
+    Integer getStartMinute();
+
+    @Value("#{target.end_hour}")
+    Integer getEndHour();
+
+    @Value("#{target.end_minute}")
+    Integer getEndMinute();
 
     @Value("#{target.name}")
     String getLevel();

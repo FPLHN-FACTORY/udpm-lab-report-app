@@ -98,6 +98,10 @@ public class StMyClassServiceImpl implements StMyClassService {
             stMyClassCustom.setStartTime(stMyClassResponse.getStartTime());
             stMyClassCustom.setStt(stMyClassResponse.getStt());
             stMyClassCustom.setTeacherId(stMyClassResponse.getTeacherId());
+            stMyClassCustom.setStartHour(stMyClassResponse.getStartHour());
+            stMyClassCustom.setStartMinute(stMyClassResponse.getStartMinute());
+            stMyClassCustom.setEndHour(stMyClassResponse.getEndHour());
+            stMyClassCustom.setEndMinute(stMyClassResponse.getEndMinute());
             for (SimpleResponse simpleResponse : listSimpleResponse) {
                 if (stMyClassResponse.getTeacherId() != null) {
                     if (stMyClassResponse.getTeacherId().equals(simpleResponse.getId())) {

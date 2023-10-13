@@ -3,8 +3,6 @@ package com.labreportapp.labreport.core.student.model.response;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
-
 @Getter
 @Setter
 public class StClassCustomResponse {
@@ -19,7 +17,15 @@ public class StClassCustomResponse {
 
     private Long startTime;
 
-    private Short classPeriod;
+    private String classPeriod;
+
+    private Integer startHour;
+
+    private Integer startMinute;
+
+    private Integer endHour;
+
+    private Integer endMinute;
 
     private String level;
 
