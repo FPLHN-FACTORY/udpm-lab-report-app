@@ -42,6 +42,4 @@ public class DateConverter {
         String formattedDate = DateConverter.convertDateToString(dateInMillis);
         System.out.println(formattedDate);
     }
-
-
 }

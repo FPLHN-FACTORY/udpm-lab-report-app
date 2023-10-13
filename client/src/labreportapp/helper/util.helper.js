@@ -237,3 +237,20 @@ export const convertCheckTimeCurrentAndMeetingDate = (
     }
   }
 };
+
+function formatTime(hour, minute) {
+  const formattedHour = hour < 10 ? `0${hour}` : hour;
+  const formattedMinute = minute < 10 ? `0${minute}` : minute;
+  return `${formattedHour}:${formattedMinute}`;
+}
+
+export function convertHourAndMinuteToString(
+  startHour,
+  startMinute,
+  endHour,
+  endMinute
+) {
+  const startTime = formatTime(startHour, startMinute);
+  const endTime = formatTime(endHour, endMinute);
+  return `${startTime} : ${endTime}`;
+}

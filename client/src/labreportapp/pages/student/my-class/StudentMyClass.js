@@ -17,17 +17,11 @@ import {
   Select,
   Table,
   Tooltip,
-  Pagination,
   Empty,
 } from "antd";
-import {
-  ControlOutlined,
-  QuestionCircleFilled,
-  ProjectOutlined,
-} from "@ant-design/icons";
 import { StMyClassAPI } from "../../../api/student/StMyClassAPI";
 import { Link } from "react-router-dom";
-import { convertMeetingPeriodToTime } from "../../../helper/util.helper";
+import { convertHourAndMinuteToString } from "../../../helper/util.helper";
 import { StLevelAPI } from "../../../api/student/StLevelAPI";
 
 const { Option } = Select;
@@ -62,6 +56,70 @@ const StudentMyClass = () => {
     document.title = "Lớp của tôi | Lab-Report-App";
   }, []);
 
+  const loadDataActivity = () => {
+    StMyClassAPI.getAllActivityByIdSemester(semester).then((response) => {
+      setListActivity(response.data.data);
+      setActivity("");
+    });
+  };
+
+  useEffect(() => {
+    loadDataClass("Không có hoạt động");
+  }, []);
+
+  useEffect(() => {
+    if (semester === "") {
+      setListActivity([]);
+      setActivity("Không có hoạt động");
+    } else {
+      loadDataActivity();
+    }
+  }, [semester]);
+
+  const handleChangeSemester = (e) => {
+    setSemester(e);
+  };
+
+  const handleClickFilter = () => {
+    loadDataClass();
+  };
+
+  const filterOptions = (input, option) => {
+    return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+  };
+
+  const loadDataClass = (activityParams) => {
+    setLoading(true);
+    let filter = {
+      semesterId: semester,
+      activityId: activityParams !== "" ? activity : activityParams,
+      code: code,
+      classPeriod: classPeriod === "" ? null : parseInt(classPeriod),
+      level: level,
+    };
+    StMyClassAPI.getAllClass(filter).then((response) => {
+      setListClass(response.data.data);
+      console.log("aaaaaaaaaa");
+      console.log(response.data.data);
+      setLoading(false);
+    });
+  };
+
+  const clearData = () => {
+    setSemester("");
+    setActivity("Không có hoạt động");
+    setCode("");
+    setClassPeriod("");
+    setLevel("");
+  };
+  const convertLongToDate = (dateLong) => {
+    const date = new Date(dateLong);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    const format = `${day}/${month}/${year}`;
+    return format;
+  };
   const columns = [
     {
       title: "STT",
@@ -80,26 +138,18 @@ const StudentMyClass = () => {
       dataIndex: "startTime",
       key: "startTime",
       sorter: (a, b) => a.startTime - b.startTime,
-      render: (text, record) => {
-        const startTime = new Date(record.startTime);
-
-        const formattedStartTime = `${startTime.getDate()}/${
-          startTime.getMonth() + 1
-        }/${startTime.getFullYear()}`;
-
-        return <span>{formattedStartTime}</span>;
-      },
+      render: (text, record) => convertLongToDate(record.startTime),
     },
     {
       title: "Ca",
       dataIndex: "classPeriod",
       key: "classPeriod",
-      sorter: (a, b) => a.classPeriod - b.classPeriod,
+      sorter: (a, b) => a.classPeriod.localeCompare(b.classPeriod),
       render: (text, record) => {
-        if (record.classPeriod == null) {
+        if (text == null) {
           return <span>Chưa có</span>;
         } else {
-          return <span>{record.classPeriod + 1}</span>;
+          return <span>{text}</span>;
         }
       },
     },
@@ -111,7 +161,16 @@ const StudentMyClass = () => {
         if (record.classPeriod == null) {
           return <span>Chưa có</span>;
         } else {
-          return <span>{convertMeetingPeriodToTime(record.classPeriod)}</span>;
+          return (
+            <span>
+              {convertHourAndMinuteToString(
+                record.startHour,
+                record.startMinute,
+                record.endHour,
+                record.endMinute
+              )}
+            </span>
+          );
         }
       },
     },
@@ -166,61 +225,6 @@ const StudentMyClass = () => {
       ),
     },
   ];
-
-  const loadDataActivity = () => {
-    StMyClassAPI.getAllActivityByIdSemester(semester).then((response) => {
-      setListActivity(response.data.data);
-      setActivity("");
-    });
-  };
-
-  useEffect(() => {
-    loadDataClass("Không có hoạt động");
-  }, []);
-
-  useEffect(() => {
-    if (semester === "") {
-      setListActivity([]);
-      setActivity("Không có hoạt động");
-    } else {
-      loadDataActivity();
-    }
-  }, [semester]);
-
-  const handleChangeSemester = (e) => {
-    setSemester(e);
-  };
-
-  const handleClickFilter = () => {
-    loadDataClass();
-  };
-
-  const filterOptions = (input, option) => {
-    return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
-  };
-
-  const loadDataClass = (activityParams) => {
-    setLoading(true);
-    let filter = {
-      semesterId: semester,
-      activityId: activityParams !== "" ? activity : activityParams,
-      code: code,
-      classPeriod: classPeriod === "" ? null : parseInt(classPeriod),
-      level: level,
-    };
-    StMyClassAPI.getAllClass(filter).then((response) => {
-      setListClass(response.data.data);
-      setLoading(false);
-    });
-  };
-
-  const clearData = () => {
-    setSemester("");
-    setActivity("Không có hoạt động");
-    setCode("");
-    setClassPeriod("");
-    setLevel("");
-  };
 
   return (
     <div className="my_class_my">
