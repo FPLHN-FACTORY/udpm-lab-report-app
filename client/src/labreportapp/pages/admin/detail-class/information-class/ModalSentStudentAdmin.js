@@ -13,13 +13,13 @@ import { ClassAPI } from "../../../../api/admin/class-manager/ClassAPI.api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRightToBracket } from "@fortawesome/free-solid-svg-icons";
 import { SearchOutlined } from "@ant-design/icons";
-import { convertMeetingPeriodToTime } from "../../../../helper/util.helper";
 import { toast } from "react-toastify";
 import {
   SetStudentClasses,
   GetStudentClasses,
 } from "../../../../app/teacher/student-class/studentClassesSlice.reduce";
 import { useAppDispatch, useAppSelector } from "../../../../app/hook";
+import { convertHourAndMinuteToString } from "../../../../helper/util.helper";
 
 const ModalSentStudent = ({
   visible,
@@ -28,7 +28,7 @@ const ModalSentStudent = ({
   classDetail,
   getSelectedRowKeys,
   getSelectedRowKeysNotKickOrMove,
-  id
+  id,
 }) => {
   const [currentModal, setCurrentModal] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
@@ -47,7 +47,6 @@ const ModalSentStudent = ({
       setData([]);
     }
   }, [visible, currentModal]);
-
 
   const featchClassSent = async () => {
     setLoadingNo(true);
@@ -73,13 +72,18 @@ const ModalSentStudent = ({
     }
   };
 
-  const setSelectedRowKeys = (selected, selectedRowKeys, isMoveStudent, isKickStudent) => {
+  const setSelectedRowKeys = (
+    selected,
+    selectedRowKeys,
+    isMoveStudent,
+    isKickStudent
+  ) => {
     getSelectedRowKeys(selected, selectedRowKeys, isMoveStudent, isKickStudent);
-  }
+  };
 
   const setSelectedRowKeysNotKickOrMove = (selected, selectedRowKeys) => {
     getSelectedRowKeysNotKickOrMove(selected, selectedRowKeys);
-  }
+  };
 
   const handleSentStudent = async (idClassSent) => {
     try {
@@ -88,36 +92,33 @@ const ModalSentStudent = ({
         idClassSent: idClassSent,
         idClassOld: classDetail.id,
       };
-      await ClassAPI.sentStudentClassesToClass(dataSent).then(
-        (response) => {
-          if (response.data.data) {
-            toast.success("Trao đổi sinh viên thành công !");
-            if (dataStudentClasses != null) {
-              const objFilter = dataStudentClasses.filter(
-                (item) => !listIdStudent.includes(item.idStudent)
-              );
-              try {
-                ClassAPI.getAdStudentClassByIdClass(id).then((respone) => {
-                  if (respone.data.data.length === 0) {
-                    setSelectedRowKeys([], [], false, false);
-                  }
-                  else {
-                    setSelectedRowKeysNotKickOrMove([], []);
-                  }
-                });
-              } catch (error) {
-                console.log(error);
-              }
-
-              dispatch(SetStudentClasses(objFilter));
+      await ClassAPI.sentStudentClassesToClass(dataSent).then((response) => {
+        if (response.data.data) {
+          toast.success("Trao đổi sinh viên thành công !");
+          if (dataStudentClasses != null) {
+            const objFilter = dataStudentClasses.filter(
+              (item) => !listIdStudent.includes(item.idStudent)
+            );
+            try {
+              ClassAPI.getAdStudentClassByIdClass(id).then((respone) => {
+                if (respone.data.data.length === 0) {
+                  setSelectedRowKeys([], [], false, false);
+                } else {
+                  setSelectedRowKeysNotKickOrMove([], []);
+                }
+              });
+            } catch (error) {
+              console.log(error);
             }
-            onCancel();
-          } else {
-            onCancel();
-            toast.error("Trao đổi sinh viên thất bại !");
+
+            dispatch(SetStudentClasses(objFilter));
           }
+          onCancel();
+        } else {
+          onCancel();
+          toast.error("Trao đổi sinh viên thất bại !");
         }
-      );
+      });
     } catch (error) {
       console.log(error);
     }
@@ -145,19 +146,29 @@ const ModalSentStudent = ({
       align: "center",
     },
     {
-      title: <div style={{ textAlign: "center" }}>Ca</div>,
+      title: <div style={{ textAlign: "center" }}>Ca học</div>,
       dataIndex: "classPeriod",
       key: "classPeriod",
-      render: (classPeriod) => <span>{classPeriod + 1}</span>,
-      sorter: (a, b) => a.classPeriod - b.classPeriod,
+      sorter: (a, b) => a.classPeriod.localeCompare(b.classPeriod),
+      align: "center",
     },
     {
       title: <div style={{ textAlign: "center" }}>Thời gian</div>,
       dataIndex: "timePeriod",
       key: "timePeriod",
       render: (text, record) => {
-        return <span>{convertMeetingPeriodToTime(record.classPeriod)}</span>;
+        return (
+          <span>
+            {convertHourAndMinuteToString(
+              record.startHour,
+              record.startMinute,
+              record.endHour,
+              record.endMinute
+            )}
+          </span>
+        );
       },
+      align: "center",
     },
     {
       title: <div style={{ textAlign: "center" }}>Giảng viên</div>,

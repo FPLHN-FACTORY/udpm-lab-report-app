@@ -1,4 +1,4 @@
-import { Row, Col, message } from "antd";
+import { Row, Col } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import "./styleTeamInMeeting.css";
 import { BookOutlined, ControlOutlined } from "@ant-design/icons";
@@ -10,20 +10,24 @@ import CollapseTeam from "../team/collapse-team/CollapseTeam";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTableList } from "@fortawesome/free-solid-svg-icons";
+import LoadingIndicatorNoOverlay from "../../../../../helper/loadingNoOverlay";
 
 const TeamInMeeting = () => {
   const { idMeeting } = useParams();
   const [meeting, setMeeting] = useState({});
   const [team, setTeam] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [checkTime, setCheckTime] = useState(false);
+  const [isLoadingWait, setIsLoadingWait] = useState(false);
   const navigate = useNavigate();
+
   useEffect(() => {
     window.scrollTo(0, 0);
+    setLoading(false);
     featchMeeting(idMeeting);
   }, []);
+
   const featchMeeting = async (idMeeting) => {
-    setLoading(false);
+    setIsLoadingWait(false);
     try {
       await TeacherMeetingAPI.getDetailByIdMeeting(idMeeting).then(
         (response) => {
@@ -45,6 +49,7 @@ const TeamInMeeting = () => {
         (responese) => {
           setTeam(responese.data.data);
           setLoading(true);
+          setIsLoadingWait(true);
         }
       );
     } catch (error) {}
@@ -61,6 +66,7 @@ const TeamInMeeting = () => {
   return (
     <>
       {!loading && <LoadingIndicator />}
+      {!isLoadingWait && loading && <LoadingIndicatorNoOverlay />}
       <div className="box-one">
         <Link to="/teacher/my-class" style={{ color: "black" }}>
           <span style={{ fontSize: "18px", paddingLeft: "20px" }}>
@@ -123,8 +129,8 @@ const TeamInMeeting = () => {
                   style={{ lineHeight: "42px", color: "grey", float: "right" }}
                 >
                   <span>
-                    Thời gian: {convertLongToDate(meeting.meetingDate)} - Ca{" "}
-                    {meeting.meetingPeriod + 1}
+                    Thời gian: {convertLongToDate(meeting.meetingDate)} -{" "}
+                    {meeting.meetingPeriod}
                   </span>
                 </div>
               </Col>
@@ -147,7 +153,7 @@ const TeamInMeeting = () => {
                 Danh sách nhóm
               </span>
             </div>
-            <div style={{ width: "auto" }}>
+            <div style={{ width: "auto", padding: "10px" }}>
               <CollapseTeam team={team} featchMeeting={featchMeeting} />
             </div>
           </div>

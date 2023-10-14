@@ -26,6 +26,7 @@ const TeModalDetailOneStudent = ({ onCancel, visible, objStudent }) => {
       setData([]);
     }
   }, [visible, currentDetail]);
+
   const featchDataAttenStudent = async (idStudent) => {
     setLoadingNo(true);
     try {
@@ -46,6 +47,7 @@ const TeModalDetailOneStudent = ({ onCancel, visible, objStudent }) => {
       console.log(error);
     }
   };
+
   const convertLongToDate = (dateLong) => {
     const date = new Date(dateLong);
     const day = String(date.getDate()).padStart(2, "0");

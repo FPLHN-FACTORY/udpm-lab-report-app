@@ -816,7 +816,7 @@ public class DBGenerator implements CommandLineRunner {
         meeting1.setClassId(class1.getId());
         meeting1.setTypeMeeting(TypeMeeting.ONLINE);
         meeting1.setTeacherId(class1.getTeacherId());
-        meeting1.setStatusMeeting(StatusMeeting.BUOI_HOC);
+        meeting1.setStatusMeeting(StatusMeeting.BUOI_NGHI);
         meeting1.setAddress("https://meet.google.com/kea-hhgi-yix");
         meeting1.setId(meetingRepository.save(meeting1).getId());
 

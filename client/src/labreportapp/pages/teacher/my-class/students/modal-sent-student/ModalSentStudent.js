@@ -13,7 +13,7 @@ import { TeacherMyClassAPI } from "../../../../../api/teacher/my-class/TeacherMy
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRightToBracket } from "@fortawesome/free-solid-svg-icons";
 import { SearchOutlined } from "@ant-design/icons";
-import { convertMeetingPeriodToTime } from "../../../../../helper/util.helper";
+import { convertHourAndMinuteToString } from "../../../../../helper/util.helper";
 import { TeacherStudentClassesAPI } from "../../../../../api/teacher/student-class/TeacherStudentClasses.api";
 import { toast } from "react-toastify";
 import {
@@ -35,6 +35,7 @@ const ModalSentStudent = ({
   const [data, setData] = useState([]);
   const dispatch = useAppDispatch();
   const dataStudentClasses = useAppSelector(GetStudentClasses);
+
   useEffect(() => {
     if (visible === true) {
       featchClassSent();
@@ -45,6 +46,7 @@ const ModalSentStudent = ({
       setData([]);
     }
   }, [visible, currentModal]);
+
   const featchClassSent = async () => {
     setLoadingNo(true);
     try {
@@ -78,8 +80,6 @@ const ModalSentStudent = ({
       await TeacherStudentClassesAPI.sentStudentClassesToClass(dataSent).then(
         (response) => {
           if (response.data.data) {
-            console.log("aaaaaaaaaaaaaaaaaa");
-            console.log(response.data.data);
             toast.success("Trao đổi sinh viên thành công !");
             if (dataStudentClasses != null) {
               const objFilter = dataStudentClasses.filter(
@@ -122,19 +122,36 @@ const ModalSentStudent = ({
       align: "center",
     },
     {
-      title: <div style={{ textAlign: "center" }}>Ca</div>,
+      title: <div style={{ textAlign: "center" }}>Sĩ số</div>,
+      dataIndex: "classSize",
+      key: "classSize",
+      sorter: (a, b) => a.classSize - b.classSize,
+      align: "center",
+    },
+    {
+      title: <div style={{ textAlign: "center" }}>Ca học</div>,
       dataIndex: "classPeriod",
       key: "classPeriod",
-      render: (classPeriod) => <span>{classPeriod + 1}</span>,
-      sorter: (a, b) => a.classPeriod - b.classPeriod,
+      sorter: (a, b) => a.classPeriod.localeCompare(b.classPeriod),
+      align: "center",
     },
     {
       title: <div style={{ textAlign: "center" }}>Thời gian</div>,
       dataIndex: "timePeriod",
       key: "timePeriod",
       render: (text, record) => {
-        return <span>{convertMeetingPeriodToTime(record.classPeriod)}</span>;
+        return (
+          <span>
+            {convertHourAndMinuteToString(
+              record.startHour,
+              record.startMinute,
+              record.endHour,
+              record.endMinute
+            )}
+          </span>
+        );
       },
+      align: "center",
     },
     {
       title: <div style={{ textAlign: "center" }}>Giảng viên</div>,

@@ -34,6 +34,7 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                 m.descriptions as descriptions,
                 m.meeting_date as meeting_date,
                 m.type_meeting as type_meeting,
+                  m.meeting_period as id_meeting_period,
                 mp.name as meeting_period, mp.start_hour as start_hour, mp.start_minute as start_minute ,
                 mp.end_hour as end_hour, mp.end_minute as end_minute,
                 m.class_id as class_id,
@@ -43,7 +44,7 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
             JOIN meeting_period mp ON mp.id = m.meeting_period
             JOIN class c ON c.id = m.class_id
             WHERE m.class_id = :#{#req.idClass}
-            ORDER BY m.meeting_date DESC
+            ORDER BY m.meeting_date DESC, mp.name DESC
                      """, nativeQuery = true)
     List<TeMeetingResponse> findMeetingByIdClass(@Param("req") TeFindMeetingRequest req);
 
@@ -52,6 +53,7 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                 m.name as name,
                 m.descriptions as descriptions,
                 m.meeting_date as meeting_date,
+                m.meeting_period as id_meeting_period,
                 mp.name as meeting_period, mp.start_hour as start_hour, mp.start_minute as start_minute ,
                 mp.end_hour as end_hour, mp.end_minute as end_minute,
                 m.type_meeting as type_meeting,
@@ -93,9 +95,11 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                 r.id as idReport,
                 r.descriptions AS descriptionsReport,
                 m.meeting_date as meeting_date,
-                mp.name as meeting_period
+                  m.meeting_period as id_meeting_period,
+                mp.name as meeting_period, mp.start_hour as start_hour, mp.start_minute as start_minute,
+                mp.end_hour as end_hour, mp.end_minute as end_minute
             FROM meeting m
-             JOIN meeting_period mp ON mp.id = m.meeting_period
+            JOIN meeting_period mp ON mp.id = m.meeting_period
             JOIN class c ON c.id = m.class_id
             JOIN team t ON t.class_id = c.id
             LEFT JOIN home_work h ON h.meeting_id = m.id AND h.team_id = :#{#req.idTeam}
@@ -111,7 +115,7 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                 m.name as name,
                 m.class_id as class_id,
                 m.meeting_date as meeting_date,
-                mp.name as meeting_period, mp.start_hour as start_hour, mp.start_minute as start_minute ,
+                mp.name as meeting_period, mp.start_hour as start_hour, mp.start_minute as start_minute,
                 mp.end_hour as end_hour, mp.end_minute as end_minute,             
                 m.status_meeting as status_meeting
             FROM meeting m
@@ -128,6 +132,7 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                  c.code as code_class,
                  m.id as id_meeting,
                  m.meeting_date as meeting_date,
+                   m.meeting_period as id_meeting_period,
                  mp.name as meeting_period, mp.start_hour as start_hour, mp.start_minute as start_minute ,
                  mp.end_hour as end_hour, mp.end_minute as end_minute,
                  m.name as name_meeting,
@@ -162,6 +167,7 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                  c.code as code_class,
                  m.id as id_meeting,
                  m.meeting_date as meeting_date,
+                   m.meeting_period as id_meeting_period,
                  mp.name as meeting_period, mp.start_hour as start_hour, mp.start_minute as start_minute ,
                  mp.end_hour as end_hour, mp.end_minute as end_minute,
                  m.name as name_meeting,

@@ -1,7 +1,18 @@
 .teacher-collapse {
+  width: auto;
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: width 0.3s;
+}
+.teacher-collapse:hover {
+  width: 100%;
+}
+.teacher-collapse .ant-collapse-header {
+  border: none;
+  min-width: 85%;
+  border-radius: 8px;
+  transition: background-color 0.3s;
 }
 .teacher-collapse .ant-collapse-header:hover {
   border-radius: 10px;
@@ -10,11 +21,7 @@
   background-color: rgb(238, 245, 249);
   cursor: pointer;
 }
-.teacher-collapse .ant-collapse-header {
-  border: none;
-  width: 1000px;
-  border-radius: 8px;
-}
+
 .teacher-collapse .box-title.active .ant-collapse-header {
   background-color: rgb(214, 236, 250);
   border-bottom: 1px solid rgb(240, 240, 240);
@@ -22,23 +29,24 @@
   border-top-right-radius: 8px;
 }
 .teacher-collapse .box-title {
-  width: 80%;
   min-height: 68px;
   height: auto;
   border-bottom: 1px solid rgb(206, 206, 206);
+  transition: width 0.3s;
 }
 .teacher-collapse .title-left {
   min-height: 40px;
   line-height: auto;
   height: auto;
   float: left;
-  min-width: 600px;
-  width: 75%;
+  min-width: 75%;
+  width: auto;
   margin-left: 20px;
 }
 .teacher-collapse .title-right {
   float: left;
-  width: 25%;
+  min-width: 75%;
+  width: auto;
   font-size: 13px;
   color: grey;
 }
@@ -60,6 +68,16 @@
 .teacher-collapse .panel-collap {
   border-bottom: 1px solid #ccc;
   border-radius: 8px;
+  width: auto;
+  min-width: 80%;
+}
+
+@media (max-width: 100px) {
+  .teacher-collapse .panel-collap {
+    width: auto;
+    border-radius: 0;
+    box-shadow: none;
+  }
 }
 
 @media (max-width: 100px) {

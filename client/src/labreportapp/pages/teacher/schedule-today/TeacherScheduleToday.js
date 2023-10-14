@@ -24,9 +24,8 @@ import {
 import { TeacherScheduleTodayAPI } from "../../../api/teacher/meeting/schedule-today/TeacherScheduleToday.api";
 import { toast } from "react-toastify";
 import {
-  convertCheckAttended,
+  checkInToAttend,
   convertHourAndMinuteToString,
-  convertMeetingPeriodToTime,
 } from "../../../helper/util.helper";
 import { SearchOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
@@ -57,6 +56,7 @@ const TeacherScheduleToday = () => {
     try {
       await TeacherScheduleTodayAPI.getAllByIdTe().then((response) => {
         setDataToday(response.data.data);
+        console.log(response.data.data);
       });
     } catch (error) {
       setLoading(true);
@@ -115,9 +115,22 @@ const TeacherScheduleToday = () => {
     return format;
   };
 
-  const handleDetailAttend = (idMeeting, meetingPeriod) => {
+  const handleDetailAttend = (
+    idMeeting,
+    meetingDate,
+    startHour,
+    startMinute,
+    endHour,
+    endMinute
+  ) => {
     try {
-      let check = convertCheckAttended(meetingPeriod);
+      let check = checkInToAttend(
+        meetingDate,
+        startHour,
+        startMinute,
+        endHour,
+        endMinute
+      );
       check
         ? navigate(`/teacher/schedule-today/attendance/` + idMeeting)
         : toast.warning(
@@ -289,33 +302,48 @@ const TeacherScheduleToday = () => {
       title: "Điểm danh",
       dataIndex: "actions",
       key: "actions",
-      // render: (text, record) => {
-      //   if (convertCheckAttended(record.meetingPeriod)) {
-      //     return (
-      //       <div className="box_icon" style={{ textAlign: "center" }}>
-      //         <Tooltip title="Xem chi tiết">
-      //           <div
-      //             onClick={() =>
-      //               handleDetailAttend(record.idMeeting, record.meetingPeriod)
-      //             }
-      //             className="box-center"
-      //             style={{
-      //               height: "30px",
-      //               width: "120px",
-      //               backgroundColor: "#007bff",
-      //               color: "white",
-      //               borderRadius: "5px",
-      //             }}
-      //           >
-      //             <span style={{ fontSize: "14px" }}>Xem - chỉnh sửa</span>
-      //           </div>
-      //         </Tooltip>
-      //       </div>
-      //     );
-      //   } else {
-      //     return null;
-      //   }
-      // },
+      render: (text, record) => {
+        let check = checkInToAttend(
+          record.meetingDate,
+          record.startHour,
+          record.startMinute,
+          record.endHour,
+          record.endMinute
+        );
+        console.log("zzzzzzzzzzzzzzzzzzzzzz" + check);
+        if (check) {
+          return (
+            <div className="box_icon" style={{ textAlign: "center" }}>
+              <Tooltip title="Xem chi tiết">
+                <div
+                  onClick={() =>
+                    handleDetailAttend(
+                      record.idMeeting,
+                      record.meetingDate,
+                      record.startHour,
+                      record.startMinute,
+                      record.endHour,
+                      record.endMinute
+                    )
+                  }
+                  className="box-center"
+                  style={{
+                    height: "30px",
+                    width: "120px",
+                    backgroundColor: "#007bff",
+                    color: "white",
+                    borderRadius: "5px",
+                  }}
+                >
+                  <span style={{ fontSize: "14px" }}>Xem - chỉnh sửa</span>
+                </div>
+              </Tooltip>
+            </div>
+          );
+        } else {
+          return null;
+        }
+      },
       width: "10%",
     },
   ];

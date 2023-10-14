@@ -274,6 +274,15 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
         });
     }
 
+    private List<TeAttendanceStudentMeetingRespone> sortASCListAttendanceObj(List<TeAttendanceStudentMeetingRespone> list) {
+        List<TeAttendanceStudentMeetingRespone> sortedList = list.stream()
+                .sorted(Comparator.comparing(TeAttendanceStudentMeetingRespone::getMeetingDate,
+                        Comparator.nullsLast(Comparator.naturalOrder()))
+                        .thenComparing(TeAttendanceStudentMeetingRespone::getMeetingPeriod))
+                .collect(Collectors.toList());
+        return sortedList;
+    }
+
     @Override
     public List<TeAttendanceStudentAllResponse> getListAttendanceStudentAllMeeting(String idClass) {
         List<TeAttendanceStudentAllResponse> listMeger = new ArrayList<>();
@@ -300,7 +309,7 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
                 attendanceObj.setIdAttendance(null);
                 attendanceObj.setMeetingDate(meeting.getMeetingDate());
                 attendanceObj.setStatusAttendance(null);
-                attendanceObj.setMeetingPeriod(attendanceObj.getMeetingPeriod());
+                attendanceObj.setMeetingPeriod(meeting.getMeetingPeriod());
                 listAttendance.forEach(attendance -> {
                             if (student.getId().equals(attendance.getIdStudent()) && meeting.getIdMeeting().equals(attendance.getIdMeeting())) {
                                 attendanceObj.setIdAttendance(attendance.getIdAttendance());
@@ -351,15 +360,6 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
             return objNew;
         });
         return new PageableObject<>(pageNew);
-    }
-
-    private List<TeAttendanceStudentMeetingRespone> sortASCListAttendanceObj(List<TeAttendanceStudentMeetingRespone> list) {
-        List<TeAttendanceStudentMeetingRespone> sortedList = list.stream()
-                .sorted(Comparator.comparing(TeAttendanceStudentMeetingRespone::getMeetingDate,
-                        Comparator.nullsLast(Comparator.naturalOrder()))
-                        .thenComparing(TeAttendanceStudentMeetingRespone::getMeetingPeriod))
-                .collect(Collectors.toList());
-        return sortedList;
     }
 
 }
