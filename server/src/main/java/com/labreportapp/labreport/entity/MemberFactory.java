@@ -2,7 +2,6 @@ package com.labreportapp.labreport.entity;
 
 import com.labreportapp.labreport.entity.base.PrimaryEntity;
 import com.labreportapp.labreport.infrastructure.constant.EntityProperties;
-import com.labreportapp.labreport.infrastructure.constant.StatusMemberTeamFactory;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -21,15 +20,12 @@ import lombok.ToString;
 @Setter
 @ToString
 @Entity
-@Table(name = "member_team_factory")
-public class MemberTeamFactory extends PrimaryEntity {
+@Table(name = "member_factory")
+public class MemberFactory extends PrimaryEntity {
 
     @Column(length = EntityProperties.LENGTH_ID)
-    private String teamFactoryId;
+    private String memberId;
 
     @Column(length = EntityProperties.LENGTH_ID)
-    private String memberFactoryId;
-
-    @Column
-    private StatusMemberTeamFactory statusMemberTeamFactory;
+    private String roleFactoryId;
 }
