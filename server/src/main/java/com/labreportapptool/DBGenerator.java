@@ -8,21 +8,25 @@ import com.labreportapp.labreport.entity.FeedBack;
 import com.labreportapp.labreport.entity.HomeWork;
 import com.labreportapp.labreport.entity.Meeting;
 import com.labreportapp.labreport.entity.MeetingPeriod;
+import com.labreportapp.labreport.entity.MemberFactory;
+import com.labreportapp.labreport.entity.MemberTeamFactory;
 import com.labreportapp.labreport.entity.Note;
 import com.labreportapp.labreport.entity.Point;
 import com.labreportapp.labreport.entity.Post;
 import com.labreportapp.labreport.entity.Report;
+import com.labreportapp.labreport.entity.RoleFactory;
 import com.labreportapp.labreport.entity.Semester;
 import com.labreportapp.labreport.entity.StudentClasses;
 import com.labreportapp.labreport.entity.Team;
+import com.labreportapp.labreport.entity.TeamFactory;
 import com.labreportapp.labreport.entity.TemplateReport;
 import com.labreportapp.labreport.infrastructure.constant.AllowUseTrello;
-import com.labreportapp.labreport.infrastructure.constant.ClassPeriod;
 import com.labreportapp.labreport.infrastructure.constant.RoleTeam;
 import com.labreportapp.labreport.infrastructure.constant.StatusAttendance;
 import com.labreportapp.labreport.infrastructure.constant.StatusClass;
 import com.labreportapp.labreport.infrastructure.constant.StatusFeedBack;
 import com.labreportapp.labreport.infrastructure.constant.StatusMeeting;
+import com.labreportapp.labreport.infrastructure.constant.StatusMemberTeamFactory;
 import com.labreportapp.labreport.infrastructure.constant.StatusStudentFeedBack;
 import com.labreportapp.labreport.infrastructure.constant.StatusTeacherEdit;
 import com.labreportapp.labreport.infrastructure.constant.StatusTeam;
@@ -36,15 +40,20 @@ import com.labreportapp.labreport.repository.HomeWorkRepository;
 import com.labreportapp.labreport.repository.LevelRepository;
 import com.labreportapp.labreport.repository.MeetingPeriodRepository;
 import com.labreportapp.labreport.repository.MeetingRepository;
+import com.labreportapp.labreport.repository.MemberFactoryRepository;
+import com.labreportapp.labreport.repository.MemberTeamFactoryRepository;
 import com.labreportapp.labreport.repository.NoteRepository;
 import com.labreportapp.labreport.repository.PointRepository;
 import com.labreportapp.labreport.repository.PostRepository;
 import com.labreportapp.labreport.repository.ReportRepository;
+import com.labreportapp.labreport.repository.RoleFactoryRepository;
 import com.labreportapp.labreport.repository.SemesterRepository;
 import com.labreportapp.labreport.repository.StudentClassesRepository;
+import com.labreportapp.labreport.repository.TeamFactoryRepository;
 import com.labreportapp.labreport.repository.TeamRepository;
 import com.labreportapp.labreport.repository.TemplateReportRepository;
 import com.labreportapp.portalprojects.entity.Category;
+import com.labreportapp.portalprojects.entity.GroupProject;
 import com.labreportapp.portalprojects.entity.Label;
 import com.labreportapp.portalprojects.entity.LabelProject;
 import com.labreportapp.portalprojects.entity.LabelProjectTodo;
@@ -55,6 +64,7 @@ import com.labreportapp.portalprojects.entity.Project;
 import com.labreportapp.portalprojects.entity.ProjectCategory;
 import com.labreportapp.portalprojects.entity.Todo;
 import com.labreportapp.portalprojects.entity.TodoList;
+import com.labreportapp.portalprojects.entity.TypeProject;
 import com.labreportapp.portalprojects.infrastructure.constant.Constants;
 import com.labreportapp.portalprojects.infrastructure.constant.PriorityLevel;
 import com.labreportapp.portalprojects.infrastructure.constant.RoleMemberProject;
@@ -65,6 +75,7 @@ import com.labreportapp.portalprojects.infrastructure.constant.StatusWork;
 import com.labreportapp.portalprojects.infrastructure.constant.TypeTodo;
 import com.labreportapp.portalprojects.repository.AssignRepository;
 import com.labreportapp.portalprojects.repository.CategoryRepository;
+import com.labreportapp.portalprojects.repository.GroupProjectRepository;
 import com.labreportapp.portalprojects.repository.LabelProjectRepository;
 import com.labreportapp.portalprojects.repository.LabelProjectTodoRepository;
 import com.labreportapp.portalprojects.repository.LabelRepository;
@@ -76,6 +87,7 @@ import com.labreportapp.portalprojects.repository.ProjectRepository;
 import com.labreportapp.portalprojects.repository.StakeholderProjectRepository;
 import com.labreportapp.portalprojects.repository.TodoListRepository;
 import com.labreportapp.portalprojects.repository.TodoRepository;
+import com.labreportapp.portalprojects.repository.TypeProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -187,6 +199,24 @@ public class DBGenerator implements CommandLineRunner {
 
     @Autowired
     private MeetingPeriodRepository meetingPeriodRepository;
+
+    @Autowired
+    private RoleFactoryRepository roleFactoryRepository; // bảng mới thêm ngày 14/10/2023
+
+    @Autowired
+    private TeamFactoryRepository teamFactoryRepository;  // bảng mới thêm ngày 14/10/2023
+
+    @Autowired
+    private MemberFactoryRepository memberFactoryRepository; // bảng mới thêm ngày 14/10/2023
+
+    @Autowired
+    private MemberTeamFactoryRepository memberTeamFactoryRepository; // bảng mới thêm ngày 14/10/2023
+
+    @Autowired
+    private TypeProjectRepository typeProjectRepository;// portal project // bảng mới thêm ngày 14/10/2023
+
+    @Autowired
+    private GroupProjectRepository groupProjectRepository;// portal project // bảng mới thêm ngày 14/10/2023
 
     @Override
     public void run(String... args) throws Exception {
@@ -2455,6 +2485,151 @@ public class DBGenerator implements CommandLineRunner {
         periodTodo1_2.setPeriodId(period1_2.getId());
         periodTodo1_2.setTodoId(todo1_2.getId());
         periodTodo1_2.setId(periodTodoRepository.save(periodTodo1_2).getId());
+// Hiệu fake 14/10/2023
+        RoleFactory roleFactory1 = new RoleFactory();
+        roleFactory1.setName("Quản lý");
+        roleFactory1.setDescriptions("Có vai trò quản lý tổng quan, phạm vi, nguồn lực, thời gian,...");
+        roleFactory1.setId(roleFactoryRepository.save(roleFactory1).getId());
+
+        RoleFactory roleFactory2 = new RoleFactory();
+        roleFactory2.setName("Trưởng nhóm");
+        roleFactory2.setDescriptions("Có vai trò lập kế hoạch, phân chia nhiệm vụ, hướng dẫn, giao tiếp và giải quyết xung đột bằng hòa bình hihi...");
+        roleFactory2.setId(roleFactoryRepository.save(roleFactory2).getId());
+
+        RoleFactory roleFactory3 = new RoleFactory();
+        roleFactory3.setName("Phó nhóm");
+        roleFactory3.setDescriptions("Có vai trò hỗ trợ trưởng nhóm trong mọi trường hợp haha,...");
+        roleFactory3.setId(roleFactoryRepository.save(roleFactory3).getId());
+
+        RoleFactory roleFactory4 = new RoleFactory();
+        roleFactory4.setName("Thành viên");
+        roleFactory4.setDescriptions("Có vai trò chỉ việc ăn và lăn lên mọi mặt trận,...");
+        roleFactory4.setId(roleFactoryRepository.save(roleFactory4).getId());
+
+        TeamFactory teamFactory1 = new TeamFactory();
+        teamFactory1.setName("Team HIỆU XỊN XÒ");
+        teamFactory1.setDescriptions("Quản lý xây dựng báo cáo xưởng thực hành vip pro kaka ha => <3 ");
+        teamFactory1.setId(teamFactoryRepository.save(teamFactory1).getId());
+
+        TeamFactory teamFactory2 = new TeamFactory();
+        teamFactory2.setName("Team Hei Babe bu CHICKEN");
+        teamFactory2.setDescriptions("Quản lý xây dựng Module bài viết nhiều bug hơn Team dự án :<<");
+        teamFactory2.setId(teamFactoryRepository.save(teamFactory2).getId());
+
+        TeamFactory teamFactory3 = new TeamFactory();
+        teamFactory3.setName("Team BARR anh SƠN HÓT POI");
+        teamFactory3.setDescriptions("Quản lý xây dựng Module sự kiện event cho CÔ NGUYỄN THỊ HẰNG XINH ĐỆP");
+        teamFactory3.setId(teamFactoryRepository.save(teamFactory3).getId());
+
+        TeamFactory teamFactory4 = new TeamFactory();
+        teamFactory4.setName("Team ăn chơi");
+        teamFactory4.setDescriptions("Chỉ biết ăn chơi hát lượn hhihii");
+        teamFactory4.setId(teamFactoryRepository.save(teamFactory4).getId());
+
+        MemberFactory memberFactory1 = new MemberFactory();
+        memberFactory1.setMemberId(studentClasses1.getStudentId());
+        memberFactory1.setRoleFactoryId(roleFactory1.getId());
+        memberFactory1.setId(memberFactoryRepository.save(memberFactory1).getId());
+
+        MemberFactory memberFactory2 = new MemberFactory();
+        memberFactory2.setMemberId(studentClasses2.getStudentId());
+        memberFactory2.setRoleFactoryId(roleFactory2.getId());
+        memberFactory2.setId(memberFactoryRepository.save(memberFactory2).getId());
+
+        MemberFactory memberFactory3 = new MemberFactory();
+        memberFactory3.setMemberId(studentClasses3.getStudentId());
+        memberFactory3.setRoleFactoryId(roleFactory3.getId());
+        memberFactory3.setId(memberFactoryRepository.save(memberFactory3).getId());
+
+        MemberFactory memberFactory4 = new MemberFactory();
+        memberFactory4.setMemberId(studentClasses4.getStudentId());
+        memberFactory4.setRoleFactoryId(roleFactory4.getId());
+        memberFactory4.setId(memberFactoryRepository.save(memberFactory4).getId());
+
+        MemberFactory memberFactory5 = new MemberFactory();
+        memberFactory5.setMemberId(studentClasses5.getStudentId());
+        memberFactory5.setRoleFactoryId(roleFactory4.getId());
+        memberFactory5.setId(memberFactoryRepository.save(memberFactory5).getId());
+
+        MemberFactory memberFactory6 = new MemberFactory();
+        memberFactory6.setMemberId(studentClasses6.getStudentId());
+        memberFactory6.setRoleFactoryId(roleFactory1.getId());
+        memberFactory6.setId(memberFactoryRepository.save(memberFactory6).getId());
+
+        MemberFactory memberFactory7 = new MemberFactory();
+        memberFactory7.setMemberId(studentClasses7.getStudentId());
+        memberFactory7.setRoleFactoryId(roleFactory2.getId());
+        memberFactory7.setId(memberFactoryRepository.save(memberFactory7).getId());
+
+        MemberTeamFactory memberTeamFactory1 = new MemberTeamFactory();
+        memberTeamFactory1.setMemberFactoryId(memberFactory1.getId());
+        memberTeamFactory1.setTeamFactoryId(teamFactory1.getId());
+        memberTeamFactory1.setStatusMemberTeamFactory(StatusMemberTeamFactory.HOAT_DONG);
+        memberTeamFactory1.setId(memberTeamFactoryRepository.save(memberTeamFactory1).getId());
+
+        MemberTeamFactory memberTeamFactory2 = new MemberTeamFactory();
+        memberTeamFactory2.setMemberFactoryId(memberFactory2.getId());
+        memberTeamFactory2.setTeamFactoryId(teamFactory1.getId());
+        memberTeamFactory2.setStatusMemberTeamFactory(StatusMemberTeamFactory.HOAT_DONG);
+        memberTeamFactory2.setId(memberTeamFactoryRepository.save(memberTeamFactory2).getId());
+
+        MemberTeamFactory memberTeamFactory3 = new MemberTeamFactory();
+        memberTeamFactory3.setMemberFactoryId(memberFactory3.getId());
+        memberTeamFactory3.setTeamFactoryId(teamFactory1.getId());
+        memberTeamFactory3.setStatusMemberTeamFactory(StatusMemberTeamFactory.HOAT_DONG);
+        memberTeamFactory3.setId(memberTeamFactoryRepository.save(memberTeamFactory3).getId());
+
+        MemberTeamFactory memberTeamFactory4 = new MemberTeamFactory();
+        memberTeamFactory4.setMemberFactoryId(memberTeamFactory4.getId());
+        memberTeamFactory4.setTeamFactoryId(teamFactory1.getId());
+        memberTeamFactory4.setStatusMemberTeamFactory(StatusMemberTeamFactory.HOAT_DONG);
+        memberTeamFactory4.setId(memberTeamFactoryRepository.save(memberTeamFactory4).getId());
+
+        MemberTeamFactory memberTeamFactory5 = new MemberTeamFactory();
+        memberTeamFactory5.setMemberFactoryId(memberFactory5.getId());
+        memberTeamFactory5.setTeamFactoryId(teamFactory1.getId());
+        memberTeamFactory5.setStatusMemberTeamFactory(StatusMemberTeamFactory.KHONG_HOAT_DONG);
+        memberTeamFactory5.setId(memberTeamFactoryRepository.save(memberTeamFactory5).getId());
+
+        MemberTeamFactory memberTeamFactory6 = new MemberTeamFactory();
+        memberTeamFactory6.setMemberFactoryId(memberFactory6.getId());
+        memberTeamFactory6.setTeamFactoryId(teamFactory2.getId());
+        memberTeamFactory6.setStatusMemberTeamFactory(StatusMemberTeamFactory.HOAT_DONG);
+        memberTeamFactory6.setId(memberTeamFactoryRepository.save(memberTeamFactory6).getId());
+
+        MemberTeamFactory memberTeamFactory7 = new MemberTeamFactory();
+        memberTeamFactory7.setMemberFactoryId(memberFactory7.getId());
+        memberTeamFactory7.setTeamFactoryId(teamFactory2.getId());
+        memberTeamFactory7.setStatusMemberTeamFactory(StatusMemberTeamFactory.HOAT_DONG);
+        memberTeamFactory7.setId(memberTeamFactoryRepository.save(memberTeamFactory7).getId());
+
+        GroupProject groupProject1 = new GroupProject();
+        groupProject1.setName("Group Chỉ biết ĂN và Lăn");
+        groupProject1.setDescription(" Ăn chơi múa hát cắn kẹo hút ke. Nói chung là vứt");
+        groupProject1.setBackgroundImage("rgb(38, 144, 214)");
+        groupProject1.setId(groupProjectRepository.save(groupProject1).getId());
+
+        GroupProject groupProject2 = new GroupProject();
+        groupProject2.setName("Group Chăm chỉ cần cù chịu khó");
+        groupProject2.setDescription("ĐƯỢT của nó luôn ạ. Yêu thương chiều chuộng luông");
+        groupProject2.setBackgroundImage("#07bc0c");
+        groupProject2.setId(groupProjectRepository.save(groupProject2).getId());
+
+        GroupProject groupProject3 = new GroupProject();
+        groupProject3.setName("Group Nhởn nhơ");
+        groupProject3.setDescription("Nói mà KHông bao giờ chịu nghe, cứ nhơ nhơ cái mặt ra. Nói chung là vứt");
+        groupProject3.setBackgroundImage("#f1c40f");
+        groupProject3.setId(groupProjectRepository.save(groupProject3).getId());
+
+        TypeProject typeProject1 = new TypeProject();
+        typeProject1.setName("Type 1");
+        typeProject1.setDescription("Quan trọng, xây dựng hệ thống cổng thông tin của trường !");
+        typeProject1.setId(typeProjectRepository.save(typeProject1).getId());
+
+        TypeProject typeProject2 = new TypeProject();
+        typeProject2.setName("Type 2");
+        typeProject2.setDescription("Không quan trọng, được sử dụng cho các nhóm trong xưởng !");
+        typeProject2.setId(typeProjectRepository.save(typeProject2).getId());
 
     }
 
