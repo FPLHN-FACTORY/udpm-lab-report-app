@@ -181,12 +181,23 @@ public class TeMeetingServiceImpl implements TeMeetingService {
         } else if (dateNow.isAfter(dateMeeting)) {
             objReturn.setListTeamReport(listTeam);
         } else {
-//            Integer checkPeriod = checkPeriod(meetingResponse.getMeetingPeriod());
-//            if (checkPeriod < meetingResponse.getMeetingPeriod()) {
-//                objReturn.setListTeamReport(new ArrayList<>());
-//            } else {
-            objReturn.setListTeamReport(listTeam);
-            //   }
+            Optional<MeetingPeriod> period = teMeetingPeriodRepository.findById(meetingResponse.getIdMeetingPeriod());
+            if (!period.isPresent()) {
+                throw new RestApiException(Message.MEETING_PERIOD_NOT_EXITS);
+            }
+            Date currentDate = new Date();
+            Date caHocStartTime = new Date(
+                    currentDate.getYear(),
+                    currentDate.getMonth(),
+                    currentDate.getDate(),
+                    period.get().getStartHour(),
+                    period.get().getStartMinute()
+            );
+            if (caHocStartTime.before(currentDate)) {
+                objReturn.setListTeamReport(new ArrayList<>());
+            } else {
+                objReturn.setListTeamReport(listTeam);
+            }
         }
         return objReturn;
     }

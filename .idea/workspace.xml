@@ -4,37 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fe93e581-5589-4bad-ba6a-389fa82a0816" name="Default Changelist" comment="fix class_period(table class), meeting_period(table meeting) and show table all task , convert time two role student and teacher">
+    <list default="true" id="fe93e581-5589-4bad-ba6a-389fa82a0816" name="Default Changelist" comment="- Fix lại tất cả các màn có chứa thuộc tính meetingPeriod to table period với 4 time 2 role teacher, student&#10;- Fix lại màn lịch dạy hôm nay, xem sửa điểm danh&#10;- Fix lại luồng xem sửa điểm danh, validate check ca&#10;- Fix lại màn chuyển sinh viên role admin&#10;- Fix lại màn điểm danh tất cả sinh viên, 1 sinh viên">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/component/teacher/SidebarTeacher.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/component/teacher/SidebarTeacher.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/helper/util.helper.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/helper/util.helper.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/labreportapp/pages/admin/detail-class/information-class/ModalSentStudentAdmin.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/pages/admin/detail-class/information-class/ModalSentStudentAdmin.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/pages/teacher/my-class/attendance/TeacherAttendanceClass.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/pages/teacher/my-class/attendance/TeacherAttendanceClass.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/pages/teacher/my-class/attendance/detail-attendance-one-student/TeModalDetailOneStudent.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/pages/teacher/my-class/attendance/detail-attendance-one-student/TeModalDetailOneStudent.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/pages/teacher/my-class/meeting/team/TeamInMeeting.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/pages/teacher/my-class/meeting/team/TeamInMeeting.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/pages/teacher/my-class/meeting/team/collapse-team/CollapseTeam.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/pages/teacher/my-class/meeting/team/collapse-team/CollapseTeam.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/pages/teacher/my-class/meeting/team/collapse-team/styleCollapseTeam.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/pages/teacher/my-class/meeting/team/collapse-team/styleCollapseTeam.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/pages/teacher/my-class/point/table-point-student/TablePoint.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/pages/teacher/my-class/point/table-point-student/TablePoint.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/pages/teacher/my-class/students/StudentsInMyClass.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/pages/teacher/my-class/students/StudentsInMyClass.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/pages/teacher/my-class/students/modal-sent-student/ModalSentStudent.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/pages/teacher/my-class/students/modal-sent-student/ModalSentStudent.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/pages/teacher/schedule-today/TeacherScheduleToday.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/pages/teacher/schedule-today/TeacherScheduleToday.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/pages/teacher/schedule-today/attendance-meeting/TeacherAttendanceMeeting.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/pages/teacher/schedule-today/attendance-meeting/TeacherAttendanceMeeting.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/model/response/TeAttendanceResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/model/response/TeAttendanceResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/model/response/TeAttendanceStudentAllResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/model/response/TeAttendanceStudentAllResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/model/response/TeClassSentStudentRespone.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/model/response/TeClassSentStudentRespone.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/model/response/TeHomeWorkAndNoteMeetingResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/model/response/TeHomeWorkAndNoteMeetingResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/model/response/TeMeetingResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/model/response/TeMeetingResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/repository/TeAttendanceRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/repository/TeAttendanceRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/repository/TeClassRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/repository/TeClassRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/repository/TeMeetingRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/repository/TeMeetingRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/service/impl/TeAttendanceServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/service/impl/TeAttendanceServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/service/impl/TeClassServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/service/impl/TeClassServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/service/impl/TeMeetingServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/service/impl/TeMeetingServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/portalprojects/infrastructure/constant/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/portalprojects/infrastructure/constant/Message.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/portalprojects/infrastructure/constant/PropertyKeys.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/portalprojects/infrastructure/constant/PropertyKeys.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapptool/DBGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapptool/DBGenerator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/resources/messages.properties" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/resources/messages.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -124,7 +97,7 @@
       <workItem from="1697089991332" duration="297000" />
       <workItem from="1697187822102" duration="109000" />
       <workItem from="1697197690985" duration="130000" />
-      <workItem from="1697279417356" duration="1047000" />
+      <workItem from="1697279417356" duration="1735000" />
     </task>
     <task id="LOCAL-00001" summary="update code merge login, pending">
       <created>1696288841421</created>
@@ -196,7 +169,14 @@
       <option name="project" value="LOCAL" />
       <updated>1697197807855</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="- Fix lại tất cả các màn có chứa thuộc tính meetingPeriod to table period với 4 time 2 role teacher, student&#10;- Fix lại màn lịch dạy hôm nay, xem sửa điểm danh&#10;- Fix lại luồng xem sửa điểm danh, validate check ca&#10;- Fix lại màn chuyển sinh viên role admin&#10;- Fix lại màn điểm danh tất cả sinh viên, 1 sinh viên">
+      <created>1697281141762</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1697281141762</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -222,6 +202,7 @@
     <MESSAGE value="fix merge code all member" />
     <MESSAGE value="fix merge code all member update code ultil convert" />
     <MESSAGE value="fix class_period(table class), meeting_period(table meeting) and show table all task , convert time two role student and teacher" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix class_period(table class), meeting_period(table meeting) and show table all task , convert time two role student and teacher" />
+    <MESSAGE value="- Fix lại tất cả các màn có chứa thuộc tính meetingPeriod to table period với 4 time 2 role teacher, student&#10;- Fix lại màn lịch dạy hôm nay, xem sửa điểm danh&#10;- Fix lại luồng xem sửa điểm danh, validate check ca&#10;- Fix lại màn chuyển sinh viên role admin&#10;- Fix lại màn điểm danh tất cả sinh viên, 1 sinh viên" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Fix lại tất cả các màn có chứa thuộc tính meetingPeriod to table period với 4 time 2 role teacher, student&#10;- Fix lại màn lịch dạy hôm nay, xem sửa điểm danh&#10;- Fix lại luồng xem sửa điểm danh, validate check ca&#10;- Fix lại màn chuyển sinh viên role admin&#10;- Fix lại màn điểm danh tất cả sinh viên, 1 sinh viên" />
   </component>
 </project>
