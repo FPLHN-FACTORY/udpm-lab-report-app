@@ -589,7 +589,7 @@ function App() {
               }
             />
             <Route
-              path="/admin/role-management"
+              path="/admin/role-project-management"
               element={
                 <AuthGuard>
                   <DashBoardAdmin>

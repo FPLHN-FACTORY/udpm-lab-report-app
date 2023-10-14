@@ -7,6 +7,7 @@ import { faRandom } from "@fortawesome/free-solid-svg-icons";
 import { ClassAPI } from "../../../../api/admin/class-manager/ClassAPI.api";
 import moment from "moment";
 import { toast } from "react-toastify";
+import LoadingIndicatorNoOverlay from "../../../../helper/loadingNoOverlay";
 
 const { Option } = Select;
 
@@ -20,7 +21,7 @@ const ModalRandomClass = ({ visible, onCancel, fetchData }) => {
   const [errorSoLopRandom, setErrorSoLopRandom] = useState("");
   const [startTime, setStartTime] = useState("");
   const [errorStartTime, setErrorStartTime] = useState("");
-
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     return () => {
       setIdActivitiSearch("");
@@ -50,8 +51,7 @@ const ModalRandomClass = ({ visible, onCancel, fetchData }) => {
           setIdSemesterSearch(null);
         }
         setSemesterDataAll(listSemester.data);
-      } catch (error) {
-      }
+      } catch (error) {}
     };
     featchDataSemester();
   }, []);
@@ -108,6 +108,7 @@ const ModalRandomClass = ({ visible, onCancel, fetchData }) => {
       };
       ClassAPI.randomClass(obj).then((response) => {
         toast.success("Random tạo lớp thành công");
+        // setLoading(false);
         fetchData();
         onCancel();
       });
@@ -116,6 +117,7 @@ const ModalRandomClass = ({ visible, onCancel, fetchData }) => {
 
   return (
     <>
+      {loading && <LoadingIndicatorNoOverlay />}
       <Modal
         visible={visible}
         onCancel={onCancel}

@@ -12,6 +12,7 @@ import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.entity.Activity;
 import com.labreportapp.labreport.entity.Semester;
 import com.labreportapp.labreport.infrastructure.constant.AllowUseTrello;
+import com.labreportapp.labreport.util.SemesterHelper;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import jakarta.validation.Valid;
@@ -38,8 +39,25 @@ public class AdActivityServiceImpl implements AdActivityService {
     @Autowired
     private AdSemesterRepository adSemesterRepository;
 
+    @Autowired
+    private SemesterHelper semesterHelper;
+
     @Override
     public PageableObject<AdActivityResponse> searchActivity(final AdFindActivityRequest rep) {
+        String idSemesterCurrent = semesterHelper.getSemesterCurrent();
+        if (rep.getSemesterId() == null) {
+            if (idSemesterCurrent != null) {
+                rep.setSemesterId(idSemesterCurrent);
+            } else {
+                rep.setSemesterId("");
+            }
+        } else if (rep.getSemesterId().equalsIgnoreCase("")) {
+            if (idSemesterCurrent != null) {
+                rep.setSemesterId(idSemesterCurrent);
+            } else {
+                rep.setSemesterId("");
+            }
+        }
         Pageable pageable = PageRequest.of(rep.getPage(), rep.getSize());
         Page<AdActivityResponse> responses = adActivityRepository.findByNameActivity(rep, pageable);
         return new PageableObject<>(responses);

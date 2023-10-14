@@ -149,7 +149,7 @@ const ActivityManagement = () => {
     setSearchName("");
     setLevelSearch("");
     setSemesterSearch("");
-    setClear(true);
+    // setClear(true);
   };
 
   const handleSemesterSearch = (value) => {
@@ -304,12 +304,13 @@ const ActivityManagement = () => {
         <div className="content">
           <div className="content-wrapper">
             <div className="content-center">
-              Tên hoạt động{" "}
+              Hoạt động{" "}
               <Input
                 type="text"
+                placeholder="Nhập mã, tên hoạt động"
                 value={searchName}
                 onChange={handleChangeSearch}
-                style={{ width: "50%", marginLeft: "10px" }}
+                style={{ width: "75%", marginLeft: "10px" }}
               />
             </div>
           </div>
@@ -318,7 +319,7 @@ const ActivityManagement = () => {
               Cấp độ{" "}
               <Select
                 value={levelSearch}
-                style={{ width: "50%", marginLeft: "10px" }}
+                style={{ width: "75%", marginLeft: "10px" }}
                 onChange={handleLevelSearch}
               >
                 <Option value={""}>Tất cả</Option>
@@ -334,11 +335,11 @@ const ActivityManagement = () => {
             <div className="content-center">
               Học kỳ{" "}
               <Select
-                style={{ width: "50%", marginLeft: "10px" }}
+                style={{ width: "75%", marginLeft: "10px" }}
                 value={semesterSearch}
                 onChange={handleSemesterSearch}
               >
-                <Option value={""}>Tất cả</Option>
+                <Option value={""}>Chọn học kỳ</Option>
                 {listSemester.map((semester) => (
                   <Option key={semester.id} value={semester.id}>
                     {semester.name}

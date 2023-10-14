@@ -47,7 +47,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
         left: 0,
       }}
     >
-      <Menu theme="light" mode="inline">
+      <Menu theme="light" mode="inline" style={{ paddingBottom: 80 }}>
         <div style={{ marginBottom: 10, marginTop: 10 }}>
           <span style={{ marginLeft: 28 }}>
             <FontAwesomeIcon
@@ -106,7 +106,6 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             <Link to="/admin/activity-management">Quản lý hoạt động</Link>{" "}
           </Menu.Item>
         </Menu.SubMenu>
-
         <Menu.SubMenu
           key="5"
           title="Cấu hình"
@@ -207,17 +206,15 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             </Link>
           </Menu.Item>
         </Menu.SubMenu>
-      </Menu>
-      <div style={{ marginBottom: 10, marginTop: 10 }}>
-        <span style={{ marginLeft: 28 }}>
-          <FontAwesomeIcon
-            icon={faCog}
-            style={{ marginRight: 7, fontSize: 18 }}
-          />
-          {!collapsed && <span style={{ fontSize: 15 }}>Dự án xưởng</span>}
-        </span>
-      </div>
-      <Menu theme="light" mode="inline" style={{ paddingBottom: 100 }}>
+        <div style={{ marginBottom: 10, marginTop: 10 }}>
+          <span style={{ marginLeft: 28 }}>
+            <FontAwesomeIcon
+              icon={faCog}
+              style={{ marginRight: 7, fontSize: 18 }}
+            />
+            {!collapsed && <span style={{ fontSize: 15 }}>Dự án xưởng</span>}
+          </span>
+        </div>
         <Menu.SubMenu
           key="13"
           title="Quản lý chung"
@@ -281,7 +278,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
               />
             }
           >
-            <Link to="/admin/role-management">Quyền trong dự án</Link>
+            <Link to="/admin/role-project-management">Quyền trong dự án</Link>
           </Menu.Item>
         </Menu.SubMenu>
         <Menu.SubMenu
@@ -349,7 +346,18 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           }
         >
           <Link to="/admin/member-management">Quản lý thành viên</Link>
-        </Menu.Item>
+        </Menu.Item>{" "}
+        <Menu.Item
+          key="24"
+          icon={
+            <FontAwesomeIcon
+              icon={faPersonMilitaryPointing}
+              style={{ color: "rgb(226, 179, 87)" }}
+            />
+          }
+        >
+          <Link to="/admin/role-factory-management">Vai trò trong xưởng</Link>
+        </Menu.Item>{" "}
       </Menu>
     </Sider>
   );

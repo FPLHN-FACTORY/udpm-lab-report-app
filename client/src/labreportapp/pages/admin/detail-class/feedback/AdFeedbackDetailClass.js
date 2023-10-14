@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { ClassAPI } from "../../../../api/admin/class-manager/ClassAPI.api";
 import { AdminFeedBackAPI } from "../../../../api/admin/AdFeedBackAPI";
 import { useAppDispatch, useAppSelector } from "../../../../app/hook";
-import { Button, Input, Select, Table } from "antd";
+import { Button, Empty, Input, Select, Table } from "antd";
 import LoadingIndicator from "../../../../helper/loading";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
@@ -266,12 +266,31 @@ const AdFeedbackDetailClass = () => {
               Danh sách feedback:
             </span>
           </div>
-          <Table
-            columns={columns}
-            dataSource={feedback}
-            key="id"
-            pagination={false}
-          />
+          {feedback.length > 0 && (
+            <Table
+              columns={columns}
+              dataSource={feedback}
+              key="id"
+              pagination={false}
+            />
+          )}
+          {feedback.length === 0 && (
+            <>
+              <p
+                style={{
+                  textAlign: "center",
+                  marginTop: "100px",
+                  fontSize: "15px",
+                  color: "red",
+                }}
+              >
+                <Empty
+                  imageStyle={{ height: 60 }}
+                  description={<span>Không có dữ liệu</span>}
+                />{" "}
+              </p>
+            </>
+          )}
         </div>
       </div>
     </div>

@@ -15,11 +15,13 @@ import { parseInt } from "lodash";
 import LoadingIndicatorNoOverlay from "../../../../helper/loadingNoOverlay";
 import { GetAdMeetingPeriod } from "../../../../app/admin/AdMeetingPeriodSlice.reducer";
 import { convertHourAndMinuteToString } from "../../../../helper/util.helper";
+import { faHeartPulse } from "@fortawesome/free-solid-svg-icons";
 
 const { Option } = Select;
 
 const ModalUpdateClass = ({ visible, onCancel, id }) => {
   const [loading, setLoading] = useState(false);
+  const [loadingOverlay, setLoadingOverlay] = useState(false);
   const dispatch = useAppDispatch();
   const [idSemesterSeach, setIdSemesterSearch] = useState("");
   const [semesterDataAll, setSemesterDataAll] = useState([]); // Dữ liệu semester
@@ -52,6 +54,8 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
     setErrorName("");
     setErrorCode("");
     setErrorActivity("");
+    setLoading(false);
+    setLoadingOverlay(false);
     setErrorClassPeriod("");
     setErrorStartTime("");
     setErrorActivitySelect("");
@@ -170,6 +174,7 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
     }
 
     if (check === 0) {
+      setLoadingOverlay(true);
       let obj = {
         classPeriod: classPeriod,
         startTime: moment(startTime, "YYYY-MM-DD").valueOf(),
@@ -180,7 +185,7 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
 
       await ClassAPI.update(id, obj).then((response) => {
         toast.success("Cập nhật thành công!");
-        console.log("data: ", response.data.data);
+        setLoadingOverlay(faHeartPulse);
         dispatch(UpdateClass(response.data.data));
         cancelSuccess();
       });
@@ -202,6 +207,7 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
   return (
     <>
       {loading && <LoadingIndicatorNoOverlay />}
+      {loadingOverlay && <LoadingIndicatorNoOverlay />}
       <Modal
         visible={visible}
         onCancel={onCancel}
