@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fe93e581-5589-4bad-ba6a-389fa82a0816" name="Default Changelist" comment="fix merge code all member update code ultil convert" />
+    <list default="true" id="fe93e581-5589-4bad-ba6a-389fa82a0816" name="Default Changelist" comment="fix class_period(table class), meeting_period(table meeting) and show table all task , convert time two role student and teacher" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -88,6 +88,7 @@
       <workItem from="1697087068876" duration="20000" />
       <workItem from="1697089991332" duration="297000" />
       <workItem from="1697187822102" duration="109000" />
+      <workItem from="1697197690985" duration="130000" />
     </task>
     <task id="LOCAL-00001" summary="update code merge login, pending">
       <created>1696288841421</created>
@@ -152,7 +153,14 @@
       <option name="project" value="LOCAL" />
       <updated>1697187868127</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="fix class_period(table class), meeting_period(table meeting) and show table all task , convert time two role student and teacher">
+      <created>1697197807855</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1697197807855</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -177,6 +185,7 @@
     <MESSAGE value="merge code quynhnc" />
     <MESSAGE value="fix merge code all member" />
     <MESSAGE value="fix merge code all member update code ultil convert" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix merge code all member update code ultil convert" />
+    <MESSAGE value="fix class_period(table class), meeting_period(table meeting) and show table all task , convert time two role student and teacher" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix class_period(table class), meeting_period(table meeting) and show table all task , convert time two role student and teacher" />
   </component>
 </project>

@@ -15,8 +15,7 @@ import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyCla
 import { SetTTrueToggle } from "../../../../app/teacher/TeCollapsedSlice.reducer";
 import {
   convertHourAndMinuteToString,
-  convertMeetingPeriodToTime,
-  convertStatusMeetingByDateAndPeriod,
+  convertStatusByHourMinute,
 } from "../../../../helper/util.helper";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTableList } from "@fortawesome/free-solid-svg-icons";
@@ -213,7 +212,7 @@ const MeetingInMyClass = () => {
               {dataMeeting.length > 0 ? (
                 <>
                   {dataMeeting.map((record) => (
-                    <div className="box-card-te">
+                    <div className="box-card-te" key={record.id}>
                       <Link
                         to={`/teacher/my-class/meeting/detail/${record.id}`}
                         key={record.id}
@@ -275,9 +274,12 @@ const MeetingInMyClass = () => {
                               fontSize: "13px",
                             }}
                           >
-                            {!convertStatusMeetingByDateAndPeriod(
+                            {!convertStatusByHourMinute(
                               record.meetingDate,
-                              record.meetingPeriod
+                              record.startHour,
+                              record.startMinute,
+                              record.endHour,
+                              record.endMinute
                             ) && (
                               <div>
                                 <Badge.Ribbon

@@ -106,48 +106,50 @@ export const convertMeetingPeriodToTime = (meetingPeriod) => {
 
   return meetingPeriodStr;
 };
-export const convertStatusMeetingByDateAndPeriod = (
+
+export const convertStatusByHourMinute = (
   meetingDate,
-  meetingPeriod
+  startHour,
+  startMinute,
+  endHour,
+  endMinute
 ) => {
+  // true là tương lai, false là chưa tới
   const currentDate = new Date();
-  const meetingPeriods = {
-    0: { start: "7:15", end: "9:15" },
-    1: { start: "9:25", end: "11:25" },
-    2: { start: "12:00", end: "14:00" },
-    3: { start: "14:10", end: "16:10" },
-    4: { start: "16:20", end: "18:20" },
-    5: { start: "18:30", end: "20:30" },
-    6: { start: "20:40", end: "22:40" },
-    // 7: { start: "22:50", end: "00:50" },
-    // 8: { start: "01:00", end: "3:00" },
-    // 9: { start: "03:10", end: "05:10" },
-  };
-  if (meetingDate > currentDate) {
+  const currentDateFormat = currentDate.setHours(0, 0, 0, 0);
+  const meetingDateObject = new Date(meetingDate);
+  const meetingDateFormat = meetingDateObject.setHours(0, 0, 0, 0);
+
+  if (meetingDateFormat > currentDateFormat) {
     return true;
-  } else if (meetingDate < currentDate) {
+  } else if (meetingDateFormat < currentDateFormat) {
     return false;
   } else {
-    const caHocTime = meetingPeriods[meetingPeriod];
-    const caHocStartDate = new Date(
+    // kiểm tra theo thời gian
+    const timeCurrent = new Date();
+    const caHocStartTime = new Date(
       currentDate.getFullYear(),
       currentDate.getMonth(),
       currentDate.getDate(),
-      parseInt(caHocTime.start.split(":")[0]),
-      parseInt(caHocTime.start.split(":")[1])
+      startHour,
+      startMinute
     );
-    const caHocEndDate = new Date(
+    const caHocEndTime = new Date(
       currentDate.getFullYear(),
       currentDate.getMonth(),
       currentDate.getDate(),
-      parseInt(caHocTime.end.split(":")[0]),
-      parseInt(caHocTime.end.split(":")[1])
+      endHour,
+      endMinute
     );
-    if (currentDate >= caHocStartDate && currentDate <= caHocEndDate) {
+    console.log(caHocEndTime);
+    if (caHocStartTime <= timeCurrent && timeCurrent <= caHocEndTime) {
       return true;
-    } else {
+    } else if (timeCurrent < caHocStartTime) {
+      return true;
+    } else if (timeCurrent > caHocEndTime && timeCurrent) {
       return false;
     }
+    return true;
   }
 };
 
@@ -177,6 +179,7 @@ export const convertCheckAttended = (meetingPeriod) => {
     // 8: { start: "01:00", end: "3:00" },
     // 9: { start: "03:10", end: "05:10" },
   };
+
   const caHocTime = meetingPeriods[meetingPeriod];
   const caHocStartDate = new Date(
     currentDate.getFullYear(),
@@ -201,10 +204,20 @@ export const convertCheckAttended = (meetingPeriod) => {
 
 export const convertCheckTimeCurrentAndMeetingDate = (
   meetingDate,
-  meetingPeriod
+  meetingPeriod,
+  startHour,
+  startMinute,
+  endHour,
+  endMinute
 ) => {
   const meetingDateObject = new Date(meetingDate);
   const currentDate = new Date();
+  const hourMinute = convertHourAndMinuteToString(
+    startHour,
+    startMinute,
+    endHour,
+    endMinute
+  ); // 12:01 - 14:01
   const meetingPeriods = {
     0: { start: "7:15", end: "9:15" },
     1: { start: "9:25", end: "11:25" },
@@ -217,24 +230,34 @@ export const convertCheckTimeCurrentAndMeetingDate = (
     // 8: { start: "01:00", end: "3:00" },
     // 9: { start: "03:10", end: "05:10" },
   };
-  const caHocTime = meetingPeriods[meetingPeriod];
-  const caHocEndDate = new Date(
-    currentDate.getFullYear(),
-    currentDate.getMonth(),
-    currentDate.getDate(),
-    parseInt(caHocTime.end.split(":")[0]),
-    parseInt(caHocTime.end.split(":")[1])
-  );
-  if (meetingDate > currentDate) {
-    return 0; // chưa tới ngày học
-  } else if (meetingDate < currentDate) {
-    return 1; // đã học
-  } else {
-    if (currentDate >= caHocEndDate) {
-      return 2; // hết ca
+  const timeArray = hourMinute.split(" - ");
+  if (timeArray.length === 2) {
+    const startTime = timeArray[0];
+    const endTime = timeArray[1];
+
+    console.log("Start time:", startTime);
+    console.log("End time:", endTime);
+    let caHocTime = endTime;
+    const caHocEndDate = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      currentDate.getDate(),
+      parseInt(caHocTime.end.split(":")[0]),
+      parseInt(caHocTime.end.split(":")[1])
+    );
+    if (meetingDate > currentDate) {
+      return 0; // chưa tới ngày học
+    } else if (meetingDate < currentDate) {
+      return 1; // đã học
     } else {
-      return 1;
+      if (currentDate >= caHocEndDate) {
+        return 2; // hết ca
+      } else {
+        return 1;
+      }
     }
+  } else {
+    console.error("Không tồn tại thời gian");
   }
 };
 
