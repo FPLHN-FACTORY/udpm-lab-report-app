@@ -9,7 +9,7 @@ import { useParams } from "react-router";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUsersRectangle } from "@fortawesome/free-solid-svg-icons";
-import { convertCheckTimeCurrentAndMeetingDate } from "../../../../../../helper/util.helper";
+import { convertStatusByHourMinute } from "../../../../../../helper/util.helper";
 const { Panel } = Collapse;
 
 const CollapseTeam = ({ team, featchMeeting }) => {
@@ -24,7 +24,7 @@ const CollapseTeam = ({ team, featchMeeting }) => {
   const [descriptionsNote, setDescriptionsNote] = useState("");
   const [descriptionsReport, setDescriptionsReport] = useState("");
   const [dowloading, setDownloading] = useState(false);
-  const [checkTime, setCheckTime] = useState(0);
+  const [checkTime, setCheckTime] = useState(true);
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Bảng điều khiển - chi tiết buổi học";
@@ -47,10 +47,12 @@ const CollapseTeam = ({ team, featchMeeting }) => {
     setActivePanel(index);
     setIdTeamDetail(item.id);
   };
+
   const handleCancel = () => {
     setEdit(false);
     featchHomeWorkNote(idTeamDetail);
   };
+
   const clear = () => {
     setEdit(false);
     setActivePanel(null);
@@ -65,6 +67,7 @@ const CollapseTeam = ({ team, featchMeeting }) => {
       console.log(error);
     }
   };
+
   const featchHomeWorkNote = async (idTeam) => {
     setDescriptionsHomeWork("");
     setDescriptionsNote("");
@@ -96,12 +99,14 @@ const CollapseTeam = ({ team, featchMeeting }) => {
         }
 
         setCheckTime(
-          convertCheckTimeCurrentAndMeetingDate(
+          convertStatusByHourMinute(
             response.data.data.meetingDate,
-            response.data.data.meetingPeriod
+            response.data.data.startHour,
+            response.data.data.startMinute,
+            response.data.data.endHour,
+            response.data.data.endMinute
           )
         );
-
         setDownloading(false);
       });
     } catch (error) {
@@ -142,6 +147,7 @@ const CollapseTeam = ({ team, featchMeeting }) => {
         e.stopPropagation();
         clear();
       }}
+      w
     >
       <Collapse
         bordered={false}
@@ -149,7 +155,6 @@ const CollapseTeam = ({ team, featchMeeting }) => {
         ghost
         showArrow={true}
         className="panel-collap"
-        style={{ width: "auto", minWidth: "auto" }}
       >
         {team.map((item, index) => (
           <Panel
@@ -196,14 +201,8 @@ const CollapseTeam = ({ team, featchMeeting }) => {
                     </span>
                   </div>
                   <div style={{ justifyContent: "right", marginLeft: "100px" }}>
-                    {(checkTime === 1 && item.descriptionsReport === null) ||
-                    (checkTime === 1 && item.descriptionsReport === "") ? (
-                      <Badge.Ribbon
-                        text={"Chưa báo cáo"}
-                        color="rgb(38, 144, 214)"
-                      />
-                    ) : (checkTime === 2 && item.descriptionsReport === null) ||
-                      (checkTime === 2 && item.descriptionsReport === "") ? (
+                    {(!checkTime && item.descriptionsReport === null) ||
+                    (!checkTime && item.descriptionsReport === "") ? (
                       <Badge.Ribbon
                         text={"Chưa báo cáo"}
                         color="rgb(38, 144, 214)"

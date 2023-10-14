@@ -13,7 +13,7 @@ import lombok.Setter;
 public class AdCreateClassRequest {
 
     @NotNull
-    private Long classPeriod;
+    private String classPeriod;
 
     @NotNull
     private Long startTime;

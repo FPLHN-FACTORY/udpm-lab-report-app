@@ -293,7 +293,8 @@ const TablePoint = () => {
                 (parseFloat(record.checkPointPhase1) +
                   parseFloat(record.checkPointPhase2)) /
                   2
-              ).toLocaleString("de-DE")}
+              ).toFixed(2)}
+              {/* .toLocaleString("de-DE")} */}
             </div>
           );
         } else {

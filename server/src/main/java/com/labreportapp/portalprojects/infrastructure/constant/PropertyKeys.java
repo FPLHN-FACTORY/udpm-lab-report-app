@@ -78,5 +78,7 @@ public class PropertyKeys {
     public static final String MEETING_EDIT_ATTENDANCE_FAILD = "meeting.edit.attendance.faild";
     public static final String ROLE_USER_CHANGE = "role.user.change";
     public static final String INVALID_TOKEN = "invalid.token";
+    public static final String MEETING_PERIOD_NOT_EXITS = "meeting.period.not.exits";
+
 
 }

@@ -12,6 +12,8 @@ import {
   faLineChart,
   faHome,
   faMagicWandSparkles,
+  faNewspaper,
+  faWindowRestore,
 } from "@fortawesome/free-solid-svg-icons";
 
 import "./style-sidebar.css";
@@ -42,7 +44,8 @@ const SidebarTeacherComponent = ({ collapsed, toggleCollapsed }) => {
         <div style={{ marginBottom: 13, marginTop: 15 }}>
           <span style={{ marginLeft: 28 }}>
             <FontAwesomeIcon
-              icon={faMagicWandSparkles}
+              // icon={faMagicWandSparkles}
+              icon={faNewspaper}
               style={{ marginRight: 7, fontSize: 18 }}
             />
             {!collapsed && (
@@ -90,7 +93,8 @@ const SidebarTeacherComponent = ({ collapsed, toggleCollapsed }) => {
         <div style={{ marginBottom: 17, marginTop: 15 }}>
           <span style={{ marginLeft: 28 }}>
             <FontAwesomeIcon
-              icon={faMagicWandSparkles}
+              // icon={faMagicWandSparkles}
+              icon={faWindowRestore}
               style={{ marginRight: 7, fontSize: 18 }}
             />
             {!collapsed && <span style={{ fontSize: 15 }}>Dự án xưởng</span>}

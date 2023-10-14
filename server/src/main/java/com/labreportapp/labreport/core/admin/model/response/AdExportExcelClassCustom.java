@@ -22,7 +22,15 @@ public class AdExportExcelClassCustom {
 
     Long startTime;
 
-    Integer classPeriod;
+    String classPeriod;
+
+    Integer startHour;
+
+    Integer startMinute;
+
+    Integer endHour;
+
+    Integer endMinute;
 
     Integer classSize;
 

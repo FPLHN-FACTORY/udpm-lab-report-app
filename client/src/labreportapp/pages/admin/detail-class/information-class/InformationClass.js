@@ -18,6 +18,7 @@ import LoadingIndicator from "../../../../helper/loading";
 import LoadingIndicatorNoOverlay from "../../../../helper/loadingNoOverlay";
 import { toast } from "react-toastify";
 import ModalSentStudentAdmin from "./ModalSentStudentAdmin";
+import { convertHourAndMinuteToString } from "../../../../helper/util.helper";
 
 const InformationClass = () => {
   const { id } = useParams();
@@ -616,20 +617,42 @@ const InformationClass = () => {
                 className="group-info-item"
                 style={{ marginTop: "13px", marginBottom: "15px" }}
               >
-                Tên giảng viên: &nbsp;{classDetail.teacherName}
+                Tên giảng viên: &nbsp;
+                {classDetail.teacherName != null
+                  ? classDetail.teacherName
+                  : "Chưa có"}
               </span>
               <span
                 className="group-info-item"
                 style={{ marginTop: "13px", marginBottom: "15px" }}
               >
-                Tài khoản giảng viên: &nbsp;{classDetail.teacherUserName}
+                Tài khoản giảng viên: &nbsp;
+                {classDetail.teacherUserName != null
+                  ? classDetail.teacherUserName
+                  : "Chưa có"}
               </span>
-              <span
-                className="group-info-item"
-                style={{ marginTop: "13px", marginBottom: "15px" }}
-              >
-                Ca học: &nbsp; {classDetail.classPeriod + 1}
-              </span>
+              {classDetail.classPeriod == null && (
+                <span
+                  className="group-info-item"
+                  style={{ marginTop: "13px", marginBottom: "15px" }}
+                >
+                  Ca học: &nbsp; Chưa có
+                </span>
+              )}
+              {classDetail.classPeriod != null && (
+                <span
+                  className="group-info-item"
+                  style={{ marginTop: "13px", marginBottom: "15px" }}
+                >
+                  Ca học: &nbsp; {classDetail.classPeriod} -{" "}
+                  {convertHourAndMinuteToString(
+                    classDetail.startHour,
+                    classDetail.startMinute,
+                    classDetail.endHour,
+                    classDetail.endMinute
+                  )}
+                </span>
+              )}
               <span
                 className="group-info-item"
                 style={{ marginTop: "13px", marginBottom: "15px" }}

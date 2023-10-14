@@ -21,7 +21,17 @@ public class AdMeetingCustom {
 
     private Long meetingDate;
 
-    private Integer meetingPeriod;
+    private String meetingPeriodId;
+
+    private String nameMeetingPeriod;
+
+    private Integer startHour;
+
+    private Integer startMinute;
+
+    private Integer endHour;
+
+    private Integer endMinute;
 
     private Integer typeMeeting;
 

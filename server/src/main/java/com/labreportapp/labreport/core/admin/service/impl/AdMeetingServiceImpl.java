@@ -9,12 +9,14 @@ import com.labreportapp.labreport.core.admin.model.response.AdMeetingCustom;
 import com.labreportapp.labreport.core.admin.model.response.AdMeetingResponse;
 import com.labreportapp.labreport.core.admin.repository.AdActivityRepository;
 import com.labreportapp.labreport.core.admin.repository.AdClassRepository;
+import com.labreportapp.labreport.core.admin.repository.AdMeetingPeriodRepository;
 import com.labreportapp.labreport.core.admin.repository.AdMeetingRepository;
 import com.labreportapp.labreport.core.admin.service.AdMeetingService;
 import com.labreportapp.labreport.core.common.response.SimpleResponse;
 import com.labreportapp.labreport.entity.Activity;
 import com.labreportapp.labreport.entity.Class;
 import com.labreportapp.labreport.entity.Meeting;
+import com.labreportapp.labreport.entity.MeetingPeriod;
 import com.labreportapp.labreport.infrastructure.constant.StatusMeeting;
 import com.labreportapp.labreport.infrastructure.constant.TypeMeeting;
 import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
@@ -42,6 +44,9 @@ public class AdMeetingServiceImpl implements AdMeetingService {
     private AdMeetingRepository adMeetingRepository;
 
     @Autowired
+    private AdMeetingPeriodRepository adMeetingPeriodRepository;
+
+    @Autowired
     private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
 
     @Autowired
@@ -64,7 +69,12 @@ public class AdMeetingServiceImpl implements AdMeetingService {
             AdMeetingCustom adMeetingCustom = new AdMeetingCustom();
             adMeetingCustom.setId(res.getId());
             adMeetingCustom.setMeetingDate(res.getMeetingDate());
-            adMeetingCustom.setMeetingPeriod(res.getMeetingPeriod());
+            adMeetingCustom.setMeetingPeriodId(res.getMeetingPeriodId());
+            adMeetingCustom.setNameMeetingPeriod(res.getNameMeetingPeriod());
+            adMeetingCustom.setStartHour(res.getStartHour());
+            adMeetingCustom.setStartMinute(res.getStartMinute());
+            adMeetingCustom.setEndHour(res.getEndHour());
+            adMeetingCustom.setEndMinute(res.getEndMinute());
             adMeetingCustom.setTypeMeeting(res.getTypeMeeting());
             adMeetingCustom.setSoDiemDanh(res.getSoDiemDanh());
             adMeetingCustom.setAddress(res.getAddress());
@@ -98,7 +108,11 @@ public class AdMeetingServiceImpl implements AdMeetingService {
         meeting.setName("Buổi học");
         meeting.setMeetingDate(request.getMeetingDate());
         meeting.setTypeMeeting(TypeMeeting.values()[request.getTypeMeeting()]);
-       // meeting.setMeetingPeriod(MeetingPeriod.values()[request.getMeetingPeriod()]);
+        MeetingPeriod meetingPeriodFind = null;
+        if (request.getMeetingPeriod() != null) {
+            meetingPeriodFind = adMeetingPeriodRepository.findById(request.getMeetingPeriod()).get();
+            meeting.setMeetingPeriod(meetingPeriodFind.getId());
+        }
         meeting.setAddress(request.getAddress());
         meeting.setClassId(request.getClassId());
         meeting.setStatusMeeting(StatusMeeting.BUOI_HOC);
@@ -113,7 +127,14 @@ public class AdMeetingServiceImpl implements AdMeetingService {
         AdMeetingCustom adMeetingCustom = new AdMeetingCustom();
         adMeetingCustom.setId(meetingNew.getId());
         adMeetingCustom.setMeetingDate(meetingNew.getMeetingDate());
-        adMeetingCustom.setMeetingPeriod(request.getMeetingPeriod());
+        if (meetingPeriodFind != null) {
+            adMeetingCustom.setMeetingPeriodId(meetingPeriodFind.getId());
+            adMeetingCustom.setNameMeetingPeriod(meetingPeriodFind.getName());
+            adMeetingCustom.setStartHour(meetingPeriodFind.getStartHour());
+            adMeetingCustom.setStartMinute(meetingPeriodFind.getStartMinute());
+            adMeetingCustom.setEndHour(meetingPeriodFind.getEndHour());
+            adMeetingCustom.setEndMinute(meetingPeriodFind.getEndMinute());
+        }
         adMeetingCustom.setTypeMeeting(meetingNew.getTypeMeeting() == TypeMeeting.ONLINE ? 0 : 1);
         adMeetingCustom.setDescriptions(meetingNew.getDescriptions());
         adMeetingCustom.setName(meetingNew.getName());
@@ -134,7 +155,8 @@ public class AdMeetingServiceImpl implements AdMeetingService {
         }
         meetingFind.get().setMeetingDate(request.getMeetingDate());
         meetingFind.get().setTypeMeeting(TypeMeeting.values()[request.getTypeMeeting()]);
-        //meetingFind.get().setMeetingPeriod(MeetingPeriod.values()[request.getMeetingPeriod()]);
+        MeetingPeriod meetingPeriodFind = adMeetingPeriodRepository.findById(request.getMeetingPeriod()).get();
+        meetingFind.get().setMeetingPeriod(meetingPeriodFind.getId());
         meetingFind.get().setAddress(request.getAddress());
         meetingFind.get().setDescriptions(request.getDescriptions());
         SimpleResponse simple = null;
@@ -147,7 +169,12 @@ public class AdMeetingServiceImpl implements AdMeetingService {
         AdMeetingCustom adMeetingCustom = new AdMeetingCustom();
         adMeetingCustom.setId(meetingNew.getId());
         adMeetingCustom.setMeetingDate(meetingNew.getMeetingDate());
-        adMeetingCustom.setMeetingPeriod(request.getMeetingPeriod());
+        adMeetingCustom.setMeetingPeriodId(request.getMeetingPeriod());
+        adMeetingCustom.setNameMeetingPeriod(meetingPeriodFind.getName());
+        adMeetingCustom.setStartHour(meetingPeriodFind.getStartHour());
+        adMeetingCustom.setStartMinute(meetingPeriodFind.getStartMinute());
+        adMeetingCustom.setEndHour(meetingPeriodFind.getEndHour());
+        adMeetingCustom.setEndMinute(meetingPeriodFind.getEndMinute());
         adMeetingCustom.setTypeMeeting(meetingNew.getTypeMeeting() == TypeMeeting.ONLINE ? 0 : 1);
         adMeetingCustom.setDescriptions(meetingNew.getDescriptions());
         adMeetingCustom.setName(meetingNew.getName());
@@ -205,10 +232,14 @@ public class AdMeetingServiceImpl implements AdMeetingService {
             }
             List<Meeting> listMeeting = new ArrayList<>();
             Long meetingDateInMillis = request.getMeetingDate();
+            MeetingPeriod meetingPeriodFind = null;
+            if (request.getMeetingPeriod() != null) {
+                meetingPeriodFind = adMeetingPeriodRepository.findById(request.getMeetingPeriod()).get();
+            }
             for (int i = 0; i < request.getNumberMeeting(); i++) {
                 Meeting meeting = new Meeting();
                 meeting.setStatusMeeting(StatusMeeting.BUOI_HOC);
-              //  meeting.setMeetingPeriod(MeetingPeriod.values()[request.getMeetingPeriod()]);
+                meeting.setMeetingPeriod(meetingPeriodFind.getId());
                 meeting.setMeetingDate(meetingDateInMillis);
                 meeting.setTypeMeeting(TypeMeeting.values()[request.getTypeMeeting()]);
                 if (request.getTeacherId() != null && !request.getTeacherId().equals("")) {
@@ -241,7 +272,16 @@ public class AdMeetingServiceImpl implements AdMeetingService {
         adDetailMeetingResponse.setName(meeting.getName());
         adDetailMeetingResponse.setMeetingDate(meeting.getMeetingDate());
         adDetailMeetingResponse.setStatusMeeting(meeting.getStatusMeeting());
-        adDetailMeetingResponse.setMeetingPeriod(meeting.getMeetingPeriod());
+        MeetingPeriod meetingPeriodFind = null;
+        if(meeting.getMeetingPeriod() != null) {
+            meetingPeriodFind = adMeetingPeriodRepository.findById(meeting.getMeetingPeriod()).get();
+            adDetailMeetingResponse.setNameMeetingPeriod(meetingPeriodFind.getName());
+            adDetailMeetingResponse.setStartHour(meetingPeriodFind.getStartHour());
+            adDetailMeetingResponse.setStartMinute(meetingPeriodFind.getStartMinute());
+            adDetailMeetingResponse.setEndHour(meetingPeriodFind.getEndHour());
+            adDetailMeetingResponse.setEndMinute(meetingPeriodFind.getEndMinute());
+        }
+        adDetailMeetingResponse.setMeetingPeriodId(meeting.getMeetingPeriod());
         adDetailMeetingResponse.setTypeMeeting(meeting.getTypeMeeting());
         adDetailMeetingResponse.setAddress(meeting.getAddress());
         adDetailMeetingResponse.setDescriptions(meeting.getDescriptions());

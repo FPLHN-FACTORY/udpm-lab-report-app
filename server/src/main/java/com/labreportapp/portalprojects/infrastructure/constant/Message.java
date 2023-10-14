@@ -79,7 +79,7 @@ public enum Message {
     MEETING_EDIT_ATTENDANCE_FAILD(PropertiesReader.getProperty(PropertyKeys.MEETING_EDIT_ATTENDANCE_FAILD)),
     ROLE_USER_CHANGE(PropertiesReader.getProperty(PropertyKeys.ROLE_USER_CHANGE)),
     INVALID_TOKEN(PropertiesReader.getProperty(PropertyKeys.INVALID_TOKEN)),
-
+    MEETING_PERIOD_NOT_EXITS(PropertiesReader.getProperty(PropertyKeys.MEETING_PERIOD_NOT_EXITS)),
     NAME_IS_EMPTY(PropertiesReader.getProperty(PropertyKeys.NAME_IS_EMPTY));
     private String message;
 

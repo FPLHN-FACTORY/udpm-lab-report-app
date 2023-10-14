@@ -9,12 +9,13 @@ import { useAppDispatch, useAppSelector } from "../../../../../app/hook";
 import { GetAdTeacher } from "../../../../../app/admin/AdTeacherSlice.reducer";
 import moment from "moment";
 import { MeetingManagementAPI } from "../../../../../api/admin/meeting-management/MeetingManagementAPI";
-import { convertMeetingPeriodToTime } from "../../../../../helper/util.helper";
+import { convertHourAndMinuteToString, convertMeetingPeriodToTime } from "../../../../../helper/util.helper";
+import { GetAdMeetingPeriod } from "../../../../../app/admin/AdMeetingPeriodSlice.reducer";
 
 const { Option } = Select;
 
 const ModalCreateMeetingAuto = ({ visible, onCancel, fetchData }) => {
-  const [meetingPeriod, setMeetingPeriod] = useState("0");
+  const [meetingPeriod, setMeetingPeriod] = useState("");
   const [typeMeeting, setTypeMeeting] = useState("0");
   const [errorTypeMeeting, setErrorTypeMeeting] = useState("");
   const [meetingDate, setMeetingDate] = useState("");
@@ -40,7 +41,7 @@ const ModalCreateMeetingAuto = ({ visible, onCancel, fetchData }) => {
   };
 
   useEffect(() => {
-    setMeetingPeriod("0");
+    setMeetingPeriod("");
     setTypeMeeting("0");
     setErrorTypeMeeting("");
     setMeetingDate("");
@@ -112,7 +113,7 @@ const ModalCreateMeetingAuto = ({ visible, onCancel, fetchData }) => {
     if (check === 0) {
       let obj = {
         meetingDate: moment(meetingDate, "YYYY-MM-DD").valueOf(),
-        meetingPeriod: parseInt(meetingPeriod),
+        meetingPeriod: meetingPeriod,
         typeMeeting: parseInt(typeMeeting),
         classId: id,
         teacherId: selectedItemsPerson,
@@ -125,6 +126,9 @@ const ModalCreateMeetingAuto = ({ visible, onCancel, fetchData }) => {
       });
     }
   };
+
+  const dataMeetingPeriod = useAppSelector(GetAdMeetingPeriod);
+
   return (
     <>
       <Modal
@@ -167,27 +171,20 @@ const ModalCreateMeetingAuto = ({ visible, onCancel, fetchData }) => {
                 }}
                 style={{ width: "100%" }}
               >
-                <Option value="0">
-                  Ca 1 ({"" + convertMeetingPeriodToTime(0)})
-                </Option>
-                <Option value="1">
-                  Ca 2 ({"" + convertMeetingPeriodToTime(1)})
-                </Option>
-                <Option value="2">
-                  Ca 3 ({"" + convertMeetingPeriodToTime(2)})
-                </Option>
-                <Option value="3">
-                  Ca 4 ({"" + convertMeetingPeriodToTime(3)})
-                </Option>
-                <Option value="4">
-                  Ca 5 ({"" + convertMeetingPeriodToTime(4)})
-                </Option>
-                <Option value="5">
-                  Ca 6 ({"" + convertMeetingPeriodToTime(5)})
-                </Option>
-                <Option value="6">
-                  Ca 7 ({"" + convertMeetingPeriodToTime(6)})
-                </Option>
+              <Option value="">Chọn ca học dự kiến</Option>
+              {dataMeetingPeriod.map((item) => {
+                return (
+                  <Option value={item.id} key={item.id}>
+                    {item.name} -{" "}
+                    {convertHourAndMinuteToString(
+                      item.startHour,
+                      item.startMinute,
+                      item.endHour,
+                      item.endMinute
+                    )}
+                  </Option>
+                );
+              })}
               </Select>{" "}
               <span style={{ color: "red" }}>{errorMeetingPeriod}</span>
             </Col>

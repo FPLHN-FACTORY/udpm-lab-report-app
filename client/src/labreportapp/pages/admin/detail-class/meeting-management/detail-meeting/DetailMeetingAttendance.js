@@ -12,6 +12,7 @@ import { MeetingManagementAPI } from "../../../../../api/admin/meeting-managemen
 import { useEffect, useState } from "react";
 import { convertLongToDate } from "../../../../../helper/convertDate";
 import {
+  convertHourAndMinuteToString,
   convertMeetingPeriodToNumber,
   convertMeetingPeriodToTime,
 } from "../../../../../helper/util.helper";
@@ -253,13 +254,13 @@ const DetailMeetingAttendance = () => {
                   }}
                 >
                   Thời gian: {convertLongToDate(meeting.meetingDate)} - Ca:
-                  {" " +
-                    parseInt(
-                      convertMeetingPeriodToNumber(meeting.meetingPeriod) + 1
-                    )}{" "}
+                  {" " + meeting.nameMeetingPeriod}{" "}
                   {" (" +
-                    convertMeetingPeriodToTime(
-                      convertMeetingPeriodToNumber(meeting.meetingPeriod)
+                    convertHourAndMinuteToString(
+                      meeting.startHour,
+                      meeting.startMinute,
+                      meeting.endHour,
+                      meeting.endMinute
                     ) +
                     ")"}
                 </div>
@@ -306,10 +307,15 @@ const DetailMeetingAttendance = () => {
                       Ca học:{" "}
                       <span style={{ color: "red" }}>
                         {" "}
-                        {parseInt(
-                          convertMeetingPeriodToNumber(meeting.meetingPeriod) +
-                            1
-                        )}
+                        {" " + meeting.nameMeetingPeriod}{" "}
+                        {" (" +
+                          convertHourAndMinuteToString(
+                            meeting.startHour,
+                            meeting.startMinute,
+                            meeting.endHour,
+                            meeting.endMinute
+                          ) +
+                          ")"}
                       </span>
                     </div>
                   </Col>

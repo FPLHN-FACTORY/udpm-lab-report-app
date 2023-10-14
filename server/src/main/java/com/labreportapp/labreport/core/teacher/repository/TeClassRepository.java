@@ -73,7 +73,8 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
                 c.id as id,
                 c.start_time as start_time,
                 c.password as password,
-                mp.name as class_period,
+                mp.name as class_period, mp.start_hour as start_hour, mp.start_minute as start_minute,
+                mp.end_hour as end_hour, mp.end_minute as end_minute,                                        
                 c.class_size as class_size,
                 c.teacher_id as teacher_id,
                 c.activity_id as activity_id,
@@ -99,7 +100,7 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
               FROM activity a
             JOIN level l ON l.id = a.level_id
             JOIN class c ON c.activity_id = a.id
-              JOIN meeting_period mp ON c.class_period = mp.id 
+            JOIN meeting_period mp ON c.class_period = mp.id 
             JOIN semester s ON s.id = a.semester_id
             WHERE DATE(FROM_UNIXTIME(c.start_time / 1000)) <= CURDATE() 
                 AND c.class_size + :#{#req.countStudent} <= :#{#size}

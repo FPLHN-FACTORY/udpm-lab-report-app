@@ -245,7 +245,7 @@ const TeacherAttendanceClass = () => {
                   <br />
                 </div>
               </div>
-              {data !== null ? (
+              {data !== null && column !== null ? (
                 <table
                   className="custom-table-teacher"
                   style={{
@@ -305,7 +305,10 @@ const TeacherAttendanceClass = () => {
                                 );
                               })}
                             <td>
-                              {parseFloat(countAbsent / countLesson) * 100}%
+                              {(
+                                parseFloat(countAbsent / countLesson) * 100
+                              ).toFixed(2)}
+                              %
                             </td>
                             <td>{countAbsent + `/` + countLesson}</td>
                             <td>

@@ -28,9 +28,12 @@ public interface TeAttendanceRepository extends JpaRepository<Attendance, String
             a.notes as notes,
             a.student_id as student_id,
             a.meeting_id as meeting_id,
-            m.meeting_date as meeting_date
+            m.meeting_date as meeting_date,
+            mp.name as meeting_period, mp.start_hour as start_hour, mp.start_minute as start_minute ,
+            mp.end_hour as end_hour, mp.end_minute as end_minute
             FROM attendance a
             JOIN meeting m ON m.id = a.meeting_id
+            JOIN meeting_period mp ON mp.id = m.meeting_period
             WHERE a.meeting_id = :#{#idMeeting}
             """, nativeQuery = true)
     List<TeAttendanceResponse> findListAttendanceByIdMeeting(@Param("idMeeting") String idMeeting);
@@ -86,7 +89,7 @@ public interface TeAttendanceRepository extends JpaRepository<Attendance, String
             AND st.class_id = :#{#req.idClass}
             GROUP BY m.id,m.name, m.meeting_date, mp.name, mp.start_hour, mp.start_minute, mp.end_hour, mp.end_minute,
             m.type_meeting, m.teacher_id, a.status, a.notes
-            ORDER BY m.meeting_date ASC 
+            ORDER BY m.meeting_date ASC, mp.name ASC
               """, countQuery = """
              SELECT COUNT(DISTINCT m.id)
                         FROM attendance a

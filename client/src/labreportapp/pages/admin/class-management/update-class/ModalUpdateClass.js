@@ -13,6 +13,8 @@ import { CreateClass } from "../../../../app/admin/ClassManager.reducer";
 import { GetAdTeacher } from "../../../../app/admin/AdTeacherSlice.reducer";
 import { parseInt } from "lodash";
 import LoadingIndicatorNoOverlay from "../../../../helper/loadingNoOverlay";
+import { GetAdMeetingPeriod } from "../../../../app/admin/AdMeetingPeriodSlice.reducer";
+import { convertHourAndMinuteToString } from "../../../../helper/util.helper";
 
 const { Option } = Select;
 
@@ -101,9 +103,9 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
             );
             setCode(respone.data.data.code);
             setClassPeriod(
-              respone.data.data.classPeriod == null
+              respone.data.data.classPeriodId == null
                 ? ""
-                : respone.data.data.classPeriod + ""
+                : respone.data.data.classPeriodId + ""
             );
             setStatusTeacherEdit(respone.data.data.statusTeacherEdit + "");
             setLoading(false);
@@ -194,6 +196,8 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
   const filterTeacherOptions = (input, option) => {
     return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
   };
+
+  const dataMeetingPeriod = useAppSelector(GetAdMeetingPeriod);
 
   return (
     <>
@@ -304,10 +308,16 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
                   onChange={handleSelectChange}
                 >
                   <Option value="">Chọn ca học dự kiến</Option>
-                  {listClassPeriod.map((value) => {
+                  {dataMeetingPeriod.map((item) => {
                     return (
-                      <Option value={value} key={value}>
-                        {parseInt(value) + parseInt(1)}
+                      <Option value={item.id} key={item.id}>
+                        {item.name} -{" "}
+                        {convertHourAndMinuteToString(
+                          item.startHour,
+                          item.startMinute,
+                          item.endHour,
+                          item.endMinute
+                        )}
                       </Option>
                     );
                   })}

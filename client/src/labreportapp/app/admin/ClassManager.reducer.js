@@ -17,7 +17,11 @@ const adClassManagementSlice = createSlice({
         stt: 1,
         id: data.id,
         code: data.code,
-        classPeriod: data.classPeriod,
+        nameClassPeriod: data.classPeriod,
+        startHour: data.startHour,
+        startMinute: data.startMinute,
+        endHour: data.endHour,
+        endMinute: data.endMinute,
         classSize: data.classSize,
         startTime: data.startTime,
         teacherId: data.teacherId,
@@ -40,7 +44,11 @@ const adClassManagementSlice = createSlice({
       state.forEach((item) => {
         if (item.id === data.id) {
           item.code = data.code;
-          item.classPeriod = data.classPeriod;
+          item.nameClassPeriod = data.classPeriod;
+          item.startHour= data.startHour;
+          item.startMinute = data.startMinute;
+          item.endHour = data.endHour;
+          item.endMinute = data.endMinute;
           item.classSize = data.classSize;
           item.startTime = data.startTime;
           item.teacherId = data.teacherId;

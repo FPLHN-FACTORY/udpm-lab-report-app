@@ -1,6 +1,7 @@
 package com.labreportapp.labreport.core.admin.excel;
 
 import com.labreportapp.labreport.core.admin.model.response.AdExportExcelClassCustom;
+import com.labreportapp.labreport.util.DateConverter;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -88,11 +89,12 @@ public class AdExportExcelClass {
 
                 Cell empClassPeriodCell = empDataRow.createCell(3);
                 empClassPeriodCell.setCellStyle(cellStyle);
-                empClassPeriodCell.setCellValue(classResponse.getClassPeriod() != null ? String.valueOf(classResponse.getClassPeriod() + 1) : "");
+                empClassPeriodCell.setCellValue(classResponse.getClassPeriod() != null ? classResponse.getClassPeriod() : "");
 
-//                Cell empThoiGianCell = empDataRow.createCell(4);
-//                empThoiGianCell.setCellStyle(cellStyle);
-//                empThoiGianCell.setCellValue(LabReportUtils.convertMeetingPeriodToTime(classResponse.getClassPeriod() != null ? classResponse.getClassPeriod() : -1));
+                Cell empTimeCell = empDataRow.createCell(4);
+                empTimeCell.setCellStyle(cellStyle);
+                empTimeCell.setCellValue(classResponse.getStartHour() != null ? DateConverter.convertHourAndMinuteToString(classResponse.getStartHour(),
+                        classResponse.getStartMinute(), classResponse.getEndHour(), classResponse.getEndMinute()) : "");
 
                 Cell empSiSoCell = empDataRow.createCell(5);
                 empSiSoCell.setCellStyle(cellStyle);

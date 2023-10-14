@@ -20,7 +20,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBook, faHome } from "@fortawesome/free-solid-svg-icons";
 import { SearchOutlined } from "@ant-design/icons";
-import { convertCheckAttended } from "../../../../helper/util.helper";
+import { checkInToAttend } from "../../../../helper/util.helper";
 
 const TeacherAttendanceMeeting = () => {
   const dispatch = useAppDispatch();
@@ -122,6 +122,7 @@ const TeacherAttendanceMeeting = () => {
       );
     } catch (error) {}
   };
+
   const featchMeetingCheckDate = async (id) => {
     setLoading(false);
     try {
@@ -153,7 +154,16 @@ const TeacherAttendanceMeeting = () => {
         idMeeting: idMeeting,
         notes: notes.trim(),
       };
-      let checkTime = convertCheckAttended(classFind.meetingPeriod);
+      let checkTime = false;
+      if (meeting !== null) {
+        checkTime = checkInToAttend(
+          meeting.meetingDate,
+          meeting.startHour,
+          meeting.startMinute,
+          meeting.endHour,
+          meeting.endMinute
+        );
+      }
       if (!checkTime) {
         toast.warning(
           "Không còn trong ca dạy, không thể xem hoặc sửa điểm danh !"
@@ -170,8 +180,16 @@ const TeacherAttendanceMeeting = () => {
         toast.success(respone.data.data.message, {
           className: className,
         });
+        setTimeout(() => {
+          navigate("/teacher/schedule-today");
+        }, 2000);
       });
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+      setTimeout(() => {
+        navigate("/teacher/schedule-today");
+      }, 2000);
+    }
   };
   const handleChangeNotes = (id, value) => {
     let dataUpdate = data.map((item) => {

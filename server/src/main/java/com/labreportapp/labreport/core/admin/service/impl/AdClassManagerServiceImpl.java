@@ -18,6 +18,7 @@ import com.labreportapp.labreport.core.admin.model.response.AdSemesterAcResponse
 import com.labreportapp.labreport.core.admin.repository.AdActivityRepository;
 import com.labreportapp.labreport.core.admin.repository.AdClassConfigurationRepository;
 import com.labreportapp.labreport.core.admin.repository.AdClassRepository;
+import com.labreportapp.labreport.core.admin.repository.AdMeetingPeriodRepository;
 import com.labreportapp.labreport.core.admin.service.AdClassService;
 import com.labreportapp.labreport.core.common.base.ImportExcelResponse;
 import com.labreportapp.labreport.core.common.base.PageableObject;
@@ -26,8 +27,8 @@ import com.labreportapp.labreport.core.common.response.SimpleResponse;
 import com.labreportapp.labreport.entity.Activity;
 import com.labreportapp.labreport.entity.Class;
 import com.labreportapp.labreport.entity.ClassConfiguration;
+import com.labreportapp.labreport.entity.MeetingPeriod;
 import com.labreportapp.labreport.infrastructure.apiconstant.ActorConstants;
-import com.labreportapp.labreport.infrastructure.constant.ClassPeriod;
 import com.labreportapp.labreport.infrastructure.constant.StatusClass;
 import com.labreportapp.labreport.infrastructure.constant.StatusTeacherEdit;
 import com.labreportapp.labreport.repository.ActivityRepository;
@@ -99,6 +100,9 @@ public class AdClassManagerServiceImpl implements AdClassService {
     private ActivityRepository activityRepository;
 
     @Autowired
+    private AdMeetingPeriodRepository adMeetingPeriodRepository;
+
+    @Autowired
     private AdClassConfigurationRepository adClassConfigurationRepository;
 
     @Override
@@ -136,7 +140,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
         Class classNew = new Class();
         classNew.setCode(classHelper.genMaLopTheoHoatDong(request.getActivityId()));
         classNew.setClassSize(0);
-        classNew.setClassPeriod(null);//ClassPeriod.values()[Math.toIntExact(request.getClassPeriod())]
+        classNew.setClassPeriod(request.getClassPeriod());
         classNew.setPassword(RandomString.random());
         classNew.setStatusTeacherEdit(StatusTeacherEdit.values()[request.getStatusTeacherEdit()]);
         Optional<Activity> activityFind = adActivityRepository.findById(request.getActivityId());
@@ -152,7 +156,12 @@ public class AdClassManagerServiceImpl implements AdClassService {
         AdClassCustomResponse adClassCustomResponse = new AdClassCustomResponse();
         adClassCustomResponse.setId(classNew.getId());
         adClassCustomResponse.setClassSize(classNew.getClassSize());
-        adClassCustomResponse.setClassPeriod(request.getClassPeriod());
+        MeetingPeriod meetingPeriodFind = adMeetingPeriodRepository.findById(request.getClassPeriod()).get();
+        adClassCustomResponse.setClassPeriod(meetingPeriodFind.getName());
+        adClassCustomResponse.setStartHour(meetingPeriodFind.getStartHour());
+        adClassCustomResponse.setStartMinute(meetingPeriodFind.getStartMinute());
+        adClassCustomResponse.setEndHour(meetingPeriodFind.getEndHour());
+        adClassCustomResponse.setEndMinute(meetingPeriodFind.getEndMinute());
         adClassCustomResponse.setCode(classNew.getCode());
         adClassCustomResponse.setActivityName(activityFind.get().getName());
         adClassCustomResponse.setStartTime(classNew.getStartTime());
@@ -173,7 +182,11 @@ public class AdClassManagerServiceImpl implements AdClassService {
     public AdClassCustomResponse updateClass(@Valid AdCreateClassRequest request, String id) {
         Class classNew = repository.findById(id).get();
         classNew.setStartTime(request.getStartTime());
-       // classNew.setClassPeriod(ClassPeriod.values()[Math.toIntExact(request.getClassPeriod())]);
+        MeetingPeriod meetingPeriodFind = null;
+        if (request.getClassPeriod() != null) {
+            meetingPeriodFind = adMeetingPeriodRepository.findById(request.getClassPeriod()).get();
+            classNew.setClassPeriod(meetingPeriodFind.getId());
+        }
         classNew.setStatusTeacherEdit(StatusTeacherEdit.values()[request.getStatusTeacherEdit()]);
         Optional<Activity> activityFind = adActivityRepository.findById(request.getActivityId());
         if (!activityFind.isPresent()) {
@@ -187,7 +200,13 @@ public class AdClassManagerServiceImpl implements AdClassService {
         AdClassCustomResponse adClassCustomResponse = new AdClassCustomResponse();
         adClassCustomResponse.setId(classNew.getId());
         adClassCustomResponse.setClassSize(classNew.getClassSize());
-        adClassCustomResponse.setClassPeriod(request.getClassPeriod());
+        if (meetingPeriodFind != null) {
+            adClassCustomResponse.setStartHour(meetingPeriodFind.getStartHour());
+            adClassCustomResponse.setStartMinute(meetingPeriodFind.getStartMinute());
+            adClassCustomResponse.setEndHour(meetingPeriodFind.getEndHour());
+            adClassCustomResponse.setEndMinute(meetingPeriodFind.getEndMinute());
+            adClassCustomResponse.setClassPeriod(meetingPeriodFind.getName());
+        }
         adClassCustomResponse.setCode(classNew.getCode());
         adClassCustomResponse.setActivityName(activityFind.get().getName());
         adClassCustomResponse.setStartTime(classNew.getStartTime());
@@ -236,7 +255,11 @@ public class AdClassManagerServiceImpl implements AdClassService {
             AdListClassCustomResponse adListClassCustomResponse = new AdListClassCustomResponse();
             adListClassCustomResponse.setId(adClassResponse.getId());
             adListClassCustomResponse.setClassSize(adClassResponse.getClassSize());
-            adListClassCustomResponse.setClassPeriod(adClassResponse.getClassPeriod());
+            adListClassCustomResponse.setNameClassPeriod(adClassResponse.getNameClassPeriod());
+            adListClassCustomResponse.setStartHour(adClassResponse.getStartHour());
+            adListClassCustomResponse.setStartMinute(adClassResponse.getStartMinute());
+            adListClassCustomResponse.setEndHour(adClassResponse.getEndHour());
+            adListClassCustomResponse.setEndMinute(adClassResponse.getEndMinute());
             adListClassCustomResponse.setStartTime(adClassResponse.getStartTime());
             adListClassCustomResponse.setCode(adClassResponse.getCode());
             adListClassCustomResponse.setTeacherId(adClassResponse.getTeacherId());
@@ -268,9 +291,26 @@ public class AdClassManagerServiceImpl implements AdClassService {
 
     @Override
     public ByteArrayOutputStream exportExcelClass(HttpServletResponse response, final AdFindClassRequest request) {
+        String idSemesterCurrent = semesterHelper.getSemesterCurrent();
+        if (request.getIdSemester() == null) {
+            if (idSemesterCurrent != null) {
+                request.setIdSemester(idSemesterCurrent);
+                request.setIdActivity("");
+            } else {
+                request.setIdSemester("");
+            }
+        } else if (request.getIdSemester().equalsIgnoreCase("")) {
+            if (idSemesterCurrent != null) {
+                request.setIdSemester(idSemesterCurrent);
+                request.setIdActivity("");
+            } else {
+                request.setIdSemester("");
+            }
+        }
         ClassConfiguration classConfiguration = adClassConfigurationRepository.findAll().get(0);
         request.setValueClassSize(classConfiguration.getClassSizeMin());
         List<AdExportExcelClassResponse> listClassResponse = repository.findClassExportExcel(request);
+
         List<String> distinctTeacherIds = listClassResponse.stream()
                 .map(AdExportExcelClassResponse::getTeacherId)
                 .filter(Objects::nonNull)
@@ -286,6 +326,10 @@ public class AdClassManagerServiceImpl implements AdClassService {
                         AdExportExcelClassCustom adExportExcelClassCustom = new AdExportExcelClassCustom();
                         adExportExcelClassCustom.setStt(res.getStt());
                         adExportExcelClassCustom.setCode(res.getCode());
+                        adExportExcelClassCustom.setStartHour(res.getStartHour());
+                        adExportExcelClassCustom.setStartMinute(res.getStartMinute());
+                        adExportExcelClassCustom.setEndHour(res.getEndHour());
+                        adExportExcelClassCustom.setEndMinute(res.getEndMinute());
                         adExportExcelClassCustom.setClassPeriod(res.getClassPeriod());
                         adExportExcelClassCustom.setClassSize(res.getClassSize());
                         adExportExcelClassCustom.setNameActivity(res.getNameActivity());
@@ -300,6 +344,10 @@ public class AdClassManagerServiceImpl implements AdClassService {
                 AdExportExcelClassCustom adExportExcelClassCustom = new AdExportExcelClassCustom();
                 adExportExcelClassCustom.setStt(res.getStt());
                 adExportExcelClassCustom.setCode(res.getCode());
+                adExportExcelClassCustom.setStartHour(res.getStartHour());
+                adExportExcelClassCustom.setStartMinute(res.getStartMinute());
+                adExportExcelClassCustom.setEndHour(res.getEndHour());
+                adExportExcelClassCustom.setEndMinute(res.getEndMinute());
                 adExportExcelClassCustom.setClassPeriod(res.getClassPeriod());
                 adExportExcelClassCustom.setClassSize(res.getClassSize());
                 adExportExcelClassCustom.setNameActivity(res.getNameActivity());
@@ -313,12 +361,12 @@ public class AdClassManagerServiceImpl implements AdClassService {
 
     @Override
     public AdDetailClassCustomResponse adFindClassById(String id) {
-        Optional<AdDetailClassRespone> adDetailClassRespone = repository.adfindClassById(id);
-        if (!adDetailClassRespone.isPresent()) {
+        AdDetailClassRespone adDetailClassRespone = repository.adfindClassById(id);
+        if (adDetailClassRespone == null) {
             throw new RestApiException(Message.CLASS_NOT_EXISTS);
         }
         AdDetailClassCustomResponse customResponse = new AdDetailClassCustomResponse();
-        AdDetailClassRespone getOptional = adDetailClassRespone.get();
+        AdDetailClassRespone getOptional = adDetailClassRespone;
         SimpleResponse response = null;
         if (getOptional.getTeacherId() != null) {
             response = convertRequestCallApiIdentity.handleCallApiGetUserById(getOptional.getTeacherId());
@@ -326,6 +374,11 @@ public class AdClassManagerServiceImpl implements AdClassService {
         customResponse.setId(getOptional.getId());
         customResponse.setCode(getOptional.getCode());
         customResponse.setClassPeriod(getOptional.getClassPeriod());
+        customResponse.setClassPeriodId(getOptional.getClassPeriodId());
+        customResponse.setStartHour(getOptional.getStartHour());
+        customResponse.setStartMinute(getOptional.getStartMinute());
+        customResponse.setEndHour(getOptional.getEndHour());
+        customResponse.setEndMinute(getOptional.getEndMinute());
         customResponse.setStartTime(getOptional.getStartTime());
         customResponse.setPassWord(getOptional.getPassWord());
         customResponse.setClassSize(getOptional.getClassSize());
@@ -385,8 +438,10 @@ public class AdClassManagerServiceImpl implements AdClassService {
             List<AdImportExcelClassResponse> listClassImport = adImportExcelClass.importData(multipartFile);
             ConcurrentHashMap<String, SimpleResponse> mapGiangVien = new ConcurrentHashMap<>();
             ConcurrentHashMap<String, Class> mapClass = new ConcurrentHashMap<>();
+            ConcurrentHashMap<String, MeetingPeriod> mapMeetingPeriod = new ConcurrentHashMap<>();
             addDataInMapGiangVien(mapGiangVien);
             addDataInMapClass(mapClass, idSemester);
+            addDataInMapMeetingPeriod(mapMeetingPeriod);
             ConcurrentHashMap<String, Class> listClassUpdate = new ConcurrentHashMap<>();
             listClassImport.parallelStream().forEach(classExcel -> {
                 if (classExcel.getCode().isEmpty()) {
@@ -400,8 +455,14 @@ public class AdClassManagerServiceImpl implements AdClassService {
                     response.setMessage("Không tim thấy lớp học");
                     return;
                 }
-                if (classExcel.getClassPeriod() != null) {
-                    //classFind.setClassPeriod(ClassPeriod.values()[classExcel.getClassPeriod() - 1]);
+                if (!classExcel.getClassPeriod().equals("")) {
+                    MeetingPeriod meetingPeriodFind = mapMeetingPeriod.get(classExcel.getClassPeriod());
+                    if (meetingPeriodFind == null) {
+                        response.setStatus(false);
+                        response.setMessage("Không tim thấy ca học");
+                        return;
+                    }
+                    classFind.setClassPeriod(meetingPeriodFind.getId());
                 } else {
                     classFind.setClassPeriod(null);
                 }
@@ -450,6 +511,17 @@ public class AdClassManagerServiceImpl implements AdClassService {
     public void getALlPutMapClass(ConcurrentHashMap<String, Class> mapSimple, List<Class> listClass) {
         for (Class xx : listClass) {
             mapSimple.put(xx.getCode(), xx);
+        }
+    }
+
+    public void addDataInMapMeetingPeriod(ConcurrentHashMap<String, MeetingPeriod> mapAll) {
+        List<MeetingPeriod> classList = adMeetingPeriodRepository.findAll();
+        getALlPutMapMeetingPeriod(mapAll, classList);
+    }
+
+    public void getALlPutMapMeetingPeriod(ConcurrentHashMap<String, MeetingPeriod> mapSimple, List<MeetingPeriod> meetingPeriodList) {
+        for (MeetingPeriod xx : meetingPeriodList) {
+            mapSimple.put(xx.getName(), xx);
         }
     }
 }

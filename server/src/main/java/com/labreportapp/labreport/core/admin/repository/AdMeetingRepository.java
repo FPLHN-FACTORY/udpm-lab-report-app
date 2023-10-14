@@ -24,12 +24,13 @@ public interface AdMeetingRepository extends JpaRepository<Meeting, String> {
                 WHERE a.class_id = :idClass 
                 GROUP BY a.id
             )
-            SELECT a.id, a.name, a.meeting_date, mp.name,
+            SELECT a.id, a.name, a.meeting_date, mp.id AS meeting_period_id, mp.name AS name_meeting_period,
+            mp.start_hour, mp.start_minute, mp.end_hour, mp.end_minute,
             a.type_meeting, a.address, a.teacher_id, a.descriptions, 
             meetingAtten.so_diem_danh
             FROM meeting a
-              JOIN meeting_period mp ON mp.id = a.meeting_period
-             LEFT JOIN class b ON a.class_id = b.id
+            LEFT JOIN meeting_period mp ON mp.id = a.meeting_period
+            LEFT JOIN class b ON a.class_id = b.id
             LEFT JOIN MeetingAttendance meetingAtten ON meetingAtten.id = a.id
             WHERE b.id = :idClass ORDER BY a.meeting_date DESC, mp.name DESC
             """, nativeQuery = true)

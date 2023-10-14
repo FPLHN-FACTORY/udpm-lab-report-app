@@ -95,6 +95,10 @@ public class TeClassServiceImpl implements TeClassService {
             }
             objNew.setClassSize(item.getClassSize());
             objNew.setClassPeriod(item.getClassPeriod());
+            objNew.setStartHour(item.getStartHour());
+            objNew.setStartMinute(item.getStartMinute());
+            objNew.setEndHour(item.getEndHour());
+            objNew.setEndMinute(item.getEndMinute());
             return objNew;
         });
         return new PageableObject<>(pageNew);

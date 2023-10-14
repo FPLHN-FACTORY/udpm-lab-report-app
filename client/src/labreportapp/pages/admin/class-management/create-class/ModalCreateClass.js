@@ -10,6 +10,8 @@ import LoadingIndicator from "../../../../helper/loading";
 import { ClassAPI } from "../../../../api/admin/class-manager/ClassAPI.api";
 import { CreateClass } from "../../../../app/admin/ClassManager.reducer";
 import { GetAdTeacher } from "../../../../app/admin/AdTeacherSlice.reducer";
+import { GetAdMeetingPeriod } from "../../../../app/admin/AdMeetingPeriodSlice.reducer";
+import { convertHourAndMinuteToString } from "../../../../helper/util.helper";
 
 const { Option } = Select;
 
@@ -176,6 +178,8 @@ const ModalCreateProject = ({ visible, onCancel }) => {
     return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
   };
 
+  const dataMeetingPeriod = useAppSelector(GetAdMeetingPeriod);
+
   return (
     <>
       <Modal
@@ -280,10 +284,16 @@ const ModalCreateProject = ({ visible, onCancel }) => {
                   onChange={handleSelectChange}
                 >
                   <Option value="">Chọn ca học</Option>
-                  {listClassPeriod.map((value) => {
+                  {dataMeetingPeriod.map((item) => {
                     return (
-                      <Option value={value} key={value}>
-                        {parseInt(value) + 1}
+                      <Option value={item.id} key={item.id}>
+                        {item.name} -{" "}
+                        {convertHourAndMinuteToString(
+                          item.startHour,
+                          item.startMinute,
+                          item.endHour,
+                          item.endMinute
+                        )}
                       </Option>
                     );
                   })}

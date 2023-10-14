@@ -4,7 +4,38 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fe93e581-5589-4bad-ba6a-389fa82a0816" name="Default Changelist" comment="fix class_period(table class), meeting_period(table meeting) and show table all task , convert time two role student and teacher" />
+    <list default="true" id="fe93e581-5589-4bad-ba6a-389fa82a0816" name="Default Changelist" comment="fix class_period(table class), meeting_period(table meeting) and show table all task , convert time two role student and teacher">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/component/teacher/SidebarTeacher.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/component/teacher/SidebarTeacher.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/helper/util.helper.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/helper/util.helper.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/pages/admin/detail-class/information-class/ModalSentStudentAdmin.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/pages/admin/detail-class/information-class/ModalSentStudentAdmin.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/pages/teacher/my-class/attendance/TeacherAttendanceClass.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/pages/teacher/my-class/attendance/TeacherAttendanceClass.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/pages/teacher/my-class/attendance/detail-attendance-one-student/TeModalDetailOneStudent.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/pages/teacher/my-class/attendance/detail-attendance-one-student/TeModalDetailOneStudent.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/pages/teacher/my-class/meeting/team/TeamInMeeting.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/pages/teacher/my-class/meeting/team/TeamInMeeting.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/pages/teacher/my-class/meeting/team/collapse-team/CollapseTeam.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/pages/teacher/my-class/meeting/team/collapse-team/CollapseTeam.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/pages/teacher/my-class/meeting/team/collapse-team/styleCollapseTeam.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/pages/teacher/my-class/meeting/team/collapse-team/styleCollapseTeam.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/pages/teacher/my-class/point/table-point-student/TablePoint.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/pages/teacher/my-class/point/table-point-student/TablePoint.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/pages/teacher/my-class/students/StudentsInMyClass.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/pages/teacher/my-class/students/StudentsInMyClass.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/pages/teacher/my-class/students/modal-sent-student/ModalSentStudent.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/pages/teacher/my-class/students/modal-sent-student/ModalSentStudent.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/pages/teacher/schedule-today/TeacherScheduleToday.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/pages/teacher/schedule-today/TeacherScheduleToday.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/labreportapp/pages/teacher/schedule-today/attendance-meeting/TeacherAttendanceMeeting.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/labreportapp/pages/teacher/schedule-today/attendance-meeting/TeacherAttendanceMeeting.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/model/response/TeAttendanceResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/model/response/TeAttendanceResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/model/response/TeAttendanceStudentAllResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/model/response/TeAttendanceStudentAllResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/model/response/TeClassSentStudentRespone.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/model/response/TeClassSentStudentRespone.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/model/response/TeHomeWorkAndNoteMeetingResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/model/response/TeHomeWorkAndNoteMeetingResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/model/response/TeMeetingResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/model/response/TeMeetingResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/repository/TeAttendanceRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/repository/TeAttendanceRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/repository/TeClassRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/repository/TeClassRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/repository/TeMeetingRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/repository/TeMeetingRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/service/impl/TeAttendanceServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/service/impl/TeAttendanceServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/service/impl/TeClassServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/service/impl/TeClassServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/service/impl/TeMeetingServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/labreport/core/teacher/service/impl/TeMeetingServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/portalprojects/infrastructure/constant/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/portalprojects/infrastructure/constant/Message.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/portalprojects/infrastructure/constant/PropertyKeys.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapp/portalprojects/infrastructure/constant/PropertyKeys.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/labreportapptool/DBGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/labreportapptool/DBGenerator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/resources/messages.properties" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/resources/messages.properties" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -41,6 +72,10 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
   </component>
   <component name="RunManager">
@@ -89,6 +124,7 @@
       <workItem from="1697089991332" duration="297000" />
       <workItem from="1697187822102" duration="109000" />
       <workItem from="1697197690985" duration="130000" />
+      <workItem from="1697279417356" duration="1047000" />
     </task>
     <task id="LOCAL-00001" summary="update code merge login, pending">
       <created>1696288841421</created>

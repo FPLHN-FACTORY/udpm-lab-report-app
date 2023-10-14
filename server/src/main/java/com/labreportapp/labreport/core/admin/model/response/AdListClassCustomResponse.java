@@ -18,7 +18,15 @@ public class AdListClassCustomResponse {
 
     private Long startTime;
 
-    private Long classPeriod;
+    private String nameClassPeriod;
+
+    private Integer startHour;
+
+    private Integer startMinute;
+
+    private Integer endHour;
+
+    private Integer endMinute;
 
     private Integer classSize;
 

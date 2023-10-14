@@ -38,6 +38,19 @@ public interface TeHomeWorkAndNoteMeetingResponse {
     Long getMeetingDate();
 
     @Value("#{target.meeting_period}")
-    Integer getMeetingPeriod();
+    String getMeetingPeriod();
+
+    @Value("#{target.start_hour}")
+    Integer getStartHour();
+
+    @Value("#{target.start_minute}")
+    Integer getStartMinute();
+
+    @Value("#{target.end_hour}")
+    Integer getEndHour();
+
+    @Value("#{target.end_minute}")
+    Integer getEndMinute();
+
 
 }

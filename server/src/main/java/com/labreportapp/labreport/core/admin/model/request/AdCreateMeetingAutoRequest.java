@@ -15,8 +15,8 @@ public class AdCreateMeetingAutoRequest {
     @NotNull
     private Long meetingDate;
 
-    @NotNull
-    private Integer meetingPeriod;
+    @NotBlank
+    private String meetingPeriod;
 
     @NotNull
     private Integer typeMeeting;

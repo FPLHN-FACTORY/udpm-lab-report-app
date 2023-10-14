@@ -8,10 +8,12 @@ import { toast } from "react-toastify";
 import { MeetingManagementAPI } from "../../../../../api/admin/meeting-management/MeetingManagementAPI";
 import { UpdateMeeting } from "../../../../../app/admin/AdMeetingManagement.reducer";
 import {
+  convertHourAndMinuteToString,
   convertMeetingPeriodToNumber,
   convertMeetingPeriodToTime,
 } from "../../../../../helper/util.helper";
 import { GetAdTeacher } from "../../../../../app/admin/AdTeacherSlice.reducer";
+import { GetAdMeetingPeriod } from "../../../../../app/admin/AdMeetingPeriodSlice.reducer";
 
 const { Option } = Select;
 
@@ -30,7 +32,7 @@ const ModalUpdateMeeting = ({ item, visible, onCancel }) => {
     if (item != null) {
       setName(item.name);
       setTypeMeeting(item.typeMeeting + "");
-      setMeetingPeriod(item.meetingPeriod + "");
+      setMeetingPeriod(item.meetingPeriodId + "");
       setMeetingDate(moment(item.meetingDate).format("YYYY-MM-DD"));
       setAddress(item.address);
       setDescriptions(item.descriptions);
@@ -53,7 +55,7 @@ const ModalUpdateMeeting = ({ item, visible, onCancel }) => {
       let obj = {
         id: item.id,
         meetingDate: moment(meetingDate, "YYYY-MM-DD").valueOf(),
-        meetingPeriod: parseInt(meetingPeriod),
+        meetingPeriod: meetingPeriod,
         typeMeeting: parseInt(typeMeeting),
         address: address,
         descriptions: descriptions,
@@ -80,6 +82,7 @@ const ModalUpdateMeeting = ({ item, visible, onCancel }) => {
     return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
   };
 
+  const dataMeetingPeriod = useAppSelector(GetAdMeetingPeriod);
   return (
     <>
       <Modal
@@ -128,27 +131,19 @@ const ModalUpdateMeeting = ({ item, visible, onCancel }) => {
                   }}
                   style={{ width: "100%" }}
                 >
-                  <Option value="0">
-                    Ca 1 ({"" + convertMeetingPeriodToTime(0)})
-                  </Option>
-                  <Option value="1">
-                    Ca 2 ({"" + convertMeetingPeriodToTime(1)})
-                  </Option>
-                  <Option value="2">
-                    Ca 3 ({"" + convertMeetingPeriodToTime(2)})
-                  </Option>
-                  <Option value="3">
-                    Ca 4 ({"" + convertMeetingPeriodToTime(3)})
-                  </Option>
-                  <Option value="4">
-                    Ca 5 ({"" + convertMeetingPeriodToTime(4)})
-                  </Option>
-                  <Option value="5">
-                    Ca 6 ({"" + convertMeetingPeriodToTime(5)})
-                  </Option>
-                  <Option value="6">
-                    Ca 7 ({"" + convertMeetingPeriodToTime(6)})
-                  </Option>
+                  {dataMeetingPeriod.map((item) => {
+                    return (
+                      <Option value={item.id} key={item.id}>
+                        {item.name} -{" "}
+                        {convertHourAndMinuteToString(
+                          item.startHour,
+                          item.startMinute,
+                          item.endHour,
+                          item.endMinute
+                        )}
+                      </Option>
+                    );
+                  })}
                 </Select>
               </Col>
               <Col span={12} style={{ padding: "5px" }}>

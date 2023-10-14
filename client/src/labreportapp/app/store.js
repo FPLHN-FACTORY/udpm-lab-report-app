@@ -41,6 +41,7 @@ import NotificationSliceReducer from "../../portalprojects/app/reducer/notificat
 import AdAttendanceDetailMeetingReducer from "./admin/AdAttendanceDetailMeeting.reducer";
 import UserCurrentReducer from "./common/UserCurrent.reducer";
 import StStudentClassesReducer from "./student/StStudentClasses.reducer";
+import AdMeetingPeriodSliceReducer from "./admin/AdMeetingPeriodSlice.reducer";
 
 export const store = configureStore({
   reducer: {
@@ -67,6 +68,7 @@ export const store = configureStore({
     adAttendanceDetailMeeting: AdAttendanceDetailMeetingReducer,
     adLevel: adLevelSliceReducer,
     StStudentClasses: StStudentClassesReducer,
+    adMeetingPeriodSlice: AdMeetingPeriodSliceReducer,
     ////
     board: boardSliceReducer,
     myProject: myProjectSliceReducer,

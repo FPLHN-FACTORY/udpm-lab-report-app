@@ -25,6 +25,9 @@ public interface TeMeetingResponse {
     @Value("#{target.type_meeting}")
     Integer getTypeMeeting();
 
+    @Value("#{target.id_meeting_period}")
+    String getIdMeetingPeriod();
+
     @Value("#{target.meeting_period}")
     String getMeetingPeriod();
 

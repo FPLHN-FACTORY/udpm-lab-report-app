@@ -17,7 +17,12 @@ const adMeetingManagementSlice = createSlice({
         id: data.id,
         name: data.name,
         meetingDate: data.meetingDate,
-        meetingPeriod: data.meetingPeriod,
+        meetingPeriodId: data.meetingPeriodId,
+        nameMeetingPeriod: data.nameMeetingPeriod,
+        startHour: data.startHour,
+        startMinute: data.startMinute,
+        endHour: data.endHour,
+        endMinute: data.endMinute,
         typeMeeting: data.typeMeeting,
         address: data.address,
         teacherId: data.teacherId,
@@ -44,7 +49,12 @@ const adMeetingManagementSlice = createSlice({
         if (item.id === data.id) {
           item.name = data.name;
           item.meetingDate = data.meetingDate;
-          item.meetingPeriod = data.meetingPeriod;
+          item.meetingPeriodId = data.meetingPeriodId;
+          item.nameMeetingPeriod = data.nameMeetingPeriod;
+          item.startHour = data.startHour;
+          item.startMinute = data.startMinute;
+          item.endHour = data.endHour;
+          item.endMinute = data.endMinute;
           item.typeMeeting = data.typeMeeting;
           item.address = data.address;
           item.descriptions = data.descriptions;
