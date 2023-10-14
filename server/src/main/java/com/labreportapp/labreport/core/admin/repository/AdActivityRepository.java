@@ -32,7 +32,7 @@ public interface AdActivityRepository extends ActivityRepository {
              WHERE  
              ( :#{#rep.name} IS NULL 
                 OR :#{#rep.name} LIKE '' 
-                OR act.name LIKE %:#{#rep.name}% )   
+                OR act.name LIKE %:#{#rep.name}% OR act.code LIKE %:#{#rep.name}% )   
                 AND ( :#{#rep.level} IS NULL  OR :#{#rep.level} LIKE ''  OR lv.id = :#{#rep.level} ) 
                 AND   ( :#{#rep.semesterId} IS NULL  OR :#{#rep.semesterId} LIKE '' OR s.id = :#{#rep.semesterId} )   
                 ORDER BY act.created_date DESC
@@ -41,7 +41,7 @@ public interface AdActivityRepository extends ActivityRepository {
             WHERE  
              ( :#{#rep.name} IS NULL 
                 OR :#{#rep.name} LIKE '' 
-                OR act.name LIKE %:#{#rep.name}% )   
+                OR act.name LIKE %:#{#rep.name}% OR act.code LIKE %:#{#rep.name}% )  
                 AND ( :#{#rep.level} IS NULL 
                 OR :#{#rep.level} LIKE '' 
                 OR lv.id = CAST(:#{#rep.level} AS SIGNED) ) AND ( :#{#rep.semesterId} IS NULL 

@@ -7,12 +7,14 @@ import { faRandom, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { UploadOutlined } from "@ant-design/icons";
 import { ClassAPI } from "../../../../api/admin/class-manager/ClassAPI.api";
 import { toast } from "react-toastify";
+import LoadingIndicatorNoOverlay from "../../../../helper/loadingNoOverlay";
 
 const { Option } = Select;
 
 const ModalImportClass = ({ visible, onCancel, fetchData }) => {
   const [selectedExcel, setSelectedExcel] = useState(null);
   const [errorSelectedExcel, setErrorSelectedExcel] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleExcelUpload = (info) => {
     setSelectedExcel(info.file.originFileObj);
@@ -46,8 +48,7 @@ const ModalImportClass = ({ visible, onCancel, fetchData }) => {
           setIdSemesterSearch(null);
         }
         setSemesterDataAll(listSemester.data);
-      } catch (error) {
-      }
+      } catch (error) {}
     };
     featchDataSemester();
   }, []);
@@ -71,6 +72,7 @@ const ModalImportClass = ({ visible, onCancel, fetchData }) => {
       setErrorSemester("");
     }
     if (check === 0) {
+      setLoading(true);
       const formData = new FormData();
       formData.append("multipartFile", selectedExcel);
       ClassAPI.importExcel(formData, idSemesterSeach).then(
@@ -82,6 +84,7 @@ const ModalImportClass = ({ visible, onCancel, fetchData }) => {
             onCancel();
             fetchData();
           }
+          setLoading(false);
         },
         (error) => {}
       );
@@ -90,6 +93,7 @@ const ModalImportClass = ({ visible, onCancel, fetchData }) => {
 
   return (
     <>
+      {loading && <LoadingIndicatorNoOverlay />}
       <Modal
         visible={visible}
         onCancel={onCancel}

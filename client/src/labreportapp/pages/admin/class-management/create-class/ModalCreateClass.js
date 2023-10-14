@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, Row, Col, Input, Button, Select } from "antd";
+import { Modal, Row, Col, Input, Button, Select, message } from "antd";
 import "./styleCreateClass.css";
 import { useEffect, useState } from "react";
 import moment from "moment";
@@ -12,13 +12,14 @@ import { CreateClass } from "../../../../app/admin/ClassManager.reducer";
 import { GetAdTeacher } from "../../../../app/admin/AdTeacherSlice.reducer";
 import { GetAdMeetingPeriod } from "../../../../app/admin/AdMeetingPeriodSlice.reducer";
 import { convertHourAndMinuteToString } from "../../../../helper/util.helper";
+import LoadingIndicatorNoOverlay from "../../../../helper/loadingNoOverlay";
 
 const { Option } = Select;
 
 const ModalCreateProject = ({ visible, onCancel }) => {
   const [idSemesterSeach, setIdSemesterSearch] = useState("");
   const [semesterDataAll, setSemesterDataAll] = useState([]); // Dữ liệu semester
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
   const [idActivitiSearch, setIdActivitiSearch] = useState("");
   const [activityDataAll, setActivityDataAll] = useState([]); // Dữ liệu activity
@@ -76,7 +77,6 @@ const ModalCreateProject = ({ visible, onCancel }) => {
   useEffect(() => {
     const featchDataSemester = async () => {
       try {
-        setLoading(false);
         const responseClassAll = await ClassAPI.fetchAllSemester();
         const listSemester = responseClassAll.data;
         if (listSemester.data.length > 0) {
@@ -92,7 +92,6 @@ const ModalCreateProject = ({ visible, onCancel }) => {
           setIdSemesterSearch(null);
         }
         setSemesterDataAll(listSemester.data);
-        setLoading(true);
       } catch (error) {}
     };
     featchDataSemester();
@@ -149,6 +148,7 @@ const ModalCreateProject = ({ visible, onCancel }) => {
     }
 
     if (check === 0) {
+      setLoading(true);
       let obj = {
         classPeriod: classPeriod,
         startTime: moment(startTime, "YYYY-MM-DD").valueOf(),
@@ -161,6 +161,7 @@ const ModalCreateProject = ({ visible, onCancel }) => {
         (response) => {
           toast.success("Thêm thành công!");
           dispatch(CreateClass(response.data.data));
+          setLoading(false);
           cancelSuccess();
         },
         (error) => {}
@@ -182,6 +183,7 @@ const ModalCreateProject = ({ visible, onCancel }) => {
 
   return (
     <>
+      {loading && <LoadingIndicatorNoOverlay />}
       <Modal
         visible={visible}
         onCancel={onCancel}
