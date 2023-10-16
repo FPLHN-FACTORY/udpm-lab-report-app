@@ -40,6 +40,7 @@ public class AdGroupProjectServiceImpl implements AdGroupProjectService {
     @Override
     @Transactional
     public AdGroupProjectResponse updateGroupProject(@Valid AdUpdateGroupProjectRequest request) throws IOException {
+        System.out.println(request + " aaaaaaaaaaaaaaaa");
         Optional<GroupProject> groupProjectFind = adGroupProjectRepository.findById(request.getId());
         if (!groupProjectFind.isPresent()) {
             throw new RestApiException(Message.GROUP_PROJECT_NOT_EXISTS);

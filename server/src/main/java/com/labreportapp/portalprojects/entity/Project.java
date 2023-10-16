@@ -54,7 +54,10 @@ public class Project extends PrimaryEntity {
     @Column(nullable = false)
     private StatusProject statusProject;
 
-//    @Column(length = EntityProperties.LENGTH_ID)
-//    private String groupProjectId;
+    @Column(length = EntityProperties.LENGTH_ID)
+    private String groupProjectId;
+
+    @Column(length = EntityProperties.LENGTH_ID)
+    private String typeProjectId;
 
 }

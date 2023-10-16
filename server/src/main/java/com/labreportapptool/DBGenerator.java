@@ -421,8 +421,27 @@ public class DBGenerator implements CommandLineRunner {
         class7.setStatusTeacherEdit(StatusTeacherEdit.CHO_PHEP);
         class7.setId(classRepository.save(class7).getId());
 
+        GroupProject groupProject1 = new GroupProject();
+        groupProject1.setName("Group Chỉ biết ĂN và Lăn");
+        groupProject1.setDescription(" Ăn chơi múa hát cắn kẹo hút ke. Nói chung là vứt");
+        groupProject1.setBackgroundImage(null);
+        groupProject1.setId(groupProjectRepository.save(groupProject1).getId());
+
+        GroupProject groupProject2 = new GroupProject();
+        groupProject2.setName("Group Chăm chỉ cần cù chịu khó");
+        groupProject2.setDescription("ĐƯỢT của nó luôn ạ. Yêu thương chiều chuộng luông");
+        groupProject2.setBackgroundImage(null);
+        groupProject2.setId(groupProjectRepository.save(groupProject2).getId());
+
+        GroupProject groupProject3 = new GroupProject();
+        groupProject3.setName("Group Nhởn nhơ");
+        groupProject3.setDescription("Nói mà KHông bao giờ chịu nghe, cứ nhơ nhơ cái mặt ra. Nói chung là vứt");
+        groupProject3.setBackgroundImage(null);
+        groupProject3.setId(groupProjectRepository.save(groupProject3).getId());
+
         Project project1 = new Project();
         project1.setCode("Project_1");
+        project1.setGroupProjectId(groupProject1.getId());
         project1.setName("Module điểm thưởng");
         project1.setStartTime(1696260088553L);
         project1.setEndTime(1695446153961L);
@@ -439,6 +458,7 @@ public class DBGenerator implements CommandLineRunner {
         project2.setEndTime(1685379600000L);
         project2.setProgress(Float.parseFloat("0"));
         project2.setBackgroundColor("#59a1e3");
+        project2.setGroupProjectId(groupProject1.getId());
         project2.setDescriptions("Mục đích của dự án là để quản lý các dự án của bộ môn PTPM");
         project2.setStatusProject(StatusProject.DANG_DIEN_RA);
         project2.setId((projectRepository.save(project2).getId()));
@@ -448,6 +468,7 @@ public class DBGenerator implements CommandLineRunner {
         project3.setName("Module bài viết");
         project3.setStartTime(1678294800000L);
         project3.setEndTime(1685379600000L);
+        project3.setGroupProjectId(groupProject1.getId());
         project3.setProgress(Float.parseFloat("0"));
         project3.setBackgroundColor("#59a1e3");
         project3.setDescriptions("Mục đích phục vụ xem bài viết của bộ môn");
@@ -2602,24 +2623,6 @@ public class DBGenerator implements CommandLineRunner {
         memberTeamFactory7.setTeamFactoryId(teamFactory2.getId());
         memberTeamFactory7.setStatusMemberTeamFactory(StatusMemberTeamFactory.HOAT_DONG);
         memberTeamFactory7.setId(memberTeamFactoryRepository.save(memberTeamFactory7).getId());
-
-        GroupProject groupProject1 = new GroupProject();
-        groupProject1.setName("Group Chỉ biết ĂN và Lăn");
-        groupProject1.setDescription(" Ăn chơi múa hát cắn kẹo hút ke. Nói chung là vứt");
-        groupProject1.setBackgroundImage(null);
-        groupProject1.setId(groupProjectRepository.save(groupProject1).getId());
-
-        GroupProject groupProject2 = new GroupProject();
-        groupProject2.setName("Group Chăm chỉ cần cù chịu khó");
-        groupProject2.setDescription("ĐƯỢT của nó luôn ạ. Yêu thương chiều chuộng luông");
-        groupProject2.setBackgroundImage(null);
-        groupProject2.setId(groupProjectRepository.save(groupProject2).getId());
-
-        GroupProject groupProject3 = new GroupProject();
-        groupProject3.setName("Group Nhởn nhơ");
-        groupProject3.setDescription("Nói mà KHông bao giờ chịu nghe, cứ nhơ nhơ cái mặt ra. Nói chung là vứt");
-        groupProject3.setBackgroundImage(null);
-        groupProject3.setId(groupProjectRepository.save(groupProject3).getId());
 
         TypeProject typeProject1 = new TypeProject();
         typeProject1.setName("Type 1");
