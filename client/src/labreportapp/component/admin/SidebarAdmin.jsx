@@ -24,6 +24,24 @@ import {
   faPeopleGroup,
   faPeopleLine,
   faClock,
+  faChartLine,
+  faChartArea,
+  faChartBar,
+  faNewspaper,
+  faWindowRestore,
+  faGraduationCap,
+  faRunning,
+  faChalkboard,
+  faFile,
+  faChartPie,
+  faChartGantt,
+  faProjectDiagram,
+  faDiagramProject,
+  faTasks,
+  faFolderPlus,
+  faUserTag,
+  faObjectGroup,
+  faDiagramSuccessor,
 } from "@fortawesome/free-solid-svg-icons";
 
 import "./style-sidebar.css";
@@ -48,10 +66,10 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
       }}
     >
       <Menu theme="light" mode="inline" style={{ paddingBottom: 80 }}>
-        <div style={{ marginBottom: 10, marginTop: 10 }}>
+        <div style={{ marginBottom: 15, marginTop: 15 }}>
           <span style={{ marginLeft: 28 }}>
             <FontAwesomeIcon
-              icon={faMagicWandSparkles}
+              icon={faNewspaper}
               style={{ marginRight: 7, fontSize: 18 }}
             />
             {!collapsed && (
@@ -64,7 +82,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           title="Quản lý chung"
           icon={
             <FontAwesomeIcon
-              icon={faGripLinesVertical}
+              icon={faCogs}
               style={{ color: "rgb(226, 179, 87)" }}
             />
           }
@@ -98,7 +116,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             className="menu_custom"
             icon={
               <FontAwesomeIcon
-                icon={faFolderOpen}
+                icon={faChalkboard}
                 style={{ color: "rgb(226, 179, 87)" }}
               />
             }
@@ -111,7 +129,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           title="Cấu hình"
           icon={
             <FontAwesomeIcon
-              icon={faConciergeBell}
+              icon={faCog}
               style={{ color: "rgb(226, 179, 87)" }}
             />
           }
@@ -147,7 +165,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             className="menu_custom"
             icon={
               <FontAwesomeIcon
-                icon={faTemperature0}
+                icon={faFile}
                 style={{ color: "rgb(226, 179, 87)" }}
               />
             }
@@ -160,7 +178,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           className="menu_custom"
           icon={
             <FontAwesomeIcon
-              icon={faBook}
+              icon={faGraduationCap}
               style={{ color: "rgb(226, 179, 87)" }}
             />
           }
@@ -182,13 +200,13 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             className="menu_custom"
             icon={
               <FontAwesomeIcon
-                icon={faLineChart}
+                icon={faChartGantt}
                 style={{ color: "rgb(226, 179, 87)" }}
               />
             }
           >
             <Link to="/admin/factory-deployment-statistics">
-              Thống kê triển khai xưởng
+              Triển khai xưởng
             </Link>
           </Menu.Item>
           <Menu.Item
@@ -196,20 +214,20 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             className="menu_custom"
             icon={
               <FontAwesomeIcon
-                icon={faLineChart}
+                icon={faChartPie}
                 style={{ color: "rgb(226, 179, 87)" }}
               />
             }
           >
             <Link to="/admin/track-activity-metrics">
-              Theo dõi chỉ số hoạt động
+              Chỉ số hoạt động
             </Link>
           </Menu.Item>
         </Menu.SubMenu>
-        <div style={{ marginBottom: 10, marginTop: 10 }}>
+        <div style={{ marginBottom: 15, marginTop: 15 }}>
           <span style={{ marginLeft: 28 }}>
             <FontAwesomeIcon
-              icon={faCog}
+              icon={faWindowRestore}
               style={{ marginRight: 7, fontSize: 18 }}
             />
             {!collapsed && <span style={{ fontSize: 15 }}>Dự án xưởng</span>}
@@ -220,7 +238,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           title="Quản lý chung"
           icon={
             <FontAwesomeIcon
-              icon={faGripLinesVertical}
+              icon={faCogs}
               style={{ color: "rgb(226, 179, 87)" }}
             />
           }
@@ -229,7 +247,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             key="14"
             icon={
               <FontAwesomeIcon
-                icon={faTeletype}
+                icon={faTasks}
                 style={{ color: "rgb(226, 179, 87)" }}
               />
             }
@@ -240,7 +258,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             key="15"
             icon={
               <FontAwesomeIcon
-                icon={faFolder}
+                icon={faFolderPlus}
                 style={{ color: "rgb(226, 179, 87)" }}
               />
             }
@@ -264,7 +282,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           title="Cấu hình"
           icon={
             <FontAwesomeIcon
-              icon={faConciergeBell}
+              icon={faCog}
               style={{ color: "rgb(226, 179, 87)" }}
             />
           }
@@ -273,12 +291,12 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             key="18"
             icon={
               <FontAwesomeIcon
-                icon={faPersonMilitaryPointing}
+                icon={faUserTag}
                 style={{ color: "rgb(226, 179, 87)" }}
               />
             }
           >
-            <Link to="/admin/role-project-management">Quyền trong dự án</Link>
+            <Link to="/admin/role-project-management">Vai trò trong dự án</Link>
           </Menu.Item>
         </Menu.SubMenu>
         <Menu.SubMenu
@@ -286,7 +304,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           title="Dự án xưởng"
           icon={
             <FontAwesomeIcon
-              icon={faCogs}
+              icon={faProjectDiagram}
               style={{ color: "rgb(226, 179, 87)" }}
             />
           }
@@ -295,7 +313,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             key="20"
             icon={
               <FontAwesomeIcon
-                icon={faGroupArrowsRotate}
+                icon={faObjectGroup}
                 style={{ color: "rgb(226, 179, 87)" }}
               />
             }
@@ -306,7 +324,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             key="21"
             icon={
               <FontAwesomeIcon
-                icon={faCogs}
+                icon={faDiagramSuccessor}
                 style={{ color: "rgb(226, 179, 87)" }}
               />
             }
@@ -314,7 +332,18 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             <Link to="/admin/project-management">Quản lý dự án</Link>
           </Menu.Item>
         </Menu.SubMenu>
-        <div style={{ marginBottom: 16, marginTop: 15 }}>
+        <Menu.Item
+          key="21.1"
+          icon={
+            <FontAwesomeIcon
+              icon={faChartBar}
+              style={{ color: "rgb(226, 179, 87)" }}
+            />
+          }
+        >
+          <Link to="/admin/project-dashboard">Thống kê dự án</Link>
+        </Menu.Item>
+        <div style={{ marginBottom: 15, marginTop: 15 }}>
           <span style={{ marginLeft: 28 }}>
             <FontAwesomeIcon
               icon={faUsers}
@@ -351,7 +380,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           key="24"
           icon={
             <FontAwesomeIcon
-              icon={faPersonMilitaryPointing}
+              icon={faUserTag}
               style={{ color: "rgb(226, 179, 87)" }}
             />
           }

@@ -111,9 +111,6 @@ const ClassConfiguration = () => {
           dataSource={adClassConfiguration}
           key="stt"
           pagination={false}
-          onRow={(record, rowIndex) => ({
-            onClick: () => handleUpdateClassCongiguration(record),
-          })}
         />
       </div>
       <ModalUpdateClassConfiguration

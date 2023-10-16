@@ -217,7 +217,7 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
       >
         <div>
           <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
-            <span style={{ fontSize: "18px" }}>Cập nhật Lớp Học</span>
+            <span style={{ fontSize: "18px" }}>Cập nhật lớp học</span>
           </div>
           <div style={{ marginTop: "15px", borderBottom: "1px solid black" }}>
             <Row style={{ marginBottom: "15px" }}>

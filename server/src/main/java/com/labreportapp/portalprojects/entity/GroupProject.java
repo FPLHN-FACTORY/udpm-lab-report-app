@@ -4,6 +4,7 @@ import com.labreportapp.labreport.entity.base.PrimaryEntity;
 import com.labreportapp.portalprojects.infrastructure.constant.EntityProperties;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,6 +33,7 @@ public class GroupProject extends PrimaryEntity {
     @Nationalized
     private String description;
 
-    @Column(length = EntityProperties.LENGTH_DESCRIPTION)
-    private String backgroundImage;
+    @Lob
+    @Column(columnDefinition = "LONGBLOB")
+    private byte[] backgroundImage;
 }

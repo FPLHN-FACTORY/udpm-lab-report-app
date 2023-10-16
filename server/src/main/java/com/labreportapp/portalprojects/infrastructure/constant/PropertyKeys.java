@@ -79,6 +79,7 @@ public class PropertyKeys {
     public static final String ROLE_USER_CHANGE = "role.user.change";
     public static final String INVALID_TOKEN = "invalid.token";
     public static final String MEETING_PERIOD_NOT_EXITS = "meeting.period.not.exits";
+    public static final String GROUP_PROJECT_NOT_EXISTS = "group.project.not.exits";
 
 
 }

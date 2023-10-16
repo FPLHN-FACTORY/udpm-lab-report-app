@@ -2606,19 +2606,19 @@ public class DBGenerator implements CommandLineRunner {
         GroupProject groupProject1 = new GroupProject();
         groupProject1.setName("Group Chỉ biết ĂN và Lăn");
         groupProject1.setDescription(" Ăn chơi múa hát cắn kẹo hút ke. Nói chung là vứt");
-        groupProject1.setBackgroundImage("rgb(38, 144, 214)");
+        groupProject1.setBackgroundImage(null);
         groupProject1.setId(groupProjectRepository.save(groupProject1).getId());
 
         GroupProject groupProject2 = new GroupProject();
         groupProject2.setName("Group Chăm chỉ cần cù chịu khó");
         groupProject2.setDescription("ĐƯỢT của nó luôn ạ. Yêu thương chiều chuộng luông");
-        groupProject2.setBackgroundImage("#07bc0c");
+        groupProject2.setBackgroundImage(null);
         groupProject2.setId(groupProjectRepository.save(groupProject2).getId());
 
         GroupProject groupProject3 = new GroupProject();
         groupProject3.setName("Group Nhởn nhơ");
         groupProject3.setDescription("Nói mà KHông bao giờ chịu nghe, cứ nhơ nhơ cái mặt ra. Nói chung là vứt");
-        groupProject3.setBackgroundImage("#f1c40f");
+        groupProject3.setBackgroundImage(null);
         groupProject3.setId(groupProjectRepository.save(groupProject3).getId());
 
         TypeProject typeProject1 = new TypeProject();

@@ -1,0 +1,15 @@
+.dropdown-menu {
+  display: none;
+}
+
+/* CSS để hiển thị menu dropdown khi nó được mở */
+.dropdown-menu.show {
+  display: block;
+  position: absolute;
+  top: 100%; /* Hiển thị menu bên dưới nút ba chấm */
+  right: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  z-index: 1; /* Đảm bảo nó hiển thị trên các phần còn lại */
+}

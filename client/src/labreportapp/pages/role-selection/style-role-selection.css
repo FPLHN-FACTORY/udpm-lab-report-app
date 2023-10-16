@@ -1,17 +1,17 @@
 /* RoleSelection.css */
 
-/* Tùy chỉnh background và phông chữ cho container 
-/* Tùy chỉnh background full màn hình */
+/* Tùy chỉnh background và phông chữ cho container */
 .role-selection-container {
   position: relative;
   min-height: 100vh; /* Chiều cao tối thiểu 100% của viewport */
-  background-image: url("https://images.unsplash.com/photo-1694431217622-67247f11aa38?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80");
+  background-image: url("../../assets/img/FPT_Polytechnic_Hanoi-2.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
-  display: flex;
+  /* display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center; */
+  padding-top: 8%;
 }
 
 /* Tạo overlay đen với độ trong suốt */
@@ -46,6 +46,7 @@ h1 {
 
 .ant-radio-button-wrapper {
   margin-right: 8px;
+  display: inline-block; /* Hiển thị Radio.Button trên cùng một dòng */
 }
 
 /* Tùy chỉnh giao diện nút "Xác nhận" */

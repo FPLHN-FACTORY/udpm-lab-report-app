@@ -42,6 +42,7 @@ import AdAttendanceDetailMeetingReducer from "./admin/AdAttendanceDetailMeeting.
 import UserCurrentReducer from "./common/UserCurrent.reducer";
 import StStudentClassesReducer from "./student/StStudentClasses.reducer";
 import AdMeetingPeriodSliceReducer from "./admin/AdMeetingPeriodSlice.reducer";
+import AdGroupProjectSliceReducer from "./admin/AdGroupProjectSlice.reducer";
 
 export const store = configureStore({
   reducer: {
@@ -69,6 +70,7 @@ export const store = configureStore({
     adLevel: adLevelSliceReducer,
     StStudentClasses: StStudentClassesReducer,
     adMeetingPeriodSlice: AdMeetingPeriodSliceReducer,
+    adGroupProject: AdGroupProjectSliceReducer,
     ////
     board: boardSliceReducer,
     myProject: myProjectSliceReducer,
