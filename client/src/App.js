@@ -130,7 +130,7 @@ function App() {
         }
       );
     });
-    if (userCurrent != null && userCurrent.role.includes("TEACHER")) {
+    if (userCurrent != null && userCurrent.role.includes("ADMIN")) {
       stompClientAll.connect({}, () => {
         stompClientAll.subscribe(
           "/portal-projects/update-meeting",
