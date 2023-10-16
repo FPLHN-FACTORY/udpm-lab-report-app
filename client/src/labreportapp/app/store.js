@@ -20,6 +20,11 @@ import StCollapsedSliceReducer from "./student/StCollapsedSlice.reducer";
 import TeCollapsedSliceReducer from "./teacher/TeCollapsedSlice.reducer";
 import teClassSliceReduce from "./teacher/my-class/teClassSlice.reduce";
 import adLevelSliceReducer from "./admin/AdLevelManager.reducer";
+import adMeetingPeriodConfigurationSliceReducer from "./admin/AdMeetingPeriodConfiguration.reducer";
+import adTypeProjectSliceReducer from "./admin/AdTypeProjectSlice.reducer";
+import adRoleProjectSliceReducer from "./admin/AdRoleProjectSlice.reducer";
+
+
 
 //
 import boardSliceReducer from "../../portalprojects/app/reducer/detail-project/DPBoardSlice.reducer";
@@ -70,6 +75,9 @@ export const store = configureStore({
     adLevel: adLevelSliceReducer,
     StStudentClasses: StStudentClassesReducer,
     adMeetingPeriodSlice: AdMeetingPeriodSliceReducer,
+    adMeetingPeriodConfiguration: adMeetingPeriodConfigurationSliceReducer,
+    adTypeProject: adTypeProjectSliceReducer,
+    adRoleProject: adRoleProjectSliceReducer,
     adGroupProject: AdGroupProjectSliceReducer,
     ////
     board: boardSliceReducer,
