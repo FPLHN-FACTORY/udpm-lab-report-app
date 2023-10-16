@@ -107,7 +107,7 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
                 attendance.setName(obj.getNameMeeting());
                 attendance.setMeetingId(obj.getIdMeeting());
                 attendance.setStudentId(obj.getIdStudent());
-                attendance.setNotes(item.getNotes());
+                attendance.setNotes(item.getNotes() == null ? "" : item.getNotes().trim());
                 if (item.getStatusAttendance().equals("YES") || item.getStatusAttendance() == "YES") {
                     attendance.setStatus(StatusAttendance.YES);
                 } else {
@@ -119,7 +119,7 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
                 attendance.setName(item.getNameMeeting());
                 attendance.setMeetingId(item.getIdMeeting());
                 attendance.setStudentId(item.getIdStudent());
-                attendance.setNotes(item.getNotes());
+                attendance.setNotes(item.getNotes() == null ? "" : item.getNotes().trim());
                 if (item.getStatusAttendance().equals("YES") || item.getStatusAttendance() == "YES") {
                     attendance.setStatus(StatusAttendance.YES);
                 } else {
@@ -133,7 +133,7 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
         Optional<Meeting> meeting = teMeetingRepository.findMeetingById(request.getIdMeeting());
         if (meeting.isPresent()) {
             Meeting meetingUp = meeting.get();
-            meetingUp.setNotes(request.getNotes());
+            meetingUp.setNotes(request.getNotes() == null ? "" : request.getNotes().trim());
             meetingUp.setStatusMeeting(StatusMeeting.BUOI_HOC);
             teMeetingRepository.save(meetingUp);
         }

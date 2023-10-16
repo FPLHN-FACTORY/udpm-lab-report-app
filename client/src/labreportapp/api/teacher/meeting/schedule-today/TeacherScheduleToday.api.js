@@ -5,7 +5,7 @@ export class TeacherScheduleTodayAPI {
   static getAllByIdTe = () => {
     return request({
       method: "GET",
-      url: url ,
+      url: url,
     });
   };
 

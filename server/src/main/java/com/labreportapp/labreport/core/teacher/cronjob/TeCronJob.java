@@ -1,11 +1,17 @@
 package com.labreportapp.labreport.core.teacher.cronjob;
 
+import com.labreportapp.labreport.core.teacher.repository.TeMeetingPeriodRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeMeetingRepository;
+import com.labreportapp.labreport.entity.Meeting;
+import com.labreportapp.labreport.entity.MeetingPeriod;
+import com.labreportapp.labreport.infrastructure.constant.StatusMeeting;
+import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -16,6 +22,9 @@ import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -29,57 +38,64 @@ public class TeCronJob {
     @Autowired
     private TeMeetingRepository teMeetingRepository;
 
+    @Autowired
+    private LabReportAppSession labReportAppSession;
+
     private SimpMessagingTemplate messagingTemplate;
+
+    @Autowired
+    private TeMeetingPeriodRepository teMeetingPeriodRepository;
 
     @Autowired
     public TeCronJob(SimpMessagingTemplate messagingTemplate) {
         this.messagingTemplate = messagingTemplate;
     }
 
+    public boolean isCurrentTimeWithinRange(int startHour, int startMinute, int endHour, int endMinute) {
+        LocalTime currentTime = LocalTime.now();
+        LocalTime startTime = LocalTime.of(startHour, startMinute);
+        LocalTime endTime = LocalTime.of(endHour, endMinute);
+        return currentTime.isAfter(endTime);
+    }
+
     @Async
+    @Transactional
     public void updateStatusMeetingJob() {
-        int countUpdateMeeting = teMeetingRepository.updateStatusMeetingRest();
-        if (countUpdateMeeting >= 1) {
+        List<Meeting> listMeeting = teMeetingRepository.findMeetingToDayUpdate();
+        if (listMeeting.size() == 0) {
+            return;
+        }
+        List<MeetingPeriod> listMeetingPeriod = teMeetingPeriodRepository.findAll();
+        if (listMeetingPeriod.size() == 0) {
+            return;
+        }
+        List<Meeting> listUp = new ArrayList<>();
+        listMeeting.forEach(item -> {
+            if (!item.getMeetingPeriod().equals("") || item.getMeetingPeriod() != null) {
+                listMeetingPeriod.forEach(period -> {
+                    if (period.getId().equals(item.getMeetingPeriod())) {
+                        boolean checkBetweenPeriod = isCurrentTimeWithinRange(period.getStartHour(),
+                                period.getStartMinute(), period.getEndHour(), period.getEndMinute());
+                        if (checkBetweenPeriod) {
+                            item.setStatusMeeting(StatusMeeting.BUOI_NGHI);
+                            listUp.add(item);
+                        }
+                    }
+                });
+            }
+        });
+        List<Meeting> savedMeetings = teMeetingRepository.saveAll(listUp);
+        if (savedMeetings.size() >= 1) {
             CompletableFuture<Void> sendNotificationFuture = CompletableFuture.runAsync(() -> {
-                messagingTemplate.convertAndSend("/portal-projects/update-meeting", "Do bạn không điểm danh buổi học hôm nay " +
-                        "nên buổi học đã được chuyển thành buổi nghỉ !");
+                messagingTemplate.convertAndSend("/portal-projects/update-meeting", "Do giảng viên không điểm danh buổi học hôm nay " +
+                        "nên buổi học đã được tự động chuyển thành buổi nghỉ !");
             });
             sendNotificationFuture.thenRun(this::playCustomSound);
         }
     }
 
-    @Scheduled(cron = "16 9 * * * *")
-    public void runJobPeriod1() {
-        updateStatusMeetingJob();
-    }
-
-    @Scheduled(cron = "26 11 * * * *")
-    public void runJobPeriod2() {
-        updateStatusMeetingJob();
-    }
-
-    @Scheduled(cron = "1 14 * * * *")
-    public void runJobPeriod3() {
-        updateStatusMeetingJob();
-    }
-
-    @Scheduled(cron = "11 16 * * * *")
-    public void runJobPeriod4() {
-        updateStatusMeetingJob();
-    }
-
-    @Scheduled(cron = "21 18 * * * *")
-    public void runJobPeriod5() {
-        updateStatusMeetingJob();
-    }
-
-    @Scheduled(cron = "31 20 * * * *")
-    public void runJobPeriod6() {
-        updateStatusMeetingJob();
-    }
-
-    @Scheduled(cron = "41 22 * * * *")
-    public void runJobPeriod7() {
+    @Scheduled(cron = "0 */10 * * * *")
+    public void runJobUpdateStatus() {
         updateStatusMeetingJob();
     }
 

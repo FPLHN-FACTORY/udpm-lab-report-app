@@ -246,33 +246,19 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
 
     Optional<Meeting> findMeetingById(String id);
 
-    @Transactional
-    @Modifying
     @Query(value = """
-            UPDATE meeting AS m
-            SET m.status_meeting = 1, m.notes = "Buổi nghỉ của lớp"
-            WHERE DATE(FROM_UNIXTIME(m.meeting_date / 1000)) <= CURDATE() AND m.status_meeting = 0
-            AND (
-                (m.meeting_period = 0 AND TIME(FROM_UNIXTIME(m.meeting_date / 1000)) > '09:15:00')
-                OR
-                (m.meeting_period = 1 AND TIME(FROM_UNIXTIME(m.meeting_date / 1000)) > '11:25:00')
-                OR 
-                (m.meeting_period = 2 AND TIME(FROM_UNIXTIME(m.meeting_date / 1000)) > '14:00:00')
-                OR
-                (m.meeting_period = 3 AND TIME(FROM_UNIXTIME(m.meeting_date / 1000)) > '16:10:00')
-                OR
-                (m.meeting_period = 4 AND TIME(FROM_UNIXTIME(m.meeting_date / 1000)) > '18:20:00')
-                OR
-                (m.meeting_period = 5 AND TIME(FROM_UNIXTIME(m.meeting_date / 1000))> '20:30:00')
-                 OR
-                (m.meeting_period = 6 AND TIME(FROM_UNIXTIME(m.meeting_date / 1000))> '22:40:00')
+            WITH get_meeting_not_attend AS (
+                SELECT m.id AS id_meeting
+                FROM meeting m
+                LEFT JOIN attendance a ON m.id = a.meeting_id
+                WHERE m.status_meeting = 0  AND DATE(FROM_UNIXTIME(m.meeting_date / 1000)) = CURDATE()
+                AND a.meeting_id IS NULL
             )
-            AND NOT EXISTS (
-                SELECT 1
-                FROM attendance a
-                WHERE a.meeting_id = m.id
-            )
+            SELECT *  FROM meeting m
+            WHERE DATE(FROM_UNIXTIME(m.meeting_date / 1000)) = CURDATE() AND m.status_meeting = 0
+                AND m.id IN (SELECT id_meeting FROM get_meeting_not_attend)
+            ORDER BY m.name ASC;
             """, nativeQuery = true)
-    int updateStatusMeetingRest();
+    List<Meeting> findMeetingToDayUpdate();
 
 }

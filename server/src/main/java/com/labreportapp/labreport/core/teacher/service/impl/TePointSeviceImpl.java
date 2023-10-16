@@ -24,6 +24,7 @@ import com.labreportapp.labreport.entity.StudentClasses;
 import com.labreportapp.labreport.infrastructure.constant.StatusTeam;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Synchronized;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -316,23 +317,44 @@ public class TePointSeviceImpl implements TePointSevice {
         }
     }
 
+    private boolean isExcelFile(MultipartFile file) {
+        Workbook workbookCheck = null;
+        try {
+            workbookCheck = new XSSFWorkbook(file.getInputStream());
+        } catch (Exception e) {
+            try {
+                workbookCheck = new HSSFWorkbook(file.getInputStream());
+            } catch (Exception ex) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override
     @Synchronized
     @Transactional
     public TeExcelResponseMessage importExcel(MultipartFile file, String idClass) {
         TeExcelResponseMessage teExcelResponseMessage = new TeExcelResponseMessage();
         try {
+            boolean isExcelFile = isExcelFile(file);
+            if (!isExcelFile) {
+                teExcelResponseMessage.setStatus(false);
+                teExcelResponseMessage.setMessage("File excel sai định dạng, vui lòng export mẫu để sử dụng !");
+                return teExcelResponseMessage;
+            }
             List<TeExcelImportPoint> listInput = tePointImportService.importDataPoint(file, idClass);
             if (listInput.size() == 0) {
                 teExcelResponseMessage.setStatus(false);
-                teExcelResponseMessage.setMessage("File excel trống, vui lòng export lại excel để sử dụng import !");
+                teExcelResponseMessage.setMessage("File excel trống, vui lòng export mẫu để sử dụng !");
                 return teExcelResponseMessage;
             }
             ConcurrentHashMap<String, SimpleResponse> mapPointStudent = new ConcurrentHashMap<>();
             addDataMapsPointStudent(mapPointStudent, idClass);
             if (listInput.size() != mapPointStudent.size()) {
                 teExcelResponseMessage.setStatus(false);
-                teExcelResponseMessage.setMessage("Import thất bại. Số lượng sinh viên trong file excel phải bằng với số lượng sinh viên trong lớp !");
+                teExcelResponseMessage.setMessage("Import thất bại. Số lượng sinh viên, số lượng điểm trong " +
+                        "file excel phải bằng với số lượng sinh viên trong lớp, vui lòng export mẫu để sử dụng !");
                 return teExcelResponseMessage;
             }
             ConcurrentHashMap<String, Point> mapPointStudentDB = new ConcurrentHashMap<>();
@@ -348,13 +370,13 @@ public class TePointSeviceImpl implements TePointSevice {
                 String regexDouble = "^(?:[0-9](?:\\.\\d*)?|10(?:\\.0*)?)$";
                 if (point.getName().isEmpty()) {
                     teExcelResponseMessage.setStatus(false);
-                    teExcelResponseMessage.setMessage(teExcelResponseMessage.getMessage() +
+                    teExcelResponseMessage.setMessage(
                             " Tên sinh viên không được để trống.");
                     return;
                 } else {
                     if (!point.getName().matches(regexName)) {
                         teExcelResponseMessage.setStatus(false);
-                        teExcelResponseMessage.setMessage(teExcelResponseMessage.getMessage() +
+                        teExcelResponseMessage.setMessage(
                                 " Tên sinh viên sai định dạng.");
                         return;
                     }
@@ -362,19 +384,19 @@ public class TePointSeviceImpl implements TePointSevice {
 
                 if (point.getCheckPointPhase1().isEmpty()) {
                     teExcelResponseMessage.setStatus(false);
-                    teExcelResponseMessage.setMessage(teExcelResponseMessage.getMessage() +
+                    teExcelResponseMessage.setMessage(
                             " Điểm giai đoạn 1 không được để trống.");
                     return;
                 }
                 if (point.getCheckPointPhase2().isEmpty()) {
                     teExcelResponseMessage.setStatus(false);
-                    teExcelResponseMessage.setMessage(teExcelResponseMessage.getMessage() +
+                    teExcelResponseMessage.setMessage(
                             " Điểm giai đoạn 2 không được để trống.");
                     return;
                 }
                 if (!point.getCheckPointPhase1().matches(regexDouble) || !point.getCheckPointPhase2().matches(regexDouble)) {
                     teExcelResponseMessage.setStatus(false);
-                    teExcelResponseMessage.setMessage(teExcelResponseMessage.getMessage() +
+                    teExcelResponseMessage.setMessage(
                             " Điểm giai đoạn 1 và giai đoạn 2 phải là số từ 0 -> 10");
                     return;
                 }
@@ -382,18 +404,18 @@ public class TePointSeviceImpl implements TePointSevice {
                 SimpleResponse simpleResponse = mapPointStudent.get(point.getEmail());
                 if (point.getEmail().isEmpty()) {
                     teExcelResponseMessage.setStatus(false);
-                    teExcelResponseMessage.setMessage(teExcelResponseMessage.getMessage() +
+                    teExcelResponseMessage.setMessage(
                             " Email không được để trống.");
                     return;
                 } else if (!point.getEmail().matches(regexEmailExactly)) {
                     teExcelResponseMessage.setStatus(false);
-                    teExcelResponseMessage.setMessage(teExcelResponseMessage.getMessage() +
+                    teExcelResponseMessage.setMessage(
                             " Email sai định dạng.");
                     return;
                 } else {
                     if (simpleResponse == null) {
                         teExcelResponseMessage.setStatus(false);
-                        teExcelResponseMessage.setMessage(teExcelResponseMessage.getMessage() + " Email của sinh viên không tồn tại.");
+                        teExcelResponseMessage.setMessage(" Email của sinh viên không tồn tại.");
                         return;
                     }
                 }

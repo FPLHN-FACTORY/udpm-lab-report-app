@@ -290,7 +290,7 @@ public class TeMeetingServiceImpl implements TeMeetingService {
         List<Meeting> listNew = new ArrayList<>();
         list.forEach(item -> {
             Meeting meeting = teMeetingRepository.findById(item.getIdMeeting()).get();
-            meeting.setAddress(item.getMeetingAddress());
+            meeting.setAddress(item.getMeetingAddress() == null ? "" : item.getMeetingAddress().trim());
             listNew.add(meeting);
         });
         teMeetingRepository.saveAll(listNew);
