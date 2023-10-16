@@ -75,6 +75,7 @@ import GroupProjectManagement from "./labreportapp/pages/admin/workshop-project/
 import TeamManagement from "./labreportapp/pages/admin/workshop-member/team-management/TeamManagement";
 import MemberManagement from "./labreportapp/pages/admin/workshop-member/member-management/MemberManagement";
 import MeetingPeriodConfiguration from "./labreportapp/pages/admin/configuration/meeting-period-configuration/MeetingPeriodConfiguration";
+import DetailGroupProject from "./labreportapp/pages/admin/workshop-project/detail-group-project/DetailGroupProject";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -604,6 +605,16 @@ function App() {
                 <AuthGuard>
                   <DashBoardAdmin>
                     <GroupProjectManagement />
+                  </DashBoardAdmin>
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/admin/group-project-management/:id"
+              element={
+                <AuthGuard>
+                  <DashBoardAdmin>
+                    <DetailGroupProject />
                   </DashBoardAdmin>
                 </AuthGuard>
               }
