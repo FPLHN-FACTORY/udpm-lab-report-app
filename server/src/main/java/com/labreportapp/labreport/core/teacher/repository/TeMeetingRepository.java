@@ -132,7 +132,7 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                  c.code as code_class,
                  m.id as id_meeting,
                  m.meeting_date as meeting_date,
-                   m.meeting_period as id_meeting_period,
+                 m.meeting_period as id_meeting_period,
                  mp.name as meeting_period, mp.start_hour as start_hour, mp.start_minute as start_minute ,
                  mp.end_hour as end_hour, mp.end_minute as end_minute,
                  m.name as name_meeting,
@@ -148,7 +148,7 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
              JOIN level l on l.id = ac.level_id
              WHERE m.teacher_id = :#{#req.idTeacher} AND DATE(FROM_UNIXTIME(m.meeting_date / 1000)) = CURDATE()
              and m.status_meeting = 0
-             ORDER BY m.meeting_date ASC
+             ORDER BY mp.name DESC
             """, countQuery = """
             SELECT DISTINCT(m.id)
                          FROM class c
@@ -207,7 +207,7 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                          UNIX_TIMESTAMP(CURRENT_DATE()) * 1000
                          AND UNIX_TIMESTAMP(DATE_ADD(CURRENT_DATE(), INTERVAL 30 DAY)) * 1000)
                  )
-             ORDER BY m.meeting_date ASC
+             ORDER BY m.meeting_date ASC,mp.name ASC
             """, countQuery = """
               SELECT COUNT(m.id)
                          FROM class c
