@@ -225,7 +225,7 @@ const TeacherPointMyClass = () => {
                     icon={faUpload}
                     style={{ marginRight: "7px" }}
                   />
-                  Import nhóm
+                  Import bảng điểm
                 </Button>
                 <ModalFileImportPoint
                   idClass={idClass}

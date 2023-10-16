@@ -236,7 +236,7 @@ const MeetingInMyClass = () => {
                             >
                               {record.name} {" - "}
                               {record.typeMeeting === 0 ? (
-                                <span>Online</span>
+                                <span style={{ color: "red" }}>Online</span>
                               ) : (
                                 <span>Offline</span>
                               )}

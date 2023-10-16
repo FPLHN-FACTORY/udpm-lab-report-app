@@ -132,7 +132,7 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                  c.code as code_class,
                  m.id as id_meeting,
                  m.meeting_date as meeting_date,
-                   m.meeting_period as id_meeting_period,
+                 m.meeting_period as id_meeting_period,
                  mp.name as meeting_period, mp.start_hour as start_hour, mp.start_minute as start_minute ,
                  mp.end_hour as end_hour, mp.end_minute as end_minute,
                  m.name as name_meeting,
@@ -148,7 +148,7 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
              JOIN level l on l.id = ac.level_id
              WHERE m.teacher_id = :#{#req.idTeacher} AND DATE(FROM_UNIXTIME(m.meeting_date / 1000)) = CURDATE()
              and m.status_meeting = 0
-             ORDER BY m.meeting_date ASC
+             ORDER BY mp.name DESC
             """, countQuery = """
             SELECT DISTINCT(m.id)
                          FROM class c
@@ -207,7 +207,7 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                          UNIX_TIMESTAMP(CURRENT_DATE()) * 1000
                          AND UNIX_TIMESTAMP(DATE_ADD(CURRENT_DATE(), INTERVAL 30 DAY)) * 1000)
                  )
-             ORDER BY m.meeting_date ASC
+             ORDER BY m.meeting_date ASC,mp.name ASC
             """, countQuery = """
               SELECT COUNT(m.id)
                          FROM class c
@@ -246,33 +246,19 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
 
     Optional<Meeting> findMeetingById(String id);
 
-    @Transactional
-    @Modifying
     @Query(value = """
-            UPDATE meeting AS m
-            SET m.status_meeting = 1, m.notes = "Buổi nghỉ của lớp"
-            WHERE DATE(FROM_UNIXTIME(m.meeting_date / 1000)) <= CURDATE() AND m.status_meeting = 0
-            AND (
-                (m.meeting_period = 0 AND TIME(FROM_UNIXTIME(m.meeting_date / 1000)) > '09:15:00')
-                OR
-                (m.meeting_period = 1 AND TIME(FROM_UNIXTIME(m.meeting_date / 1000)) > '11:25:00')
-                OR 
-                (m.meeting_period = 2 AND TIME(FROM_UNIXTIME(m.meeting_date / 1000)) > '14:00:00')
-                OR
-                (m.meeting_period = 3 AND TIME(FROM_UNIXTIME(m.meeting_date / 1000)) > '16:10:00')
-                OR
-                (m.meeting_period = 4 AND TIME(FROM_UNIXTIME(m.meeting_date / 1000)) > '18:20:00')
-                OR
-                (m.meeting_period = 5 AND TIME(FROM_UNIXTIME(m.meeting_date / 1000))> '20:30:00')
-                 OR
-                (m.meeting_period = 6 AND TIME(FROM_UNIXTIME(m.meeting_date / 1000))> '22:40:00')
+            WITH get_meeting_not_attend AS (
+                SELECT m.id AS id_meeting
+                FROM meeting m
+                LEFT JOIN attendance a ON m.id = a.meeting_id
+                WHERE m.status_meeting = 0  AND DATE(FROM_UNIXTIME(m.meeting_date / 1000)) = CURDATE()
+                AND a.meeting_id IS NULL
             )
-            AND NOT EXISTS (
-                SELECT 1
-                FROM attendance a
-                WHERE a.meeting_id = m.id
-            )
+            SELECT *  FROM meeting m
+            WHERE DATE(FROM_UNIXTIME(m.meeting_date / 1000)) = CURDATE() AND m.status_meeting = 0
+                AND m.id IN (SELECT id_meeting FROM get_meeting_not_attend)
+            ORDER BY m.name ASC;
             """, nativeQuery = true)
-    int updateStatusMeetingRest();
+    List<Meeting> findMeetingToDayUpdate();
 
 }

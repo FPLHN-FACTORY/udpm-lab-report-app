@@ -56,9 +56,9 @@ const TeacherScheduleToday = () => {
     try {
       await TeacherScheduleTodayAPI.getAllByIdTe().then((response) => {
         setDataToday(response.data.data);
-        console.log(response.data.data);
       });
     } catch (error) {
+      console.log(error);
       setLoading(true);
     }
   };
@@ -310,7 +310,6 @@ const TeacherScheduleToday = () => {
           record.endHour,
           record.endMinute
         );
-        console.log("zzzzzzzzzzzzzzzzzzzzzz" + check);
         if (check) {
           return (
             <div className="box_icon" style={{ textAlign: "center" }}>
@@ -535,13 +534,25 @@ const TeacherScheduleToday = () => {
             </div>
             <div className="table-teacher" style={{ marginTop: "20px" }}>
               {dataToday != null && dataToday.length > 0 ? (
-                <Table
-                  size="middle"
-                  dataSource={data}
-                  rowKey="idMeeting"
-                  columns={columns}
-                  pagination={false}
-                />
+                <>
+                  <div
+                    style={{
+                      paddingBottom: "15px",
+                      fontSize: "15px",
+                      color: "red",
+                    }}
+                  >
+                    Lưu ý: Nếu giảng viên không điểm danh buổi học thì buổi học
+                    đó sẽ được tự động chuyển thành buổi nghỉ.
+                  </div>
+                  <Table
+                    size="middle"
+                    dataSource={data}
+                    rowKey="idMeeting"
+                    columns={columns}
+                    pagination={false}
+                  />
+                </>
               ) : (
                 <Empty
                   imageStyle={{ height: 60 }}

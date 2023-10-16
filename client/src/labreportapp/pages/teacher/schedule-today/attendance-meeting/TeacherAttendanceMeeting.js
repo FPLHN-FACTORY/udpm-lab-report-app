@@ -152,7 +152,7 @@ const TeacherAttendanceMeeting = () => {
       let dataFind = {
         listAttendance: data,
         idMeeting: idMeeting,
-        notes: notes.trim(),
+        notes: notes,
       };
       let checkTime = false;
       if (meeting !== null) {
@@ -180,15 +180,11 @@ const TeacherAttendanceMeeting = () => {
         toast.success(respone.data.data.message, {
           className: className,
         });
-        setTimeout(() => {
-          navigate("/teacher/schedule-today");
-        }, 2000);
+        navigate("/teacher/schedule-today");
       });
     } catch (error) {
       console.log(error);
-      setTimeout(() => {
-        navigate("/teacher/schedule-today");
-      }, 2000);
+      navigate("/teacher/schedule-today");
     }
   };
   const handleChangeNotes = (id, value) => {
