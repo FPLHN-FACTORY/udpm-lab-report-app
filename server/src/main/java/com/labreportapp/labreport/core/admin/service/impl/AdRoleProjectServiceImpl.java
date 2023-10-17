@@ -50,7 +50,7 @@ public class AdRoleProjectServiceImpl implements AdRoleProjectService {
     public RoleProject updateRoleProject(AdUpdateRoleProjectRequest obj) {
         Optional<RoleProject> findById = adRoleProjectRepository.findById(obj.getId());
         if (!findById.isPresent()) {
-            throw new RestApiException(Message.SEMESTER_NOT_EXISTS);
+            throw new RestApiException(Message.ROLE_PROJECT_NOT_EXISTS);
         }
         RoleProject roleProject = findById.get();
         roleProject.setName(obj.getName());
@@ -73,7 +73,7 @@ public class AdRoleProjectServiceImpl implements AdRoleProjectService {
         Optional<RoleProject> findRoleProjectById = adRoleProjectRepository.findById(id);
 
         if (!findRoleProjectById.isPresent()) {
-            throw new RestApiException(Message.SEMESTER_NOT_EXISTS);
+            throw new RestApiException(Message.ROLE_PROJECT_NOT_EXISTS);
         }
 
         adRoleProjectRepository.delete(findRoleProjectById.get());

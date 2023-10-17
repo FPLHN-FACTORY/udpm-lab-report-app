@@ -23,6 +23,8 @@ import adLevelSliceReducer from "./admin/AdLevelManager.reducer";
 import adMeetingPeriodConfigurationSliceReducer from "./admin/AdMeetingPeriodConfiguration.reducer";
 import adTypeProjectSliceReducer from "./admin/AdTypeProjectSlice.reducer";
 import adRoleProjectSliceReducer from "./admin/AdRoleProjectSlice.reducer";
+import adTeamSliceReducer from "./admin/AdTeamSlice.reducer";
+
 
 
 
@@ -81,6 +83,8 @@ export const store = configureStore({
     adRoleProject: adRoleProjectSliceReducer,
     adGroupProject: AdGroupProjectSliceReducer,
     adDetailGroupProject: AdDetailGroupProjectSliceReducer,
+    adTeam: adTeamSliceReducer,
+
     ////
     board: boardSliceReducer,
     myProject: myProjectSliceReducer,

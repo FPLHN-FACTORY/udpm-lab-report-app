@@ -1,81 +1,77 @@
 import { Modal, Row, Col, Input, Button, Select } from "antd";
 import { useEffect, useState } from "react";
-import { AdRoleProjectAPI } from "../../../../api/admin/AdRoleProjectAPI";
-import { UpdateRoleProject } from "../../../../app/admin/AdRoleProjectSlice.reducer";
+import { AdTeamAPI } from "../../../../../api/admin/AdTeamAPI";
+import { AddTeam } from "../../../../../app/admin/AdTeamSlice.reducer";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useAppDispatch } from "../../../../app/hook";
+import { useAppDispatch } from "../../../../../app/hook";
 import TextArea from "antd/es/input/TextArea";
 import moment from "moment";
 
 const { Option } = Select;
 
-const ModalUpdateRoleProject = ({ visible, onCancel, roleProject }) => {
-    const [name, setName] = useState("");
-    const [description, setDescription] = useState("");
-    const [errorName, setErrorName] = useState("Vui lòng không để trống");
-    const [errorDescription, setErrorDescription] = useState("Vui lòng không để trống");
-    const dispatch = useAppDispatch();
+const ModalCreateTeam = ({ visible, onCancel }) => {
+  const [name, setName] = useState("");
+  const [subjectName, setSubjectName] = useState("");
+  const [errorName, setErrorName] = useState("Vui lòng không để trống");
+  const [errorSubjectName, setErrorSubjectName] = useState("Vui lòng không để trống");
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (roleProject !== null) {
-      setName(roleProject.name);
-      setDescription(roleProject.description);
-
-      return () => {
+    return () => {
       setName("");
-      setErrorName();
-      setDescription("");
-      setErrorDescription();
-      };
-    }
-  }, [roleProject]);
+      setErrorName("");
+      setSubjectName("");
+      setErrorSubjectName("");
+    };
+  }, [visible]);
 
-  const update = () => {
+  const create = () => {
     let check = 0;
     if (name.trim() === "") {
-      setErrorName("Tên vai trò không được để trống");
+      setErrorName("Tên nhóm không được để trống");
       check++;
     } else {
       setErrorName("");
       if (name.trim().length > 500) {
-        setErrorName("Tên vai trò không quá 500 ký tự");
+        setErrorName("Tên nhóm không quá 500 ký tự");
         check++;
       } else {
         setErrorName("");
       }
     }
-     if (description.trim() === "") {
-      setErrorDescription("Mô tả không được để trống");
+    if (subjectName.trim() === "") {
+      setErrorSubjectName("Đề tài không được để trống");
       check++;
     } else {
-      setErrorDescription("");
-      if (description.trim().length > 500) {
-        setErrorDescription("Mô tả không quá 500 ký tự");
+      setErrorSubjectName("");
+      if (subjectName.trim().length > 500) {
+        setErrorSubjectName("Đề tài không quá 500 ký tự");
         check++;
       } else {
-        setErrorDescription("");
+        setErrorSubjectName("");
       }
     }
-
     if (check === 0) {
       let obj = {
-        id: roleProject.id,
         name: name,
-        description: description,
-
+        subjectName: subjectName,
       };
 
-      AdRoleProjectAPI.updateRoleProject(obj, roleProject.id).then(
+      AdTeamAPI.addTeam(obj).then(
         (response) => {
-          toast.success("Cập nhật thành công!");
-          dispatch(UpdateRoleProject(response.data.data));
+          toast.success("Thêm nhóm thành công!");
+          dispatch(AddTeam(response.data.data));
+          console.log(obj.idProject);
           onCancel();
         },
         (error) => {}
       );
     }
   };
+
+  
+
   return (
     <>
       <Modal
@@ -83,16 +79,15 @@ const ModalUpdateRoleProject = ({ visible, onCancel, roleProject }) => {
         onCancel={onCancel}
         width={750}
         footer={null}
-        className="modal_show_detail_update_level"
+        className="modal_show_detail_create_level"
       >
-        {" "}
         <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
-          <span style={{ fontSize: "18px" }}>Cập nhật Vai trò</span>
+          <span style={{ fontSize: "18px" }}>Thêm mới nhóm</span>
         </div>
         <div style={{ marginTop: "15px", borderBottom: "1px solid black" }}>
-        <Row gutter={16} style={{ marginBottom: "15px" }}>
+          <Row gutter={16} style={{ marginBottom: "15px" }}>
             <Col span={24}>
-              <span>Tên Vai trò:</span> <br />
+              <span>Tên nhóm:</span> <br />
               <Input
                 value={name}
                 onChange={(e) => {
@@ -105,17 +100,18 @@ const ModalUpdateRoleProject = ({ visible, onCancel, roleProject }) => {
           </Row>
           <Row gutter={16} style={{ marginBottom: "15px" }}>
             <Col span={24}>
-              <span>Mô tả:</span> <br />
+              <span>Tên đề tài:</span> <br />
               <TextArea
-                value={description}
+                value={subjectName}
                 onChange={(e) => {
-                  setDescription(e.target.value);
+                  setSubjectName(e.target.value);
                 }}
                 type="text"
               />
-              <span style={{ color: "red" }}>{errorDescription}</span>
+              <span style={{ color: "red" }}>{errorSubjectName}</span>
             </Col>
           </Row>
+          
         </div>
         <div style={{ textAlign: "right" }}>
           <div style={{ paddingTop: "15px" }}>
@@ -125,9 +121,9 @@ const ModalUpdateRoleProject = ({ visible, onCancel, roleProject }) => {
                 backgroundColor: "rgb(61, 139, 227)",
                 color: "white",
               }}
-              onClick={update}
+              onClick={create}
             >
-              Cập nhật
+              Thêm
             </Button>
             <Button
               style={{
@@ -144,4 +140,5 @@ const ModalUpdateRoleProject = ({ visible, onCancel, roleProject }) => {
     </>
   );
 };
-export default ModalUpdateRoleProject;
+
+export default ModalCreateTeam;

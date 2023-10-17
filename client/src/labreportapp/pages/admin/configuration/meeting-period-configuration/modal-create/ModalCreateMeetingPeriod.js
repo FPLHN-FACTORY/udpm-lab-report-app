@@ -70,7 +70,7 @@ const ModalCreateMeetingPeriod = ({ visible, onCancel }) => {
       >
         {" "}
         <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
-          <span style={{ fontSize: "18px" }}>Thêm mới Level</span>
+          <span style={{ fontSize: "18px" }}>Thêm mới Ca</span>
         </div>
         <div style={{ marginTop: "15px", borderBottom: "1px solid black" }}>
           <Row gutter={16} style={{ marginBottom: "15px" }}>

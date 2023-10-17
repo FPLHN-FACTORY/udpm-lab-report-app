@@ -78,7 +78,7 @@ const ModalUpdateMeetingPeriod = ({ visible, onCancel, meetingPeriod }) => {
       >
         {" "}
         <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
-          <span style={{ fontSize: "18px" }}>Cập nhật Level</span>
+          <span style={{ fontSize: "18px" }}>Cập nhật Ca</span>
         </div>
         <div style={{ marginTop: "15px", borderBottom: "1px solid black" }}>
         <Row gutter={16} style={{ marginBottom: "15px" }}>

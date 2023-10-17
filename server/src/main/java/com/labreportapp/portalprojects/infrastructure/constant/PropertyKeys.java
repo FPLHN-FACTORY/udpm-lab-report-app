@@ -39,6 +39,7 @@ public class PropertyKeys {
     public static final String ASSIGN_NOT_EXISTS = "assign.not.exists";
     public static final String LABEL_PROJECT_TODO_EXISTS = "label.project.todo.exists";
     public static final String LABEL_PROJECT_TODO_NOT_EXISTS = "label.project.todo.not.exists";
+    public static final String ROLE_PROJECT_NOT_EXISTS = "role.project.todo.not.exists";
 
     public static final String CLASS_STUDENT_IS_EMPTY = "class.student.is.empty";
     public static final String DESCRIPTIONS_IS_EMPTY = "descriptions.is.empty";
@@ -80,6 +81,6 @@ public class PropertyKeys {
     public static final String INVALID_TOKEN = "invalid.token";
     public static final String MEETING_PERIOD_NOT_EXITS = "meeting.period.not.exits";
     public static final String GROUP_PROJECT_NOT_EXISTS = "group.project.not.exits";
-
+    public static final String TEAM_PROJECT_ALREADY_EXISTS = "team.project.not.exits";
 
 }

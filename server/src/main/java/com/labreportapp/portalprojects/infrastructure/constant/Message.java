@@ -58,6 +58,8 @@ public enum Message {
     TEAM_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeys.TEAM_NOT_EXISTS)),
     UNIQUE_LEADER_TEAM(PropertiesReader.getProperty(PropertyKeys.UNIQUE_LEADER_TEAM)),
     LEVEL_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeys.LEVEL_NOT_EXISTS)),
+    ROLE_PROJECT_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeys.ROLE_PROJECT_NOT_EXISTS)),
+
     //    INVALID_DATE(PropertiesReader.getProperty(PropertyKeys.INVALID_DATE)),
     DANG_CO_DU_LIEU_LIEN_QUAN_KHONG_THE_XOA_BUOI_HOC(PropertiesReader.getProperty(PropertyKeys.DANG_CO_DU_LIEU_LIEN_QUAN_KHONG_THE_XOA_BUOI_HOC)),
     ACTIVITY_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeys.ACTIVITY_NOT_EXISTS)),
@@ -81,7 +83,9 @@ public enum Message {
     INVALID_TOKEN(PropertiesReader.getProperty(PropertyKeys.INVALID_TOKEN)),
     MEETING_PERIOD_NOT_EXITS(PropertiesReader.getProperty(PropertyKeys.MEETING_PERIOD_NOT_EXITS)),
     NAME_IS_EMPTY(PropertiesReader.getProperty(PropertyKeys.NAME_IS_EMPTY)),
+    TEAM_PROJECT_ALREADY_EXISTS(PropertiesReader.getProperty(PropertyKeys.TEAM_PROJECT_ALREADY_EXISTS)),
     GROUP_PROJECT_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeys.GROUP_PROJECT_NOT_EXISTS));
+
     private String message;
 
     Message(String message) {
