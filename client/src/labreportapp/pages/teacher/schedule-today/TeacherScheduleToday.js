@@ -39,12 +39,19 @@ const TeacherScheduleToday = () => {
   const [current, setCurrent] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const navigate = useNavigate();
+
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Bảng điều khiển - Lịch dạy hôm nay";
+    const intervalId = setInterval(() => {
+      featchDataToDay();
+      setTime("7");
+      featchDataTime();
+    }, 600000);
     featchDataToDay();
     setTime("7");
     featchDataTime();
+    return () => clearInterval(intervalId);
   }, []);
 
   useEffect(() => {

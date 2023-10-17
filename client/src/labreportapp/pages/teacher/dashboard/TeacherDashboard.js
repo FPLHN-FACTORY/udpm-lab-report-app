@@ -209,6 +209,7 @@ const TeacherDashboard = () => {
   };
 
   const handleExport = async (idClass) => {
+    setLoadingExport(true);
     try {
       const response = await TeacherStatisticalAPI.export(idClass);
       const blob = new Blob([response.data], {
@@ -218,14 +219,12 @@ const TeacherDashboard = () => {
       const link = document.createElement("a");
       link.href = url;
       link.download =
-        "ThongKeTongHop_" + convertLongToDate(new Date().getTime()) + ".xlsx";
+        "Thong_Ke_" + convertLongToDate(new Date().getTime()) + ".xlsx";
       link.click();
       window.URL.revokeObjectURL(url);
-      console.log(response);
-      setLoadingExport(true);
-      setTimeout(() => {
-        setLoadingExport(false);
-      }, 1500);
+
+      setLoadingExport(false);
+
       toast.success("Export thành công !");
     } catch (error) {
       console.log(error);

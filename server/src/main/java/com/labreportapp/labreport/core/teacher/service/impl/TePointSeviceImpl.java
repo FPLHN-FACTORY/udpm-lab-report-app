@@ -226,6 +226,7 @@ public class TePointSeviceImpl implements TePointSevice {
     private CellStyle chooseCellStyle(String type, Workbook workbook) {
         CellStyle cellStyle = workbook.createCellStyle();
         Font fontStyle = workbook.createFont();
+        fontStyle.setFontName("Times New Roman");
         if (type.equals("title")) {
             fontStyle.setBold(true);
             fontStyle.setFontHeightInPoints((short) 20);
@@ -252,6 +253,7 @@ public class TePointSeviceImpl implements TePointSevice {
             cellStyle.setBorderBottom(BorderStyle.THIN);
             cellStyle.setBorderLeft(BorderStyle.THIN);
             cellStyle.setBorderRight(BorderStyle.THIN);
+            cellStyle.setFont(fontStyle);
         }
         if (type.equals("dataCenterTable")) {
             cellStyle.setAlignment(HorizontalAlignment.CENTER);
@@ -259,6 +261,7 @@ public class TePointSeviceImpl implements TePointSevice {
             cellStyle.setBorderBottom(BorderStyle.THIN);
             cellStyle.setBorderLeft(BorderStyle.THIN);
             cellStyle.setBorderRight(BorderStyle.THIN);
+            cellStyle.setFont(fontStyle);
         }
         return cellStyle;
     }

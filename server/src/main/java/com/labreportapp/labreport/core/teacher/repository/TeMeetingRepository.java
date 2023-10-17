@@ -9,11 +9,9 @@ import com.labreportapp.labreport.core.teacher.model.response.TeMeetingCustomToA
 import com.labreportapp.labreport.core.teacher.model.response.TeMeetingResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeScheduleMeetingClassResponse;
 import com.labreportapp.labreport.entity.Meeting;
-import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -95,7 +93,7 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                 r.id as idReport,
                 r.descriptions AS descriptionsReport,
                 m.meeting_date as meeting_date,
-                  m.meeting_period as id_meeting_period,
+                m.meeting_period as id_meeting_period,
                 mp.name as meeting_period, mp.start_hour as start_hour, mp.start_minute as start_minute,
                 mp.end_hour as end_hour, mp.end_minute as end_minute
             FROM meeting m
@@ -108,6 +106,32 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
             WHERE m.id = :#{#req.idMeeting}
                       """, nativeQuery = true)
     Optional<TeHomeWorkAndNoteMeetingResponse> searchDetailMeetingTeamByIdMeIdTeam(@Param("req") TeFindMeetingRequest req);
+
+    @Query(value = """
+            SELECT
+                m.id AS idMeeting,
+                m.name AS nameMeeting,
+                m.descriptions AS descriptionsMeeting,
+                h.id AS idHomeWork,
+                h.descriptions AS descriptionsHomeWork,
+                n.id AS idNote,
+                n.descriptions AS descriptionsNote,
+                r.id as idReport,
+                r.descriptions AS descriptionsReport,
+                m.meeting_date as meeting_date,
+                m.meeting_period as id_meeting_period,
+                mp.name as meeting_period, mp.start_hour as start_hour, mp.start_minute as start_minute,
+                mp.end_hour as end_hour, mp.end_minute as end_minute
+            FROM meeting m
+            JOIN meeting_period mp ON mp.id = m.meeting_period
+            JOIN class c ON c.id = m.class_id
+            JOIN team t ON t.class_id = c.id
+            LEFT JOIN home_work h ON h.meeting_id = m.id AND h.team_id = t.id
+            LEFT JOIN note n ON n.meeting_id = m.id AND n.team_id = t.id
+            LEFT JOIN report r ON r.meeting_id = m.id AND r.team_id = t.id
+            WHERE m.class_id = :#{#idClass}
+                      """, nativeQuery = true)
+    List<TeHomeWorkAndNoteMeetingResponse> searchHwNoteReport(@Param("idClass") String idClass);
 
     @Query(value = """
             SELECT  
@@ -167,7 +191,7 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                  c.code as code_class,
                  m.id as id_meeting,
                  m.meeting_date as meeting_date,
-                   m.meeting_period as id_meeting_period,
+                 m.meeting_period as id_meeting_period,
                  mp.name as meeting_period, mp.start_hour as start_hour, mp.start_minute as start_minute ,
                  mp.end_hour as end_hour, mp.end_minute as end_minute,
                  m.name as name_meeting,
