@@ -4,10 +4,12 @@ import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.portalprojects.core.admin.model.request.AdCreateGroupProjectRequest;
 import com.labreportapp.portalprojects.core.admin.model.request.AdFindGroupProjectRequest;
 import com.labreportapp.portalprojects.core.admin.model.request.AdUpdateGroupProjectRequest;
+import com.labreportapp.portalprojects.core.admin.model.response.AdDetailGroupProjectResponse;
 import com.labreportapp.portalprojects.core.admin.model.response.AdGroupProjectResponse;
 import com.labreportapp.portalprojects.core.admin.repository.AdGroupProjectRepository;
 import com.labreportapp.portalprojects.core.admin.service.AdGroupProjectService;
 import com.labreportapp.portalprojects.entity.GroupProject;
+import com.labreportapp.portalprojects.entity.Project;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import jakarta.validation.Valid;
@@ -19,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -66,5 +69,15 @@ public class AdGroupProjectServiceImpl implements AdGroupProjectService {
         GroupProject groupProjectNew = adGroupProjectRepository.save(groupProject);
         AdGroupProjectResponse adGroupProjectResponse = adGroupProjectRepository.findGroupProjectById(groupProjectNew.getId());
         return adGroupProjectResponse;
+    }
+
+    @Override
+    public AdGroupProjectResponse detailGroupProject(String id) {
+        return adGroupProjectRepository.findGroupProjectById(id);
+    }
+
+    @Override
+    public List<AdDetailGroupProjectResponse> getAllProject(String id) {
+        return adGroupProjectRepository.getAllProject(id);
     }
 }

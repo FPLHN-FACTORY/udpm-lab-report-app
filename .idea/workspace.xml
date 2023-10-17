@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fe93e581-5589-4bad-ba6a-389fa82a0816" name="Default Changelist" comment="- Fix lại tất cả các màn có chứa thuộc tính meetingPeriod to table period với 4 time 2 role teacher, student&#10;- Fix lại màn lịch dạy hôm nay, xem sửa điểm danh&#10;- Fix lại luồng xem sửa điểm danh, validate check ca&#10;- Fix lại màn chuyển sinh viên role admin&#10;- Fix lại màn điểm danh tất cả sinh viên, 1 sinh viên">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="fe93e581-5589-4bad-ba6a-389fa82a0816" name="Default Changelist" comment="update code&#10;- Fix lại màn điểm danh tất cả sinh viên, 1 sinh viên" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -25,7 +23,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="thangncph26123" />
+        <entry key="$PROJECT_DIR$" value="develop" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -96,6 +94,7 @@
       <workItem from="1697187822102" duration="109000" />
       <workItem from="1697197690985" duration="130000" />
       <workItem from="1697279417356" duration="1793000" />
+      <workItem from="1697523106194" duration="125000" />
     </task>
     <task id="LOCAL-00001" summary="update code merge login, pending">
       <created>1696288841421</created>
@@ -174,7 +173,14 @@
       <option name="project" value="LOCAL" />
       <updated>1697281141762</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="update code&#10;- Fix lại màn điểm danh tất cả sinh viên, 1 sinh viên">
+      <created>1697523150788</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1697523150788</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -201,6 +207,7 @@
     <MESSAGE value="fix merge code all member update code ultil convert" />
     <MESSAGE value="fix class_period(table class), meeting_period(table meeting) and show table all task , convert time two role student and teacher" />
     <MESSAGE value="- Fix lại tất cả các màn có chứa thuộc tính meetingPeriod to table period với 4 time 2 role teacher, student&#10;- Fix lại màn lịch dạy hôm nay, xem sửa điểm danh&#10;- Fix lại luồng xem sửa điểm danh, validate check ca&#10;- Fix lại màn chuyển sinh viên role admin&#10;- Fix lại màn điểm danh tất cả sinh viên, 1 sinh viên" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Fix lại tất cả các màn có chứa thuộc tính meetingPeriod to table period với 4 time 2 role teacher, student&#10;- Fix lại màn lịch dạy hôm nay, xem sửa điểm danh&#10;- Fix lại luồng xem sửa điểm danh, validate check ca&#10;- Fix lại màn chuyển sinh viên role admin&#10;- Fix lại màn điểm danh tất cả sinh viên, 1 sinh viên" />
+    <MESSAGE value="update code&#10;- Fix lại màn điểm danh tất cả sinh viên, 1 sinh viên" />
+    <option name="LAST_COMMIT_MESSAGE" value="update code&#10;- Fix lại màn điểm danh tất cả sinh viên, 1 sinh viên" />
   </component>
 </project>

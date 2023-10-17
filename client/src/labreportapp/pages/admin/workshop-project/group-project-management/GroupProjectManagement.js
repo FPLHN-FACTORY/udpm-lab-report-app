@@ -51,6 +51,9 @@ const GroupProjectManagement = () => {
 
   useEffect(() => {
     loadDataGroupProject();
+    return () => {
+      dispatch(SetAdGroupProject([]));
+    }
   }, [current, size]);
 
   const clearFilter = () => {

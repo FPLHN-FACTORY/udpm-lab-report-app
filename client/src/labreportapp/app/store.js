@@ -48,6 +48,7 @@ import UserCurrentReducer from "./common/UserCurrent.reducer";
 import StStudentClassesReducer from "./student/StStudentClasses.reducer";
 import AdMeetingPeriodSliceReducer from "./admin/AdMeetingPeriodSlice.reducer";
 import AdGroupProjectSliceReducer from "./admin/AdGroupProjectSlice.reducer";
+import AdDetailGroupProjectSliceReducer from "./admin/AdDetailGroupProjectSlice.reducer";
 
 export const store = configureStore({
   reducer: {
@@ -79,6 +80,7 @@ export const store = configureStore({
     adTypeProject: adTypeProjectSliceReducer,
     adRoleProject: adRoleProjectSliceReducer,
     adGroupProject: AdGroupProjectSliceReducer,
+    adDetailGroupProject: AdDetailGroupProjectSliceReducer,
     ////
     board: boardSliceReducer,
     myProject: myProjectSliceReducer,
