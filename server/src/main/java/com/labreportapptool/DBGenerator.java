@@ -64,7 +64,6 @@ import com.labreportapp.portalprojects.entity.Project;
 import com.labreportapp.portalprojects.entity.ProjectCategory;
 import com.labreportapp.portalprojects.entity.Todo;
 import com.labreportapp.portalprojects.entity.TodoList;
-import com.labreportapp.portalprojects.entity.TypeProject;
 import com.labreportapp.portalprojects.infrastructure.constant.Constants;
 import com.labreportapp.portalprojects.infrastructure.constant.PriorityLevel;
 import com.labreportapp.portalprojects.infrastructure.constant.RoleMemberProject;
@@ -87,7 +86,6 @@ import com.labreportapp.portalprojects.repository.ProjectRepository;
 import com.labreportapp.portalprojects.repository.StakeholderProjectRepository;
 import com.labreportapp.portalprojects.repository.TodoListRepository;
 import com.labreportapp.portalprojects.repository.TodoRepository;
-import com.labreportapp.portalprojects.repository.TypeProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -212,8 +210,8 @@ public class DBGenerator implements CommandLineRunner {
     @Autowired
     private MemberTeamFactoryRepository memberTeamFactoryRepository; // bảng mới thêm ngày 14/10/2023
 
-    @Autowired
-    private TypeProjectRepository typeProjectRepository;// portal project // bảng mới thêm ngày 14/10/2023
+//    @Autowired
+//    private TypeProjectRepository typeProjectRepository;// portal project // bảng mới thêm ngày 14/10/2023
 
     @Autowired
     private GroupProjectRepository groupProjectRepository;// portal project // bảng mới thêm ngày 14/10/2023
@@ -2623,16 +2621,6 @@ public class DBGenerator implements CommandLineRunner {
         memberTeamFactory7.setTeamFactoryId(teamFactory2.getId());
         memberTeamFactory7.setStatusMemberTeamFactory(StatusMemberTeamFactory.HOAT_DONG);
         memberTeamFactory7.setId(memberTeamFactoryRepository.save(memberTeamFactory7).getId());
-
-        TypeProject typeProject1 = new TypeProject();
-        typeProject1.setName("Type 1");
-        typeProject1.setDescription("Quan trọng, xây dựng hệ thống cổng thông tin của trường !");
-        typeProject1.setId(typeProjectRepository.save(typeProject1).getId());
-
-        TypeProject typeProject2 = new TypeProject();
-        typeProject2.setName("Type 2");
-        typeProject2.setDescription("Không quan trọng, được sử dụng cho các nhóm trong xưởng !");
-        typeProject2.setId(typeProjectRepository.save(typeProject2).getId());
 
     }
 

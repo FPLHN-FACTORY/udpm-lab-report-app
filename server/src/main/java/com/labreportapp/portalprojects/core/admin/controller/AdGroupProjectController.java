@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
@@ -42,5 +42,15 @@ public class AdGroupProjectController {
     @PostMapping
     public ResponseObject createGroupProject(@Valid @ModelAttribute AdCreateGroupProjectRequest request) throws IOException {
         return new ResponseObject(adGroupProjectService.createGroupProject(request));
+    }
+
+    @GetMapping("/detail")
+    public ResponseObject detailGroupProject(@RequestParam("id") String id) {
+        return new ResponseObject(adGroupProjectService.detailGroupProject(id));
+    }
+
+    @GetMapping("/get-all-project")
+    public ResponseObject getAllProject(@RequestParam("id") String id) {
+        return new ResponseObject(adGroupProjectService.getAllProject(id));
     }
 }

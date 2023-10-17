@@ -38,4 +38,18 @@ export class AdGroupProjectAPI {
       data: formData,
     });
   }
+
+  static detailGroupProject(id) {
+    return request({
+      method: "GET",
+      url: url + "/detail?id=" + id,
+    });
+  }
+
+  static getAllProject(id) {
+    return request({
+      method: "GET",
+      url: url + "/get-all-project?id=" + id,
+    });
+  }
 }

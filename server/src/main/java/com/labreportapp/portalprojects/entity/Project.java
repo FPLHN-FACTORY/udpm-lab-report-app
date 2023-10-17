@@ -3,6 +3,7 @@ package com.labreportapp.portalprojects.entity;
 import com.labreportapp.labreport.entity.base.PrimaryEntity;
 import com.labreportapp.portalprojects.infrastructure.constant.EntityProperties;
 import com.labreportapp.portalprojects.infrastructure.constant.StatusProject;
+import com.labreportapp.portalprojects.infrastructure.constant.TypeProject;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -57,7 +58,7 @@ public class Project extends PrimaryEntity {
     @Column(length = EntityProperties.LENGTH_ID)
     private String groupProjectId;
 
-    @Column(length = EntityProperties.LENGTH_ID)
-    private String typeProjectId;
+    @Column
+    private TypeProject typeProject;
 
 }

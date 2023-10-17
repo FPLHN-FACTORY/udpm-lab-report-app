@@ -219,9 +219,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
               />
             }
           >
-            <Link to="/admin/track-activity-metrics">
-              Chỉ số hoạt động
-            </Link>
+            <Link to="/admin/track-activity-metrics">Chỉ số hoạt động</Link>
           </Menu.Item>
         </Menu.SubMenu>
         <div style={{ marginBottom: 15, marginTop: 15 }}>
@@ -243,17 +241,6 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             />
           }
         >
-          <Menu.Item
-            key="14"
-            icon={
-              <FontAwesomeIcon
-                icon={faTasks}
-                style={{ color: "rgb(226, 179, 87)" }}
-              />
-            }
-          >
-            <Link to="/admin/type-project-management">Quản lý loại dự án</Link>
-          </Menu.Item>
           <Menu.Item
             key="15"
             icon={

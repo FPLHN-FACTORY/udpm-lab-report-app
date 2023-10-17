@@ -76,6 +76,7 @@ import TeamManagement from "./labreportapp/pages/admin/workshop-member/team-mana
 import MemberManagement from "./labreportapp/pages/admin/workshop-member/member-management/MemberManagement";
 import MeetingPeriodConfiguration from "./labreportapp/pages/admin/configuration/meeting-period-configuration/MeetingPeriodConfiguration";
 import DetailGroupProject from "./labreportapp/pages/admin/workshop-project/detail-group-project/DetailGroupProject";
+import RoleFactoryManagement from "./labreportapp/pages/admin/workshop-member/role-factory-management/RoleFactoryManagement";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -595,6 +596,16 @@ function App() {
                 <AuthGuard>
                   <DashBoardAdmin>
                     <RoleManagement />
+                  </DashBoardAdmin>
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/admin/role-factory-management"
+              element={
+                <AuthGuard>
+                  <DashBoardAdmin>
+                    <RoleFactoryManagement />
                   </DashBoardAdmin>
                 </AuthGuard>
               }
