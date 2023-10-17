@@ -6,6 +6,7 @@ import com.labreportapp.labreport.core.admin.service.AdTeamService;
 import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.core.common.base.ResponseObject;
 import com.labreportapp.labreport.entity.Team;
+import com.labreportapp.labreport.entity.TeamFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,7 +28,7 @@ public class AdTeamController {
     @GetMapping("/page/{page}")
     public ResponseEntity<?> getAllTeam(@PathVariable int page) {
         Pageable pageResquest = PageRequest.of(page - 1, 5);
-        List<Team> TeamList = adTeamService.findAllTeam(pageResquest);
+        List<TeamFactory> TeamList = adTeamService.findAllTeam(pageResquest);
         return ResponseEntity.ok(TeamList);
     }
 

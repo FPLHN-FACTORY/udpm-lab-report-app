@@ -81,6 +81,6 @@ public class PropertyKeys {
     public static final String INVALID_TOKEN = "invalid.token";
     public static final String MEETING_PERIOD_NOT_EXITS = "meeting.period.not.exits";
     public static final String GROUP_PROJECT_NOT_EXISTS = "group.project.not.exits";
-    public static final String TEAM_PROJECT_ALREADY_EXISTS = "team.project.not.exits";
+    public static final String TEAM_MEMBER_TEAM_ALREADY_EXISTS = "team.project.not.exits";
 
 }

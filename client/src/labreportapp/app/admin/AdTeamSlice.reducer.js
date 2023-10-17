@@ -16,7 +16,7 @@ const adTeamSlice = createSlice({
         stt: state.length + 1,
         id: data.id,
         name: data.name,
-        subjectName: data.subjectName,
+        descriptions: data.descriptions,
 
       };
       state.unshift(newTeam);
@@ -29,7 +29,7 @@ const adTeamSlice = createSlice({
       );
       if (index !== -1) {
         state[index].name = updateTeam.name;
-        state[index].subjectName = updateTeam.subjectName;
+        state[index].descriptions = updateTeam.descriptions;
 
 
       }

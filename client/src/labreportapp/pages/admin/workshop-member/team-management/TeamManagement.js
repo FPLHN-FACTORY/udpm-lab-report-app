@@ -76,10 +76,10 @@ const TeamManagement = () => {
       width: "20%",
     },
     {
-      title: "Tên Đề Tài",
-      dataIndex: "subjectName",
-      key: "subjectName",
-      sorter: (a, b) => a.subjectName.localeCompare(b.subjectName),
+      title: "Mô tả",
+      dataIndex: "descriptions",
+      key: "descriptions",
+      sorter: (a, b) => a.descriptions.localeCompare(b.descriptions),
       width: "40%",
     },
     {
@@ -103,8 +103,8 @@ const TeamManagement = () => {
             />
           </Tooltip>
           <Popconfirm
-            title="Xóa Ca"
-            description="Bạn có chắc chắn muốn xóa Loại này không?"
+            title="Xóa nhóm"
+            descriptions="Bạn có chắc chắn muốn xóa Loại này không?"
             onConfirm={() => {
               buttonDelete(record.id);
             }}

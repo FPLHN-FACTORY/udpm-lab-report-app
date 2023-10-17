@@ -7,26 +7,27 @@ import "react-toastify/dist/ReactToastify.css";
 import { useAppDispatch } from "../../../../../app/hook";
 import TextArea from "antd/es/input/TextArea";
 import moment from "moment";
+import { UpdateDescriptions } from "../../../../../../portalprojects/app/reducer/detail-project/DPBoardSlice.reducer";
 
 const { Option } = Select;
 
 const ModalUpdateTeam = ({ visible, onCancel, team }) => {
-    const [name, setName] = useState("");
-    const [subjectName, setSubjectName] = useState("");
-    const [errorName, setErrorName] = useState("Vui lòng không để trống");
-    const [errorSubjectName, setErrorSubjectName] = useState("Vui lòng không để trống");
-    const dispatch = useAppDispatch();
+  const [name, setName] = useState("");
+  const [descriptions, setDescription] = useState("");
+  const [errorName, setErrorName] = useState("Vui lòng không để trống");
+  const [errorDescription, setErrorDescription] = useState("Vui lòng không để trống");
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (team !== null) {
       setName(team.name);
-      setSubjectName(team.subjectName);
+      setDescription(team.descriptions);
 
       return () => {
         setName("");
         setErrorName("");
-        setSubjectName("");
-        setErrorSubjectName("");
+        setDescription("");
+        setErrorDescription();
       };
     }
   }, [team]);
@@ -45,23 +46,23 @@ const ModalUpdateTeam = ({ visible, onCancel, team }) => {
         setErrorName("");
       }
     }
-    if (subjectName.trim() === "") {
-        setErrorSubjectName("Đề tài không được để trống");
+    if (descriptions.trim() === "") {
+      setErrorDescription("Mô tả không được để trống");
+      check++;
+    } else {
+      setErrorDescription("");
+      if (descriptions.trim().length > 500) {
+        setErrorDescription("Mô tả không quá 500 ký tự");
         check++;
       } else {
-        setErrorSubjectName("");
-        if (subjectName.trim().length > 500) {
-          setErrorSubjectName("Đề tài không quá 500 ký tự");
-          check++;
-        } else {
-          setErrorSubjectName("");
-        }
+        setErrorDescription("");
       }
+    }
     if (check === 0) {
       let obj = {
         id: team.id,
         name: name,
-        subjectName: subjectName,
+        descriptions: descriptions,
 
       };
 
@@ -104,15 +105,15 @@ const ModalUpdateTeam = ({ visible, onCancel, team }) => {
           </Row>
           <Row gutter={16} style={{ marginBottom: "15px" }}>
             <Col span={24}>
-              <span>Tên đề tài:</span> <br />
+              <span>Mô tả:</span> <br />
               <TextArea
-                value={subjectName}
+                value={descriptions}
                 onChange={(e) => {
-                  setSubjectName(e.target.value);
+                  setDescription(e.target.value);
                 }}
                 type="text"
               />
-              <span style={{ color: "red" }}>{errorSubjectName}</span>
+              <span style={{ color: "red" }}>{errorDescription}</span>
             </Col>
           </Row>
         </div>

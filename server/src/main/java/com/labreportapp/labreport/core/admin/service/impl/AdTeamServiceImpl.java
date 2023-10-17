@@ -7,7 +7,7 @@ import com.labreportapp.labreport.core.admin.model.response.AdTeamResponse;
 import com.labreportapp.labreport.core.admin.repository.AdTeamRepository;
 import com.labreportapp.labreport.core.admin.service.AdTeamService;
 import com.labreportapp.labreport.core.common.base.PageableObject;
-import com.labreportapp.labreport.entity.Team;
+import com.labreportapp.labreport.entity.TeamFactory;
 import com.labreportapp.labreport.util.FormUtils;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
@@ -36,25 +36,25 @@ public class AdTeamServiceImpl implements AdTeamService {
     private List<AdTeamResponse> adTeamResponseList;
 
     @Override
-    public List<Team> findAllTeam(Pageable pageable) {
+    public List<TeamFactory> findAllTeam(Pageable pageable) {
         return adTeamRepository.getAllTeam(pageable);
     }
 
     @Override
-    public Team createTeam(AdCreateTeamRequest obj) {
-        Team team = formUtils.convertToObject(Team.class, obj);
+    public TeamFactory createTeam(AdCreateTeamRequest obj) {
+        TeamFactory team = formUtils.convertToObject(TeamFactory.class, obj);
         return adTeamRepository.save(team);
     }
 
     @Override
-    public Team updateTeam(AdUpdateTeamRequest obj) {
-        Optional<Team> findById = adTeamRepository.findById(obj.getId());
+    public TeamFactory updateTeam(AdUpdateTeamRequest obj) {
+        Optional<TeamFactory> findById = adTeamRepository.findById(obj.getId());
         if (!findById.isPresent()) {
             throw new RestApiException(Message.TEAM_NOT_EXISTS);
         }
-        Team team = findById.get();
+        TeamFactory team = findById.get();
         team.setName(obj.getName());
-        team.setSubjectName(obj.getSubjectName());
+        team.setDescriptions(obj.getDescriptions());
 
         return adTeamRepository.save(team);
     }
@@ -69,13 +69,13 @@ public class AdTeamServiceImpl implements AdTeamService {
 
     @Override
     public Boolean deleteTeam(String id) {
-        Optional<Team> findTeamById = adTeamRepository.findById(id);
-        Integer countTeams = adTeamRepository.countProjectByTeamId(id);
+        Optional<TeamFactory> findTeamById = adTeamRepository.findById(id);
+        Integer countTeams = adTeamRepository.countMemberTeamByTeamId(id);
         if (!findTeamById.isPresent()) {
             throw new RestApiException(Message.TEAM_NOT_EXISTS);
         }
         if (countTeams != null && countTeams > 0) {
-            throw new RestApiException(Message.TEAM_PROJECT_ALREADY_EXISTS);
+            throw new RestApiException(Message.TEAM_MEMBER_TEAM_ALREADY_EXISTS);
         }
 
         adTeamRepository.delete(findTeamById.get());

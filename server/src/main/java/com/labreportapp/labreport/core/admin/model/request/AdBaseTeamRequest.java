@@ -20,7 +20,7 @@ public class AdBaseTeamRequest {
     @NotEmpty
     @NotBlank
     @Length(max = 500)
-    private String subjectName;
+    private String descriptions;
 
 
 }

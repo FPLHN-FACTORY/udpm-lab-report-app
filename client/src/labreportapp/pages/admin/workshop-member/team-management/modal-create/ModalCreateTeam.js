@@ -12,17 +12,17 @@ const { Option } = Select;
 
 const ModalCreateTeam = ({ visible, onCancel }) => {
   const [name, setName] = useState("");
-  const [subjectName, setSubjectName] = useState("");
-  const [errorName, setErrorName] = useState("Vui lòng không để trống");
-  const [errorSubjectName, setErrorSubjectName] = useState("Vui lòng không để trống");
+  const [descriptions, setDescription] = useState("");
+  const [errorName, setErrorName] = useState("");
+  const [errorDescription, setErrorDescription] = useState("");
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     return () => {
       setName("");
       setErrorName("");
-      setSubjectName("");
-      setErrorSubjectName("");
+      setDescription("");
+      setErrorDescription("");
     };
   }, [visible]);
 
@@ -40,29 +40,29 @@ const ModalCreateTeam = ({ visible, onCancel }) => {
         setErrorName("");
       }
     }
-    if (subjectName.trim() === "") {
-      setErrorSubjectName("Đề tài không được để trống");
+    if (descriptions.trim() === "") {
+      setErrorDescription("Mô tả không được để trống");
       check++;
     } else {
-      setErrorSubjectName("");
-      if (subjectName.trim().length > 500) {
-        setErrorSubjectName("Đề tài không quá 500 ký tự");
+      setErrorDescription("");
+      if (descriptions.trim().length > 500) {
+        setErrorDescription("Mô tả không quá 500 ký tự");
         check++;
       } else {
-        setErrorSubjectName("");
+        setErrorDescription("");
       }
     }
     if (check === 0) {
       let obj = {
         name: name,
-        subjectName: subjectName,
+        descriptions: descriptions,
       };
 
       AdTeamAPI.addTeam(obj).then(
         (response) => {
           toast.success("Thêm nhóm thành công!");
           dispatch(AddTeam(response.data.data));
-          console.log(obj.idProject);
+          console.log(obj.descriptions);
           onCancel();
         },
         (error) => {}
@@ -100,15 +100,15 @@ const ModalCreateTeam = ({ visible, onCancel }) => {
           </Row>
           <Row gutter={16} style={{ marginBottom: "15px" }}>
             <Col span={24}>
-              <span>Tên đề tài:</span> <br />
+              <span>Mô tả:</span> <br />
               <TextArea
-                value={subjectName}
+                value={descriptions}
                 onChange={(e) => {
-                  setSubjectName(e.target.value);
+                  setDescription(e.target.value);
                 }}
                 type="text"
               />
-              <span style={{ color: "red" }}>{errorSubjectName}</span>
+              <span style={{ color: "red" }}>{errorDescription}</span>
             </Col>
           </Row>
           
