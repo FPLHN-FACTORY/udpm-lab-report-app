@@ -51,7 +51,7 @@ public class AdMeetingPeriodConfigurationServiceImpl implements AdMeetingPeriodC
     public MeetingPeriod updateMeetingPeriod(AdUpdateMeetingPeriodRequest obj) {
         Optional<MeetingPeriod> findById = adMeetingPeriodRepository.findById(obj.getId());
         if (!findById.isPresent()) {
-            throw new RestApiException(Message.SEMESTER_NOT_EXISTS);
+            throw new RestApiException(Message.PERIOD_NOT_EXISTS);
         }
         MeetingPeriod meetingPeriod = findById.get();
         meetingPeriod.setName(obj.getName());
@@ -74,11 +74,14 @@ public class AdMeetingPeriodConfigurationServiceImpl implements AdMeetingPeriodC
     @Override
     public Boolean deleteMeetingPeriod(String id) {
         Optional<MeetingPeriod> findMeetingPeriodById = adMeetingPeriodRepository.findById(id);
+        Integer countMeetings = adMeetingPeriodRepository.countMeetingByMeetingPeriodId(id);
 
         if (!findMeetingPeriodById.isPresent()) {
-            throw new RestApiException(Message.SEMESTER_NOT_EXISTS);
+            throw new RestApiException(Message.PERIOD_NOT_EXISTS);
         }
-
+        if (countMeetings != null && countMeetings > 0) {
+            throw new RestApiException(Message.PERIOD_OVERLAP);
+        }
         adMeetingPeriodRepository.delete(findMeetingPeriodById.get());
         return true;
     }

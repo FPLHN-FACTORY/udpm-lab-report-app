@@ -1,7 +1,7 @@
 import { Modal, Row, Col, Input, Button, Select } from "antd";
 import { useEffect, useState } from "react";
-import { AdTeamAPI } from "../../../../../api/admin/AdTeamAPI";
-import { UpdateTeam } from "../../../../../app/admin/AdTeamSlice.reducer";
+import { AdRoleFactoryAPI } from "../../../../../api/admin/AdRoleFactoryAPI";
+import { UpdateRoleFactory } from "../../../../../app/admin/AdRoleFactorySlice.reducer";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAppDispatch } from "../../../../../app/hook";
@@ -10,7 +10,7 @@ import moment from "moment";
 
 const { Option } = Select;
 
-const ModalUpdateTeam = ({ visible, onCancel, team }) => {
+const ModalUpdateRoleFactory = ({ visible, onCancel, roleFactory }) => {
   const [name, setName] = useState("");
   const [descriptions, setDescription] = useState("");
   const [errorName, setErrorName] = useState("");
@@ -18,9 +18,9 @@ const ModalUpdateTeam = ({ visible, onCancel, team }) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (team !== null) {
-      setName(team.name);
-      setDescription(team.descriptions);
+    if (roleFactory !== null) {
+      setName(roleFactory.name);
+      setDescription(roleFactory.descriptions);
 
       return () => {
         setName("");
@@ -29,17 +29,17 @@ const ModalUpdateTeam = ({ visible, onCancel, team }) => {
         setErrorDescription();
       };
     }
-  }, [team]);
+  }, [roleFactory]);
 
   const update = () => {
     let check = 0;
     if (name.trim() === "") {
-      setErrorName("Tên nhóm không được để trống");
+      setErrorName("Tên vai trò không được để trống");
       check++;
     } else {
       setErrorName("");
       if (name.trim().length > 500) {
-        setErrorName("Tên nhóm không quá 500 ký tự");
+        setErrorName("Tên vai trò không quá 500 ký tự");
         check++;
       } else {
         setErrorName("");
@@ -59,16 +59,16 @@ const ModalUpdateTeam = ({ visible, onCancel, team }) => {
     }
     if (check === 0) {
       let obj = {
-        id: team.id,
+        id: roleFactory.id,
         name: name,
         descriptions: descriptions,
 
       };
 
-      AdTeamAPI.updateTeam(obj, team.id).then(
+      AdRoleFactoryAPI.updateRoleFactory(obj, roleFactory.id).then(
         (response) => {
           toast.success("Cập nhật thành công!");
-          dispatch(UpdateTeam(response.data.data));
+          dispatch(UpdateRoleFactory(response.data.data));
           onCancel();
         },
         (error) => {}
@@ -143,4 +143,4 @@ const ModalUpdateTeam = ({ visible, onCancel, team }) => {
     </>
   );
 };
-export default ModalUpdateTeam;
+export default ModalUpdateRoleFactory;

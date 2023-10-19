@@ -15,6 +15,10 @@ const ModalUpdateMeetingPeriod = ({ visible, onCancel, meetingPeriod }) => {
   const [endHour, setEndHour] = useState("");
   const [endMinute, setEndMinute] = useState("");
   const [errorName, setErrorName] = useState("");
+  const [errorStartHour, setErrorStartHour] = useState("");
+  const [errorEndHour, setErrorEndHour] = useState("");
+  const [errorStartMinute, setErrorStartMinute] = useState("");
+  const [errorEndMinute, setErrorEndMinute] = useState("");
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -45,6 +49,63 @@ const ModalUpdateMeetingPeriod = ({ visible, onCancel, meetingPeriod }) => {
       check++;
     } else {
       setErrorName("");
+    }
+
+    if (startHour === "" || startMinute === "") {
+      setErrorStartHour("Giờ bắt đầu không được để trống");
+      setErrorStartMinute("Phút bắt đầu không được để trống");
+      check++;
+    } else {
+      setErrorStartHour("");
+      setErrorStartMinute("");
+    }
+  
+    if (endHour === "" || endMinute === "") {
+      setErrorEndHour("Giờ kết thúc không được để trống");
+      setErrorEndMinute("Phút kết thúc không được để trống");
+      check++;
+    } else {
+      setErrorEndHour("");
+      setErrorEndMinute("");
+    }
+  
+    if (parseInt(startHour) > parseInt(endHour)) {
+      setErrorStartHour("Giờ bắt đầu phải nhỏ hơn giờ kết thúc");
+      setErrorEndHour("Giờ kết thúc phải lớn hơn giờ bắt đầu");
+      check++;
+    } else if (parseInt(startHour) === parseInt(endHour) && parseInt(startMinute) >= parseInt(endMinute)) {
+      setErrorStartMinute("Phút bắt đầu phải nhỏ hơn phút kết thúc");
+      setErrorEndMinute("Phút kết thúc phải lớn hơn phút bắt đầu");
+      check++;
+    } else {
+      setErrorStartHour("");
+      setErrorEndHour("");
+      setErrorStartMinute("");
+      setErrorEndMinute("");
+    }
+
+    if (parseInt(startHour) >= 24) {
+      setErrorStartHour("Giờ bắt đầu phải nhỏ hơn 24 phút");
+      check++;
+    } else if (parseInt(startMinute) >= 60) {
+      setErrorStartMinute("Phút bắt đầu phải nhỏ hơn 60 phút");
+      check++;
+    } else {
+      setErrorStartHour("");
+      setErrorStartMinute("");
+    }
+  
+  
+    
+    if (parseInt(endHour) >= 24) {
+      setErrorEndHour("Giờ kết thúc phải nhỏ hơn 24 giờ");
+      check++;
+    } else if (parseInt(endMinute) >= 60) {
+      setErrorEndMinute("Phút kết thúc phải nhỏ hơn 60 phút");
+      check++;
+    } else {
+      setErrorEndHour("");
+      setErrorEndMinute("");
     }
 
     if (check === 0) {
@@ -104,7 +165,7 @@ const ModalUpdateMeetingPeriod = ({ visible, onCancel, meetingPeriod }) => {
                 }}
                 type="text"
               />
-              <span style={{ color: "red" }}>{errorName}</span>
+              <span style={{ color: "red" }}>{errorStartHour}</span>
             </Col>
             <Col span={24}>
               <span>Giờ kết thúc:</span> <br />
@@ -115,7 +176,7 @@ const ModalUpdateMeetingPeriod = ({ visible, onCancel, meetingPeriod }) => {
                 }}
                 type="text"
               />
-              <span style={{ color: "red" }}>{errorName}</span>
+              <span style={{ color: "red" }}>{errorEndHour}</span>
             </Col>
             <Col span={24}>
               <span>Phút bắt đầu:</span> <br />
@@ -126,7 +187,7 @@ const ModalUpdateMeetingPeriod = ({ visible, onCancel, meetingPeriod }) => {
                 }}
                 type="text"
               />
-              <span style={{ color: "red" }}>{errorName}</span>
+              <span style={{ color: "red" }}>{errorStartMinute}</span>
             </Col>
             <Col span={24}>
               <span>Phút kết thúc:</span> <br />
@@ -137,7 +198,7 @@ const ModalUpdateMeetingPeriod = ({ visible, onCancel, meetingPeriod }) => {
                 }}
                 type="text"
               />
-              <span style={{ color: "red" }}>{errorName}</span>
+              <span style={{ color: "red" }}>{errorEndMinute}</span>
             </Col>
             
           </Row>

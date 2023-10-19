@@ -43,4 +43,7 @@ public interface AdMeetingPeriodConfigurationRepository extends JpaRepository<Me
                     ORDER BY obj.created_date DESC       
             """, nativeQuery = true)
     Page<AdMeetingPeriodConfigurationResponse> searchMeetingPeriod(@Param("req") AdFindMeetingConfigurationRequest req, Pageable page);
+
+    @Query(value = "SELECT COUNT(*) FROM meeting a join meeting_period b on a.meeting_period = b.id WHERE b.id  = :id", nativeQuery = true)
+    Integer countMeetingByMeetingPeriodId(@Param("id") String id);
 }
