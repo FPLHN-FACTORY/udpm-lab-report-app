@@ -1,4 +1,4 @@
-import { Modal, Row, Col, Input, Button, Select } from "antd";
+import { Modal, Row, Col, Input, Button, Select, message } from "antd";
 import { useEffect, useState } from "react";
 import { AdTeamAPI } from "../../../../../api/admin/AdTeamAPI";
 import { AddTeam } from "../../../../../app/admin/AdTeamSlice.reducer";
@@ -60,7 +60,7 @@ const ModalCreateTeam = ({ visible, onCancel }) => {
 
       AdTeamAPI.addTeam(obj).then(
         (response) => {
-          toast.success("Thêm nhóm thành công!");
+          message.success("Thêm nhóm thành công!");
           dispatch(AddTeam(response.data.data));
           console.log(obj.descriptions);
           onCancel();

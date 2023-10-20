@@ -28,6 +28,7 @@ import {
   Popconfirm,
   Modal,
   Empty,
+  message,
 } from "antd";
 import {
   QuestionCircleFilled,
@@ -127,12 +128,11 @@ const StRegisterClass = () => {
       };
       await StClassAPI.studentJoinClass(filter).then((response) => {
         setLoading(false);
-        toast.success("Tham gia lớp học thành công!");
+        message.success("Tham gia lớp học thành công!");
         navigate(`/student/my-class/post/${record.id}`);
       });
     } catch (error) {
       setLoading(false);
-      toast.error(error.response.data);
       getClassByCriteriaIsAcive(semester);
     }
   };

@@ -1,4 +1,4 @@
-import { Modal, Row, Col, Input, Button } from "antd";
+import { Modal, Row, Col, Input, Button, message } from "antd";
 import { useEffect, useState } from "react";
 import { AdLevelAPI } from "../../../../api/admin/AdLevelManagerAPI";
 import { useAppSelector } from "../../../../app/hook";
@@ -41,7 +41,7 @@ const ModalCreateLevel = ({ visible, onCancel }) => {
 
       AdLevelAPI.addLevel(obj).then(
         (response) => {
-          toast.success("Thêm thành công!");
+          message.success("Thêm thành công!");
           dispatch(AddLevel(response.data.data));
           onCancel();
         },

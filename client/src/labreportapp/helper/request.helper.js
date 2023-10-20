@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 import { portIdentity } from "./constants";
 import store from "../app/store";
+import { message } from "antd";
 
 export const request = axios.create({
   baseURL: AppConfig.apiUrl,
@@ -27,7 +28,7 @@ request.interceptors.response.use(
       window.location.href = "/not-authorization";
     }
     if (error.response != null && error.response.status === 400) {
-      toast.error(error.response.data.message);
+      message.error(error.response.data.message);
     }
     if (error.response && error.response.status === 500) {
       if (error.response.data.message === "2003") {

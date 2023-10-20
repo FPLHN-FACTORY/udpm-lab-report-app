@@ -1,4 +1,4 @@
-import { Modal, Row, Col, Input, Button } from "antd";
+import { Modal, Row, Col, Input, Button, message } from "antd";
 import "./styleModalUpdatePeriod.css";
 import { useEffect, useState } from "react";
 import { PeriodProjectAPI } from "../../../../api/period-project/periodProject.api";
@@ -117,12 +117,12 @@ const ModalUpdatePeriod = ({ visible, onCancel, idPeriod }) => {
 
       PeriodProjectAPI.update(obj).then(
         (response) => {
-          toast.success("Cập nhật thành công!");
+          message.success("Cập nhật thành công!");
           dispatch(UpdatePeriodProject(response.data.data));
           onCancel();
         },
         (error) => {
-          toast.error(error.response.data.message);
+          message.error(error.response.data.message);
         }
       );
     }

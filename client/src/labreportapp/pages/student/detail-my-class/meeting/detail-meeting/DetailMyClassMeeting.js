@@ -28,7 +28,7 @@ const StTeamMeeting = () => {
         featchTeams(response.data.data.idClass);
       });
     } catch (error) {
-      toast.error(error.response.data.message);
+
     }
   };
 

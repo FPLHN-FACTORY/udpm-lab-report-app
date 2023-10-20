@@ -1,7 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import "./style-meeting-management.css";
 import { BookOutlined, ControlOutlined } from "@ant-design/icons";
-import { Button, Checkbox, Empty, Popconfirm, Select, Tooltip } from "antd";
+import { Button, Checkbox, Empty, Popconfirm, Select, Tooltip, message } from "antd";
 import { MeetingManagementAPI } from "../../../../api/admin/meeting-management/MeetingManagementAPI";
 import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import { useEffect, useState } from "react";
@@ -54,10 +54,10 @@ const MeetingManagment = () => {
         dispatch(SetMeeting(response.data.data));
         setIsLoading(false);
         if (check === 1) {
-          toast.success("Thay đổi giảng viên thành công");
+          message.success("Thay đổi giảng viên thành công");
         }
         if (check === 2) {
-          toast.success("Tạo nhiều buổi học thành công");
+          message.success("Tạo nhiều buổi học thành công");
         }
       },
       (error) => {
@@ -114,7 +114,7 @@ const MeetingManagment = () => {
     MeetingManagementAPI.deleteMeeting(id).then(
       (response) => {
         dispatch(DeleteMeeting(response.data.data));
-        toast.success("Xóa thành công");
+        message.success("Xóa thành công");
       },
       (error) => {}
     );
@@ -174,7 +174,7 @@ const MeetingManagment = () => {
 
   const changeIsTeacher = () => {
     if (!isChangeTeacher && selectedIds.length === 0) {
-      toast.error("Hãy chọn buổi học cần thay đổi giảng viên");
+      message.error("Hãy chọn buổi học cần thay đổi giảng viên");
       return;
     }
     setIsChangeTeacher(!isChangeTeacher);

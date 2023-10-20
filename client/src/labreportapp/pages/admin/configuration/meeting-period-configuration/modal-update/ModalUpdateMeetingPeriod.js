@@ -1,4 +1,4 @@
-import { Modal, Row, Col, Input, Button } from "antd";
+import { Modal, Row, Col, Input, Button, message } from "antd";
 import { useEffect, useState } from "react";
 import { AdMeetingPeriodConfigurationAPI } from "../../../../../api/admin/AdMeetingPeriodConfigurationAPI";
 import { useAppDispatch } from "../../../../../app/hook";
@@ -120,7 +120,7 @@ const ModalUpdateMeetingPeriod = ({ visible, onCancel, meetingPeriod }) => {
 
       AdMeetingPeriodConfigurationAPI.updateMeetingPeriod(obj, meetingPeriod.id).then(
         (response) => {
-          toast.success("Cập nhật thành công!");
+          message.success("Cập nhật thành công!");
           dispatch(UpdateMeetingPeriodConfiguration(response.data.data));
           onCancel();
         },

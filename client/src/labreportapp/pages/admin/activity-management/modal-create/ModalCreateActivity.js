@@ -1,5 +1,5 @@
 import "./styleModalCreateActivity.css";
-import { Modal, Row, Col, Input, Button, DatePicker, Select } from "antd";
+import { Modal, Row, Col, Input, Button, DatePicker, Select, message } from "antd";
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "../../../../app/hook";
 import { toast } from "react-toastify";
@@ -122,7 +122,7 @@ const ModalCreateActivity = ({
       console.log(code, descriptions, level);
       ActivityManagementAPI.create(obj).then(
         (response) => {
-          toast.success("Thêm thành công!");
+          message.success("Thêm thành công!");
           let objCreate = {
             ...response.data.data,
             nameSemester: semesterNameItem.name,

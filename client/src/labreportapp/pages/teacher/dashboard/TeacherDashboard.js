@@ -17,6 +17,7 @@ import {
   Statistic,
   Table,
   Tooltip,
+  message,
 } from "antd";
 import { useState } from "react";
 import { useAppDispatch } from "../../../app/hook";
@@ -230,7 +231,7 @@ const TeacherDashboard = () => {
       link.click();
       window.URL.revokeObjectURL(url);
       setLoadingExport(false);
-      toast.success("Export thành công !");
+      message.success("Export thành công !");
     } catch (error) {
       console.log(error);
     }

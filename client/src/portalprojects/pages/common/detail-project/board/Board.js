@@ -11,7 +11,7 @@ import {
   GetFilter,
 } from "../../../../app/reducer/detail-project/DPBoardSlice.reducer";
 import "./board.css";
-import { Input } from "antd";
+import { Input, message } from "antd";
 import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import { DetailProjectAPI } from "../../../../api/detail-project/detailProject.api";
 import {
@@ -208,7 +208,7 @@ const Board = () => {
 
   const handleAddList = () => {
     if (newListTitle === "") {
-      toast.error("Tên danh sách không được để trống");
+      message.error("Tên danh sách không được để trống");
       return;
     }
 

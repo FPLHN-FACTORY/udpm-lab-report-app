@@ -1,4 +1,4 @@
-import { Modal, Row, Col, Input, Button } from "antd";
+import { Modal, Row, Col, Input, Button, message } from "antd";
 import { useEffect, useState } from "react";
 import { AdSemesterAPI } from "../../../../api/admin/AdSemesterAPI";
 import moment from "moment";
@@ -124,7 +124,7 @@ const ModalCreateSemester = ({ visible, onCancel }) => {
 
       AdSemesterAPI.addSemester(obj).then(
         (response) => {
-          toast.success("Thêm thành công!");
+          message.success("Thêm thành công!");
           dispatch(AddSemester(response.data.data));
           onCancel();
         },

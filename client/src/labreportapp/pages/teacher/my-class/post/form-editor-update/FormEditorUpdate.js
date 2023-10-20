@@ -3,7 +3,7 @@ import JoditEditor from "jodit-react";
 import { TeacherPostAPI } from "../../../../../api/teacher/post/TeacherPost.api";
 import { UpdatePost } from "../../../../../app/teacher/post/tePostSlice.reduce";
 import { toast } from "react-toastify";
-import { Button } from "antd";
+import { Button, message } from "antd";
 import { useAppDispatch } from "../../../../../app/hook";
 import { useEffect } from "react";
 
@@ -25,27 +25,27 @@ function EditorUpdate({ obj, showUpdate }) {
   const update = () => {
     let empty = 0;
     if (descriptions.trim() === "<p><br></p>") {
-      toast.error("Nội dung bài viết không được trống !");
+      message.error("Nội dung bài viết không được trống !");
       empty++;
     }
     if (descriptions.trim() === "<p><br></p><br>") {
-      toast.error("Nội dung bài viết không được trống !");
+      message.error("Nội dung bài viết không được trống !");
       empty++;
     }
     if (descriptions.trim() === "<ul><li><br></li><br></ul>") {
-      toast.error("Nội dung bài viết không được trống !");
+      message.error("Nội dung bài viết không được trống !");
       empty++;
     }
     if (descriptions.trim() === "<ul><li><br></li><br></ul><br>") {
-      toast.error("Nội dung bài viết không được trống !");
+      message.error("Nội dung bài viết không được trống !");
       empty++;
     }
     if (descriptions.trim() === "<ol><li><br></li><br></ol>") {
-      toast.error("Nội dung bài viết không được trống !");
+      message.error("Nội dung bài viết không được trống !");
       empty++;
     }
     if (descriptions.trim() === "<ol><li><br></li><br></ol><br>") {
-      toast.error("Nội dung bài viết không được trống !");
+      message.error("Nội dung bài viết không được trống !");
       empty++;
     }
     if (empty === 0) {
@@ -58,10 +58,10 @@ function EditorUpdate({ obj, showUpdate }) {
           setDescriptions("");
           showUpdate(false);
           dispatch(UpdatePost(respone.data.data));
-          toast.success("Sửa bài viết thành công !");
+          message.success("Sửa bài viết thành công !");
         },
         (error) => {
-          toast.error(error.response.data.message);
+          message.error(error.response.data.message);
         }
       );
     }

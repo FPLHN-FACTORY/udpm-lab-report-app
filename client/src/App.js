@@ -78,6 +78,7 @@ import MeetingPeriodConfiguration from "./labreportapp/pages/admin/configuration
 import DetailGroupProject from "./labreportapp/pages/admin/workshop-project/detail-group-project/DetailGroupProject";
 import RoleFactoryManagement from "./labreportapp/pages/admin/workshop-member/role-factory-management/RoleFactoryManagement";
 import DetailTeamFactory from "./labreportapp/pages/admin/workshop-member/team-management/detail-team-factory/DetailTeamFactory";
+import { message } from "antd";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -90,7 +91,7 @@ function App() {
   });
 
   stompClientAll.onWebSocketClose(() => {
-    toast.info("Mất kết nối đến máy chủ !");
+    message.info("Mất kết nối đến máy chủ !");
   });
 
   const playNotificationSound = () => {
@@ -112,7 +113,7 @@ function App() {
       stompClientAll.subscribe(
         "/portal-projects/create-notification/" + userCurrent.id,
         (message) => {
-          toast.info("Bạn có thông báo mới", {
+          message.info("Bạn có thông báo mới", {
             position: toast.POSITION.BOTTOM_RIGHT,
           });
           playNotificationSound();
@@ -138,7 +139,7 @@ function App() {
         stompClientAll.subscribe(
           "/portal-projects/update-meeting",
           (message) => {
-            toast.info("Thông báo : " + message.body, {
+            message.info("Thông báo : " + message.body, {
               position: toast.POSITION.TOP_CENTER,
             });
           }

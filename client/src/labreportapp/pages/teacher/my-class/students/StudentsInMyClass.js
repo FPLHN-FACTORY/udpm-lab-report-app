@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import "./styleStudentsInMyClass.css";
-import { Button, Checkbox, Empty, Input, Table, Tag } from "antd";
+import { Button, Checkbox, Empty, Input, Table, Tag, message } from "antd";
 import { Link } from "react-router-dom";
 import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
 import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/TeacherStudentClasses.api";
@@ -339,7 +339,7 @@ const StudentsInMyClass = () => {
   const [checkedList, setCheckedList] = useState([]);
   const handleSentStudent = () => {
     if (checkedList.length === 0) {
-      toast.info("Vui lòng chọn sinh viên cần chuyển lớp !");
+      message.info("Vui lòng chọn sinh viên cần chuyển lớp !");
       return;
     }
     setShowModalSent(true);

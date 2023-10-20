@@ -1,4 +1,4 @@
-import { Button, Col, Input, Modal, Row, Select } from "antd";
+import { Button, Col, Input, Modal, Row, Select, message } from "antd";
 import "./style-modal-create-meeting.css";
 import { useState } from "react";
 import moment from "moment";
@@ -68,7 +68,7 @@ const ModalCreateMeeting = ({ visible, onCancel }) => {
 
       MeetingManagementAPI.createMeeting(obj).then((response) => {
         dispatch(CreateMeeting(response.data.data));
-        toast.success("Thêm thành công");
+        message.success("Thêm thành công");
         onCancel();
       });
     }

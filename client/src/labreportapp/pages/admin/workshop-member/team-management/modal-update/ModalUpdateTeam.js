@@ -1,4 +1,4 @@
-import { Modal, Row, Col, Input, Button, Select } from "antd";
+import { Modal, Row, Col, Input, Button, Select, message } from "antd";
 import { useEffect, useState } from "react";
 import { AdTeamAPI } from "../../../../../api/admin/AdTeamAPI";
 import { UpdateTeam } from "../../../../../app/admin/AdTeamSlice.reducer";
@@ -66,7 +66,7 @@ const ModalUpdateTeam = ({ visible, onCancel, team }) => {
 
       AdTeamAPI.updateTeam(obj, team.id).then(
         (response) => {
-          toast.success("Cập nhật thành công!");
+          message.success("Cập nhật thành công!");
           dispatch(UpdateTeam(response.data.data));
           onCancel();
         },

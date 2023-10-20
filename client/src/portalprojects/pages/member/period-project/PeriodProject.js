@@ -18,6 +18,7 @@ import {
   Select,
   Table,
   Tooltip,
+  message,
 } from "antd";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
@@ -281,11 +282,11 @@ const PeriodProject = () => {
   const deletePeriod = (id) => {
     PeriodProjectAPI.delete(id, detailProject.id).then(
       (response) => {
-        toast.success("Xóa thành công!");
+        message.success("Xóa thành công!");
         dispatch(DeletePeriodProject(response.data.data));
       },
       (error) => {
-        toast.error(error.response.data.message);
+        message.error(error.response.data.message);
       }
     );
   };

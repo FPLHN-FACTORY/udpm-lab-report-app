@@ -1016,12 +1016,12 @@ const BoardStompClient = (dispatch, useAppSelector, id) => {
 
     stompClient.subscribe("/portal-projects/success/" + sessionId, (message) => {
       let successObject = JSON.parse(message.body);
-      toast.success(successObject.successMessage);
+      message.success(successObject.successMessage);
     });
 
     stompClient.subscribe("/portal-projects/error/" + sessionId, (message) => {
       var errorObject = JSON.parse(message.body).data;
-      toast.error("Lỗi hệ thống");
+      message.error("Lỗi hệ thống");
     });
 
     stompClient.subscribe(

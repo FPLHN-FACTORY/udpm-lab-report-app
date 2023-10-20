@@ -1,4 +1,4 @@
-import { Button, Col, Input, Modal, Row, Select } from "antd";
+import { Button, Col, Input, Modal, Row, Select, message } from "antd";
 import "./style-modal-update-meeting.css";
 import { useState } from "react";
 import moment from "moment";
@@ -64,7 +64,7 @@ const ModalUpdateMeeting = ({ item, visible, onCancel }) => {
 
       MeetingManagementAPI.updateMeeting(obj).then((response) => {
         dispatch(UpdateMeeting(response.data.data));
-        toast.success("Cập nhật thành công");
+        message.success("Cập nhật thành công");
         onCancel();
       });
     }

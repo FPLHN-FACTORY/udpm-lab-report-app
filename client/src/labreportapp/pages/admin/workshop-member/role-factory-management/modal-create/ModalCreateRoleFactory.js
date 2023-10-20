@@ -1,4 +1,4 @@
-import { Modal, Row, Col, Input, Button, Select } from "antd";
+import { Modal, Row, Col, Input, Button, Select, message } from "antd";
 import { useEffect, useState } from "react";
 import { AdRoleFactoryAPI } from "../../../../../api/admin/AdRoleFactoryAPI";
 import { AddRoleFactory } from "../../../../../app/admin/AdRoleFactorySlice.reducer";
@@ -60,7 +60,7 @@ const ModalCreateRoleFactory = ({ visible, onCancel }) => {
 
       AdRoleFactoryAPI.addRoleFactory(obj).then(
         (response) => {
-          toast.success("Thêm vai trò thành công!");
+          message.success("Thêm vai trò thành công!");
           dispatch(AddRoleFactory(response.data.data));
           console.log(obj.descriptions);
           onCancel();

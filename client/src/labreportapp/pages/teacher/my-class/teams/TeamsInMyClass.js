@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import "./styleTeamsInMyClass.css";
-import { Row, Table, Button, Tooltip, Modal, Empty, Tag } from "antd";
+import { Row, Table, Button, Tooltip, Modal, Empty, Tag, message } from "antd";
 import { Link } from "react-router-dom";
 import { ControlOutlined } from "@ant-design/icons";
 import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/TeacherStudentClasses.api";
@@ -106,7 +106,7 @@ const TeamsInMyClass = () => {
   const handleDeleteTeam = async () => {
     try {
       await TeacherTeamsAPI.deleteById(teamDelete.id).then((respone) => {
-        toast.success(respone.data.data);
+        message.success(respone.data.data);
         dispatch(DeleteTeam(teamDelete));
         if (dataStudentClasses != null) {
           const objFilter = dataStudentClasses.map((item) => {
@@ -133,7 +133,7 @@ const TeamsInMyClass = () => {
       await TeacherTeamsAPI.createProjectToTeam(dataUp).then((response) => {
         console.log(response);
         dispatch(UpdateTeam(response.data.data));
-        toast.success("Tạo trello thành công !");
+        message.success("Tạo trello thành công !");
       });
     } catch (error) {}
   };

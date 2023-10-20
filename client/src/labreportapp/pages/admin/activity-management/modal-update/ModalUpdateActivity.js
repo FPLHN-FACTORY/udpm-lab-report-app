@@ -1,5 +1,5 @@
 import "./styleModalUpdateActivity.css";
-import { Modal, Row, Col, Input, Button, DatePicker, Select } from "antd";
+import { Modal, Row, Col, Input, Button, DatePicker, Select, message } from "antd";
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "../../../../app/hook";
 import { toast } from "react-toastify";
@@ -138,7 +138,7 @@ const ModalUpdateActivity = ({
       };
       ActivityManagementAPI.update(obj).then(
         (response) => {
-          toast.success("Cập nhật thành công!");
+          message.success("Cập nhật thành công!");
           let objUpdate = {
             ...response.data.data,
             nameSemesterText: semesterNameItem.name,

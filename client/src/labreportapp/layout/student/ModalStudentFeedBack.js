@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Button, Select, Input } from "antd";
+import { Modal, Button, Select, Input, message } from "antd";
 import "react-toastify/dist/ReactToastify.css";
 import "./style-modal-student-feedback.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -49,7 +49,7 @@ const ModalStudentFeedBack = ({ visible, setVisible }) => {
 
   const createFeedback = () => {
     if (!isBothTextAreasFilled) {
-      toast.error("Hãy nhập đày đủ feedback của các lớp");
+      message.error("Hãy nhập đày đủ feedback của các lớp");
       return;
     }
     let obj = {
@@ -57,7 +57,7 @@ const ModalStudentFeedBack = ({ visible, setVisible }) => {
     };
     setIsLoading(true);
     StFeedBackAPI.createFeedBack(obj).then((response) => {
-      toast.success("FeedBack thành công");
+      message.success("FeedBack thành công");
       setIsLoading(false);
       setVisible(false);
     });

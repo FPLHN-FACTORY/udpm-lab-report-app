@@ -1,4 +1,4 @@
-import { Modal, Row, Col, Input, Button, Select } from "antd";
+import { Modal, Row, Col, Input, Button, Select, message } from "antd";
 import { useEffect, useState } from "react";
 import { AdRoleFactoryAPI } from "../../../../../api/admin/AdRoleFactoryAPI";
 import { UpdateRoleFactory } from "../../../../../app/admin/AdRoleFactorySlice.reducer";
@@ -67,7 +67,7 @@ const ModalUpdateRoleFactory = ({ visible, onCancel, roleFactory }) => {
 
       AdRoleFactoryAPI.updateRoleFactory(obj, roleFactory.id).then(
         (response) => {
-          toast.success("Cập nhật thành công!");
+          message.success("Cập nhật thành công!");
           dispatch(UpdateRoleFactory(response.data.data));
           onCancel();
         },

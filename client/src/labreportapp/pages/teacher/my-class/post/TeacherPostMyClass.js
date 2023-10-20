@@ -8,6 +8,7 @@ import {
   Popconfirm,
   Row,
   Spin,
+  message,
 } from "antd";
 import { useEffect } from "react";
 import { useState } from "react";
@@ -147,7 +148,7 @@ const TeacherPostMyClass = () => {
     try {
       await TeacherPostAPI.delete(id).then((respone) => {
         dispatch(DeletePost(respone.data.data));
-        toast.success("Xóa bài viết thành công !");
+        message.success("Xóa bài viết thành công !");
       });
     } catch (error) {}
   };
@@ -166,9 +167,9 @@ const TeacherPostMyClass = () => {
       };
       await TeacherMyClassAPI.updateStatusClass(objApi).then((respone) => {
         if (objApi.status === 0) {
-          toast.success("Mở lớp thành công !");
+          message.success("Mở lớp thành công !");
         } else {
-          toast.success("Khóa lớp thành công !");
+          message.success("Khóa lớp thành công !");
         }
         dispatch(UpdateClass(respone.data.data));
       });
@@ -182,7 +183,7 @@ const TeacherPostMyClass = () => {
     tempInput.setSelectionRange(0, 99999);
     document.execCommand("copy");
     document.body.removeChild(tempInput);
-    toast.success("Đã sao chép mật khẩu vào bộ nhớ đệm !");
+    message.success("Đã sao chép mật khẩu vào bộ nhớ đệm !");
   };
   const convertLongToDate = (dateLong) => {
     const date = new Date(dateLong);

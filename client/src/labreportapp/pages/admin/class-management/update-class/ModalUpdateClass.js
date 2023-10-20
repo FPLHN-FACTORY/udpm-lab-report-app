@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, Row, Col, Input, Button, Select } from "antd";
+import { Modal, Row, Col, Input, Button, Select, message } from "antd";
 import "./styleUpdateClass.css";
 import { useEffect, useState } from "react";
 import moment from "moment";
@@ -184,7 +184,7 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
       };
 
       await ClassAPI.update(id, obj).then((response) => {
-        toast.success("Cập nhật thành công!");
+        message.success("Cập nhật thành công!");
         setLoadingOverlay(faHeartPulse);
         dispatch(UpdateClass(response.data.data));
         cancelSuccess();

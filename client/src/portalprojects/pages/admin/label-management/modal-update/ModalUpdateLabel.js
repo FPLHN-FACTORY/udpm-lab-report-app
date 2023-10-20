@@ -1,5 +1,5 @@
 import "./styleModalUpdateLabel.css";
-import { Modal, Row, Col, Input, Button } from "antd";
+import { Modal, Row, Col, Input, Button, message } from "antd";
 import { useEffect, useState } from "react";
 import { LabelManagementAPI } from "../../../../api/label-management/labelManagement.api";
 import { useAppDispatch } from "../../../../app/hook";
@@ -93,12 +93,12 @@ const ModalUpdateLabel = ({ visible, onCancel, idLabel, label }) => {
       };
       LabelManagementAPI.update(obj).then(
         (response) => {
-          toast.success("Cập nhật thành công!");
+          message.success("Cập nhật thành công!");
           dispatch(UpdateLabelManagement(response.data.data));
           onCancel();
         },
         (error) => {
-          toast.error(error.response.data.message);
+          message.error(error.response.data.message);
         }
       );
     }

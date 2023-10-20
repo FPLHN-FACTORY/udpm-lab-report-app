@@ -10,7 +10,7 @@ import {
   faTrash,
   faWaveSquare,
 } from "@fortawesome/free-solid-svg-icons";
-import { Popconfirm } from "antd";
+import { Popconfirm, message } from "antd";
 import { useAppSelector } from "../../../../../app/hook";
 import { GetProject } from "../../../../../app/reducer/detail-project/DPProjectSlice.reducer";
 import { getStompClient } from "../../stomp-client-config/StompClientManager";
@@ -58,7 +58,7 @@ const PopupListAction = ({ position, onClose, list }) => {
 
   const deleteTodoList = () => {
     if (list.tasks.length > 0) {
-      toast.error("Không thể xóa danh sách đang có thẻ");
+      message.error("Không thể xóa danh sách đang có thẻ");
       return;
     }
     let obj = {

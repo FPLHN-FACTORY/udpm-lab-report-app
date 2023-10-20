@@ -13,7 +13,7 @@ import { SetTTrueToggle } from "../../../../app/admin/AdCollapsedSlice.reducer";
 import { useEffect, useState } from "react";
 import { ClassAPI } from "../../../../api/admin/class-manager/ClassAPI.api";
 import moment from "moment";
-import { Button, Empty, Input, Popconfirm, Spin, Table, Tag } from "antd";
+import { Button, Empty, Input, Popconfirm, Spin, Table, Tag, message } from "antd";
 import LoadingIndicator from "../../../../helper/loading";
 import LoadingIndicatorNoOverlay from "../../../../helper/loadingNoOverlay";
 import { toast } from "react-toastify";
@@ -56,7 +56,7 @@ const InformationClass = () => {
     } else if (!isKickStudent) {
       setIsKickStudent(true);
       setIsMoveStudent(false);
-      toast.success(
+      message.success(
         "Đã chuyển sang chế độ xóa sinh viên khỏi lớp, hãy chọn sinh viên cần xóa!"
       );
     }
@@ -67,7 +67,7 @@ const InformationClass = () => {
     } else if (!isMoveStudent) {
       setIsMoveStudent(true);
       setIsKickStudent(false);
-      toast.success(
+      message.success(
         "Đã chuyển sang chế độ di chuyển sinh viên, hãy chọn sinh viên cần chuyển lớp!"
       );
     } else if (isMoveStudent) {
@@ -190,11 +190,11 @@ const InformationClass = () => {
             setTimeout(() => {
               if (response.data.data.status === true) {
                 setInputFile("");
-                toast.success("Đang import, vui lòng chờ giây lát !", {
+                message.success("Đang import, vui lòng chờ giây lát !", {
                   position: toast.POSITION.TOP_CENTER,
                 });
               } else {
-                toast.error(
+                message.error(
                   "Import thất bại, " +
                     response.data.data.message +
                     ", vui lòng chờ !",
@@ -490,10 +490,10 @@ const InformationClass = () => {
         };
         await ClassAPI.kickStudentClassesToClass(data).then((response) => {
           if (response.data.data) {
-            toast.success("Xóa sinh viên thành công!");
+            message.success("Xóa sinh viên thành công!");
             setSelected([]);
           } else {
-            toast.error("Xóa sinh viên thất bại !");
+            message.error("Xóa sinh viên thất bại !");
           }
         });
       } catch (error) {
@@ -851,13 +851,13 @@ const InformationClass = () => {
                   <Button
                     onClick={() => {
                       if (!isKickStudent && !isMoveStudent) {
-                        toast.success(
+                        message.success(
                           "Đang ở chế độ chỉ xem danh sách sinh viên !"
                         );
                       } else {
                         setIsMoveStudent(false);
                         setIsKickStudent(false);
-                        toast.success(
+                        message.success(
                           "Đã chuyển sang chế độ chỉ xem danh sách sinh viên! "
                         );
                       }

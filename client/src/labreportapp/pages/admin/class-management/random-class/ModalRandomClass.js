@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Button, Select, Row, Col, Input } from "antd";
+import { Modal, Button, Select, Row, Col, Input, message } from "antd";
 import "./style-modal-random-class.css";
 import "react-toastify/dist/ReactToastify.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -107,7 +107,7 @@ const ModalRandomClass = ({ visible, onCancel, fetchData }) => {
         startTime: moment(startTime, "YYYY-MM-DD").valueOf(),
       };
       ClassAPI.randomClass(obj).then((response) => {
-        toast.success("Random tạo lớp thành công");
+        message.success("Random tạo lớp thành công");
         // setLoading(false);
         fetchData();
         onCancel();

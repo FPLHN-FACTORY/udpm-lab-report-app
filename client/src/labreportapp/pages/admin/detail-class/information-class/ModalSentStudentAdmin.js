@@ -7,6 +7,7 @@ import {
   Tooltip,
   Input,
   Button,
+  message,
 } from "antd";
 import { useEffect, useState } from "react";
 import { ClassAPI } from "../../../../api/admin/class-manager/ClassAPI.api";
@@ -94,7 +95,7 @@ const ModalSentStudent = ({
       };
       await ClassAPI.sentStudentClassesToClass(dataSent).then((response) => {
         if (response.data.data) {
-          toast.success("Trao đổi sinh viên thành công !");
+          message.success("Trao đổi sinh viên thành công !");
           if (dataStudentClasses != null) {
             const objFilter = dataStudentClasses.filter(
               (item) => !listIdStudent.includes(item.idStudent)
@@ -116,7 +117,7 @@ const ModalSentStudent = ({
           onCancel();
         } else {
           onCancel();
-          toast.error("Trao đổi sinh viên thất bại !");
+          message.error("Trao đổi sinh viên thất bại !");
         }
       });
     } catch (error) {

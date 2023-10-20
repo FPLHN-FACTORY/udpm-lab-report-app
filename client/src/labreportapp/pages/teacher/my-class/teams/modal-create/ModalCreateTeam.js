@@ -9,6 +9,7 @@ import {
   Space,
   Tooltip,
   Table,
+  message,
 } from "antd";
 import "./styleModalCreateTeam.css";
 import { useEffect, useState } from "react";
@@ -156,7 +157,7 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
       };
       TeacherTeamsAPI.createTeam(teamNew).then(
         (respone) => {
-          toast.success("Thêm thành công !");
+          message.success("Thêm thành công !");
           let data = respone.data.data;
           let dataAddTable = {
             ...data,

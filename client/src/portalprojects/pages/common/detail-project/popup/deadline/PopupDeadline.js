@@ -1,6 +1,6 @@
 import "./stylePopupDeadline.css";
 import React, { useEffect, useRef, useState } from "react";
-import { Button, Input, Select } from "antd";
+import { Button, Input, Select, message } from "antd";
 import { useAppSelector } from "../../../../../app/hook";
 import { GetPeriodCurrent } from "../../../../../app/reducer/detail-project/DPPeriodSlice.reducer";
 import { GetProject } from "../../../../../app/reducer/detail-project/DPProjectSlice.reducer";
@@ -70,7 +70,7 @@ const PopupDeadline = ({ position, onClose }) => {
 
   const saveDeadline = () => {
     if (deadline == null || deadline === "") {
-      toast.error("Mời chọn ngày hạn");
+      message.error("Mời chọn ngày hạn");
       return;
     }
 
@@ -99,7 +99,7 @@ const PopupDeadline = ({ position, onClose }) => {
 
   const deleteDeadline = () => {
     if (detailTodo.deadline == null && detailTodo.reminderTime == null) {
-      toast.error("Bạn chưa chọn ngày hạn !");
+      message.error("Bạn chưa chọn ngày hạn !");
       return;
     }
     let obj = {

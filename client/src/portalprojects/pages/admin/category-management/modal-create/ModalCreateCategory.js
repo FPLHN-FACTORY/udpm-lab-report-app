@@ -1,4 +1,4 @@
-import { Modal, Row, Col, Input, Button } from "antd";
+import { Modal, Row, Col, Input, Button, message } from "antd";
 import { useEffect, useState } from "react";
 import { AdCategoryAPI } from "../../../../api/admin-category/adCategory.api";
 import { toast } from "react-toastify";
@@ -37,12 +37,12 @@ const ModalCreateCategory = ({ visible, onCancel }) => {
 
       AdCategoryAPI.create(obj).then(
         (response) => {
-          toast.success("Thêm thành công!");
+          message.success("Thêm thành công!");
           dispatch(CreateCategory(response.data.data));
           onCancel();
         },
         (error) => {
-          toast.error(error.response.data.message);
+          message.error(error.response.data.message);
         }
       );
     }

@@ -159,7 +159,7 @@ const ModalCreateProject = ({ visible, onCancel }) => {
 
       ClassAPI.create(obj).then(
         (response) => {
-          toast.success("Thêm thành công!");
+          message.success("Thêm thành công!");
           dispatch(CreateClass(response.data.data));
           setLoading(false);
           cancelSuccess();

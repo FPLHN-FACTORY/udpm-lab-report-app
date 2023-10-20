@@ -9,7 +9,7 @@ import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyCla
 import { TeacherMeetingAPI } from "../../../../api/teacher/meeting/TeacherMeeting.api";
 import { Link } from "react-router-dom";
 import CustomSwitch from "./CustomSwitch";
-import { Button, Empty, Input, Row, Table } from "antd";
+import { Button, Empty, Input, Row, Table, message } from "antd";
 import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import {
@@ -177,7 +177,7 @@ const TeacherAttendanceMeeting = () => {
           respone.data.data.message.length < 27
             ? "custom-toast-short"
             : "custom-toast-long";
-        toast.success(respone.data.data.message, {
+        message.success(respone.data.data.message, {
           className: className,
         });
         navigate("/teacher/schedule-today");

@@ -10,7 +10,7 @@ import {
   faTeletype
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Input, Pagination, Table, Tooltip, Popconfirm } from "antd";
+import { Button, Input, Pagination, Table, Tooltip, Popconfirm, message } from "antd";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useAppSelector, useAppDispatch } from "../../../../app/hook";
@@ -162,7 +162,7 @@ const ProjectTypeManagement = () => {
   const buttonDelete = (id) => {
     AdTypeProjectAPI.deleteTypeProject(id).then(
       (response) => {
-        toast.success("Xóa thành công!");
+        message.success("Xóa thành công!");
         dispatch(DeleteTypeProject(response.data.data));
         fetchData();
       },

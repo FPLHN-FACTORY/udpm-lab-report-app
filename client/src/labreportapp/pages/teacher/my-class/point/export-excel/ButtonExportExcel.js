@@ -1,4 +1,4 @@
-import { Button, Spin } from "antd";
+import { Button, Spin, message } from "antd";
 import { useState } from "react";
 import { TeacherExcelPointAPI } from "../../../../../api/teacher/point/excel/TeacherExcelPoint.api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -34,7 +34,7 @@ const ButtonExportExcel = ({ idClass }) => {
       setTimeout(() => {
         setDownloading(false);
       }, 1500);
-      toast.success("Export thành công !");
+      message.success("Export thành công !");
     } catch (error) {
       console.log(error);
     }

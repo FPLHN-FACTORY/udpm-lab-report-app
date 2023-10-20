@@ -10,6 +10,7 @@ import {
   Image,
   Tooltip,
   Table,
+  message,
 } from "antd";
 import "./styleModalCreateProject.css";
 import { useEffect, useState } from "react";
@@ -223,7 +224,7 @@ const ModalCreateProject = ({ visible, onCancel }) => {
       };
       ProjectManagementAPI.createProject(projectNew).then(
         (respone) => {
-          toast.success("Thêm thành công !");
+          message.success("Thêm thành công !");
           let data = respone.data.data;
           let dataAddTable = {
             ...data,
@@ -233,7 +234,7 @@ const ModalCreateProject = ({ visible, onCancel }) => {
           cancelSuccess();
         },
         (error) => {
-          toast.error(error.response.data.message);
+          message.error(error.response.data.message);
         }
       );
     }

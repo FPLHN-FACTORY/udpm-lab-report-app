@@ -12,7 +12,7 @@ import {
   faSignOut,
   faUserPlus,
 } from "@fortawesome/free-solid-svg-icons";
-import { Table, Button, Tooltip, Space, Popconfirm, Tag, Empty } from "antd";
+import { Table, Button, Tooltip, Space, Popconfirm, Tag, Empty, message } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { convertMeetingPeriodToNumber } from "../../../../helper/util.helper";
 import { convertLongToDate } from "../../../../helper/convertDate";
@@ -75,11 +75,11 @@ const DetailMyClassTeam = () => {
     };
     StMyClassAPI.leaveClass(obj)
       .then((response) => {
-        toast.success("Rời lớp học thành công!");
+        message.success("Rời lớp học thành công!");
         navigate(`/student/my-class`);
       })
       .catch((error) => {
-        toast.error(error.response.data);
+
       });
   };
   const [showDetailTeam, setShowDetailTeam] = useState(false);

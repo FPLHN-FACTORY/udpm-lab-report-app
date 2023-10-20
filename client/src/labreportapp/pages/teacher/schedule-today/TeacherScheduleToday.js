@@ -13,6 +13,7 @@ import {
   Select,
   Table,
   Tooltip,
+  message,
 } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -108,7 +109,7 @@ const TeacherScheduleToday = () => {
       await TeacherScheduleTodayAPI.updateDescriptionMeeting(dataUp).then(
         (response) => {
           setDataToday(response.data.data);
-          toast.success("Lưu link học thành công");
+          message.success("Lưu link học thành công");
         }
       );
     } catch (error) {}

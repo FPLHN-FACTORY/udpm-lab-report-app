@@ -10,6 +10,7 @@ import {
   Image,
   Table,
   Spin,
+  message,
 } from "antd";
 import { useEffect, useState } from "react";
 import moment from "moment";
@@ -292,15 +293,13 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
       };
       ProjectManagementAPI.updateProject(projectNew, idProject).then(
         (respone) => {
-          toast.success("Cập nhật thành công !");
+          message.success("Cập nhật thành công !");
           let data = respone.data.data;
-          console.log("updateeeeeeeeeeeeeeeee");
-          console.log(data);
           dispatch(UpdateProject(data));
           cancelUpdateSuccess();
         },
         (error) => {
-          toast.error(error.response.data.message);
+          message.error(error.response.data.message);
         }
       );
     }

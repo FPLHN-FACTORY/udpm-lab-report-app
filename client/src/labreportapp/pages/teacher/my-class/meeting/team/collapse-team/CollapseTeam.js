@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Badge, Button, Col, Collapse, Empty, Row, Spin } from "antd";
+import { Badge, Button, Col, Collapse, Empty, Row, Spin, message } from "antd";
 import "./styleCollapseTeam.css";
 import TextArea from "antd/es/input/TextArea";
 import { TeacherMeetingAPI } from "../../../../../../api/teacher/meeting/TeacherMeeting.api";
@@ -127,7 +127,7 @@ const CollapseTeam = ({ team, featchMeeting }) => {
       };
       await TeacherMeetingHomeWorkNoteAPI.updateHomeWorkAndNote(data).then(
         (response) => {
-          toast.success("Cập nhật thành công !");
+          message.success("Cập nhật thành công !");
           setDescriptionsHomeWork(response.data.data.descriptionsHomeWork);
           setDescriptionsNote(response.data.data.descriptionsNote);
           setDescriptionsReport(response.data.data.descriptionsReport);

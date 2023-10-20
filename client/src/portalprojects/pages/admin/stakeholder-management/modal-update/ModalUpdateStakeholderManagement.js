@@ -10,6 +10,7 @@ import {
   Select,
   Pagination,
   Spin,
+  message,
 } from "antd";
 import "./stydeModalUpdateStakeholderManagement.css";
 import { useEffect, useState } from "react";
@@ -77,14 +78,14 @@ const ModalUpdateStakeholderManagement = ({
       };
       if (projectNew.listProject.toString("")) {
         PeriodProjectAPI.updateProjectByIdStake(projectNew, idStakeHolder);
-        toast.success("Cập nhật thành công");
+        message.success("Cập nhật thành công");
         onCancel();
       }
       if (projectNew.listProject == "") {
-        toast.error("Cập nhật thất bại");
+        message.error("Cập nhật thất bại");
       }
     } catch (error) {
-      toast.error("Cập nhật thất bại");
+      message.error("Cập nhật thất bại");
     }
   };
   const fetchData = async (idPeriodPre) => {

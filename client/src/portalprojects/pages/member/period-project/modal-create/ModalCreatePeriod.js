@@ -1,4 +1,4 @@
-import { Modal, Row, Col, Input, Button } from "antd";
+import { Modal, Row, Col, Input, Button, message } from "antd";
 import "./styleModalCreatePeriod.css";
 import { useEffect, useState } from "react";
 import { PeriodProjectAPI } from "../../../../api/period-project/periodProject.api";
@@ -103,12 +103,12 @@ const ModalCreatePeriod = ({ visible, onCancel }) => {
 
       PeriodProjectAPI.create(obj).then(
         (response) => {
-          toast.success("Thêm thành công!");
+          message.success("Thêm thành công!");
           dispatch(CreatePeriodProject(response.data.data));
           onCancel();
         },
         (error) => {
-          toast.error(error.response.data.message);
+          message.error(error.response.data.message);
         }
       );
     }

@@ -1,4 +1,4 @@
-import { Row, Col, Table, Empty, Button, Popconfirm, Input } from "antd";
+import { Row, Col, Table, Empty, Button, Popconfirm, Input, message } from "antd";
 import { useParams } from "react-router";
 import "./style-detail-meeting-attendance.css";
 import {
@@ -182,7 +182,7 @@ const DetailMeetingAttendance = () => {
       listAttendance: data,
     };
     MeetingManagementAPI.updateAttendance(obj).then((response) => {
-      toast.success("Cập nhật thành công");
+      message.success("Cập nhật thành công");
     });
   };
 

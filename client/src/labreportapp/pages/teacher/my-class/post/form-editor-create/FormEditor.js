@@ -3,7 +3,7 @@ import JoditEditor from "jodit-react";
 import { TeacherPostAPI } from "../../../../../api/teacher/post/TeacherPost.api";
 import { CreatePost } from "../../../../../app/teacher/post/tePostSlice.reduce";
 import { toast } from "react-toastify";
-import { Button } from "antd";
+import { Button, message } from "antd";
 import { useAppDispatch, useAppSelector } from "../../../../../app/hook";
 import { TeacherStudentClassesAPI } from "../../../../../api/teacher/student-class/TeacherStudentClasses.api";
 import { TeacherMailAPI } from "../../../../../api/teacher/sent-mail/TeacherMailAPI.api";
@@ -27,27 +27,27 @@ function Editor({ idClass, showCreate }) {
   const create = () => {
     let empty = 0;
     if (descriptionss.trim() === "<p><br></p>") {
-      toast.error("Nội dung bài viết không được trống !");
+      message.error("Nội dung bài viết không được trống !");
       empty++;
     }
     if (descriptionss.trim() === "<p><br></p><br>") {
-      toast.error("Nội dung bài viết không được trống !");
+      message.error("Nội dung bài viết không được trống !");
       empty++;
     }
     if (descriptionss.trim() === "<ul><li><br></li><br></ul>") {
-      toast.error("Nội dung bài viết không được trống !");
+      message.error("Nội dung bài viết không được trống !");
       empty++;
     }
     if (descriptionss.trim() === "<ul><li><br></li><br></ul><br>") {
-      toast.error("Nội dung bài viết không được trống !");
+      message.error("Nội dung bài viết không được trống !");
       empty++;
     }
     if (descriptionss.trim() === "<ol><li><br></li><br></ol>") {
-      toast.error("Nội dung bài viết không được trống !");
+      message.error("Nội dung bài viết không được trống !");
       empty++;
     }
     if (descriptionss.trim() === "<ol><li><br></li><br></ol><br>") {
-      toast.error("Nội dung bài viết không được trống !");
+      message.error("Nội dung bài viết không được trống !");
       empty++;
     }
     if (empty === 0) {
@@ -61,11 +61,11 @@ function Editor({ idClass, showCreate }) {
           showCreate(false);
           dispatch(CreatePost(respone.data.data));
           featchStudentClass(idClass);
-          toast.success("Thêm bài viết thành công !");
+          message.success("Thêm bài viết thành công !");
           featchSentMaillToStudent(obj.descriptions);
         },
         (error) => {
-          toast.error(error.response.data.message);
+          message.error(error.response.data.message);
         }
       );
     }

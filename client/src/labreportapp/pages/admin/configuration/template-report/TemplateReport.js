@@ -2,7 +2,7 @@ import { faTemperature0 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { AdTemplateReportAPI } from "../../../../api/admin/AdTemplateReportAPI";
-import { Button } from "antd";
+import { Button, message } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { toast } from "react-toastify";
 import LoadingIndicator from "../../../../helper/loading";
@@ -35,10 +35,10 @@ const TemplateReport = () => {
   const update = (data) => {
     AdTemplateReportAPI.updateTemplateReportById(data)
       .then(() => {
-        toast.success("Cập nhật thành công!");
+        message.success("Cập nhật thành công!");
       })
       .catch(() => {
-        toast.error("Cập nhật thất bại!");
+
       });
   };
 

@@ -20,6 +20,7 @@ import {
   Tooltip,
   Popconfirm,
   Tag,
+  message,
 } from "antd";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
@@ -71,7 +72,7 @@ const SemesterManagement = () => {
   const updateStatusFeedback = (id) => {
     AdSemesterAPI.updateStatusFeedback(id).then((response) => {
       dispatch(UpdateStatusFeedback(id));
-      toast.success("Bật feedback thành công");
+      message.success("Bật feedback thành công");
     });
   };
 
@@ -239,7 +240,7 @@ const SemesterManagement = () => {
   const buttonDelete = (id) => {
     AdSemesterAPI.deleteSemester(id).then(
       (response) => {
-        toast.success("Xóa thành công!");
+        message.success("Xóa thành công!");
         dispatch(DeleteSemester(response.data.data));
         fetchData();
       },

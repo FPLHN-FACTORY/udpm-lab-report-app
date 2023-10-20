@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import Task from "../task/Task";
 import "./list.css";
-import { Input, Tooltip } from "antd";
+import { Input, Tooltip, message } from "antd";
 import { toast } from "react-toastify";
 import { useAppSelector } from "../../../../app/hook";
 import { GetPeriodCurrent } from "../../../../app/reducer/detail-project/DPPeriodSlice.reducer";
@@ -80,11 +80,11 @@ const List = ({ list, index }) => {
   const handleSaveTask = () => {
     const newTaskTitle = taskName;
     if (newTaskTitle === "") {
-      toast.error("Tiêu đề không được để trống");
+      message.error("Tiêu đề không được để trống");
       return;
     }
     if (periodCurrent == null || Object.keys(periodCurrent).length === 0) {
-      toast.error("Bạn chưa tạo giai đoạn");
+      message.error("Bạn chưa tạo giai đoạn");
       return;
     }
     let obj = {

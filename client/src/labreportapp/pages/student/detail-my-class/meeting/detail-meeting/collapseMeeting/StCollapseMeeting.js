@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, Row } from "antd";
+import { Button, Col, Row, message } from "antd";
 import "./style-collapse-meeting.css";
 import TextArea from "antd/es/input/TextArea";
 import { StudentMeetingAPI } from "../../../../../../api/student/StMeetingAPI";
@@ -108,7 +108,7 @@ const CollapseMeeting = ({ items }) => {
         descriptionsReport: descriptionsReport,
       };
       await StudentMeetingAPI.updateHomeWorkAndNote(data).then((response) => {
-        toast.success("Cập nhật thành công");
+        message.success("Cập nhật thành công");
         clear();
       });
     } catch (error) {

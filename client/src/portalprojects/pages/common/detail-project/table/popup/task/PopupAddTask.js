@@ -1,4 +1,4 @@
-import { Button, Input, Select } from "antd";
+import { Button, Input, Select, message } from "antd";
 import "./stylePopupAddTask.css";
 import React, { useEffect, useRef, useState } from "react";
 import { useAppSelector } from "../../../../../../app/hook";
@@ -74,7 +74,7 @@ const PopupAddTask = ({ onClose }) => {
 
   const handleAddTask = () => {
     if (periodCurrent == null || Object.keys(periodCurrent).length === 0) {
-      toast.error("Bạn chưa tạo giai đoạn");
+      message.error("Bạn chưa tạo giai đoạn");
       return;
     }
     let obj = {

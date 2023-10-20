@@ -7,6 +7,7 @@ import {
   Popconfirm,
   Spin,
   Tooltip,
+  message,
 } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -267,7 +268,7 @@ const TaskModal = memo(({ open, onCancel, id }) => {
       return;
     }
     if (descriptions.length > 5000) {
-      toast.error("Mô tả không vượt quá 5000 ký tự");
+      message.error("Mô tả không vượt quá 5000 ký tự");
       return;
     }
     let obj = {

@@ -9,7 +9,7 @@ import {
   faFilter
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Input, Pagination, Table, Tooltip, Popconfirm } from "antd";
+import { Button, Input, Pagination, Table, Tooltip, Popconfirm, message } from "antd";
 import "./style-meeting-period-management.css";
 import React from "react";
 import { useEffect, useState } from "react";
@@ -183,7 +183,7 @@ const MeetingPeriodConfiguration = () => {
   const buttonDelete = (id) => {
     AdMeetingPeriodConfigurationAPI.deleteMeetingPeriod(id).then(
       (response) => {
-        toast.success("Xóa thành công!");
+        message.success("Xóa thành công!");
         dispatch(DeleteMeetingPeriodConfiguration(response.data.data));
         fetchData();
       },

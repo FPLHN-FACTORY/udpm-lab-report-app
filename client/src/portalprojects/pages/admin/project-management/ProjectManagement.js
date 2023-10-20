@@ -164,7 +164,6 @@ const ProjectManagement = () => {
     setIdCategorySearch("");
     setCurrent(1);
     await featchData();
-    toast.success("Hủy bỏ bộ lọc thành công !");
   };
 
   const handleCancelModalCreateSusscess = () => {

@@ -1,4 +1,4 @@
-import { Modal, Row, Col, Input, Button } from "antd";
+import { Modal, Row, Col, Input, Button, message } from "antd";
 import { useEffect, useState } from "react";
 import { AdTypeProjectAPI } from "../../../../../api/admin/AdTypeProjectAPI";
 import { useAppDispatch } from "../../../../../app/hook";
@@ -67,7 +67,7 @@ const ModalUpdateTypeProject = ({ visible, onCancel, typeProject }) => {
 
       AdTypeProjectAPI.updateTypeProject(obj, typeProject.id).then(
         (response) => {
-          toast.success("Cập nhật thành công!");
+          message.success("Cập nhật thành công!");
           dispatch(UpdateTypeProject(response.data.data));
           onCancel();
         },

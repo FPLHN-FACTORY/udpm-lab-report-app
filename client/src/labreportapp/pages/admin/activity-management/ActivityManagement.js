@@ -20,6 +20,7 @@ import {
   Table,
   Tag,
   Tooltip,
+  message,
 } from "antd";
 import { useAppDispatch, useAppSelector } from "../../../app/hook";
 import { useEffect, useState } from "react";
@@ -166,7 +167,7 @@ const ActivityManagement = () => {
   const handleDeleteActivity = async (id) => {
     try {
       await ActivityManagementAPI.delete(id).then((response) => {
-        toast.success("Xóa thành công!");
+        message.success("Xóa thành công!");
         dispatch(DeleteActivityManagement(id));
       });
     } catch (error) {

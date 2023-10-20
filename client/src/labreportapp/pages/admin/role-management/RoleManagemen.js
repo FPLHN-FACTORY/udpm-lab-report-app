@@ -11,7 +11,7 @@ import {
   faPersonMilitaryPointing
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Input, Pagination, Table, Tooltip, Popconfirm } from "antd";
+import { Button, Input, Pagination, Table, Tooltip, Popconfirm, message } from "antd";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useAppSelector, useAppDispatch } from "../../../app/hook";
@@ -164,7 +164,7 @@ const RoleManagement = () => {
   const buttonDelete = (id) => {
     AdRoleProjectAPI.deleteRoleProject(id).then(
       (response) => {
-        toast.success("Xóa thành công!");
+        message.success("Xóa thành công!");
         dispatch(DeleteRoleProject(response.data.data));
         fetchData();
       },

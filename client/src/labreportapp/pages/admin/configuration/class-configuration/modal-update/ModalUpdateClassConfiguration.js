@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { AdClassCongigurationAPI } from "../../../../../api/admin/AdClassConfigurationAPI";
 import { toast } from "react-toastify";
-import { Button, Col, Input, Modal, Row } from "antd";
+import { Button, Col, Input, Modal, Row, message } from "antd";
 
 const ModalUpdateClassConfiguration = ({
   loadData,
@@ -102,12 +102,12 @@ const ModalUpdateClassConfiguration = ({
       };
       AdClassCongigurationAPI.update(obj).then(
         () => {
-          toast.success("Cập nhật thành công!");
+          message.success("Cập nhật thành công!");
           onCancel();
           loadData();
         },
         (error) => {
-          toast.error(error.response.data.message);
+          message.error(error.response.data.message);
         }
       );
     }

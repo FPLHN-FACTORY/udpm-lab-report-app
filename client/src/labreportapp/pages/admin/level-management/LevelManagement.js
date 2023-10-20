@@ -9,7 +9,7 @@ import {
   faChainSlash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Input, Pagination, Table, Tooltip, Popconfirm } from "antd";
+import { Button, Input, Pagination, Table, Tooltip, Popconfirm, message } from "antd";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import "./style-level-management.css";
@@ -153,7 +153,7 @@ const LevelManagement = () => {
   const buttonDelete = (id) => {
     AdLevelAPI.deleteLevel(id).then(
       (response) => {
-        toast.success("Xóa thành công!");
+        message.success("Xóa thành công!");
         dispatch(DeleteLevel(response.data.data));
         fetchData();
       },

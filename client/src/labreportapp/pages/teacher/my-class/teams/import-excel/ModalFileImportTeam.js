@@ -1,4 +1,4 @@
-import { Button, Input, Modal } from "antd";
+import { Button, Input, Modal, message } from "antd";
 import { TeacherExcelTeamAPI } from "../../../../../api/teacher/teams-class/excel/TeacherExcelTeam.api";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -34,9 +34,9 @@ const ModalFileImport = ({ visible, onCancel, idClass, fetchData }) => {
       onCancel();
       if (response.data.data.status === true) {
         fetchData(idClass);
-        toast.success(response.data.data.message);
+        message.success(response.data.data.message);
       } else {
-        toast.error(response.data.data.message);
+        message.error(response.data.data.message);
       }
       setSelectedFile(null);
       setInputFileKey((prevKey) => prevKey + 1);

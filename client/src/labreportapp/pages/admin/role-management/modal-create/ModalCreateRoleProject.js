@@ -1,4 +1,4 @@
-import { Modal, Row, Col, Input, Button, Select } from "antd";
+import { Modal, Row, Col, Input, Button, Select, message } from "antd";
 import { useEffect, useState } from "react";
 import { AdRoleProjectAPI } from "../../../../api/admin/AdRoleProjectAPI";
 import { AddRoleProject } from "../../../../app/admin/AdRoleProjectSlice.reducer";
@@ -60,7 +60,7 @@ const ModalCreateRoleProject = ({ visible, onCancel }) => {
 
       AdRoleProjectAPI.addRoleProject(obj).then(
         (response) => {
-          toast.success("Thêm Loại thành công!");
+          message.success("Thêm Loại thành công!");
           dispatch(AddRoleProject(response.data.data));
           console.log(obj.idProject);
           onCancel();

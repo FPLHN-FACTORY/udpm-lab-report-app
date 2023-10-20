@@ -56,7 +56,6 @@ const TeacherAttendanceClass = () => {
         }
       );
     } catch (error) {
-      toast.error(error.data.message);
     }
   };
   const featchTable = async (idClass) => {
@@ -67,7 +66,6 @@ const TeacherAttendanceClass = () => {
           setLoading(true);
         })
         .catch((err) => {
-          toast.error(err.data.message);
         });
     } catch (error) {}
   };

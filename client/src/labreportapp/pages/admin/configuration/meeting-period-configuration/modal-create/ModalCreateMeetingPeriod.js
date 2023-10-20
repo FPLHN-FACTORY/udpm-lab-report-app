@@ -1,4 +1,4 @@
-import { Modal, Row, Col, Input, Button } from "antd";
+import { Modal, Row, Col, Input, Button, message } from "antd";
 import { useEffect, useState } from "react";
 import { AdMeetingPeriodConfigurationAPI } from "../../../../../api/admin/AdMeetingPeriodConfigurationAPI";
 import {
@@ -112,7 +112,7 @@ const ModalCreateMeetingPeriod = ({ visible, onCancel }) => {
 
       AdMeetingPeriodConfigurationAPI.addMeetingPeriod(obj).then(
         (response) => {
-          toast.success("Thêm Ca thành công!");
+          message.success("Thêm Ca thành công!");
           dispatch(AddMeetingPeriodConfiguration(response.data.data));
           onCancel();
         },

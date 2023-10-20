@@ -10,6 +10,7 @@ import {
   Tooltip,
   Table,
   Empty,
+  message,
 } from "antd";
 import "./styleModalUpdateTeam.css";
 import { useEffect, useState } from "react";
@@ -187,7 +188,7 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
       };
       await TeacherTeamsAPI.updateTeam(teamUpdate).then(
         (respone) => {
-          toast.success("Sửa thông tin nhóm thành công !");
+          message.success("Sửa thông tin nhóm thành công !");
           let data = respone.data.data;
           let dataTableTeam = {
             ...data,

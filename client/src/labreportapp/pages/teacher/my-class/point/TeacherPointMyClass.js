@@ -7,7 +7,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { ControlOutlined } from "@ant-design/icons";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Button, Row } from "antd";
+import { Button, Row, message } from "antd";
 import { useEffect, useState } from "react";
 import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
 import { TeacherPointAPI } from "../../../../api/teacher/point/TeacherPoint.api";
@@ -72,7 +72,7 @@ const TeacherPointMyClass = () => {
       };
       await TeacherPointAPI.createOrUpdate(dataFind).then((respone) => {
         dispatch(UpdatePoint(respone.data.data));
-        toast.success("Lưu bảng điểm thành công !");
+        message.success("Lưu bảng điểm thành công !");
       });
     } catch (error) {}
   };

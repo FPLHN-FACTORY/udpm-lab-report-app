@@ -1,5 +1,5 @@
 import "./styleModalCreateLabel.css";
-import { Modal, Row, Col, Input, Button } from "antd";
+import { Modal, Row, Col, Input, Button, message } from "antd";
 import { useEffect, useState } from "react";
 import { LabelManagementAPI } from "../../../../api/label-management/labelManagement.api";
 import { useAppDispatch } from "../../../../app/hook";
@@ -77,12 +77,12 @@ const ModalCreateLabel = ({ visible, onCancel }) => {
       };
       LabelManagementAPI.create(obj).then(
         (response) => {
-          toast.success("Thêm thành công!");
+          message.success("Thêm thành công!");
           dispatch(CreateLabelManagement(response.data.data));
           onCancel();
         },
         (error) => {
-          toast.error(error.response.data.message);
+          message.error(error.response.data.message);
         }
       );
     }

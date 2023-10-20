@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Button, Select, Row, Col, Input, Upload } from "antd";
+import { Modal, Button, Select, Row, Col, Input, Upload, message } from "antd";
 import "./style-modal-import-class.css";
 import "react-toastify/dist/ReactToastify.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -78,9 +78,9 @@ const ModalImportClass = ({ visible, onCancel, fetchData }) => {
       ClassAPI.importExcel(formData, idSemesterSeach).then(
         (response) => {
           if (response.data.data.status === false) {
-            toast.success(response.data.data.message);
+            message.success(response.data.data.message);
           } else {
-            toast.success("Import thành công");
+            message.success("Import thành công");
             onCancel();
             fetchData();
           }
