@@ -5,6 +5,7 @@ import com.labreportapp.labreport.core.teacher.model.request.TeFindScheduleMeeti
 import com.labreportapp.labreport.core.teacher.model.request.TeFindScheduleNowToTime;
 import com.labreportapp.labreport.core.teacher.model.response.TeDetailTeamReportRespone;
 import com.labreportapp.labreport.core.teacher.model.response.TeHomeWorkAndNoteMeetingResponse;
+import com.labreportapp.labreport.core.teacher.model.response.TeHwNoteReportListRespone;
 import com.labreportapp.labreport.core.teacher.model.response.TeMeetingCustomToAttendanceResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeMeetingResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeScheduleMeetingClassResponse;
@@ -108,32 +109,6 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
     Optional<TeHomeWorkAndNoteMeetingResponse> searchDetailMeetingTeamByIdMeIdTeam(@Param("req") TeFindMeetingRequest req);
 
     @Query(value = """
-            SELECT
-                m.id AS idMeeting,
-                m.name AS nameMeeting,
-                m.descriptions AS descriptionsMeeting,
-                h.id AS idHomeWork,
-                h.descriptions AS descriptionsHomeWork,
-                n.id AS idNote,
-                n.descriptions AS descriptionsNote,
-                r.id as idReport,
-                r.descriptions AS descriptionsReport,
-                m.meeting_date as meeting_date,
-                m.meeting_period as id_meeting_period,
-                mp.name as meeting_period, mp.start_hour as start_hour, mp.start_minute as start_minute,
-                mp.end_hour as end_hour, mp.end_minute as end_minute
-            FROM meeting m
-            JOIN meeting_period mp ON mp.id = m.meeting_period
-            JOIN class c ON c.id = m.class_id
-            JOIN team t ON t.class_id = c.id
-            LEFT JOIN home_work h ON h.meeting_id = m.id AND h.team_id = t.id
-            LEFT JOIN note n ON n.meeting_id = m.id AND n.team_id = t.id
-            LEFT JOIN report r ON r.meeting_id = m.id AND r.team_id = t.id
-            WHERE m.class_id = :#{#idClass}
-                      """, nativeQuery = true)
-    List<TeHomeWorkAndNoteMeetingResponse> searchHwNoteReport(@Param("idClass") String idClass);
-
-    @Query(value = """
             SELECT  
                 m.id as id,
                 m.name as name,
@@ -164,7 +139,8 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                  m.address as address_meeting,
                  m.descriptions as descriptions_meeting,
                  l.name as level,
-                 m.notes as notes
+                 m.notes as notes,
+                 m.status_meeting as status_meeting
              FROM class c
              JOIN meeting m ON m.class_id = c.id
              JOIN meeting_period mp ON mp.id = m.meeting_period
@@ -199,7 +175,8 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                  m.address as address_meeting,
                  m.descriptions as descriptions_meeting,
                  l.name as level,
-                 m.notes as notes
+                 m.notes as notes,
+                 m.status_meeting as status_meeting
              FROM class c
              JOIN meeting m ON m.class_id = c.id
              JOIN meeting_period mp ON mp.id = m.meeting_period
@@ -285,4 +262,30 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
             """, nativeQuery = true)
     List<Meeting> findMeetingToDayUpdate();
 
+    @Query(value = """
+            SELECT t.id AS idTeam,
+                t.name AS nameTeam,
+                m.id AS idMeeting,
+                m.name AS nameMeeting,
+                m.descriptions AS descriptionsMeeting,
+                h.id AS idHomeWork,
+                h.descriptions AS descriptionsHomeWork,
+                n.id AS idNote,
+                n.descriptions AS descriptionsNote,
+                r.id as idReport,
+                r.descriptions AS descriptionsReport,
+                m.meeting_date as meeting_date,
+                m.meeting_period as id_meeting_period,
+                mp.name as meeting_period, mp.start_hour as start_hour, mp.start_minute as start_minute,
+                mp.end_hour as end_hour, mp.end_minute as end_minute
+            FROM meeting m
+            JOIN meeting_period mp ON mp.id = m.meeting_period
+            JOIN class c ON c.id = m.class_id
+            JOIN team t ON t.class_id = c.id
+            LEFT JOIN home_work h ON h.meeting_id = m.id AND h.team_id = t.id
+            LEFT JOIN note n ON n.meeting_id = m.id AND n.team_id = t.id
+            LEFT JOIN report r ON r.meeting_id = m.id AND r.team_id = t.id
+            WHERE m.class_id = :#{#idClass}
+                      """, nativeQuery = true)
+    List<TeHwNoteReportListRespone> searchHwNoteReport(@Param("idClass") String idClass);
 }

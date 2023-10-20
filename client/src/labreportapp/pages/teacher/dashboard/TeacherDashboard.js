@@ -207,6 +207,13 @@ const TeacherDashboard = () => {
     }
     setClear(true);
   };
+  const convertLongToDateTime = (dateLong) => {
+    const date = new Date(dateLong);
+    const format = `${date.getFullYear()}-${
+      date.getMonth() + 1
+    }-${date.getDay()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
+    return format;
+  };
 
   const handleExport = async (idClass) => {
     setLoadingExport(true);
@@ -219,12 +226,10 @@ const TeacherDashboard = () => {
       const link = document.createElement("a");
       link.href = url;
       link.download =
-        "Thong_Ke_" + convertLongToDate(new Date().getTime()) + ".xlsx";
+        "ThongKe_" + convertLongToDateTime(new Date().getTime()) + ".xlsx";
       link.click();
       window.URL.revokeObjectURL(url);
-
       setLoadingExport(false);
-
       toast.success("Export thành công !");
     } catch (error) {
       console.log(error);

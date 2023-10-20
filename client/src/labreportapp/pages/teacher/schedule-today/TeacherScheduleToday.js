@@ -481,6 +481,13 @@ const TeacherScheduleToday = () => {
           text
         ),
     },
+    {
+      title: "Ghi chú",
+      dataIndex: "statusMeeting",
+      key: "statusMeeting",
+      render: (text, record) =>
+        text !== null && text === "0" ? "Buổi học" : "Buổi nghỉ",
+    },
   ];
   return (
     <>

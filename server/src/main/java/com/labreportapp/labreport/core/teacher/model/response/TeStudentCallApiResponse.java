@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 /**
  * @author hieundph25894
  */
@@ -36,4 +38,5 @@ public class TeStudentCallApiResponse {
 
     private String subjectName;
 
+    private List<TeHwNoteReportListRespone> listHomeWorkNoteReport;
 }

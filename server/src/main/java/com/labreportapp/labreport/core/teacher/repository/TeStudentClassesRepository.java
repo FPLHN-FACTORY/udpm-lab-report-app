@@ -19,10 +19,10 @@ public interface TeStudentClassesRepository extends JpaRepository<StudentClasses
 
     @Query(value = """
             SELECT 
-            sc.id as id, 
-            sc.student_id as idStudent,
-            sc.email as emailStudent,
-            sc.class_id
+                sc.id as id, 
+                sc.student_id as idStudent,
+                sc.email as emailStudent,
+                sc.class_id
             FROM student_classes sc
             WHERE sc.class_id = :#{#idClass}
             ORDER BY  sc.email ASC
@@ -30,34 +30,42 @@ public interface TeStudentClassesRepository extends JpaRepository<StudentClasses
     List<TePointImportResponse> findAllStudentClassForPointByIdClass(@Param("idClass") String idClass);
 
     @Query(value = """
-            SELECT DISTINCT 
-            sc.id as idStudentClass,
-            sc.student_id as idStudent,
-            sc.email as emailStudent,
-            sc.role as role,
-            sc.status as statusStudent,
-            t.id as idTeam,
-            t.code as codeTeam,
-            t.name as nameTeam,
-            t.subject_name as subject_name
+            SELECT 
+                sc.id as idStudentClass,
+                sc.student_id as idStudent,
+                sc.email as emailStudent,
+                sc.role as role,
+                sc.status as statusStudent,
+                t.id as idTeam,
+                t.code as codeTeam,
+                t.name as nameTeam,
+                t.subject_name as subject_name
             FROM student_classes sc
             LEFT JOIN team t on t.id = sc.team_id
             WHERE sc.class_id = :#{#idClass}
-            ORDER BY t.name ASC
+            ORDER BY
+                CASE
+                  WHEN SUBSTRING(t.name, 6) REGEXP '^[0-9]+$' THEN CAST(SUBSTRING(t.name, 6) AS SIGNED)
+                  ELSE NULL
+                END ASC,
+                CASE
+                  WHEN SUBSTRING(t.name, 6) REGEXP '^[0-9]+$' THEN ROW_NUMBER() OVER (ORDER BY t.name)
+                  ELSE 0
+                END ASC, t.created_date ASC;
                      """, nativeQuery = true)
     List<TeStudentClassesResponse> findStudentClassByIdClass(@Param("idClass") String idClass);
 
     @Query(value = """
             SELECT DISTINCT 
-            sc.id as idStudentClass,
-            sc.student_id as idStudent,
-            sc.email as emailStudent,
-            sc.role as role,
-            sc.status as statusStudent,
-            t.id as idTeam,
-            t.code as codeTeam,
-            t.name as nameTeam,
-             t.subject_name as subject_name
+                sc.id as idStudentClass,
+                sc.student_id as idStudent,
+                sc.email as emailStudent,
+                sc.role as role,
+                sc.status as statusStudent,
+                t.id as idTeam,
+                t.code as codeTeam,
+                t.name as nameTeam,
+                t.subject_name as subject_name
             FROM student_classes sc
             JOIN team t on t.id = sc.team_id
             WHERE sc.class_id = :#{#req.idClass} and sc.team_id =:#{#req.idTeam}
@@ -76,10 +84,8 @@ public interface TeStudentClassesRepository extends JpaRepository<StudentClasses
     List<StudentClasses> findAllStudentClassesByIdTeam(@Param("idTeam") String idTeam);
 
     @Query(value = """
-            SELECT *
-            FROM student_classes sc
-            WHERE sc.class_id = :#{#idClass}
-                 """, nativeQuery = true)
+            SELECT * FROM student_classes sc WHERE sc.class_id = :#{#idClass}
+             """, nativeQuery = true)
     List<StudentClasses> findStudentClassesByIdClass(@Param("idClass") String idClass);
 
 }

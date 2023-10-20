@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.apache.poi.ss.usermodel.Sheet;
 
 /**
  * @author hieundph25894
@@ -14,24 +15,9 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class TeamColor {
+public class TeCountMeetingAndSheetRespone {
 
-    private String id;
+    private Sheet sheet;
 
-    private String code;
-
-    private String name;
-
-    private String subjectName;
-
-    private String classId;
-
-    private String projectId;
-
-    private short color;
-
-    private Integer rowStartMeger;
-
-    private Integer rowEndMeger;
-
+    private Integer countMeeting;
 }

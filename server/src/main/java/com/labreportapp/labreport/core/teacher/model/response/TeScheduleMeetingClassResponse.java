@@ -54,4 +54,7 @@ public interface TeScheduleMeetingClassResponse {
     @Value("#{target.notes}")
     String getNotes();
 
+    @Value("#{target.status_meeting}")
+    String getStatusMeeting();
+
 }
