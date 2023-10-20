@@ -28,4 +28,8 @@ public class Level extends PrimaryEntity {
     @Nationalized
     private String name;
 
+    @Column(length = Integer.MAX_VALUE)
+    @Nationalized
+    private String descriptions;
+
 }

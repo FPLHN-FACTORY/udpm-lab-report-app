@@ -43,7 +43,12 @@ public interface AdRoleFactoryRepository extends JpaRepository<RoleFactory, Stri
             """, nativeQuery = true)
     Page<AdRoleFactoryResponse> searchRoleFactory(@Param("req") AdFindRoleFactoryRequest req, Pageable page);
 
-    @Query(value = "SELECT COUNT(*) FROM member_factory a join role_factory b on a.role_factory_id=b.id WHERE b.id = :id", nativeQuery = true)
+    @Query(value = """
+            SELECT COUNT(b.id) FROM member_factory a 
+            JOIN member_role_factory b ON a.id = b.member_factory_id 
+            JOIN role_factory c ON c.id = b.role_factory_id
+            WHERE c.id = :id
+            """, nativeQuery = true)
     Integer countMemberFactoryByRoleId(@Param("id") String id);
 
     @Query(value = """

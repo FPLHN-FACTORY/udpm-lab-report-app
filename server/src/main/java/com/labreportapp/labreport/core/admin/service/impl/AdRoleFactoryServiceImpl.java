@@ -86,9 +86,8 @@ public class AdRoleFactoryServiceImpl implements AdRoleFactoryService {
             throw new RestApiException(Message.ROLE_MEMBER_NOT_EXISTS);
         }
         if (countRoles != null && countRoles > 0) {
-            throw new RestApiException(Message.ROLE_FACTORY_NOT_EXISTS);
+            throw new RestApiException(Message.ROLE_FACTORY_HAVE_MEMBER);
         }
-
         adRoleFactoryRepository.delete(findRoleFactoryById.get());
         return true;
     }
