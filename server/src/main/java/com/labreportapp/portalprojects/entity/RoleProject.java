@@ -32,6 +32,9 @@ public class RoleProject extends PrimaryEntity {
     @Nationalized
     private String description;
 
+    @Column
+    private RoleDefault roleDefault;
+
     @Column(length = EntityProperties.LENGTH_ID)
     private String projectId;
 }
