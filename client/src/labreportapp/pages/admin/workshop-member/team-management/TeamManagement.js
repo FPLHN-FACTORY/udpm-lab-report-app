@@ -10,6 +10,8 @@ import {
   faTeletype,
   faPersonMilitaryPointing,
   faPeopleGroup,
+  faEyeSlash,
+  faEye,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Input, Pagination, Table, Tooltip, Popconfirm } from "antd";
@@ -29,6 +31,7 @@ import LoadingIndicator from "../../../../helper/loading";
 import moment from "moment";
 import "./style-team-management.css";
 import React from "react";
+import { Link } from "react-router-dom";
 
 const TeamManagement = () => {
   const [team, setTeam] = useState(null);
@@ -58,7 +61,7 @@ const TeamManagement = () => {
       setLoading(false);
     });
   };
-  
+
   const data = useAppSelector(GetTeam);
 
   const columns = [
@@ -88,6 +91,20 @@ const TeamManagement = () => {
       key: "actions",
       render: (text, record) => (
         <div>
+          {" "}
+          <Tooltip title="Xem chi tiết">
+            <Link to={`/admin/team-management/${record.id}`}>
+              <FontAwesomeIcon
+                style={{
+                  marginRight: "20px",
+                  cursor: "pointer",
+                  color: "rgb(38, 144, 214)",
+                }}
+                icon={faEye}
+                size="1x"
+              />
+            </Link>
+          </Tooltip>
           <Tooltip title="Cập nhật">
             <FontAwesomeIcon
               onClick={() => {
@@ -166,7 +183,6 @@ const TeamManagement = () => {
       (response) => {
         toast.success("Xóa thành công!");
         dispatch(DeleteTeam(response.data.data));
-        fetchData();
       },
       (error) => {}
     );
@@ -180,8 +196,11 @@ const TeamManagement = () => {
         <FontAwesomeIcon icon={faPeopleGroup} style={{ fontSize: "20px" }} />
         <span style={{ marginLeft: "10px" }}>Quản lý team</span>
       </div>
-      <div className="filter-level" style={{ marginBottom: "10px" }}>
-      <FontAwesomeIcon icon={faFilter} style={{ fontSize: "20px" }} />{" "}
+      <div
+        className="filter-level"
+        style={{ marginBottom: "10px", paddingBottom: 0 }}
+      >
+        <FontAwesomeIcon icon={faFilter} style={{ fontSize: "20px" }} />{" "}
         <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
         <hr />
         <div className="title__search" style={{ marginRight: "60px" }}>
@@ -219,14 +238,14 @@ const TeamManagement = () => {
       </div>
       <div
         className="box-son-general"
-        style={{ minHeight: "400px", marginTop: "30px" }}
+        style={{ minHeight: "400px", marginTop: "30px", padding: 20 }}
       >
-        <div className="tittle__category" style={{ marginBottom: "20px" }}>
+        <div className="tittle__category" style={{ marginBottom: "15px" }}>
           <div>
             <FontAwesomeIcon
               icon={faTableList}
               style={{
-                marginRight: "10px",
+                marginRight: "3px",
                 fontSize: "20px",
               }}
             />

@@ -40,17 +40,7 @@ const DetailGroupProject = () => {
     AdGroupProjectAPI.detailGroupProject(id).then((response) => {
       setDetailGroupProject(response.data.data);
       if (response.data.data.backgroundImage) {
-        const byteArray = response.data.data.backgroundImage
-          .split(",")
-          .map(Number);
-
-        const uint8Array = new Uint8Array(byteArray);
-
-        const blob = new Blob([uint8Array], { type: "image/jpeg" });
-
-        const imageUrl = URL.createObjectURL(blob);
-
-        setSelectedImageUrl(imageUrl);
+        setSelectedImageUrl(response.data.data.backgroundImage);
       }
       setLoading(false);
     });

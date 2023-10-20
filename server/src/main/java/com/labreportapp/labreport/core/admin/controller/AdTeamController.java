@@ -22,6 +22,7 @@ import java.util.List;
 @RequestMapping("/admin/team")
 @CrossOrigin(origins = {"*"}, maxAge = -1)
 public class AdTeamController {
+
     @Autowired
     private AdTeamService adTeamService;
 
@@ -58,5 +59,10 @@ public class AdTeamController {
                                             @RequestBody AdUpdateTeamRequest obj) {
         obj.setId(id);
         return new ResponseObject(adTeamService.updateTeam(obj));
+    }
+
+    @GetMapping("/detail/{id}")
+    public ResponseObject detailTeam(@PathVariable("id") String id) {
+        return new ResponseObject(adTeamService.detailTeam(id));
     }
 }

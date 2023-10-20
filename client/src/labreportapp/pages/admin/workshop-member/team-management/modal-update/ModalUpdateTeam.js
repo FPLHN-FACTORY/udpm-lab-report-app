@@ -15,22 +15,24 @@ const ModalUpdateTeam = ({ visible, onCancel, team }) => {
   const [name, setName] = useState("");
   const [descriptions, setDescription] = useState("");
   const [errorName, setErrorName] = useState("Vui lòng không để trống");
-  const [errorDescription, setErrorDescription] = useState("Vui lòng không để trống");
+  const [errorDescription, setErrorDescription] = useState(
+    "Vui lòng không để trống"
+  );
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (team !== null) {
       setName(team.name);
       setDescription(team.descriptions);
-
-      return () => {
-        setName("");
-        setErrorName("");
-        setDescription("");
-        setErrorDescription();
-      };
     }
-  }, [team]);
+
+    return () => {
+      setName("");
+      setErrorName("");
+      setDescription("");
+      setErrorDescription();
+    };
+  }, [team, visible]);
 
   const update = () => {
     let check = 0;
@@ -63,7 +65,6 @@ const ModalUpdateTeam = ({ visible, onCancel, team }) => {
         id: team.id,
         name: name,
         descriptions: descriptions,
-
       };
 
       AdTeamAPI.updateTeam(obj, team.id).then(
@@ -90,7 +91,7 @@ const ModalUpdateTeam = ({ visible, onCancel, team }) => {
           <span style={{ fontSize: "18px" }}>Cập nhật Nhóm</span>
         </div>
         <div style={{ marginTop: "15px", borderBottom: "1px solid black" }}>
-        <Row gutter={16} style={{ marginBottom: "15px" }}>
+          <Row gutter={16} style={{ marginBottom: "15px" }}>
             <Col span={24}>
               <span>Tên nhóm:</span> <br />
               <Input

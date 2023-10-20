@@ -111,6 +111,27 @@ public class ConvertRequestCallApiIdentity {
         }
     }
 
+    public SimpleResponse handleCallApiGetUserByEmail(String email) {
+        try {
+            String apiUrl = ApiConstants.API_GET_USER_BY_EMAIL;
+            HttpHeaders headers = new HttpHeaders();
+            String authorizationToken = "Bearer " + labReportAppSession.getToken();
+            headers.set("Authorization", authorizationToken);
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
+            ResponseEntity<SimpleResponse> responseEntity =
+                    restTemplate.exchange(apiUrl + "/" + email, HttpMethod.GET, httpEntity,
+                            new ParameterizedTypeReference<SimpleResponse>() {
+                            });
+
+            SimpleResponse response = responseEntity.getBody();
+            return response;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public Object handleCallApiGetRoleUserByIdUserAndModuleCode(String idUSer) {
         try {
             String apiUrl = ApiConstants.API_GET_ROLES_USER_BY_ID_USER_AND_MODULE_CODE;
@@ -120,7 +141,7 @@ public class ConvertRequestCallApiIdentity {
             headers.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
             ResponseEntity<List<RolesResponse>> responseEntity =
-                    restTemplate.exchange(apiUrl + "/" + idUSer + "/" + LabReportAppConstants.MODULE_ID, HttpMethod.GET, httpEntity,
+                    restTemplate.exchange(apiUrl + "/" + idUSer + "/" + LabReportAppConstants.MODULE_CODE, HttpMethod.GET, httpEntity,
                             new ParameterizedTypeReference<List<RolesResponse>>() {
                             });
 

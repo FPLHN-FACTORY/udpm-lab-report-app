@@ -51,6 +51,7 @@ import StStudentClassesReducer from "./student/StStudentClasses.reducer";
 import AdMeetingPeriodSliceReducer from "./admin/AdMeetingPeriodSlice.reducer";
 import AdGroupProjectSliceReducer from "./admin/AdGroupProjectSlice.reducer";
 import AdDetailGroupProjectSliceReducer from "./admin/AdDetailGroupProjectSlice.reducer";
+import AdMemberFactorySliceReducer from "./admin/AdMemberFactorySlice.reducer";
 
 export const store = configureStore({
   reducer: {
@@ -84,7 +85,7 @@ export const store = configureStore({
     adGroupProject: AdGroupProjectSliceReducer,
     adDetailGroupProject: AdDetailGroupProjectSliceReducer,
     adTeam: adTeamSliceReducer,
-
+    adMemberFactory: AdMemberFactorySliceReducer,
     ////
     board: boardSliceReducer,
     myProject: myProjectSliceReducer,

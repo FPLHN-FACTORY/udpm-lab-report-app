@@ -233,7 +233,6 @@ const ModalUpdateStakeholderManagement = ({
         onCancel={onCancel}
         width={950}
         footer={null}
-        className="modal_show_detail"
       >
         <div>
           <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>

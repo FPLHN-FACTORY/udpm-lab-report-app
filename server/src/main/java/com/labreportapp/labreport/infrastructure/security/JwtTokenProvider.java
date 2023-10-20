@@ -76,7 +76,7 @@ public class JwtTokenProvider {
             httpSession.setAttribute(SessionConstant.USER_CURRENT_USERNAME, userName);
             httpSession.setAttribute(SessionConstant.USER_CURRENT_NAME, name);
 
-            return new UsernamePasswordAuthenticationToken(null, token, authorities);
+            return new UsernamePasswordAuthenticationToken(id, token, authorities);
         }
     }
 

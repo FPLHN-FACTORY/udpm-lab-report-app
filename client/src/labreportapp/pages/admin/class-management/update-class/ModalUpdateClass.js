@@ -166,8 +166,8 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
     } else {
       setErrorStartTime("");
     }
-    if (idActivitiSearch === "") {
-      setErrorActivitySelect("Hoạt động bắt đầu không được để trống");
+    if (idActivitiSearch === "" || idActivitiSearch === "none") {
+      setErrorActivitySelect("Hoạt động không được để trống");
       check++;
     } else {
       setErrorActivitySelect("");

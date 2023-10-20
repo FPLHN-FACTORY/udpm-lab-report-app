@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fe93e581-5589-4bad-ba6a-389fa82a0816" name="Default Changelist" comment="update code&#10;- Fix lại màn điểm danh tất cả sinh viên, 1 sinh viên" />
+    <list default="true" id="fe93e581-5589-4bad-ba6a-389fa82a0816" name="Default Changelist" comment="update code&#10;- Fix lại màn điểm danh tất cả sinh viên, 1 sinh viên">
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Merge_at_10_16_2023_10_35_PM__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Merge_at_10_16_2023_10_35_PM__Default_Changelist_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -95,6 +98,7 @@
       <workItem from="1697197690985" duration="130000" />
       <workItem from="1697279417356" duration="1793000" />
       <workItem from="1697523106194" duration="125000" />
+      <workItem from="1697565914982" duration="1562000" />
     </task>
     <task id="LOCAL-00001" summary="update code merge login, pending">
       <created>1696288841421</created>

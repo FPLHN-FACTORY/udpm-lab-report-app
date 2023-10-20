@@ -39,5 +39,11 @@ export class AdTeamAPI {
     });
   };
 
+  static detailTeam = (id) => {
+    return request({
+      method: "GET",
+      url: url + `/detail/` + id,
+    });
+  };
   
 }

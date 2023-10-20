@@ -9,6 +9,7 @@ import com.labreportapp.labreport.entity.HomeWork;
 import com.labreportapp.labreport.entity.Meeting;
 import com.labreportapp.labreport.entity.MeetingPeriod;
 import com.labreportapp.labreport.entity.MemberFactory;
+import com.labreportapp.labreport.entity.MemberRoleFactory;
 import com.labreportapp.labreport.entity.MemberTeamFactory;
 import com.labreportapp.labreport.entity.Note;
 import com.labreportapp.labreport.entity.Point;
@@ -26,7 +27,7 @@ import com.labreportapp.labreport.infrastructure.constant.StatusAttendance;
 import com.labreportapp.labreport.infrastructure.constant.StatusClass;
 import com.labreportapp.labreport.infrastructure.constant.StatusFeedBack;
 import com.labreportapp.labreport.infrastructure.constant.StatusMeeting;
-import com.labreportapp.labreport.infrastructure.constant.StatusMemberTeamFactory;
+import com.labreportapp.labreport.infrastructure.constant.StatusMemberFactory;
 import com.labreportapp.labreport.infrastructure.constant.StatusStudentFeedBack;
 import com.labreportapp.labreport.infrastructure.constant.StatusTeacherEdit;
 import com.labreportapp.labreport.infrastructure.constant.StatusTeam;
@@ -41,6 +42,7 @@ import com.labreportapp.labreport.repository.LevelRepository;
 import com.labreportapp.labreport.repository.MeetingPeriodRepository;
 import com.labreportapp.labreport.repository.MeetingRepository;
 import com.labreportapp.labreport.repository.MemberFactoryRepository;
+import com.labreportapp.labreport.repository.MemberRoleFactoryRepository;
 import com.labreportapp.labreport.repository.MemberTeamFactoryRepository;
 import com.labreportapp.labreport.repository.NoteRepository;
 import com.labreportapp.labreport.repository.PointRepository;
@@ -215,6 +217,9 @@ public class DBGenerator implements CommandLineRunner {
 
     @Autowired
     private GroupProjectRepository groupProjectRepository;// portal project // bảng mới thêm ngày 14/10/2023
+
+    @Autowired
+    private MemberRoleFactoryRepository memberRoleFactoryRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -592,15 +597,15 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses6.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
         studentClasses6.setId(studentClassesRepository.save(studentClasses6).getId());
 
-        StudentClasses studentClasses7 = new StudentClasses();
-        studentClasses7.setStudentId("FCB1D931-CB71-4F12-94D6-08DBB66B2F92".toLowerCase());
-        studentClasses7.setClassId(class1.getId());
-        studentClasses7.setTeamId(team1.getId());
-        studentClasses7.setEmail("huynqph26772@fpt.edu.vn");
-        studentClasses7.setRole(RoleTeam.MEMBER);
-        studentClasses7.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
-        studentClasses7.setStatus(StatusTeam.ACTIVE);
-        studentClasses7.setId(studentClassesRepository.save(studentClasses7).getId());
+//        StudentClasses studentClasses7 = new StudentClasses();
+//        studentClasses7.setStudentId("FCB1D931-CB71-4F12-94D6-08DBB66B2F92".toLowerCase());
+//        studentClasses7.setClassId(class1.getId());
+//        studentClasses7.setTeamId(team1.getId());
+//        studentClasses7.setEmail("huynqph26772@fpt.edu.vn");
+//        studentClasses7.setRole(RoleTeam.MEMBER);
+//        studentClasses7.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
+//        studentClasses7.setStatus(StatusTeam.ACTIVE);
+//        studentClasses7.setId(studentClassesRepository.save(studentClasses7).getId());
 
         StudentClasses studentClasses8 = new StudentClasses();
         studentClasses8.setStudentId("6A85641C-874B-4AD0-B1BA-08DBB743DD7D".toLowerCase());
@@ -778,11 +783,11 @@ public class DBGenerator implements CommandLineRunner {
         feedBack6.setStudentId(studentClasses6.getStudentId());
         feedBack6.setId(feedBackRepository.save(feedBack6).getId());
 
-        FeedBack feedBack7 = new FeedBack();
-        feedBack7.setDescriptions("Day ok #");
-        feedBack7.setClassId(class1.getId());
-        feedBack7.setStudentId(studentClasses7.getStudentId());
-        feedBack7.setId(feedBackRepository.save(feedBack7).getId());
+//        FeedBack feedBack7 = new FeedBack();
+//        feedBack7.setDescriptions("Day ok #");
+//        feedBack7.setClassId(class1.getId());
+//        feedBack7.setStudentId(studentClasses7.getStudentId());
+//        feedBack7.setId(feedBackRepository.save(feedBack7).getId());
 
         FeedBack feedBack8 = new FeedBack();
         feedBack8.setDescriptions("Day ok #");
@@ -2506,17 +2511,17 @@ public class DBGenerator implements CommandLineRunner {
         periodTodo1_2.setId(periodTodoRepository.save(periodTodo1_2).getId());
 // Hiệu fake 14/10/2023
         RoleFactory roleFactory1 = new RoleFactory();
-        roleFactory1.setName("Quản lý");
+        roleFactory1.setName("Giám đốc xưởng");
         roleFactory1.setDescriptions("Có vai trò quản lý tổng quan, phạm vi, nguồn lực, thời gian,...");
         roleFactory1.setId(roleFactoryRepository.save(roleFactory1).getId());
 
         RoleFactory roleFactory2 = new RoleFactory();
-        roleFactory2.setName("Trưởng nhóm");
+        roleFactory2.setName("Quản lý");
         roleFactory2.setDescriptions("Có vai trò lập kế hoạch, phân chia nhiệm vụ, hướng dẫn, giao tiếp và giải quyết xung đột bằng hòa bình hihi...");
         roleFactory2.setId(roleFactoryRepository.save(roleFactory2).getId());
 
         RoleFactory roleFactory3 = new RoleFactory();
-        roleFactory3.setName("Phó nhóm");
+        roleFactory3.setName("TechLead");
         roleFactory3.setDescriptions("Có vai trò hỗ trợ trưởng nhóm trong mọi trường hợp haha,...");
         roleFactory3.setId(roleFactoryRepository.save(roleFactory3).getId());
 
@@ -2547,80 +2552,127 @@ public class DBGenerator implements CommandLineRunner {
 
         MemberFactory memberFactory1 = new MemberFactory();
         memberFactory1.setMemberId(studentClasses1.getStudentId());
-        memberFactory1.setRoleFactoryId(roleFactory1.getId());
+        memberFactory1.setEmail(studentClasses1.getEmail());
+        memberFactory1.setStatusMemberFactory(StatusMemberFactory.HOAT_DONG);
         memberFactory1.setId(memberFactoryRepository.save(memberFactory1).getId());
 
         MemberFactory memberFactory2 = new MemberFactory();
         memberFactory2.setMemberId(studentClasses2.getStudentId());
-        memberFactory2.setRoleFactoryId(roleFactory2.getId());
+        memberFactory2.setEmail(studentClasses2.getEmail());
+        memberFactory2.setStatusMemberFactory(StatusMemberFactory.HOAT_DONG);
         memberFactory2.setId(memberFactoryRepository.save(memberFactory2).getId());
 
         MemberFactory memberFactory3 = new MemberFactory();
         memberFactory3.setMemberId(studentClasses3.getStudentId());
-        memberFactory3.setRoleFactoryId(roleFactory3.getId());
+        memberFactory3.setEmail(studentClasses3.getEmail());
+        memberFactory3.setStatusMemberFactory(StatusMemberFactory.HOAT_DONG);
         memberFactory3.setId(memberFactoryRepository.save(memberFactory3).getId());
 
         MemberFactory memberFactory4 = new MemberFactory();
         memberFactory4.setMemberId(studentClasses4.getStudentId());
-        memberFactory4.setRoleFactoryId(roleFactory4.getId());
+        memberFactory4.setEmail(studentClasses4.getEmail());
+        memberFactory4.setStatusMemberFactory(StatusMemberFactory.HOAT_DONG);
         memberFactory4.setId(memberFactoryRepository.save(memberFactory4).getId());
 
         MemberFactory memberFactory5 = new MemberFactory();
         memberFactory5.setMemberId(studentClasses5.getStudentId());
-        memberFactory5.setRoleFactoryId(roleFactory4.getId());
+        memberFactory5.setEmail(studentClasses5.getEmail());
+        memberFactory5.setStatusMemberFactory(StatusMemberFactory.HOAT_DONG);
         memberFactory5.setId(memberFactoryRepository.save(memberFactory5).getId());
 
         MemberFactory memberFactory6 = new MemberFactory();
         memberFactory6.setMemberId(studentClasses6.getStudentId());
-        memberFactory6.setRoleFactoryId(roleFactory1.getId());
+        memberFactory6.setEmail(studentClasses6.getEmail());
+        memberFactory6.setStatusMemberFactory(StatusMemberFactory.HOAT_DONG);
         memberFactory6.setId(memberFactoryRepository.save(memberFactory6).getId());
 
-        MemberFactory memberFactory7 = new MemberFactory();
-        memberFactory7.setMemberId(studentClasses7.getStudentId());
-        memberFactory7.setRoleFactoryId(roleFactory2.getId());
-        memberFactory7.setId(memberFactoryRepository.save(memberFactory7).getId());
+//        MemberFactory memberFactory7 = new MemberFactory();
+//        memberFactory7.setMemberId(studentClasses7.getStudentId());
+//        memberFactory7.setEmail(studentClasses7.getEmail());
+//        memberFactory7.setStatusMemberFactory(StatusMemberFactory.HOAT_DONG);
+//        memberFactory7.setId(memberFactoryRepository.save(memberFactory7).getId());
+
+        MemberRoleFactory memberRoleFactory1 = new MemberRoleFactory();
+        memberRoleFactory1.setRoleFactoryId(roleFactory1.getId());
+        memberRoleFactory1.setMemberFactoryId(memberFactory1.getId());
+        memberRoleFactory1.setId(memberRoleFactoryRepository.save(memberRoleFactory1).getId());
+
+        MemberRoleFactory memberRoleFactory11 = new MemberRoleFactory();
+        memberRoleFactory11.setRoleFactoryId(roleFactory3.getId());
+        memberRoleFactory11.setMemberFactoryId(memberFactory1.getId());
+        memberRoleFactory11.setId(memberRoleFactoryRepository.save(memberRoleFactory11).getId());
+
+        MemberRoleFactory memberRoleFactory2 = new MemberRoleFactory();
+        memberRoleFactory2.setRoleFactoryId(roleFactory2.getId());
+        memberRoleFactory2.setMemberFactoryId(memberFactory2.getId());
+        memberRoleFactory2.setId(memberRoleFactoryRepository.save(memberRoleFactory2).getId());
+
+        MemberRoleFactory memberRoleFactory22 = new MemberRoleFactory();
+        memberRoleFactory22.setRoleFactoryId(roleFactory3.getId());
+        memberRoleFactory22.setMemberFactoryId(memberFactory2.getId());
+        memberRoleFactory22.setId(memberRoleFactoryRepository.save(memberRoleFactory22).getId());
+
+        MemberRoleFactory memberRoleFactory3 = new MemberRoleFactory();
+        memberRoleFactory3.setRoleFactoryId(roleFactory4.getId());
+        memberRoleFactory3.setMemberFactoryId(memberFactory3.getId());
+        memberRoleFactory3.setId(memberRoleFactoryRepository.save(memberRoleFactory3).getId());
+
+        MemberRoleFactory memberRoleFactory4 = new MemberRoleFactory();
+        memberRoleFactory4.setRoleFactoryId(roleFactory4.getId());
+        memberRoleFactory4.setMemberFactoryId(memberFactory4.getId());
+        memberRoleFactory4.setId(memberRoleFactoryRepository.save(memberRoleFactory4).getId());
+
+        MemberRoleFactory memberRoleFactory5 = new MemberRoleFactory();
+        memberRoleFactory5.setRoleFactoryId(roleFactory4.getId());
+        memberRoleFactory5.setMemberFactoryId(memberFactory5.getId());
+        memberRoleFactory5.setId(memberRoleFactoryRepository.save(memberRoleFactory5).getId());
+
+        MemberRoleFactory memberRoleFactory6 = new MemberRoleFactory();
+        memberRoleFactory6.setRoleFactoryId(roleFactory4.getId());
+        memberRoleFactory6.setMemberFactoryId(memberFactory6.getId());
+        memberRoleFactory6.setId(memberRoleFactoryRepository.save(memberRoleFactory6).getId());
+
+//        MemberRoleFactory memberRoleFactory7 = new MemberRoleFactory();
+//        memberRoleFactory7.setRoleFactoryId(roleFactory4.getId());
+//        memberRoleFactory7.setMemberFactoryId(memberFactory7.getId());
+//        memberRoleFactory7.setId(memberRoleFactoryRepository.save(memberRoleFactory7).getId());
+
+        /////
 
         MemberTeamFactory memberTeamFactory1 = new MemberTeamFactory();
         memberTeamFactory1.setMemberFactoryId(memberFactory1.getId());
         memberTeamFactory1.setTeamFactoryId(teamFactory1.getId());
-        memberTeamFactory1.setStatusMemberTeamFactory(StatusMemberTeamFactory.HOAT_DONG);
         memberTeamFactory1.setId(memberTeamFactoryRepository.save(memberTeamFactory1).getId());
 
         MemberTeamFactory memberTeamFactory2 = new MemberTeamFactory();
         memberTeamFactory2.setMemberFactoryId(memberFactory2.getId());
         memberTeamFactory2.setTeamFactoryId(teamFactory1.getId());
-        memberTeamFactory2.setStatusMemberTeamFactory(StatusMemberTeamFactory.HOAT_DONG);
         memberTeamFactory2.setId(memberTeamFactoryRepository.save(memberTeamFactory2).getId());
 
         MemberTeamFactory memberTeamFactory3 = new MemberTeamFactory();
         memberTeamFactory3.setMemberFactoryId(memberFactory3.getId());
         memberTeamFactory3.setTeamFactoryId(teamFactory1.getId());
-        memberTeamFactory3.setStatusMemberTeamFactory(StatusMemberTeamFactory.HOAT_DONG);
         memberTeamFactory3.setId(memberTeamFactoryRepository.save(memberTeamFactory3).getId());
 
         MemberTeamFactory memberTeamFactory4 = new MemberTeamFactory();
         memberTeamFactory4.setMemberFactoryId(memberTeamFactory4.getId());
         memberTeamFactory4.setTeamFactoryId(teamFactory1.getId());
-        memberTeamFactory4.setStatusMemberTeamFactory(StatusMemberTeamFactory.HOAT_DONG);
         memberTeamFactory4.setId(memberTeamFactoryRepository.save(memberTeamFactory4).getId());
 
         MemberTeamFactory memberTeamFactory5 = new MemberTeamFactory();
         memberTeamFactory5.setMemberFactoryId(memberFactory5.getId());
         memberTeamFactory5.setTeamFactoryId(teamFactory1.getId());
-        memberTeamFactory5.setStatusMemberTeamFactory(StatusMemberTeamFactory.KHONG_HOAT_DONG);
         memberTeamFactory5.setId(memberTeamFactoryRepository.save(memberTeamFactory5).getId());
 
         MemberTeamFactory memberTeamFactory6 = new MemberTeamFactory();
         memberTeamFactory6.setMemberFactoryId(memberFactory6.getId());
         memberTeamFactory6.setTeamFactoryId(teamFactory2.getId());
-        memberTeamFactory6.setStatusMemberTeamFactory(StatusMemberTeamFactory.HOAT_DONG);
         memberTeamFactory6.setId(memberTeamFactoryRepository.save(memberTeamFactory6).getId());
 
-        MemberTeamFactory memberTeamFactory7 = new MemberTeamFactory();
-        memberTeamFactory7.setMemberFactoryId(memberFactory7.getId());
-        memberTeamFactory7.setTeamFactoryId(teamFactory2.getId());
-        memberTeamFactory7.setStatusMemberTeamFactory(StatusMemberTeamFactory.HOAT_DONG);
-        memberTeamFactory7.setId(memberTeamFactoryRepository.save(memberTeamFactory7).getId());
+//        MemberTeamFactory memberTeamFactory7 = new MemberTeamFactory();
+//        memberTeamFactory7.setMemberFactoryId(memberFactory7.getId());
+//        memberTeamFactory7.setTeamFactoryId(teamFactory2.getId());
+//        memberTeamFactory7.setId(memberTeamFactoryRepository.save(memberTeamFactory7).getId());
 
     }
 

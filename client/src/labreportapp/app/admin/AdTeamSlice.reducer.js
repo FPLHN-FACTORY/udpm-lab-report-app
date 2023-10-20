@@ -17,21 +17,16 @@ const adTeamSlice = createSlice({
         id: data.id,
         name: data.name,
         descriptions: data.descriptions,
-
       };
       state.unshift(newTeam);
       return state;
     },
     UpdateTeam: (state, action) => {
       const updateTeam = action.payload;
-      const index = state.findIndex(
-        (team) => team.id === updateTeam.id
-      );
+      const index = state.findIndex((team) => team.id === updateTeam.id);
       if (index !== -1) {
         state[index].name = updateTeam.name;
         state[index].descriptions = updateTeam.descriptions;
-
-
       }
     },
     DeleteTeam: (state, action) => {
@@ -42,11 +37,7 @@ const adTeamSlice = createSlice({
   },
 });
 
-export const { SetTeam,
-               AddTeam,
-               UpdateTeam,
-               DeleteTeam,
-             } = adTeamSlice.actions;
+export const { SetTeam, AddTeam, UpdateTeam, DeleteTeam } = adTeamSlice.actions;
 
 export const GetTeam = (state) => state.adTeam;
 

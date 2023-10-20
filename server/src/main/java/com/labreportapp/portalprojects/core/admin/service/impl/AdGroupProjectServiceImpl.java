@@ -9,7 +9,7 @@ import com.labreportapp.portalprojects.core.admin.model.response.AdGroupProjectR
 import com.labreportapp.portalprojects.core.admin.repository.AdGroupProjectRepository;
 import com.labreportapp.portalprojects.core.admin.service.AdGroupProjectService;
 import com.labreportapp.portalprojects.entity.GroupProject;
-import com.labreportapp.portalprojects.entity.Project;
+import com.labreportapp.portalprojects.infrastructure.cloudinary.CloudinaryUploadImages;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import jakarta.validation.Valid;
@@ -34,6 +34,9 @@ public class AdGroupProjectServiceImpl implements AdGroupProjectService {
     @Autowired
     private AdGroupProjectRepository adGroupProjectRepository;
 
+    @Autowired
+    private CloudinaryUploadImages cloudinaryUploadImages;
+
     @Override
     public PageableObject<AdGroupProjectResponse> getAllPage(final AdFindGroupProjectRequest request) {
         Pageable pageable = PageRequest.of(request.getPage(), request.getSize());
@@ -43,7 +46,6 @@ public class AdGroupProjectServiceImpl implements AdGroupProjectService {
     @Override
     @Transactional
     public AdGroupProjectResponse updateGroupProject(@Valid AdUpdateGroupProjectRequest request) throws IOException {
-        System.out.println(request + " aaaaaaaaaaaaaaaa");
         Optional<GroupProject> groupProjectFind = adGroupProjectRepository.findById(request.getId());
         if (!groupProjectFind.isPresent()) {
             throw new RestApiException(Message.GROUP_PROJECT_NOT_EXISTS);
@@ -51,7 +53,7 @@ public class AdGroupProjectServiceImpl implements AdGroupProjectService {
         groupProjectFind.get().setName(request.getName());
         groupProjectFind.get().setDescription(request.getDescriptions());
         if (request.getFile() != null) {
-            groupProjectFind.get().setBackgroundImage(request.getFile().getBytes());
+            groupProjectFind.get().setBackgroundImage(cloudinaryUploadImages.uploadImage(request.getFile()));
         }
         adGroupProjectRepository.save(groupProjectFind.get());
         AdGroupProjectResponse adGroupProjectResponse = adGroupProjectRepository.findGroupProjectById(request.getId());
@@ -64,7 +66,7 @@ public class AdGroupProjectServiceImpl implements AdGroupProjectService {
         groupProject.setName(request.getName());
         groupProject.setDescription(request.getDescriptions());
         if (request.getFile() != null) {
-            groupProject.setBackgroundImage(request.getFile().getBytes());
+            groupProject.setBackgroundImage(cloudinaryUploadImages.uploadImage(request.getFile()));
         }
         GroupProject groupProjectNew = adGroupProjectRepository.save(groupProject);
         AdGroupProjectResponse adGroupProjectResponse = adGroupProjectRepository.findGroupProjectById(groupProjectNew.getId());

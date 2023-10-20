@@ -2,6 +2,7 @@ package com.labreportapp.labreport.entity;
 
 import com.labreportapp.labreport.entity.base.PrimaryEntity;
 import com.labreportapp.labreport.infrastructure.constant.EntityProperties;
+import com.labreportapp.labreport.infrastructure.constant.StatusMemberFactory;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -26,6 +27,9 @@ public class MemberFactory extends PrimaryEntity {
     @Column(length = EntityProperties.LENGTH_ID)
     private String memberId;
 
-    @Column(length = EntityProperties.LENGTH_ID)
-    private String roleFactoryId;
+    @Column(length = EntityProperties.LENGTH_EMAIL)
+    private String email;
+
+    @Column
+    private StatusMemberFactory statusMemberFactory;
 }

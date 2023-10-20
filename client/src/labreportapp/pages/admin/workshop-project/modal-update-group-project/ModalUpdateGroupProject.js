@@ -24,15 +24,7 @@ const ModalUpdateGroupProject = ({ visible, onCancel, item }) => {
       setName(item.name);
       setDescriptions(item.descriptions);
       if (item.backgroundImage) {
-        const byteArray = item.backgroundImage.split(",").map(Number);
-
-        const uint8Array = new Uint8Array(byteArray);
-
-        const blob = new Blob([uint8Array], { type: "image/jpeg" });
-
-        const imageUrl = URL.createObjectURL(blob);
-
-        setSelectedImageUrl(imageUrl);
+        setSelectedImageUrl(item.backgroundImage);
       }
     }
   }, [item]);

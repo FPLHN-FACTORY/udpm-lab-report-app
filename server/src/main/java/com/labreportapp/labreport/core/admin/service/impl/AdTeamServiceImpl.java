@@ -68,7 +68,7 @@ public class AdTeamServiceImpl implements AdTeamService {
     }
 
     @Override
-    public Boolean deleteTeam(String id) {
+    public String deleteTeam(String id) {
         Optional<TeamFactory> findTeamById = adTeamRepository.findById(id);
         Integer countTeams = adTeamRepository.countMemberTeamByTeamId(id);
         if (!findTeamById.isPresent()) {
@@ -77,8 +77,12 @@ public class AdTeamServiceImpl implements AdTeamService {
         if (countTeams != null && countTeams > 0) {
             throw new RestApiException(Message.TEAM_MEMBER_TEAM_ALREADY_EXISTS);
         }
-
         adTeamRepository.delete(findTeamById.get());
-        return true;
+        return id;
+    }
+
+    @Override
+    public TeamFactory detailTeam(String id) {
+        return adTeamRepository.findById(id).get();
     }
 }

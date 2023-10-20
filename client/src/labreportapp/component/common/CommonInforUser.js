@@ -39,12 +39,6 @@ const CommonInforUser = () => {
   const userMenu = (
     <Menu onClick={handleMenuClick}>
       <Menu.Item
-        key="0"
-        icon={<FontAwesomeIcon icon={faUser} style={{ marginRight: 5 }} />}
-      >
-        <Link to="/profile">Trang cá nhân</Link>
-      </Menu.Item>
-      <Menu.Item
         key="1"
         icon={
           <FontAwesomeIcon icon={faPersonSwimming} style={{ marginRight: 5 }} />

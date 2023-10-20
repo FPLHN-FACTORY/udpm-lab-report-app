@@ -40,7 +40,6 @@ const ModalBackGroundColor = ({ visible, onCancel }) => {
         onCancel={onCancel}
         width={780}
         footer={null}
-        className="modal_show_detail"
       >
         {" "}
         <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>

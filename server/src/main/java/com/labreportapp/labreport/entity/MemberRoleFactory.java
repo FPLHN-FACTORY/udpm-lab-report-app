@@ -20,13 +20,12 @@ import lombok.ToString;
 @Setter
 @ToString
 @Entity
-@Table(name = "member_team_factory")
-public class MemberTeamFactory extends PrimaryEntity {
-
-    @Column(length = EntityProperties.LENGTH_ID)
-    private String teamFactoryId;
+@Table(name = "member_role_factory")
+public class MemberRoleFactory extends PrimaryEntity {
 
     @Column(length = EntityProperties.LENGTH_ID)
     private String memberFactoryId;
 
+    @Column(length = EntityProperties.LENGTH_ID)
+    private String roleFactoryId;
 }

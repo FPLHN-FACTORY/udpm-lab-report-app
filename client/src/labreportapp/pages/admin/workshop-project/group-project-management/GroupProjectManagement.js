@@ -53,7 +53,7 @@ const GroupProjectManagement = () => {
     loadDataGroupProject();
     return () => {
       dispatch(SetAdGroupProject([]));
-    }
+    };
   }, [current, size]);
 
   const clearFilter = () => {
@@ -76,22 +76,6 @@ const GroupProjectManagement = () => {
   };
 
   const data = useAppSelector(GetAdGroupProject);
-
-  const handleImageBlob = (image) => {
-    if (image) {
-      const byteArray = image.split(",").map(Number);
-
-      const uint8Array = new Uint8Array(byteArray);
-
-      const blob = new Blob([uint8Array], { type: "image/jpeg" });
-
-      const imageUrl = URL.createObjectURL(blob);
-
-      return imageUrl;
-    } else {
-      return DeFault;
-    }
-  };
 
   const [dropdownStates, setDropdownStates] = useState({}); // Lưu trạng thái của menu dropdown
 
@@ -229,7 +213,11 @@ const GroupProjectManagement = () => {
                               to={`/admin/group-project-management/${item.id}`}
                             >
                               <img
-                                src={handleImageBlob(item.backgroundImage)}
+                                src={
+                                  item.backgroundImage == null
+                                    ? DeFault
+                                    : item.backgroundImage
+                                }
                                 alt="Nhóm dự án"
                                 style={{
                                   objectFit: "cover",
@@ -346,7 +334,6 @@ const GroupProjectManagement = () => {
         <ModalCreateGroupProject
           visible={showCreateGroupProject}
           onCancel={handleShowCreateGroupProject}
-
         />
       </div>
     </div>

@@ -3,6 +3,7 @@ package com.labreportapp.labreport.core.admin.repository;
 import com.labreportapp.labreport.core.admin.model.request.AdFindTeamRequest;
 import com.labreportapp.labreport.core.admin.model.response.AdTeamResponse;
 import com.labreportapp.labreport.entity.TeamFactory;
+import com.labreportapp.labreport.repository.TeamFactoryRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,7 +17,7 @@ import java.util.List;
  * @author quynhncph26201
  */
 @Repository
-public interface AdTeamRepository extends JpaRepository<TeamFactory, String> {
+public interface AdTeamRepository extends TeamFactoryRepository {
     @Query(" SELECT obj FROM TeamFactory obj")
     List<TeamFactory> getAllTeam(Pageable pageable);
 

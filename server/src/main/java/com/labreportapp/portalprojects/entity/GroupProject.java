@@ -33,7 +33,6 @@ public class GroupProject extends PrimaryEntity {
     @Nationalized
     private String description;
 
-    @Lob
-    @Column(columnDefinition = "LONGBLOB")
-    private byte[] backgroundImage;
+    @Column(length = Integer.MAX_VALUE)
+    private String backgroundImage;
 }

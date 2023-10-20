@@ -84,7 +84,10 @@ public enum Message {
     MEETING_PERIOD_NOT_EXITS(PropertiesReader.getProperty(PropertyKeys.MEETING_PERIOD_NOT_EXITS)),
     NAME_IS_EMPTY(PropertiesReader.getProperty(PropertyKeys.NAME_IS_EMPTY)),
     TEAM_MEMBER_TEAM_ALREADY_EXISTS(PropertiesReader.getProperty(PropertyKeys.TEAM_MEMBER_TEAM_ALREADY_EXISTS)),
-    GROUP_PROJECT_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeys.GROUP_PROJECT_NOT_EXISTS));
+    GROUP_PROJECT_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeys.GROUP_PROJECT_NOT_EXISTS)),
+    NO_FIND_EMAIL(PropertiesReader.getProperty(PropertyKeys.NO_FIND_EMAIL)),
+    MEMBER_ALREADY(PropertiesReader.getProperty(PropertyKeys.MEMBER_ALREADY)),
+    MEMBER_FACTORY_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeys.MEMBER_FACTORY_NOT_EXISTS));
 
     private String message;
 
