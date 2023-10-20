@@ -22,6 +22,7 @@ import com.labreportapp.labreport.entity.Team;
 import com.labreportapp.labreport.entity.TeamFactory;
 import com.labreportapp.labreport.entity.TemplateReport;
 import com.labreportapp.labreport.infrastructure.constant.AllowUseTrello;
+import com.labreportapp.labreport.infrastructure.constant.RoleDefault;
 import com.labreportapp.labreport.infrastructure.constant.RoleTeam;
 import com.labreportapp.labreport.infrastructure.constant.StatusAttendance;
 import com.labreportapp.labreport.infrastructure.constant.StatusClass;
@@ -64,6 +65,7 @@ import com.labreportapp.portalprojects.entity.Period;
 import com.labreportapp.portalprojects.entity.PeriodTodo;
 import com.labreportapp.portalprojects.entity.Project;
 import com.labreportapp.portalprojects.entity.ProjectCategory;
+import com.labreportapp.portalprojects.entity.RoleConfig;
 import com.labreportapp.portalprojects.entity.Todo;
 import com.labreportapp.portalprojects.entity.TodoList;
 import com.labreportapp.portalprojects.infrastructure.constant.Constants;
@@ -85,6 +87,7 @@ import com.labreportapp.portalprojects.repository.PeriodRepository;
 import com.labreportapp.portalprojects.repository.PeriodTodoRepository;
 import com.labreportapp.portalprojects.repository.ProjectCategoryRepository;
 import com.labreportapp.portalprojects.repository.ProjectRepository;
+import com.labreportapp.portalprojects.repository.RoleConfigRepository;
 import com.labreportapp.portalprojects.repository.StakeholderProjectRepository;
 import com.labreportapp.portalprojects.repository.TodoListRepository;
 import com.labreportapp.portalprojects.repository.TodoRepository;
@@ -220,6 +223,9 @@ public class DBGenerator implements CommandLineRunner {
 
     @Autowired
     private MemberRoleFactoryRepository memberRoleFactoryRepository;
+
+    @Autowired
+    private RoleConfigRepository roleConfigRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -2509,25 +2515,54 @@ public class DBGenerator implements CommandLineRunner {
         periodTodo1_2.setPeriodId(period1_2.getId());
         periodTodo1_2.setTodoId(todo1_2.getId());
         periodTodo1_2.setId(periodTodoRepository.save(periodTodo1_2).getId());
+
+        RoleConfig roleConfig1 = new RoleConfig();
+        roleConfig1.setName("Quản lý");
+        roleConfig1.setRoleDefault(RoleDefault.DEFAULT);
+        roleConfig1.setDescription("");
+        roleConfig1.setId(roleConfigRepository.save(roleConfig1).getId());
+
+        RoleConfig roleConfig2 = new RoleConfig();
+        roleConfig2.setName("Trưởng nhóm");
+        roleConfig2.setRoleDefault(RoleDefault.NO_DEFAULT);
+        roleConfig2.setDescription("");
+        roleConfig2.setId(roleConfigRepository.save(roleConfig2).getId());
+
+        RoleConfig roleConfig3 = new RoleConfig();
+        roleConfig3.setName("Dev");
+        roleConfig3.setRoleDefault(RoleDefault.NO_DEFAULT);
+        roleConfig3.setDescription("");
+        roleConfig3.setId(roleConfigRepository.save(roleConfig3).getId());
+
+        RoleConfig roleConfig4 = new RoleConfig();
+        roleConfig4.setName("Tester");
+        roleConfig4.setRoleDefault(RoleDefault.NO_DEFAULT);
+        roleConfig4.setDescription("");
+        roleConfig4.setId(roleConfigRepository.save(roleConfig4).getId());
+
 // Hiệu fake 14/10/2023
         RoleFactory roleFactory1 = new RoleFactory();
         roleFactory1.setName("Giám đốc xưởng");
+        roleFactory1.setRoleDefault(RoleDefault.NO_DEFAULT);
         roleFactory1.setDescriptions("Có vai trò quản lý tổng quan, phạm vi, nguồn lực, thời gian,...");
         roleFactory1.setId(roleFactoryRepository.save(roleFactory1).getId());
 
         RoleFactory roleFactory2 = new RoleFactory();
         roleFactory2.setName("Quản lý");
+        roleFactory2.setRoleDefault(RoleDefault.NO_DEFAULT);
         roleFactory2.setDescriptions("Có vai trò lập kế hoạch, phân chia nhiệm vụ, hướng dẫn, giao tiếp và giải quyết xung đột bằng hòa bình hihi...");
         roleFactory2.setId(roleFactoryRepository.save(roleFactory2).getId());
 
         RoleFactory roleFactory3 = new RoleFactory();
         roleFactory3.setName("TechLead");
+        roleFactory3.setRoleDefault(RoleDefault.NO_DEFAULT);
         roleFactory3.setDescriptions("Có vai trò hỗ trợ trưởng nhóm trong mọi trường hợp haha,...");
         roleFactory3.setId(roleFactoryRepository.save(roleFactory3).getId());
 
         RoleFactory roleFactory4 = new RoleFactory();
         roleFactory4.setName("Thành viên");
         roleFactory4.setDescriptions("Có vai trò chỉ việc ăn và lăn lên mọi mặt trận,...");
+        roleFactory4.setRoleDefault(RoleDefault.DEFAULT);
         roleFactory4.setId(roleFactoryRepository.save(roleFactory4).getId());
 
         TeamFactory teamFactory1 = new TeamFactory();
