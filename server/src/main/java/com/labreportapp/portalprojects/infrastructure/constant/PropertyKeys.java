@@ -40,6 +40,7 @@ public class PropertyKeys {
     public static final String LABEL_PROJECT_TODO_EXISTS = "label.project.todo.exists";
     public static final String LABEL_PROJECT_TODO_NOT_EXISTS = "label.project.todo.not.exists";
     public static final String ROLE_PROJECT_NOT_EXISTS = "role.project.todo.not.exists";
+    public static final String ROLE_MEMBER_NOT_EXISTS = "role.project.todo.not.exists";
 
     public static final String CLASS_STUDENT_IS_EMPTY = "class.student.is.empty";
     public static final String DESCRIPTIONS_IS_EMPTY = "descriptions.is.empty";
@@ -58,6 +59,7 @@ public class PropertyKeys {
     public static final String SEMESTER_ACTIVITY_ALREADY_EXISTS = "semester.activity.already.exist";
     public static final String LEVEL_ACTIVITY_ALREADY_EXISTS = "level.activity.already.exist";
     public static final String LEVEL_NOT_EXISTS = "level.not.exist";
+    public static final String ROLE_FACTORY_NOT_EXISTS = "role.factory.not.exist";
     //    public static final String INVALID_DATE = "invalid.date";
     public static final String DANG_CO_DU_LIEU_LIEN_QUAN_KHONG_THE_XOA_BUOI_HOC = "dang.co.du.lieu.lien.quan.khong.the.xoa.buoi.hoc";
     public static final String STUDENT_CLASSES_NOT_EXISTS = "student.classes.not.exists";

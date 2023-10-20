@@ -121,7 +121,7 @@ const TeamManagement = () => {
           </Tooltip>
           <Popconfirm
             title="Xóa nhóm"
-            descriptions="Bạn có chắc chắn muốn xóa Loại này không?"
+            descriptions="Bạn có chắc chắn muốn xóa NHóm này không?"
             onConfirm={() => {
               buttonDelete(record.id);
             }}

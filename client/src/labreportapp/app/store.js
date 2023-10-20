@@ -24,9 +24,7 @@ import adMeetingPeriodConfigurationSliceReducer from "./admin/AdMeetingPeriodCon
 import adTypeProjectSliceReducer from "./admin/AdTypeProjectSlice.reducer";
 import adRoleProjectSliceReducer from "./admin/AdRoleProjectSlice.reducer";
 import adTeamSliceReducer from "./admin/AdTeamSlice.reducer";
-
-
-
+import adRoleFactorySliceReducer from "./admin/AdRoleFactorySlice.reducer";
 
 //
 import boardSliceReducer from "../../portalprojects/app/reducer/detail-project/DPBoardSlice.reducer";
@@ -86,7 +84,7 @@ export const store = configureStore({
     adDetailGroupProject: AdDetailGroupProjectSliceReducer,
     adTeam: adTeamSliceReducer,
     adMemberFactory: AdMemberFactorySliceReducer,
-    ////
+    adRoleFactory: adRoleFactorySliceReducer,
     board: boardSliceReducer,
     myProject: myProjectSliceReducer,
     memberProject: memberProjectSliceReducer,
