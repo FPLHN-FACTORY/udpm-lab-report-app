@@ -54,7 +54,7 @@ public class TeStatisticalController {
     @GetMapping("/export-excel-class")
     public ResponseEntity<byte[]> exportExcelOneClass(HttpServletResponse response, @RequestParam("idClass") String idClass) {
         try {
-            ByteArrayOutputStream file = teStatisticalService.exportExcel(response, idClass);
+            ByteArrayOutputStream file = teStatisticalService.exportExcelStatistical(response, idClass);
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
             headers.setContentDispositionFormData("attachment", "sample.xlsx");

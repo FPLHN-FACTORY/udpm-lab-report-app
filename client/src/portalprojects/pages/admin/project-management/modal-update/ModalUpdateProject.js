@@ -294,6 +294,8 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
         (respone) => {
           toast.success("Cập nhật thành công !");
           let data = respone.data.data;
+          console.log("updateeeeeeeeeeeeeeeee");
+          console.log(data);
           dispatch(UpdateProject(data));
           cancelUpdateSuccess();
         },

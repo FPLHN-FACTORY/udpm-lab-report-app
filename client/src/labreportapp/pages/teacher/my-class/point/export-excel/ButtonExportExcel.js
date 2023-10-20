@@ -9,7 +9,7 @@ import LoadingIndicatorNoOverlay from "../../../../../helper/loadingNoOverlay";
 const ButtonExportExcel = ({ idClass }) => {
   const [downloading, setDownloading] = useState(false);
 
-  const convertLongToDate = (dateLong) => {
+  const convertLongToDateTime = (dateLong) => {
     const date = new Date(dateLong);
     const format = `${date.getFullYear()}-${
       date.getMonth() + 1
@@ -27,7 +27,7 @@ const ButtonExportExcel = ({ idClass }) => {
       const link = document.createElement("a");
       link.href = url;
       link.download =
-        "BangDiem_" + convertLongToDate(new Date().getTime()) + ".xlsx";
+        "BangDiem_" + convertLongToDateTime(new Date().getTime()) + ".xlsx";
       link.click();
       window.URL.revokeObjectURL(url);
       setDownloading(true);

@@ -156,6 +156,16 @@ public class AdProjectServiceImpl implements AdProjectService {
         project.setName(request.getName());
         project.setStartTime(request.getStartTime());
         project.setEndTime(request.getEndTime());
+        Long currentTime = new Date().getTime();
+        if (currentTime < request.getStartTime()) {
+            project.setStatusProject(StatusProject.CHUA_DIEN_RA);
+        }
+        if (currentTime >= request.getStartTime() && currentTime <= request.getEndTime()) {
+            project.setStatusProject(StatusProject.DANG_DIEN_RA);
+        }
+        if (request.getEndTime() < currentTime) {
+            project.setStatusProject(StatusProject.DA_DIEN_RA);
+        }
         List<String> listCaregoryIds = request.getListCategorysId();
         List<ProjectCategory> newCategoryProject = new ArrayList<>();
         listCaregoryIds.forEach(item -> {

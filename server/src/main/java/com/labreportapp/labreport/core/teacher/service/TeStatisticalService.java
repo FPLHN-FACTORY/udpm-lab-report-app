@@ -11,7 +11,7 @@ import java.io.ByteArrayOutputStream;
  */
 public interface TeStatisticalService {
 
-    ByteArrayOutputStream exportExcel(HttpServletResponse response, String idClass);
+    ByteArrayOutputStream exportExcelStatistical(HttpServletResponse response, String idClass);
 
     TeCountClassReponse findCount(final TeFindClassStatisticalRequest request);
 }

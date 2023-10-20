@@ -35,7 +35,6 @@ const projectManagementSlide = createSlice({
     UpdateProject: (state, action) => {
       const project = action.payload;
       const index = state.findIndex((item) => item.id === project.id);
-      console.log(state[index]);
       if (index !== -1) {
         let projectUpdate = state[index];
         projectUpdate.code = project.code;

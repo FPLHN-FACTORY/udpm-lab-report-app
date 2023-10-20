@@ -365,6 +365,7 @@ public class TeTeamsServiceImpl implements TeTeamsService {
     private CellStyle chooseCellStyle(String type, Workbook workbook) {
         CellStyle cellStyle = workbook.createCellStyle();
         Font fontStyle = workbook.createFont();
+        fontStyle.setFontName("Times New Roman");
         if (type.equals("title")) {
             fontStyle.setBold(true);
             fontStyle.setFontHeightInPoints((short) 20);
@@ -391,6 +392,7 @@ public class TeTeamsServiceImpl implements TeTeamsService {
             cellStyle.setBorderBottom(BorderStyle.THIN);
             cellStyle.setBorderLeft(BorderStyle.THIN);
             cellStyle.setBorderRight(BorderStyle.THIN);
+            cellStyle.setFont(fontStyle);
         }
         if (type.equals("dataCenterTable")) {
             cellStyle.setAlignment(HorizontalAlignment.CENTER);
@@ -398,6 +400,7 @@ public class TeTeamsServiceImpl implements TeTeamsService {
             cellStyle.setBorderBottom(BorderStyle.THIN);
             cellStyle.setBorderLeft(BorderStyle.THIN);
             cellStyle.setBorderRight(BorderStyle.THIN);
+            cellStyle.setFont(fontStyle);
         }
         if (type.equals("note")) {
             fontStyle.setColor(Font.COLOR_RED);
