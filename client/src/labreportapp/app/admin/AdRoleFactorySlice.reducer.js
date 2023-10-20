@@ -17,7 +17,7 @@ const adRoleFactorySlice = createSlice({
         id: data.id,
         name: data.name,
         descriptions: data.descriptions,
-
+        roleDefault: data.roleDefault === "DEFAULT" ? 0 : 1,
       };
       state.unshift(newRoleFactory);
       return state;
@@ -30,23 +30,26 @@ const adRoleFactorySlice = createSlice({
       if (index !== -1) {
         state[index].name = updateRoleFactory.name;
         state[index].descriptions = updateRoleFactory.descriptions;
-
-
+        state[index].roleDefault =
+          updateRoleFactory.roleDefault === "DEFAULT" ? 0 : 1;
       }
     },
     DeleteRoleFactory: (state, action) => {
       const idRoleFactory = action.payload;
-      const index = state.findIndex((roleFactory) => roleFactory.id === idRoleFactory);
+      const index = state.findIndex(
+        (roleFactory) => roleFactory.id === idRoleFactory
+      );
       state.splice(index, 1);
     },
   },
 });
 
-export const { SetRoleFactory,
-               AddRoleFactory,
-               UpdateRoleFactory,
-               DeleteRoleFactory,
-             } = adRoleFactorySlice.actions;
+export const {
+  SetRoleFactory,
+  AddRoleFactory,
+  UpdateRoleFactory,
+  DeleteRoleFactory,
+} = adRoleFactorySlice.actions;
 
 export const GetRoleFactory = (state) => state.adRoleFactory;
 

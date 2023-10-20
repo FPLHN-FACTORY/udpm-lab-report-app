@@ -12,7 +12,16 @@ import {
   faPeopleGroup,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Input, Pagination, Table, Tooltip, Popconfirm, message } from "antd";
+import {
+  Button,
+  Input,
+  Pagination,
+  Table,
+  Tooltip,
+  Popconfirm,
+  message,
+  Tag,
+} from "antd";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useAppSelector, useAppDispatch } from "../../../../app/hook";
@@ -58,7 +67,7 @@ const RoleFactoryManagement = () => {
       setLoading(false);
     });
   };
-  
+
   const data = useAppSelector(GetRoleFactory);
 
   const columns = [
@@ -77,10 +86,29 @@ const RoleFactoryManagement = () => {
     },
     {
       title: "Mô tả",
-      dataIndex: "descriptions",
-      key: "descriptions",
+      dataIndex: "description",
+      key: "description",
       sorter: (a, b) => a.descriptions.localeCompare(b.descriptions),
       width: "40%",
+      render: (text, record) => {
+        if (record.descriptions === "" || record.descriptions == null) {
+          return <span>Chưa có</span>;
+        } else {
+          return <span>{record.descriptions}</span>;
+        }
+      },
+    },
+    {
+      title: "Trạng thái",
+      dataIndex: "status",
+      key: "status",
+      render: (text, record) => {
+        if (record.roleDefault === 0) {
+          return <Tag color="success">Mặc định</Tag>;
+        } else {
+          return <Tag color="error">Không mặc định</Tag>;
+        }
+      },
     },
     {
       title: "Hành động",
@@ -103,8 +131,9 @@ const RoleFactoryManagement = () => {
             />
           </Tooltip>
           <Popconfirm
+            placement="topLeft"
             title="Xóa vai trò"
-            descriptions="Bạn có chắc chắn muốn xóa vai trò này không?"
+            description="Bạn có chắc chắn muốn xóa vai trò này không?"
             onConfirm={() => {
               buttonDelete(record.id);
             }}
@@ -172,17 +201,16 @@ const RoleFactoryManagement = () => {
     );
   };
 
-
   return (
     <div className="box-general" style={{ paddingTop: 50 }}>
-                  {loading && <LoadingIndicator />}
+      {loading && <LoadingIndicator />}
       <div className="title_activity_management" style={{ marginTop: 0 }}>
         {" "}
         <FontAwesomeIcon icon={faPeopleGroup} style={{ fontSize: "20px" }} />
         <span style={{ marginLeft: "10px" }}>Quản lý vai trò trong xưởng</span>
       </div>
       <div className="filter-level" style={{ marginBottom: "10px" }}>
-      <FontAwesomeIcon icon={faFilter} style={{ fontSize: "20px" }} />{" "}
+        <FontAwesomeIcon icon={faFilter} style={{ fontSize: "20px" }} />{" "}
         <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
         <hr />
         <div className="title__search" style={{ marginRight: "60px" }}>
@@ -196,7 +224,7 @@ const RoleFactoryManagement = () => {
             style={{ width: "300px", marginLeft: "5px" }}
           />
         </div>
-        <div className="box_btn_filter">
+        <div className="box_btn_filter" style={{ paddingBottom: 10 }}>
           <Button
             className="btn_filter"
             onClick={buttonSearch}
@@ -220,9 +248,9 @@ const RoleFactoryManagement = () => {
       </div>
       <div
         className="box-son-general"
-        style={{ minHeight: "400px", marginTop: "30px" }}
+        style={{ minHeight: "400px", marginTop: "30px", padding: 20 }}
       >
-        <div className="tittle__category" style={{ marginBottom: "20px" }}>
+        <div className="tittle__category" style={{ marginBottom: "15px" }}>
           <div>
             <FontAwesomeIcon
               icon={faTableList}
@@ -253,7 +281,7 @@ const RoleFactoryManagement = () => {
                   marginRight: "5px",
                 }}
               />{" "}
-              Thêm 
+              Thêm
             </Button>
           </div>
         </div>
@@ -276,7 +304,10 @@ const RoleFactoryManagement = () => {
           </div>
         </div>
       </div>
-      <ModalCreateRoleFactory visible={modalCreate} onCancel={buttonCreateCancel} />
+      <ModalCreateRoleFactory
+        visible={modalCreate}
+        onCancel={buttonCreateCancel}
+      />
       <ModalUpdateRoleFactory
         visible={modalUpdate}
         onCancel={buttonUpdateCancel}

@@ -1,6 +1,6 @@
 import { request } from "../../helper/request.helper";
 
-const url = `/admin/role-project`;
+const url = `/admin/role-config`;
 
 export class AdRoleProjectAPI {
   static fetchAllRoleProject = (filter) => {

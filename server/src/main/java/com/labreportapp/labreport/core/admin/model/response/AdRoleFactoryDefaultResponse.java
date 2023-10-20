@@ -1,13 +1,12 @@
 package com.labreportapp.labreport.core.admin.model.response;
 
+import com.labreportapp.labreport.entity.base.IsIdentified;
 import org.springframework.beans.factory.annotation.Value;
 
 /**
- * @author quynhncph26201
+ * @author thangncph26123
  */
-public interface AdRoleFactoryResponse {
-    @Value("#{target.id}")
-    String getId();
+public interface AdRoleFactoryDefaultResponse extends IsIdentified {
 
     @Value("#{target.name}")
     String getName();

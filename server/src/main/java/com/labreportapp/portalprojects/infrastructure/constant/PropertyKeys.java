@@ -87,5 +87,6 @@ public class PropertyKeys {
     public static final String NO_FIND_EMAIL = "no.find.email";
     public static final String MEMBER_ALREADY = "member.already";
     public static final String MEMBER_FACTORY_NOT_EXISTS = "member.factory.not.exists";
+    public static final String ROLE_CONFIG_ONLY_HAVA_ONE = "role.config.only.have.one";
 
 }

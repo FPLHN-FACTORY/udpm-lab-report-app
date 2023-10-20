@@ -1,4 +1,4 @@
-import { Modal, Row, Col, Input, Button, Select, message } from "antd";
+import { Modal, Row, Col, Input, Button, Select, message, Radio } from "antd";
 import { useEffect, useState } from "react";
 import { AdRoleFactoryAPI } from "../../../../../api/admin/AdRoleFactoryAPI";
 import { UpdateRoleFactory } from "../../../../../app/admin/AdRoleFactorySlice.reducer";
@@ -14,6 +14,7 @@ const ModalUpdateRoleFactory = ({ visible, onCancel, roleFactory }) => {
   const [name, setName] = useState("");
   const [descriptions, setDescription] = useState("");
   const [errorName, setErrorName] = useState("");
+  const [status, setStatus] = useState("");
   const [errorDescription, setErrorDescription] = useState("");
   const dispatch = useAppDispatch();
 
@@ -21,7 +22,7 @@ const ModalUpdateRoleFactory = ({ visible, onCancel, roleFactory }) => {
     if (roleFactory !== null) {
       setName(roleFactory.name);
       setDescription(roleFactory.descriptions);
-
+      setStatus(roleFactory.roleDefault + "");
       return () => {
         setName("");
         setErrorName("");
@@ -29,7 +30,7 @@ const ModalUpdateRoleFactory = ({ visible, onCancel, roleFactory }) => {
         setErrorDescription();
       };
     }
-  }, [roleFactory]);
+  }, [roleFactory, visible]);
 
   const update = () => {
     let check = 0;
@@ -45,24 +46,20 @@ const ModalUpdateRoleFactory = ({ visible, onCancel, roleFactory }) => {
         setErrorName("");
       }
     }
-    if (descriptions.trim() === "") {
-      setErrorDescription("Mô tả không được để trống");
+
+    if (descriptions.trim().length > 500) {
+      setErrorDescription("Mô tả không quá 500 ký tự");
       check++;
     } else {
       setErrorDescription("");
-      if (descriptions.trim().length > 500) {
-        setErrorDescription("Mô tả không quá 500 ký tự");
-        check++;
-      } else {
-        setErrorDescription("");
-      }
     }
+
     if (check === 0) {
       let obj = {
         id: roleFactory.id,
         name: name,
         descriptions: descriptions,
-
+        roleDefault: parseInt(status),
       };
 
       AdRoleFactoryAPI.updateRoleFactory(obj, roleFactory.id).then(
@@ -89,11 +86,12 @@ const ModalUpdateRoleFactory = ({ visible, onCancel, roleFactory }) => {
           <span style={{ fontSize: "18px" }}>Cập nhật Nhóm</span>
         </div>
         <div style={{ marginTop: "15px", borderBottom: "1px solid black" }}>
-        <Row gutter={16} style={{ marginBottom: "15px" }}>
+          <Row gutter={16} style={{ marginBottom: "15px" }}>
             <Col span={24}>
               <span>Tên nhóm:</span> <br />
               <Input
                 value={name}
+                placeholder="Nhập tên vai trò"
                 onChange={(e) => {
                   setName(e.target.value);
                 }}
@@ -107,6 +105,7 @@ const ModalUpdateRoleFactory = ({ visible, onCancel, roleFactory }) => {
               <span>Mô tả:</span> <br />
               <TextArea
                 value={descriptions}
+                placeholder="Nhập mô tả"
                 onChange={(e) => {
                   setDescription(e.target.value);
                 }}
@@ -114,6 +113,24 @@ const ModalUpdateRoleFactory = ({ visible, onCancel, roleFactory }) => {
               />
               <span style={{ color: "red" }}>{errorDescription}</span>
             </Col>
+          </Row>{" "}
+          <Row
+            style={{
+              marginTop: 20,
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <div style={{ marginRight: 10, marginTop: 5 }}>Trạng thái:</div>
+            <Radio.Group
+              value={status}
+              onChange={(e) => {
+                setStatus(e.target.value);
+              }}
+            >
+              <Radio.Button value="0">Mặc định</Radio.Button>
+              <Radio.Button value="1">Không mặc định</Radio.Button>
+            </Radio.Group>
           </Row>
         </div>
         <div style={{ textAlign: "right" }}>

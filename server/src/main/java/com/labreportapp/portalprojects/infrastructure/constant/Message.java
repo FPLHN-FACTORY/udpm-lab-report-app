@@ -89,9 +89,8 @@ public enum Message {
     MEMBER_ALREADY(PropertiesReader.getProperty(PropertyKeys.MEMBER_ALREADY)),
     MEMBER_FACTORY_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeys.MEMBER_FACTORY_NOT_EXISTS)),
     ROLE_MEMBER_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeys.ROLE_MEMBER_NOT_EXISTS)),
-
-    GROUP_PROJECT_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeys.GROUP_PROJECT_NOT_EXISTS));
-
+    GROUP_PROJECT_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeys.GROUP_PROJECT_NOT_EXISTS)),
+    ROLE_CONFIG_ONLY_HAVA_ONE(PropertiesReader.getProperty(PropertyKeys.ROLE_CONFIG_ONLY_HAVA_ONE));
 
     private String message;
 

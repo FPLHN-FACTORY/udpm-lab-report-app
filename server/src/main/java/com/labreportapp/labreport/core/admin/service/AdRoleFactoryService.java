@@ -13,11 +13,12 @@ import java.util.List;
  * @author quynhncph26201
  */
 public interface AdRoleFactoryService {
+
     List<RoleFactory> findAllRoleFactory(Pageable pageable);
 
-    RoleFactory createRoleFactory(@Valid final AdCreateRoleFactoryRequest obj);
+    RoleFactory createRoleFactory(@Valid AdCreateRoleFactoryRequest obj);
 
-    RoleFactory updateRoleFactory(final AdUpdateRoleFactoryRequest obj);
+    RoleFactory updateRoleFactory(@Valid AdUpdateRoleFactoryRequest obj);
 
     PageableObject<AdRoleFactoryResponse> searchRoleFactory(final AdFindRoleFactoryRequest rep);
 

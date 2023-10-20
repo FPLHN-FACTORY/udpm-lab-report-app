@@ -17,8 +17,7 @@ const adRoleProjectSlice = createSlice({
         id: data.id,
         name: data.name,
         description: data.description,
-        idProject: data.idProject,
-
+        roleDefault: data.roleDefault === "DEFAULT" ? 0 : 1,
       };
       state.unshift(newRoleProject);
       return state;
@@ -31,24 +30,26 @@ const adRoleProjectSlice = createSlice({
       if (index !== -1) {
         state[index].name = updateRoleProject.name;
         state[index].description = updateRoleProject.description;
-        state[index].idProject = updateRoleProject.idProject;
-
-
+        state[index].roleDefault =
+          updateRoleProject.roleDefault === "DEFAULT" ? 0 : 1;
       }
     },
     DeleteRoleProject: (state, action) => {
       const idRoleProject = action.payload;
-      const index = state.findIndex((roleProject) => roleProject.id === idRoleProject);
+      const index = state.findIndex(
+        (roleProject) => roleProject.id === idRoleProject
+      );
       state.splice(index, 1);
     },
   },
 });
 
-export const { SetRoleProject,
-               AddRoleProject,
-               UpdateRoleProject,
-               DeleteRoleProject,
-             } = adRoleProjectSlice.actions;
+export const {
+  SetRoleProject,
+  AddRoleProject,
+  UpdateRoleProject,
+  DeleteRoleProject,
+} = adRoleProjectSlice.actions;
 
 export const GetRoleProject = (state) => state.adRoleProject;
 

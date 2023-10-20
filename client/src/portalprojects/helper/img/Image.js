@@ -1,7 +1,7 @@
 import { Tooltip } from "antd";
 import "./styleImage.css";
 import { memo } from "react";
-import Avartar from "../../../labreportapp/assets/img/default-image.jpg";
+import Avartar from "../../../labreportapp/assets/img/logo_team_factory.png";
 
 const Image = ({ url, picxel, marginRight, name }) => {
   return (

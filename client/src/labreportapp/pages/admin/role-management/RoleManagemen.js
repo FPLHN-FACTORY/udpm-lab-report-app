@@ -8,10 +8,19 @@ import {
   faPencil,
   faFilter,
   faTeletype,
-  faPersonMilitaryPointing
+  faPersonMilitaryPointing,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Input, Pagination, Table, Tooltip, Popconfirm, message } from "antd";
+import {
+  Button,
+  Input,
+  Pagination,
+  Table,
+  Tooltip,
+  Popconfirm,
+  message,
+  Tag,
+} from "antd";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useAppSelector, useAppDispatch } from "../../../app/hook";
@@ -57,7 +66,6 @@ const RoleManagement = () => {
       setLoading(false);
     });
   };
-  
 
   const data = useAppSelector(GetRoleProject);
 
@@ -81,6 +89,25 @@ const RoleManagement = () => {
       key: "description",
       sorter: (a, b) => a.description.localeCompare(b.description),
       width: "40%",
+      render: (text, record) => {
+        if (record.description === "" || record.description == null) {
+          return <span>Chưa có</span>;
+        } else {
+          return <span>{record.description}</span>;
+        }
+      },
+    },
+    {
+      title: "Trạng thái",
+      dataIndex: "status",
+      key: "status",
+      render: (text, record) => {
+        if (record.roleDefault === 0) {
+          return <Tag color="success">Mặc định</Tag>;
+        } else {
+          return <Tag color="error">Không mặc định</Tag>;
+        }
+      },
     },
     {
       title: "Hành động",
@@ -103,8 +130,9 @@ const RoleManagement = () => {
             />
           </Tooltip>
           <Popconfirm
-            title="Xóa Ca"
-            description="Bạn có chắc chắn muốn xóa Loại này không?"
+            placement="topLeft"
+            title="Xóa vai trò"
+            description="Bạn có chắc chắn muốn xóa vai trò này không?"
             onConfirm={() => {
               buttonDelete(record.id);
             }}
@@ -174,7 +202,7 @@ const RoleManagement = () => {
 
   return (
     <div className="box-general" style={{ paddingTop: 50 }}>
-       {loading && <LoadingIndicator />}
+      {loading && <LoadingIndicator />}
       <div className="title_activity_management" style={{ marginTop: 0 }}>
         {" "}
         <FontAwesomeIcon
@@ -183,12 +211,12 @@ const RoleManagement = () => {
         />
         <span style={{ marginLeft: "10px" }}>Quản lý vai trò trong dự án</span>
       </div>
-      <div className="filter-level" style={{ marginBottom: "10px" }}>
-      <FontAwesomeIcon icon={faFilter} style={{ fontSize: "20px" }} />{" "}
+      <div className="filter-level">
+        <FontAwesomeIcon icon={faFilter} style={{ fontSize: "20px" }} />{" "}
         <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
         <hr />
         <div className="title__search" style={{ marginRight: "60px" }}>
-          Tên Vai Trò:{" "}
+          Tên vai trò:{" "}
           <Input
             type="text"
             value={name}
@@ -198,7 +226,7 @@ const RoleManagement = () => {
             style={{ width: "300px", marginLeft: "5px" }}
           />
         </div>
-        <div className="box_btn_filter">
+        <div className="box_btn_filter" style={{ paddingBottom: 10 }}>
           <Button
             className="btn_filter"
             onClick={buttonSearch}
@@ -222,9 +250,9 @@ const RoleManagement = () => {
       </div>
       <div
         className="box-son-general"
-        style={{ minHeight: "400px", marginTop: "30px" }}
+        style={{ minHeight: "400px", marginTop: "30px", padding: 20 }}
       >
-        <div className="tittle__category" style={{ marginBottom: "20px" }}>
+        <div className="tittle__category" style={{ marginBottom: "15px" }}>
           <div>
             <FontAwesomeIcon
               icon={faTableList}
@@ -255,7 +283,7 @@ const RoleManagement = () => {
                   marginRight: "5px",
                 }}
               />{" "}
-              Thêm Loại
+              Thêm vai trò
             </Button>
           </div>
         </div>
@@ -278,7 +306,10 @@ const RoleManagement = () => {
           </div>
         </div>
       </div>
-      <ModalCreateRoleProject visible={modalCreate} onCancel={buttonCreateCancel} />
+      <ModalCreateRoleProject
+        visible={modalCreate}
+        onCancel={buttonCreateCancel}
+      />
       <ModalUpdateRoleProject
         visible={modalUpdate}
         onCancel={buttonUpdateCancel}

@@ -1,20 +1,22 @@
 import {
   faPlus,
   faFilterCircleDollar,
-  faChainSlash,
-  faTableList,
-  faClock,
-  faTrash,
-  faPencil,
-  faFilter,
-  faTeletype,
-  faPersonMilitaryPointing,
   faPeopleGroup,
-  faEyeSlash,
-  faEye,
+  faEllipsisV,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Input, Pagination, Table, Tooltip, Popconfirm, message } from "antd";
+import {
+  Button,
+  Col,
+  Dropdown,
+  Input,
+  Menu,
+  Pagination,
+  Popconfirm,
+  Row,
+  Tag,
+  message,
+} from "antd";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useAppSelector, useAppDispatch } from "../../../../app/hook";
@@ -32,6 +34,7 @@ import moment from "moment";
 import "./style-team-management.css";
 import React from "react";
 import { Link } from "react-router-dom";
+import Image from "../../../../../portalprojects/helper/img/Image";
 
 const TeamManagement = () => {
   const [team, setTeam] = useState(null);
@@ -64,86 +67,6 @@ const TeamManagement = () => {
 
   const data = useAppSelector(GetTeam);
 
-  const columns = [
-    {
-      title: "#",
-      dataIndex: "stt",
-      key: "stt",
-      render: (text, record, index) => (current - 1) * 10 + index + 1,
-    },
-    {
-      title: "Tên Nhóm",
-      dataIndex: "name",
-      key: "name",
-      sorter: (a, b) => a.name.localeCompare(b.name),
-      width: "20%",
-    },
-    {
-      title: "Mô tả",
-      dataIndex: "descriptions",
-      key: "descriptions",
-      sorter: (a, b) => a.descriptions.localeCompare(b.descriptions),
-      width: "40%",
-    },
-    {
-      title: "Hành động",
-      dataIndex: "actions",
-      key: "actions",
-      render: (text, record) => (
-        <div>
-          {" "}
-          <Tooltip title="Xem chi tiết">
-            <Link to={`/admin/team-management/${record.id}`}>
-              <FontAwesomeIcon
-                style={{
-                  marginRight: "20px",
-                  cursor: "pointer",
-                  color: "rgb(38, 144, 214)",
-                }}
-                icon={faEye}
-                size="1x"
-              />
-            </Link>
-          </Tooltip>
-          <Tooltip title="Cập nhật">
-            <FontAwesomeIcon
-              onClick={() => {
-                buttonUpdate(record);
-              }}
-              style={{
-                marginRight: "15px",
-                cursor: "pointer",
-                color: "rgb(38, 144, 214)",
-              }}
-              icon={faPencil}
-              size="1x"
-            />
-          </Tooltip>
-          <Popconfirm
-            title="Xóa nhóm"
-            descriptions="Bạn có chắc chắn muốn xóa NHóm này không?"
-            onConfirm={() => {
-              buttonDelete(record.id);
-            }}
-            okText="Có"
-            cancelText="Không"
-          >
-            <Tooltip title="Xóa">
-              <FontAwesomeIcon
-                style={{
-                  cursor: "pointer",
-                  marginLeft: "10px",
-                  color: "rgb(38, 144, 214)",
-                }}
-                icon={faTrash}
-                size="1x"
-              />
-            </Tooltip>
-          </Popconfirm>
-        </div>
-      ),
-    },
-  ];
   const [modalUpdate, setModalUpdate] = useState(false);
   const [modalCreate, setModalCreate] = useState(false);
 
@@ -188,6 +111,19 @@ const TeamManagement = () => {
     );
   };
 
+  const [dropdownStates, setDropdownStates] = useState({});
+
+  const toggleDropdown = (itemId) => {
+    setDropdownStates((prevState) => ({
+      ...prevState,
+      [itemId]: !prevState[itemId],
+    }));
+  };
+
+  const handleMenuClick = (e, itemId) => {
+    console.log("Chọn mục: ", e.key, "của phần tử:", itemId);
+  };
+
   return (
     <div className="box-general" style={{ paddingTop: 50 }}>
       {loading && <LoadingIndicator />}
@@ -196,110 +132,188 @@ const TeamManagement = () => {
         <FontAwesomeIcon icon={faPeopleGroup} style={{ fontSize: "20px" }} />
         <span style={{ marginLeft: "10px" }}>Quản lý team</span>
       </div>
-      <div
-        className="filter-level"
-        style={{ marginBottom: "10px", paddingBottom: 0 }}
-      >
-        <FontAwesomeIcon icon={faFilter} style={{ fontSize: "20px" }} />{" "}
-        <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
-        <hr />
-        <div className="title__search" style={{ marginRight: "60px" }}>
-          Tên Nhóm:{" "}
-          <Input
-            type="text"
-            value={name}
-            onChange={(e) => {
-              setName(e.target.value);
-            }}
-            style={{ width: "300px", marginLeft: "5px" }}
-          />
-        </div>
-        <div className="box_btn_filter">
-          <Button
-            className="btn_filter"
-            onClick={buttonSearch}
-            style={{ marginRight: "15px" }}
-          >
-            <FontAwesomeIcon
-              icon={faFilterCircleDollar}
-              style={{ marginRight: 5 }}
-            />
-            Tìm kiếm
-          </Button>
-          <Button
-            className="btn__clear"
-            onClick={clearData}
-            style={{ backgroundColor: "rgb(50, 144, 202)" }}
-          >
-            <FontAwesomeIcon icon={faChainSlash} style={{ marginRight: 5 }} />
-            Làm mới bộ lọc
-          </Button>
-        </div>
-      </div>
+
       <div
         className="box-son-general"
-        style={{ minHeight: "400px", marginTop: "30px", padding: 20 }}
+        style={{ minHeight: "620px", marginTop: 20 }}
       >
-        <div className="tittle__category" style={{ marginBottom: "15px" }}>
-          <div>
-            <FontAwesomeIcon
-              icon={faTableList}
-              style={{
-                marginRight: "3px",
-                fontSize: "20px",
-              }}
-            />
-            <span style={{ fontSize: "18px", fontWeight: "500" }}>
-              {" "}
-              Danh sách team
-            </span>
-          </div>
-
-          <div>
-            <Button
-              style={{
-                color: "white",
-                backgroundColor: "rgb(55, 137, 220)",
-              }}
-              onClick={buttonCreate}
-            >
-              <FontAwesomeIcon
-                icon={faPlus}
-                size="1x"
-                style={{
-                  backgroundColor: "rgb(55, 137, 220)",
-                  marginRight: "5px",
+        <div
+          className="member-factory-managment"
+          style={{ marginBottom: "20px" }}
+        >
+          <div style={{}}>Danh sách team trong xưởng:</div>
+          <div style={{ display: "flex", alignItems: "center", marginTop: 15 }}>
+            <div style={{ flex: 1 }}>
+              <Input
+                type="text"
+                placeholder="🔍 Nhập tên nhóm"
+                style={{ width: "55%" }}
+                value={name}
+                onChange={(e) => {
+                  setName(e.target.value);
                 }}
-              />{" "}
-              Thêm Nhóm
-            </Button>
+              />
+              <Button
+                className="btn_filter"
+                onClick={buttonSearch}
+                style={{ marginRight: "15px" }}
+              >
+                <FontAwesomeIcon
+                  icon={faFilterCircleDollar}
+                  style={{ marginRight: 5 }}
+                />
+                Tìm kiếm
+              </Button>
+            </div>
+            <div>
+              <Button
+                style={{
+                  backgroundColor: "rgb(38, 144, 214)",
+                  color: "white",
+                }}
+                onClick={buttonCreate}
+              >
+                <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
+                Thêm nhóm
+              </Button>
+            </div>
           </div>
-        </div>
-        <div>
-          <Table
-            dataSource={data}
-            rowKey="id"
-            columns={columns}
-            pagination={false}
+          <div className="" style={{ marginTop: 20 }}>
+            <div className="header-list-member-factory">
+              <span style={{ marginLeft: 5 }}>#</span>{" "}
+              <span style={{ marginLeft: 20 }}>Tên nhóm</span>{" "}
+            </div>
+            <div>
+              {data.map((item) => {
+                return (
+                  <Row
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      minHeight: 60,
+                    }}
+                    className="item-list-member-factory__"
+                  >
+                    {" "}
+                    <span>{item.stt}</span>
+                    <Link
+                      to={`/admin/team-management/${item.id}`}
+                      style={{ marginLeft: 20 }}
+                    >
+                      <span style={{ fontSize: 16 }}>{item.name}</span>
+                    </Link>
+                    <Col
+                      span={8}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        flex: 1,
+                        marginLeft: 30,
+                      }}
+                    ></Col>
+                    <Col
+                      span={16}
+                      style={{
+                        display: "flex",
+                        justifyContent: "right",
+                        alignItems: "center",
+                        paddingRight: 20,
+                      }}
+                    >
+                      <div
+                        style={{
+                          marginRight: 20,
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        {item.listMember.length > 0 &&
+                          item.listMember.map((mb) => {
+                            return (
+                              <Image
+                                url={mb.picture}
+                                picxel={28}
+                                marginRight={-2}
+                                name={mb.name + " " + mb.userName}
+                              />
+                            );
+                          })}
+                        {item.listMember.length === 0 && (
+                          <Tag color="error">Chưa có thành viên</Tag>
+                        )}
+                        <span style={{ marginLeft: 8 }}>/</span>
+                        <span style={{ marginLeft: 8 }}>
+                          {item.numberMember} Thành viên
+                        </span>
+                      </div>
+                      <div style={{ textAlign: "right" }}>
+                        <Dropdown
+                          overlay={
+                            <Menu onClick={(e) => handleMenuClick(e, item.id)}>
+                              <Menu.Item
+                                key="item1"
+                                onClick={() => {
+                                  buttonUpdate(item);
+                                }}
+                              >
+                                Cập nhật
+                              </Menu.Item>
+                              <Popconfirm
+                                placement="topLeft"
+                                title="Xóa nhóm"
+                                description="Bạn có chắc chắn muốn xóa nhóm này không ?"
+                                onConfirm={() => {
+                                  buttonDelete(item.id);
+                                }}
+                                okText="Có"
+                                cancelText="Không"
+                              >
+                                <Menu.Item key="item2">Xóa</Menu.Item>
+                              </Popconfirm>
+                            </Menu>
+                          }
+                          visible={dropdownStates[item.id]}
+                          onVisibleChange={(visible) =>
+                            setDropdownStates((prevState) => ({
+                              ...prevState,
+                              [item.id]: visible,
+                            }))
+                          }
+                        >
+                          <Button onClick={() => toggleDropdown(item.id)}>
+                            <FontAwesomeIcon icon={faEllipsisV} />
+                          </Button>
+                        </Dropdown>
+                      </div>
+                    </Col>
+                  </Row>
+                );
+              })}
+            </div>
+            <div>
+              <div className="pagination_box">
+                <Pagination
+                  simple
+                  current={current}
+                  onChange={(page) => {
+                    setCurrent(page);
+                  }}
+                  total={total * 10}
+                />
+              </div>
+            </div>
+          </div>
+          <ModalCreateTeam
+            visible={modalCreate}
+            onCancel={buttonCreateCancel}
           />
-          <div className="pagination_box">
-            <Pagination
-              simple
-              current={current}
-              onChange={(page) => {
-                setCurrent(page);
-              }}
-              total={total * 10}
-            />
-          </div>
+          <ModalUpdateTeam
+            visible={modalUpdate}
+            onCancel={buttonUpdateCancel}
+            team={team}
+          />
         </div>
       </div>
-      <ModalCreateTeam visible={modalCreate} onCancel={buttonCreateCancel} />
-      <ModalUpdateTeam
-        visible={modalUpdate}
-        onCancel={buttonUpdateCancel}
-        team={team}
-      />
     </div>
   );
 };

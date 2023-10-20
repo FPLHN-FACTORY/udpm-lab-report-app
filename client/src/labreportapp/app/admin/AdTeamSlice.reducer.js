@@ -12,11 +12,16 @@ const adTeamSlice = createSlice({
     },
     AddTeam: (state, action) => {
       const data = action.payload;
+      state.forEach((item) => {
+        item.stt = item.stt + 1;
+      });
       let newTeam = {
-        stt: state.length + 1,
+        stt: 1,
         id: data.id,
         name: data.name,
         descriptions: data.descriptions,
+        numberMember: 0,
+        listMember: [],
       };
       state.unshift(newTeam);
       return state;

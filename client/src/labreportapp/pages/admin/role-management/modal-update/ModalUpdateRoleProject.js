@@ -1,4 +1,4 @@
-import { Modal, Row, Col, Input, Button, Select, message } from "antd";
+import { Modal, Row, Col, Input, Button, Select, message, Radio } from "antd";
 import { useEffect, useState } from "react";
 import { AdRoleProjectAPI } from "../../../../api/admin/AdRoleProjectAPI";
 import { UpdateRoleProject } from "../../../../app/admin/AdRoleProjectSlice.reducer";
@@ -11,25 +11,27 @@ import moment from "moment";
 const { Option } = Select;
 
 const ModalUpdateRoleProject = ({ visible, onCancel, roleProject }) => {
-    const [name, setName] = useState("");
-    const [description, setDescription] = useState("");
-    const [errorName, setErrorName] = useState("Vui lòng không để trống");
-    const [errorDescription, setErrorDescription] = useState("Vui lòng không để trống");
-    const dispatch = useAppDispatch();
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [status, setStatus] = useState("");
+  const [errorName, setErrorName] = useState("");
+  const [errorDescription, setErrorDescription] = useState("");
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (roleProject !== null) {
       setName(roleProject.name);
       setDescription(roleProject.description);
+      setStatus(roleProject.roleDefault + "");
 
       return () => {
-      setName("");
-      setErrorName();
-      setDescription("");
-      setErrorDescription();
+        setName("");
+        setErrorName();
+        setDescription("");
+        setErrorDescription();
       };
     }
-  }, [roleProject]);
+  }, [roleProject, visible]);
 
   const update = () => {
     let check = 0;
@@ -45,17 +47,12 @@ const ModalUpdateRoleProject = ({ visible, onCancel, roleProject }) => {
         setErrorName("");
       }
     }
-     if (description.trim() === "") {
-      setErrorDescription("Mô tả không được để trống");
+
+    if (description.trim().length > 500) {
+      setErrorDescription("Mô tả không quá 500 ký tự");
       check++;
     } else {
       setErrorDescription("");
-      if (description.trim().length > 500) {
-        setErrorDescription("Mô tả không quá 500 ký tự");
-        check++;
-      } else {
-        setErrorDescription("");
-      }
     }
 
     if (check === 0) {
@@ -63,7 +60,7 @@ const ModalUpdateRoleProject = ({ visible, onCancel, roleProject }) => {
         id: roleProject.id,
         name: name,
         description: description,
-
+        roleDefault: parseInt(status),
       };
 
       AdRoleProjectAPI.updateRoleProject(obj, roleProject.id).then(
@@ -90,11 +87,12 @@ const ModalUpdateRoleProject = ({ visible, onCancel, roleProject }) => {
           <span style={{ fontSize: "18px" }}>Cập nhật Vai trò</span>
         </div>
         <div style={{ marginTop: "15px", borderBottom: "1px solid black" }}>
-        <Row gutter={16} style={{ marginBottom: "15px" }}>
+          <Row gutter={16} style={{ marginBottom: "15px" }}>
             <Col span={24}>
-              <span>Tên Vai trò:</span> <br />
+              <span>Tên vai trò:</span> <br />
               <Input
                 value={name}
+                placeholder="Nhập tên vai trò"
                 onChange={(e) => {
                   setName(e.target.value);
                 }}
@@ -108,6 +106,7 @@ const ModalUpdateRoleProject = ({ visible, onCancel, roleProject }) => {
               <span>Mô tả:</span> <br />
               <TextArea
                 value={description}
+                placeholder="Nhập mô tả"
                 onChange={(e) => {
                   setDescription(e.target.value);
                 }}
@@ -115,6 +114,24 @@ const ModalUpdateRoleProject = ({ visible, onCancel, roleProject }) => {
               />
               <span style={{ color: "red" }}>{errorDescription}</span>
             </Col>
+          </Row>
+          <Row
+            style={{
+              marginTop: 20,
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <div style={{ marginRight: 10, marginTop: 5 }}>Trạng thái:</div>
+            <Radio.Group
+              value={status}
+              onChange={(e) => {
+                setStatus(e.target.value);
+              }}
+            >
+              <Radio.Button value="0">Mặc định</Radio.Button>
+              <Radio.Button value="1">Không mặc định</Radio.Button>
+            </Radio.Group>
           </Row>
         </div>
         <div style={{ textAlign: "right" }}>

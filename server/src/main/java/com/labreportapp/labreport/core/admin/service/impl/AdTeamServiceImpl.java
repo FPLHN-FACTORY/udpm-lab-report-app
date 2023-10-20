@@ -3,11 +3,14 @@ package com.labreportapp.labreport.core.admin.service.impl;
 import com.labreportapp.labreport.core.admin.model.request.AdCreateTeamRequest;
 import com.labreportapp.labreport.core.admin.model.request.AdFindTeamRequest;
 import com.labreportapp.labreport.core.admin.model.request.AdUpdateTeamRequest;
+import com.labreportapp.labreport.core.admin.model.response.AdTeamFactoryCustom;
 import com.labreportapp.labreport.core.admin.model.response.AdTeamResponse;
 import com.labreportapp.labreport.core.admin.repository.AdTeamRepository;
 import com.labreportapp.labreport.core.admin.service.AdTeamService;
 import com.labreportapp.labreport.core.common.base.PageableObject;
+import com.labreportapp.labreport.core.common.response.SimpleResponse;
 import com.labreportapp.labreport.entity.TeamFactory;
+import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
 import com.labreportapp.labreport.util.FormUtils;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
@@ -18,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,7 +37,8 @@ public class AdTeamServiceImpl implements AdTeamService {
 
     private FormUtils formUtils = new FormUtils();
 
-    private List<AdTeamResponse> adTeamResponseList;
+    @Autowired
+    private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
 
     @Override
     public List<TeamFactory> findAllTeam(Pageable pageable) {
@@ -60,11 +65,28 @@ public class AdTeamServiceImpl implements AdTeamService {
     }
 
     @Override
-    public PageableObject<AdTeamResponse> searchTeam(AdFindTeamRequest rep) {
+    public PageableObject<AdTeamFactoryCustom> searchTeam(AdFindTeamRequest rep) {
         Pageable pageable = PageRequest.of(rep.getPage() - 1, rep.getSize());
         Page<AdTeamResponse> adTeamResponses = adTeamRepository.searchTeam(rep, pageable);
-        adTeamResponseList = adTeamResponses.stream().toList();
-        return new PageableObject<>(adTeamResponses);
+        List<AdTeamResponse> adTeamResponseList = adTeamResponses.toList();
+        List<AdTeamFactoryCustom> listCustom = new ArrayList<>();
+        adTeamResponseList.forEach(xx -> {
+            AdTeamFactoryCustom adTeamFactoryCustom = new AdTeamFactoryCustom();
+            adTeamFactoryCustom.setId(xx.getId());
+            adTeamFactoryCustom.setName(xx.getName());
+            adTeamFactoryCustom.setDescriptions(xx.getDescriptions());
+            adTeamFactoryCustom.setStt(xx.getStt());
+            adTeamFactoryCustom.setNumberMember(adTeamRepository.countNumberMemberOfTeam(xx.getId()));
+            List<String> memberStr = adTeamRepository.getAllMemberOfTeam(xx.getId());
+            List<SimpleResponse> listResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(memberStr);
+            adTeamFactoryCustom.setListMember(listResponse);
+            listCustom.add(adTeamFactoryCustom);
+        });
+        PageableObject<AdTeamFactoryCustom> pageableObject = new PageableObject<>();
+        pageableObject.setData(listCustom);
+        pageableObject.setCurrentPage(adTeamResponses.getNumber());
+        pageableObject.setTotalPages(adTeamResponses.getTotalPages());
+        return pageableObject;
     }
 
     @Override

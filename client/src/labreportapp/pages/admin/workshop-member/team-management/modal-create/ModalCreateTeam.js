@@ -40,17 +40,11 @@ const ModalCreateTeam = ({ visible, onCancel }) => {
         setErrorName("");
       }
     }
-    if (descriptions.trim() === "") {
-      setErrorDescription("Mô tả không được để trống");
+    if (descriptions.trim().length > 500) {
+      setErrorDescription("Mô tả không quá 500 ký tự");
       check++;
     } else {
       setErrorDescription("");
-      if (descriptions.trim().length > 500) {
-        setErrorDescription("Mô tả không quá 500 ký tự");
-        check++;
-      } else {
-        setErrorDescription("");
-      }
     }
     if (check === 0) {
       let obj = {
@@ -70,8 +64,6 @@ const ModalCreateTeam = ({ visible, onCancel }) => {
     }
   };
 
-  
-
   return (
     <>
       <Modal
@@ -90,6 +82,7 @@ const ModalCreateTeam = ({ visible, onCancel }) => {
               <span>Tên nhóm:</span> <br />
               <Input
                 value={name}
+                placeholder="Nhập tên nhóm"
                 onChange={(e) => {
                   setName(e.target.value);
                 }}
@@ -102,6 +95,7 @@ const ModalCreateTeam = ({ visible, onCancel }) => {
             <Col span={24}>
               <span>Mô tả:</span> <br />
               <TextArea
+                placeholder="Nhập mô tả"
                 value={descriptions}
                 onChange={(e) => {
                   setDescription(e.target.value);
@@ -111,7 +105,6 @@ const ModalCreateTeam = ({ visible, onCancel }) => {
               <span style={{ color: "red" }}>{errorDescription}</span>
             </Col>
           </Row>
-          
         </div>
         <div style={{ textAlign: "right" }}>
           <div style={{ paddingTop: "15px" }}>

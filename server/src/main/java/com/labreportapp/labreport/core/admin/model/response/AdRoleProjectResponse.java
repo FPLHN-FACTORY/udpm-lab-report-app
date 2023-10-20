@@ -10,6 +10,7 @@ import org.springframework.data.rest.core.config.Projection;
  */
 @Projection(types = {RoleProject.class})
 public interface AdRoleProjectResponse extends IsIdentified {
+
     @Value("#{target.stt}")
     Integer STT();
 
@@ -19,6 +20,6 @@ public interface AdRoleProjectResponse extends IsIdentified {
     @Value("#{target.description}")
     String getDescription();
 
-    @Value("#{target.idProject}")
-    String getIdProject();
+    @Value("#{target.role_default}")
+    Integer getRoleDefault();
 }

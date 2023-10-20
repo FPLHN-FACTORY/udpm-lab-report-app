@@ -3,6 +3,7 @@ package com.labreportapp.labreport.core.admin.service;
 import com.labreportapp.labreport.core.admin.model.request.AdCreateTeamRequest;
 import com.labreportapp.labreport.core.admin.model.request.AdFindTeamRequest;
 import com.labreportapp.labreport.core.admin.model.request.AdUpdateTeamRequest;
+import com.labreportapp.labreport.core.admin.model.response.AdTeamFactoryCustom;
 import com.labreportapp.labreport.core.admin.model.response.AdTeamResponse;
 import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.entity.TeamFactory;
@@ -22,7 +23,7 @@ public interface AdTeamService {
 
     TeamFactory updateTeam(final AdUpdateTeamRequest obj);
 
-    PageableObject<AdTeamResponse> searchTeam(final AdFindTeamRequest rep);
+    PageableObject<AdTeamFactoryCustom> searchTeam(final AdFindTeamRequest rep);
 
     String deleteTeam(final String id);
 

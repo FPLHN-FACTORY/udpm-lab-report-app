@@ -45,17 +45,12 @@ const ModalUpdateTeam = ({ visible, onCancel, team }) => {
         setErrorName("");
       }
     }
-    if (descriptions.trim() === "") {
-      setErrorDescription("Mô tả không được để trống");
+
+    if (descriptions.trim().length > 500) {
+      setErrorDescription("Mô tả không quá 500 ký tự");
       check++;
     } else {
       setErrorDescription("");
-      if (descriptions.trim().length > 500) {
-        setErrorDescription("Mô tả không quá 500 ký tự");
-        check++;
-      } else {
-        setErrorDescription("");
-      }
     }
     if (check === 0) {
       let obj = {
@@ -96,6 +91,7 @@ const ModalUpdateTeam = ({ visible, onCancel, team }) => {
                 onChange={(e) => {
                   setName(e.target.value);
                 }}
+                placeholder="Nhập tên nhóm"
                 type="text"
               />
               <span style={{ color: "red" }}>{errorName}</span>
@@ -106,6 +102,7 @@ const ModalUpdateTeam = ({ visible, onCancel, team }) => {
               <span>Mô tả:</span> <br />
               <TextArea
                 value={descriptions}
+                placeholder="Nhập mô tả"
                 onChange={(e) => {
                   setDescription(e.target.value);
                 }}

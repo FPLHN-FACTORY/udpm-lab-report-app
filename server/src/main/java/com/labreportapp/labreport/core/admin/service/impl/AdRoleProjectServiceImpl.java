@@ -7,10 +7,11 @@ import com.labreportapp.labreport.core.admin.model.response.AdRoleProjectRespons
 import com.labreportapp.labreport.core.admin.repository.AdRoleProjectRepository;
 import com.labreportapp.labreport.core.admin.service.AdRoleProjectService;
 import com.labreportapp.labreport.core.common.base.PageableObject;
-import com.labreportapp.labreport.util.FormUtils;
-import com.labreportapp.portalprojects.entity.RoleProject;
+import com.labreportapp.labreport.infrastructure.constant.RoleDefault;
+import com.labreportapp.portalprojects.entity.RoleConfig;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,51 +32,53 @@ public class AdRoleProjectServiceImpl implements AdRoleProjectService {
     @Autowired
     private AdRoleProjectRepository adRoleProjectRepository;
 
-    private FormUtils formUtils = new FormUtils();
-
-    private List<AdRoleProjectResponse> adRoleProjectResponseList;
-
     @Override
-    public List<RoleProject> findAllRoleProject(Pageable pageable) {
+    public List<RoleConfig> findAllRoleProject(Pageable pageable) {
         return adRoleProjectRepository.getAllRoleProject(pageable);
     }
 
     @Override
-    public RoleProject createRoleProject(AdCreateRoleProjectRequest obj) {
-        RoleProject roleProject = formUtils.convertToObject(RoleProject.class, obj);
-        return adRoleProjectRepository.save(roleProject);
+    public RoleConfig createRoleProject(@Valid AdCreateRoleProjectRequest obj) {
+        if (obj.getRoleDefault() == 0 && adRoleProjectRepository.getRoleConfigDefault() != null) {
+            throw new RestApiException(Message.ROLE_CONFIG_ONLY_HAVA_ONE);
+        }
+        RoleConfig roleConfig = new RoleConfig();
+        roleConfig.setRoleDefault(obj.getRoleDefault() == 0 ? RoleDefault.DEFAULT : RoleDefault.NO_DEFAULT);
+        roleConfig.setDescription(obj.getDescription());
+        roleConfig.setName(obj.getName());
+        return adRoleProjectRepository.save(roleConfig);
     }
 
+
     @Override
-    public RoleProject updateRoleProject(AdUpdateRoleProjectRequest obj) {
-        Optional<RoleProject> findById = adRoleProjectRepository.findById(obj.getId());
+    public RoleConfig updateRoleProject(@Valid AdUpdateRoleProjectRequest obj) {
+        Optional<RoleConfig> findById = adRoleProjectRepository.findById(obj.getId());
         if (!findById.isPresent()) {
             throw new RestApiException(Message.ROLE_PROJECT_NOT_EXISTS);
         }
-        RoleProject roleProject = findById.get();
-        roleProject.setName(obj.getName());
-        roleProject.setDescription(obj.getDescription());
-        roleProject.setProjectId(obj.getIdProject());
-
-        return adRoleProjectRepository.save(roleProject);
+        if (obj.getRoleDefault() == 0 && adRoleProjectRepository.getRoleConfigDefault() != null) {
+            throw new RestApiException(Message.ROLE_CONFIG_ONLY_HAVA_ONE);
+        }
+        RoleConfig roleConfig = findById.get();
+        roleConfig.setName(obj.getName());
+        roleConfig.setDescription(obj.getDescription());
+        roleConfig.setRoleDefault(obj.getRoleDefault() == 0 ? RoleDefault.DEFAULT : RoleDefault.NO_DEFAULT);
+        return adRoleProjectRepository.save(roleConfig);
     }
 
     @Override
     public PageableObject<AdRoleProjectResponse> searchRoleProject(AdFindRoleProjectRequest rep) {
         Pageable pageable = PageRequest.of(rep.getPage() - 1, rep.getSize());
         Page<AdRoleProjectResponse> adRoleProjectResponses = adRoleProjectRepository.searchRoleProject(rep, pageable);
-        adRoleProjectResponseList = adRoleProjectResponses.stream().toList();
         return new PageableObject<>(adRoleProjectResponses);
     }
 
     @Override
     public Boolean deleteRoleProject(String id) {
-        Optional<RoleProject> findRoleProjectById = adRoleProjectRepository.findById(id);
-
+        Optional<RoleConfig> findRoleProjectById = adRoleProjectRepository.findById(id);
         if (!findRoleProjectById.isPresent()) {
             throw new RestApiException(Message.ROLE_PROJECT_NOT_EXISTS);
         }
-
         adRoleProjectRepository.delete(findRoleProjectById.get());
         return true;
     }

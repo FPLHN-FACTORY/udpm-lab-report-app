@@ -2,6 +2,7 @@ package com.labreportapp.labreport.core.admin.model.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
@@ -12,15 +13,16 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 @Setter
 public class AdBaseRoleProjectRequest {
+
     @NotEmpty
     @NotBlank
     @Length(max = 500)
     private String name;
 
-    @NotEmpty
-    @NotBlank
     @Length(max = 500)
     private String description;
 
-    private String idProject;
+    @NotNull
+    private Integer roleDefault;
+
 }

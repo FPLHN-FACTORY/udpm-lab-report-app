@@ -2690,7 +2690,7 @@ public class DBGenerator implements CommandLineRunner {
         memberTeamFactory3.setId(memberTeamFactoryRepository.save(memberTeamFactory3).getId());
 
         MemberTeamFactory memberTeamFactory4 = new MemberTeamFactory();
-        memberTeamFactory4.setMemberFactoryId(memberTeamFactory4.getId());
+        memberTeamFactory4.setMemberFactoryId(memberFactory4.getId());
         memberTeamFactory4.setTeamFactoryId(teamFactory1.getId());
         memberTeamFactory4.setId(memberTeamFactoryRepository.save(memberTeamFactory4).getId());
 

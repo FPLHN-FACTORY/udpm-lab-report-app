@@ -40,8 +40,7 @@ public class AdTeamController {
 
     @GetMapping("/search")
     public ResponseObject searchTeam(final AdFindTeamRequest request) {
-        PageableObject<AdTeamResponse> listTeam = adTeamService.searchTeam(request);
-        return new ResponseObject(listTeam);
+        return new ResponseObject(adTeamService.searchTeam(request));
     }
 
     @PostMapping("/add")
