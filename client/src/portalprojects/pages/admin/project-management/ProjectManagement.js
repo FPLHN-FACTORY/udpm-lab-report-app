@@ -5,9 +5,16 @@ import {
   faEye,
   faPenToSquare,
   faPlus,
+  faCodeCompare,
+  faCirclePlus,
 } from "@fortawesome/free-solid-svg-icons";
 import "./styleProjectManagement.css";
-import { ProjectOutlined, UnorderedListOutlined } from "@ant-design/icons";
+import {
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+  ProjectOutlined,
+  SyncOutlined,
+} from "@ant-design/icons";
 import {
   Button,
   Pagination,
@@ -17,6 +24,9 @@ import {
   Select,
   Row,
   Col,
+  Space,
+  DatePicker,
+  Tag,
 } from "antd";
 import { useAppDispatch, useAppSelector } from "../../../app/hook";
 import {
@@ -30,7 +40,8 @@ import ModalCreateProject from "../project-management/modal-create/ModalCreatePr
 import ModalUpdateProject from "../project-management/modal-update/ModalUpdateProject";
 import LoadingIndicator from "../../../helper/loading";
 import moment from "moment";
-import { toast } from "react-toastify";
+import { convertDateLongToString } from "../../../../labreportapp/helper/util.helper";
+const { RangePicker } = DatePicker;
 
 const { Option } = Select;
 const ProjectManagement = () => {
@@ -210,7 +221,6 @@ const ProjectManagement = () => {
       key: "stt",
       sorter: (a, b) => a.stt - b.stt,
       render: (text, record, index) => startIndex + (index + 1),
-      width: "20px",
     },
 
     {
@@ -253,7 +263,6 @@ const ProjectManagement = () => {
       title: "Thể loại",
       dataIndex: "nameCategorys",
       key: "nameCategorys",
-      width: "17%",
     },
     {
       title: "Tiến độ",
@@ -263,71 +272,59 @@ const ProjectManagement = () => {
       render: (text, record) => {
         return <span>{record.progress}%</span>;
       },
-      width: "9%",
     },
     {
-      title: "Thời gian",
+      title: <div style={{ textAlign: "center" }}>Thời gian</div>,
       dataIndex: "startTimeAndEndTime",
       key: "startTimeAndEndTime",
       render: (text, record) => {
-        const startTime = new Date(record.startTime);
-        const endTime = new Date(record.endTime);
-
-        const formattedStartTime = `${startTime.getDate()}/${
-          startTime.getMonth() + 1
-        }/${startTime.getFullYear()}`;
-        const formattedEndTime = `${endTime.getDate()}/${
-          endTime.getMonth() + 1
-        }/${endTime.getFullYear()}`;
-
+        const startTime = convertDateLongToString(record.startTime);
+        const endTime = convertDateLongToString(record.endTime);
         return (
           <span>
-            {formattedStartTime} - {formattedEndTime}
+            {startTime} - {endTime}
           </span>
         );
       },
-      width: "175px",
     },
     {
-      title: "Trạng thái",
+      title: <div style={{ textAlign: "center" }}>Trạng thái</div>,
       dataIndex: "statusProject",
       key: "statusProject",
       sorter: (a, b) => a.statusProject - b.statusProject,
       render: (text) => {
-        let statusText = "";
         if (text === "0") {
-          statusText = "Đã diễn ra";
           return (
-            <span
-              className="box_span_status"
-              style={{ backgroundColor: "rgb(45, 211, 86)", fontSize: "13px" }}
+            <Tag
+              icon={<CheckCircleOutlined />}
+              style={{ width: "120px", textAlign: "center" }}
+              color="success"
             >
-              {statusText}
-            </span>
+              Đã diễn ra
+            </Tag>
           );
         } else if (text === "1") {
-          statusText = "Đang diễn ra";
           return (
-            <span
-              className="box_span_status"
-              style={{ backgroundColor: "rgb(41, 157, 224)", fontSize: "13px" }}
+            <Tag
+              icon={<SyncOutlined spin />}
+              style={{ width: "120px", textAlign: "center" }}
+              color="processing"
             >
-              {statusText}
-            </span>
+              Đang diễn ra
+            </Tag>
           );
         } else {
-          statusText = "Chưa diễn ra";
           return (
-            <span
-              className="box_span_status"
-              style={{ backgroundColor: "rgb(238, 162, 48)", fontSize: "13px" }}
+            <Tag
+              icon={<CloseCircleOutlined />}
+              style={{ width: "120px", textAlign: "center" }}
+              color="error"
             >
-              {statusText}
-            </span>
+              Chưa diễn ra
+            </Tag>
           );
         }
       },
-      width: "130px",
     },
     {
       title: "Hành động",
@@ -358,7 +355,6 @@ const ProjectManagement = () => {
           </div>
         </>
       ),
-      width: "105px",
     },
   ];
 
@@ -378,7 +374,7 @@ const ProjectManagement = () => {
         />{" "}
         <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
         <hr />
-        <Row gutter={16} style={{ marginBottom: "15px", paddingTop: "20px" }}>
+        <Row gutter={24} style={{ marginBottom: "15px", paddingTop: "20px" }}>
           <Col span={8}>
             <span>Mã:</span>{" "}
             <Input
@@ -494,16 +490,21 @@ const ProjectManagement = () => {
             </Select>
           </Col>
         </Row>
-        <div className="box_btn_filter">
-          <Button className="btn_filter" onClick={handleSearch}>
-            Tìm kiếm
-          </Button>
+        <div className="box-btn">
           <Button
-            className="btn_clear"
-            onClick={handleClear}
-            style={{ backgroundColor: "rgb(38, 144, 214)" }}
+            className="btn_filter"
+            onClick={handleSearch}
+            style={{ marginRight: "15px", backgroundColor: "#E2B357" }}
           >
-            Làm mới bộ lọc
+            <FontAwesomeIcon icon={faFilter} style={{ paddingRight: "5px" }} />{" "}
+            <span>Tìm kiếm</span>
+          </Button>
+          <Button className="btn_clean" onClick={handleClear}>
+            <FontAwesomeIcon
+              icon={faCodeCompare}
+              style={{ paddingRight: "5px" }}
+            />{" "}
+            <span>Làm mới bộ lọc</span>
           </Button>
         </div>
       </div>
@@ -530,11 +531,11 @@ const ProjectManagement = () => {
               }}
             >
               <FontAwesomeIcon
-                icon={faPlus}
+                icon={faCirclePlus}
                 size="1x"
                 style={{
                   backgroundColor: "rgb(55, 137, 220)",
-                  paddingRight: "8px",
+                  paddingRight: "7px",
                 }}
               />{" "}
               Thêm dự án

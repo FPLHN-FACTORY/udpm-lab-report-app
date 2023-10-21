@@ -11,6 +11,7 @@ import {
   Tooltip,
   Table,
   message,
+  DatePicker,
 } from "antd";
 import "./styleModalCreateProject.css";
 import { useEffect, useState } from "react";
@@ -24,7 +25,10 @@ import { CommonAPI } from "../../../../api/commonAPI";
 import LoadingIndicator from "../../../../helper/loading";
 import { CategoryProjectManagementAPI } from "../../../../api/admin/project-management/categoryProjectManagement.api";
 import { SearchOutlined } from "@ant-design/icons";
-
+import dayjs from "dayjs";
+import { AdRoleConfigAPI } from "../../../../api/admin/role-config/AdPotalsRoleConfig.api";
+import { AdPotalsMemberFactoryAPI } from "../../../../api/admin/member-factory/AdPotalsMemberFactory.api";
+const { RangePicker } = DatePicker;
 const { Option } = Select;
 const { TextArea } = Input;
 
@@ -33,10 +37,9 @@ const ModalCreateProject = ({ visible, onCancel }) => {
   const [errorCode, setErrorCode] = useState("");
   const [name, setName] = useState("");
   const [errorName, setErrorName] = useState("");
-  const [startTime, setStartTime] = useState("");
-  const [errorStartTime, setErrorStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
-  const [errorEndTime, setErrorEndTime] = useState("");
+  const [startTime, setStartTime] = useState(null);
+  const [errorTime, setErrorTime] = useState("");
+  const [endTime, setEndTime] = useState(null);
   const [descriptions, setDescriptions] = useState("");
   const [errorDescriptions, setErrorDescriptions] = useState("");
   const [errorMembers, setErrorMembers] = useState("");
@@ -48,6 +51,8 @@ const ModalCreateProject = ({ visible, onCancel }) => {
   const [listMembers, setListMembers] = useState([]);
   const [listMembersChange, setListMembersChange] = useState([]);
   const [listMemberProjects, setListMemberProjects] = useState([]);
+
+  const [listRoleConfig, setListRoleConfig] = useState([]);
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
 
@@ -64,15 +69,17 @@ const ModalCreateProject = ({ visible, onCancel }) => {
 
   useEffect(() => {
     if (visible) {
+      featchRoleConfig();
       return () => {
         setCode("");
         setName("");
-        setStartTime("");
-        setEndTime("");
+        setStartTime(null);
+        setEndTime(null);
+        setErrorCode("");
         setDescriptions("");
+        setErrorCategorys("");
         setErrorDescriptions("");
-        setErrorEndTime("");
-        setErrorStartTime("");
+        setErrorTime("");
         setErrorName();
         setListCategorysChange([]);
         setListMembersChange([]);
@@ -91,11 +98,22 @@ const ModalCreateProject = ({ visible, onCancel }) => {
     }
   }, [listCategorysChange, listMembersChange]);
 
+  const featchRoleConfig = async () => {
+    try {
+      await AdRoleConfigAPI.getAllRoleConfig().then((response) => {
+        setListRoleConfig(response.data.data);
+        console.log("//////////////////");
+        console.log(response);
+      });
+    } catch (error) {}
+  };
+
   const featChMultiSelect = async () => {
     setLoading(true);
     try {
-      await CommonAPI.fetchAll().then((respone) => {
-        setListMembers(respone.data);
+      await AdPotalsMemberFactoryAPI.getAllMemberActive().then((respone) => {
+        setListMembers(respone.data.data);
+        console.log(respone.data.data);
       });
       await CategoryProjectManagementAPI.fetchAllCategory().then((respone) => {
         setListCategorys(respone.data.data);
@@ -151,11 +169,11 @@ const ModalCreateProject = ({ visible, onCancel }) => {
         return {
           memberId: member.id,
           email: member.email,
-          role: `0`,
+          role: `Dev`,
           statusWork: `0`,
           name: member.name,
-          code: member.code,
-          image: member.picture,
+          userName: member.userName,
+          picture: member.picture,
         };
       });
       setListMemberProjects(listMemberAdd);
@@ -164,7 +182,17 @@ const ModalCreateProject = ({ visible, onCancel }) => {
       alert("Hệ thống lỗi, vui lòng F5 lại trang");
     }
   };
-
+  const handleDateChange = (e) => {
+    if (e != null) {
+      setStartTime(
+        dayjs(e[0]).set({ hour: 0, minute: 0, second: 0 }).valueOf()
+      );
+      setEndTime(dayjs(e[1]).set({ hour: 0, minute: 0, second: 0 }).valueOf());
+    } else {
+      setStartTime(null);
+      setEndTime(null);
+    }
+  };
   const create = () => {
     let check = 0;
     if (code.trim() === "") {
@@ -179,46 +207,34 @@ const ModalCreateProject = ({ visible, onCancel }) => {
     } else {
       setErrorName("");
     }
-    if (startTime === "") {
-      setErrorStartTime("Thời gian bắt đầu không được để trống");
+    if (startTime == null && endTime == null) {
+      setErrorTime("Thời gian không được để trống");
       check++;
     } else {
-      setErrorStartTime("");
+      setErrorTime("");
     }
-    if (endTime === "") {
-      setErrorEndTime("Thời gian kết thúc không được để trống");
+    if (startTime === null && endTime !== null) {
+      setErrorTime("Thời gian bắt đầu không được để trống");
       check++;
-    } else {
-      setErrorEndTime("");
     }
-    if (new Date(startTime) > new Date(endTime)) {
-      setErrorStartTime(
-        "Thời gian bắt đầu không được lớn hơn thời gian kết thúc"
-      );
+    if (endTime === null && startTime !== null) {
+      setErrorTime("Thời gian kết thúc không được để trống");
       check++;
-    } else {
-      if (startTime === "") {
-        setErrorStartTime("Thời gian bắt đầu không được để trống");
-        check++;
-      } else {
-        setErrorStartTime("");
-      }
     }
     if (listCategorysChange.length <= 0) {
-      setErrorCategorys("Không được để trống thể loại");
+      setErrorCategorys("Thể loại không được để trống");
       check++;
     } else {
       setErrorCategorys("");
     }
-
     if (check === 0) {
       featMemberAndCaregoryAddProject();
       let projectNew = {
         code: code,
         name: name,
         descriptions: descriptions,
-        startTime: moment(startTime, "YYYY-MM-DD").valueOf(),
-        endTime: moment(endTime, "YYYY-MM-DD").valueOf(),
+        startTime: startTime,
+        endTime: endTime,
         listMembers: listMemberProjects,
         listCategorysId: listCategorysChange,
       };
@@ -234,7 +250,7 @@ const ModalCreateProject = ({ visible, onCancel }) => {
           cancelSuccess();
         },
         (error) => {
-          message.error(error.response.data.message);
+          console.log(error);
         }
       );
     }
@@ -249,10 +265,10 @@ const ModalCreateProject = ({ visible, onCancel }) => {
     },
     {
       title: "Mã",
-      dataIndex: "code",
-      key: "code",
+      dataIndex: "userName",
+      key: "userName",
       width: 50,
-      sorter: (a, b) => a.code.localeCompare(b.code),
+      sorter: (a, b) => a.userName.localeCompare(b.userName),
     },
     {
       title: "Thành viên",
@@ -340,10 +356,11 @@ const ModalCreateProject = ({ visible, onCancel }) => {
             onPressEnter={confirm}
             style={{ width: 188, marginBottom: 8, display: "block" }}
           >
-            <Option value="0">Quản lý</Option>
-            <Option value="1">Trưởng nhóm</Option>
-            <Option value="2">Dev</Option>
-            <Option value="3">Tester</Option>
+            {listRoleConfig.length === 0
+              ? "Không có vai trò để chọn"
+              : listRoleConfig.map((item) => {
+                  <Option value={item.name}>{item.name}</Option>;
+                })}
           </Select>
           <div style={{ display: "flex", justifyContent: "flex-end" }}>
             <Button
@@ -365,17 +382,17 @@ const ModalCreateProject = ({ visible, onCancel }) => {
       ),
       onFilter: (value, record) => record.role === value,
       sorter: (a, b) => a.role.localeCompare(b.role),
-      sortDirections: ["ascend", "descend"],
       render: (text, record) => (
         <Select
           style={{ width: "100%" }}
           value={record.role}
           onChange={(value) => handleRoleChange(record.memberId, value)}
         >
-          <Option value="0">Quản lý</Option>
-          <Option value="1">Trưởng nhóm</Option>
-          <Option value="2">Dev</Option>
-          <Option value="3">Tester</Option>
+          {listRoleConfig.length > 0
+            ? listRoleConfig.map((item) => (
+                <Option value={item.name}>{item.name}</Option>
+              ))
+            : "Không có vai trò để chọn"}
         </Select>
       ),
     },
@@ -387,16 +404,17 @@ const ModalCreateProject = ({ visible, onCancel }) => {
       <Modal
         visible={visible}
         onCancel={cancelFaild}
-        width={750}
+        width={1000}
         footer={null}
         bodyStyle={{ overflow: "hidden" }}
+        style={{ top: "53px" }}
       >
         {" "}
         <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
           <span style={{ fontSize: "18px" }}>Thêm dự án</span>
         </div>
         <div style={{ marginTop: "15px", borderBottom: "1px solid black" }}>
-          <Row gutter={16} style={{ marginBottom: "15px" }}>
+          <Row gutter={24} style={{ marginBottom: "15px" }}>
             <Col span={12}>
               {" "}
               <span className="notBlank">(*) </span>
@@ -426,70 +444,65 @@ const ModalCreateProject = ({ visible, onCancel }) => {
               <span className="error">{errorName}</span>
             </Col>
           </Row>
-          <Row gutter={16} style={{ marginBottom: "15px" }}>
+          <Row gutter={24} style={{ marginBottom: "15px" }}>
             <Col span={12}>
-              {" "}
               <span className="notBlank">(*) </span>
-              <span>Thời gian bắt đầu:</span> <br />
-              <Input
-                value={startTime}
+              <span>Thời gian:</span> <br />
+              <RangePicker
+                style={{ width: "100%" }}
+                format="YYYY-MM-DD"
+                value={[
+                  startTime ? dayjs(startTime) : null,
+                  endTime ? dayjs(endTime) : null,
+                ]}
                 onChange={(e) => {
-                  setStartTime(e.target.value);
+                  handleDateChange(e);
                 }}
-                type="date"
               />
-              <span className="error">{errorStartTime}</span>
+              <span className="error">{errorTime}</span>
             </Col>
             <Col span={12}>
-              {" "}
-              <span className="notBlank">(*) </span>
-              <span>Thời gian kết thúc:</span> <br />
-              <Input
-                value={endTime}
-                onChange={(e) => {
-                  setEndTime(e.target.value);
-                }}
-                type="date"
-              />
-              <span className="error">{errorEndTime}</span>
+              <div style={{ width: "100%" }}>
+                {" "}
+                <span className="notBlank">(*) </span>
+                <span>Thể loại:</span>
+                <Select
+                  mode="multiple"
+                  placeholder="Thêm thể loại"
+                  dropdownMatchSelectWidth={false}
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                  }}
+                  value={listCategorysChange}
+                  onChange={handleChangeCategorys}
+                  optionLabelProp="label"
+                  defaultValue={[]}
+                  filterOption={(text, option) =>
+                    option.label.toLowerCase().indexOf(text.toLowerCase()) !==
+                    -1
+                  }
+                >
+                  {listCategorys.map((record) => (
+                    <Option
+                      label={record.name}
+                      value={record.id}
+                      key={record.id}
+                    >
+                      <Tooltip title={record.name}>
+                        <Space>{record.name}</Space>
+                      </Tooltip>
+                    </Option>
+                  ))}
+                </Select>
+                <span
+                  className="error"
+                  style={{ display: "block", marginTop: "2px" }}
+                >
+                  {errorCategorys}
+                </span>
+              </div>
             </Col>
-          </Row>
-          <Row style={{ marginBottom: "15px" }}>
-            <div style={{ width: "100%" }}>
-              {" "}
-              <span className="notBlank">(*) </span>
-              <span>Thể loại:</span>
-              <Select
-                mode="multiple"
-                placeholder="Thêm thể loại"
-                dropdownMatchSelectWidth={false}
-                style={{
-                  width: "100%",
-                  height: "auto",
-                }}
-                value={listCategorysChange}
-                onChange={handleChangeCategorys}
-                optionLabelProp="label"
-                defaultValue={[]}
-                filterOption={(text, option) =>
-                  option.label.toLowerCase().indexOf(text.toLowerCase()) !== -1
-                }
-              >
-                {listCategorys.map((record) => (
-                  <Option label={record.name} value={record.id} key={record.id}>
-                    <Tooltip title={record.name}>
-                      <Space>{record.name}</Space>
-                    </Tooltip>
-                  </Option>
-                ))}
-              </Select>
-              <span
-                className="error"
-                style={{ display: "block", marginTop: "2px" }}
-              >
-                {errorCategorys}
-              </span>
-            </div>
           </Row>
           <Row style={{ marginBottom: "15px" }}>
             <div style={{ width: "100%" }}>
@@ -521,7 +534,10 @@ const ModalCreateProject = ({ visible, onCancel }) => {
                       <Space>
                         <Image.PreviewGroup>
                           <Image
-                            src={member.picture}
+                            src={
+                              member.picture ||
+                              "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                            }
                             alt="Avatar"
                             width={25}
                             height={25}

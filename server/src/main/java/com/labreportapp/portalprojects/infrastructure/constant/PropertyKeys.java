@@ -90,4 +90,6 @@ public class PropertyKeys {
     public static final String ROLE_CONFIG_ONLY_HAVA_ONE = "role.config.only.have.one";
     public static final String ROLE_FACTORY_HAVE_MEMBER = "role.factory.have.member";
 
+    public static final String START_TIME_MORE_THAN_END_TIME = "start.time.more.than.end.time";
+    public static final String TIME_NOT_NULL = "time.not.null";
 }
