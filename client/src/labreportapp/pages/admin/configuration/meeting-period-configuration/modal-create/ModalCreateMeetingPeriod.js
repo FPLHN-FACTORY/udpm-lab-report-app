@@ -101,6 +101,28 @@ const ModalCreateMeetingPeriod = ({ visible, onCancel }) => {
     setErrorEndMinute("");
   }
 
+  if (!Number.isInteger(Number(startHour)) || Number(startHour) <= 0) {
+  setErrorStartHour("Giờ bắt đầu phải là số nguyên dương");
+  check++;
+} else if (!Number.isInteger(Number(startMinute)) || Number(startMinute) <= 0) {
+  setErrorStartMinute("Phút bắt đầu phải là số nguyên dương");
+  check++;
+} else {
+  setErrorStartHour("");
+  setErrorStartMinute("");
+}
+
+  if (!Number.isInteger(Number(endHour)) || Number(endHour) <= 0) {
+  setErrorEndHour("Giờ kết thúc phải là số nguyên dương");
+  check++;
+} else if (!Number.isInteger(Number(endMinute)) || Number(endMinute) <= 0) {
+  setErrorEndMinute("Phút kết thúc phải là số nguyên dương");
+  check++;
+} else {
+  setErrorEndHour("");
+  setErrorEndMinute("");
+}
+
     if (check === 0) {
       let obj = {
         name: name,
