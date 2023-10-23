@@ -33,6 +33,13 @@ export class ProjectManagementAPI {
     });
   };
 
+  static detailUpdate = (id) => {
+    return request({
+      method: "GET",
+      url: url + `/detail-update/` + id,
+    });
+  };
+
   static createWithId = () => {
     return request({
       method: "POST",

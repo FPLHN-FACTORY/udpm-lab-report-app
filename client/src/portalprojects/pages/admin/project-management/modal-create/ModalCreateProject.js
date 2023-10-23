@@ -374,6 +374,7 @@ const ModalCreateProject = ({ visible, onCancel }) => {
               style={{
                 width: "100%",
               }}
+              maxTagCount={3}
               key={record.memberId}
               options={listRoleConfig.map((item) => ({
                 value: item.name,
@@ -522,8 +523,9 @@ const ModalCreateProject = ({ visible, onCancel }) => {
                         <Image.PreviewGroup>
                           <Image
                             src={
-                              member.picture ||
-                              "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                              member.picture === "Images/Default.png"
+                                ? "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                                : member.picture
                             }
                             alt="Avatar"
                             width={25}

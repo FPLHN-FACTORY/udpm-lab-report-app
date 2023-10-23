@@ -192,30 +192,35 @@ public class AdProjectServiceImpl implements AdProjectService {
         });
         List<RoleProject> listRoleProject = adPotalsRoleProjectRepository.saveAll(newRoleProject);
 
-        MemberProject memberCreateProject = new MemberProject();
-        memberCreateProject.setMemberId(labReportAppSession.getUserId());
-        memberCreateProject.setProjectId(newProject.getId());
-        memberCreateProject.setEmail(labReportAppSession.getEmail());
-        memberCreateProject.setStatusWork(StatusWork.DANG_LAM);
-        memberCreateProject.setId(adMemberProjectRepository.save(memberCreateProject).getId());
-
-        List<MemberProject> listMemberProject = adMemberProjectRepository.saveAll(newMemberProject);
         List<RoleMemberProject> newRoleMemberProject = new ArrayList<>();
-
-        RoleMemberProject roleMemberProjectDefault = new RoleMemberProject();
-        roleMemberProjectDefault.setMemberProjectId(memberCreateProject.getId());
-        Optional<RoleProject> roleProSetDefault = listRoleProject.stream()
-                .filter(i -> i.getRoleDefault().equals(RoleDefault.DEFAULT))
+        Optional<AdCreateMemberProjectRequest> memberDefault = listMember.stream()
+                .filter(i -> i.getMemberId().equals(labReportAppSession.getUserId()))
                 .findFirst();
-        if (roleProSetDefault.isPresent()) {
-            roleMemberProjectDefault.setRoleProjectId(roleProSetDefault.get().getId());
-        } else {
-            if (listRoleProject.size() > 0) {
-                RoleProject roleProjectAp = listRoleProject.get(0);
-                roleMemberProjectDefault.setRoleProjectId(roleProjectAp.getId());
+        if (!memberDefault.isPresent()){
+            MemberProject memberCreateProject = new MemberProject();
+            memberCreateProject.setMemberId(labReportAppSession.getUserId());
+            memberCreateProject.setProjectId(newProject.getId());
+            memberCreateProject.setEmail(labReportAppSession.getEmail());
+            memberCreateProject.setStatusWork(StatusWork.DANG_LAM);
+            memberCreateProject.setId(adMemberProjectRepository.save(memberCreateProject).getId());
+
+            RoleMemberProject roleMemberProjectDefault = new RoleMemberProject();
+            roleMemberProjectDefault.setMemberProjectId(memberCreateProject.getId());
+            Optional<RoleProject> roleProSetDefault = listRoleProject.stream()
+                    .filter(i -> i.getRoleDefault().equals(RoleDefault.DEFAULT))
+                    .findFirst();
+
+            if (roleProSetDefault.isPresent()) {
+                roleMemberProjectDefault.setRoleProjectId(roleProSetDefault.get().getId());
+            } else {
+                if (listRoleProject.size() > 0) {
+                    RoleProject roleProjectAp = listRoleProject.get(0);
+                    roleMemberProjectDefault.setRoleProjectId(roleProjectAp.getId());
+                }
             }
+            newRoleMemberProject.add(roleMemberProjectDefault);
         }
-        newRoleMemberProject.add(roleMemberProjectDefault);
+        List<MemberProject> listMemberProject = adMemberProjectRepository.saveAll(newMemberProject);
         listMember.forEach(member -> {
             member.getRole().forEach(role -> {
                 listRoleProject.forEach(roleProject -> {
@@ -248,7 +253,6 @@ public class AdProjectServiceImpl implements AdProjectService {
         List<AdMemberAndRoleProjectCustomResponse> listMemberRole = adMemberProjectService
                 .findAllMemberJoinProject(idProject);
         List<ProjectCategory> listProjectCategory = adProjectCategoryRepository.findAllByProjectId(idProject);
-        System.err.println(listProjectCategory.toString());
         AdProjectReponse project = projectFind.get();
         AdDetailProjectCateMemberRespone objReturn = new AdDetailProjectCateMemberRespone();
         objReturn.setCode(project.getCode());

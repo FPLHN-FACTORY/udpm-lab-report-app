@@ -95,7 +95,11 @@ const ModalDetailProject = ({ visible, onCancel, idProject }) => {
           <div>
             <Image.PreviewGroup>
               <Image
-                src={record.picture}
+                src={
+                  record.picture === "Images/Default.png"
+                    ? "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                    : record.picture
+                }
                 alt="Avatar"
                 width={25}
                 height={25}
