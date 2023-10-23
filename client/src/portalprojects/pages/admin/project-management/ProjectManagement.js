@@ -371,7 +371,7 @@ const ProjectManagement = () => {
         <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
         <hr />
         <Row gutter={24} style={{ marginBottom: "15px", paddingTop: "20px" }}>
-          <Col span={"8px"}>
+          <Col span={8}>
             <span>Mã:</span>{" "}
             <Input
               type="text"
@@ -381,7 +381,7 @@ const ProjectManagement = () => {
               }}
             />
           </Col>
-          <Col span={"8px"}>
+          <Col span={8}>
             <span>Tên:</span>
             <Input
               type="text"
@@ -391,7 +391,7 @@ const ProjectManagement = () => {
               }}
             />
           </Col>
-          <Col span={"8px"}>
+          <Col span={8}>
             <span>Thể loại:</span>
             {""}
             <Select
@@ -409,7 +409,7 @@ const ProjectManagement = () => {
           </Col>
         </Row>
         <Row gutter={24} style={{ marginBottom: "15px" }}>
-          <Col span={"8px"}>
+          <Col span={8}>
             <span>Thời gian bắt đầu:</span>
             {""}
             <Input
@@ -420,7 +420,7 @@ const ProjectManagement = () => {
               type="date"
             />
           </Col>
-          <Col span={"8px"}>
+          <Col span={8}>
             <span>Thời gian kết thúc:</span> {""}
             <Input
               value={endTimeSearch}
@@ -430,7 +430,7 @@ const ProjectManagement = () => {
               type="date"
             />
           </Col>
-          <Col span={"8px"}>
+          <Col span={8}>
             <span>Trạng thái:</span>
             {""}
             <Select
