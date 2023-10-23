@@ -7,6 +7,7 @@ import {
   faPlus,
   faCodeCompare,
   faCirclePlus,
+  faMattressPillow,
 } from "@fortawesome/free-solid-svg-icons";
 import "./styleProjectManagement.css";
 import {
@@ -41,7 +42,7 @@ import ModalUpdateProject from "../project-management/modal-update/ModalUpdatePr
 import LoadingIndicator from "../../../helper/loading";
 import moment from "moment";
 import { convertDateLongToString } from "../../../../labreportapp/helper/util.helper";
-const { RangePicker } = DatePicker;
+import { Link } from "react-router-dom";
 
 const { Option } = Select;
 const ProjectManagement = () => {
@@ -62,21 +63,35 @@ const ProjectManagement = () => {
   const [idCategorySearch, setIdCategorySearch] = useState("");
   const [listCategorySearch, setListCategorySearch] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [clear, setClear] = useState(false);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     document.title = "Quản lý dự án | Portal-Projects";
-    featchData();
+    handleSearch();
     return () => {
       dispatch(SetProjectManagement([]));
     };
   }, [current]);
 
+  // useEffect(() => {
+  //   if (checkAdd) {
+  //     handleSearch();
+  //     setCheckAdd(false);
+  //   }
+  // }, [checkAdd]);
+
   useEffect(() => {
-    if (checkAdd) {
-      featchData();
-      setCheckAdd(false);
+    window.scrollTo(0, 0);
+    document.title = "Quản lý dự án | Portal-Projects";
+    if (clear) {
+      handleSearch();
+      return () => {
+        dispatch(SetProjectManagement([]));
+      };
+      setClear(false);
     }
-  }, [checkAdd]);
+  }, [clear]);
 
   useEffect(() => {
     document.title = "Quản lý dự án | Portal-Projects";
@@ -93,40 +108,6 @@ const ProjectManagement = () => {
     const responeGetAllCategory =
       await CategoryProjectManagementAPI.fetchAllCategory();
     setListCategorySearch(responeGetAllCategory.data.data);
-  };
-
-  const featchData = async () => {
-    try {
-      setLoading(true);
-      let filter = {
-        code: codeSearch,
-        name: nameSearch,
-        startTime:
-          startTimeSearch != null &&
-          startTimeSearch !== "null" &&
-          startTimeSearch !== "undefined"
-            ? moment(startTimeSearch, moment.ISO_8601).format("YYYY-MM-DD")
-            : null,
-        endTime:
-          endTimeSearch != null &&
-          endTimeSearch !== "null" &&
-          endTimeSearch !== "undefined"
-            ? moment(endTimeSearch, moment.ISO_8601).format("YYYY-MM-DD")
-            : null,
-        statusProject: statusProjectSearch,
-        idCategory: idCategorySearch,
-        page: current,
-        size: 5,
-      };
-      await ProjectManagementAPI.featchAll(filter).then(async (response) => {
-        setDataTable(response.data.data.data);
-        setTotalPages(parseInt(response.data.data.totalPages));
-        dispatch(SetProjectManagement(response.data.data.data));
-        setLoading(false);
-      });
-    } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang");
-    }
   };
 
   const handleSearch = async () => {
@@ -151,12 +132,14 @@ const ProjectManagement = () => {
         statusProject: statusProjectSearch,
         idCategory: idCategorySearch,
         page: current,
-        size: 5,
+        size: 10,
       };
 
       const response = await ProjectManagementAPI.featchAll(filter);
       const responseData = response.data.data;
       setDataTable(responseData.data);
+      console.log("aaaaaaaaaaaaaa");
+      console.log(responseData.data);
       setTotalPages(parseInt(responseData.totalPages));
       dispatch(SetProjectManagement(responseData.data));
       setLoading(false);
@@ -173,8 +156,9 @@ const ProjectManagement = () => {
     setEndTimeSearch("");
     setStatusProjectSearch("");
     setIdCategorySearch("");
-    setCurrent(1);
-    await featchData();
+    setCurrent(0);
+    setClear(true);
+    await handleSearch();
   };
 
   const handleCancelModalCreateSusscess = () => {
@@ -333,11 +317,23 @@ const ProjectManagement = () => {
       render: (text, record) => (
         <>
           <div>
+            <Tooltip title="Xem trello dự án">
+              <Link
+                to={`/detail-project/${record.id}`}
+                style={{ color: "black" }}
+              >
+                <FontAwesomeIcon
+                  icon={faMattressPillow}
+                  className="icon"
+                  style={{ width: "19px" }}
+                />
+              </Link>
+            </Tooltip>
             <Tooltip title="Xem chi tiết dự án">
               <FontAwesomeIcon
                 icon={faEye}
                 className="icon"
-                style={{ paddingRight: 8 }}
+                style={{ paddingRight: "8px" }}
                 onClick={() => {
                   handleDetailProject(record.id);
                 }}
@@ -375,7 +371,7 @@ const ProjectManagement = () => {
         <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
         <hr />
         <Row gutter={24} style={{ marginBottom: "15px", paddingTop: "20px" }}>
-          <Col span={8}>
+          <Col span={"8px"}>
             <span>Mã:</span>{" "}
             <Input
               type="text"
@@ -385,7 +381,7 @@ const ProjectManagement = () => {
               }}
             />
           </Col>
-          <Col span={8}>
+          <Col span={"8px"}>
             <span>Tên:</span>
             <Input
               type="text"
@@ -395,7 +391,7 @@ const ProjectManagement = () => {
               }}
             />
           </Col>
-          <Col span={8}>
+          <Col span={"8px"}>
             <span>Thể loại:</span>
             {""}
             <Select
@@ -413,7 +409,7 @@ const ProjectManagement = () => {
           </Col>
         </Row>
         <Row gutter={24} style={{ marginBottom: "15px" }}>
-          <Col span={8}>
+          <Col span={"8px"}>
             <span>Thời gian bắt đầu:</span>
             {""}
             <Input
@@ -424,7 +420,7 @@ const ProjectManagement = () => {
               type="date"
             />
           </Col>
-          <Col span={8}>
+          <Col span={"8px"}>
             <span>Thời gian kết thúc:</span> {""}
             <Input
               value={endTimeSearch}
@@ -434,7 +430,7 @@ const ProjectManagement = () => {
               type="date"
             />
           </Col>
-          <Col span={8}>
+          <Col span={"8px"}>
             <span>Trạng thái:</span>
             {""}
             <Select
@@ -542,7 +538,7 @@ const ProjectManagement = () => {
             </Button>
           </div>
         </div>
-        <div style={{ marginTop: 15 }}>
+        <div style={{ marginTop: "15px" }}>
           <Table
             dataSource={data}
             rowKey="id"

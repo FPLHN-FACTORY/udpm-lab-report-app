@@ -742,23 +742,22 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
         <div style={{ textAlign: "right" }}>
           <div style={{ paddingTop: "15px" }}>
             <Button
-              style={{
-                marginRight: "5px",
-                backgroundColor: "rgb(61, 139, 227)",
-                color: "white",
-              }}
-              onClick={update}
-            >
-              Cập nhật
-            </Button>
-            <Button
+              className="btn_filter"
               style={{
                 backgroundColor: "red",
                 color: "white",
+                width: "100px",
               }}
               onClick={cancelUpdateFaild}
             >
               Hủy
+            </Button>{" "}
+            <Button
+              className="btn_clean"
+              style={{ width: "100px", marginLeft: "10px" }}
+              onClick={update}
+            >
+              Cập nhật
             </Button>
           </div>
         </div>

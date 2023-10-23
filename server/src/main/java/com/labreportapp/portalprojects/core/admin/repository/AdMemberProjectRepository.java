@@ -1,6 +1,7 @@
 package com.labreportapp.portalprojects.core.admin.repository;
 
 import com.labreportapp.portalprojects.core.admin.model.request.AdFindProjectRequest;
+import com.labreportapp.portalprojects.core.admin.model.response.AdMemberAndRoleProjectResponse;
 import com.labreportapp.portalprojects.core.admin.model.response.AdMemberProjectReponse;
 import com.labreportapp.portalprojects.entity.MemberProject;
 import com.labreportapp.portalprojects.repository.MemberProjectRepository;
@@ -20,7 +21,7 @@ public interface AdMemberProjectRepository extends MemberProjectRepository {
     List<MemberProject> findAllMember();
 
     @Query(value = """
-             SELECT ROW_NUMBER() OVER(ORDER BY mp.last_modified_date DESC ) AS STT ,
+             SELECT ROW_NUMBER() OVER(ORDER BY mp.last_modified_date DESC ) AS stt,
                      mp.id,
                      mp.member_id,
                      mp.project_id,
@@ -36,20 +37,28 @@ public interface AdMemberProjectRepository extends MemberProjectRepository {
     List<AdMemberProjectReponse> findByName(@Param("rep") AdFindProjectRequest rep);
 
     @Query(value = """
-             SELECT ROW_NUMBER() OVER(ORDER BY mp.last_modified_date DESC ) AS STT ,
-                     mp.id,
-                     mp.member_id,
-                     mp.project_id,
-                     mp.role,
-                     mp.status_work,
-                     pro.name
-             FROM member_project mp 
-             JOIN project pro ON pro.id = mp.project_id
-             WHERE  
-                  pro.id = :idProject  AND  mp.status_work = '0'  
+                SELECT ROW_NUMBER() OVER(ORDER BY mp.last_modified_date DESC ) AS stt,
+                       mp.member_id AS member_id,
+                       mp.email AS email,
+                       mp.status_work AS status_work,
+                       rp.name AS name_role_project,
+                       rp.id AS role_project_id
+                FROM member_project mp
+                JOIN role_member_project rmp ON mp.id = rmp.member_project_id
+                JOIN role_project rp ON rmp.role_project_id = rp.id
+                JOIN project p ON p.id = mp.project_id
+                 WHERE p.id = :idProject
             """, nativeQuery = true)
-    List<AdMemberProjectReponse> findAllMemberJoinProject(@Param("idProject") String idProject);
+    List<AdMemberAndRoleProjectResponse> findAllMemberJoinProject(@Param("idProject") String idProject);
 
+    // countQuery = """
+//              SELECT COUNT(DISTINCT mp. mp.member_id)
+//                            FROM member_project mp
+//                            JOIN role_member_project rmp ON mp.id = rmp.member_project_id
+//                            JOIN role_project rp ON rmp.role_project_id = rp.id
+//                            JOIN project p ON p.id = mp.project_id
+//                             WHERE p.id = :idProject
+//            """
     @Query(value = """
              SELECT ROW_NUMBER() OVER(ORDER BY mp.last_modified_date DESC ) AS STT ,
                      mp.id,

@@ -30,6 +30,7 @@ import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.constant.RoleMemberProject;
 import com.labreportapp.portalprojects.infrastructure.constant.StatusProject;
 import com.labreportapp.portalprojects.infrastructure.constant.StatusWork;
+import com.labreportapp.portalprojects.infrastructure.constant.TypeProject;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -222,6 +223,7 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         project.setStartTime(new Date().getTime());
         project.setEndTime(new Date().getTime() + 90 * 86400000);
         project.setStatusProject(StatusProject.DANG_DIEN_RA);
+        project.setTypeProject(TypeProject.DU_AN_XUONG_THUC_HANH);
         project.setBackgroundColor("rgb(38, 144, 214)");
         Project projectNew = teProjectRepository.save(project);
         teamUp.setProjectId(projectNew.getId());
@@ -246,16 +248,6 @@ public class TeTeamsServiceImpl implements TeTeamsService {
                 teStudentClassesRepository.save(item);
             });
             teTeamsRepositoty.delete(team);
-//            if (team.getProjectId() != null) {
-//                Optional<Project> projectFind = teProjectRepository.findById(team.getProjectId());
-//                if (projectFind.isPresent()) {
-//                    List<MemberProject> listMemberFind = teMemberProjectRepository.findMemberProjectByProjectId(team.getProjectId());
-//                    if (listMemberFind.size() != 0) {
-//                        teMemberProjectRepository.deleteAll(listMemberFind);
-//                    }
-//                    teProjectRepository.delete(projectFind.get());
-//                }
-//            }
             return "Xóa nhóm thành công !";
         } else {
             return "Không tìm thấy nhóm, xóa thất bại !";

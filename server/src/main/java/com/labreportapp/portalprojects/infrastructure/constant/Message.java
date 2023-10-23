@@ -94,6 +94,7 @@ public enum Message {
     ROLE_FACTORY_HAVE_MEMBER(PropertiesReader.getProperty(PropertyKeys.ROLE_FACTORY_HAVE_MEMBER)),
     TIME_NOT_NULL(PropertiesReader.getProperty(PropertyKeys.TIME_NOT_NULL)),
 
+    ROLE_DEFAULT_NOT_EMPTY(PropertiesReader.getProperty(PropertyKeys.ROLE_DEFAULT_NOT_EMPTY)),
     START_TIME_MORE_THAN_END_TIME(PropertiesReader.getProperty(PropertyKeys.START_TIME_MORE_THAN_END_TIME));
     private String message;
 

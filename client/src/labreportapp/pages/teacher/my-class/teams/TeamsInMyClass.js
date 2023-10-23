@@ -236,10 +236,6 @@ const TeamsInMyClass = () => {
                     icon={faMattressPillow}
                     className="icon"
                     style={{ width: "19px" }}
-                    onClick={() => {
-                      setShowDetailModal(true);
-                      handleDetailTeam(record);
-                    }}
                   />
                 </Link>
               </Tooltip>

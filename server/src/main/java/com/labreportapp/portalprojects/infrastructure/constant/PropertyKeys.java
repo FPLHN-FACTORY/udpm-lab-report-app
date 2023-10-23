@@ -92,4 +92,5 @@ public class PropertyKeys {
 
     public static final String START_TIME_MORE_THAN_END_TIME = "start.time.more.than.end.time";
     public static final String TIME_NOT_NULL = "time.not.null";
+    public static final String ROLE_DEFAULT_NOT_EMPTY = "role.default.not.empty";
 }

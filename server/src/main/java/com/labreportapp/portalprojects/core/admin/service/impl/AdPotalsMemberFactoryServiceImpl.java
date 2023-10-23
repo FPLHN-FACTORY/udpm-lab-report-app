@@ -2,6 +2,7 @@ package com.labreportapp.portalprojects.core.admin.service.impl;
 
 import com.labreportapp.labreport.core.common.response.SimpleResponse;
 import com.labreportapp.labreport.entity.MemberFactory;
+import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
 import com.labreportapp.portalprojects.core.admin.model.response.AdPotalsMemberFactoryCustom;
 import com.labreportapp.portalprojects.core.admin.repository.AdPotalsMemberFactoryRepository;
@@ -26,11 +27,19 @@ public class AdPotalsMemberFactoryServiceImpl implements AdPotalsMemberFactorySe
     @Autowired
     private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
 
+    @Autowired
+    private LabReportAppSession labReportAppSession;
+
     @Override
     public List<AdPotalsMemberFactoryCustom> getAllMemberFactory() {
         List<MemberFactory> listMemberFactory = adPotalsMemberFactoryRepository.getAllMemberFactory();
         if (listMemberFactory.size() == 0) {
             return null;
+        }
+        if (labReportAppSession.getUserId() != null && !labReportAppSession.equals("")) {
+            listMemberFactory = listMemberFactory.stream()
+                    .filter(member -> !member.getMemberId().equals(labReportAppSession.getUserId()))
+                    .collect(Collectors.toList());
         }
         List<String> idList = listMemberFactory.stream()
                 .map(MemberFactory::getMemberId)
@@ -59,43 +68,4 @@ public class AdPotalsMemberFactoryServiceImpl implements AdPotalsMemberFactorySe
         });
         return listReturn;
     }
-    //    @Override
-//    public PageableObject<AdMemberFactoryCustom> getPage(final AdFindMemberFactoryRequest request) {
-//        Pageable pageable = PageRequest.of(request.getPage(), request.getSize());
-//        Page<AdMemberFactoryResponse> responsePage = adMemberFactoryRepository.getAllRoleProject(pageable, request);
-//        List<String> idList = responsePage.getContent().stream()
-//                .map(AdMemberFactoryResponse::getMemberId)
-//                .filter(Objects::nonNull)
-//                .distinct()
-//                .collect(Collectors.toList());
-//        List<SimpleResponse> listResponse = new ArrayList<>();
-//        if (idList != null && idList.size() > 0) {
-//            listResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idList);
-//        }
-//        List<SimpleResponse> finalListResponse = listResponse;
-//        List<AdMemberFactoryCustom> listCustom = new ArrayList<>();
-//        responsePage.getContent().forEach(page -> {
-//            finalListResponse.forEach(response -> {
-//                if (page.getMemberId().equals(response.getId())) {
-//                    AdMemberFactoryCustom adMemberFactoryCustom = new AdMemberFactoryCustom();
-//                    adMemberFactoryCustom.setId(page.getId());
-//                    adMemberFactoryCustom.setMemberId(page.getMemberId());
-//                    adMemberFactoryCustom.setRoleMemberFactory(page.getRoleMemberFactory());
-//                    adMemberFactoryCustom.setNumberTeam(page.getNumberTeam());
-//                    adMemberFactoryCustom.setPicture(response.getPicture());
-//                    adMemberFactoryCustom.setStt(page.getStt());
-//                    adMemberFactoryCustom.setEmail(page.getEmail());
-//                    adMemberFactoryCustom.setStatusMemberFactory(page.getStatusMemberFactory());
-//                    adMemberFactoryCustom.setName(response.getName());
-//                    adMemberFactoryCustom.setUserName(response.getUserName());
-//                    listCustom.add(adMemberFactoryCustom);
-//                }
-//            });
-//        });
-//        PageableObject<AdMemberFactoryCustom> pageableObject = new PageableObject<>();
-//        pageableObject.setData(listCustom);
-//        pageableObject.setCurrentPage(responsePage.getNumber());
-//        pageableObject.setTotalPages(responsePage.getTotalPages());
-//        return pageableObject;
-//    }
 }

@@ -1,8 +1,12 @@
 package com.labreportapp.portalprojects.core.admin.service.impl;
 
+import com.labreportapp.labreport.core.common.response.SimpleResponse;
+import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
 import com.labreportapp.portalprojects.core.admin.model.request.AdCreateMemberProjectRequest;
 import com.labreportapp.portalprojects.core.admin.model.request.AdFindProjectRequest;
 import com.labreportapp.portalprojects.core.admin.model.request.AdUpdateMemberProjectRequest;
+import com.labreportapp.portalprojects.core.admin.model.response.AdMemberAndRoleProjectCustomResponse;
+import com.labreportapp.portalprojects.core.admin.model.response.AdMemberAndRoleProjectResponse;
 import com.labreportapp.portalprojects.core.admin.model.response.AdMemberProjectReponse;
 import com.labreportapp.portalprojects.core.admin.repository.AdMemberProjectRepository;
 import com.labreportapp.portalprojects.core.admin.service.AdMemberProjectService;
@@ -16,7 +20,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author NguyenVinh
@@ -27,8 +33,10 @@ public class AdMemberProjectServiceImpl implements AdMemberProjectService {
     @Autowired
     private AdMemberProjectRepository adMemberProjectRepository;
 
-    private FormUtils formUtils = new FormUtils();
+    @Autowired
+    private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
 
+    private FormUtils formUtils = new FormUtils();
 
     @Override
     public List<AdMemberProjectReponse> searchProject(AdFindProjectRequest rep) {
@@ -36,8 +44,36 @@ public class AdMemberProjectServiceImpl implements AdMemberProjectService {
     }
 
     @Override
-    public List<AdMemberProjectReponse> findAllMemberJoinProject(String idProject) {
-        return adMemberProjectRepository.findAllMemberJoinProject(idProject);
+    public List<AdMemberAndRoleProjectCustomResponse> findAllMemberJoinProject(String idProject) {
+        List<AdMemberAndRoleProjectResponse> listMemberId = adMemberProjectRepository.findAllMemberJoinProject(idProject);
+        List<String> idList = listMemberId.stream()
+                .map(AdMemberAndRoleProjectResponse::getMemberId)
+                .filter(Objects::nonNull)
+                .distinct()
+                .collect(Collectors.toList());
+        List<AdMemberAndRoleProjectCustomResponse> listReturn = new ArrayList<>();
+        if (listMemberId.size() == 0) {
+            return listReturn;
+        }
+        List<SimpleResponse> listCall = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idList);
+        listMemberId.forEach(db -> {
+            listCall.forEach(call -> {
+                if (db.getMemberId().equals(call.getId())) {
+                    AdMemberAndRoleProjectCustomResponse obj = new AdMemberAndRoleProjectCustomResponse();
+                    obj.setStt(db.getStt());
+                    obj.setEmail(db.getEmail());
+                    obj.setIdRole(db.getIdRole());
+                    obj.setNameRole(db.getNameRole());
+                    obj.setStatus(db.getStatus());
+                    obj.setMemberId(db.getMemberId());
+                    obj.setName(call.getName());
+                    obj.setUserName(call.getUserName());
+                    obj.setPicture(call.getPicture());
+                    listReturn.add(obj);
+                }
+            });
+        });
+        return listReturn;
     }
 
     @Override
