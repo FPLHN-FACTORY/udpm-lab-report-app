@@ -89,5 +89,7 @@ public class PropertyKeys {
     public static final String MEMBER_FACTORY_NOT_EXISTS = "member.factory.not.exists";
     public static final String ROLE_CONFIG_ONLY_HAVA_ONE = "role.config.only.have.one";
     public static final String ROLE_FACTORY_HAVE_MEMBER = "role.factory.have.member";
+    public static final String MEMBER_FACTORY_IS_ALREADY_IN_THE_GROUP = "member.factory.is.already.in.the.group";
+    public static final String MEMBER_TEAM_FACTORY_NOT_EXISTS = "member.team.factory.not.exists";
 
 }

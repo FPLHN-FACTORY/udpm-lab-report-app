@@ -45,5 +45,41 @@ export class AdTeamAPI {
       url: url + `/detail/` + id,
     });
   };
-  
+
+  static detailMemberTeamFactory = (id) => {
+    return request({
+      method: "GET",
+      url: url + `/member-team-factory/` + id,
+    });
+  };
+
+  static getAllMemberFactory = () => {
+    return request({
+      method: "GET",
+      url: url + `/all-member-factory`,
+    });
+  };
+
+  static addMembers = (data) => {
+    return request({
+      method: "POST",
+      url: url + `/add-members`,
+      data: data,
+    });
+  };
+
+  static deleteMemberTeamFactory = (id) => {
+    return request({
+      method: "DELETE",
+      url: url + `/delete-member-team-factory/${id}`,
+    });
+  };
+
+  static deleteListMemberTeamFactory = (data) => {
+    return request({
+      method: "DELETE",
+      url: url + `/delete-list-member-team-factory`,
+      data: data,
+    });
+  };
 }

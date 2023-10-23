@@ -68,7 +68,7 @@ const MemberManagement = () => {
   const loadData = () => {
     setLoading(true);
     let filter = {
-      value: debouncedNameValue,
+      value: debouncedNameValue.trim(),
       page: current - 1,
       status: status === "" ? null : parseInt(status),
       roleFactoryId: role,

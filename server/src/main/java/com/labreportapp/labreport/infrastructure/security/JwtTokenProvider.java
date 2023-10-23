@@ -69,7 +69,7 @@ public class JwtTokenProvider {
                 && email.equals(storedEmail)
                 && userName.equals(storedUserName)
                 && name.equals(storedName)) {
-            return new UsernamePasswordAuthenticationToken(null, token, authorities);
+            return new UsernamePasswordAuthenticationToken(id, token, authorities);
         } else {
             httpSession.setAttribute(SessionConstant.USER_CURRENT_ID, id);
             httpSession.setAttribute(SessionConstant.USER_CURRENT_EMAIL, email);

@@ -3,6 +3,7 @@ package com.labreportapp.labreport.core.admin.repository;
 import com.labreportapp.labreport.core.admin.model.request.AdFindMemberFactoryRequest;
 import com.labreportapp.labreport.core.admin.model.response.AdMemberFactoryResponse;
 import com.labreportapp.labreport.core.common.base.SimpleEntityProjection;
+import com.labreportapp.labreport.entity.MemberFactory;
 import com.labreportapp.labreport.repository.MemberFactoryRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -123,4 +124,9 @@ public interface AdMemberFactoryRepository extends MemberFactoryRepository {
             WHERE a.id = :id
             """, nativeQuery = true)
     List<String> getTeamsMemberFactory(@Param("id") String id);
+
+    @Query(value = """
+            SELECT * FROM member_factory ORDER BY created_date DESC
+            """, nativeQuery = true)
+    List<MemberFactory> getAllMemberFactory();
 }

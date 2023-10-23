@@ -1,6 +1,6 @@
 import React from "react";
-import { Spin } from "antd";
-import { Loading3QuartersOutlined } from "@ant-design/icons";
+import { ClimbingBoxLoader } from "react-spinners";
+import "./style-loading.css";
 
 const LoadingIndicator = () => (
   <div
@@ -13,13 +13,36 @@ const LoadingIndicator = () => (
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      backgroundColor: "white",
+      backgroundColor: "rgba(72, 72, 72, 0.2)",
       zIndex: 999999999,
     }}
   >
-    <Spin
-      indicator={<Loading3QuartersOutlined style={{ fontSize: 48 }} spin />}
-    />
+    <div class="boxes">
+      <div class="box">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <div class="box">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <div class="box">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <div class="box">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
   </div>
 );
 
