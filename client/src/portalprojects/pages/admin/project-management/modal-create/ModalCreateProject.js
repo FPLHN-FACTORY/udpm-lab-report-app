@@ -467,6 +467,7 @@ const ModalCreateProject = ({ visible, onCancel }) => {
                   value={listCategorysChange}
                   onChange={handleChangeCategorys}
                   optionLabelProp="label"
+                  maxTagCount={3}
                   defaultValue={[]}
                   filterOption={(text, option) =>
                     option.label.toLowerCase().indexOf(text.toLowerCase()) !==
@@ -508,6 +509,7 @@ const ModalCreateProject = ({ visible, onCancel }) => {
                 onChange={handleChangeMembers}
                 optionLabelProp="label"
                 defaultValue={[]}
+                maxTagCount={4}
                 filterOption={(text, option) =>
                   option.label.toLowerCase().indexOf(text.toLowerCase()) !== -1
                 }
