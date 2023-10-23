@@ -18,10 +18,10 @@ public interface AdMemberAndRoleProjectResponse {
     @Value("#{target.status_work}")
     Integer getStatus();
 
-    @Value("#{target.role_project_id}")
-    String getIdRole();
-
-    @Value("#{target.name_role_project}")
-    String getNameRole();
+//    @Value("#{target.role_project_id}")
+//    String getIdRole();
+//
+//    @Value("#{target.name_role_project}")
+//    String getNameRole();
 
 }

@@ -44,6 +44,11 @@ public class AdProjectController {
         return new ResponseObject(adProjectService.findProjectById(id));
     }
 
+    @GetMapping("/detail-update/{id}")
+    public ResponseObject detailUpdateProject(@PathVariable("id") String id) {
+        return new ResponseObject(adProjectService.detailUpdate(id));
+    }
+
     @GetMapping("/search")
     public ResponseObject searchProjce(final AdFindProjectRequest repuest) {
         PageableObject<AdProjectReponse> listProjce = adProjectService.searchProject(repuest);

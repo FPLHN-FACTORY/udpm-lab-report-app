@@ -19,6 +19,6 @@ public class AdPotalsRoleProjectServiceImpl implements AdPotalsRoleProjectServic
 
     @Override
     public List<RoleProject> getAllRoleProjectByProjId(String id) {
-        return adPotalsRoleProjectRepository.findAllByProjectId(id);
+        return adPotalsRoleProjectRepository.findRoleProjectsByProjectId(id);
     }
 }

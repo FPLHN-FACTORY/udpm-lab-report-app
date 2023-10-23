@@ -6,6 +6,8 @@ import com.labreportapp.portalprojects.core.admin.model.request.AdCreateMemberPr
 import com.labreportapp.portalprojects.core.admin.model.request.AdCreateProjectRequest;
 import com.labreportapp.portalprojects.core.admin.model.request.AdFindProjectRequest;
 import com.labreportapp.portalprojects.core.admin.model.request.AdUpdateProjectRequest;
+import com.labreportapp.portalprojects.core.admin.model.response.AdDetailProjectCateMemberRespone;
+import com.labreportapp.portalprojects.core.admin.model.response.AdMemberAndRoleProjectCustomResponse;
 import com.labreportapp.portalprojects.core.admin.model.response.AdProjectReponse;
 import com.labreportapp.portalprojects.core.admin.repository.AdLabelProjectRepository;
 import com.labreportapp.portalprojects.core.admin.repository.AdMemberProjectRepository;
@@ -14,6 +16,7 @@ import com.labreportapp.portalprojects.core.admin.repository.AdPotalsRoleMemberP
 import com.labreportapp.portalprojects.core.admin.repository.AdPotalsRoleProjectRepository;
 import com.labreportapp.portalprojects.core.admin.repository.AdProjectCategoryRepository;
 import com.labreportapp.portalprojects.core.admin.repository.AdProjectRepository;
+import com.labreportapp.portalprojects.core.admin.service.AdMemberProjectService;
 import com.labreportapp.portalprojects.core.admin.service.AdProjectService;
 import com.labreportapp.portalprojects.core.common.base.PageableObject;
 import com.labreportapp.portalprojects.entity.Label;
@@ -88,6 +91,9 @@ public class AdProjectServiceImpl implements AdProjectService {
     @Autowired
     private AdPotalsRoleMemberProjectRepository adPotalsRoleMemberProjectRepository;
 
+    @Autowired
+    private AdMemberProjectService adMemberProjectService;
+
     @Override
     public List<Project> findAllProject(Pageable pageable) {
         return adProjectRepository.findAllProject(pageable);
@@ -95,14 +101,15 @@ public class AdProjectServiceImpl implements AdProjectService {
 
     @Override
     @CacheEvict(value = {"membersByProject"}, allEntries = true)
-    public Project createProject(@Valid AdCreateProjectRequest request) {
+    public AdProjectReponse createProject(@Valid AdCreateProjectRequest request) {
         String checkCode = adProjectRepository.getProjectByCode(request.getCode());
         if (checkCode != null) {
             throw new RestApiException(Message.CODE_PROJECT_ALREADY_EXISTS);
         }
         if (request.getStartTime() != null && request.getEndTime() != null) {
-            if (request.getEndTime() - request.getStartTime() <= 0)
+            if (request.getEndTime() - request.getStartTime() <= 0) {
                 throw new RestApiException(Message.START_TIME_MORE_THAN_END_TIME);
+            }
         } else if (request.getStartTime() == null || request.getEndTime() == null) {
             throw new RestApiException(Message.TIME_NOT_NULL);
         }
@@ -227,7 +234,35 @@ public class AdProjectServiceImpl implements AdProjectService {
             });
         });
         adPotalsRoleMemberProjectRepository.saveAll(newRoleMemberProject);
-        return newProject;
+        Optional<AdProjectReponse> projectView = adProjectRepository.findOneProjectById(newProject.getId());
+        return projectView.get();
+    }
+
+
+    @Override
+    public AdDetailProjectCateMemberRespone detailUpdate(String idProject) {
+        Optional<AdProjectReponse> projectFind = adProjectRepository.findOneProjectById(idProject);
+        if (!projectFind.isPresent()) {
+            return null;
+        }
+        List<AdMemberAndRoleProjectCustomResponse> listMemberRole = adMemberProjectService
+                .findAllMemberJoinProject(idProject);
+        List<ProjectCategory> listProjectCategory = adProjectCategoryRepository.findAllByProjectId(idProject);
+        System.err.println(listProjectCategory.toString());
+        AdProjectReponse project = projectFind.get();
+        AdDetailProjectCateMemberRespone objReturn = new AdDetailProjectCateMemberRespone();
+        objReturn.setCode(project.getCode());
+        objReturn.setName(project.getName());
+        objReturn.setBackGroundImage(project.getBackGroundImage());
+        objReturn.setBackGroundColor(project.getBackGroundColor());
+        objReturn.setStartTime(project.getStartTime());
+        objReturn.setEndTime(project.getEndTime());
+        objReturn.setProgress(project.getProgress());
+        objReturn.setStatusProject(project.getStatusProject());
+        objReturn.setDescriptions(project.getDescriptions());
+        objReturn.setListMemberRole(listMemberRole);
+        objReturn.setListCategory(listProjectCategory);
+        return objReturn;
     }
 
     @Override
@@ -315,7 +350,7 @@ public class AdProjectServiceImpl implements AdProjectService {
             rep.setEndTimeLong(endTimeLong);
         }
         Pageable pageable = PageRequest.of(rep.getPage() - 1, rep.getSize());
-        Page<AdProjectReponse> reponses = adProjectRepository.findByNameProject(rep, pageable);
+        Page<AdProjectReponse> reponses = adProjectRepository.findProjectPage(rep, pageable);
         listProject = reponses.stream().toList();
         return new PageableObject<>(reponses);
     }

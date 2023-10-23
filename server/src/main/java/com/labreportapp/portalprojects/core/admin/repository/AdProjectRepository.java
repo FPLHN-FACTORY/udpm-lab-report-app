@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author hieundph25894
@@ -99,7 +100,28 @@ public interface AdProjectRepository extends ProjectRepository {
                 OR cate.id LIKE %:#{#rep.idCategory}% )
              ORDER BY pro.last_modified_date DESC
              """, nativeQuery = true)
-    Page<AdProjectReponse> findByNameProject(@Param("rep") AdFindProjectRequest rep, Pageable page);
+    Page<AdProjectReponse> findProjectPage(@Param("rep") AdFindProjectRequest rep, Pageable page);
+
+    @Query(value = """
+            SELECT ROW_NUMBER() OVER(ORDER BY pro.last_modified_date DESC ) AS stt,
+                   pro.id,
+                   pro.name,
+                   pro.code,
+                   pro.descriptions,
+                   pro.status_project,
+                   pro.start_time,
+                   pro.end_time,
+                   pro.progress,
+                   pro.created_date,
+                   pro.background_image,
+                   pro.background_color,
+                   GROUP_CONCAT(cate.name SEPARATOR ', ') as nameCategorys
+             FROM project_category a
+             JOIN project pro on a.project_id = pro.id
+             JOIN category cate on a.category_id = cate.id
+            WHERE pro.id = :idProject
+            """, nativeQuery = true)
+    Optional<AdProjectReponse> findOneProjectById(@Param("idProject") String idProject);
 
     @Query(value = """
              SELECT pro.code FROM project pro  WHERE pro.code = :codeProject  
@@ -110,5 +132,6 @@ public interface AdProjectRepository extends ProjectRepository {
     @Query("SELECT pro.id  FROM Project pro WHERE pro.code = :codeProject AND pro.id <> :id")
     String findByIdCode(@Param("codeProject") String codeProject,
                         @Param("id") String id);
+
 
 }

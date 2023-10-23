@@ -4,7 +4,6 @@ import {
   faFilter,
   faEye,
   faPenToSquare,
-  faPlus,
   faCodeCompare,
   faCirclePlus,
   faMattressPillow,
@@ -25,8 +24,6 @@ import {
   Select,
   Row,
   Col,
-  Space,
-  DatePicker,
   Tag,
 } from "antd";
 import { useAppDispatch, useAppSelector } from "../../../app/hook";
@@ -43,6 +40,7 @@ import LoadingIndicator from "../../../helper/loading";
 import moment from "moment";
 import { convertDateLongToString } from "../../../../labreportapp/helper/util.helper";
 import { Link } from "react-router-dom";
+import { SetCategory } from "../../../app/reducer/admin/category-management/adCategorySlice.reducer";
 
 const { Option } = Select;
 const ProjectManagement = () => {
@@ -53,8 +51,6 @@ const ProjectManagement = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
-  const [dataTable, setDataTable] = useState([]);
-  const [checkAdd, setCheckAdd] = useState(false);
   const [codeSearch, setCodeSearch] = useState("");
   const [nameSearch, setNameSearch] = useState("");
   const [startTimeSearch, setStartTimeSearch] = useState(null);
@@ -68,28 +64,21 @@ const ProjectManagement = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Quản lý dự án | Portal-Projects";
-    handleSearch();
+    handleSearch(current);
     return () => {
       dispatch(SetProjectManagement([]));
     };
   }, [current]);
 
-  // useEffect(() => {
-  //   if (checkAdd) {
-  //     handleSearch();
-  //     setCheckAdd(false);
-  //   }
-  // }, [checkAdd]);
-
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Quản lý dự án | Portal-Projects";
     if (clear) {
-      handleSearch();
+      handleSearch(1);
+      setClear(false);
       return () => {
         dispatch(SetProjectManagement([]));
       };
-      setClear(false);
     }
   }, [clear]);
 
@@ -101,17 +90,16 @@ const ProjectManagement = () => {
     setEndTimeSearch("");
     setStatusProjectSearch("");
     setIdCategorySearch("");
-    fetchDataSearch();
+    fetchDataCategory();
   }, []);
 
-  const fetchDataSearch = async () => {
+  const fetchDataCategory = async () => {
     const responeGetAllCategory =
       await CategoryProjectManagementAPI.fetchAllCategory();
     setListCategorySearch(responeGetAllCategory.data.data);
+    dispatch(SetCategory(responeGetAllCategory.data.data));
   };
-
-  const handleSearch = async () => {
-    setCurrent(1);
+  const handleSearch = async (current) => {
     try {
       setLoading(true);
       let filter = {
@@ -132,23 +120,26 @@ const ProjectManagement = () => {
         statusProject: statusProjectSearch,
         idCategory: idCategorySearch,
         page: current,
-        size: 10,
+        size: 5,
       };
-
       const response = await ProjectManagementAPI.featchAll(filter);
       const responseData = response.data.data;
-      setDataTable(responseData.data);
-      console.log("aaaaaaaaaaaaaa");
-      console.log(responseData.data);
       setTotalPages(parseInt(responseData.totalPages));
       dispatch(SetProjectManagement(responseData.data));
+      if (responseData.totalPages === 1) {
+        setCurrent(1);
+      }
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      alert("Lỗi hệ thống, vui lòng F5 lại trang");
+      console.log(error);
     }
   };
 
+  const handleFind = async () => {
+    setCurrent(1);
+    await handleSearch(1);
+  };
   const handleClear = async () => {
     setCodeSearch("");
     setNameSearch("");
@@ -156,22 +147,19 @@ const ProjectManagement = () => {
     setEndTimeSearch("");
     setStatusProjectSearch("");
     setIdCategorySearch("");
-    setCurrent(0);
+    setCurrent(1);
     setClear(true);
-    await handleSearch();
   };
 
   const handleCancelModalCreateSusscess = () => {
     document.querySelector("body").style.overflowX = "hidden";
     setShowCreateModal(false);
     setShowUpdateModal(false);
-    setCheckAdd(true);
   };
   const handleCancelModalCreateFaild = () => {
     document.querySelector("body").style.overflowX = "hidden";
     setShowCreateModal(false);
     setShowUpdateModal(false);
-    setCheckAdd(false);
   };
   const handleCancelCreate = {
     handleCancelModalCreateSusscess,
@@ -197,14 +185,13 @@ const ProjectManagement = () => {
   };
 
   const data = useAppSelector(GetProjectManagement);
-  const startIndex = (current - 1) * 5;
+
   const columns = [
     {
-      title: "STT",
+      title: "#",
       dataIndex: "stt",
       key: "stt",
       sorter: (a, b) => a.stt - b.stt,
-      render: (text, record, index) => startIndex + (index + 1),
     },
 
     {
@@ -489,7 +476,7 @@ const ProjectManagement = () => {
         <div className="box-btn">
           <Button
             className="btn_filter"
-            onClick={handleSearch}
+            onClick={handleFind}
             style={{ marginRight: "15px", backgroundColor: "#E2B357" }}
           >
             <FontAwesomeIcon icon={faFilter} style={{ paddingRight: "5px" }} />{" "}

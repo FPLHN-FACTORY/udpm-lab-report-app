@@ -16,5 +16,5 @@ public interface AdPotalsRoleProjectRepository extends RoleProjectRepository {
 
     Optional<RoleProject> findFirstByRoleDefault(RoleDefault roleDefault);
 
-    List<RoleProject> findAllByProjectId(String idProject);
+    List<RoleProject> findRoleProjectsByProjectId(String idProject);
 }

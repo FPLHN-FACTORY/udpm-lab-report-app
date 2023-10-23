@@ -16,6 +16,8 @@ import lombok.ToString;
 @Setter
 public class AdMemberRoleBaseResponse {
 
+    private String idRoleMemberProject;
+
     private String idRole;
 
     private String nameRole;

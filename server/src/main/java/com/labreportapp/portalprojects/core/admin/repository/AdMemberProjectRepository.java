@@ -38,19 +38,25 @@ public interface AdMemberProjectRepository extends MemberProjectRepository {
 
     @Query(value = """
                 SELECT ROW_NUMBER() OVER(ORDER BY mp.last_modified_date DESC ) AS stt,
-                       mp.member_id AS member_id,
-                       mp.email AS email,
-                       mp.status_work AS status_work,
-                       rp.name AS name_role_project,
-                       rp.id AS role_project_id
+                 		mp.member_id AS member_id,
+                        mp.email AS email,
+                        mp.status_work AS status_work
                 FROM member_project mp
-                JOIN role_member_project rmp ON mp.id = rmp.member_project_id
-                JOIN role_project rp ON rmp.role_project_id = rp.id
-                JOIN project p ON p.id = mp.project_id
-                 WHERE p.id = :idProject
+                WHERE mp.project_id = :idProject
             """, nativeQuery = true)
     List<AdMemberAndRoleProjectResponse> findAllMemberJoinProject(@Param("idProject") String idProject);
 
+    //DISTINCT   mp.member_id AS member_id,
+//                ROW_NUMBER() OVER(ORDER BY mp.last_modified_date DESC ) AS stt,
+//                       mp.email AS email,
+//                       mp.status_work AS status_work,
+//                FROM member_project mp
+//                JOIN role_member_project rmp ON mp.id = rmp.member_project_id
+//                JOIN role_project rp ON rmp.role_project_id = rp.id
+//                JOIN project p ON p.id = mp.project_id
+//                 WHERE p.id = :idProject
+    //    rp.name AS name_role_project,
+//    rp.id AS role_project_id
     // countQuery = """
 //              SELECT COUNT(DISTINCT mp. mp.member_id)
 //                            FROM member_project mp
@@ -60,7 +66,7 @@ public interface AdMemberProjectRepository extends MemberProjectRepository {
 //                             WHERE p.id = :idProject
 //            """
     @Query(value = """
-             SELECT ROW_NUMBER() OVER(ORDER BY mp.last_modified_date DESC ) AS STT ,
+             SELECT ROW_NUMBER() OVER(ORDER BY mp.last_modified_date DESC ) AS stt ,
                      mp.id,
                      mp.member_id,
                      mp.project_id,

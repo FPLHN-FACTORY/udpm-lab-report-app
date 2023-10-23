@@ -26,10 +26,7 @@ public class AdMemberAndRoleProjectCustomResponse {
 
     private Integer status;
 
-        private String idRole;
-
-    private String nameRole;
-   // private List<AdMemberRoleBaseResponse> listRole;
+    private List<AdMemberRoleBaseResponse> listRole;
 
     private String picture;
 

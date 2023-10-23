@@ -8,8 +8,11 @@ import com.labreportapp.portalprojects.core.admin.model.request.AdUpdateMemberPr
 import com.labreportapp.portalprojects.core.admin.model.response.AdMemberAndRoleProjectCustomResponse;
 import com.labreportapp.portalprojects.core.admin.model.response.AdMemberAndRoleProjectResponse;
 import com.labreportapp.portalprojects.core.admin.model.response.AdMemberProjectReponse;
+import com.labreportapp.portalprojects.core.admin.model.response.AdMemberRoleBaseResponse;
+import com.labreportapp.portalprojects.core.admin.model.response.AdRoleMemberProjectDetailResponse;
 import com.labreportapp.portalprojects.core.admin.repository.AdMemberProjectRepository;
 import com.labreportapp.portalprojects.core.admin.service.AdMemberProjectService;
+import com.labreportapp.portalprojects.core.admin.service.AdPotalsRoleMemberProjectService;
 import com.labreportapp.portalprojects.entity.MemberProject;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
@@ -36,6 +39,9 @@ public class AdMemberProjectServiceImpl implements AdMemberProjectService {
     @Autowired
     private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
 
+    @Autowired
+    private AdPotalsRoleMemberProjectService adPotalsRoleMemberProjectService;
+
     private FormUtils formUtils = new FormUtils();
 
     @Override
@@ -55,6 +61,8 @@ public class AdMemberProjectServiceImpl implements AdMemberProjectService {
         if (listMemberId.size() == 0) {
             return listReturn;
         }
+        List<AdRoleMemberProjectDetailResponse> listMemberRole = adPotalsRoleMemberProjectService
+                .getAllRoleMemberProjByIdProj(idProject);
         List<SimpleResponse> listCall = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idList);
         listMemberId.forEach(db -> {
             listCall.forEach(call -> {
@@ -62,13 +70,22 @@ public class AdMemberProjectServiceImpl implements AdMemberProjectService {
                     AdMemberAndRoleProjectCustomResponse obj = new AdMemberAndRoleProjectCustomResponse();
                     obj.setStt(db.getStt());
                     obj.setEmail(db.getEmail());
-                    obj.setIdRole(db.getIdRole());
-                    obj.setNameRole(db.getNameRole());
+                    List<AdMemberRoleBaseResponse> listRole = new ArrayList<>();
                     obj.setStatus(db.getStatus());
                     obj.setMemberId(db.getMemberId());
                     obj.setName(call.getName());
                     obj.setUserName(call.getUserName());
                     obj.setPicture(call.getPicture());
+                    listMemberRole.forEach(role -> {
+                        if (db.getMemberId().equals(role.getMemberId())) {
+                            AdMemberRoleBaseResponse roleDetail = new AdMemberRoleBaseResponse();
+                            roleDetail.setIdRoleMemberProject(role.getIdRoleMemberProject());
+                            roleDetail.setIdRole(role.getRoleProjectId());
+                            roleDetail.setNameRole(role.getNameRole());
+                            listRole.add(roleDetail);
+                        }
+                    });
+                    obj.setListRole(listRole);
                     listReturn.add(obj);
                 }
             });

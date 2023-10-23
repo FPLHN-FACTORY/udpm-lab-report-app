@@ -28,7 +28,6 @@ import { AdPotalsMemberFactoryAPI } from "../../../../api/admin/member-factory/A
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 const { TextArea } = Input;
-const options = [];
 
 const ModalCreateProject = ({ visible, onCancel }) => {
   const [code, setCode] = useState("");
@@ -44,7 +43,6 @@ const ModalCreateProject = ({ visible, onCancel }) => {
   const [errorCategorys, setErrorCategorys] = useState("");
   const [listCategorys, setListCategorys] = useState([]);
   const [listCategorysChange, setListCategorysChange] = useState([]);
-  const [listCategoryName, setListCategoryName] = useState("");
   const [listCategoryProjects, setListCategoryProjects] = useState([]);
   const [listMembers, setListMembers] = useState([]);
   const [listMembersChange, setListMembersChange] = useState([]);
@@ -83,7 +81,6 @@ const ModalCreateProject = ({ visible, onCancel }) => {
         setListMembersChange([]);
         setListCategoryProjects([]);
         setListMemberProjects([]);
-        setListCategoryName("");
       };
     }
   }, [visible]);
@@ -100,8 +97,6 @@ const ModalCreateProject = ({ visible, onCancel }) => {
     try {
       await AdPotalsRoleConfigAPI.getAllRoleConfig().then((response) => {
         setListRoleConfig(response.data.data);
-        console.log("role config ");
-        console.log(response.data.data);
       });
     } catch (error) {
       console.log(error);
@@ -175,6 +170,7 @@ const ModalCreateProject = ({ visible, onCancel }) => {
       console.log(error);
     }
   };
+
   const handleDateChange = (e) => {
     if (e != null) {
       setStartTime(
@@ -186,6 +182,7 @@ const ModalCreateProject = ({ visible, onCancel }) => {
       setEndTime(null);
     }
   };
+
   const create = () => {
     let check = 0;
     if (code.trim() === "") {
@@ -234,11 +231,7 @@ const ModalCreateProject = ({ visible, onCancel }) => {
         (respone) => {
           message.success("Thêm thành công !");
           let data = respone.data.data;
-          let dataAddTable = {
-            ...data,
-            stt: 1,
-          };
-          dispatch(CreateProject(dataAddTable));
+          dispatch(CreateProject(data));
           cancelSuccess();
         },
         (error) => {

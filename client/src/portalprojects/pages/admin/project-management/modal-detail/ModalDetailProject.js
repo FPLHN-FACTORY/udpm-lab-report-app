@@ -75,7 +75,7 @@ const ModalDetailProject = ({ visible, onCancel, idProject }) => {
   const data = listData;
   const columns = [
     {
-      title: "STT",
+      title: "#",
       dataIndex: "stt",
       key: "stt",
     },
@@ -115,17 +115,26 @@ const ModalDetailProject = ({ visible, onCancel, idProject }) => {
     },
     {
       title: "Vai trò",
-      dataIndex: "idRole",
-      key: "idRole",
+      dataIndex: "listRoleSelect",
+      key: "listRoleSelect",
       render: (text, record) =>
-        listRoleProject.length > 0 ? (
-          <Select defaultValue={text}>
-            {listRoleProject.map((item) => (
-              <Option value={item.id}>{item.name}</Option>
-            ))}
-          </Select>
+        record.listRole != null ? (
+          <Select
+            mode="multiple"
+            placeholder="Chọn vai trò"
+            value={record.listRole.map((item) => item.nameRole)}
+            style={{
+              width: "100%",
+            }}
+            key={record.idRoleMemberProject}
+            options={record.listRole.map((item) => ({
+              value: item.idRole,
+              label: item.nameRole,
+              disabled: true,
+            }))}
+          />
         ) : (
-          "Không có vai trò để chọn"
+          "Chưa có vai trò "
         ),
     },
   ];

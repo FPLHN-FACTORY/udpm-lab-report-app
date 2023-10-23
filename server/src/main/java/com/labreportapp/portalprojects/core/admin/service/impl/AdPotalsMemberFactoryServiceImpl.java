@@ -36,11 +36,11 @@ public class AdPotalsMemberFactoryServiceImpl implements AdPotalsMemberFactorySe
         if (listMemberFactory.size() == 0) {
             return null;
         }
-        if (labReportAppSession.getUserId() != null && !labReportAppSession.equals("")) {
-            listMemberFactory = listMemberFactory.stream()
-                    .filter(member -> !member.getMemberId().equals(labReportAppSession.getUserId()))
-                    .collect(Collectors.toList());
-        }
+//        if (labReportAppSession.getUserId() != null && !labReportAppSession.equals("")) {
+//            listMemberFactory = listMemberFactory.stream()
+//                    .filter(member -> !member.getMemberId().equals(labReportAppSession.getUserId()))
+//                    .collect(Collectors.toList());
+//        }
         List<String> idList = listMemberFactory.stream()
                 .map(MemberFactory::getMemberId)
                 .filter(Objects::nonNull)

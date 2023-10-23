@@ -11,17 +11,14 @@ import {
   Table,
   Spin,
   message,
+  DatePicker,
 } from "antd";
 import { useEffect, useState } from "react";
-import moment from "moment";
 import "./styleModalUpdateProject.css";
 import { useAppDispatch, useAppSelector } from "../../../../app/hook";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { CommonAPI } from "../../../../api/commonAPI";
 import { CategoryProjectManagementAPI } from "../../../../api/admin/project-management/categoryProjectManagement.api";
 import { ProjectManagementAPI } from "../../../../api/admin/project-management/projectManagement.api";
-import { MemberProjectManagementAPI } from "../../../../api/admin/project-management/memberProjectManagement.api";
 import { UpdateProject } from "../../../../app/reducer/admin/project-management/projectManagementSlide.reducer";
 import {
   SetCategoryProject,
@@ -32,7 +29,11 @@ import {
   GetMemberProject,
 } from "../../../../app/reducer/admin/member-project-management/memberProjectManagement.reduce";
 import { SearchOutlined } from "@ant-design/icons";
-
+import { AdPotalsRoleProjectAPI } from "../../../../api/admin/role-project/AdPotalsRoleProject.api";
+import dayjs from "dayjs";
+import { AdPotalsMemberFactoryAPI } from "../../../../api/admin/member-factory/AdPotalsMemberFactory.api";
+import { GetCategory } from "../../../../app/reducer/admin/category-management/adCategorySlice.reducer";
+const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 const { Option } = Select;
 const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
@@ -42,44 +43,44 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
   const [name, setName] = useState("");
   const [errorName, setErrorName] = useState("");
   const [startTime, setStartTime] = useState("");
-  const [errorStartTime, setErrorStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
-  const [errorEndTime, setErrorEndTime] = useState("");
+  const [errorTime, setErrorTime] = useState("");
   const [descriptions, setDescriptions] = useState("");
   const [errorDescriptions, setErrorDescriptions] = useState("");
   const [errorMembers, setErrorMembers] = useState("");
   const [errorCategorys, setErrorCategorys] = useState("");
   const [listCategorys, setListCategorys] = useState([]); //getAll
-  const [listCategoryChange, setListCategoryChange] = useState([]); //change
+  const [listCategorysChange, setListCategorysChange] = useState([]);
   const [listCategoryProjects, setListCategoryProjects] = useState([]); // add
   const [listCategoryNotJoin, setListCategoryNotJoin] = useState([]);
   const [listCategoryJoin, setListCategoryJoin] = useState([]);
-  const [listMember, setListMembers] = useState([]); //getAll
+  const [listMember, setListMember] = useState([]); //getAll
   const [listMemberChange, setListMemberChange] = useState([]); //change
   const [listMemberProjects, setListMemberProjects] = useState([]); //add
   const [listMemberNotJoin, setListMemberNotJoin] = useState([]);
   const [listMemberJoin, setListMemberJoin] = useState([]);
   const [loading, setLoading] = useState(false);
   const [listUpdateMember, setListUpdateMember] = useState([]); // listMemberAll update
+
+  const [listRoleProject, setListRoleProject] = useState([]);
+  const dataCategory = useAppSelector(GetCategory);
   useEffect(() => {
     if (idProject !== null && idProject !== "" && visible === true) {
-      setListCategoryChange([]);
+      setListCategorysChange([]);
       setListMemberChange([]);
       setListUpdateMember([]);
       setListMemberProjects([]);
-      fetchData();
+      featchRoleProject(idProject);
+      featChMultiSelect();
+      featchProject();
     }
   }, [idProject, visible]);
-
-  useEffect(() => {
-    featChMultiSelect();
-  }, []);
 
   useEffect(() => {
     if (visible) {
       featMemberAndCaregoryAddProject();
     }
-  }, [listCategoryChange, listMemberChange]);
+  }, [listCategorysChange, listMemberChange]);
 
   const cancelUpdateSuccess = () => {
     onCancel.handleCancelModalCreateSusscess();
@@ -92,124 +93,86 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
     setListMemberChange(idMember);
   };
   const handleChangeCategorys = (idCategory) => {
-    setListCategoryChange(idCategory);
+    setListCategorysChange(idCategory);
   };
 
   const featChMultiSelect = async () => {
+    setLoading(true);
     try {
-      await CommonAPI.fetchAll().then((respone) => {
-        setListMembers(respone.data);
-      });
-      await CategoryProjectManagementAPI.fetchAllCategory().then((respone) => {
-        setListCategorys(respone.data.data);
+      await AdPotalsMemberFactoryAPI.getAllMemberActive().then((respone) => {
+        setListMember(respone.data.data);
       });
     } catch (error) {
-      alert("Vui lòng load lại trang");
+      console.log(error);
     }
   };
 
-  const fetchData = async () => {
-    setLoading(true);
+  const featchRoleProject = async (idProject) => {
     try {
-      await ProjectManagementAPI.detail(idProject).then((response) => {
+      await AdPotalsRoleProjectAPI.getAllRoleProjectByProjId(idProject).then(
+        (response) => {
+          setListRoleProject(response.data.data);
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const featchProject = async () => {
+    try {
+      await ProjectManagementAPI.detailUpdate(idProject).then((response) => {
         let obj = response.data.data;
         setCode(obj.code);
         setName(obj.name);
         setStartTime(obj.startTime);
         setEndTime(obj.endTime);
         setDescriptions(obj.descriptions);
-      });
-      const responeListCategoryProject =
-        await CategoryProjectManagementAPI.fetchCategoryWithIdProject(
-          idProject
+        setListMemberChange(
+          obj.listMemberRole != null &&
+            obj.listMemberRole.map((i) => i.memberId)
         );
-      const listCategoryProject = responeListCategoryProject.data.data;
-      const listCategoryJoin = listCategorys
-        .filter((obj1) =>
-          listCategoryProject.some((obj2) => obj2.idCategory === obj1.id)
-        )
-        .map((obj1) => {
-          const matchedItem = listCategoryProject.find(
-            (obj2) => obj2.idCategory === obj1.id
-          );
-          return { ...obj1, ...matchedItem };
-        });
-      setListCategoryJoin(listCategoryJoin);
-      dispatch(SetCategoryProject(listCategoryJoin));
-      const listCategoryNotJoin = await listCategorys.filter((obj1) => {
-        return !listCategoryJoin.some((obj2) => obj2.idCategory === obj1.id);
+        setListCategorysChange(
+          obj.listCategory != null && obj.listCategory.map((i) => i.categoryId)
+        );
       });
-      setListCategoryNotJoin(listCategoryNotJoin);
-
-      const responeListMemberProject =
-        await MemberProjectManagementAPI.fetchAll(idProject);
-      const listMemberProject = await responeListMemberProject.data.data;
-      const listMemberJoin = listMember
-        .filter((obj1) =>
-          listMemberProject.some((obj2) => obj2.memberId === obj1.id)
-        )
-        .map((obj1) => {
-          const matchedItem = listMemberProject.find(
-            (obj2) => obj2.memberId === obj1.id
-          );
-          return {
-            ...obj1,
-            memberId: matchedItem.memberId,
-            role: matchedItem.role,
-            projectId: matchedItem.projectId,
-            statusWork: matchedItem.status,
-          };
-        });
-      setListMemberJoin(listMemberJoin);
-      dispatch(SetMemberProject(listMemberJoin));
-      const listMemberNotJoin = listMember.filter((obj1) => {
-        return !listMemberJoin.some((obj2) => obj2.memberId === obj1.id);
-      });
-      setListMemberNotJoin(
-        listMemberNotJoin.map((obj) => {
-          return obj;
-        })
-      );
-      setTimeout(() => {
-        setLoading(false);
-      }, 500);
-    } catch (err) {
-      alert("Lỗi hệ thống, vui lòng ấn F5 để tải lại trang");
+    } catch (error) {
+      console.log(error);
     }
   };
 
   const featMemberAndCaregoryAddProject = async () => {
     try {
-      const listMemberJoinCreate = await listMember
-        .filter((obj1) => listMemberChange.some((obj2) => obj1.id === obj2))
+      console.log("changer");
+      console.log(listMember);
+      const listMemberJoinCreate = listMember
+        .filter((obj1) =>
+          listMemberChange.some((obj2) => obj1.memberId === obj2)
+        )
         .map((obj1) => {
           const matchedItem = listMemberChange.find(
-            (obj2) => obj2.id === obj1.id
+            (obj2) => obj2 === obj1.memberId
           );
-          return {
-            ...obj1,
-            memberId: matchedItem,
-            role: "0",
-            projectId: idProject,
-            statusWork: "0",
-          };
+          return { ...obj1, ...matchedItem };
         });
-      const listMemberAdd = listMemberJoinCreate.map((member) => {
-        return {
-          memberId: member.id,
-          email: member.email,
-          role: "0",
-          statusWork: member.statusWork,
-          code: member.userName,
-          name: member.name,
-          image: member.picture,
-          username: member.userName,
-          id: member.id,
-        };
-      });
-      setListUpdateMember(listMemberAdd);
-      setListMemberProjects(listMemberAdd);
-      setListCategoryProjects(listCategoryChange);
+      console.log("memebrer role");
+      console.log(listMemberJoinCreate);
+      // const roleDefault = listRoleProject.find(
+      //   (item) => item.roleDefault === "DEFAULT"
+      // );
+      // const listMemberAdd = listMemberJoinCreate.map((member) => {
+      //   return {
+      //     memberId: member.memberId,
+      //     email: member.email,
+      //     role:
+      //       listRoleProject.length > 0
+      //         ? [roleDefault !== undefined && roleDefault.name]
+      //         : ["Không có vai trò mặc định, vui lòng chọn vai trò khác"],
+      //     statusWork: member.statusWork,
+      //   };
+      // });
+      setListUpdateMember(listMemberJoinCreate);
+      setListMemberProjects(listMemberJoinCreate);
+      setListCategoryProjects(listCategorysChange);
     } catch (error) {
       alert("Hệ thống lỗi, vui lòng F5 lại trang");
     }
@@ -222,11 +185,7 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
         let newData = {
           memberId: record.memberId,
           email: record.email,
-          role: value,
-          statusWork: record.statusWork,
-          code: record.userName,
-          name: record.name,
-          image: record.picture,
+          role: [...value],
         };
         return { ...record, ...newData };
       }
@@ -235,6 +194,17 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
     setListUpdateMember(updatedListInfo);
   };
 
+  const handleDateChange = (e) => {
+    if (e != null) {
+      setStartTime(
+        dayjs(e[0]).set({ hour: 0, minute: 0, second: 0 }).valueOf()
+      );
+      setEndTime(dayjs(e[1]).set({ hour: 0, minute: 0, second: 0 }).valueOf());
+    } else {
+      setStartTime(null);
+      setEndTime(null);
+    }
+  };
   const update = () => {
     let check = 0;
     if (code === "") {
@@ -249,25 +219,19 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
     } else {
       setErrorName("");
     }
-    if (startTime === "") {
-      setErrorStartTime("Thời gian bắt đầu không được để trống");
+    if (startTime == null && endTime == null) {
+      setErrorTime("Thời gian không được để trống");
       check++;
     } else {
-      setErrorStartTime("");
+      setErrorTime("");
     }
-    if (endTime === "") {
-      setErrorEndTime("Thời gian kết thúc không được để trống");
+    if (startTime === null && endTime !== null) {
+      setErrorTime("Thời gian bắt đầu không được để trống");
       check++;
-    } else {
-      setErrorEndTime("");
     }
-    if (new Date(startTime) > new Date(endTime)) {
-      setErrorStartTime(
-        "Thời gian bắt đầu không được lớn hơn thời gian kết thúc"
-      );
+    if (endTime === null && startTime !== null) {
+      setErrorTime("Thời gian kết thúc không được để trống");
       check++;
-    } else {
-      setErrorStartTime("");
     }
     if (descriptions.trim === "") {
       setErrorDescriptions("Mô tả không được để trống");
@@ -277,19 +241,18 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
         setErrorDescriptions("Mô tả không vượt quá 1000 ký tự");
         check++;
       } else {
-        setErrorStartTime("");
+        setErrorDescriptions("");
       }
     }
     if (check === 0) {
-      featMemberAndCaregoryAddProject();
       let projectNew = {
         code: code,
         name: name,
         descriptions: descriptions,
-        startTime: moment(startTime).valueOf(),
-        endTime: moment(endTime).valueOf(),
+        startTime: startTime,
+        endTime: endTime,
         listMembers: listUpdateMember,
-        listCategorysId: listCategoryChange,
+        listCategorysId: listCategorysChange,
       };
       ProjectManagementAPI.updateProject(projectNew, idProject).then(
         (respone) => {
@@ -305,99 +268,17 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
     }
   };
 
-  const setStt = (current) => {
-    return current;
-  };
-  const dataCategorys = useAppSelector(GetCategoryProject);
-  const columnDataCategory = [
+  const columns = [
     {
-      title: "STT",
-      dataIndex: "stt",
-      key: "stt",
-      width: "20%",
-    },
-    { title: "Tên", dataIndex: "name", key: "name", width: "60%" },
-  ];
-
-  const dataMembers = useAppSelector(GetMemberProject);
-
-  const columnDataMembers = [
-    {
-      title: "STT",
-      dataIndex: "stt",
-      key: "stt",
-      width: 20,
-    },
-    {
-      title: "Mã",
-      dataIndex: "userName",
-      key: "userName",
-      width: 10,
-      sorter: (a, b) => a.userName.localeCompare(b.userName),
-    },
-    {
-      title: "Thành viên",
-      dataIndex: "name",
-      key: "name",
-      width: "100%",
-      sorter: (a, b) => a.name.localeCompare(b.name),
-      render: (text, record) => {
-        return (
-          <div>
-            <Image.PreviewGroup>
-              <Image
-                src={record.picture}
-                alt="Avatar"
-                width={25}
-                height={25}
-                marginRight={-5}
-                className="avatarMember"
-              />
-            </Image.PreviewGroup>
-            <span style={{ paddingLeft: "8px" }}>{record.name}</span>
-          </div>
-        );
-      },
-    },
-    {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
-      width: 280,
-    },
-    {
-      title: "Vai trò",
-      dataIndex: "role",
-      key: "role",
-      render: (text, record) => (
-        <Select
-          style={{ width: "100%" }}
-          defaultValue={`${text}`}
-          onChange={(value) => handleRoleChange(record.memberId, value)}
-        >
-          <Option value="0">Quản lý</Option>
-          <Option value="1">Trưởng nhóm</Option>
-          <Option value="2">Dev</Option>
-          <Option value="3">Tester</Option>
-        </Select>
-      ),
-      width: "13%",
-    },
-  ];
-
-  const columnsMemberAdd = [
-    {
-      title: "STT",
+      title: "#",
       dataIndex: "stt",
       key: "stt",
       render: (text, record, index) => index + 1,
-      width: "7%",
     },
     {
       title: "Mã",
       dataIndex: "userName",
       key: "userName",
-      width: 50,
       sorter: (a, b) => a.userName.localeCompare(b.userName),
     },
     {
@@ -422,20 +303,18 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
           </div>
         );
       },
-      width: "40%",
     },
     {
       title: "Email",
       dataIndex: "email",
       key: "email",
-      width: "20%",
       filterDropdown: ({
         setSelectedKeys,
         selectedKeys,
         confirm,
         clearFilters,
       }) => (
-        <div style={{ padding: 8 }}>
+        <div style={{ padding: "8px" }}>
           <Input
             placeholder="Tìm kiếm"
             value={selectedKeys[0]}
@@ -443,18 +322,18 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
               setSelectedKeys(e.target.value ? [e.target.value] : [])
             }
             onPressEnter={confirm}
-            style={{ width: 188, marginBottom: 8, display: "block" }}
+            style={{ width: 188, marginBottom: "8px", display: "block" }}
           />
           <Button
             type="primary"
             className="btn_search_member"
             onClick={confirm}
             size="small"
-            style={{ width: 90, marginRight: 8 }}
+            style={{ width: "90px", marginRight: "8px" }}
           >
             Tìm
           </Button>
-          <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
+          <Button onClick={clearFilters} size="small" style={{ width: "90px" }}>
             Đặt lại
           </Button>
         </div>
@@ -469,20 +348,62 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
     },
     {
       title: "Vai trò",
-      dataIndex: "role",
-      key: "role",
-      width: "10%",
+      dataIndex: "roleCustome",
+      key: "roleCustome",
+      filterDropdown: ({
+        setSelectedKeys,
+        selectedKeys,
+        confirm,
+        clearFilters,
+      }) => (
+        <div style={{ padding: "8px" }}>
+          <Select
+            placeholder="Tìm kiếm"
+            value={selectedKeys[0]}
+            onChange={(value) => setSelectedKeys(value ? [value] : [])}
+            onPressEnter={confirm}
+            style={{ width: 188, marginBottom: "8px", display: "block" }}
+          >
+            {listRoleProject.length === 0
+              ? "Không có vai trò để chọn"
+              : listRoleProject.map((item) => {
+                  <Option value={item.id}>{item.name}</Option>;
+                })}
+          </Select>
+          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <Button
+              type="primary"
+              onClick={confirm}
+              size="small"
+              style={{ marginRight: "8px" }}
+            >
+              Tìm
+            </Button>
+            <Button onClick={clearFilters} size="small">
+              Đặt lại
+            </Button>
+          </div>
+        </div>
+      ),
+      filterIcon: (filtered) => (
+        <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+      ),
+      onFilter: (value, record) => record.role === value,
+      sorter: (a, b) => a.role.localeCompare(b.role),
       render: (text, record) => (
         <Select
-          style={{ width: "100%" }}
-          defaultValue={`0`}
-          onChange={(value) => handleRoleChange(record.memberId, value)}
-        >
-          <Option value="0">Quản lý</Option>
-          <Option value="1">Trưởng nhóm</Option>
-          <Option value="2">Dev</Option>
-          <Option value="3">Tester</Option>
-        </Select>
+          mode="multiple"
+          placeholder="Chọn vai trò"
+          // value={record.listRole.map((item) => item.idRole)}
+          style={{
+            width: "100%",
+          }}
+          key={record.idRoleMemberProject}
+          options={listRoleProject.map((item) => ({
+            value: item.id,
+            label: item.name,
+          }))}
+        />
       ),
     },
   ];
@@ -492,8 +413,9 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
       <Modal
         visible={visible}
         onCancel={cancelUpdateFaild}
-        width={750}
+        width={1150}
         footer={null}
+        style={{ top: "53px" }}
       >
         {" "}
         <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
@@ -534,58 +456,44 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
               <span className="error">{errorName}</span>
             </Col>
           </Row>
-          <Row gutter={16} style={{ marginBottom: "15px" }}>
+          <Row gutter={24} style={{ marginBottom: "15px" }}>
             <Col span={12}>
-              <span>
+              <span className="notBlank">(*) </span>
+              <span>Thời gian:</span> <br />
+              <RangePicker
+                style={{ width: "100%" }}
+                format="YYYY-MM-DD"
+                value={[
+                  startTime ? dayjs(startTime) : null,
+                  endTime ? dayjs(endTime) : null,
+                ]}
+                onChange={(e) => {
+                  handleDateChange(e);
+                }}
+              />
+              <span className="error">{errorTime}</span>
+            </Col>
+            <Col span={12}>
+              <div style={{ width: "100%" }}>
                 {" "}
-                <span className="notBlank">*</span>Thời gian bắt đầu:
-              </span>{" "}
-              <br />
-              <Input
-                value={moment(startTime).format("YYYY-MM-DD")}
-                onChange={(e) => {
-                  setStartTime(e.target.value);
-                }}
-                type="date"
-              />
-              <span className="error">{errorStartTime}</span>
-            </Col>
-            <Col span={12}>
-              {" "}
-              <span className="notBlank">*</span>
-              <span>Thời gian kết thúc:</span> <br />
-              <Input
-                value={moment(endTime).format("YYYY-MM-DD")}
-                onChange={(e) => {
-                  setEndTime(e.target.value);
-                }}
-                type="date"
-              />
-              <span className="error">{errorEndTime}</span>
-            </Col>
-          </Row>
-          <Row style={{ marginBottom: "15px" }}>
-            <div style={{ width: "100%" }}>
-              <span>Thể loại:</span>
-              {listCategoryNotJoin.length > 0 ? (
+                <span className="notBlank">(*) </span>
+                <span>Thể loại:</span>
                 <Select
                   mode="multiple"
                   placeholder="Thêm thể loại"
-                  dropdownMatchSelectWidth={false}
                   style={{
                     width: "100%",
                     height: "auto",
                   }}
-                  value={listCategoryChange}
+                  value={listCategorysChange}
                   onChange={handleChangeCategorys}
                   optionLabelProp="label"
-                  defaultValue={[]}
                   filterOption={(text, option) =>
                     option.label.toLowerCase().indexOf(text.toLowerCase()) !==
                     -1
                   }
                 >
-                  {listCategoryNotJoin.map((record) => (
+                  {dataCategory.map((record) => (
                     <Option
                       label={record.name}
                       value={record.id}
@@ -597,56 +505,20 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
                     </Option>
                   ))}
                 </Select>
-              ) : (
-                <span> Đã có tất cả thể loại</span>
-              )}
-              <Table
-                dataSource={dataCategorys.map((item, index) => ({
-                  ...item,
-                  stt: setStt(index + 1),
-                }))}
-                rowKey="id"
-                columns={columnDataCategory}
-                pagination={{
-                  pageSize: 5,
-                  showSizeChanger: false,
-                  size: "small",
-                }}
-                className="table_category_update"
-              />
-              <span
-                className="error"
-                style={{ display: "block", marginTop: "2px" }}
-              >
-                {errorCategorys}
-              </span>
-            </div>
+                <span
+                  className="error"
+                  style={{ display: "block", marginTop: "2px" }}
+                >
+                  {errorCategorys}
+                </span>
+              </div>
+            </Col>
           </Row>
+
           <Row style={{ marginBottom: "15px" }}>
             <span style={{ fontSize: "16px", fontWeight: 500 }}>
               Danh sách thành viên đang tham gia dự án:
             </span>
-
-            {loading ? (
-              <div className="loading-overlay">
-                <Spin size="large" />
-              </div>
-            ) : (
-              <Table
-                dataSource={dataMembers.map((item, index) => ({
-                  ...item,
-                  stt: setStt(index + 1),
-                }))}
-                rowKey="id"
-                columns={columnDataMembers}
-                pagination={{
-                  pageSize: 5,
-                  showSizeChanger: false,
-                  size: "small",
-                }}
-                className="table_member_update"
-              />
-            )}
             <span
               className="error"
               style={{ display: "block", marginTop: "2px" }}
@@ -654,68 +526,70 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
               {errorMembers}
             </span>
           </Row>
-          <Row style={{ marginBottom: "10px" }}>
+          <Row style={{ marginBottom: "15px" }}>
             <div style={{ width: "100%" }}>
-              {" "}
-              {listMemberNotJoin.length > 0 ? (
-                <Select
-                  mode="multiple"
-                  placeholder="Thêm thành viên"
-                  dropdownMatchSelectWidth={false}
-                  style={{
-                    width: "100%",
-                    height: "auto",
-                  }}
-                  value={listMemberChange}
-                  onChange={handleChangeMembers}
-                  optionLabelProp="label"
-                  defaultValue={[]}
-                  filterOption={(text, option) =>
-                    option.label.toLowerCase().indexOf(text.toLowerCase()) !==
-                    -1
-                  }
-                >
-                  {listMemberNotJoin.map((member) => (
-                    <Option
-                      label={member.email}
-                      value={member.id}
-                      key={member.id}
-                    >
-                      <Tooltip title={member.email}>
-                        <Space>
-                          <Image.PreviewGroup>
-                            <Image
-                              src={member.picture}
-                              alt="Avatar"
-                              width={25}
-                              height={25}
-                              className="avatarMember"
-                            />
-                          </Image.PreviewGroup>
-                          {member.name +
-                            " " +
-                            member.code +
-                            " (" +
-                            member.email +
-                            ")"}
-                          {}
-                        </Space>
-                      </Tooltip>
-                    </Option>
-                  ))}
-                </Select>
-              ) : (
-                <span> Tất cả thành viên đã tham gia dự án</span>
-              )}
+              <span>Thành viên:</span>
+              <Select
+                mode="multiple"
+                placeholder="Thêm thành viên"
+                style={{
+                  width: "100%",
+                  height: "auto",
+                }}
+                value={listMemberChange}
+                onChange={handleChangeMembers}
+                optionLabelProp="label"
+                filterOption={(text, option) =>
+                  option.label.toLowerCase().indexOf(text.toLowerCase()) !== -1
+                }
+              >
+                {listMember.map((member) => (
+                  <Option
+                    label={member.email}
+                    value={member.memberId}
+                    key={member.id}
+                  >
+                    <Tooltip title={member.email}>
+                      <Space>
+                        <Image.PreviewGroup>
+                          <Image
+                            src={
+                              member.picture ||
+                              "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                            }
+                            alt="Avatar"
+                            width={25}
+                            height={25}
+                            className="avatarMember"
+                          />
+                        </Image.PreviewGroup>
+                        {member.name +
+                          " " +
+                          member.userName +
+                          " (" +
+                          member.email +
+                          ")"}
+                        {}
+                      </Space>
+                    </Tooltip>
+                  </Option>
+                ))}{" "}
+              </Select>
+              <span
+                className="error"
+                style={{ display: "block", marginTop: "2px" }}
+              >
+                {errorMembers}
+              </span>
             </div>
-          </Row>{" "}
+          </Row>
           {listMemberProjects.length > 0 && (
             <Row>
               {" "}
               <Col span={24}>
                 <Table
                   className="table-member-management"
-                  columns={columnsMemberAdd}
+                  columns={columns}
                   dataSource={listMemberProjects}
                   rowKey="id"
                 />
