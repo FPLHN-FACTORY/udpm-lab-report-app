@@ -11,20 +11,21 @@ import {
   Tooltip,
   Table,
   message,
+  DatePicker,
 } from "antd";
 import "./styleModalCreateProject.css";
 import { useEffect, useState } from "react";
-import moment from "moment";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAppDispatch } from "../../../../app/hook";
 import { ProjectManagementAPI } from "../../../../api/admin/project-management/projectManagement.api";
 import { CreateProject } from "../../../../app/reducer/admin/project-management/projectManagementSlide.reducer";
-import { CommonAPI } from "../../../../api/commonAPI";
 import LoadingIndicator from "../../../../helper/loading";
 import { CategoryProjectManagementAPI } from "../../../../api/admin/project-management/categoryProjectManagement.api";
 import { SearchOutlined } from "@ant-design/icons";
-
+import dayjs from "dayjs";
+import { AdPotalsRoleConfigAPI } from "../../../../api/admin/role-config/AdPotalsRoleConfig.api";
+import { AdPotalsMemberFactoryAPI } from "../../../../api/admin/member-factory/AdPotalsMemberFactory.api";
+const { RangePicker } = DatePicker;
 const { Option } = Select;
 const { TextArea } = Input;
 
@@ -33,21 +34,20 @@ const ModalCreateProject = ({ visible, onCancel }) => {
   const [errorCode, setErrorCode] = useState("");
   const [name, setName] = useState("");
   const [errorName, setErrorName] = useState("");
-  const [startTime, setStartTime] = useState("");
-  const [errorStartTime, setErrorStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
-  const [errorEndTime, setErrorEndTime] = useState("");
+  const [startTime, setStartTime] = useState(null);
+  const [errorTime, setErrorTime] = useState("");
+  const [endTime, setEndTime] = useState(null);
   const [descriptions, setDescriptions] = useState("");
   const [errorDescriptions, setErrorDescriptions] = useState("");
-  const [errorMembers, setErrorMembers] = useState("");
+
   const [errorCategorys, setErrorCategorys] = useState("");
   const [listCategorys, setListCategorys] = useState([]);
   const [listCategorysChange, setListCategorysChange] = useState([]);
-  const [listCategoryName, setListCategoryName] = useState("");
-  const [listCategoryProjects, setListCategoryProjects] = useState([]);
   const [listMembers, setListMembers] = useState([]);
   const [listMembersChange, setListMembersChange] = useState([]);
   const [listMemberProjects, setListMemberProjects] = useState([]);
+
+  const [listRoleConfig, setListRoleConfig] = useState([]);
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
 
@@ -64,21 +64,21 @@ const ModalCreateProject = ({ visible, onCancel }) => {
 
   useEffect(() => {
     if (visible) {
+      featchRoleConfig();
       return () => {
         setCode("");
         setName("");
-        setStartTime("");
-        setEndTime("");
+        setStartTime(null);
+        setEndTime(null);
+        setErrorCode("");
         setDescriptions("");
+        setErrorCategorys("");
         setErrorDescriptions("");
-        setErrorEndTime("");
-        setErrorStartTime("");
+        setErrorTime("");
         setErrorName();
         setListCategorysChange([]);
         setListMembersChange([]);
-        setListCategoryProjects([]);
         setListMemberProjects([]);
-        setListCategoryName("");
       };
     }
   }, [visible]);
@@ -91,25 +91,29 @@ const ModalCreateProject = ({ visible, onCancel }) => {
     }
   }, [listCategorysChange, listMembersChange]);
 
+  const featchRoleConfig = async () => {
+    try {
+      await AdPotalsRoleConfigAPI.getAllRoleConfig().then((response) => {
+        setListRoleConfig(response.data.data);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const featChMultiSelect = async () => {
     setLoading(true);
     try {
-      await CommonAPI.fetchAll().then((respone) => {
-        setListMembers(respone.data);
+      await AdPotalsMemberFactoryAPI.getAllMemberActive().then((respone) => {
+        setListMembers(respone.data.data);
       });
       await CategoryProjectManagementAPI.fetchAllCategory().then((respone) => {
         setListCategorys(respone.data.data);
         setLoading(false);
       });
     } catch (error) {
-      alert("Vui lòng load lại trang");
+      console.log(error);
     }
-  };
-
-  const fetchCategoryData = async (id) => {
-    const response =
-      await CategoryProjectManagementAPI.fetchCategoryWithIdProject(id);
-    return response.data.data;
   };
 
   const handleChangeMembers = (idMember) => {
@@ -126,8 +130,7 @@ const ModalCreateProject = ({ visible, onCancel }) => {
         let newData = {
           memberId: record.memberId,
           email: record.email,
-          role: value + "",
-          statusWork: record.statusWork,
+          listRole: [...value],
         };
         return { ...record, ...newData };
       }
@@ -136,9 +139,9 @@ const ModalCreateProject = ({ visible, onCancel }) => {
     setListMemberProjects(updatedListInfo);
   };
 
-  const featMemberAndCaregoryAddProject = async () => {
+  const featMemberAndCaregoryAddProject = () => {
     try {
-      const listMemberJoinCreate = await listMembers
+      const listMemberJoinCreate = listMembers
         .filter((obj1) => listMembersChange.some((obj2) => obj1.id === obj2))
         .map((obj1) => {
           const matchedItem = listMembersChange.find(
@@ -147,21 +150,36 @@ const ModalCreateProject = ({ visible, onCancel }) => {
           return { ...obj1, ...matchedItem };
         });
 
+      const roleDefault = listRoleConfig.find(
+        (item) => item.roleDefault === "DEFAULT"
+      );
+
       const listMemberAdd = listMemberJoinCreate.map((member) => {
         return {
-          memberId: member.id,
-          email: member.email,
-          role: `0`,
-          statusWork: `0`,
-          name: member.name,
-          code: member.code,
-          image: member.picture,
+          ...member,
+          listRole:
+            member.listRole === undefined &&
+            listRoleConfig.length > 0 &&
+            roleDefault !== undefined
+              ? [roleDefault.name]
+              : member.listRole,
         };
       });
       setListMemberProjects(listMemberAdd);
-      setListCategoryProjects(listCategorysChange);
     } catch (error) {
-      alert("Hệ thống lỗi, vui lòng F5 lại trang");
+      console.log(error);
+    }
+  };
+
+  const handleDateChange = (e) => {
+    if (e != null) {
+      setStartTime(
+        dayjs(e[0]).set({ hour: 0, minute: 0, second: 0 }).valueOf()
+      );
+      setEndTime(dayjs(e[1]).set({ hour: 0, minute: 0, second: 0 }).valueOf());
+    } else {
+      setStartTime(null);
+      setEndTime(null);
     }
   };
 
@@ -179,46 +197,44 @@ const ModalCreateProject = ({ visible, onCancel }) => {
     } else {
       setErrorName("");
     }
-    if (startTime === "") {
-      setErrorStartTime("Thời gian bắt đầu không được để trống");
+    if (startTime == null && endTime == null) {
+      setErrorTime("Thời gian không được để trống");
       check++;
     } else {
-      setErrorStartTime("");
+      setErrorTime("");
     }
-    if (endTime === "") {
-      setErrorEndTime("Thời gian kết thúc không được để trống");
+    if (startTime === null && endTime !== null) {
+      setErrorTime("Thời gian bắt đầu không được để trống");
       check++;
-    } else {
-      setErrorEndTime("");
     }
-    if (new Date(startTime) > new Date(endTime)) {
-      setErrorStartTime(
-        "Thời gian bắt đầu không được lớn hơn thời gian kết thúc"
-      );
+    if (endTime === null && startTime !== null) {
+      setErrorTime("Thời gian kết thúc không được để trống");
       check++;
-    } else {
-      if (startTime === "") {
-        setErrorStartTime("Thời gian bắt đầu không được để trống");
-        check++;
-      } else {
-        setErrorStartTime("");
-      }
     }
     if (listCategorysChange.length <= 0) {
-      setErrorCategorys("Không được để trống thể loại");
+      setErrorCategorys("Thể loại không được để trống");
       check++;
     } else {
       setErrorCategorys("");
     }
+    let checkRole = 0;
+    listMemberProjects.map((item) => {
+      if (item.listRole.length === 0) {
+        checkRole++;
+        check++;
+      }
+    });
+    if (checkRole > 0) {
+      message.error("Vai trò của thành viên không được trống");
+    }
 
     if (check === 0) {
-      featMemberAndCaregoryAddProject();
       let projectNew = {
         code: code,
         name: name,
         descriptions: descriptions,
-        startTime: moment(startTime, "YYYY-MM-DD").valueOf(),
-        endTime: moment(endTime, "YYYY-MM-DD").valueOf(),
+        startTime: startTime,
+        endTime: endTime,
         listMembers: listMemberProjects,
         listCategorysId: listCategorysChange,
       };
@@ -226,50 +242,47 @@ const ModalCreateProject = ({ visible, onCancel }) => {
         (respone) => {
           message.success("Thêm thành công !");
           let data = respone.data.data;
-          let dataAddTable = {
-            ...data,
-            stt: 1,
-          };
-          dispatch(CreateProject(dataAddTable));
+          dispatch(CreateProject(data));
           cancelSuccess();
         },
         (error) => {
-          message.error(error.response.data.message);
+          console.log(error);
         }
       );
     }
   };
+
   const columns = [
     {
-      title: "STT",
+      title: "#",
       dataIndex: "stt",
       key: "stt",
       render: (text, record, index) => index + 1,
-      width: "7%",
     },
     {
       title: "Mã",
-      dataIndex: "code",
-      key: "code",
-      width: 50,
-      sorter: (a, b) => a.code.localeCompare(b.code),
+      dataIndex: "userName",
+      key: "userName",
+      sorter: (a, b) => a.userName.localeCompare(b.userName),
     },
     {
       title: "Thành viên",
       dataIndex: "name",
       key: "name",
-      width: 250,
       sorter: (a, b) => a.name.localeCompare(b.name),
       render: (text, record) => {
         return (
           <div>
             <Image.PreviewGroup>
               <Image
-                src={record.picture}
+                src={
+                  record.picture === "Images/Default.png"
+                    ? "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                    : record.picture
+                }
                 alt="Avatar"
                 width={25}
                 height={25}
-                marginRight={-5}
                 className="avatarMember"
               />
             </Image.PreviewGroup>
@@ -282,14 +295,13 @@ const ModalCreateProject = ({ visible, onCancel }) => {
       title: "Email",
       dataIndex: "email",
       key: "email",
-      width: "25%",
       filterDropdown: ({
         setSelectedKeys,
         selectedKeys,
         confirm,
         clearFilters,
       }) => (
-        <div style={{ padding: 8 }}>
+        <div style={{ padding: "8px" }}>
           <Input
             placeholder="Tìm kiếm"
             value={selectedKeys[0]}
@@ -297,18 +309,18 @@ const ModalCreateProject = ({ visible, onCancel }) => {
               setSelectedKeys(e.target.value ? [e.target.value] : [])
             }
             onPressEnter={confirm}
-            style={{ width: 188, marginBottom: 8, display: "block" }}
+            style={{ width: 188, marginBottom: "8px", display: "block" }}
           />
           <Button
             type="primary"
             className="btn_search_member"
             onClick={confirm}
             size="small"
-            style={{ width: 90, marginRight: 8 }}
+            style={{ width: "90px", marginRight: "8px" }}
           >
             Tìm
           </Button>
-          <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
+          <Button onClick={clearFilters} size="small" style={{ width: "90px" }}>
             Đặt lại
           </Button>
         </div>
@@ -323,60 +335,30 @@ const ModalCreateProject = ({ visible, onCancel }) => {
     },
     {
       title: "Vai trò",
-      dataIndex: "role",
-      key: "role",
-      width: "15%",
-      filterDropdown: ({
-        setSelectedKeys,
-        selectedKeys,
-        confirm,
-        clearFilters,
-      }) => (
-        <div style={{ padding: 8 }}>
-          <Select
-            placeholder="Tìm kiếm"
-            value={selectedKeys[0]}
-            onChange={(value) => setSelectedKeys(value ? [value] : [])}
-            onPressEnter={confirm}
-            style={{ width: 188, marginBottom: 8, display: "block" }}
-          >
-            <Option value="0">Quản lý</Option>
-            <Option value="1">Trưởng nhóm</Option>
-            <Option value="2">Dev</Option>
-            <Option value="3">Tester</Option>
-          </Select>
-          <div style={{ display: "flex", justifyContent: "flex-end" }}>
-            <Button
-              type="primary"
-              onClick={confirm}
-              size="small"
-              style={{ marginRight: 8 }}
-            >
-              Tìm
-            </Button>
-            <Button onClick={clearFilters} size="small">
-              Đặt lại
-            </Button>
-          </div>
-        </div>
-      ),
-      filterIcon: (filtered) => (
-        <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
-      ),
-      onFilter: (value, record) => record.role === value,
-      sorter: (a, b) => a.role.localeCompare(b.role),
-      sortDirections: ["ascend", "descend"],
+      dataIndex: "roleCustome",
+      key: "roleCustome",
       render: (text, record) => (
-        <Select
-          style={{ width: "100%" }}
-          value={record.role}
-          onChange={(value) => handleRoleChange(record.memberId, value)}
-        >
-          <Option value="0">Quản lý</Option>
-          <Option value="1">Trưởng nhóm</Option>
-          <Option value="2">Dev</Option>
-          <Option value="3">Tester</Option>
-        </Select>
+        <>
+          {listRoleConfig.length > 0 ? (
+            <Select
+              mode="multiple"
+              placeholder="Chọn vai trò"
+              value={record.listRole}
+              onChange={(e) => handleRoleChange(record.memberId, e)}
+              style={{
+                width: "100%",
+              }}
+              maxTagCount={3}
+              key={record.memberId}
+              options={listRoleConfig.map((item) => ({
+                value: item.name,
+                label: item.name,
+              }))}
+            />
+          ) : (
+            "Không có vai trò để chọn"
+          )}
+        </>
       ),
     },
   ];
@@ -387,16 +369,17 @@ const ModalCreateProject = ({ visible, onCancel }) => {
       <Modal
         visible={visible}
         onCancel={cancelFaild}
-        width={750}
+        width={1150}
         footer={null}
         bodyStyle={{ overflow: "hidden" }}
+        style={{ top: "53px" }}
       >
         {" "}
         <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
           <span style={{ fontSize: "18px" }}>Thêm dự án</span>
         </div>
         <div style={{ marginTop: "15px", borderBottom: "1px solid black" }}>
-          <Row gutter={16} style={{ marginBottom: "15px" }}>
+          <Row gutter={24} style={{ marginBottom: "15px" }}>
             <Col span={12}>
               {" "}
               <span className="notBlank">(*) </span>
@@ -426,79 +409,78 @@ const ModalCreateProject = ({ visible, onCancel }) => {
               <span className="error">{errorName}</span>
             </Col>
           </Row>
-          <Row gutter={16} style={{ marginBottom: "15px" }}>
+          <Row gutter={24} style={{ marginBottom: "15px" }}>
             <Col span={12}>
-              {" "}
               <span className="notBlank">(*) </span>
-              <span>Thời gian bắt đầu:</span> <br />
-              <Input
-                value={startTime}
+              <span>Thời gian:</span> <br />
+              <RangePicker
+                style={{ width: "100%" }}
+                format="YYYY-MM-DD"
+                value={[
+                  startTime ? dayjs(startTime) : null,
+                  endTime ? dayjs(endTime) : null,
+                ]}
                 onChange={(e) => {
-                  setStartTime(e.target.value);
+                  handleDateChange(e);
                 }}
-                type="date"
               />
-              <span className="error">{errorStartTime}</span>
+              <span className="error">{errorTime}</span>
             </Col>
             <Col span={12}>
-              {" "}
-              <span className="notBlank">(*) </span>
-              <span>Thời gian kết thúc:</span> <br />
-              <Input
-                value={endTime}
-                onChange={(e) => {
-                  setEndTime(e.target.value);
-                }}
-                type="date"
-              />
-              <span className="error">{errorEndTime}</span>
+              <div style={{ width: "100%" }}>
+                {" "}
+                <span className="notBlank">(*) </span>
+                <span>Thể loại:</span>
+                <Select
+                  mode="multiple"
+                  placeholder="Thêm thể loại"
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                  }}
+                  value={listCategorysChange}
+                  onChange={handleChangeCategorys}
+                  optionLabelProp="label"
+                  maxTagCount={3}
+                  defaultValue={[]}
+                  filterOption={(text, option) =>
+                    option.label.toLowerCase().indexOf(text.toLowerCase()) !==
+                    -1
+                  }
+                >
+                  {listCategorys.map((record) => (
+                    <Option
+                      label={record.name}
+                      value={record.id}
+                      key={record.id}
+                    >
+                      <Tooltip title={record.name}>
+                        <Space>{record.name}</Space>
+                      </Tooltip>
+                    </Option>
+                  ))}
+                </Select>
+                <span
+                  className="error"
+                  style={{ display: "block", marginTop: "2px" }}
+                >
+                  {errorCategorys}
+                </span>
+              </div>
             </Col>
           </Row>
           <Row style={{ marginBottom: "15px" }}>
             <div style={{ width: "100%" }}>
-              {" "}
-              <span className="notBlank">(*) </span>
-              <span>Thể loại:</span>
-              <Select
-                mode="multiple"
-                placeholder="Thêm thể loại"
-                dropdownMatchSelectWidth={false}
-                style={{
-                  width: "100%",
-                  height: "auto",
-                }}
-                value={listCategorysChange}
-                onChange={handleChangeCategorys}
-                optionLabelProp="label"
-                defaultValue={[]}
-                filterOption={(text, option) =>
-                  option.label.toLowerCase().indexOf(text.toLowerCase()) !== -1
-                }
-              >
-                {listCategorys.map((record) => (
-                  <Option label={record.name} value={record.id} key={record.id}>
-                    <Tooltip title={record.name}>
-                      <Space>{record.name}</Space>
-                    </Tooltip>
-                  </Option>
-                ))}
-              </Select>
-              <span
-                className="error"
-                style={{ display: "block", marginTop: "2px" }}
-              >
-                {errorCategorys}
-              </span>
-            </div>
-          </Row>
-          <Row style={{ marginBottom: "15px" }}>
-            <div style={{ width: "100%" }}>
-              {" "}
               <span>Thành viên:</span>
+              {listMembersChange.length > 0 && (
+                <span style={{ color: "red" }}>
+                  {" "}
+                  (*) Vui lòng chọn lại vai trò khi đã thêm tất cả thành viên
+                </span>
+              )}
               <Select
                 mode="multiple"
                 placeholder="Thêm thành viên"
-                dropdownMatchSelectWidth={false}
                 style={{
                   width: "100%",
                   height: "auto",
@@ -507,6 +489,7 @@ const ModalCreateProject = ({ visible, onCancel }) => {
                 onChange={handleChangeMembers}
                 optionLabelProp="label"
                 defaultValue={[]}
+                maxTagCount={4}
                 filterOption={(text, option) =>
                   option.label.toLowerCase().indexOf(text.toLowerCase()) !== -1
                 }
@@ -521,7 +504,11 @@ const ModalCreateProject = ({ visible, onCancel }) => {
                       <Space>
                         <Image.PreviewGroup>
                           <Image
-                            src={member.picture}
+                            src={
+                              member.picture === "Images/Default.png"
+                                ? "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                                : member.picture
+                            }
                             alt="Avatar"
                             width={25}
                             height={25}
@@ -540,16 +527,10 @@ const ModalCreateProject = ({ visible, onCancel }) => {
                   </Option>
                 ))}{" "}
               </Select>
-              <span
-                className="error"
-                style={{ display: "block", marginTop: "2px" }}
-              >
-                {errorMembers}
-              </span>
             </div>
           </Row>
           {listMemberProjects.length > 0 && (
-            <Row>
+            <Row style={{ marginBottom: "20px" }}>
               {" "}
               <Col span={24}>
                 <Table
@@ -557,6 +538,7 @@ const ModalCreateProject = ({ visible, onCancel }) => {
                   columns={columns}
                   dataSource={listMemberProjects}
                   rowKey="id"
+                  pagination={false}
                 />
               </Col>{" "}
             </Row>
@@ -586,22 +568,22 @@ const ModalCreateProject = ({ visible, onCancel }) => {
         >
           <div style={{ paddingTop: "15px" }}>
             <Button
-              style={{
-                backgroundColor: "rgb(61, 139, 227)",
-                color: "white",
-              }}
-              onClick={create}
-            >
-              Thêm
-            </Button>
-            <Button
+              className="btn_filter"
               style={{
                 backgroundColor: "red",
                 color: "white",
+                width: "100px",
               }}
               onClick={cancelFaild}
             >
               Hủy
+            </Button>{" "}
+            <Button
+              className="btn_clean"
+              style={{ width: "100px", marginLeft: "10px" }}
+              onClick={create}
+            >
+              Thêm
             </Button>
           </div>
         </div>

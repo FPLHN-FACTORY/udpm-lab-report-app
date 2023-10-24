@@ -5,8 +5,10 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 /**
- * @author NguyenVinh
+ * @author hieundph25894
  */
 @Setter
 @Getter
@@ -22,10 +24,6 @@ public abstract class AdBaseMemberProjectRequest {
 
     @NotEmpty
     @NotBlank
-    private String role;
-
-    @NotEmpty
-    @NotBlank
-    private String statusWork;
+    private List<String> listRole;
 
 }

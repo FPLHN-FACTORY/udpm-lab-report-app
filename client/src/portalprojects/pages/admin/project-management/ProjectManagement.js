@@ -4,10 +4,17 @@ import {
   faFilter,
   faEye,
   faPenToSquare,
-  faPlus,
+  faCodeCompare,
+  faCirclePlus,
+  faMattressPillow,
 } from "@fortawesome/free-solid-svg-icons";
 import "./styleProjectManagement.css";
-import { ProjectOutlined, UnorderedListOutlined } from "@ant-design/icons";
+import {
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+  ProjectOutlined,
+  SyncOutlined,
+} from "@ant-design/icons";
 import {
   Button,
   Pagination,
@@ -17,6 +24,7 @@ import {
   Select,
   Row,
   Col,
+  Tag,
 } from "antd";
 import { useAppDispatch, useAppSelector } from "../../../app/hook";
 import {
@@ -30,7 +38,9 @@ import ModalCreateProject from "../project-management/modal-create/ModalCreatePr
 import ModalUpdateProject from "../project-management/modal-update/ModalUpdateProject";
 import LoadingIndicator from "../../../helper/loading";
 import moment from "moment";
-import { toast } from "react-toastify";
+import { convertDateLongToString } from "../../../../labreportapp/helper/util.helper";
+import { Link } from "react-router-dom";
+import { SetCategory } from "../../../app/reducer/admin/category-management/adCategorySlice.reducer";
 
 const { Option } = Select;
 const ProjectManagement = () => {
@@ -41,8 +51,6 @@ const ProjectManagement = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
-  const [dataTable, setDataTable] = useState([]);
-  const [checkAdd, setCheckAdd] = useState(false);
   const [codeSearch, setCodeSearch] = useState("");
   const [nameSearch, setNameSearch] = useState("");
   const [startTimeSearch, setStartTimeSearch] = useState(null);
@@ -51,21 +59,28 @@ const ProjectManagement = () => {
   const [idCategorySearch, setIdCategorySearch] = useState("");
   const [listCategorySearch, setListCategorySearch] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [clear, setClear] = useState(false);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     document.title = "Quản lý dự án | Portal-Projects";
-    featchData();
+    handleSearch(current);
     return () => {
       dispatch(SetProjectManagement([]));
     };
   }, [current]);
 
   useEffect(() => {
-    if (checkAdd) {
-      featchData();
-      setCheckAdd(false);
+    window.scrollTo(0, 0);
+    document.title = "Quản lý dự án | Portal-Projects";
+    if (clear) {
+      handleSearch(1);
+      setClear(false);
+      return () => {
+        dispatch(SetProjectManagement([]));
+      };
     }
-  }, [checkAdd]);
+  }, [clear]);
 
   useEffect(() => {
     document.title = "Quản lý dự án | Portal-Projects";
@@ -75,16 +90,16 @@ const ProjectManagement = () => {
     setEndTimeSearch("");
     setStatusProjectSearch("");
     setIdCategorySearch("");
-    fetchDataSearch();
+    fetchDataCategory();
   }, []);
 
-  const fetchDataSearch = async () => {
+  const fetchDataCategory = async () => {
     const responeGetAllCategory =
       await CategoryProjectManagementAPI.fetchAllCategory();
     setListCategorySearch(responeGetAllCategory.data.data);
+    dispatch(SetCategory(responeGetAllCategory.data.data));
   };
-
-  const featchData = async () => {
+  const handleSearch = async (current) => {
     try {
       setLoading(true);
       let filter = {
@@ -107,54 +122,24 @@ const ProjectManagement = () => {
         page: current,
         size: 5,
       };
-      await ProjectManagementAPI.featchAll(filter).then(async (response) => {
-        setDataTable(response.data.data.data);
-        setTotalPages(parseInt(response.data.data.totalPages));
-        dispatch(SetProjectManagement(response.data.data.data));
-        setLoading(false);
-      });
-    } catch (error) {
-      alert("Lỗi hệ thống, vui lòng F5 lại trang");
-    }
-  };
-
-  const handleSearch = async () => {
-    setCurrent(1);
-    try {
-      setLoading(true);
-      let filter = {
-        code: codeSearch,
-        name: nameSearch,
-        startTime:
-          startTimeSearch != null &&
-          startTimeSearch !== "null" &&
-          startTimeSearch !== "undefined"
-            ? moment(startTimeSearch, moment.ISO_8601).format("YYYY-MM-DD")
-            : null,
-        endTime:
-          endTimeSearch != null &&
-          endTimeSearch !== "null" &&
-          endTimeSearch !== "undefined"
-            ? moment(endTimeSearch, moment.ISO_8601).format("YYYY-MM-DD")
-            : null,
-        statusProject: statusProjectSearch,
-        idCategory: idCategorySearch,
-        page: current,
-        size: 5,
-      };
-
       const response = await ProjectManagementAPI.featchAll(filter);
       const responseData = response.data.data;
-      setDataTable(responseData.data);
       setTotalPages(parseInt(responseData.totalPages));
       dispatch(SetProjectManagement(responseData.data));
+      if (responseData.totalPages === 1) {
+        setCurrent(1);
+      }
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      alert("Lỗi hệ thống, vui lòng F5 lại trang");
+      console.log(error);
     }
   };
 
+  const handleFind = async () => {
+    setCurrent(1);
+    await handleSearch(1);
+  };
   const handleClear = async () => {
     setCodeSearch("");
     setNameSearch("");
@@ -163,20 +148,18 @@ const ProjectManagement = () => {
     setStatusProjectSearch("");
     setIdCategorySearch("");
     setCurrent(1);
-    await featchData();
+    setClear(true);
   };
 
   const handleCancelModalCreateSusscess = () => {
     document.querySelector("body").style.overflowX = "hidden";
     setShowCreateModal(false);
     setShowUpdateModal(false);
-    setCheckAdd(true);
   };
   const handleCancelModalCreateFaild = () => {
     document.querySelector("body").style.overflowX = "hidden";
     setShowCreateModal(false);
     setShowUpdateModal(false);
-    setCheckAdd(false);
   };
   const handleCancelCreate = {
     handleCancelModalCreateSusscess,
@@ -202,15 +185,13 @@ const ProjectManagement = () => {
   };
 
   const data = useAppSelector(GetProjectManagement);
-  const startIndex = (current - 1) * 5;
+
   const columns = [
     {
-      title: "STT",
+      title: "#",
       dataIndex: "stt",
       key: "stt",
       sorter: (a, b) => a.stt - b.stt,
-      render: (text, record, index) => startIndex + (index + 1),
-      width: "20px",
     },
 
     {
@@ -253,7 +234,6 @@ const ProjectManagement = () => {
       title: "Thể loại",
       dataIndex: "nameCategorys",
       key: "nameCategorys",
-      width: "17%",
     },
     {
       title: "Tiến độ",
@@ -263,71 +243,59 @@ const ProjectManagement = () => {
       render: (text, record) => {
         return <span>{record.progress}%</span>;
       },
-      width: "9%",
     },
     {
-      title: "Thời gian",
+      title: <div style={{ textAlign: "center" }}>Thời gian</div>,
       dataIndex: "startTimeAndEndTime",
       key: "startTimeAndEndTime",
       render: (text, record) => {
-        const startTime = new Date(record.startTime);
-        const endTime = new Date(record.endTime);
-
-        const formattedStartTime = `${startTime.getDate()}/${
-          startTime.getMonth() + 1
-        }/${startTime.getFullYear()}`;
-        const formattedEndTime = `${endTime.getDate()}/${
-          endTime.getMonth() + 1
-        }/${endTime.getFullYear()}`;
-
+        const startTime = convertDateLongToString(record.startTime);
+        const endTime = convertDateLongToString(record.endTime);
         return (
           <span>
-            {formattedStartTime} - {formattedEndTime}
+            {startTime} - {endTime}
           </span>
         );
       },
-      width: "175px",
     },
     {
-      title: "Trạng thái",
+      title: <div style={{ textAlign: "center" }}>Trạng thái</div>,
       dataIndex: "statusProject",
       key: "statusProject",
       sorter: (a, b) => a.statusProject - b.statusProject,
       render: (text) => {
-        let statusText = "";
         if (text === "0") {
-          statusText = "Đã diễn ra";
           return (
-            <span
-              className="box_span_status"
-              style={{ backgroundColor: "rgb(45, 211, 86)", fontSize: "13px" }}
+            <Tag
+              icon={<CheckCircleOutlined />}
+              style={{ width: "120px", textAlign: "center" }}
+              color="success"
             >
-              {statusText}
-            </span>
+              Đã diễn ra
+            </Tag>
           );
         } else if (text === "1") {
-          statusText = "Đang diễn ra";
           return (
-            <span
-              className="box_span_status"
-              style={{ backgroundColor: "rgb(41, 157, 224)", fontSize: "13px" }}
+            <Tag
+              icon={<SyncOutlined spin />}
+              style={{ width: "120px", textAlign: "center" }}
+              color="processing"
             >
-              {statusText}
-            </span>
+              Đang diễn ra
+            </Tag>
           );
         } else {
-          statusText = "Chưa diễn ra";
           return (
-            <span
-              className="box_span_status"
-              style={{ backgroundColor: "rgb(238, 162, 48)", fontSize: "13px" }}
+            <Tag
+              icon={<CloseCircleOutlined />}
+              style={{ width: "120px", textAlign: "center" }}
+              color="error"
             >
-              {statusText}
-            </span>
+              Chưa diễn ra
+            </Tag>
           );
         }
       },
-      width: "130px",
     },
     {
       title: "Hành động",
@@ -336,11 +304,23 @@ const ProjectManagement = () => {
       render: (text, record) => (
         <>
           <div>
+            <Tooltip title="Xem trello dự án">
+              <Link
+                to={`/detail-project/${record.id}`}
+                style={{ color: "black" }}
+              >
+                <FontAwesomeIcon
+                  icon={faMattressPillow}
+                  className="icon"
+                  style={{ width: "19px" }}
+                />
+              </Link>
+            </Tooltip>
             <Tooltip title="Xem chi tiết dự án">
               <FontAwesomeIcon
                 icon={faEye}
                 className="icon"
-                style={{ paddingRight: 8 }}
+                style={{ paddingRight: "8px" }}
                 onClick={() => {
                   handleDetailProject(record.id);
                 }}
@@ -358,7 +338,6 @@ const ProjectManagement = () => {
           </div>
         </>
       ),
-      width: "105px",
     },
   ];
 
@@ -378,7 +357,7 @@ const ProjectManagement = () => {
         />{" "}
         <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
         <hr />
-        <Row gutter={16} style={{ marginBottom: "15px", paddingTop: "20px" }}>
+        <Row gutter={24} style={{ marginBottom: "15px", paddingTop: "20px" }}>
           <Col span={8}>
             <span>Mã:</span>{" "}
             <Input
@@ -494,16 +473,21 @@ const ProjectManagement = () => {
             </Select>
           </Col>
         </Row>
-        <div className="box_btn_filter">
-          <Button className="btn_filter" onClick={handleSearch}>
-            Tìm kiếm
-          </Button>
+        <div className="box-btn">
           <Button
-            className="btn_clear"
-            onClick={handleClear}
-            style={{ backgroundColor: "rgb(38, 144, 214)" }}
+            className="btn_filter"
+            onClick={handleFind}
+            style={{ marginRight: "15px", backgroundColor: "#E2B357" }}
           >
-            Làm mới bộ lọc
+            <FontAwesomeIcon icon={faFilter} style={{ paddingRight: "5px" }} />{" "}
+            <span>Tìm kiếm</span>
+          </Button>
+          <Button className="btn_clean" onClick={handleClear}>
+            <FontAwesomeIcon
+              icon={faCodeCompare}
+              style={{ paddingRight: "5px" }}
+            />{" "}
+            <span>Làm mới bộ lọc</span>
           </Button>
         </div>
       </div>
@@ -530,18 +514,18 @@ const ProjectManagement = () => {
               }}
             >
               <FontAwesomeIcon
-                icon={faPlus}
+                icon={faCirclePlus}
                 size="1x"
                 style={{
                   backgroundColor: "rgb(55, 137, 220)",
-                  paddingRight: "8px",
+                  paddingRight: "7px",
                 }}
               />{" "}
               Thêm dự án
             </Button>
           </div>
         </div>
-        <div style={{ marginTop: 15 }}>
+        <div style={{ marginTop: "15px" }}>
           <Table
             dataSource={data}
             rowKey="id"

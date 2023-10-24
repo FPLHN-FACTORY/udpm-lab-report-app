@@ -92,8 +92,12 @@ public enum Message {
     GROUP_PROJECT_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeys.GROUP_PROJECT_NOT_EXISTS)),
     ROLE_CONFIG_ONLY_HAVA_ONE(PropertiesReader.getProperty(PropertyKeys.ROLE_CONFIG_ONLY_HAVA_ONE)),
     ROLE_FACTORY_HAVE_MEMBER(PropertiesReader.getProperty(PropertyKeys.ROLE_FACTORY_HAVE_MEMBER)),
+    TIME_NOT_NULL(PropertiesReader.getProperty(PropertyKeys.TIME_NOT_NULL)),
+    ROLE_FACTORY_HAVE_MEMBER(PropertiesReader.getProperty(PropertyKeys.ROLE_FACTORY_HAVE_MEMBER)),
     MEMBER_FACTORY_IS_ALREADY_IN_THE_GROUP(PropertiesReader.getProperty(PropertyKeys.MEMBER_FACTORY_IS_ALREADY_IN_THE_GROUP)),
-    MEMBER_TEAM_FACTORY_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeys.MEMBER_TEAM_FACTORY_NOT_EXISTS));
+    MEMBER_TEAM_FACTORY_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeys.MEMBER_TEAM_FACTORY_NOT_EXISTS)),
+    ROLE_DEFAULT_NOT_EMPTY(PropertiesReader.getProperty(PropertyKeys.ROLE_DEFAULT_NOT_EMPTY)),
+    START_TIME_MORE_THAN_END_TIME(PropertiesReader.getProperty(PropertyKeys.START_TIME_MORE_THAN_END_TIME));
 
     private String message;
 

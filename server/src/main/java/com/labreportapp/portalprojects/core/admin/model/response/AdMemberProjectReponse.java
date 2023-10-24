@@ -7,12 +7,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.rest.core.config.Projection;
 
 /**
- * @author NguyenVinh
+ * @author hieundph25894
  */
 @Projection(types = {MemberProject.class , Project.class})
 public interface AdMemberProjectReponse extends IsIdentified {
 
-     Integer getSTT();
+     Integer getStt();
 
      @Value("#{target.member_id}")
      String getMemberId();

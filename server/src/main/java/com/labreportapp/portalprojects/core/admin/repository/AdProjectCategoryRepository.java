@@ -2,6 +2,7 @@ package com.labreportapp.portalprojects.core.admin.repository;
 
 
 import com.labreportapp.portalprojects.core.admin.model.response.AdProjectCategoryReponse;
+import com.labreportapp.portalprojects.entity.ProjectCategory;
 import com.labreportapp.portalprojects.repository.ProjectCategoryRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,5 +21,7 @@ public interface AdProjectCategoryRepository extends ProjectCategoryRepository {
             "Join Category category on category.id = projectCategory.categoryId " +
             " WHERE projectCategory.projectId = :id")
     List<AdProjectCategoryReponse> getAllByIdProject(@Param("id") String idProject);
+
+    List<ProjectCategory> findAllByProjectId(String idProject);
 
 }
