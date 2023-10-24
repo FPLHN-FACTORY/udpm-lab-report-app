@@ -56,8 +56,10 @@ public class AdRoleProjectServiceImpl implements AdRoleProjectService {
         if (!findById.isPresent()) {
             throw new RestApiException(Message.ROLE_PROJECT_NOT_EXISTS);
         }
-        if (obj.getRoleDefault() == 0 && adRoleProjectRepository.getRoleConfigDefault() != null) {
-            throw new RestApiException(Message.ROLE_CONFIG_ONLY_HAVA_ONE);
+        if (findById.get().getRoleDefault() == RoleDefault.NO_DEFAULT) {
+            if (obj.getRoleDefault() == 0 && adRoleProjectRepository.getRoleConfigDefault() != null) {
+                throw new RestApiException(Message.ROLE_CONFIG_ONLY_HAVA_ONE);
+            }
         }
         RoleConfig roleConfig = findById.get();
         roleConfig.setName(obj.getName());

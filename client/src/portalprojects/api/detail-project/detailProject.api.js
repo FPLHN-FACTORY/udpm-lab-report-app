@@ -64,7 +64,7 @@ export class DetailProjectAPI {
     return request({
       method: "POST",
       url: `/member/notification`,
-      data: obj
+      data: obj,
     });
   };
 
@@ -72,6 +72,36 @@ export class DetailProjectAPI {
     return request({
       method: "GET",
       url: `/member/member-project/get-all-member-team/` + idProject,
+    });
+  };
+
+  static getAllRoleProject = (idProject) => {
+    return request({
+      method: "GET",
+      url: `/member/role-project?idProject=` + idProject,
+    });
+  };
+
+  static createRoleProject = (data) => {
+    return request({
+      method: "POST",
+      url: `/member/role-project`,
+      data: data,
+    });
+  };
+
+  static updateRoleProject = (data) => {
+    return request({
+      method: "PUT",
+      url: `/member/role-project`,
+      data: data,
+    });
+  };
+
+  static deleteRoleProject = (id) => {
+    return request({
+      method: "DELETE",
+      url: `/member/role-project?id=` + id,
     });
   };
 }

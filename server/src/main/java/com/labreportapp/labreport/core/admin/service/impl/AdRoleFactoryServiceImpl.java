@@ -60,8 +60,10 @@ public class AdRoleFactoryServiceImpl implements AdRoleFactoryService {
         if (!findById.isPresent()) {
             throw new RestApiException(Message.ROLE_FACTORY_NOT_EXISTS);
         }
-        if (obj.getRoleDefault() == 0 && adRoleFactoryRepository.getRoleConfigDefault() != null) {
-            throw new RestApiException(Message.ROLE_CONFIG_ONLY_HAVA_ONE);
+        if (findById.get().getRoleDefault() == RoleDefault.NO_DEFAULT) {
+            if (obj.getRoleDefault() == 0 && adRoleFactoryRepository.getRoleConfigDefault() != null) {
+                throw new RestApiException(Message.ROLE_CONFIG_ONLY_HAVA_ONE);
+            }
         }
         RoleFactory roleFactory = findById.get();
         roleFactory.setName(obj.getName());
@@ -81,10 +83,10 @@ public class AdRoleFactoryServiceImpl implements AdRoleFactoryService {
     @Override
     public Boolean deleteRoleFactory(String id) {
         Optional<RoleFactory> findRoleFactoryById = adRoleFactoryRepository.findById(id);
-        Integer countRoles = adRoleFactoryRepository.countMemberFactoryByRoleId(id);
         if (!findRoleFactoryById.isPresent()) {
             throw new RestApiException(Message.ROLE_MEMBER_NOT_EXISTS);
         }
+        Integer countRoles = adRoleFactoryRepository.countMemberFactoryByRoleId(id);
         if (countRoles != null && countRoles > 0) {
             throw new RestApiException(Message.ROLE_FACTORY_HAVE_MEMBER);
         }

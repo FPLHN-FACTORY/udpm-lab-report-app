@@ -3,6 +3,8 @@ package com.labreportapp.portalprojects.core.member.model.request;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 /**
  * @author thangncph26123
  */
@@ -16,5 +18,5 @@ public class MeCreateMemberProjectRequest {
 
     private String projectId;
 
-    private Short role;
+    private List<String> role;
 }

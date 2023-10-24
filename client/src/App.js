@@ -112,10 +112,8 @@ function App() {
     stompClientAll.connect({}, () => {
       stompClientAll.subscribe(
         "/portal-projects/create-notification/" + userCurrent.id,
-        (message) => {
-          message.info("Bạn có thông báo mới", {
-            position: toast.POSITION.BOTTOM_RIGHT,
-          });
+        (response) => {
+          message.success("Bạn có thông báo mới");
           playNotificationSound();
 
           DetailProjectAPI.countNotification(userCurrent.id).then(
@@ -133,19 +131,15 @@ function App() {
           );
         }
       );
-    });
-    if (userCurrent != null && userCurrent.role.includes("ADMIN")) {
-      stompClientAll.connect({}, () => {
+      if (userCurrent != null && userCurrent.role.includes("ADMIN")) {
         stompClientAll.subscribe(
           "/portal-projects/update-meeting",
-          (message) => {
-            message.info("Thông báo : " + message.body, {
-              position: toast.POSITION.TOP_CENTER,
-            });
+          (response) => {
+            message.success("Thông báo : " + response.body);
           }
         );
-      });
-    }
+      }
+    });
   }
 
   return (

@@ -8,19 +8,19 @@ import com.labreportapp.portalprojects.core.member.model.request.MeMemberProject
 import com.labreportapp.portalprojects.core.member.model.request.MeUpdateMemberProjectRequest;
 import com.labreportapp.portalprojects.core.member.model.response.MeMemberProjectResponse;
 import com.labreportapp.portalprojects.core.member.repository.MeMemberProjectRepository;
-import com.labreportapp.portalprojects.core.member.repository.MeNotificationMemberRepository;
-import com.labreportapp.portalprojects.core.member.repository.MeNotificationRepository;
 import com.labreportapp.portalprojects.core.member.repository.MeProjectRepository;
 import com.labreportapp.portalprojects.core.member.service.MeMemberProjectService;
 import com.labreportapp.portalprojects.entity.MemberProject;
 import com.labreportapp.portalprojects.entity.Project;
-import com.labreportapp.portalprojects.infrastructure.configemail.EmailSender;
+import com.labreportapp.portalprojects.entity.RoleMemberProject;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
-import com.labreportapp.portalprojects.infrastructure.constant.RoleMemberProject;
 import com.labreportapp.portalprojects.infrastructure.constant.StatusWork;
+import com.labreportapp.portalprojects.infrastructure.constant.TypeProject;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.MessageHandlingException;
+import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import com.labreportapp.portalprojects.infrastructure.successnotification.ConstantMessageSuccess;
 import com.labreportapp.portalprojects.infrastructure.successnotification.SuccessNotificationSender;
+import com.labreportapp.portalprojects.repository.RoleMemberProjectRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.Synchronized;
@@ -53,16 +53,10 @@ public class MeMemberProjectServiceImpl implements MeMemberProjectService {
     private MeProjectRepository meProjectRepository;
 
     @Autowired
-    private MeNotificationRepository meNotificationRepository;
-
-    @Autowired
-    private MeNotificationMemberRepository meNotificationMemberRepository;
-
-    @Autowired
-    private EmailSender emailSender;
-
-    @Autowired
     private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
+
+    @Autowired
+    private RoleMemberProjectRepository roleMemberProjectRepository;
 
     @Override
     @Cacheable(value = "membersByProject", key = "#idProject")
@@ -83,7 +77,8 @@ public class MeMemberProjectServiceImpl implements MeMemberProjectService {
                     custom.setName(response.getName());
                     custom.setPicture(response.getPicture());
                     custom.setUserName(response.getUserName());
-                    custom.setRole(memberProject.getRole());
+                    List<String> roles = meMemberProjectRepository.getAllRoleProjectByIdMemberProject(memberProject.getId());
+                    custom.setRoles(roles);
                     custom.setStatusWork(memberProject.getStatusWork());
                     listCustom.add(custom);
                 }
@@ -94,8 +89,17 @@ public class MeMemberProjectServiceImpl implements MeMemberProjectService {
 
     @Override
     public List<SimpleResponse> getAllMemberTeam(String idProject) {
-        List<String> listIdStudent = meMemberProjectRepository.getAllMemberTeam(idProject);
-        List<SimpleResponse> listResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(listIdStudent);
+        Optional<Project> projectFind = meProjectRepository.findById(idProject);
+        if (!projectFind.isPresent()) {
+            throw new RestApiException(Message.PROJECT_NOT_EXISTS);
+        }
+        List<String> listId = new ArrayList<>();
+        if(projectFind.get().getTypeProject() == TypeProject.DU_AN_XUONG_THUC_HANH) {
+            listId = meMemberProjectRepository.getAllMemberTeam(idProject);
+        } else {
+            listId = meMemberProjectRepository.getAllMemberFactory();
+        }
+        List<SimpleResponse> listResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(listId);
         return listResponse;
     }
 
@@ -109,8 +113,16 @@ public class MeMemberProjectServiceImpl implements MeMemberProjectService {
             if (memberProject == null) {
                 throw new MessageHandlingException(Message.MEMBER_PROJECT_NOT_EXISTS);
             }
-            memberProject.setRole(RoleMemberProject.values()[request.getRole()]);
             memberProject.setStatusWork(StatusWork.values()[request.getStatusWork()]);
+            meMemberProjectRepository.deleteRoleMemberProject(memberProject.getId());
+            List<com.labreportapp.portalprojects.entity.RoleMemberProject> roleMemberProjects = new ArrayList<>();
+            request.getRole().forEach(role -> {
+                com.labreportapp.portalprojects.entity.RoleMemberProject roleMemberProject = new com.labreportapp.portalprojects.entity.RoleMemberProject();
+                roleMemberProject.setMemberProjectId(memberProject.getId());
+                roleMemberProject.setRoleProjectId(role);
+                roleMemberProjects.add(roleMemberProject);
+            });
+            roleMemberProjectRepository.saveAll(roleMemberProjects);
             successNotificationSender.senderNotification(ConstantMessageSuccess.CAP_NHAT_THANH_CONG, headerAccessor);
             return meMemberProjectRepository.save(memberProject);
         } catch (Exception e) {
@@ -134,57 +146,23 @@ public class MeMemberProjectServiceImpl implements MeMemberProjectService {
             memberProject.setProjectId(xx.getProjectId());
             memberProject.setEmail(xx.getEmail());
             memberProject.setStatusWork(StatusWork.DANG_LAM);
-            memberProject.setRole(RoleMemberProject.values()[xx.getRole()]);
             listMemberProject.add(memberProject);
         }
-        meMemberProjectRepository.saveAll(listMemberProject);
-
-//        int atIndex = request.getEmail().indexOf("@");
-//        String username = "";
-//        if (atIndex != -1) {
-//            username = request.getEmail().substring(0, atIndex);
-//        }
-//
-//        Notification notification = new Notification();
-//        notification.setContent("Chúc mừng " + username + ", bạn đã được tham gia dự án " + projectFind.get().getName());
-//        notification.setUrl("#/detail-project/" + request.getProjectId());
-//        Notification newNotification = meNotificationRepository.save(notification);
-//
-//        NotificationMember notificationMember = new NotificationMember();
-//        notificationMember.setMemberId(request.getMemberId());
-//        notificationMember.setNotificationId(newNotification.getId());
-//        notificationMember.setStatus(0);
-//        meNotificationMemberRepository.save(notificationMember);
-
-//        String[] arrayEmail = new String[1];
-//        arrayEmail[0] = request.getEmail();
-//        String contentEmail = """
-//                <p>Xin chào""" + " " + username + """
-//                ,</p>
-//                <p>Đây là email thông báo rằng bạn đã được chọn để tham gia vào
-//                một dự án của xưởng dự án của Bộ môn Phát Triển Phần Mềm.
-//                Chúng tôi rất vui mừng và tin tưởng
-//                rằng sự đóng góp của bạn sẽ góp phần làm nên thành công của dự án này.</p>
-//                <p><strong>Dự án: </strong><span style=\"color: red;\"><b>
-//                """ + projectFind.get().getName() + """
-//                </b></span></p>
-//                <p><strong>Thời gian bắt đầu: </strong><span style=\"color: red;\"><b>""" +
-//                DateConverter.convertDateToStringMail(projectFind.get().getStartTime()) + """
-//                </b></span></p>
-//                <p><strong>Thời gian kết thúc dự kiến: </strong><span style=\"color: red;\"><b>""" +
-//                DateConverter.convertDateToStringMail(projectFind.get().getEndTime()) + """
-//                </b></span></p>
-//                <p><strong>Vai trò của bạn trong dự án là: </strong></strong><span style=\"color: red;\"><b>""" +
-//                ConvertRoleMemberProject.convert(newMemberProject.getRole()) + """
-//                </b></span></p>
-//                <p>Trân trọng,</p>
-//                <p>- Portal Projects -</p>
-//                """;
-//        Thread emailThread = new Thread(() -> {
-//            emailSender.sendEmail(arrayEmail, "Portal Projects xin thông báo",
-//                    "Thông báo về việc tham gia dự án", contentEmail);
-//        });
-//        emailThread.start();
+        List<MemberProject> listMemberProjectNew = meMemberProjectRepository.saveAll(listMemberProject);
+        List<RoleMemberProject> roleMemberProjects = new ArrayList<>();
+        listMemberProjectNew.forEach(memberProject -> {
+            request.getListMemberProject().forEach(xx -> {
+                if(memberProject.getMemberId().equals(xx.getMemberId())) {
+                    xx.getRole().forEach(role -> {
+                        RoleMemberProject roleMemberProject = new RoleMemberProject();
+                        roleMemberProject.setMemberProjectId(memberProject.getId());
+                        roleMemberProject.setRoleProjectId(role);
+                        roleMemberProjects.add(roleMemberProject);
+                    });
+                }
+            });
+        });
+        roleMemberProjectRepository.saveAll(roleMemberProjects);
         successNotificationSender.senderNotification(ConstantMessageSuccess.THEM_THANH_CONG, headerAccessor);
         return listMemberProject;
     }

@@ -13,17 +13,36 @@ const LoadingIndicator = () => (
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      backgroundColor: "white",
+      backgroundColor: "rgba(72, 72, 72, 0.2)",
       zIndex: 999999999,
     }}
   >
-    <Spin
-      indicator={<Loading3QuartersOutlined style={{ fontSize: 40 }} spin />}
-    />
-    <br />
-    <span style={{ marginLeft: "10px", color: "black", fontSize: "16px" }}>
-      Loading ...
-    </span>
+    <div class="boxes">
+      <div class="box">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <div class="box">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <div class="box">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <div class="box">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
   </div>
 );
 
