@@ -79,6 +79,10 @@ import DetailGroupProject from "./labreportapp/pages/admin/workshop-project/deta
 import RoleFactoryManagement from "./labreportapp/pages/admin/workshop-member/role-factory-management/RoleFactoryManagement";
 import DetailTeamFactory from "./labreportapp/pages/admin/workshop-member/team-management/detail-team-factory/DetailTeamFactory";
 import { message } from "antd";
+import TeMemberFactory from "./labreportapp/pages/teacher/member-factory/TeMemberFactory";
+import TeTeamFactory from "./labreportapp/pages/teacher/team-factory/TeTeamFactory";
+import StTeamFactory from "./labreportapp/pages/student/team-factory/StTeamFactory";
+import StMemberFactory from "./labreportapp/pages/student/member-factory/StMemberFactory";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -349,6 +353,46 @@ function App() {
                   <DashBoardTeacher>
                     <TeacherMyClass />
                   </DashBoardTeacher>
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/teacher/member-factory"
+              element={
+                <AuthGuard>
+                  <DashBoardTeacher>
+                    <TeMemberFactory />
+                  </DashBoardTeacher>
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/teacher/team-factory"
+              element={
+                <AuthGuard>
+                  <DashBoardTeacher>
+                    <TeTeamFactory />
+                  </DashBoardTeacher>
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/student/team-factory"
+              element={
+                <AuthGuard>
+                  <DashBoardStudent>
+                    <StTeamFactory />
+                  </DashBoardStudent>
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/student/member-factory"
+              element={
+                <AuthGuard>
+                  <DashBoardStudent>
+                    <StMemberFactory />
+                  </DashBoardStudent>
                 </AuthGuard>
               }
             />

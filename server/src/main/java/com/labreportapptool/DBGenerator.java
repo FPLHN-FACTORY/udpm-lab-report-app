@@ -75,6 +75,7 @@ import com.labreportapp.portalprojects.infrastructure.constant.StatusPeriod;
 import com.labreportapp.portalprojects.infrastructure.constant.StatusProject;
 import com.labreportapp.portalprojects.infrastructure.constant.StatusTodo;
 import com.labreportapp.portalprojects.infrastructure.constant.StatusWork;
+import com.labreportapp.portalprojects.infrastructure.constant.TypeProject;
 import com.labreportapp.portalprojects.infrastructure.constant.TypeTodo;
 import com.labreportapp.portalprojects.repository.AssignRepository;
 import com.labreportapp.portalprojects.repository.CategoryRepository;
@@ -453,6 +454,7 @@ public class DBGenerator implements CommandLineRunner {
         project1.setGroupProjectId(groupProject1.getId());
         project1.setName("Module điểm thưởng");
         project1.setStartTime(1696260088553L);
+        project1.setTypeProject(TypeProject.DU_AN_XUONG_THUC_HANH);
         project1.setEndTime(1695446153961L);
         project1.setProgress(Float.parseFloat("0"));
         project1.setBackgroundColor("rgb(38, 144, 214)");
@@ -465,6 +467,7 @@ public class DBGenerator implements CommandLineRunner {
         project2.setName("Module quản lý dự án");
         project2.setStartTime(1678294800000L);
         project2.setEndTime(1685379600000L);
+        project2.setTypeProject(TypeProject.DU_AN_XUONG_THUC_HANH);
         project2.setProgress(Float.parseFloat("0"));
         project2.setBackgroundColor("#59a1e3");
         project2.setGroupProjectId(groupProject1.getId());
@@ -476,6 +479,7 @@ public class DBGenerator implements CommandLineRunner {
         project3.setCode("Project_3");
         project3.setName("Module bài viết");
         project3.setStartTime(1678294800000L);
+        project3.setTypeProject(TypeProject.DU_AN_XUONG_THUC_HANH);
         project3.setEndTime(1685379600000L);
         project3.setGroupProjectId(groupProject1.getId());
         project3.setProgress(Float.parseFloat("0"));
@@ -483,7 +487,6 @@ public class DBGenerator implements CommandLineRunner {
         project3.setDescriptions("Mục đích phục vụ xem bài viết của bộ môn");
         project3.setStatusProject(StatusProject.DANG_DIEN_RA);
         project3.setId((projectRepository.save(project3).getId()));
-
 
 //Team - class 1
         Team team1 = new Team();
@@ -1921,7 +1924,6 @@ public class DBGenerator implements CommandLineRunner {
         memberProject1.setMemberId("f5882312-81a5-4d44-8e44-08dbb2f9feb4".toLowerCase());
         memberProject1.setProjectId(project1.getId());
         memberProject1.setEmail("quynhncph26201@fpt.edu.vn");
-        memberProject1.setRole(RoleMemberProject.MANAGER);
         memberProject1.setStatusWork(StatusWork.DANG_LAM);
         memberProject1.setId(memberProjectRepository.save(memberProject1).getId());
 
@@ -1929,7 +1931,6 @@ public class DBGenerator implements CommandLineRunner {
         memberProject2.setMemberId("80de791c-f32b-4e7d-8e46-08dbb2f9feb4".toLowerCase());
         memberProject2.setProjectId(project1.getId());
         memberProject2.setEmail("hieundph26058@fpt.edu.vn");
-        memberProject2.setRole(RoleMemberProject.LEADER);
         memberProject2.setStatusWork(StatusWork.DANG_LAM);
         memberProject2.setId(memberProjectRepository.save(memberProject2).getId());
 
@@ -1937,7 +1938,6 @@ public class DBGenerator implements CommandLineRunner {
         memberProject3.setMemberId("fcb1d931-cb71-4f12-94d6-08dbb66b2f92".toLowerCase());
         memberProject3.setProjectId(project1.getId());
         memberProject3.setEmail("huynqph26772@fpt.edu.vn");
-        memberProject3.setRole(RoleMemberProject.DEV);
         memberProject3.setStatusWork(StatusWork.DANG_LAM);
         memberProject3.setId(memberProjectRepository.save(memberProject3).getId());
 
@@ -1945,7 +1945,6 @@ public class DBGenerator implements CommandLineRunner {
         memberProject4.setMemberId("59f0cb47-5bd4-4909-b1c4-08dbb743dd7d".toLowerCase());
         memberProject4.setProjectId(project1.getId());
         memberProject4.setEmail("vanntph19604@fpt.edu.vn");
-        memberProject4.setRole(RoleMemberProject.TESTER);
         memberProject4.setStatusWork(StatusWork.DANG_LAM);
         memberProject4.setId(memberProjectRepository.save(memberProject4).getId());
 
@@ -1953,7 +1952,6 @@ public class DBGenerator implements CommandLineRunner {
         memberProject5.setMemberId("2b5c2803-c998-4012-8e47-08dbb2f9feb4".toLowerCase());
         memberProject5.setProjectId(project1.getId());
         memberProject5.setEmail("vinhnvph23845@fpt.edu.vn");
-        memberProject5.setRole(RoleMemberProject.DEV);
         memberProject5.setStatusWork(StatusWork.DANG_LAM);
         memberProject5.setId(memberProjectRepository.save(memberProject5).getId());
 
@@ -1962,7 +1960,6 @@ public class DBGenerator implements CommandLineRunner {
         memberProject6.setMemberId("71090C89-F618-41AE-2A8D-08DBB201EFE8".toLowerCase());
         memberProject6.setProjectId(project2.getId());
         memberProject6.setEmail("hieundph25894@fpt.edu.vn");
-        memberProject6.setRole(RoleMemberProject.MANAGER);
         memberProject6.setStatusWork(StatusWork.DANG_LAM);
         memberProject6.setId(memberProjectRepository.save(memberProject6).getId());
 
@@ -1970,7 +1967,6 @@ public class DBGenerator implements CommandLineRunner {
         memberProject7.setMemberId("2435C7D5-9BEC-45AC-9BFE-08DBA87523FE".toLowerCase());
         memberProject7.setProjectId(project2.getId());
         memberProject7.setEmail("thangncph26123@fpt.edu.vn");
-        memberProject7.setRole(RoleMemberProject.LEADER);
         memberProject7.setStatusWork(StatusWork.DANG_LAM);
         memberProject7.setId(memberProjectRepository.save(memberProject7).getId());
 
@@ -1978,7 +1974,6 @@ public class DBGenerator implements CommandLineRunner {
         memberProject8.setMemberId("6A85641C-874B-4AD0-B1BA-08DBB743DD7D".toLowerCase());
         memberProject8.setProjectId(project2.getId());
         memberProject8.setEmail("hatqph21186@fpt.edu.vn");
-        memberProject8.setRole(RoleMemberProject.DEV);
         memberProject8.setStatusWork(StatusWork.DANG_LAM);
         memberProject8.setId(memberProjectRepository.save(memberProject8).getId());
 
@@ -1986,7 +1981,6 @@ public class DBGenerator implements CommandLineRunner {
         memberProject9.setMemberId("B8E51E50-4823-4F9A-B1BC-08DBB743DD7D".toLowerCase());
         memberProject9.setProjectId(project2.getId());
         memberProject9.setEmail("nhatnvph26159@fpt.edu.vn");
-        memberProject9.setRole(RoleMemberProject.TESTER);
         memberProject9.setStatusWork(StatusWork.DANG_LAM);
         memberProject9.setId(memberProjectRepository.save(memberProject9).getId());
 
@@ -1994,7 +1988,6 @@ public class DBGenerator implements CommandLineRunner {
         memberProject10.setMemberId("B34C613D-8AA5-4865-B1BD-08DBB743DD7D".toLowerCase());
         memberProject10.setProjectId(project2.getId());
         memberProject10.setEmail("tuannvph25577@fpt.edu.vn");
-        memberProject10.setRole(RoleMemberProject.DEV);
         memberProject10.setStatusWork(StatusWork.DANG_LAM);
         memberProject10.setId(memberProjectRepository.save(memberProject10).getId());
 
@@ -2003,7 +1996,6 @@ public class DBGenerator implements CommandLineRunner {
         memberProject11.setMemberId("d3c53418-67ea-47fe-b1be-08dbb743dd7d".toLowerCase());
         memberProject11.setProjectId(project3.getId());
         memberProject11.setEmail("anhdtnph25326@fpt.edu.vn");
-        memberProject11.setRole(RoleMemberProject.MANAGER);
         memberProject11.setStatusWork(StatusWork.DANG_LAM);
         memberProject11.setId(memberProjectRepository.save(memberProject11).getId());
 
@@ -2011,7 +2003,6 @@ public class DBGenerator implements CommandLineRunner {
         memberProject12.setMemberId("07e9748d-cf8c-4d48-b1bf-08dbb743dd7d".toLowerCase());
         memberProject12.setProjectId(project3.getId());
         memberProject12.setEmail("trangntph19494@fpt.edu.vn");
-        memberProject12.setRole(RoleMemberProject.LEADER);
         memberProject12.setStatusWork(StatusWork.DANG_LAM);
         memberProject12.setId(memberProjectRepository.save(memberProject12).getId());
 
@@ -2019,7 +2010,6 @@ public class DBGenerator implements CommandLineRunner {
         memberProject13.setMemberId("8e0a1e2d-246f-49b7-b1c2-08dbb743dd7d".toLowerCase());
         memberProject13.setProjectId(project3.getId());
         memberProject13.setEmail("hoangdvph25902@fpt.edu.vn");
-        memberProject13.setRole(RoleMemberProject.DEV);
         memberProject13.setStatusWork(StatusWork.DANG_LAM);
         memberProject13.setId(memberProjectRepository.save(memberProject13).getId());
 
@@ -2027,7 +2017,6 @@ public class DBGenerator implements CommandLineRunner {
         memberProject14.setMemberId("967C6BB6-0F50-4862-B1C0-08DBB743DD7D".toLowerCase());
         memberProject14.setProjectId(project3.getId());
         memberProject14.setEmail("huyvqph25924@fpt.edu.vn");
-        memberProject14.setRole(RoleMemberProject.TESTER);
         memberProject14.setStatusWork(StatusWork.DANG_LAM);
         memberProject14.setId(memberProjectRepository.save(memberProject14).getId());
 
@@ -2035,10 +2024,8 @@ public class DBGenerator implements CommandLineRunner {
         memberProject15.setMemberId("1d566092-b2dd-49c6-b1c1-08dbb743dd7d".toLowerCase());
         memberProject15.setProjectId(project3.getId());
         memberProject15.setEmail("hungpvph25929@fpt.edu.vn");
-        memberProject15.setRole(RoleMemberProject.DEV);
         memberProject15.setStatusWork(StatusWork.DANG_LAM);
         memberProject15.setId(memberProjectRepository.save(memberProject15).getId());
-
 
         Period period1 = new Period();
         period1.setCode("period_1");
