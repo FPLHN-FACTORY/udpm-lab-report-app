@@ -24,6 +24,6 @@ public abstract class AdBaseMemberProjectRequest {
 
     @NotEmpty
     @NotBlank
-    private List<String> role;
+    private List<String> listRole;
 
 }

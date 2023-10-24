@@ -39,11 +39,10 @@ const ModalCreateProject = ({ visible, onCancel }) => {
   const [endTime, setEndTime] = useState(null);
   const [descriptions, setDescriptions] = useState("");
   const [errorDescriptions, setErrorDescriptions] = useState("");
-  const [errorMembers, setErrorMembers] = useState("");
+
   const [errorCategorys, setErrorCategorys] = useState("");
   const [listCategorys, setListCategorys] = useState([]);
   const [listCategorysChange, setListCategorysChange] = useState([]);
-  const [listCategoryProjects, setListCategoryProjects] = useState([]);
   const [listMembers, setListMembers] = useState([]);
   const [listMembersChange, setListMembersChange] = useState([]);
   const [listMemberProjects, setListMemberProjects] = useState([]);
@@ -79,7 +78,6 @@ const ModalCreateProject = ({ visible, onCancel }) => {
         setErrorName();
         setListCategorysChange([]);
         setListMembersChange([]);
-        setListCategoryProjects([]);
         setListMemberProjects([]);
       };
     }
@@ -132,7 +130,7 @@ const ModalCreateProject = ({ visible, onCancel }) => {
         let newData = {
           memberId: record.memberId,
           email: record.email,
-          role: [...value],
+          listRole: [...value],
         };
         return { ...record, ...newData };
       }
@@ -141,7 +139,7 @@ const ModalCreateProject = ({ visible, onCancel }) => {
     setListMemberProjects(updatedListInfo);
   };
 
-  const featMemberAndCaregoryAddProject = async () => {
+  const featMemberAndCaregoryAddProject = () => {
     try {
       const listMemberJoinCreate = listMembers
         .filter((obj1) => listMembersChange.some((obj2) => obj1.id === obj2))
@@ -151,21 +149,23 @@ const ModalCreateProject = ({ visible, onCancel }) => {
           );
           return { ...obj1, ...matchedItem };
         });
+
       const roleDefault = listRoleConfig.find(
         (item) => item.roleDefault === "DEFAULT"
       );
-      console.log(roleDefault);
+
       const listMemberAdd = listMemberJoinCreate.map((member) => {
         return {
           ...member,
-          role:
-            listRoleConfig.length > 0
-              ? [roleDefault !== undefined && roleDefault.name]
-              : ["Không có vai trò mặc định, vui lòng chọn vai trò khác"],
+          listRole:
+            member.listRole === undefined &&
+            listRoleConfig.length > 0 &&
+            roleDefault !== undefined
+              ? [roleDefault.name]
+              : member.listRole,
         };
       });
       setListMemberProjects(listMemberAdd);
-      setListCategoryProjects(listCategorysChange);
     } catch (error) {
       console.log(error);
     }
@@ -217,6 +217,17 @@ const ModalCreateProject = ({ visible, onCancel }) => {
     } else {
       setErrorCategorys("");
     }
+    let checkRole = 0;
+    listMemberProjects.map((item) => {
+      if (item.listRole.length === 0) {
+        checkRole++;
+        check++;
+      }
+    });
+    if (checkRole > 0) {
+      message.error("Vai trò của thành viên không được trống");
+    }
+
     if (check === 0) {
       let projectNew = {
         code: code,
@@ -243,7 +254,7 @@ const ModalCreateProject = ({ visible, onCancel }) => {
 
   const columns = [
     {
-      title: "STT",
+      title: "#",
       dataIndex: "stt",
       key: "stt",
       render: (text, record, index) => index + 1,
@@ -264,11 +275,14 @@ const ModalCreateProject = ({ visible, onCancel }) => {
           <div>
             <Image.PreviewGroup>
               <Image
-                src={record.picture}
+                src={
+                  record.picture === "Images/Default.png"
+                    ? "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                    : record.picture
+                }
                 alt="Avatar"
                 width={25}
                 height={25}
-                marginRight={-5}
                 className="avatarMember"
               />
             </Image.PreviewGroup>
@@ -321,55 +335,15 @@ const ModalCreateProject = ({ visible, onCancel }) => {
     },
     {
       title: "Vai trò",
-      dataIndex: "role",
-      key: "role",
-      filterDropdown: ({
-        setSelectedKeys,
-        selectedKeys,
-        confirm,
-        clearFilters,
-      }) => (
-        <div style={{ padding: "8px" }}>
-          <Select
-            placeholder="Tìm kiếm"
-            value={selectedKeys[0]}
-            onChange={(value) => setSelectedKeys(value ? [value] : [])}
-            onPressEnter={confirm}
-            style={{ width: 188, marginBottom: "8px", display: "block" }}
-          >
-            {listRoleConfig.length === 0
-              ? "Không có vai trò để chọn"
-              : listRoleConfig.map((item) => {
-                  <Option value={item.name}>{item.name}</Option>;
-                })}
-          </Select>
-          <div style={{ display: "flex", justifyContent: "flex-end" }}>
-            <Button
-              type="primary"
-              onClick={confirm}
-              size="small"
-              style={{ marginRight: "8px" }}
-            >
-              Tìm
-            </Button>
-            <Button onClick={clearFilters} size="small">
-              Đặt lại
-            </Button>
-          </div>
-        </div>
-      ),
-      filterIcon: (filtered) => (
-        <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
-      ),
-      onFilter: (value, record) => record.role === value,
-      sorter: (a, b) => a.role.localeCompare(b.role),
+      dataIndex: "roleCustome",
+      key: "roleCustome",
       render: (text, record) => (
         <>
           {listRoleConfig.length > 0 ? (
             <Select
               mode="multiple"
               placeholder="Chọn vai trò"
-              value={record.role}
+              value={record.listRole}
               onChange={(e) => handleRoleChange(record.memberId, e)}
               style={{
                 width: "100%",
@@ -498,6 +472,12 @@ const ModalCreateProject = ({ visible, onCancel }) => {
           <Row style={{ marginBottom: "15px" }}>
             <div style={{ width: "100%" }}>
               <span>Thành viên:</span>
+              {listMembersChange.length > 0 && (
+                <span style={{ color: "red" }}>
+                  {" "}
+                  (*) Vui lòng chọn lại vai trò khi đã thêm tất cả thành viên
+                </span>
+              )}
               <Select
                 mode="multiple"
                 placeholder="Thêm thành viên"
@@ -547,16 +527,10 @@ const ModalCreateProject = ({ visible, onCancel }) => {
                   </Option>
                 ))}{" "}
               </Select>
-              <span
-                className="error"
-                style={{ display: "block", marginTop: "2px" }}
-              >
-                {errorMembers}
-              </span>
             </div>
           </Row>
           {listMemberProjects.length > 0 && (
-            <Row>
+            <Row style={{ marginBottom: "20px" }}>
               {" "}
               <Col span={24}>
                 <Table
@@ -564,6 +538,7 @@ const ModalCreateProject = ({ visible, onCancel }) => {
                   columns={columns}
                   dataSource={listMemberProjects}
                   rowKey="id"
+                  pagination={false}
                 />
               </Col>{" "}
             </Row>

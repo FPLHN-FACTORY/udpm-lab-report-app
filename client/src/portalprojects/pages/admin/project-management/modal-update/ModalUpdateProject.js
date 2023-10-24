@@ -17,17 +17,8 @@ import { useEffect, useState } from "react";
 import "./styleModalUpdateProject.css";
 import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import "react-toastify/dist/ReactToastify.css";
-import { CategoryProjectManagementAPI } from "../../../../api/admin/project-management/categoryProjectManagement.api";
 import { ProjectManagementAPI } from "../../../../api/admin/project-management/projectManagement.api";
 import { UpdateProject } from "../../../../app/reducer/admin/project-management/projectManagementSlide.reducer";
-import {
-  SetCategoryProject,
-  GetCategoryProject,
-} from "../../../../app/reducer/admin/category-project-management/categoryProjectManagement.reduce";
-import {
-  SetMemberProject,
-  GetMemberProject,
-} from "../../../../app/reducer/admin/member-project-management/memberProjectManagement.reduce";
 import { SearchOutlined } from "@ant-design/icons";
 import { AdPotalsRoleProjectAPI } from "../../../../api/admin/role-project/AdPotalsRoleProject.api";
 import dayjs from "dayjs";
@@ -47,20 +38,12 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
   const [errorTime, setErrorTime] = useState("");
   const [descriptions, setDescriptions] = useState("");
   const [errorDescriptions, setErrorDescriptions] = useState("");
-  const [errorMembers, setErrorMembers] = useState("");
   const [errorCategorys, setErrorCategorys] = useState("");
-  const [listCategorys, setListCategorys] = useState([]); //getAll
   const [listCategorysChange, setListCategorysChange] = useState([]);
-  const [listCategoryProjects, setListCategoryProjects] = useState([]); // add
-  const [listCategoryNotJoin, setListCategoryNotJoin] = useState([]);
-  const [listCategoryJoin, setListCategoryJoin] = useState([]);
-  const [listMember, setListMember] = useState([]); //getAll
-  const [listMemberChange, setListMemberChange] = useState([]); //change
-  const [listMemberProjects, setListMemberProjects] = useState([]); //add
-  const [listMemberNotJoin, setListMemberNotJoin] = useState([]);
-  const [listMemberJoin, setListMemberJoin] = useState([]);
+  const [listMember, setListMember] = useState([]);
+  const [listMemberChange, setListMemberChange] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [listUpdateMember, setListUpdateMember] = useState([]); // listMemberAll update
+  const [listUpdateMember, setListUpdateMember] = useState([]);
 
   const [listRoleProject, setListRoleProject] = useState([]);
   const dataCategory = useAppSelector(GetCategory);
@@ -69,7 +52,6 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
       setListCategorysChange([]);
       setListMemberChange([]);
       setListUpdateMember([]);
-      setListMemberProjects([]);
       featchRoleProject(idProject);
       featChMultiSelect();
       featchProject();
@@ -118,6 +100,7 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
       console.log(error);
     }
   };
+  const [listMemberRole, setListMemberRole] = useState([]);
   const featchProject = async () => {
     try {
       await ProjectManagementAPI.detailUpdate(idProject).then((response) => {
@@ -131,6 +114,7 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
           obj.listMemberRole != null &&
             obj.listMemberRole.map((i) => i.memberId)
         );
+        setListMemberRole(obj.listMemberRole);
         setListCategorysChange(
           obj.listCategory != null && obj.listCategory.map((i) => i.categoryId)
         );
@@ -142,55 +126,70 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
 
   const featMemberAndCaregoryAddProject = async () => {
     try {
-      console.log("changer");
-      console.log(listMember);
-      const listMemberJoinCreate = listMember
-        .filter((obj1) =>
-          listMemberChange.some((obj2) => obj1.memberId === obj2)
-        )
-        .map((obj1) => {
-          const matchedItem = listMemberChange.find(
-            (obj2) => obj2 === obj1.memberId
-          );
-          return { ...obj1, ...matchedItem };
-        });
-      console.log("memebrer role");
-      console.log(listMemberJoinCreate);
-      // const roleDefault = listRoleProject.find(
-      //   (item) => item.roleDefault === "DEFAULT"
-      // );
-      // const listMemberAdd = listMemberJoinCreate.map((member) => {
-      //   return {
-      //     memberId: member.memberId,
-      //     email: member.email,
-      //     role:
-      //       listRoleProject.length > 0
-      //         ? [roleDefault !== undefined && roleDefault.name]
-      //         : ["Không có vai trò mặc định, vui lòng chọn vai trò khác"],
-      //     statusWork: member.statusWork,
-      //   };
-      // });
-      setListUpdateMember(listMemberJoinCreate);
-      setListMemberProjects(listMemberJoinCreate);
-      setListCategoryProjects(listCategorysChange);
+      const memberRoles = {};
+      listMemberRole.forEach((memberRole) => {
+        memberRoles[memberRole.memberId] = memberRole.listRole;
+      });
+
+      const roleDefault = listRoleProject.find(
+        (item) => item.roleDefault === "DEFAULT"
+      );
+
+      const membersInChange = listMember.filter((member) =>
+        listMemberChange.includes(member.memberId)
+      );
+
+      const updatedListMemberJoinCreate = membersInChange.map((obj1) => {
+        let updatedRoles = memberRoles[obj1.memberId] || [];
+
+        if (
+          roleDefault &&
+          !updatedRoles.some((role) => role.idRole === roleDefault.id)
+        ) {
+          updatedRoles.push({
+            idRole: roleDefault.id,
+            nameRole: roleDefault.name,
+          });
+        }
+
+        return {
+          ...obj1,
+          listRole: updatedRoles,
+        };
+      });
+      setListUpdateMember(updatedListMemberJoinCreate);
     } catch (error) {
-      alert("Hệ thống lỗi, vui lòng F5 lại trang");
+      console.log(error);
     }
   };
 
   const handleRoleChange = (id, value) => {
-    let listFindUpdateRole = [...listMemberJoin, ...listUpdateMember];
-    let updatedListInfo = listFindUpdateRole.map((record) => {
+    const selectedRoles = Array.isArray(value) ? value : value.split(",");
+
+    let updatedListInfo = listUpdateMember.map((record) => {
       if (record.memberId === id) {
         let newData = {
           memberId: record.memberId,
           email: record.email,
-          role: [...value],
+          listRole: [],
         };
+
+        selectedRoles.forEach((roleId) => {
+          let selectedRole = listRoleProject.find((role) => role.id === roleId);
+          if (selectedRole) {
+            newData.listRole.push({
+              idRole: selectedRole.id,
+              nameRole: selectedRole.name,
+            });
+          }
+        });
+
         return { ...record, ...newData };
       }
       return record;
     });
+
+    console.log(updatedListInfo);
     setListUpdateMember(updatedListInfo);
   };
 
@@ -244,6 +243,16 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
         setErrorDescriptions("");
       }
     }
+    let checkRole = 0;
+    listUpdateMember.map((item) => {
+      if (item.listRole.length === 0) {
+        checkRole++;
+        check++;
+      }
+    });
+    if (checkRole > 0) {
+      message.error("Vai trò của thành viên không được trống");
+    }
     if (check === 0) {
       let projectNew = {
         code: code,
@@ -251,7 +260,7 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
         descriptions: descriptions,
         startTime: startTime,
         endTime: endTime,
-        listMembers: listUpdateMember,
+        listMember: listUpdateMember,
         listCategorysId: listCategorysChange,
       };
       ProjectManagementAPI.updateProject(projectNew, idProject).then(
@@ -291,11 +300,14 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
           <div>
             <Image.PreviewGroup>
               <Image
-                src={record.picture}
+                src={
+                  record.picture === "Images/Default.png"
+                    ? "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                    : record.picture
+                }
                 alt="Avatar"
                 width={25}
                 height={25}
-                marginRight={-5}
                 className="avatarMember"
               />
             </Image.PreviewGroup>
@@ -350,55 +362,17 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
       title: "Vai trò",
       dataIndex: "roleCustome",
       key: "roleCustome",
-      filterDropdown: ({
-        setSelectedKeys,
-        selectedKeys,
-        confirm,
-        clearFilters,
-      }) => (
-        <div style={{ padding: "8px" }}>
-          <Select
-            placeholder="Tìm kiếm"
-            value={selectedKeys[0]}
-            onChange={(value) => setSelectedKeys(value ? [value] : [])}
-            onPressEnter={confirm}
-            style={{ width: 188, marginBottom: "8px", display: "block" }}
-          >
-            {listRoleProject.length === 0
-              ? "Không có vai trò để chọn"
-              : listRoleProject.map((item) => {
-                  <Option value={item.id}>{item.name}</Option>;
-                })}
-          </Select>
-          <div style={{ display: "flex", justifyContent: "flex-end" }}>
-            <Button
-              type="primary"
-              onClick={confirm}
-              size="small"
-              style={{ marginRight: "8px" }}
-            >
-              Tìm
-            </Button>
-            <Button onClick={clearFilters} size="small">
-              Đặt lại
-            </Button>
-          </div>
-        </div>
-      ),
-      filterIcon: (filtered) => (
-        <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
-      ),
-      onFilter: (value, record) => record.role === value,
-      sorter: (a, b) => a.role.localeCompare(b.role),
+
       render: (text, record) => (
         <Select
           mode="multiple"
           placeholder="Chọn vai trò"
-          // value={record.listRole.map((item) => item.idRole)}
+          value={record.listRole.map((item) => item.idRole)}
           style={{
             width: "100%",
           }}
-          key={record.idRoleMemberProject}
+          onChange={(e) => handleRoleChange(record.memberId, e)}
+          key={record.idRole}
           options={listRoleProject.map((item) => ({
             value: item.id,
             label: item.name,
@@ -514,21 +488,15 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
               </div>
             </Col>
           </Row>
-
-          <Row style={{ marginBottom: "15px" }}>
-            <span style={{ fontSize: "16px", fontWeight: 500 }}>
-              Danh sách thành viên đang tham gia dự án:
-            </span>
-            <span
-              className="error"
-              style={{ display: "block", marginTop: "2px" }}
-            >
-              {errorMembers}
-            </span>
-          </Row>
           <Row style={{ marginBottom: "15px" }}>
             <div style={{ width: "100%" }}>
               <span>Thành viên:</span>
+              {listMemberChange.length > 0 && (
+                <span style={{ color: "red" }}>
+                  {" "}
+                  (*) Vui lòng chọn vai trò khi đã thêm tất cả thành viên
+                </span>
+              )}
               <Select
                 mode="multiple"
                 placeholder="Thêm thành viên"
@@ -554,8 +522,9 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
                         <Image.PreviewGroup>
                           <Image
                             src={
-                              member.picture ||
-                              "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                              member.picture === "Images/Default.png"
+                                ? "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                                : member.picture
                             }
                             alt="Avatar"
                             width={25}
@@ -575,22 +544,16 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
                   </Option>
                 ))}{" "}
               </Select>
-              <span
-                className="error"
-                style={{ display: "block", marginTop: "2px" }}
-              >
-                {errorMembers}
-              </span>
             </div>
           </Row>
-          {listMemberProjects.length > 0 && (
+          {listUpdateMember.length > 0 && (
             <Row>
               {" "}
               <Col span={24}>
                 <Table
                   className="table-member-management"
                   columns={columns}
-                  dataSource={listMemberProjects}
+                  dataSource={listUpdateMember}
                   rowKey="id"
                 />
               </Col>{" "}

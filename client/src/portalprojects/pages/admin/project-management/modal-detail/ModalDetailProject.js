@@ -130,6 +130,7 @@ const ModalDetailProject = ({ visible, onCancel, idProject }) => {
             style={{
               width: "100%",
             }}
+            maxTagCount={3}
             key={record.idRoleMemberProject}
             options={record.listRole.map((item) => ({
               value: item.idRole,

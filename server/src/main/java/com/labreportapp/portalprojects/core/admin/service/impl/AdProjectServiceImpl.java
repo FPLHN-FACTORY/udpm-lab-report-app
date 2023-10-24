@@ -5,9 +5,11 @@ import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.portalprojects.core.admin.model.request.AdCreateMemberProjectRequest;
 import com.labreportapp.portalprojects.core.admin.model.request.AdCreateProjectRequest;
 import com.labreportapp.portalprojects.core.admin.model.request.AdFindProjectRequest;
-import com.labreportapp.portalprojects.core.admin.model.request.AdUpdateProjectRequest;
+import com.labreportapp.portalprojects.core.admin.model.request.AdListMemberUpdateRoleRequest;
+import com.labreportapp.portalprojects.core.admin.model.request.AdUpdateProjectRoleRequest;
 import com.labreportapp.portalprojects.core.admin.model.response.AdDetailProjectCateMemberRespone;
 import com.labreportapp.portalprojects.core.admin.model.response.AdMemberAndRoleProjectCustomResponse;
+import com.labreportapp.portalprojects.core.admin.model.response.AdMemberRoleBaseResponse;
 import com.labreportapp.portalprojects.core.admin.model.response.AdProjectReponse;
 import com.labreportapp.portalprojects.core.admin.repository.AdLabelProjectRepository;
 import com.labreportapp.portalprojects.core.admin.repository.AdMemberProjectRepository;
@@ -42,6 +44,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import java.text.ParseException;
@@ -50,7 +53,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author hieundph25894
@@ -100,6 +102,7 @@ public class AdProjectServiceImpl implements AdProjectService {
     }
 
     @Override
+    @Transactional
     @CacheEvict(value = {"membersByProject"}, allEntries = true)
     public AdProjectReponse createProject(@Valid AdCreateProjectRequest request) {
         String checkCode = adProjectRepository.getProjectByCode(request.getCode());
@@ -114,20 +117,19 @@ public class AdProjectServiceImpl implements AdProjectService {
             throw new RestApiException(Message.TIME_NOT_NULL);
         }
         List<AdCreateMemberProjectRequest> listMember = request.getListMembers();
-
-        if (listMember.size() > 0) {
-            AtomicBoolean checkRoleDefault = new AtomicBoolean(false);
-            listMember.forEach(m -> {
-                m.getRole().forEach(i -> {
-                    if (i.equals("Không có vai trò mặc định, vui lòng chọn vai trò khác")) {
-                        checkRoleDefault.set(true);
-                    }
-                });
-            });
-            if (checkRoleDefault.get()) {
-                throw new RestApiException(Message.ROLE_DEFAULT_NOT_EMPTY);
-            }
-        }
+//        if (listMember.size() > 0) {
+//            AtomicBoolean checkRoleDefault = new AtomicBoolean(false);
+//            listMember.forEach(m -> {
+//                m.getListRole().forEach(i -> {
+//                    if (i.equals("Không có vai trò mặc định, vui lòng chọn vai trò khác")) {
+//                        checkRoleDefault.set(true);
+//                    }
+//                });
+//            });
+//            if (checkRoleDefault.get()) {
+//                throw new RestApiException(Message.ROLE_DEFAULT_NOT_EMPTY);
+//            }
+//        }
 
         Project project = formUtils.convertToObject(Project.class, request);
         project.setStartTime(request.getStartTime());
@@ -146,6 +148,15 @@ public class AdProjectServiceImpl implements AdProjectService {
         project.setBackgroundColor("#59a1e3");
         project.setTypeProject(TypeProject.DU_AN_XUONG_DU_AN);
         Project newProject = adProjectRepository.save(project);
+        List<String> listCaregoryIds = request.getListCategorysId();
+        List<ProjectCategory> newCategoryProject = new ArrayList<>();
+        listCaregoryIds.forEach(item -> {
+            ProjectCategory categoryProject = new ProjectCategory();
+            categoryProject.setCategoryId(item);
+            categoryProject.setProjectId(newProject.getId());
+            newCategoryProject.add(categoryProject);
+        });
+        adProjectCategoryRepository.saveAll(newCategoryProject);
 
         List<Label> listLabel = labelRepository.findAll();
         List<LabelProject> newLabelProject = new ArrayList<>();
@@ -158,17 +169,6 @@ public class AdProjectServiceImpl implements AdProjectService {
             newLabelProject.add(labelProject);
         });
         adLabelProjectRepository.saveAll(newLabelProject);
-
-        List<String> listCaregoryIds = request.getListCategorysId();
-        List<ProjectCategory> newCategoryProject = new ArrayList<>();
-        listCaregoryIds.forEach(item -> {
-            ProjectCategory categoryProject = new ProjectCategory();
-            categoryProject.setCategoryId(item);
-            categoryProject.setProjectId(newProject.getId());
-            newCategoryProject.add(categoryProject);
-        });
-        adProjectCategoryRepository.saveAll(newCategoryProject);
-
 
         List<MemberProject> newMemberProject = new ArrayList<>();
         listMember.forEach(item -> {
@@ -196,7 +196,7 @@ public class AdProjectServiceImpl implements AdProjectService {
         Optional<AdCreateMemberProjectRequest> memberDefault = listMember.stream()
                 .filter(i -> i.getMemberId().equals(labReportAppSession.getUserId()))
                 .findFirst();
-        if (!memberDefault.isPresent()){
+        if (!memberDefault.isPresent()) {
             MemberProject memberCreateProject = new MemberProject();
             memberCreateProject.setMemberId(labReportAppSession.getUserId());
             memberCreateProject.setProjectId(newProject.getId());
@@ -222,7 +222,7 @@ public class AdProjectServiceImpl implements AdProjectService {
         }
         List<MemberProject> listMemberProject = adMemberProjectRepository.saveAll(newMemberProject);
         listMember.forEach(member -> {
-            member.getRole().forEach(role -> {
+            member.getListRole().forEach(role -> {
                 listRoleProject.forEach(roleProject -> {
                     if (roleProject.getName().equals(role)) {
                         RoleMemberProject roleMemberProject = new RoleMemberProject();
@@ -243,6 +243,150 @@ public class AdProjectServiceImpl implements AdProjectService {
         return projectView.get();
     }
 
+    @Override
+    @Transactional
+    @CacheEvict(value = {"membersByProject"}, allEntries = true)
+    public AdProjectReponse updateProject(@Valid AdUpdateProjectRoleRequest request, String idProject) {
+        Optional<Project> projectCheck = adProjectRepository.findById(idProject);
+        if (!projectCheck.isPresent()) {
+            throw new RestApiException(Message.PROJECT_NOT_EXISTS);
+        }
+        String checkCodeProject = adProjectRepository.findByIdCode(request.getCode(), idProject);
+        Project project = projectCheck.get();
+        if (checkCodeProject != null && !project.getCode().equals(request.getCode())) {
+            throw new RestApiException(Message.CODE_PROJECT_ALREADY_EXISTS);
+        }
+        project.setCode(request.getCode());
+        project.setDescriptions(request.getDescriptions());
+        project.setName(request.getName());
+        project.setStartTime(request.getStartTime());
+        project.setEndTime(request.getEndTime());
+        Long currentTime = new Date().getTime();
+        if (currentTime < request.getStartTime()) {
+            project.setStatusProject(StatusProject.CHUA_DIEN_RA);
+        }
+        if (currentTime >= request.getStartTime() && currentTime <= request.getEndTime()) {
+            project.setStatusProject(StatusProject.DANG_DIEN_RA);
+        }
+        if (request.getEndTime() < currentTime) {
+            project.setStatusProject(StatusProject.DA_DIEN_RA);
+        }
+
+        List<AdListMemberUpdateRoleRequest> listMember = request.getListMember();
+
+        Project newProject = adProjectRepository.save(project);
+        List<String> listCaregoryIds = request.getListCategorysId();
+        List<ProjectCategory> newCategoryProject = new ArrayList<>();
+        listCaregoryIds.forEach(item -> {
+            ProjectCategory categoryProject = new ProjectCategory();
+            categoryProject.setCategoryId(item);
+            categoryProject.setProjectId(project.getId());
+            newCategoryProject.add(categoryProject);
+        });
+        adProjectCategoryRepository.saveAll(newCategoryProject);
+
+        List<MemberProject> newMemberProject = new ArrayList<>();
+        List<AdMemberAndRoleProjectCustomResponse> listMemberJoinRole = adMemberProjectService
+                .findAllMemberJoinProject(idProject);
+
+
+//        listMember.forEach(item -> {
+//            Optional<AdMemberAndRoleProjectCustomResponse> objFind = findMemberRoleByMemberId(
+//                    listMemberJoinRole, item.getMemberId());
+//            if (objFind.isPresent()) {
+//                item.getListRole().forEach(role -> {
+//                    if (role.getIdRole().equals(objFind.get().get))
+//                });
+//
+//            }
+//            MemberProject memberProject = new MemberProject();
+//            memberProject.setProjectId(newProject.getId());
+//            memberProject.setMemberId(item.getMemberId());
+//            memberProject.setEmail(item.getEmail());
+//            memberProject.setStatusWork(StatusWork.DANG_LAM);
+//            newMemberProject.add(memberProject);
+//        });
+
+        List<RoleConfig> listRoleConfig = adPotalsRoleConfigRepository.findAll();
+        List<RoleProject> newRoleProject = new ArrayList<>();
+        listRoleConfig.forEach(item -> {
+            RoleProject roleProject = new RoleProject();
+            roleProject.setProjectId(newProject.getId());
+            roleProject.setName(item.getName());
+            roleProject.setDescription(item.getDescription());
+            roleProject.setRoleDefault(item.getRoleDefault());
+            newRoleProject.add(roleProject);
+        });
+        List<RoleProject> listRoleProject = adPotalsRoleProjectRepository.saveAll(newRoleProject);
+
+        List<RoleMemberProject> newRoleMemberProject = new ArrayList<>();
+        Optional<AdListMemberUpdateRoleRequest> memberDefault = listMember.stream()
+                .filter(i -> i.getMemberId().equals(labReportAppSession.getUserId()))
+                .findFirst();
+
+        if (!memberDefault.isPresent()) {
+            MemberProject memberCreateProject = new MemberProject();
+            memberCreateProject.setMemberId(labReportAppSession.getUserId());
+            memberCreateProject.setProjectId(newProject.getId());
+            memberCreateProject.setEmail(labReportAppSession.getEmail());
+            memberCreateProject.setStatusWork(StatusWork.DANG_LAM);
+            memberCreateProject.setId(adMemberProjectRepository.save(memberCreateProject).getId());
+
+            RoleMemberProject roleMemberProjectDefault = new RoleMemberProject();
+            roleMemberProjectDefault.setMemberProjectId(memberCreateProject.getId());
+            Optional<RoleProject> roleProSetDefault = listRoleProject.stream()
+                    .filter(i -> i.getRoleDefault().equals(RoleDefault.DEFAULT))
+                    .findFirst();
+
+            if (roleProSetDefault.isPresent()) {
+                roleMemberProjectDefault.setRoleProjectId(roleProSetDefault.get().getId());
+            } else {
+                if (listRoleProject.size() > 0) {
+                    RoleProject roleProjectAp = listRoleProject.get(0);
+                    roleMemberProjectDefault.setRoleProjectId(roleProjectAp.getId());
+                }
+            }
+            newRoleMemberProject.add(roleMemberProjectDefault);
+        }
+        List<MemberProject> listMemberProject = adMemberProjectRepository.saveAll(newMemberProject);
+        listMember.forEach(member -> {
+            member.getListRole().forEach(role -> {
+                listRoleProject.forEach(roleProject -> {
+                    if (roleProject.getName().equals(role)) {
+                        RoleMemberProject roleMemberProject = new RoleMemberProject();
+                        roleMemberProject.setRoleProjectId(roleProject.getId());
+                        listMemberProject.forEach(memberProject -> {
+                            if (member.getMemberId().equals(memberProject.getMemberId())) {
+                                roleMemberProject.setMemberProjectId(memberProject.getId());
+                            }
+                        });
+                        newRoleMemberProject.add(roleMemberProject);
+                    }
+                });
+
+            });
+        });
+        adPotalsRoleMemberProjectRepository.saveAll(newRoleMemberProject);
+        Optional<AdProjectReponse> projectView = adProjectRepository.findOneProjectById(newProject.getId());
+        return projectView.get();
+
+    }
+
+    private Optional<AdMemberAndRoleProjectCustomResponse> findMemberRoleByMemberId(
+            List<AdMemberAndRoleProjectCustomResponse> listMemberRole, String memberId) {
+        Optional<AdMemberAndRoleProjectCustomResponse> obj = listMemberRole.stream()
+                .filter(i -> i.getMemberId().equals(memberId) && !memberId.equals(""))
+                .findFirst();
+        return obj;
+    }
+
+    private Optional<AdMemberRoleBaseResponse> findMemberRoleProjByIdRoleProj(
+            List<AdMemberRoleBaseResponse> listRole, String idRoleProj) {
+        Optional<AdMemberRoleBaseResponse> obj = listRole.stream()
+                .filter(i -> i.getIdRole().equals(idRoleProj))
+                .findFirst();
+        return obj;
+    }
 
     @Override
     public AdDetailProjectCateMemberRespone detailUpdate(String idProject) {
@@ -267,63 +411,6 @@ public class AdProjectServiceImpl implements AdProjectService {
         objReturn.setListMemberRole(listMemberRole);
         objReturn.setListCategory(listProjectCategory);
         return objReturn;
-    }
-
-    @Override
-    @CacheEvict(value = {"membersByProject"}, allEntries = true)
-    public Project updateProject(@Valid AdUpdateProjectRequest request) {
-        Optional<Project> projectCheck = adProjectRepository.findById(request.getId());
-        if (!projectCheck.isPresent()) {
-            throw new RestApiException(Message.PROJECT_NOT_EXISTS);
-        }
-        String checkCodeProject = adProjectRepository.findByIdCode(request.getCode(), request.getId());
-        Project project = projectCheck.get();
-        if (checkCodeProject != null && !project.getCode().equals(request.getCode())) {
-            throw new RestApiException(Message.CODE_PROJECT_ALREADY_EXISTS);
-        }
-        project.setCode(request.getCode());
-        project.setDescriptions(request.getDescriptions());
-        project.setName(request.getName());
-        project.setStartTime(request.getStartTime());
-        project.setEndTime(request.getEndTime());
-        Long currentTime = new Date().getTime();
-        if (currentTime < request.getStartTime()) {
-            project.setStatusProject(StatusProject.CHUA_DIEN_RA);
-        }
-        if (currentTime >= request.getStartTime() && currentTime <= request.getEndTime()) {
-            project.setStatusProject(StatusProject.DANG_DIEN_RA);
-        }
-        if (request.getEndTime() < currentTime) {
-            project.setStatusProject(StatusProject.DA_DIEN_RA);
-        }
-        List<String> listCaregoryIds = request.getListCategorysId();
-        List<ProjectCategory> newCategoryProject = new ArrayList<>();
-        listCaregoryIds.forEach(item -> {
-            ProjectCategory categoryProject = new ProjectCategory();
-            categoryProject.setCategoryId(item);
-            categoryProject.setProjectId(project.getId());
-            newCategoryProject.add(categoryProject);
-        });
-        adProjectCategoryRepository.saveAll(newCategoryProject);
-        List<AdCreateMemberProjectRequest> listMember = request.getListMembers();
-        List<MemberProject> newMemberProject = new ArrayList<>();
-        listMember.forEach(item -> {
-            MemberProject memberProjectFind = adMemberProjectRepository.findMemberProject(item.getMemberId(), item.getProjectId());
-            if (memberProjectFind != null) {
-                memberProjectFind.setEmail(item.getEmail());
-                memberProjectFind.setStatusWork(StatusWork.DANG_LAM);
-                adMemberProjectRepository.save(memberProjectFind);
-            } else {
-                MemberProject memberProject = new MemberProject();
-                memberProject.setProjectId(project.getId());
-                memberProject.setMemberId(item.getMemberId());
-                memberProject.setEmail(item.getEmail());
-                memberProject.setStatusWork(StatusWork.DANG_LAM);
-                newMemberProject.add(memberProject);
-            }
-        });
-        adMemberProjectRepository.saveAll(newMemberProject);
-        return adProjectRepository.save(project);
     }
 
     @Override
