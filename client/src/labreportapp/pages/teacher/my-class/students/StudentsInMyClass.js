@@ -34,8 +34,12 @@ const StudentsInMyClass = () => {
   const navigate = useNavigate();
   useEffect(() => {
     window.scrollTo(0, 0);
-    dispatch(SetStudentClasses([]));
+
     featchClass(idClass);
+
+    return () => {
+      dispatch(SetStudentClasses([]));
+    };
   }, []);
   const featchClass = async (idClass) => {
     setLoading(false);

@@ -25,6 +25,7 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.Synchronized;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
@@ -56,6 +57,7 @@ public class MeMemberProjectServiceImpl implements MeMemberProjectService {
     private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
 
     @Autowired
+    @Qualifier(RoleMemberProjectRepository.NAME)
     private RoleMemberProjectRepository roleMemberProjectRepository;
 
     @Override

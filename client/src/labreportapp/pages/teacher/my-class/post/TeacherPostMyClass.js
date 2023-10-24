@@ -70,6 +70,10 @@ const TeacherPostMyClass = () => {
     window.scrollTo(0, 0);
     featchClass(idClass);
     featchPost(idClass);
+
+    return () => {
+      dispatch(SetPost([]));
+    };
   }, []);
   const handleSeeMore = () => {
     if (currentPage < totalPage) {

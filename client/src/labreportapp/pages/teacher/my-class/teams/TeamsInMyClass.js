@@ -56,6 +56,10 @@ const TeamsInMyClass = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     fetchData(idClass);
+
+    return () => {
+      dispatch(SetTeams([]));
+    };
   }, []);
 
   const fetchData = async (idClass) => {
