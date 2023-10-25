@@ -25,6 +25,8 @@ import {
   Row,
   Col,
   Tag,
+  DatePicker,
+  Empty,
 } from "antd";
 import { useAppDispatch, useAppSelector } from "../../../app/hook";
 import {
@@ -37,12 +39,15 @@ import ModalDetailProject from "../project-management/modal-detail/ModalDetailPr
 import ModalCreateProject from "../project-management/modal-create/ModalCreateProject";
 import ModalUpdateProject from "../project-management/modal-update/ModalUpdateProject";
 import LoadingIndicator from "../../../helper/loading";
-import moment from "moment";
 import { convertDateLongToString } from "../../../../labreportapp/helper/util.helper";
 import { Link } from "react-router-dom";
+import { AdGroupProjectAPI } from "../../../../../src/labreportapp/api/admin/AdGroupProjectAPI";
 import { SetCategory } from "../../../app/reducer/admin/category-management/adCategorySlice.reducer";
-
+import dayjs from "dayjs";
+import viVN from "antd/lib/locale/vi_VN";
+const { RangePicker } = DatePicker;
 const { Option } = Select;
+
 const ProjectManagement = () => {
   const dispatch = useAppDispatch();
   const [current, setCurrent] = useState(1);
@@ -53,17 +58,21 @@ const ProjectManagement = () => {
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [codeSearch, setCodeSearch] = useState("");
   const [nameSearch, setNameSearch] = useState("");
-  const [startTimeSearch, setStartTimeSearch] = useState(null);
-  const [endTimeSearch, setEndTimeSearch] = useState(null);
+  const [startTimeSearch, setStartTimeSearch] = useState("");
+  const [endTimeSearch, setEndTimeSearch] = useState("");
   const [statusProjectSearch, setStatusProjectSearch] = useState("");
   const [idCategorySearch, setIdCategorySearch] = useState("");
   const [listCategorySearch, setListCategorySearch] = useState([]);
   const [loading, setLoading] = useState(true);
   const [clear, setClear] = useState(false);
+  const [listGroupProject, setListGroupProject] = useState([]);
+  const [idGroupProjectSearch, setIdGroupProjectSearch] = useState("");
 
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Quản lý dự án | Portal-Projects";
+    fetchDataCategory();
+    featDataGroupProject();
     handleSearch(current);
     return () => {
       dispatch(SetProjectManagement([]));
@@ -74,6 +83,8 @@ const ProjectManagement = () => {
     window.scrollTo(0, 0);
     document.title = "Quản lý dự án | Portal-Projects";
     if (clear) {
+      fetchDataCategory();
+      featDataGroupProject();
       handleSearch(1);
       setClear(false);
       return () => {
@@ -90,8 +101,20 @@ const ProjectManagement = () => {
     setEndTimeSearch("");
     setStatusProjectSearch("");
     setIdCategorySearch("");
-    fetchDataCategory();
+    setIdGroupProjectSearch("");
   }, []);
+
+  const featDataGroupProject = async () => {
+    try {
+      await AdGroupProjectAPI.getAllGroupToProjectManagement().then(
+        (response) => {
+          setListGroupProject(response.data.data);
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const fetchDataCategory = async () => {
     const responeGetAllCategory =
@@ -99,26 +122,18 @@ const ProjectManagement = () => {
     setListCategorySearch(responeGetAllCategory.data.data);
     dispatch(SetCategory(responeGetAllCategory.data.data));
   };
+
   const handleSearch = async (current) => {
     try {
       setLoading(true);
       let filter = {
         code: codeSearch,
         name: nameSearch,
-        startTime:
-          startTimeSearch != null &&
-          startTimeSearch !== "null" &&
-          startTimeSearch !== "undefined"
-            ? moment(startTimeSearch, moment.ISO_8601).format("YYYY-MM-DD")
-            : null,
-        endTime:
-          endTimeSearch != null &&
-          endTimeSearch !== "null" &&
-          endTimeSearch !== "undefined"
-            ? moment(endTimeSearch, moment.ISO_8601).format("YYYY-MM-DD")
-            : null,
+        startTime: startTimeSearch,
+        endTime: endTimeSearch,
         statusProject: statusProjectSearch,
         idCategory: idCategorySearch,
+        groupProjectId: idGroupProjectSearch,
         page: current,
         size: 5,
       };
@@ -147,6 +162,7 @@ const ProjectManagement = () => {
     setEndTimeSearch("");
     setStatusProjectSearch("");
     setIdCategorySearch("");
+    setIdGroupProjectSearch("");
     setCurrent(1);
     setClear(true);
   };
@@ -234,6 +250,14 @@ const ProjectManagement = () => {
       title: "Thể loại",
       dataIndex: "nameCategorys",
       key: "nameCategorys",
+    },
+    {
+      title: "Nhóm dự án",
+      dataIndex: "nameGroupProject",
+      key: "nameGroupProject",
+      render: (text, record) => {
+        return text ? text : <Tag color="geekblue">Không có nhóm</Tag>;
+      },
     },
     {
       title: "Tiến độ",
@@ -341,6 +365,19 @@ const ProjectManagement = () => {
     },
   ];
 
+  const handleDateChange = (e) => {
+    if (e != null) {
+      setStartTimeSearch(
+        dayjs(e[0]).set({ hour: 0, minute: 0, second: 0 }).valueOf()
+      );
+      setEndTimeSearch(
+        dayjs(e[1]).set({ hour: 0, minute: 0, second: 0 }).valueOf()
+      );
+    } else {
+      setStartTimeSearch("");
+      setEndTimeSearch("");
+    }
+  };
   return (
     <div className="project_management">
       {loading && <LoadingIndicator />}{" "}
@@ -350,14 +387,10 @@ const ProjectManagement = () => {
         <span style={{ marginLeft: "10px" }}>Quản lý dự án</span>
       </div>
       <div className="filter_project_management">
-        <FontAwesomeIcon
-          icon={faFilter}
-          size="2px"
-          style={{ fontSize: "26px" }}
-        />{" "}
+        <FontAwesomeIcon icon={faFilter} style={{ fontSize: "26px" }} />{" "}
         <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
         <hr />
-        <Row gutter={24} style={{ marginBottom: "15px", paddingTop: "20px" }}>
+        <Row gutter={24} style={{ marginBottom: "10px", paddingTop: "15px" }}>
           <Col span={8}>
             <span>Mã:</span>{" "}
             <Input
@@ -390,31 +423,29 @@ const ProjectManagement = () => {
             >
               <Option value="">Tất cả</Option>
               {listCategorySearch.map((item) => {
-                return <Option value={item.id}>{item.name}</Option>;
+                return (
+                  <Option value={item.id} key={item.id}>
+                    {item.name}
+                  </Option>
+                );
               })}
             </Select>
           </Col>
         </Row>
-        <Row gutter={24} style={{ marginBottom: "15px" }}>
+        <Row gutter={24} style={{ marginBottom: "10px" }}>
           <Col span={8}>
-            <span>Thời gian bắt đầu:</span>
-            {""}
-            <Input
-              value={startTimeSearch}
+            <span>Thời gian:</span> <br />
+            <RangePicker
+              style={{ width: "100%" }}
+              format="YYYY-MM-DD"
+              value={[
+                startTimeSearch ? dayjs(startTimeSearch) : null,
+                endTimeSearch ? dayjs(endTimeSearch) : null,
+              ]}
               onChange={(e) => {
-                setStartTimeSearch(e.target.value);
+                handleDateChange(e);
               }}
-              type="date"
-            />
-          </Col>
-          <Col span={8}>
-            <span>Thời gian kết thúc:</span> {""}
-            <Input
-              value={endTimeSearch}
-              onChange={(e) => {
-                setEndTimeSearch(e.target.value);
-              }}
-              type="date"
+              locale={viVN}
             />
           </Col>
           <Col span={8}>
@@ -472,6 +503,33 @@ const ProjectManagement = () => {
               </Option>
             </Select>
           </Col>
+          <Col span={8}>
+            <span>Nhóm dự án:</span>
+            <Select
+              showSearch
+              style={{ width: "100%" }}
+              placeholder="Chọn thuộc nhóm dự án"
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                (option?.label ?? "").includes(input)
+              }
+              filterSort={(optionA, optionB) =>
+                (optionA?.label ?? "")
+                  .toLowerCase()
+                  .localeCompare((optionB?.label ?? "").toLowerCase())
+              }
+              value={idGroupProjectSearch}
+              onChange={(e) => setIdGroupProjectSearch(e)}
+              defaultValue={""}
+              options={[
+                { value: "", label: "Tất cả" },
+                { value: "0", label: "Không có nhóm" },
+                ...listGroupProject.map((i) => {
+                  return { value: i.id, label: i.name };
+                }),
+              ]}
+            />
+          </Col>
         </Row>
         <div className="box-btn">
           <Button
@@ -525,23 +583,33 @@ const ProjectManagement = () => {
             </Button>
           </div>
         </div>
-        <div style={{ marginTop: "15px" }}>
-          <Table
-            dataSource={data}
-            rowKey="id"
-            columns={columns}
-            pagination={false}
-          />
-          <div className="pagination_box">
-            <Pagination
-              simple
-              current={current}
-              onChange={(value) => {
-                setCurrent(value);
-              }}
-              total={totalPages * 10}
+        <div style={{ marginTop: "15px", minHeight: "170px", height: "auto" }}>
+          {data.length > 0 ? (
+            <>
+              {" "}
+              <Table
+                dataSource={data}
+                rowKey="id"
+                columns={columns}
+                pagination={false}
+              />
+              <div className="pagination_box">
+                <Pagination
+                  simple
+                  current={current}
+                  onChange={(value) => {
+                    setCurrent(value);
+                  }}
+                  total={totalPages * 10}
+                />
+              </div>
+            </>
+          ) : (
+            <Empty
+              imageStyle={{ height: "60px" }}
+              description={<span>Không có dữ liệu</span>}
             />
-          </div>
+          )}
         </div>
         <ModalDetailProject
           visible={showDetailModal}

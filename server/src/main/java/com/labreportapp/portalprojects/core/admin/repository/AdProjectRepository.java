@@ -35,44 +35,49 @@ public interface AdProjectRepository extends ProjectRepository {
                     pro.created_date,
                     pro.background_image,
                     pro.background_color,
-                    GROUP_CONCAT(cate.name SEPARATOR ', ') as nameCategorys
+                    GROUP_CONCAT(cate.name SEPARATOR ', ') as nameCategorys,
+                    gp.name as name_group_project,
+                    gp.id as id_group_project
               FROM project_category a
               JOIN project pro on a.project_id = pro.id
               JOIN category cate on a.category_id = cate.id
-             WHERE
-               ( :#{#rep.code} IS NULL
+              LEFT JOIN group_project gp on gp.id = pro.group_project_id
+              WHERE pro.type_project = '0'
+            AND
+            ( :#{#rep.code} IS NULL
                 OR :#{#rep.code} LIKE ''
                 OR pro.code LIKE %:#{#rep.code}% )
              AND
              ( :#{#rep.name} IS NULL
                 OR :#{#rep.name} LIKE ''
                 OR pro.name LIKE %:#{#rep.name}% )
-             AND
-                 ( :#{#rep.startTimeLong} IS NULL
-                    OR :#{#rep.startTimeLong} LIKE 'null'
-                OR :#{#rep.startTimeLong} LIKE ''
-                OR pro.start_time >= :#{#rep.startTimeLong} )
-             AND
-                 ( :#{#rep.endTimeLong} IS NULL
-                   OR :#{#rep.endTimeLong} LIKE 'null'
-                OR :#{#rep.endTimeLong} LIKE ''
-                OR pro.end_time <= :#{#rep.endTimeLong} )
+              AND
+                 ( :#{#rep.startTimeLong} IS NULL and :#{#rep.endTimeLong} IS NULL
+                OR pro.start_time >= :#{#rep.startTimeLong} and  pro.end_time <= :#{#rep.endTimeLong} )
              AND
                  ( :#{#rep.statusProject} IS NULL
                 OR :#{#rep.statusProject} LIKE ''
                 OR pro.status_project LIKE :#{#rep.statusProject} )
-            AND  
+            AND
                  ( :#{#rep.idCategory} IS NULL
                 OR :#{#rep.idCategory} LIKE ''
                 OR cate.id LIKE %:#{#rep.idCategory}% )
-                     GROUP BY pro.id
-             ORDER BY pro.last_modified_date DESC
+            AND 
+                ( :#{#rep.groupProjectId} IS NULL 
+                OR :#{#rep.groupProjectId} LIKE ''
+                OR :#{#rep.groupProjectId} LIKE '0' AND pro.group_project_id IS NULL
+                OR pro.group_project_id LIKE :#{#rep.groupProjectId}
+                )
+            GROUP BY pro.id
+            ORDER BY pro.last_modified_date DESC
             """, countQuery = """
              SELECT COUNT(DISTINCT pro.id)
              FROM project_category a
              JOIN project pro on a.project_id = pro.id
              JOIN category cate on a.category_id = cate.id
-            WHERE
+             LEFT JOIN group_project gp on gp.id = pro.group_project_id
+            WHERE pro.type_project = '0'
+            AND
             ( :#{#rep.code} IS NULL
                 OR :#{#rep.code} LIKE ''
                 OR pro.code LIKE %:#{#rep.code}% )
@@ -81,24 +86,23 @@ public interface AdProjectRepository extends ProjectRepository {
                 OR :#{#rep.name} LIKE ''
                 OR pro.name LIKE %:#{#rep.name}% )
              AND
-                 ( :#{#rep.startTimeLong} IS NULL
-                    OR :#{#rep.startTimeLong} LIKE 'null'
-                OR :#{#rep.startTimeLong} LIKE ''
-                OR pro.start_time >= :#{#rep.startTimeLong} )
-             AND
-                 ( :#{#rep.endTimeLong} IS NULL
-                   OR :#{#rep.endTimeLong} LIKE 'null'
-                OR :#{#rep.endTimeLong} LIKE ''
-                OR pro.end_time <= :#{#rep.endTimeLong} )
+                 ( :#{#rep.startTimeLong} IS NULL and :#{#rep.endTimeLong} IS NULL)
+                OR (pro.start_time >= :#{#rep.startTimeLong} AND  pro.end_time <= :#{#rep.endTimeLong} )
              AND
                  ( :#{#rep.statusProject} IS NULL
                 OR :#{#rep.statusProject} LIKE ''
                 OR pro.status_project LIKE :#{#rep.statusProject} )
-            AND  
+            AND
                  ( :#{#rep.idCategory} IS NULL
                 OR :#{#rep.idCategory} LIKE ''
                 OR cate.id LIKE %:#{#rep.idCategory}% )
-             ORDER BY pro.last_modified_date DESC
+            AND 
+                ( :#{#rep.groupProjectId} IS NULL 
+                OR :#{#rep.groupProjectId} LIKE ''
+                OR :#{#rep.groupProjectId} LIKE '0' AND pro.group_project_id IS NULL
+                OR pro.group_project_id LIKE :#{#rep.groupProjectId}
+                )
+            ORDER BY pro.last_modified_date DESC
              """, nativeQuery = true)
     Page<AdProjectReponse> findProjectPage(@Param("rep") AdFindProjectRequest rep, Pageable page);
 
@@ -115,10 +119,13 @@ public interface AdProjectRepository extends ProjectRepository {
                    pro.created_date,
                    pro.background_image,
                    pro.background_color,
-                   GROUP_CONCAT(cate.name SEPARATOR ', ') as nameCategorys
+                   GROUP_CONCAT(cate.name SEPARATOR ', ') as nameCategorys,
+                    gp.name as name_group_project,
+                    gp.id as id_group_project
              FROM project_category a
              JOIN project pro on a.project_id = pro.id
              JOIN category cate on a.category_id = cate.id
+             LEFT JOIN group_project gp on gp.id = pro.group_project_id
             WHERE pro.id = :idProject
             """, nativeQuery = true)
     Optional<AdProjectReponse> findOneProjectById(@Param("idProject") String idProject);

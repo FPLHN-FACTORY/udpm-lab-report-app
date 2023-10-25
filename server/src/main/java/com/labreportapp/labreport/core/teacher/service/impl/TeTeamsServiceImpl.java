@@ -45,6 +45,7 @@ import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiExce
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.Synchronized;
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
@@ -67,6 +68,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -244,10 +246,12 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         }
         Team teamUp = team.get();
         Project project = new Project();
-        project.setCode("PRJ_" + RandomString.random());
-        project.setName("Project" + RandomString.random());
-        project.setStartTime(new Date().getTime());
-        project.setEndTime(new Date().getTime() + 90 * 86400000);
+        project.setCode("Project_" + RandomString.random());
+        project.setName("Dự án " + RandomString.random());
+        project.setStartTime(DateUtils.truncate(new Date(), Calendar.DATE).getTime());
+        project.setEndTime(DateUtils.truncate(new Date(), Calendar.DATE).getTime() + 90L * 86400000);
+        project.setDescriptions(teamUp.getSubjectName());
+        project.setProgress(0F);
         project.setStatusProject(StatusProject.DANG_DIEN_RA);
         project.setTypeProject(TypeProject.DU_AN_XUONG_THUC_HANH);
         project.setBackgroundColor("rgb(38, 144, 214)");
@@ -299,7 +303,6 @@ public class TeTeamsServiceImpl implements TeTeamsService {
             }
         }
         teRoleMemberProjectRepository.save(roleMemberProjectDefault);
-        System.err.println(teRoleMemberProjectRepository.save(roleMemberProjectDefault));
         return teTeamsRepositoty.save(teamUp);
     }
 

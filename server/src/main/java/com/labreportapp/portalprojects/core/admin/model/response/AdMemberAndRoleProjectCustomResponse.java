@@ -33,4 +33,6 @@ public class AdMemberAndRoleProjectCustomResponse {
     private String userName;
 
     private String name;
+
+    private String idMemberProject;
 }

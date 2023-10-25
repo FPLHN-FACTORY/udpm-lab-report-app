@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { convertDateLongToString } from "../../../../../labreportapp/helper/util.helper";
 
 const initialState = [];
 
@@ -27,6 +28,13 @@ const projectManagementSlide = createSlice({
         projectUpdate.name = project.name;
         projectUpdate.progress = project.progress;
         projectUpdate.statusProject = project.statusProject;
+        projectUpdate.nameCategorys = project.nameCategorys;
+        projectUpdate.nameGroupProject = project.nameGroupProject;
+        projectUpdate.startTime = project.startTime;
+        projectUpdate.endTime = project.endTime;
+        projectUpdate.backGroundColor = project.backGroundColor;
+        projectUpdate.backGroundImage = project.backGroundImage;
+        projectUpdate.groupProjectId = project.groupProjectId;
       }
     },
   },

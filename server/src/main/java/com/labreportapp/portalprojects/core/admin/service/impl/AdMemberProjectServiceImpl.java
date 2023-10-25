@@ -76,6 +76,7 @@ public class AdMemberProjectServiceImpl implements AdMemberProjectService {
                     obj.setName(call.getName());
                     obj.setUserName(call.getUserName());
                     obj.setPicture(call.getPicture());
+                    obj.setIdMemberProject(db.getIdMemberProject());
                     listMemberRole.forEach(role -> {
                         if (db.getMemberId().equals(role.getMemberId())) {
                             AdMemberRoleBaseResponse roleDetail = new AdMemberRoleBaseResponse();

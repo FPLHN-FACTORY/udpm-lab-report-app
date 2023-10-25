@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -44,7 +45,7 @@ public class AdProjectController {
     }
 
     @GetMapping("")
-    public ResponseObject viewProject(@ModelAttribute final AdFindProjectRequest repuest) {
+    public ResponseObject viewProject(@ModelAttribute final AdFindProjectRequest repuest) throws ParseException {
         return new ResponseObject((adProjectService.searchProject(repuest)));
     }
 
@@ -79,6 +80,4 @@ public class AdProjectController {
     public ResponseObject removeProject(@PathVariable("id") String id) {
         return new ResponseObject(adProjectService.removeProject(id));
     }
-
-
 }

@@ -3,7 +3,7 @@ package com.labreportapp.portalprojects.core.admin.repository;
 import com.labreportapp.portalprojects.core.admin.model.response.AdRoleMemberProjectDetailResponse;
 import com.labreportapp.portalprojects.entity.RoleMemberProject;
 import com.labreportapp.portalprojects.repository.RoleMemberProjectRepository;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -17,9 +17,9 @@ import java.util.List;
 public interface AdPotalsRoleMemberProjectRepository extends RoleMemberProjectRepository {
 
     @Query(value = """
-                    SELECT * FROM role_member_project rmp 
+                    SELECT rmp.* FROM role_member_project rmp 
                     JOIN role_project rp ON rp.id = rmp.role_project_id
-                    WHERE rp.project_id = :#{#idProject}
+                    WHERE rp.project_id = :idProject
             """, nativeQuery = true)
     List<RoleMemberProject> getListRoleMemberProjectByIdProj(@Param("idProject") String idProject);
 
@@ -35,5 +35,18 @@ public interface AdPotalsRoleMemberProjectRepository extends RoleMemberProjectRe
                     WHERE rp.project_id = :#{#idProject} and mp.project_id = :#{#idProject}
             """, nativeQuery = true)
     List<AdRoleMemberProjectDetailResponse> getAllRoleMemberCustomByIdProj(@Param("idProject") String idProject);
+
+    @Modifying
+    @Query(value = """
+                   WITH role_member_pro_in AS (
+                       SELECT rmp.id as id
+                       FROM role_member_project rmp
+                       JOIN role_project rp ON rp.id = rmp.role_project_id
+                       WHERE rp.project_id = :idProject
+                   )
+                   DELETE FROM role_member_project
+                   WHERE id IN (SELECT id FROM role_member_pro_in);
+            """, nativeQuery = true)
+    void deleteAllRoleMemberProjectByIdProject(@Param("idProject") String idProject);
 
 }

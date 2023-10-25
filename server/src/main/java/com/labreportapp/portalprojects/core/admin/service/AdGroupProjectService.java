@@ -6,6 +6,7 @@ import com.labreportapp.portalprojects.core.admin.model.request.AdFindGroupProje
 import com.labreportapp.portalprojects.core.admin.model.request.AdUpdateGroupProjectRequest;
 import com.labreportapp.portalprojects.core.admin.model.response.AdDetailGroupProjectResponse;
 import com.labreportapp.portalprojects.core.admin.model.response.AdGroupProjectResponse;
+import com.labreportapp.portalprojects.entity.GroupProject;
 import com.labreportapp.portalprojects.entity.Project;
 import jakarta.validation.Valid;
 
@@ -26,4 +27,6 @@ public interface AdGroupProjectService {
     AdGroupProjectResponse detailGroupProject(String id);
 
     List<AdDetailGroupProjectResponse> getAllProject(String id);
+
+    List<GroupProject> getAllGroupToProjectManagement();
 }

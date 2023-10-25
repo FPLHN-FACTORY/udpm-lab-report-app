@@ -28,6 +28,8 @@ public abstract class AdBaseProjectRepuest {
     @NotNull
     private Long startTime;
 
+    private String groupProjectId;
+
     @NotNull
     private Long endTime;
 

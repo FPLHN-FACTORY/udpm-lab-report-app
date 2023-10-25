@@ -52,6 +52,7 @@ import AdDetailGroupProjectSliceReducer from "./admin/AdDetailGroupProjectSlice.
 import AdMemberFactorySliceReducer from "./admin/AdMemberFactorySlice.reducer";
 import AdDetailTeamSliceReducer from "./admin/AdDetailTeamSlice.reducer";
 import DPRoleProjectSliceReducer from "../../portalprojects/app/reducer/detail-project/DPRoleProjectSlice.reducer";
+import AdGroupProjectToProjectManagementSliceReduce from "./admin/AdGroupProjectToProjectManagementSlice.reduce";
 
 export const store = configureStore({
   reducer: {
@@ -106,6 +107,8 @@ export const store = configureStore({
     userCurrent: UserCurrentReducer,
     adDetailTeam: AdDetailTeamSliceReducer,
     meRoleProject: DPRoleProjectSliceReducer,
+    adGroupProjectToProjectManagement:
+      AdGroupProjectToProjectManagementSliceReduce,
   },
 });
 

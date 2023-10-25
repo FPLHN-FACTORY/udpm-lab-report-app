@@ -31,6 +31,8 @@ public class AdUpdateProjectRoleRequest {
 
     private String descriptions;
 
+    private String groupProjectId;
+
     @NotNull
     private Long startTime;
 
