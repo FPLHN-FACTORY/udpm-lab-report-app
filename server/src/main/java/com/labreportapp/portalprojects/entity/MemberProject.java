@@ -35,7 +35,7 @@ public class MemberProject extends PrimaryEntity {
     @Column(length = EntityProperties.LENGTH_ID)
     private String projectId;
 
-    private RoleMemberProject role;
+//    private RoleMemberProject role;
 
     private StatusWork statusWork;
 }

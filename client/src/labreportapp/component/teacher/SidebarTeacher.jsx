@@ -14,6 +14,8 @@ import {
   faMagicWandSparkles,
   faNewspaper,
   faWindowRestore,
+  faPeopleLine,
+  faPeopleGroup,
 } from "@fortawesome/free-solid-svg-icons";
 
 import "./style-sidebar.css";
@@ -77,7 +79,6 @@ const SidebarTeacherComponent = ({ collapsed, toggleCollapsed }) => {
         >
           <Link to="/teacher/my-class">Lớp của tôi</Link>
         </Menu.Item>
-
         <Menu.Item
           key="4"
           className="menu_custom"
@@ -107,6 +108,28 @@ const SidebarTeacherComponent = ({ collapsed, toggleCollapsed }) => {
         >
           <Link to="/teacher/my-project">Dự án tại xưởng</Link>
         </Menu.Item>
+        <Menu.Item
+          key="22"
+          icon={
+            <FontAwesomeIcon
+              icon={faPeopleLine}
+              style={{ color: "rgb(226, 179, 87)" }}
+            />
+          }
+        >
+          <Link to="/teacher/team-factory">Danh sách team xưởng</Link>
+        </Menu.Item>
+        <Menu.Item
+          key="23"
+          icon={
+            <FontAwesomeIcon
+              icon={faPeopleGroup}
+              style={{ color: "rgb(226, 179, 87)" }}
+            />
+          }
+        >
+          <Link to="/teacher/member-factory">Thành viên trong xưởng</Link>
+        </Menu.Item>{" "}
       </Menu>
     </Sider>
   );

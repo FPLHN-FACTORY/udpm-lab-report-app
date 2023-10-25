@@ -7,10 +7,14 @@ import {
   faPencilAlt,
   faPencilRuler,
   faPencilSquare,
+  faSave,
 } from "@fortawesome/free-solid-svg-icons";
-import { useAppSelector } from "../../../../../app/hook";
-import { GetMemberProject } from "../../../../../app/reducer/detail-project/DPMemberProject.reducer";
-import { Button, Col, Input, Row, Select, Table } from "antd";
+import { useAppDispatch, useAppSelector } from "../../../../../app/hook";
+import {
+  GetMemberProject,
+  SetMemberProject,
+} from "../../../../../app/reducer/detail-project/DPMemberProject.reducer";
+import { Button, Col, Input, Row, Select, Table, Tooltip } from "antd";
 import Image from "../../../../../helper/img/Image";
 import { SearchOutlined } from "@ant-design/icons";
 import { CommonAPI } from "../../../../../api/commonAPI";
@@ -18,6 +22,7 @@ import { GetProject } from "../../../../../app/reducer/detail-project/DPProjectS
 import { getStompClient } from "../../stomp-client-config/StompClientManager";
 import Cookies from "js-cookie";
 import { DetailProjectAPI } from "../../../../../api/detail-project/detailProject.api";
+import { GetMeRoleProject } from "../../../../../app/reducer/detail-project/DPRoleProjectSlice.reducer";
 const { Option } = Select;
 
 const PopupMemberManagement = ({ position, onClose }) => {
@@ -52,6 +57,8 @@ const PopupMemberManagement = ({ position, onClose }) => {
     };
   }, [onClose]);
 
+  const roleProjects = useAppSelector(GetMeRoleProject);
+
   const popupStyle = {
     position: "fixed",
     top: "50%",
@@ -59,7 +66,7 @@ const PopupMemberManagement = ({ position, onClose }) => {
     transform: "translate(-50%, -50%)",
     zIndex: 9999999999,
     paddingBottom: "7px",
-    width: "68%",
+    width: "80%",
     backgroundColor: "white",
     borderRadius: "10px",
     boxShadow: "0 2px 5px rgba(0, 0, 0, 0.3)",
@@ -219,59 +226,22 @@ const PopupMemberManagement = ({ position, onClose }) => {
     },
     {
       title: "Vai trò",
-      dataIndex: "role",
-      key: "role",
-      width: "12%",
-      filterDropdown: ({
-        setSelectedKeys,
-        selectedKeys,
-        confirm,
-        clearFilters,
-      }) => (
-        <div style={{ padding: 8 }}>
-          <Select
-            placeholder="Tìm kiếm"
-            value={selectedKeys[0]}
-            onChange={(value) => setSelectedKeys(value ? [value] : [])}
-            onPressEnter={confirm}
-            style={{ width: 188, marginBottom: 8, display: "block" }}
-          >
-            <Option value="0">Quản lý</Option>
-            <Option value="1">Trưởng nhóm</Option>
-            <Option value="2">Dev</Option>
-            <Option value="3">Tester</Option>
-          </Select>
-          <div style={{ display: "flex", justifyContent: "flex-end" }}>
-            <Button
-              type="primary"
-              onClick={confirm}
-              size="small"
-              style={{ marginRight: 8 }}
-            >
-              Tìm
-            </Button>
-            <Button onClick={clearFilters} size="small">
-              Đặt lại
-            </Button>
-          </div>
-        </div>
-      ),
-      filterIcon: (filtered) => (
-        <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
-      ),
-      onFilter: (value, record) => record.role === value,
-      sorter: (a, b) => a.role.localeCompare(b.role),
-      sortDirections: ["ascend", "descend"],
+      dataIndex: "roles",
+      key: "roles",
       render: (text, record) => (
         <Select
+          mode="multiple"
+          maxTagCount={2}
           style={{ width: "100%" }}
-          value={record.role}
-          onChange={(value) => handleRoleChange(record, value)}
+          value={record.roles}
+          placeholder="Chưa có vai trò"
+          onChange={(value) => handleRoleChange(record.id, value)}
         >
-          <Option value="0">Quản lý</Option>
-          <Option value="1">Trưởng nhóm</Option>
-          <Option value="2">Dev</Option>
-          <Option value="3">Tester</Option>
+          {roleProjects.map((item) => (
+            <Option value={item.id} key={item.id}>
+              {item.name}
+            </Option>
+          ))}
         </Select>
       ),
     },
@@ -322,30 +292,45 @@ const PopupMemberManagement = ({ position, onClose }) => {
         <Select
           style={{ width: "100%" }}
           value={record.statusWork}
-          onChange={(value) => handleStatusChange(record, value)}
+          onChange={(value) => handleStatusChange(record.id, value)}
         >
           <Option value="0">Đang làm</Option>
           <Option value="1">Nghỉ việc</Option>
         </Select>
       ),
     },
+    {
+      title: "Hành động",
+      dataIndex: "actions",
+      key: "actions",
+      render: (text, record) => (
+        <div style={{ textAlign: "center" }}>
+          <Tooltip title="Lưu thay đổi">
+            <FontAwesomeIcon
+              style={{
+                marginRight: "15px",
+                cursor: "pointer",
+                color: "rgb(38, 144, 214)",
+              }}
+              onClick={() => handleSaveChanges(record)}
+              icon={faSave}
+              size="1x"
+            />
+          </Tooltip>
+        </div>
+      ),
+      width: "5%",
+    },
   ];
 
-  const [valueMultiMember, setValueMultiMember] = useState([]);
-  const [memberAll, setMemberAll] = useState([]);
-  const memberProject = useAppSelector(GetMemberProject);
-  const [listMemberNoJoinProject, setListMemberNoJoinProject] = useState([]);
-  const [listMemberAdd, setListMemberAdd] = useState([]);
-
-  const handleRoleChange = (item, value) => {
+  const handleSaveChanges = (item) => {
     let obj = {
       idMember: item.memberId,
       idProject: detailProject.id,
       statusWork: parseInt(item.statusWork),
-      role: parseInt(value),
+      role: item.roles,
     };
 
-    console.log(obj);
     const bearerToken = Cookies.get("token");
     const headers = {
       Authorization: "Bearer " + bearerToken,
@@ -357,22 +342,45 @@ const PopupMemberManagement = ({ position, onClose }) => {
     );
   };
 
-  const handleStatusChange = (item, value) => {
-    let obj = {
-      idMember: item.memberId,
-      idProject: detailProject.id,
-      statusWork: parseInt(value),
-      role: parseInt(item.role),
-    };
-    const bearerToken = Cookies.get("token");
-    const headers = {
-      Authorization: "Bearer " + bearerToken,
-    };
-    stompClient.send(
-      "/action/update-member-project/" + detailProject.id,
-      headers,
-      JSON.stringify(obj)
+  const [valueMultiMember, setValueMultiMember] = useState([]);
+  const [memberAll, setMemberAll] = useState([]);
+  const memberProject = useAppSelector(GetMemberProject);
+  const [listMemberNoJoinProject, setListMemberNoJoinProject] = useState([]);
+  const [listMemberAdd, setListMemberAdd] = useState([]);
+
+  // const handleRoleChange = (item, value) => {
+  // let obj = {
+  //   idMember: item.memberId,
+  //   idProject: detailProject.id,
+  //   statusWork: parseInt(item.statusWork),
+  //   role: parseInt(value),
+  // };
+
+  // console.log(obj);
+  // const bearerToken = Cookies.get("token");
+  // const headers = {
+  //   Authorization: "Bearer " + bearerToken,
+  // };
+  // stompClient.send(
+  //   "/action/update-member-project/" + detailProject.id,
+  //   headers,
+  //   JSON.stringify(obj)
+  // );
+  // };
+  const dispatch = useAppDispatch();
+
+  const handleRoleChange = (recordId, value) => {
+    const updatedData = memberProject.map((record) =>
+      record.id === recordId ? { ...record, roles: value } : record
     );
+    dispatch(SetMemberProject(updatedData));
+  };
+
+  const handleStatusChange = (recordId, value) => {
+    const updatedData = memberProject.map((record) =>
+      record.id === recordId ? { ...record, statusWork: value } : record
+    );
+    dispatch(SetMemberProject(updatedData));
   };
 
   const handleChangeValueMultiMember = (e) => {
@@ -408,9 +416,8 @@ const PopupMemberManagement = ({ position, onClose }) => {
         memberId: member.id,
         email: member.email,
         projectId: detailProject.id,
-        role: 0,
+        role: [],
       }));
-    console.log(listData);
     setListMemberAdd(listData);
   };
 
@@ -474,56 +481,20 @@ const PopupMemberManagement = ({ position, onClose }) => {
       dataIndex: "role",
       key: "role",
       width: "12%",
-      filterDropdown: ({
-        setSelectedKeys,
-        selectedKeys,
-        confirm,
-        clearFilters,
-      }) => (
-        <div style={{ padding: 8 }}>
-          <Select
-            placeholder="Tìm kiếm"
-            value={selectedKeys[0]}
-            onChange={(value) => setSelectedKeys(value ? [value] : [])}
-            onPressEnter={confirm}
-            style={{ width: 188, marginBottom: 8, display: "block" }}
-          >
-            <Option value="0">Quản lý</Option>
-            <Option value="1">Trưởng nhóm</Option>
-            <Option value="2">Dev</Option>
-            <Option value="3">Tester</Option>
-          </Select>
-          <div style={{ display: "flex", justifyContent: "flex-end" }}>
-            <Button
-              type="primary"
-              onClick={confirm}
-              size="small"
-              style={{ marginRight: 8 }}
-            >
-              Tìm
-            </Button>
-            <Button onClick={clearFilters} size="small">
-              Đặt lại
-            </Button>
-          </div>
-        </div>
-      ),
-      filterIcon: (filtered) => (
-        <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
-      ),
-      onFilter: (value, record) => record.role === value,
-      sorter: (a, b) => a.role.localeCompare(b.role),
-      sortDirections: ["ascend", "descend"],
       render: (text, record) => (
         <Select
+          mode="multiple"
+          maxTagCount={2}
           style={{ width: "100%" }}
-          value={record.role + ""}
+          value={record.role}
+          placeholder="Chưa có vai trò"
           onChange={(value) => handleRoleChangeAdd(record.memberId, value)}
         >
-          <Option value="0">Quản lý</Option>
-          <Option value="1">Trưởng nhóm</Option>
-          <Option value="2">Dev</Option>
-          <Option value="3">Tester</Option>
+          {roleProjects.map((item) => (
+            <Option value={item.id} key={item.id}>
+              {item.name}
+            </Option>
+          ))}
         </Select>
       ),
     },
@@ -536,7 +507,7 @@ const PopupMemberManagement = ({ position, onClose }) => {
           memberId: record.memberId,
           email: record.email,
           projectId: detailProject.id,
-          role: parseInt(value),
+          role: value,
         };
         return { ...record, ...newData };
       }
@@ -556,7 +527,6 @@ const PopupMemberManagement = ({ position, onClose }) => {
     const headers = {
       Authorization: "Bearer " + bearerToken,
     };
-
     stompClient.send(
       "/action/create-member-project/" + detailProject.id,
       headers,

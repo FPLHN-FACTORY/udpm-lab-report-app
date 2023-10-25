@@ -7,29 +7,15 @@ const projectManagementSlide = createSlice({
   initialState,
   reducers: {
     SetProjectManagement: (state, action) => {
-      state = action.payload;
+      state.length = 0;
+      state.push(...action.payload);
       return state;
     },
     CreateProject: (state, action) => {
-      const data = action.payload;
-      let newProject = {
-        id: data.id,
-        name: data.name,
-        progress: data.progress,
-        backGroundImage: data.backgroundImage,
-        backGroundColor: data.backgroundColor,
-        code: data.code,
-        descriptions: data.descriptions,
-        startTime: data.startTime,
-        endTime: data.endTime,
-        statusProject:
-          data.statusProject === "DA_DIEN_RA"
-            ? "0"
-            : data.statusProject === "DANG_DIEN_RA"
-            ? "1"
-            : "2",
-      };
-      state.unshift(newProject);
+      state.unshift(action.payload);
+      state.forEach((item, index) => {
+        item.stt = index + 1;
+      });
       return state;
     },
     UpdateProject: (state, action) => {

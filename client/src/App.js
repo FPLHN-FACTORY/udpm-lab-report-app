@@ -79,6 +79,10 @@ import DetailGroupProject from "./labreportapp/pages/admin/workshop-project/deta
 import RoleFactoryManagement from "./labreportapp/pages/admin/workshop-member/role-factory-management/RoleFactoryManagement";
 import DetailTeamFactory from "./labreportapp/pages/admin/workshop-member/team-management/detail-team-factory/DetailTeamFactory";
 import { message } from "antd";
+import TeMemberFactory from "./labreportapp/pages/teacher/member-factory/TeMemberFactory";
+import TeTeamFactory from "./labreportapp/pages/teacher/team-factory/TeTeamFactory";
+import StTeamFactory from "./labreportapp/pages/student/team-factory/StTeamFactory";
+import StMemberFactory from "./labreportapp/pages/student/member-factory/StMemberFactory";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -112,10 +116,8 @@ function App() {
     stompClientAll.connect({}, () => {
       stompClientAll.subscribe(
         "/portal-projects/create-notification/" + userCurrent.id,
-        (message) => {
-          message.info("Bạn có thông báo mới", {
-            position: toast.POSITION.BOTTOM_RIGHT,
-          });
+        (response) => {
+          message.success("Bạn có thông báo mới");
           playNotificationSound();
 
           DetailProjectAPI.countNotification(userCurrent.id).then(
@@ -133,19 +135,15 @@ function App() {
           );
         }
       );
-    });
-    if (userCurrent != null && userCurrent.role.includes("ADMIN")) {
-      stompClientAll.connect({}, () => {
+      if (userCurrent != null && userCurrent.role.includes("ADMIN")) {
         stompClientAll.subscribe(
           "/portal-projects/update-meeting",
-          (message) => {
-            message.info("Thông báo : " + message.body, {
-              position: toast.POSITION.TOP_CENTER,
-            });
+          (response) => {
+            message.success("Thông báo : " + response.body);
           }
         );
-      });
-    }
+      }
+    });
   }
 
   return (
@@ -355,6 +353,46 @@ function App() {
                   <DashBoardTeacher>
                     <TeacherMyClass />
                   </DashBoardTeacher>
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/teacher/member-factory"
+              element={
+                <AuthGuard>
+                  <DashBoardTeacher>
+                    <TeMemberFactory />
+                  </DashBoardTeacher>
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/teacher/team-factory"
+              element={
+                <AuthGuard>
+                  <DashBoardTeacher>
+                    <TeTeamFactory />
+                  </DashBoardTeacher>
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/student/team-factory"
+              element={
+                <AuthGuard>
+                  <DashBoardStudent>
+                    <StTeamFactory />
+                  </DashBoardStudent>
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/student/member-factory"
+              element={
+                <AuthGuard>
+                  <DashBoardStudent>
+                    <StMemberFactory />
+                  </DashBoardStudent>
                 </AuthGuard>
               }
             />

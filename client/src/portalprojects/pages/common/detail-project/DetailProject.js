@@ -31,6 +31,7 @@ import Table from "./table/Table";
 import { useState } from "react";
 import { SetDetailTodo } from "../../../app/reducer/detail-project/DPDetailTodoSlice.reducer";
 import TaskModal from "./task-modal/TaskModal";
+import { SetMeRoleProject } from "../../../app/reducer/detail-project/DPRoleProjectSlice.reducer";
 
 const DetailProject = () => {
   const { id } = useParams();
@@ -55,10 +56,17 @@ const DetailProject = () => {
     });
   };
 
+  const loadDataRoleProject = () => {
+    DetailProjectAPI.getAllRoleProject(id).then((response) => {
+      dispatch(SetMeRoleProject(response.data.data));
+    });
+  };
+
   useEffect(() => {
     dispatch(SetLoading(true));
     loadData();
     loadDataPeriod();
+    loadDataRoleProject();
 
     return () => {
       document.querySelector("body").style.backgroundColor = "";

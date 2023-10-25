@@ -37,6 +37,10 @@ const TeacherPointMyClass = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     fetchData(idClass);
+
+    return () => {
+      dispatch(SetPoint([]));
+    };
   }, []);
   const fetchData = async (idClass) => {
     await Promise.all([await featchClass(idClass), await featchPoint(idClass)]);

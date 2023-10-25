@@ -3,6 +3,7 @@ package com.labreportapp.portalprojects.core.admin.service;
 import com.labreportapp.portalprojects.core.admin.model.request.AdCreateMemberProjectRequest;
 import com.labreportapp.portalprojects.core.admin.model.request.AdFindProjectRequest;
 import com.labreportapp.portalprojects.core.admin.model.request.AdUpdateMemberProjectRequest;
+import com.labreportapp.portalprojects.core.admin.model.response.AdMemberAndRoleProjectCustomResponse;
 import com.labreportapp.portalprojects.core.admin.model.response.AdMemberProjectReponse;
 import com.labreportapp.portalprojects.entity.MemberProject;
 import jakarta.validation.Valid;
@@ -16,7 +17,7 @@ public interface AdMemberProjectService {
 
     List<AdMemberProjectReponse> searchProject(final AdFindProjectRequest rep);
 
-    List<AdMemberProjectReponse> findAllMemberJoinProject(final String idProject);
+    List<AdMemberAndRoleProjectCustomResponse> findAllMemberJoinProject(final String idProject);
 
     List<MemberProject> getAll();
 

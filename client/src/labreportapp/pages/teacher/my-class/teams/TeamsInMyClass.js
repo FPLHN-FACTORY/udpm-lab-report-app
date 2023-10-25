@@ -56,6 +56,10 @@ const TeamsInMyClass = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     fetchData(idClass);
+
+    return () => {
+      dispatch(SetTeams([]));
+    };
   }, []);
 
   const fetchData = async (idClass) => {
@@ -236,10 +240,6 @@ const TeamsInMyClass = () => {
                     icon={faMattressPillow}
                     className="icon"
                     style={{ width: "19px" }}
-                    onClick={() => {
-                      setShowDetailModal(true);
-                      handleDetailTeam(record);
-                    }}
                   />
                 </Link>
               </Tooltip>

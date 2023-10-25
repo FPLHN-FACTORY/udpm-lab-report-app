@@ -3,6 +3,8 @@ package com.labreportapp.portalprojects.core.admin.service;
 import com.labreportapp.portalprojects.core.admin.model.request.AdCreateProjectRequest;
 import com.labreportapp.portalprojects.core.admin.model.request.AdFindProjectRequest;
 import com.labreportapp.portalprojects.core.admin.model.request.AdUpdateProjectRequest;
+import com.labreportapp.portalprojects.core.admin.model.request.AdUpdateProjectRoleRequest;
+import com.labreportapp.portalprojects.core.admin.model.response.AdDetailProjectCateMemberRespone;
 import com.labreportapp.portalprojects.core.admin.model.response.AdProjectReponse;
 import com.labreportapp.portalprojects.core.common.base.PageableObject;
 import com.labreportapp.portalprojects.entity.Project;
@@ -19,9 +21,11 @@ public interface AdProjectService {
 
     List<Project> findAllProject(Pageable pageable);
 
-    Project createProject(@Valid final AdCreateProjectRequest request);
+    AdProjectReponse createProject(@Valid final AdCreateProjectRequest request);
 
-    Project updateProject(@Valid AdUpdateProjectRequest request);
+    AdProjectReponse updateProject(@Valid AdUpdateProjectRoleRequest request, String idProject);
+
+    AdDetailProjectCateMemberRespone detailUpdate(String idProject);
 
     PageableObject<AdProjectReponse> searchProject(final AdFindProjectRequest rep);
 

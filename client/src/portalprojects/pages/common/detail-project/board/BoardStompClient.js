@@ -98,6 +98,7 @@ import {
   SetToTalPages,
 } from "../../../../app/reducer/notification/NotificationSlice.reducer";
 import Cookies from "js-cookie";
+import { message } from "antd";
 
 const BoardStompClient = (dispatch, useAppSelector, id) => {
   const stompClient = getStompClient();
@@ -986,7 +987,9 @@ const BoardStompClient = (dispatch, useAppSelector, id) => {
   };
 
   const loadDataPeriodNotExists = () => {
-    let sessionId = /\/([^\/]+)\/websocket/.exec(stompClient.ws._transport.url)[1];
+    let sessionId = /\/([^\/]+)\/websocket/.exec(
+      stompClient.ws._transport.url
+    )[1];
     dispatch(SetSessionId(sessionId));
     stompClient.subscribe(
       "/portal-projects/update-index-todo-list/" + detailProject.id,
@@ -1014,13 +1017,13 @@ const BoardStompClient = (dispatch, useAppSelector, id) => {
       }
     );
 
-    stompClient.subscribe("/portal-projects/success/" + sessionId, (message) => {
-      let successObject = JSON.parse(message.body);
+    stompClient.subscribe("/portal-projects/success/" + sessionId, (mes) => {
+      let successObject = JSON.parse(mes.body);
       message.success(successObject.successMessage);
     });
 
-    stompClient.subscribe("/portal-projects/error/" + sessionId, (message) => {
-      var errorObject = JSON.parse(message.body).data;
+    stompClient.subscribe("/portal-projects/error/" + sessionId, (mes) => {
+      var errorObject = JSON.parse(mes.body).data;
       message.error("Lỗi hệ thống");
     });
 

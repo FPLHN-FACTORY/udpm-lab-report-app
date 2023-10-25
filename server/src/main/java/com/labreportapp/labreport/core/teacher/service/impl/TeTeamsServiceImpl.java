@@ -12,8 +12,13 @@ import com.labreportapp.labreport.core.teacher.model.response.TeExcelResponseMes
 import com.labreportapp.labreport.core.teacher.model.response.TeStudentCallApiResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeTeamsRespone;
 import com.labreportapp.labreport.core.teacher.repository.TeClassRepository;
+import com.labreportapp.labreport.core.teacher.repository.TeLabelProjectRepository;
+import com.labreportapp.labreport.core.teacher.repository.TeLabelRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeMemberProjectRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeProjectRepository;
+import com.labreportapp.labreport.core.teacher.repository.TeRoleConfigReposiotry;
+import com.labreportapp.labreport.core.teacher.repository.TeRoleMemberProjectRepository;
+import com.labreportapp.labreport.core.teacher.repository.TeRoleProjectRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeStudentClassesRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeTeamsRepositoty;
 import com.labreportapp.labreport.core.teacher.service.TeStudentClassesService;
@@ -21,15 +26,21 @@ import com.labreportapp.labreport.core.teacher.service.TeTeamsService;
 import com.labreportapp.labreport.entity.Class;
 import com.labreportapp.labreport.entity.StudentClasses;
 import com.labreportapp.labreport.entity.Team;
+import com.labreportapp.labreport.infrastructure.constant.RoleDefault;
 import com.labreportapp.labreport.infrastructure.constant.RoleTeam;
 import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.labreport.util.RandomString;
+import com.labreportapp.portalprojects.entity.Label;
+import com.labreportapp.portalprojects.entity.LabelProject;
 import com.labreportapp.portalprojects.entity.MemberProject;
 import com.labreportapp.portalprojects.entity.Project;
+import com.labreportapp.portalprojects.entity.RoleConfig;
+import com.labreportapp.portalprojects.entity.RoleMemberProject;
+import com.labreportapp.portalprojects.entity.RoleProject;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
-import com.labreportapp.portalprojects.infrastructure.constant.RoleMemberProject;
 import com.labreportapp.portalprojects.infrastructure.constant.StatusProject;
 import com.labreportapp.portalprojects.infrastructure.constant.StatusWork;
+import com.labreportapp.portalprojects.infrastructure.constant.TypeProject;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -94,6 +105,21 @@ public class TeTeamsServiceImpl implements TeTeamsService {
 
     @Autowired
     private LabReportAppSession labReportAppSession;
+
+    @Autowired
+    private TeRoleConfigReposiotry teRoleConfigReposiotry;
+
+    @Autowired
+    private TeRoleProjectRepository teRoleProjectRepository;
+
+    @Autowired
+    private TeLabelRepository teLabelRepository;
+
+    @Autowired
+    private TeLabelProjectRepository teLabelProjectRepository;
+
+    @Autowired
+    private TeRoleMemberProjectRepository teRoleMemberProjectRepository;
 
     @Override
     public List<TeTeamsRespone> getAllTeams(final TeFindStudentClasses teFindStudentClasses) {
@@ -207,6 +233,7 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         return teTeamsRepositoty.save(team);
     }
 
+
     @Override
     @Transactional
     @CacheEvict(value = {"membersByProject"}, allEntries = true)
@@ -222,16 +249,57 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         project.setStartTime(new Date().getTime());
         project.setEndTime(new Date().getTime() + 90 * 86400000);
         project.setStatusProject(StatusProject.DANG_DIEN_RA);
+        project.setTypeProject(TypeProject.DU_AN_XUONG_THUC_HANH);
         project.setBackgroundColor("rgb(38, 144, 214)");
         Project projectNew = teProjectRepository.save(project);
         teamUp.setProjectId(projectNew.getId());
-        MemberProject memberTeacher = new MemberProject();
-        memberTeacher.setMemberId(labReportAppSession.getUserId());
-        memberTeacher.setEmail(labReportAppSession.getEmail());
-        memberTeacher.setProjectId(projectNew.getId());
-        memberTeacher.setRole(RoleMemberProject.MANAGER);
-        memberTeacher.setStatusWork(StatusWork.DANG_LAM);
-        teMemberProjectRepository.save(memberTeacher);
+
+        List<Label> listLabel = teLabelRepository.findAll();
+        List<LabelProject> newLabelProject = new ArrayList<>();
+        listLabel.forEach(item -> {
+            LabelProject labelProject = new LabelProject();
+            labelProject.setProjectId(projectNew.getId());
+            labelProject.setColorLabel(item.getColorLabel());
+            labelProject.setCode(item.getCode());
+            labelProject.setName(item.getName());
+            newLabelProject.add(labelProject);
+        });
+        teLabelProjectRepository.saveAll(newLabelProject);
+
+        List<RoleConfig> listRoleConfig = teRoleConfigReposiotry.findAll();
+        List<RoleProject> newRoleProject = new ArrayList<>();
+        listRoleConfig.forEach(item -> {
+            RoleProject roleProject = new RoleProject();
+            roleProject.setProjectId(projectNew.getId());
+            roleProject.setName(item.getName());
+            roleProject.setDescription(item.getDescription());
+            roleProject.setRoleDefault(item.getRoleDefault());
+            newRoleProject.add(roleProject);
+        });
+        List<RoleProject> listRoleProject = teRoleProjectRepository.saveAll(newRoleProject);
+
+        MemberProject memberCreateProject = new MemberProject();
+        memberCreateProject.setMemberId(labReportAppSession.getUserId());
+        memberCreateProject.setProjectId(projectNew.getId());
+        memberCreateProject.setEmail(labReportAppSession.getEmail());
+        memberCreateProject.setStatusWork(StatusWork.DANG_LAM);
+        memberCreateProject.setId(teMemberProjectRepository.save(memberCreateProject).getId());
+
+        RoleMemberProject roleMemberProjectDefault = new RoleMemberProject();
+        roleMemberProjectDefault.setMemberProjectId(memberCreateProject.getId());
+        Optional<RoleProject> roleProSetDefault = listRoleProject.stream()
+                .filter(i -> i.getRoleDefault().equals(RoleDefault.DEFAULT))
+                .findFirst();
+        if (roleProSetDefault.isPresent()) {
+            roleMemberProjectDefault.setRoleProjectId(roleProSetDefault.get().getId());
+        } else {
+            if (listRoleProject.size() > 0) {
+                RoleProject roleProjectAp = listRoleProject.get(0);
+                roleMemberProjectDefault.setRoleProjectId(roleProjectAp.getId());
+            }
+        }
+        teRoleMemberProjectRepository.save(roleMemberProjectDefault);
+        System.err.println(teRoleMemberProjectRepository.save(roleMemberProjectDefault));
         return teTeamsRepositoty.save(teamUp);
     }
 
@@ -246,16 +314,6 @@ public class TeTeamsServiceImpl implements TeTeamsService {
                 teStudentClassesRepository.save(item);
             });
             teTeamsRepositoty.delete(team);
-//            if (team.getProjectId() != null) {
-//                Optional<Project> projectFind = teProjectRepository.findById(team.getProjectId());
-//                if (projectFind.isPresent()) {
-//                    List<MemberProject> listMemberFind = teMemberProjectRepository.findMemberProjectByProjectId(team.getProjectId());
-//                    if (listMemberFind.size() != 0) {
-//                        teMemberProjectRepository.deleteAll(listMemberFind);
-//                    }
-//                    teProjectRepository.delete(projectFind.get());
-//                }
-//            }
             return "Xóa nhóm thành công !";
         } else {
             return "Không tìm thấy nhóm, xóa thất bại !";

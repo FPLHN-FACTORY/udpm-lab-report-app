@@ -1,10 +1,16 @@
 import React, { useState } from "react";
 import { Layout, Menu } from "antd";
-import { faBars, faImage, faPalette } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBars,
+  faImage,
+  faPalette,
+  faUserTag,
+} from "@fortawesome/free-solid-svg-icons";
 import "./styleMenuRight.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ModalBackGroundImage from "../popup/background/ModalBackGroundImage";
 import ModalBackGroundColor from "../popup/background/ModalBackgroundColor";
+import ModalRoleProjectManagement from "./modal-role-project-management/ModalRoleProjectManagement";
 
 const { Sider } = Layout;
 
@@ -45,6 +51,19 @@ const MenuRight = () => {
     setShowModalBackgourndColor(false);
   };
 
+  const [showModalRoleProjectManagement, setShowModalRoleProjectManagement] =
+    useState(false);
+
+  const handleClickModalRoleProjectManagement = (id) => {
+    document.querySelector("body").style.overflowX = "hidden";
+    setShowModalRoleProjectManagement(true);
+  };
+
+  const handleModalRoleProjectManagementCancel = () => {
+    document.querySelector("body").style.overflowX = "auto";
+    setShowModalRoleProjectManagement(false);
+  };
+
   return (
     <div className="sidebar-menu">
       <Sider
@@ -68,8 +87,11 @@ const MenuRight = () => {
             <FontAwesomeIcon icon={faPalette} style={{ marginRight: "7px" }} />
             Thay đổi màu nền
           </Menu.Item>
+          <Menu.Item key="3" onClick={handleClickModalRoleProjectManagement}>
+            <FontAwesomeIcon icon={faUserTag} style={{ marginRight: "7px" }} />
+            Quản lý vai trò trong dự án
+          </Menu.Item>
         </Menu>
-        
       </Sider>
       <ModalBackGroundImage
         visible={showModalBackgourndImage}
@@ -78,6 +100,10 @@ const MenuRight = () => {
       <ModalBackGroundColor
         visible={showModalBackgourndColor}
         onCancel={handleModalBackgourndColorCancel}
+      />
+      <ModalRoleProjectManagement
+        visible={showModalRoleProjectManagement}
+        onCancel={handleModalRoleProjectManagementCancel}
       />
     </div>
   );

@@ -1,35 +1,39 @@
-import { Modal, Row, Col, Input, Table, Image, Pagination, Spin } from "antd";
+import { Modal, Row, Col, Input, Table, Image, Spin, Select } from "antd";
 import "./styleModalDetailProject.css";
 import { useEffect, useState } from "react";
 import { ProjectManagementAPI } from "../../../../api/admin/project-management/projectManagement.api";
 import moment from "moment";
 import { MemberProjectManagementAPI } from "../../../../api/admin/project-management/memberProjectManagement.api";
 import { CategoryProjectManagementAPI } from "../../../../api/admin/project-management/categoryProjectManagement.api";
-import { CommonAPI } from "../../../../api/commonAPI";
+import { AdPotalsRoleProjectAPI } from "../../../../api/admin/role-project/AdPotalsRoleProject.api";
 
 const { TextArea } = Input;
-
+const { Option } = Select;
 const ModalDetailProject = ({ visible, onCancel, idProject }) => {
   const [project, setProject] = useState({});
   const [listData, setListData] = useState([]);
   const [listCategoryProjects, setListCategoryProjects] = useState("");
-  const [listMemberAll, setListMemberAll] = useState([]);
+  const [listRoleProject, setListRoleProject] = useState([]);
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    fetchListMemberAll();
-  }, []);
 
   useEffect(() => {
     if (idProject !== null && idProject !== "" && visible === true) {
       setListData([]);
+      featchRoleProject(idProject);
       fetchData();
     }
   }, [visible, idProject, onCancel]);
 
-  const fetchListMemberAll = async () => {
-    const responeListMemberAll = await CommonAPI.fetchAll();
-    setListMemberAll(responeListMemberAll.data);
+  const featchRoleProject = async (idProject) => {
+    try {
+      await AdPotalsRoleProjectAPI.getAllRoleProjectByProjId(idProject).then(
+        (response) => {
+          setListRoleProject(response.data.data);
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const fetchData = async () => {
@@ -56,33 +60,12 @@ const ModalDetailProject = ({ visible, onCancel, idProject }) => {
       });
 
       const responeListMemberProject =
-        await MemberProjectManagementAPI.fetchAll(idProject);
+        await MemberProjectManagementAPI.getAllStudentXuong(idProject);
       const listMemberProject = await responeListMemberProject.data.data;
-
-      const listMemberJoin = listMemberAll
-        .filter((obj1) =>
-          listMemberProject.some((obj2) => obj2.memberId === obj1.id)
-        )
-        .map((obj1) => {
-          const matchedItem = listMemberProject.find(
-            (obj2) => obj2.memberId === obj1.id
-          );
-          return {
-            ...obj1,
-            memberId: matchedItem.memberId,
-            roleProject: parseInt(matchedItem.role),
-            projectId: matchedItem.projectId,
-            statusWork: parseInt(matchedItem.status),
-          };
-        });
-
-      setListData(listMemberJoin);
-
-      setTimeout(() => {
-        setLoading(false);
-      }, 500);
+      setListData(listMemberProject);
+      setLoading(false);
     } catch (err) {
-      alert("Lỗi hệ thống, vui lòng ấn F5 để tải lại trang");
+      console.log(err);
     }
   };
 
@@ -92,7 +75,7 @@ const ModalDetailProject = ({ visible, onCancel, idProject }) => {
   const data = listData;
   const columns = [
     {
-      title: "STT",
+      title: "#",
       dataIndex: "stt",
       key: "stt",
     },
@@ -100,21 +83,23 @@ const ModalDetailProject = ({ visible, onCancel, idProject }) => {
       title: "Mã",
       dataIndex: "userName",
       key: "userName",
-      width: 50,
       sorter: (a, b) => a.userName.localeCompare(b.userName),
     },
     {
       title: "Thành viên",
       dataIndex: "name",
       key: "name",
-      width: 400,
       sorter: (a, b) => a.name.localeCompare(b.name),
       render: (text, record) => {
         return (
           <div>
             <Image.PreviewGroup>
               <Image
-                src={record.picture}
+                src={
+                  record.picture === "Images/Default.png"
+                    ? "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                    : record.picture
+                }
                 alt="Avatar"
                 width={25}
                 height={25}
@@ -131,34 +116,40 @@ const ModalDetailProject = ({ visible, onCancel, idProject }) => {
       title: "Email",
       dataIndex: "email",
       key: "email",
-      width: 280,
     },
     {
       title: "Vai trò",
-      dataIndex: "roleProject",
-      key: "roleProject",
-      render: (text, record) => {
-        switch (record.roleProject) {
-          case 0:
-            return "Quản lý";
-          case 1:
-            return "Trưởng nhóm";
-          case 2:
-            return "Dev";
-          default:
-            return "Tester";
-        }
-      },
-      width: 150,
+      dataIndex: "listRoleSelect",
+      key: "listRoleSelect",
+      render: (text, record) =>
+        record.listRole != null ? (
+          <Select
+            mode="multiple"
+            placeholder="Chọn vai trò"
+            value={record.listRole.map((item) => item.nameRole)}
+            style={{
+              width: "100%",
+            }}
+            maxTagCount={3}
+            key={record.idRoleMemberProject}
+            options={record.listRole.map((item) => ({
+              value: item.idRole,
+              label: item.nameRole,
+              disabled: true,
+            }))}
+          />
+        ) : (
+          "Chưa có vai trò "
+        ),
     },
   ];
-  const rowTable = "row_table";
   return (
     <Modal
       onCancel={onCancel}
       visible={visible}
-      width={750}
+      width={1150}
       footer={null}
+      style={{ top: "53px" }}
     >
       <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
         <span style={{ fontSize: "18px" }}>Chi tiết dự án</span>
@@ -240,19 +231,18 @@ const ModalDetailProject = ({ visible, onCancel, idProject }) => {
             </div>
           ) : (
             <Table
+              style={{ width: "100%" }}
               dataSource={data.map((item, index) => ({
                 ...item,
                 stt: setStt(index + 1),
               }))}
-              rowKey="id"
+              rowKey="stt"
               columns={columns}
               pagination={{
                 pageSize: 5,
                 showSizeChanger: false,
                 size: "small",
               }}
-              rowClassName={rowTable}
-              className="table_modal_project_management"
             />
           )}
         </Row>

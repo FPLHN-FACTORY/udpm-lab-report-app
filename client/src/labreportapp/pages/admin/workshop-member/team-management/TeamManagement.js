@@ -49,6 +49,10 @@ const TeamManagement = () => {
     fetchData();
     window.scrollTo(0, 0);
     document.title = "Quản lý team | Lab-Report-App";
+
+    return () => {
+      dispatch(SetTeam([]));
+    };
   }, [current]);
 
   const fetchData = () => {

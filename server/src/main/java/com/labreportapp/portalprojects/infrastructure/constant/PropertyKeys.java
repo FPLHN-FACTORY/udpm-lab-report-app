@@ -89,5 +89,10 @@ public class PropertyKeys {
     public static final String MEMBER_FACTORY_NOT_EXISTS = "member.factory.not.exists";
     public static final String ROLE_CONFIG_ONLY_HAVA_ONE = "role.config.only.have.one";
     public static final String ROLE_FACTORY_HAVE_MEMBER = "role.factory.have.member";
+    public static final String MEMBER_FACTORY_IS_ALREADY_IN_THE_GROUP = "member.factory.is.already.in.the.group";
+    public static final String MEMBER_TEAM_FACTORY_NOT_EXISTS = "member.team.factory.not.exists";
 
+    public static final String START_TIME_MORE_THAN_END_TIME = "start.time.more.than.end.time";
+    public static final String TIME_NOT_NULL = "time.not.null";
+    public static final String ROLE_DEFAULT_NOT_EMPTY = "role.default.not.empty";
 }

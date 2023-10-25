@@ -32,6 +32,10 @@ const MeetingInMyClass = () => {
     window.scrollTo(0, 0);
     featchMeeting(idClass);
     featchClass(idClass);
+
+    return () => {
+      dispatch(SetMeeting([]));
+    };
   }, []);
   const featchClass = async (idClass) => {
     try {
