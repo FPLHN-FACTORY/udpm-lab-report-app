@@ -72,30 +72,35 @@ const LabelManagement = () => {
     {
       title: "STT",
       dataIndex: "index",
+      align: "center",
       key: "index",
       render: (text, record, index) => index + 1,
     },
     {
       title: "Tên nhãn",
       dataIndex: "name",
+      align: "center",
       key: "name",
       sorter: (a, b) => a.name.localeCompare(b.name),
     },
     {
       title: "Màu sắc nhãn",
       dataIndex: "colorLabel",
+      align: "center",
       key: "colorLabel",
       render: (text, record) => {
         if (record.colorLabel) {
           return (
-            <div
-              style={{
-                backgroundColor: record.colorLabel,
-                width: 200,
-                height: 30,
-                borderRadius: 8,
-              }}
-            ></div>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <div
+                style={{
+                  backgroundColor: record.colorLabel,
+                  width: 200,
+                  height: 30,
+                  borderRadius: 8,
+                }}
+              ></div>
+            </div>
           );
         }
       },
@@ -103,6 +108,7 @@ const LabelManagement = () => {
     {
       title: "Hành động",
       dataIndex: "actions",
+      align: "center",
       key: "actions",
       render: (text, record) => (
         <div>
@@ -164,104 +170,114 @@ const LabelManagement = () => {
   };
 
   return (
-    <div className="label_management">
-      {isLoading && <LoadingIndicator />}
-
-      <div className="title_label_management">
-        {" "}
-        <FontAwesomeIcon icon={faTags} style={{ fontSize: 20 }} />
-        <span style={{ marginLeft: "10px" }}>Quản lý nhãn</span>
+    <>
+      <div className="box-one">
+        <div
+          className="heading-box"
+          style={{ fontSize: "18px", paddingLeft: "20px" }}
+        >
+          <span style={{ fontSize: "20px", fontWeight: "500" }}>
+            <FontAwesomeIcon icon={faTags} style={{ fontSize: 20 }} />
+            <span style={{ marginLeft: "10px" }}>Quản lý nhãn</span>
+          </span>
+        </div>
       </div>
-      <div className="filter-label">
-        <FontAwesomeIcon icon={faFilter} style={{ fontSize: 20 }} />{" "}
-        <span style={{ fontSize: "25px", fontWeight: "500" }}>Bộ lọc</span>
-        <hr />
-        <div className="content">
-          <div className="content-wrapper">
-            <div className="content-center">
-              Tên nhãn:{" "}
-              <Input
-                type="text"
-                value={searchName}
-                onChange={handleChangeSearch}
-                style={{ width: "50%", marginLeft: "10px" }}
+      <div
+        className="label_management"
+        style={{ paddingTop: 10, marginTop: 0 }}
+      >
+        {isLoading && <LoadingIndicator />}
+        <div className="filter-label">
+          <FontAwesomeIcon icon={faFilter} style={{ fontSize: 20 }} />{" "}
+          <span style={{ fontSize: "20px", fontWeight: "500" }}>Bộ lọc</span>
+          <hr />
+          <div className="content">
+            <div className="content-wrapper">
+              <div className="content-center">
+                Tên nhãn:{" "}
+                <Input
+                  type="text"
+                  value={searchName}
+                  onChange={handleChangeSearch}
+                  style={{ width: "50%", marginLeft: "10px" }}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="box_btn_filter">
+            <Button className="btn_filter" onClick={handleSearch}>
+              Tìm kiếm
+            </Button>
+            <Button
+              className="btn_clear"
+              onClick={handleClear}
+              style={{ backgroundColor: "rgb(38, 144, 214)" }}
+            >
+              Làm mới bộ lọc
+            </Button>
+          </div>
+        </div>
+        <div className="table_label">
+          <div className="title_label_management_table">
+            <div>
+              {" "}
+              {<FontAwesomeIcon icon={faList} style={{ fontSize: 20 }} />}
+              <span style={{ fontSize: "18px", fontWeight: "500" }}>
+                {" "}
+                Danh sách nhãn
+              </span>
+            </div>
+            <div>
+              <Button
+                style={{
+                  color: "white",
+                  backgroundColor: "rgb(55, 137, 220)",
+                }}
+                onClick={handleLabelCreate}
+              >
+                <FontAwesomeIcon
+                  icon={faPlus}
+                  size="1x"
+                  style={{
+                    backgroundColor: "rgb(55, 137, 220)",
+                  }}
+                />{" "}
+                Thêm nhãn
+              </Button>
+            </div>
+          </div>
+          <div style={{ marginTop: "10px" }}>
+            <Table
+              className="table_content"
+              pagination={false}
+              columns={columns}
+              rowKey="id"
+              dataSource={data}
+            />
+            <div className="pagination_box">
+              <Pagination
+                simple
+                current={current}
+                onChange={(value) => {
+                  setCurrent(value);
+                }}
+                total={total * 10}
               />
             </div>
           </div>
         </div>
-        <div className="box_btn_filter">
-          <Button className="btn_filter" onClick={handleSearch}>
-            Tìm kiếm
-          </Button>
-          <Button
-            className="btn_clear"
-            onClick={handleClear}
-            style={{ backgroundColor: "rgb(38, 144, 214)" }}
-          >
-            Làm mới bộ lọc
-          </Button>
-        </div>
+        <ModalCreateLabel
+          visible={showCreateModal}
+          onCancel={handleModalCreateCancel}
+        />
+        <ModalUpdateLabel
+          visible={showUpdateModal}
+          onCancel={handleModalUpdateCancel}
+          idLabel={idLabel}
+          label={label}
+        />
       </div>
-      <div className="table_label">
-        <div className="title_label_management_table">
-          <div>
-            {" "}
-            {<FontAwesomeIcon icon={faList} style={{ fontSize: 20 }} />}
-            <span style={{ fontSize: "18px", fontWeight: "500" }}>
-              {" "}
-              Danh sách nhãn
-            </span>
-          </div>
-          <div>
-            <Button
-              style={{
-                color: "white",
-                backgroundColor: "rgb(55, 137, 220)",
-              }}
-              onClick={handleLabelCreate}
-            >
-              <FontAwesomeIcon
-                icon={faPlus}
-                size="1x"
-                style={{
-                  backgroundColor: "rgb(55, 137, 220)",
-                }}
-              />{" "}
-              Thêm nhãn
-            </Button>
-          </div>
-        </div>
-        <div style={{ marginTop: "10px" }}>
-          <Table
-            className="table_content"
-            pagination={false}
-            columns={columns}
-            rowKey="id"
-            dataSource={data}
-          />
-          <div className="pagination_box">
-            <Pagination
-              simple
-              current={current}
-              onChange={(value) => {
-                setCurrent(value);
-              }}
-              total={total * 10}
-            />
-          </div>
-        </div>
-      </div>
-      <ModalCreateLabel
-        visible={showCreateModal}
-        onCancel={handleModalCreateCancel}
-      />
-      <ModalUpdateLabel
-        visible={showUpdateModal}
-        onCancel={handleModalUpdateCancel}
-        idLabel={idLabel}
-        label={label}
-      />
-    </div>
+    </>
   );
 };
 

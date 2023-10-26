@@ -37,71 +37,76 @@ const TemplateReport = () => {
       .then(() => {
         message.success("Cập nhật thành công!");
       })
-      .catch(() => {
-
-      });
+      .catch(() => {});
   };
 
   return (
-    <div className="box-general" style={{ paddingTop: 50 }}>
-      {isLoading && <LoadingIndicator />}
-      <div className="heading-box">
-        <span style={{ fontSize: "20px", fontWeight: "500" }}>
-          <FontAwesomeIcon
-            icon={faTemperature0}
-            style={{ marginRight: "8px" }}
-          />
-          Template báo cáo
-        </span>
-      </div>
-      <div className="box-son-general">
-        <div style={{ marginBottom: "15px" }}>
-          {edit === false ? (
-            <Button
-              className="btn_filter"
-              onClick={() => setEdit(true)}
-              style={{ fontSize: "15px" }}
-            >
-              Cập nhật
-            </Button>
-          ) : (
-            <Button
-              className="btn__clear"
-              onClick={() => {
-                update(templateReport);
-                setEdit(false);
-              }}
-              style={{
-                fontSize: "15px",
-                backgroundColor: "rgb(50, 144, 202)",
-              }}
-            >
-              Xác nhận
-            </Button>
-          )}
-        </div>
+    <>
+      <div className="box-one">
         <div
-          style={{
-            width: "100%",
-            height: "550px",
-          }}
+          className="heading-box"
+          style={{ fontSize: "18px", paddingLeft: "20px" }}
         >
-          <TextArea
-            rows={4}
-            placeholder="Nội dung"
-            value={templateReport?.descriptions}
-            onChange={(e) =>
-              setTemplateReport({
-                ...templateReport,
-                descriptions: e.target.value,
-              })
-            }
-            readOnly={edit === true ? false : true}
-            style={{ width: "100%", height: "480px" }}
-          />
+          <span style={{ fontSize: "20px", fontWeight: "500" }}>
+            <FontAwesomeIcon
+              icon={faTemperature0}
+              style={{ marginRight: "8px" }}
+            />
+            Template báo cáo
+          </span>
         </div>
       </div>
-    </div>
+      <div className="box-general" style={{ paddingTop: 10, marginTop: 0 }}>
+        {isLoading && <LoadingIndicator />}
+        <div className="box-son-general">
+          <div style={{ marginBottom: "15px" }}>
+            {edit === false ? (
+              <Button
+                className="btn_filter"
+                onClick={() => setEdit(true)}
+                style={{ fontSize: "15px" }}
+              >
+                Cập nhật
+              </Button>
+            ) : (
+              <Button
+                className="btn__clear"
+                onClick={() => {
+                  update(templateReport);
+                  setEdit(false);
+                }}
+                style={{
+                  fontSize: "15px",
+                  backgroundColor: "rgb(50, 144, 202)",
+                }}
+              >
+                Xác nhận
+              </Button>
+            )}
+          </div>
+          <div
+            style={{
+              width: "100%",
+              height: "550px",
+            }}
+          >
+            <TextArea
+              rows={4}
+              placeholder="Nội dung"
+              value={templateReport?.descriptions}
+              onChange={(e) =>
+                setTemplateReport({
+                  ...templateReport,
+                  descriptions: e.target.value,
+                })
+              }
+              readOnly={edit === true ? false : true}
+              style={{ width: "100%", height: "480px" }}
+            />
+          </div>
+        </div>
+      </div>
+    </>
   );
 };
 

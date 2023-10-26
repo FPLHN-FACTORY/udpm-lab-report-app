@@ -6,8 +6,10 @@ import com.labreportapp.labreport.core.admin.model.response.AdDetailMemberFactor
 import com.labreportapp.labreport.core.admin.model.response.AdMemberFactoryCustom;
 import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.core.common.base.SimpleEntityProjection;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 /**
@@ -28,4 +30,8 @@ public interface AdMemberFactoryService {
     AdMemberFactoryCustom updateMemberFactory(@Valid AdUpdateMemberFactoryRequest request);
 
     AdDetailMemberFactoryResponse detailMemberFactory(String id);
+
+    ByteArrayOutputStream exportTemplateExcel(HttpServletResponse response);
+
+    ByteArrayOutputStream exportExcel(HttpServletResponse response, final AdFindMemberFactoryRequest request);
 }

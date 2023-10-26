@@ -16,7 +16,7 @@ import java.util.List;
 public interface MeMemberProjectRepository extends MemberProjectRepository {
 
     @Query(value = """
-            SELECT a.id, a.member_id, a.role, a.status_work FROM member_project a WHERE a.project_id = :idProject
+            SELECT a.id, a.member_id, a.status_work FROM member_project a WHERE a.project_id = :idProject
             """, nativeQuery = true)
     List<MeMemberProjectResponse> getAllMemberProject(@Param("idProject") String idProject);
 

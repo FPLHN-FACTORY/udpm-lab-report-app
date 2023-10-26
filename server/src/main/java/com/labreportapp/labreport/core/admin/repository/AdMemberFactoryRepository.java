@@ -1,6 +1,7 @@
 package com.labreportapp.labreport.core.admin.repository;
 
 import com.labreportapp.labreport.core.admin.model.request.AdFindMemberFactoryRequest;
+import com.labreportapp.labreport.core.admin.model.response.AdExcelMemberFactoryResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdMemberFactoryResponse;
 import com.labreportapp.labreport.core.common.base.SimpleEntityProjection;
 import com.labreportapp.labreport.entity.MemberFactory;
@@ -68,7 +69,7 @@ public interface AdMemberFactoryRepository extends MemberFactoryRepository {
             GROUP BY a.id
             ORDER BY a.created_date DESC
             """, nativeQuery = true)
-    Page<AdMemberFactoryResponse> getAllRoleProject(Pageable pageable, @Param("req") AdFindMemberFactoryRequest req);
+    Page<AdMemberFactoryResponse> getPageMemberFactory(Pageable pageable, @Param("req") AdFindMemberFactoryRequest req);
 
     @Query(value = """
             SELECT a.id, a.name FROM role_factory a ORDER BY a.created_date DESC
@@ -129,4 +130,32 @@ public interface AdMemberFactoryRepository extends MemberFactoryRepository {
             SELECT * FROM member_factory ORDER BY created_date DESC
             """, nativeQuery = true)
     List<MemberFactory> getAllMemberFactory();
+
+    @Query(value = """
+            WITH memberFactoryRole AS (
+                SELECT a.id, GROUP_CONCAT(c.name, ' ') AS role_member_factory
+                FROM member_factory a
+                LEFT JOIN member_role_factory b ON a.id = b.member_factory_id
+                LEFT JOIN role_factory c ON c.id = b.role_factory_id
+                GROUP BY a.id
+            ), memberFactoryNumberTeam AS (
+                SELECT a.id, GROUP_CONCAT(c.name, ' ') AS member_team_factory
+                FROM member_factory a
+                LEFT JOIN member_team_factory b ON a.id = b.member_factory_id
+                LEFT JOIN team_factory c ON c.id = b.team_factory_id
+                GROUP BY a.id
+            )
+            SELECT DISTINCT a.id, ROW_NUMBER() OVER(ORDER BY a.created_date DESC) AS stt, 
+            a.member_id, a.email, a.status_member_factory, mfr.role_member_factory, mfnt.member_team_factory
+            FROM member_factory a
+            LEFT JOIN member_role_factory b ON a.id = b.member_factory_id
+            LEFT JOIN memberFactoryRole mfr ON mfr.id = a.id
+            LEFT JOIN memberFactoryNumberTeam mfnt ON mfnt.id = a.id
+            WHERE (:#{#req.value} IS NULL OR :#{#req.value} LIKE '' OR a.email LIKE %:#{#req.value}%)
+            AND (:#{#req.status} IS NULL OR :#{#req.status} LIKE '' OR a.status_member_factory = :#{#req.status})
+            AND (:#{#req.roleFactoryId} IS NULL OR :#{#req.roleFactoryId} LIKE '' OR b.role_factory_id = :#{#req.roleFactoryId})
+            GROUP BY a.id
+            ORDER BY a.created_date DESC
+            """, nativeQuery = true)
+    List<AdExcelMemberFactoryResponse> getListMemberFactory(@Param("req") AdFindMemberFactoryRequest req);
 }

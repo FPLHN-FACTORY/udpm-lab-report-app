@@ -1,8 +1,11 @@
 package com.labreportapp.labreport.core.admin.service.impl;
 
+import com.labreportapp.labreport.core.admin.excel.AdExportExcelMemberFactory;
 import com.labreportapp.labreport.core.admin.model.request.AdFindMemberFactoryRequest;
 import com.labreportapp.labreport.core.admin.model.request.AdUpdateMemberFactoryRequest;
 import com.labreportapp.labreport.core.admin.model.response.AdDetailMemberFactoryResponse;
+import com.labreportapp.labreport.core.admin.model.response.AdExcelMemberFactoryCustom;
+import com.labreportapp.labreport.core.admin.model.response.AdExcelMemberFactoryResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdMemberFactoryCustom;
 import com.labreportapp.labreport.core.admin.model.response.AdMemberFactoryResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdRoleFactoryDefaultResponse;
@@ -14,7 +17,6 @@ import com.labreportapp.labreport.core.common.response.SimpleResponse;
 import com.labreportapp.labreport.entity.MemberFactory;
 import com.labreportapp.labreport.entity.MemberRoleFactory;
 import com.labreportapp.labreport.entity.MemberTeamFactory;
-import com.labreportapp.labreport.entity.RoleFactory;
 import com.labreportapp.labreport.infrastructure.constant.StatusMemberFactory;
 import com.labreportapp.labreport.repository.MemberRoleFactoryRepository;
 import com.labreportapp.labreport.repository.MemberTeamFactoryRepository;
@@ -23,7 +25,15 @@ import com.labreportapp.labreport.repository.TeamFactoryRepository;
 import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -33,6 +43,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -67,10 +78,13 @@ public class AdMemberFactoryServiceImpl implements AdMemberFactoryService {
     @Autowired
     private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
 
+    @Autowired
+    private AdExportExcelMemberFactory adExportExcelMemberFactory;
+
     @Override
     public PageableObject<AdMemberFactoryCustom> getPage(final AdFindMemberFactoryRequest request) {
         Pageable pageable = PageRequest.of(request.getPage(), request.getSize());
-        Page<AdMemberFactoryResponse> responsePage = adMemberFactoryRepository.getAllRoleProject(pageable, request);
+        Page<AdMemberFactoryResponse> responsePage = adMemberFactoryRepository.getPageMemberFactory(pageable, request);
         List<String> idList = responsePage.getContent().stream()
                 .map(AdMemberFactoryResponse::getMemberId)
                 .filter(Objects::nonNull)
@@ -217,5 +231,69 @@ public class AdMemberFactoryServiceImpl implements AdMemberFactoryService {
         adDetailMemberFactoryResponse.setRoles(listRoles);
         adDetailMemberFactoryResponse.setTeams(listTeams);
         return adDetailMemberFactoryResponse;
+    }
+
+    @Override
+    public ByteArrayOutputStream exportTemplateExcel(HttpServletResponse response) {
+        try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            Sheet sheet = workbook.createSheet("Template mẫu Import danh sách thành viên xưởng");
+
+            CellStyle cellStyle = workbook.createCellStyle();
+
+            XSSFFont font = (XSSFFont) workbook.createFont();
+            font.setFontHeight(12);
+            cellStyle.setFont(font);
+
+            Row row = sheet.createRow(0);
+            Cell cell = row.createCell(0);
+            cell.setCellValue("STT");
+            cell.setCellStyle(cellStyle);
+
+            Cell cell1 = row.createCell(1);
+            cell1.setCellValue("Họ và tên");
+            cell1.setCellStyle(cellStyle);
+
+            Cell cell2 = row.createCell(2);
+            cell2.setCellValue("Email");
+            cell2.setCellStyle(cellStyle);
+            int rowNum = 1;
+
+            workbook.write(outputStream);
+            return outputStream;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public ByteArrayOutputStream exportExcel(HttpServletResponse response, final AdFindMemberFactoryRequest request) {
+        List<AdExcelMemberFactoryResponse> listRepo = adMemberFactoryRepository.getListMemberFactory(request);
+        List<String> idList = listRepo.stream()
+                .map(AdExcelMemberFactoryResponse::getMemberId)
+                .filter(Objects::nonNull)
+                .distinct()
+                .collect(Collectors.toList());
+        List<SimpleResponse> listResponse = new ArrayList<>();
+        if (idList != null && idList.size() > 0) {
+            listResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idList);
+        }
+        List<SimpleResponse> finalListResponse = listResponse;
+        List<AdExcelMemberFactoryCustom> listCustom = new ArrayList<>();
+        listRepo.forEach(repo -> {
+            finalListResponse.forEach(xx -> {
+                if (repo.getMemberId().equals(xx.getId())) {
+                    AdExcelMemberFactoryCustom adExcelMemberFactoryCustom = new AdExcelMemberFactoryCustom();
+                    adExcelMemberFactoryCustom.setStt(repo.getStt());
+                    adExcelMemberFactoryCustom.setName(xx.getName());
+                    adExcelMemberFactoryCustom.setRole(repo.getRoleMemberFactory());
+                    adExcelMemberFactoryCustom.setTeam(repo.getMemberTeamFactory());
+                    adExcelMemberFactoryCustom.setStatus(repo.getStatusMemberFactory());
+                    adExcelMemberFactoryCustom.setUserName(xx.getUserName());
+                    listCustom.add(adExcelMemberFactoryCustom);
+                }
+            });
+        });
+        return adExportExcelMemberFactory.exportExcel(response, listCustom);
     }
 }

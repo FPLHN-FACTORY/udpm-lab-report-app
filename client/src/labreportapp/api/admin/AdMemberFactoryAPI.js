@@ -53,4 +53,21 @@ export class AdMemberFactoryAPI {
       data: data,
     });
   }
+
+  static exportTemplateExcel() {
+    return request({
+      method: "GET",
+      url: url + "/export-template-excel",
+      responseType: "blob",
+    });
+  }
+
+  static exportExcel(filter) {
+    return request({
+      method: "GET",
+      url: url + "/export-excel",
+      responseType: "blob",
+      params: filter,
+    });
+  }
 }

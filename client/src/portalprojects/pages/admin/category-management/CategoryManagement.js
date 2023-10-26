@@ -116,103 +116,113 @@ const CategoryManagement = () => {
   };
 
   return (
-    <div className="category">
-      {loading && <LoadingIndicator />}
-      <div className="title_my_project">
-        {" "}
-        <FontAwesomeIcon icon={faFolder} style={{ fontSize: 20 }} />
-        <span style={{ marginLeft: "10px", fontSize: 20, fontWeight: "500" }}>
-          Quản lý thể loại
-        </span>
-      </div>
-      <div className="filter_category">
-        <FontAwesomeIcon icon={faFilter} style={{ fontSize: 20 }} />{" "}
-        <span style={{ fontSize: "20px", fontWeight: "500" }}>Bộ lọc</span>
-        <hr />
-        <div className="title__search">
-          Tên thể loại:{" "}
-          <Input
-            type="text"
-            value={name}
-            onChange={(e) => {
-              setName(e.target.value);
-            }}
-            style={{ width: "300px", marginLeft: "5px" }}
-          />
-        </div>
-        <div className="box_btn_filter">
-          <Button className="btn_filter" onClick={buttonSearch}>
-            Tìm kiếm
-          </Button>
-          <Button
-            className="btn__clear"
-            onClick={clearData}
-            style={{ backgroundColor: "rgb(38, 144, 214)" }}
-          >
-            Làm mới bộ lọc
-          </Button>
-        </div>
-      </div>
-
-      <div className="table__category">
-        <div className="tittle__category">
-          <div>
-            {" "}
-            {<FontAwesomeIcon icon={faFolder} style={{ fontSize: 20 }} />}
-            <span style={{ fontSize: "18px", fontWeight: "500" }}>
-              {" "}
-              Danh sách thể loại
-            </span>
-          </div>
-          <div>
-            <Button
-              style={{
-                color: "white",
-                backgroundColor: "rgb(55, 137, 220)",
-              }}
-              onClick={buttonCreate}
+    <>
+      <div className="box-one">
+        <div
+          className="heading-box"
+          style={{ fontSize: "18px", paddingLeft: "20px" }}
+        >
+          <span style={{ fontSize: "20px", fontWeight: "500" }}>
+            <FontAwesomeIcon icon={faFolder} style={{ fontSize: 20 }} />
+            <span
+              style={{ marginLeft: "10px", fontSize: 20, fontWeight: "500" }}
             >
-              <FontAwesomeIcon
-                icon={faPlus}
-                size="1x"
-                style={{
-                  backgroundColor: "rgb(55, 137, 220)",
-                }}
-              />{" "}
-              Thêm thể loại
+              Quản lý thể loại
+            </span>
+          </span>
+        </div>
+      </div>
+      <div className="category" style={{ paddingTop: 10, marginTop: 0 }}>
+        {loading && <LoadingIndicator />}
+        <div className="filter_category">
+          <FontAwesomeIcon icon={faFilter} style={{ fontSize: 20 }} />{" "}
+          <span style={{ fontSize: "20px", fontWeight: "500" }}>Bộ lọc</span>
+          <hr />
+          <div className="title__search">
+            Tên thể loại:{" "}
+            <Input
+              type="text"
+              value={name}
+              onChange={(e) => {
+                setName(e.target.value);
+              }}
+              style={{ width: "300px", marginLeft: "5px" }}
+            />
+          </div>
+          <div className="box_btn_filter">
+            <Button className="btn_filter" onClick={buttonSearch}>
+              Tìm kiếm
+            </Button>
+            <Button
+              className="btn__clear"
+              onClick={clearData}
+              style={{ backgroundColor: "rgb(38, 144, 214)" }}
+            >
+              Làm mới bộ lọc
             </Button>
           </div>
         </div>
-        <br />
-        <div>
-          <Table
-            dataSource={data}
-            rowKey="id"
-            columns={columns}
-            pagination={false}
-          />
-          <div className="pagination_box">
-            <Pagination
-              simple
-              current={current}
-              onChange={(value) => {
-                setCurrent(value);
-              }}
-              total={total * 10}
+
+        <div className="table__category">
+          <div className="tittle__category">
+            <div>
+              {" "}
+              {<FontAwesomeIcon icon={faFolder} style={{ fontSize: 20 }} />}
+              <span style={{ fontSize: "18px", fontWeight: "500" }}>
+                {" "}
+                Danh sách thể loại
+              </span>
+            </div>
+            <div>
+              <Button
+                style={{
+                  color: "white",
+                  backgroundColor: "rgb(55, 137, 220)",
+                }}
+                onClick={buttonCreate}
+              >
+                <FontAwesomeIcon
+                  icon={faPlus}
+                  size="1x"
+                  style={{
+                    backgroundColor: "rgb(55, 137, 220)",
+                  }}
+                />{" "}
+                Thêm thể loại
+              </Button>
+            </div>
+          </div>
+          <br />
+          <div>
+            <Table
+              dataSource={data}
+              rowKey="id"
+              columns={columns}
+              pagination={false}
             />
+            <div className="pagination_box">
+              <Pagination
+                simple
+                current={current}
+                onChange={(value) => {
+                  setCurrent(value);
+                }}
+                total={total * 10}
+              />
+            </div>
           </div>
         </div>
+        <ModalCreateCategory
+          visible={modalCreate}
+          onCancel={buttonCreateCancel}
+        />
+        <ModalUpdateCategory
+          visible={modalUpdate}
+          onCancel={buttonUpdateCancel}
+          category={category}
+        />
       </div>
-      <ModalCreateCategory
-        visible={modalCreate}
-        onCancel={buttonCreateCancel}
-      />
-      <ModalUpdateCategory
-        visible={modalUpdate}
-        onCancel={buttonUpdateCancel}
-        category={category}
-      />
-    </div>
+    </>
   );
 };
 

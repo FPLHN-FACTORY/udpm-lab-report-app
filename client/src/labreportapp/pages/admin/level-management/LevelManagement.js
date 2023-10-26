@@ -9,7 +9,15 @@ import {
   faChainSlash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Input, Pagination, Table, Tooltip, Popconfirm, message } from "antd";
+import {
+  Button,
+  Input,
+  Pagination,
+  Table,
+  Tooltip,
+  Popconfirm,
+  message,
+} from "antd";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import "./style-level-management.css";
@@ -162,116 +170,123 @@ const LevelManagement = () => {
   };
 
   return (
-    <div className="box-general" style={{ paddingTop: 50 }}>
-      {loading && <LoadingIndicator />}
-      <div className="title_activity_management" style={{ marginTop: 0 }}>
-        {" "}
-        <FontAwesomeIcon icon={faLevelUp} style={{ fontSize: "20px" }} />
-        <span style={{ marginLeft: "10px" }}>Quản lý level</span>
-      </div>
-      <div className="filter-level" style={{ marginBottom: "10px" }}>
-        <FontAwesomeIcon icon={faFilter} style={{ fontSize: "20px" }} />{" "}
-        <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
-        <hr />
-        <div className="title__search" style={{ marginRight: "60px" }}>
-          Tên level:{" "}
-          <Input
-            type="text"
-            value={name}
-            onChange={(e) => {
-              setName(e.target.value);
-            }}
-            style={{ width: "300px", marginLeft: "5px" }}
-          />
-        </div>
-        <div className="box_btn_filter">
-          <Button
-            className="btn_filter"
-            onClick={buttonSearch}
-            style={{ marginRight: "15px" }}
-          >
-            <FontAwesomeIcon
-              icon={faFilterCircleDollar}
-              style={{ marginRight: 5 }}
-            />
-            Tìm kiếm
-          </Button>
-          <Button
-            className="btn__clear"
-            onClick={clearData}
-            style={{ backgroundColor: "rgb(50, 144, 202)" }}
-          >
-            <FontAwesomeIcon icon={faChainSlash} style={{ marginRight: 5 }} />
-            Làm mới bộ lọc
-          </Button>
+    <>
+      <div className="box-one">
+        <div
+          className="heading-box"
+          style={{ fontSize: "18px", paddingLeft: "20px" }}
+        >
+          <span style={{ fontSize: "20px", fontWeight: "500" }}>
+            <FontAwesomeIcon icon={faLevelUp} style={{ fontSize: "20px" }} />
+            <span style={{ marginLeft: "10px" }}>Quản lý level</span>
+          </span>
         </div>
       </div>
-      <div
-        className="box-son-general"
-        style={{ minHeight: "400px", marginTop: "30px" }}
-      >
-        <div className="tittle__category" style={{ marginBottom: "20px" }}>
-          <div>
-            {" "}
-            {
-              <FontAwesomeIcon
-                icon={faLevelUpAlt}
-                style={{ fontSize: "20px" }}
-              />
-            }
-            <span style={{ fontSize: "18px", fontWeight: "500" }}>
-              {" "}
-              Danh sách level
-            </span>
-          </div>
-
-          <div>
-            <Button
-              style={{
-                color: "white",
-                backgroundColor: "rgb(55, 137, 220)",
+      <div className="box-general" style={{ paddingTop: 10, marginTop: 0 }}>
+        {loading && <LoadingIndicator />}
+        <div className="filter-level" style={{ marginBottom: "10px" }}>
+          <FontAwesomeIcon icon={faFilter} style={{ fontSize: "20px" }} />{" "}
+          <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
+          <hr />
+          <div className="title__search" style={{ marginRight: "60px" }}>
+            Tên level:{" "}
+            <Input
+              type="text"
+              value={name}
+              onChange={(e) => {
+                setName(e.target.value);
               }}
-              onClick={buttonCreate}
+              style={{ width: "300px", marginLeft: "5px" }}
+            />
+          </div>
+          <div className="box_btn_filter">
+            <Button
+              className="btn_filter"
+              onClick={buttonSearch}
+              style={{ marginRight: "15px" }}
             >
               <FontAwesomeIcon
-                icon={faPlus}
-                size="1x"
-                style={{
-                  backgroundColor: "rgb(55, 137, 220)",
-                  marginRight: "5px",
-                }}
-              />{" "}
-              Thêm level
+                icon={faFilterCircleDollar}
+                style={{ marginRight: 5 }}
+              />
+              Tìm kiếm
+            </Button>
+            <Button
+              className="btn__clear"
+              onClick={clearData}
+              style={{ backgroundColor: "rgb(50, 144, 202)" }}
+            >
+              <FontAwesomeIcon icon={faChainSlash} style={{ marginRight: 5 }} />
+              Làm mới bộ lọc
             </Button>
           </div>
         </div>
-        <div>
-          <Table
-            dataSource={data}
-            rowKey="id"
-            columns={columns}
-            pagination={false}
-          />
-          <div className="pagination_box">
-            <Pagination
-              simple
-              current={current}
-              onChange={(page) => {
-                setCurrent(page);
-              }}
-              total={total * 10}
+        <div
+          className="box-son-general"
+          style={{ minHeight: "400px", marginTop: "30px", padding: 20 }}
+        >
+          <div className="tittle__category" style={{ marginBottom: "15px" }}>
+            <div>
+              {" "}
+              {
+                <FontAwesomeIcon
+                  icon={faLevelUpAlt}
+                  style={{ fontSize: "20px" }}
+                />
+              }
+              <span style={{ fontSize: "18px", fontWeight: "500" }}>
+                {" "}
+                Danh sách level
+              </span>
+            </div>
+
+            <div>
+              <Button
+                style={{
+                  color: "white",
+                  backgroundColor: "rgb(55, 137, 220)",
+                }}
+                onClick={buttonCreate}
+              >
+                <FontAwesomeIcon
+                  icon={faPlus}
+                  size="1x"
+                  style={{
+                    backgroundColor: "rgb(55, 137, 220)",
+                    marginRight: "5px",
+                  }}
+                />{" "}
+                Thêm level
+              </Button>
+            </div>
+          </div>
+          <div>
+            <Table
+              dataSource={data}
+              rowKey="id"
+              columns={columns}
+              pagination={false}
             />
+            <div className="pagination_box">
+              <Pagination
+                simple
+                current={current}
+                onChange={(page) => {
+                  setCurrent(page);
+                }}
+                total={total * 10}
+              />
+            </div>
           </div>
         </div>
+        <ModalCreateLevel visible={modalCreate} onCancel={buttonCreateCancel} />
+        <ModalUpdateLevel
+          visible={modalUpdate}
+          onCancel={buttonUpdateCancel}
+          level={level}
+        />
       </div>
-      <ModalCreateLevel visible={modalCreate} onCancel={buttonCreateCancel} />
-
-      <ModalUpdateLevel
-        visible={modalUpdate}
-        onCancel={buttonUpdateCancel}
-        level={level}
-      />
-    </div>
+    </>
   );
 };
 

@@ -249,122 +249,134 @@ const SemesterManagement = () => {
   };
 
   return (
-    <div className="semester">
-      {loading && <LoadingIndicator />}
-      <div className="title_activity_management">
-        <FontAwesomeIcon icon={faLayerGroup} size="1x" />
-        <span style={{ marginLeft: "10px" }}>Quản lý học kỳ</span>
+    <>
+      <div className="box-one">
+        <div
+          className="heading-box"
+          style={{ fontSize: "18px", paddingLeft: "20px" }}
+        >
+          <span style={{ fontSize: "20px", fontWeight: "500" }}>
+            <FontAwesomeIcon icon={faLayerGroup} size="1x" />
+            <span style={{ marginLeft: "10px" }}>Quản lý học kỳ</span>
+          </span>
+        </div>
       </div>
-      <div className="filter-semester" style={{ marginBottom: "10px" }}>
-        <FontAwesomeIcon
-          icon={faFilter}
-          style={{ fontSize: "20px", marginRight: "7px" }}
-        />
-        <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
-        <hr />
-        <div className="title__search">
-          Tên học kỳ:
-          <Input
-            type="text"
-            value={name}
-            onChange={(e) => {
-              setName(e.target.value);
-            }}
-            style={{ width: "300px", marginLeft: "5px" }}
+      <div className="semester" style={{ paddingTop: 30 }}>
+        {loading && <LoadingIndicator />}
+        <div
+          className="filter-semester"
+          style={{ marginBottom: "10px", marginTop: 0 }}
+        >
+          <FontAwesomeIcon
+            icon={faFilter}
+            style={{ fontSize: "20px", marginRight: "7px" }}
           />
-        </div>
-        <div className="box_btn_filter">
-          <Button
-            className="btn_filter"
-            onClick={buttonSearch}
-            style={{ marginRight: "15px" }}
-          >
-            {" "}
-            <FontAwesomeIcon
-              icon={faFilterCircleDollar}
-              style={{ marginRight: "5px" }}
-            />
-            Tìm kiếm
-          </Button>
-          <Button
-            className="btn__clear"
-            onClick={clearData}
-            style={{ backgroundColor: "rgb(50, 144, 202)" }}
-          >
-            <FontAwesomeIcon
-              icon={faChainSlash}
-              style={{ marginRight: "5px" }}
-            />
-            Làm mới bộ lọc
-          </Button>
-        </div>
-      </div>
-      <div
-        className="table__category_custom"
-        style={{ marginTop: "30px", padding: "20px" }}
-      >
-        <div className="tittle__category">
-          <div>
-            {
-              <FontAwesomeIcon
-                icon={faLayerGroup}
-                style={{ marginRight: "7px", fontSize: "20px" }}
-              />
-            }
-            <span style={{ fontSize: "18px", fontWeight: "500" }}>
-              Danh sách học kỳ
-            </span>
-          </div>
-          <div>
-            <Button
-              style={{
-                color: "white",
-                backgroundColor: "rgb(55, 137, 220)",
+          <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
+          <hr />
+          <div className="title__search">
+            Tên học kỳ:
+            <Input
+              type="text"
+              value={name}
+              onChange={(e) => {
+                setName(e.target.value);
               }}
-              onClick={buttonCreate}
+              style={{ width: "300px", marginLeft: "5px" }}
+            />
+          </div>
+          <div className="box_btn_filter">
+            <Button
+              className="btn_filter"
+              onClick={buttonSearch}
+              style={{ marginRight: "15px" }}
+            >
+              {" "}
+              <FontAwesomeIcon
+                icon={faFilterCircleDollar}
+                style={{ marginRight: "5px" }}
+              />
+              Tìm kiếm
+            </Button>
+            <Button
+              className="btn__clear"
+              onClick={clearData}
+              style={{ backgroundColor: "rgb(50, 144, 202)" }}
             >
               <FontAwesomeIcon
-                icon={faPlus}
-                size="1x"
-                style={{
-                  backgroundColor: "rgb(55, 137, 220)",
-                  marginRight: "5px",
-                }}
+                icon={faChainSlash}
+                style={{ marginRight: "5px" }}
               />
-              Thêm học kỳ
+              Làm mới bộ lọc
             </Button>
           </div>
         </div>
-        <br />
-        <div>
-          <Table
-            dataSource={data}
-            rowKey="id"
-            columns={columns}
-            pagination={false}
-          />
-          <div className="pagination_box">
-            <Pagination
-              simple
-              current={current}
-              onChange={(page) => {
-                setCurrent(page);
-              }}
-              total={total * 10}
+        <div
+          className="table__category_custom"
+          style={{ marginTop: "30px", padding: "20px" }}
+        >
+          <div className="tittle__category">
+            <div>
+              {
+                <FontAwesomeIcon
+                  icon={faLayerGroup}
+                  style={{ marginRight: "7px", fontSize: "20px" }}
+                />
+              }
+              <span style={{ fontSize: "18px", fontWeight: "500" }}>
+                Danh sách học kỳ
+              </span>
+            </div>
+            <div>
+              <Button
+                style={{
+                  color: "white",
+                  backgroundColor: "rgb(55, 137, 220)",
+                }}
+                onClick={buttonCreate}
+              >
+                <FontAwesomeIcon
+                  icon={faPlus}
+                  size="1x"
+                  style={{
+                    backgroundColor: "rgb(55, 137, 220)",
+                    marginRight: "5px",
+                  }}
+                />
+                Thêm học kỳ
+              </Button>
+            </div>
+          </div>
+          <br />
+          <div>
+            <Table
+              dataSource={data}
+              rowKey="id"
+              columns={columns}
+              pagination={false}
             />
+            <div className="pagination_box">
+              <Pagination
+                simple
+                current={current}
+                onChange={(page) => {
+                  setCurrent(page);
+                }}
+                total={total * 10}
+              />
+            </div>
           </div>
         </div>
+        <ModalCreateSemester
+          visible={modalCreate}
+          onCancel={buttonCreateCancel}
+        />
+        <ModalUpdateSemester
+          visible={modalUpdate}
+          onCancel={buttonUpdateCancel}
+          semester={semester}
+        />
       </div>
-      <ModalCreateSemester
-        visible={modalCreate}
-        onCancel={buttonCreateCancel}
-      />
-      <ModalUpdateSemester
-        visible={modalUpdate}
-        onCancel={buttonUpdateCancel}
-        semester={semester}
-      />
-    </div>
+    </>
   );
 };
 

@@ -288,162 +288,173 @@ const ActivityManagement = () => {
     },
   ];
   return (
-    <div className="activity_management">
-      {loading && <LoadingIndicator />}
-      <div className="title_activity_management">
-        {" "}
-        <FontAwesomeIcon icon={faTags} style={{ fontSize: "20px" }} />
-        <span style={{ marginLeft: "10px" }}>Quản lý hoạt động</span>
-      </div>
-      <div className="filter_my_class">
-        <FontAwesomeIcon
-          icon={faFilter}
-          style={{ fontSize: "20px", marginRight: "7px" }}
-        />{" "}
-        <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
-        <hr />
-        <div className="content">
-          <div className="content-wrapper">
-            <div className="content-center">
-              Hoạt động{" "}
-              <Input
-                type="text"
-                placeholder="Nhập mã, tên hoạt động"
-                value={searchName}
-                onChange={handleChangeSearch}
-                style={{ width: "75%", marginLeft: "10px" }}
-              />
-            </div>
-          </div>
-          <div className="content-wrapper">
-            <div className="content-center">
-              Cấp độ{" "}
-              <Select
-                value={levelSearch}
-                style={{ width: "75%", marginLeft: "10px" }}
-                onChange={handleLevelSearch}
-              >
-                <Option value={""}>Tất cả</Option>
-                {listLevel.map((level) => (
-                  <Option key={level.id} value={level.id}>
-                    {level.name}
-                  </Option>
-                ))}
-              </Select>
-            </div>
-          </div>
-          <div className="content-wrapper">
-            <div className="content-center">
-              Học kỳ{" "}
-              <Select
-                style={{ width: "75%", marginLeft: "10px" }}
-                value={semesterSearch}
-                onChange={handleSemesterSearch}
-              >
-                <Option value={""}>Chọn học kỳ</Option>
-                {listSemester.map((semester) => (
-                  <Option key={semester.id} value={semester.id}>
-                    {semester.name}
-                  </Option>
-                ))}
-              </Select>
-            </div>
-          </div>
-        </div>
-        <div className="box_btn_filter">
-          <Button
-            className="btn_filter"
-            onClick={handleSearch}
-            style={{ marginRight: "15px" }}
-          >
-            {" "}
-            <FontAwesomeIcon
-              icon={faFilterCircleDollar}
-              style={{ marginRight: 5 }}
-            />
-            Tìm kiếm
-          </Button>
-          <Button
-            className="btn_clear"
-            style={{ backgroundColor: "rgb(38, 144, 214)", color: "white" }}
-            onClick={handleClear}
-          >
-            <FontAwesomeIcon icon={faChainSlash} style={{ marginRight: 5 }} />
-            Làm mới bộ lọc
-          </Button>
+    <>
+      <div className="box-one">
+        <div
+          className="heading-box"
+          style={{ fontSize: "18px", paddingLeft: "20px" }}
+        >
+          <span style={{ fontSize: "20px", fontWeight: "500" }}>
+            <FontAwesomeIcon icon={faTags} style={{ fontSize: "20px" }} />
+            <span style={{ marginLeft: "10px" }}>Quản lý hoạt động</span>
+          </span>
         </div>
       </div>
-      <div className="table_activity_management">
-        <div className="title_activity_management_table">
-          <div>
-            {" "}
-            {
-              <FontAwesomeIcon
-                icon={faAddressCard}
-                style={{ fontSize: "20px", marginRight: "7px" }}
-              />
-            }
-            <span style={{ fontSize: "18px", fontWeight: "500" }}>
-              {" "}
-              Danh sách hoạt động
-            </span>
+      <div
+        className="activity_management"
+        style={{ paddingTop: 10, marginTop: 0 }}
+      >
+        {loading && <LoadingIndicator />}
+        <div className="filter_my_class">
+          <FontAwesomeIcon
+            icon={faFilter}
+            style={{ fontSize: "20px", marginRight: "7px" }}
+          />{" "}
+          <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
+          <hr />
+          <div className="content">
+            <div className="content-wrapper">
+              <div className="content-center">
+                Hoạt động{" "}
+                <Input
+                  type="text"
+                  placeholder="Nhập mã, tên hoạt động"
+                  value={searchName}
+                  onChange={handleChangeSearch}
+                  style={{ width: "75%", marginLeft: "10px" }}
+                />
+              </div>
+            </div>
+            <div className="content-wrapper">
+              <div className="content-center">
+                Cấp độ{" "}
+                <Select
+                  value={levelSearch}
+                  style={{ width: "75%", marginLeft: "10px" }}
+                  onChange={handleLevelSearch}
+                >
+                  <Option value={""}>Tất cả</Option>
+                  {listLevel.map((level) => (
+                    <Option key={level.id} value={level.id}>
+                      {level.name}
+                    </Option>
+                  ))}
+                </Select>
+              </div>
+            </div>
+            <div className="content-wrapper">
+              <div className="content-center">
+                Học kỳ{" "}
+                <Select
+                  style={{ width: "75%", marginLeft: "10px" }}
+                  value={semesterSearch}
+                  onChange={handleSemesterSearch}
+                >
+                  <Option value={""}>Chọn học kỳ</Option>
+                  {listSemester.map((semester) => (
+                    <Option key={semester.id} value={semester.id}>
+                      {semester.name}
+                    </Option>
+                  ))}
+                </Select>
+              </div>
+            </div>
           </div>
-          <div>
+          <div className="box_btn_filter">
             <Button
-              style={{
-                color: "white",
-                backgroundColor: "rgb(55, 137, 220)",
-              }}
-              onClick={handleActivityCreate}
+              className="btn_filter"
+              onClick={handleSearch}
+              style={{ marginRight: "15px" }}
             >
+              {" "}
               <FontAwesomeIcon
-                icon={faPlus}
-                size="1x"
-                style={{
-                  backgroundColor: "rgb(55, 137, 220)",
-                  marginRight: "5px",
-                }}
-              />{" "}
-              Thêm hoạt động
+                icon={faFilterCircleDollar}
+                style={{ marginRight: 5 }}
+              />
+              Tìm kiếm
+            </Button>
+            <Button
+              className="btn_clear"
+              style={{ backgroundColor: "rgb(38, 144, 214)", color: "white" }}
+              onClick={handleClear}
+            >
+              <FontAwesomeIcon icon={faChainSlash} style={{ marginRight: 5 }} />
+              Làm mới bộ lọc
             </Button>
           </div>
         </div>
-        <div style={{ marginTop: "15px" }}>
-          <Table
-            className="table_content"
-            pagination={false}
-            columns={columns}
-            rowKey="id"
-            dataSource={data}
-          />
-          <div className="pagination_box">
-            <Pagination
-              simple
-              current={current}
-              onChange={(value) => {
-                setCurrent(value);
-              }}
-              total={total * 10}
+        <div className="table_activity_management">
+          <div className="title_activity_management_table">
+            <div>
+              {" "}
+              {
+                <FontAwesomeIcon
+                  icon={faAddressCard}
+                  style={{ fontSize: "20px", marginRight: "7px" }}
+                />
+              }
+              <span style={{ fontSize: "18px", fontWeight: "500" }}>
+                {" "}
+                Danh sách hoạt động
+              </span>
+            </div>
+            <div>
+              <Button
+                style={{
+                  color: "white",
+                  backgroundColor: "rgb(55, 137, 220)",
+                }}
+                onClick={handleActivityCreate}
+              >
+                <FontAwesomeIcon
+                  icon={faPlus}
+                  size="1x"
+                  style={{
+                    backgroundColor: "rgb(55, 137, 220)",
+                    marginRight: "5px",
+                  }}
+                />{" "}
+                Thêm hoạt động
+              </Button>
+            </div>
+          </div>
+          <div style={{ marginTop: "15px" }}>
+            <Table
+              className="table_content"
+              pagination={false}
+              columns={columns}
+              rowKey="id"
+              dataSource={data}
             />
+            <div className="pagination_box">
+              <Pagination
+                simple
+                current={current}
+                onChange={(value) => {
+                  setCurrent(value);
+                }}
+                total={total * 10}
+              />
+            </div>
           </div>
         </div>
+        <ModalCreateActivity
+          visible={showCreateModal}
+          onCancel={handleModalCreateCancel}
+          listSemester={listSemester}
+          listLevel={listLevel}
+          fetchData={fetchData}
+        />
+        <ModalUpdateActivity
+          visible={showUpdateModal}
+          onCancel={handleModalUpdateCancel}
+          listSemester={listSemester}
+          activity={activity}
+          listLevel={listLevel}
+          fetchData={fetchData}
+        />
       </div>
-      <ModalCreateActivity
-        visible={showCreateModal}
-        onCancel={handleModalCreateCancel}
-        listSemester={listSemester}
-        listLevel={listLevel}
-        fetchData={fetchData}
-      />
-      <ModalUpdateActivity
-        visible={showUpdateModal}
-        onCancel={handleModalUpdateCancel}
-        listSemester={listSemester}
-        activity={activity}
-        listLevel={listLevel}
-        fetchData={fetchData}
-      />
-    </div>
+    </>
   );
 };
 

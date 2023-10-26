@@ -14,9 +14,6 @@ public interface MeMemberProjectResponse extends IsIdentified {
     @Value("#{target.member_id}")
     String getMemberId();
 
-    @Value("#{target.role}")
-    String getRole();
-
     @Value("#{target.status_work}")
     String getStatusWork();
 }

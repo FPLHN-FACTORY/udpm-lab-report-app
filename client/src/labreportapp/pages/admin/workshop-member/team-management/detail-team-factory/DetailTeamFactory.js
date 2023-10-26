@@ -180,225 +180,248 @@ const DetailTeamFactory = () => {
   };
 
   return (
-    <div className="box-general" style={{ paddingTop: 50 }}>
-      {loadingNoOverlay && <LoadingIndicatorNoOverlay />}
-      {loading && <LoadingIndicator />}
-      <div className="title_activity_management" style={{ marginTop: 0 }}>
-        {" "}
-        <FontAwesomeIcon icon={faPeopleGroup} style={{ fontSize: "20px" }} />
-        <span style={{ marginLeft: "10px" }}>
-          <Link to="/admin/team-management" style={{ color: "black" }}>
-            {" "}
-            Quản lý team
-          </Link>{" "}
-          / {detailTeam != null && detailTeam.name}
-        </span>
-      </div>
-
-      <div
-        className="box-son-general"
-        style={{ minHeight: "620px", marginTop: 20 }}
-      >
+    <>
+      <div className="box-one">
         <div
-          className="title_detail_team_factory"
-          style={{ marginBottom: "20px" }}
+          className="heading-box"
+          style={{ fontSize: "18px", paddingLeft: "20px" }}
         >
-          <Row>
-            <Col span={8} style={{ padding: 20 }}>
-              <img
-                src={LogoTeamFactory}
-                width="35%"
-                style={{
-                  borderRadius: 5,
-                  border: "1px solid rgb(216, 216, 216)",
-                }}
-              />{" "}
-              <br />
-              <div
-                style={{
-                  marginTop: 15,
-                  borderBottom: "1px solid gray",
-                  paddingBottom: 15,
-                }}
-              >
-                <span style={{ fontSize: 20, fontWeight: 500, marginTop: 10 }}>
-                  {detailTeam != null && detailTeam.name}
-                </span>
-              </div>
-              <div
-                style={{
-                  marginTop: 15,
-                  display: "flex",
-                  justifyContent: "space-between",
-                }}
-              >
-                <div style={{ fontSize: 16, fontWeight: 500 }}>Mô tả:</div>{" "}
-                <div>
-                  <FontAwesomeIcon
-                    icon={faCog}
-                    style={{
-                      fontSize: 18,
-                      color: "rgb(38, 144, 214)",
-                      cursor: "pointer",
-                    }}
-                  />
-                </div>
-              </div>
-              <div style={{ marginTop: 10 }}>
+          <span style={{ fontSize: "20px", fontWeight: "500" }}>
+            <FontAwesomeIcon
+              icon={faPeopleGroup}
+              style={{ fontSize: "20px" }}
+            />
+            <span style={{ marginLeft: "10px" }}>
+              <Link to="/admin/team-management" style={{ color: "black" }}>
                 {" "}
-                <div>
-                  {detailTeam != null
-                    ? detailTeam.descriptions
-                    : "Chưa có mô tả"}
-                </div>
-              </div>
-            </Col>
-            <Col span={16} style={{ padding: 20 }}>
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <div style={{ flex: 1 }}>
-                  <Input
-                    value={value}
-                    onChange={handleChangeValue}
-                    type="text"
-                    placeholder="🔍 Nhập username, tên thành viên"
-                    style={{ width: "55%" }}
-                  />
-                </div>
-                <div>
-                  <Button
-                    style={{
-                      backgroundColor: "rgb(38, 144, 214)",
-                      color: "white",
-                    }}
-                    onClick={openModalAddMemberTeam}
-                  >
-                    <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />{" "}
-                    Thêm thành viên
-                  </Button>
-                </div>
-              </div>
-              <div style={{ marginTop: 20 }}>
-                <div className="header-list-member-factory">
-                  <Checkbox checked={isCheckedAll} onChange={handleCheckAll} />{" "}
-                  <div style={{ marginLeft: 30 }}>
-                    <FontAwesomeIcon icon={faUser} />{" "}
-                    <span style={{ marginLeft: 5 }}>
-                      {data != null && data.length} thành viên
-                    </span>
-                    <Popconfirm
-                      placement="left"
-                      title="Xóa nhiều thành viên"
-                      description="Bạn có chắc chắn muốn xóa những thành viên đã chọn ra khỏi nhóm không ?"
-                      onConfirm={() => {
-                        deleteListMemberTeamFactory();
-                      }}
-                      okText="Có"
-                      cancelText="Không"
-                    >
-                      {" "}
-                      <Button
-                        style={{
-                          marginLeft: 25,
-                          color: "white",
-                          backgroundColor: "rgb(244, 65, 65)",
-                        }}
-                      >
-                        <FontAwesomeIcon
-                          icon={faTrashCan}
-                          style={{ marginRight: 9 }}
-                        />
-                        Xóa
-                      </Button>
-                    </Popconfirm>
-                  </div>
-                </div>
-                <div className="">
-                  {filteredData.map((item) => {
-                    return (
-                      <div className="item-list-member-factory">
-                        <Checkbox
-                          checked={isItemChecked(item.idMemberTeamFactory)}
-                          onChange={() =>
-                            handleCheckItem(item.idMemberTeamFactory)
-                          }
-                        />{" "}
-                        <div
-                          style={{
-                            marginLeft: 30,
-                            display: "flex",
-                            alignItems: "center",
-                            flex: 1,
-                          }}
-                          className="left-div"
-                        >
-                          <Image
-                            url={item.picture}
-                            name={item.name + " " + item.userName}
-                            picxel={45}
-                          />{" "}
-                          <span
-                            style={{
-                              marginLeft: 15,
-                              color: "rgb(38, 144, 214)",
-                              fontWeight: 500,
-                            }}
-                          >
-                            {item.name}
-                          </span>
-                          <span
-                            style={{
-                              marginLeft: 10,
-                              color: "gray",
-                              fontSize: 14,
-                            }}
-                          >
-                            {item.userName}
-                          </span>
-                        </div>
-                        <div className="right-div" style={{ paddingRight: 30 }}>
-                          <Popconfirm
-                            placement="topLeft"
-                            title="Xóa thành viên"
-                            description="Bạn có chắc chắn muốn xóa thành viên này ra khỏi nhóm không ?"
-                            onConfirm={() => {
-                              deleteMemberTeamFactory(item.idMemberTeamFactory);
-                            }}
-                            okText="Có"
-                            cancelText="Không"
-                          >
-                            {" "}
-                            <FontAwesomeIcon
-                              icon={faTrashCan}
-                              style={{ cursor: "pointer" }}
-                            />{" "}
-                          </Popconfirm>
-                        </div>
-                      </div>
-                    );
-                  })}
-                  {filteredData.length === 0 && (
-                    <p style={{ marginTop: 30 }}>
-                      {" "}
-                      <Empty
-                        imageStyle={{ height: 60 }}
-                        description={<span>Không có thành viên</span>}
-                      />
-                    </p>
-                  )}
-                </div>
-              </div>
-            </Col>
-          </Row>
+                Quản lý team
+              </Link>{" "}
+              / {detailTeam != null && detailTeam.name}
+            </span>
+          </span>
         </div>
       </div>
-      <ModalAddMemberTeam
-        visible={showModalAddMemberTeam}
-        allMemberFactory={differentItems}
-        onCancel={cancelShowModalAddMemberTeam}
-        fetchAll={loadData}
-        fetchAllMemberFactory={loadDataMemberTeamFactory}
-      />
-    </div>
+      <div className="box-general" style={{ paddingTop: 10, marginTop: 0 }}>
+        {loadingNoOverlay && <LoadingIndicatorNoOverlay />}
+        {loading && <LoadingIndicator />}
+        <div
+          className="box-son-general"
+          style={{ minHeight: "620px", marginTop: 20 }}
+        >
+          <div
+            className="title_detail_team_factory"
+            style={{ marginBottom: "20px" }}
+          >
+            <Row>
+              <Col span={8} style={{ padding: 20 }}>
+                <img
+                  src={LogoTeamFactory}
+                  width="35%"
+                  style={{
+                    borderRadius: 5,
+                    border: "1px solid rgb(216, 216, 216)",
+                  }}
+                />{" "}
+                <br />
+                <div
+                  style={{
+                    marginTop: 15,
+                    borderBottom: "1px solid gray",
+                    paddingBottom: 15,
+                  }}
+                >
+                  <span
+                    style={{ fontSize: 20, fontWeight: 500, marginTop: 10 }}
+                  >
+                    {detailTeam != null && detailTeam.name}
+                  </span>
+                </div>
+                <div
+                  style={{
+                    marginTop: 15,
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <div style={{ fontSize: 16, fontWeight: 500 }}>Mô tả:</div>{" "}
+                  <div>
+                    <FontAwesomeIcon
+                      icon={faCog}
+                      style={{
+                        fontSize: 18,
+                        color: "rgb(38, 144, 214)",
+                        cursor: "pointer",
+                      }}
+                    />
+                  </div>
+                </div>
+                <div style={{ marginTop: 10 }}>
+                  {" "}
+                  <div>
+                    {detailTeam != null
+                      ? detailTeam.descriptions
+                      : "Chưa có mô tả"}
+                  </div>
+                </div>
+              </Col>
+              <Col span={16} style={{ padding: 20 }}>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <div style={{ flex: 1 }}>
+                    <Input
+                      value={value}
+                      onChange={handleChangeValue}
+                      type="text"
+                      placeholder="🔍 Nhập username, tên thành viên"
+                      style={{ width: "55%" }}
+                    />
+                  </div>
+                  <div>
+                    <Button
+                      style={{
+                        backgroundColor: "rgb(38, 144, 214)",
+                        color: "white",
+                      }}
+                      onClick={openModalAddMemberTeam}
+                    >
+                      <FontAwesomeIcon
+                        icon={faPlus}
+                        style={{ marginRight: 5 }}
+                      />{" "}
+                      Thêm thành viên
+                    </Button>
+                  </div>
+                </div>
+                <div style={{ marginTop: 20 }}>
+                  <div className="header-list-member-factory">
+                    <Checkbox
+                      checked={isCheckedAll}
+                      onChange={handleCheckAll}
+                    />{" "}
+                    <div style={{ marginLeft: 30 }}>
+                      <FontAwesomeIcon icon={faUser} />{" "}
+                      <span style={{ marginLeft: 5 }}>
+                        {data != null && data.length} thành viên
+                      </span>
+                      <Popconfirm
+                        placement="left"
+                        title="Xóa nhiều thành viên"
+                        description="Bạn có chắc chắn muốn xóa những thành viên đã chọn ra khỏi nhóm không ?"
+                        onConfirm={() => {
+                          deleteListMemberTeamFactory();
+                        }}
+                        okText="Có"
+                        cancelText="Không"
+                      >
+                        {" "}
+                        <Button
+                          style={{
+                            marginLeft: 25,
+                            color: "white",
+                            backgroundColor: "rgb(244, 65, 65)",
+                          }}
+                        >
+                          <FontAwesomeIcon
+                            icon={faTrashCan}
+                            style={{ marginRight: 9 }}
+                          />
+                          Xóa
+                        </Button>
+                      </Popconfirm>
+                    </div>
+                  </div>
+                  <div className="">
+                    {filteredData.map((item) => {
+                      return (
+                        <div className="item-list-member-factory">
+                          <Checkbox
+                            checked={isItemChecked(item.idMemberTeamFactory)}
+                            onChange={() =>
+                              handleCheckItem(item.idMemberTeamFactory)
+                            }
+                          />{" "}
+                          <div
+                            style={{
+                              marginLeft: 30,
+                              display: "flex",
+                              alignItems: "center",
+                              flex: 1,
+                            }}
+                            className="left-div"
+                          >
+                            <Image
+                              url={item.picture}
+                              name={item.name + " " + item.userName}
+                              picxel={45}
+                            />{" "}
+                            <span
+                              style={{
+                                marginLeft: 15,
+                                color: "rgb(38, 144, 214)",
+                                fontWeight: 500,
+                              }}
+                            >
+                              {item.name}
+                            </span>
+                            <span
+                              style={{
+                                marginLeft: 10,
+                                color: "gray",
+                                fontSize: 14,
+                              }}
+                            >
+                              {item.userName}
+                            </span>
+                          </div>
+                          <div
+                            className="right-div"
+                            style={{ paddingRight: 30 }}
+                          >
+                            <Popconfirm
+                              placement="topLeft"
+                              title="Xóa thành viên"
+                              description="Bạn có chắc chắn muốn xóa thành viên này ra khỏi nhóm không ?"
+                              onConfirm={() => {
+                                deleteMemberTeamFactory(
+                                  item.idMemberTeamFactory
+                                );
+                              }}
+                              okText="Có"
+                              cancelText="Không"
+                            >
+                              {" "}
+                              <FontAwesomeIcon
+                                icon={faTrashCan}
+                                style={{ cursor: "pointer" }}
+                              />{" "}
+                            </Popconfirm>
+                          </div>
+                        </div>
+                      );
+                    })}
+                    {filteredData.length === 0 && (
+                      <p style={{ marginTop: 30 }}>
+                        {" "}
+                        <Empty
+                          imageStyle={{ height: 60 }}
+                          description={<span>Không có thành viên</span>}
+                        />
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </Col>
+            </Row>
+          </div>
+        </div>
+        <ModalAddMemberTeam
+          visible={showModalAddMemberTeam}
+          allMemberFactory={differentItems}
+          onCancel={cancelShowModalAddMemberTeam}
+          fetchAll={loadData}
+          fetchAllMemberFactory={loadDataMemberTeamFactory}
+        />
+      </div>
+    </>
   );
 };
 

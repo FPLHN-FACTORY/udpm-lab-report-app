@@ -6,10 +6,18 @@ import {
   faClock,
   faTrash,
   faPencil,
-  faFilter
+  faFilter,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Input, Pagination, Table, Tooltip, Popconfirm, message } from "antd";
+import {
+  Button,
+  Input,
+  Pagination,
+  Table,
+  Tooltip,
+  Popconfirm,
+  message,
+} from "antd";
 import "./style-meeting-period-management.css";
 import React from "react";
 import { useEffect, useState } from "react";
@@ -17,15 +25,14 @@ import { useParams } from "react-router";
 import { useAppSelector, useAppDispatch } from "../../../../app/hook";
 import {
   GetMeetingPeriodConfiguration,
-   SetMeetingPeriodConfiguration,
-    DeleteMeetingPeriodConfiguration,
+  SetMeetingPeriodConfiguration,
+  DeleteMeetingPeriodConfiguration,
 } from "../../../../app/admin/AdMeetingPeriodConfiguration.reducer";
 import { AdMeetingPeriodConfigurationAPI } from "../../../../api/admin/AdMeetingPeriodConfigurationAPI";
 import ModalCreateMeetingPeriod from "./modal-create/ModalCreateMeetingPeriod";
 import ModalUpdateMeetingPeriod from "./modal-update/ModalUpdateMeetingPeriod";
 import { toast } from "react-toastify";
 import LoadingIndicator from "../../../../helper/loading";
-
 
 const MeetingPeriodConfiguration = () => {
   const [meetingPeriod, setMeetingPeriod] = useState(null);
@@ -35,12 +42,12 @@ const MeetingPeriodConfiguration = () => {
   const [total, setTotal] = useState(0);
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
-  
+
   useEffect(() => {
     fetchData();
     window.scrollTo(0, 0);
     document.title = "Quản lý ca học | Lab-Report-App";
-  },  [current]);
+  }, [current]);
 
   const fetchData = () => {
     setLoading(true);
@@ -49,7 +56,9 @@ const MeetingPeriodConfiguration = () => {
       page: current,
       size: 10,
     };
-    AdMeetingPeriodConfigurationAPI.fetchAllMeetingPeriodConfiguration(filter).then((response) => {
+    AdMeetingPeriodConfigurationAPI.fetchAllMeetingPeriodConfiguration(
+      filter
+    ).then((response) => {
       dispatch(SetMeetingPeriodConfiguration(response.data.data.data));
       setTotal(response.data.data.totalPages);
       setLoading(false);
@@ -82,7 +91,10 @@ const MeetingPeriodConfiguration = () => {
         return <span>{`${startHour}:${startMinute}`}</span>;
       },
       sorter: (a, b) => {
-        return a.startHour.localeCompare(b.startHour) || a.startMinute.localeCompare(b.startMinute);
+        return (
+          a.startHour.localeCompare(b.startHour) ||
+          a.startMinute.localeCompare(b.startMinute)
+        );
       },
       width: "25%",
     },
@@ -96,7 +108,10 @@ const MeetingPeriodConfiguration = () => {
         return <span>{`${endHour}:${endMinute}`}</span>;
       },
       sorter: (a, b) => {
-        return a.endHour.localeCompare(b.endHour) || a.endMinute.localeCompare(b.endMinute);
+        return (
+          a.endHour.localeCompare(b.endHour) ||
+          a.endMinute.localeCompare(b.endMinute)
+        );
       },
       width: "25%",
     },
@@ -191,117 +206,128 @@ const MeetingPeriodConfiguration = () => {
     );
   };
   return (
-    <div className="box-general" style={{ paddingTop: 50 }}>
-            {loading && <LoadingIndicator />}
-      <div className="title_activity_management" style={{ marginTop: 0 }}>
-        {" "}
-        <FontAwesomeIcon icon={faClock} style={{ fontSize: "20px" }} />
-        <span style={{ marginLeft: "10px" }}>Quản lý ca học</span>
-      </div>
-      <div className="filter-level" style={{ marginBottom: "10px" }}>
-      <FontAwesomeIcon icon={faFilter} style={{ fontSize: "20px" }} />{" "}
-        <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
-        <hr />
-        <div className="title__search" style={{ marginRight: "60px" }}>
-          Tên Ca:{" "}
-          <Input
-            type="text"
-            value={name}
-            onChange={(e) => {
-              setName(e.target.value);
-            }}
-            style={{ width: "300px", marginLeft: "5px" }}
-          />
-        </div>
-        <div className="box_btn_filter">
-          <Button
-            className="btn_filter"
-            onClick={buttonSearch}
-            style={{ marginRight: "15px" }}
-          >
-            <FontAwesomeIcon
-              icon={faFilterCircleDollar}
-              style={{ marginRight: 5 }}
-            />
-            Tìm kiếm
-          </Button>
-          <Button
-            className="btn__clear"
-            onClick={clearData}
-            style={{ backgroundColor: "rgb(50, 144, 202)" }}
-          >
-            <FontAwesomeIcon icon={faChainSlash} style={{ marginRight: 5 }} />
-            Làm mới bộ lọc
-          </Button>
+    <>
+      <div className="box-one">
+        <div
+          className="heading-box"
+          style={{ fontSize: "18px", paddingLeft: "20px" }}
+        >
+          <span style={{ fontSize: "20px", fontWeight: "500" }}>
+            <FontAwesomeIcon icon={faClock} style={{ fontSize: "20px" }} />
+            <span style={{ marginLeft: "10px" }}>Quản lý ca học</span>
+          </span>
         </div>
       </div>
-      <div
-        className="box-son-general"
-        style={{ minHeight: "400px", marginTop: "30px" }}
-      >
-        <div className="tittle__category" style={{ marginBottom: "20px" }}>
-          <div>
-            <FontAwesomeIcon
-              icon={faTableList}
-              style={{
-                marginRight: "10px",
-                fontSize: "20px",
-              }}
-            />
-            <span style={{ fontSize: "18px", fontWeight: "500" }}>
-              {" "}
-              Danh sách ca học
-            </span>
-          </div>
+      <div className="box-general" style={{ paddingTop: 10, marginTop: 0 }}>
+        {loading && <LoadingIndicator />}
 
-          <div>
-            <Button
-              style={{
-                color: "white",
-                backgroundColor: "rgb(55, 137, 220)",
+        <div className="filter-level" style={{ marginBottom: "10px" }}>
+          <FontAwesomeIcon icon={faFilter} style={{ fontSize: "20px" }} />{" "}
+          <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
+          <hr />
+          <div className="title__search" style={{ marginRight: "60px" }}>
+            Tên Ca:{" "}
+            <Input
+              type="text"
+              value={name}
+              onChange={(e) => {
+                setName(e.target.value);
               }}
-              onClick={buttonCreate}
+              style={{ width: "300px", marginLeft: "5px" }}
+            />
+          </div>
+          <div className="box_btn_filter">
+            <Button
+              className="btn_filter"
+              onClick={buttonSearch}
+              style={{ marginRight: "15px" }}
             >
               <FontAwesomeIcon
-                icon={faPlus}
-                size="1x"
-                style={{
-                  backgroundColor: "rgb(55, 137, 220)",
-                  marginRight: "5px",
-                }}
-              />{" "}
-              Thêm Ca
+                icon={faFilterCircleDollar}
+                style={{ marginRight: 5 }}
+              />
+              Tìm kiếm
+            </Button>
+            <Button
+              className="btn__clear"
+              onClick={clearData}
+              style={{ backgroundColor: "rgb(50, 144, 202)" }}
+            >
+              <FontAwesomeIcon icon={faChainSlash} style={{ marginRight: 5 }} />
+              Làm mới bộ lọc
             </Button>
           </div>
         </div>
-        <div>
-          <Table
-            dataSource={data}
-            rowKey="id"
-            columns={columns}
-            pagination={false}
-          />
-          <div className="pagination_box">
-            <Pagination
-              simple
-              current={current}
-              onChange={(page) => {
-                setCurrent(page);
-              }}
-              total={total * 10}
+        <div
+          className="box-son-general"
+          style={{ minHeight: "400px", marginTop: "30px" }}
+        >
+          <div className="tittle__category" style={{ marginBottom: "20px" }}>
+            <div>
+              <FontAwesomeIcon
+                icon={faTableList}
+                style={{
+                  marginRight: "10px",
+                  fontSize: "20px",
+                }}
+              />
+              <span style={{ fontSize: "18px", fontWeight: "500" }}>
+                {" "}
+                Danh sách ca học
+              </span>
+            </div>
+
+            <div>
+              <Button
+                style={{
+                  color: "white",
+                  backgroundColor: "rgb(55, 137, 220)",
+                }}
+                onClick={buttonCreate}
+              >
+                <FontAwesomeIcon
+                  icon={faPlus}
+                  size="1x"
+                  style={{
+                    backgroundColor: "rgb(55, 137, 220)",
+                    marginRight: "5px",
+                  }}
+                />{" "}
+                Thêm Ca
+              </Button>
+            </div>
+          </div>
+          <div>
+            <Table
+              dataSource={data}
+              rowKey="id"
+              columns={columns}
+              pagination={false}
             />
+            <div className="pagination_box">
+              <Pagination
+                simple
+                current={current}
+                onChange={(page) => {
+                  setCurrent(page);
+                }}
+                total={total * 10}
+              />
+            </div>
           </div>
         </div>
-      </div>
-      <ModalCreateMeetingPeriod visible={modalCreate} onCancel={buttonCreateCancel} />
+        <ModalCreateMeetingPeriod
+          visible={modalCreate}
+          onCancel={buttonCreateCancel}
+        />
 
-      <ModalUpdateMeetingPeriod
-        visible={modalUpdate}
-        onCancel={buttonUpdateCancel}
-        meetingPeriod={meetingPeriod}
-      />
-    </div>
-    
+        <ModalUpdateMeetingPeriod
+          visible={modalUpdate}
+          onCancel={buttonUpdateCancel}
+          meetingPeriod={meetingPeriod}
+        />
+      </div>
+    </>
   );
 };
 
