@@ -82,4 +82,9 @@ public class AdGroupProjectServiceImpl implements AdGroupProjectService {
     public List<AdDetailGroupProjectResponse> getAllProject(String id) {
         return adGroupProjectRepository.getAllProject(id);
     }
+
+    @Override
+    public List<GroupProject> getAllGroupToProjectManagement() {
+        return adGroupProjectRepository.findAll();
+    }
 }

@@ -48,4 +48,10 @@ public interface AdProjectReponse extends IsIdentified {
     @Value("#{target.nameCategorys}")
     String getNameCategorys();
 
+    @Value("#{target.name_group_project}")
+    String getNameGroupProject();
+
+    @Value("#{target.id_group_project}")
+    String getGroupProjectId();
+
 }

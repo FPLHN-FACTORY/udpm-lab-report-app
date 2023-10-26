@@ -5,13 +5,35 @@ import {
   SetMyProject,
 } from "../../../../portalprojects/app/reducer/my-project/myProjectSlice.reducer";
 import { useAppDispatch, useAppSelector } from "../../../app/hook";
-import { Button, Input, Pagination, Select, Table, Tooltip } from "antd";
+import {
+  Button,
+  Col,
+  Empty,
+  Input,
+  Pagination,
+  Row,
+  Select,
+  Table,
+  Tag,
+  Tooltip,
+} from "antd";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faFilter } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCodeCompare,
+  faEye,
+  faFilter,
+} from "@fortawesome/free-solid-svg-icons";
 import LoadingIndicator from "../../../helper/loading";
-import { ProjectOutlined } from "@ant-design/icons";
+import {
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+  ProjectOutlined,
+  SyncOutlined,
+} from "@ant-design/icons";
 import "./style-teacher-my-project.css";
+import { convertDateLongToString } from "../../../helper/util.helper";
+import { AdGroupProjectAPI } from "../../../api/admin/AdGroupProjectAPI";
 
 const { Option } = Select;
 
@@ -22,20 +44,38 @@ const TeacherMyProject = () => {
   const [current, setCurrent] = useState(1);
   const [total, setTotal] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [listGroupProject, setListGroupProject] = useState([]);
+  const [idGroupProjectSearch, setIdGroupProjectSearch] = useState("");
 
   useEffect(() => {
     document.title = "Dự án của tôi | Portal-Projects";
     fetchData();
-
     return () => {
       dispatch(SetMyProject([]));
     };
   }, [current]);
 
+  useEffect(() => {
+    featDataGroupProject();
+  }, []);
+
+  const featDataGroupProject = async () => {
+    try {
+      await AdGroupProjectAPI.getAllGroupToProjectManagement().then(
+        (response) => {
+          setListGroupProject(response.data.data);
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const fetchData = async () => {
     let filter = {
       nameProject: name,
       status: status === "" ? null : parseInt(status),
+      groupProjectId: idGroupProjectSearch,
       page: current - 1,
     };
     setIsLoading(true);
@@ -58,10 +98,10 @@ const TeacherMyProject = () => {
   const clear = () => {
     setName("");
     setStatus("");
+    setIdGroupProjectSearch("");
   };
 
   const data = useAppSelector(GetMyProject);
-
   const columns = [
     {
       title: "Tên dự án",
@@ -94,86 +134,102 @@ const TeacherMyProject = () => {
       },
     },
     {
-      title: "Tiến độ",
+      title: "Nhóm dự án",
+      dataIndex: "nameGroupProject",
+      key: "nameGroupProject",
+      render: (text, record) => {
+        return text ? text : <Tag color="geekblue">Không có nhóm</Tag>;
+      },
+    },
+    {
+      title: <div style={{ textAlign: "center" }}>Tiến độ</div>,
       dataIndex: "progress",
       key: "progress",
       sorter: (a, b) => a.progress - b.progress,
       render: (text, record) => {
-        return <span>{record.progress}%</span>;
+        return <div style={{ textAlign: "center" }}>{record.progress}%</div>;
       },
-      width: "10%",
     },
     {
-      title: "Thời gian",
+      title: <div style={{ textAlign: "center" }}>Thời gian</div>,
       dataIndex: "startTimeAndEndTime",
       key: "startTimeAndEndTime",
       render: (text, record) => {
-        const startTime = new Date(record.startTime);
-        const endTime = new Date(record.endTime);
-
-        const formattedStartTime = `${startTime.getDate()}/${
-          startTime.getMonth() + 1
-        }/${startTime.getFullYear()}`;
-        const formattedEndTime = `${endTime.getDate()}/${
-          endTime.getMonth() + 1
-        }/${endTime.getFullYear()}`;
-
+        const startTime = convertDateLongToString(record.startTime);
+        const endTime = convertDateLongToString(record.endTime);
         return (
-          <span>
-            {formattedStartTime} - {formattedEndTime}
-          </span>
+          <div style={{ textAlign: "center" }}>
+            {startTime} - {endTime}
+          </div>
         );
       },
-      width: "15%",
     },
     {
-      title: "Trạng thái",
+      title: <div style={{ textAlign: "center" }}>Trạng thái</div>,
       dataIndex: "status",
       key: "status",
       sorter: (a, b) => a.status - b.status,
       render: (text) => {
-        let statusText = "";
-        if (text === 0) {
-          statusText = "Đã diễn ra";
-          return (
-            <span
-              className="box_span_status"
-              style={{ backgroundColor: "rgb(45, 211, 86)", fontSize: "13px" }}
-            >
-              {statusText}
-            </span>
-          );
-        } else if (text === 1) {
-          statusText = "Đang diễn ra";
-          return (
-            <span
-              className="box_span_status"
-              style={{ backgroundColor: "rgb(41, 157, 224)", fontSize: "13px" }}
-            >
-              {statusText}
-            </span>
-          );
-        } else if (text === 2) {
-          statusText = "Chưa diễn ra";
-          return (
-            <span
-              className="box_span_status"
-              style={{ backgroundColor: "rgb(238, 162, 48)", fontSize: "13px" }}
-            >
-              {statusText}
-            </span>
-          );
-        }
+        return (
+          <div style={{ textAlign: "center" }}>
+            {text === 0 ? (
+              <Tag
+                icon={<CheckCircleOutlined />}
+                style={{ width: "120px", textAlign: "center" }}
+                color="success"
+              >
+                Đã diễn ra
+              </Tag>
+            ) : text === 1 ? (
+              <Tag
+                icon={<SyncOutlined spin />}
+                style={{ width: "120px", textAlign: "center" }}
+                color="processing"
+              >
+                Đang diễn ra
+              </Tag>
+            ) : (
+              <Tag
+                icon={<CloseCircleOutlined />}
+                style={{ width: "120px", textAlign: "center" }}
+                color="error"
+              >
+                Chưa diễn ra
+              </Tag>
+            )}
+          </div>
+        );
       },
-      width: "15%",
     },
-
     {
-      title: "Hành động",
+      title: <div style={{ textAlign: "center" }}>Loại dự án</div>,
+      dataIndex: "typeProject",
+      key: "typeProject",
+      render: (text, record) => {
+        return (
+          <div style={{ textAlign: "center" }}>
+            {text === 0 ? (
+              <Tag color="#f50" style={{ width: "120px", textAlign: "center" }}>
+                Xưởng dự án
+              </Tag>
+            ) : (
+              <Tag
+                color="#108ee9"
+                style={{ width: "120px", textAlign: "center" }}
+              >
+                Xưởng thực hành
+              </Tag>
+            )}
+          </div>
+        );
+      },
+    },
+    {
+      title: <div style={{ textAlign: "center" }}>Hành động</div>,
       dataIndex: "actions",
       key: "actions",
       render: (text, record) => (
-        <div>
+        <div style={{ textAlign: "center" }}>
           <Link to={`/detail-project/${record.id}`}>
             <Tooltip title="Xem chi tiết dự án">
               <FontAwesomeIcon icon={faEye} size="1x" />
@@ -185,21 +241,27 @@ const TeacherMyProject = () => {
   ];
 
   return (
-    <div className="my_project_teacher">
+    <>
+      {" "}
       {isLoading && <LoadingIndicator />}
-
-      <div className="title_my_project">
-        {" "}
-        <ProjectOutlined style={{ fontSize: "26px" }} />
-        <span style={{ marginLeft: "10px" }}>Dự án của tôi</span>
+      <div className="box-one">
+        <div
+          className="heading-box"
+          style={{ fontSize: "18px", paddingLeft: "20px" }}
+        >
+          <span style={{ fontSize: "20px", fontWeight: "500" }}>
+            <ProjectOutlined style={{ fontSize: "26px" }} />
+            <span style={{ marginLeft: "8px" }}>Dự án của tôi</span>
+          </span>
+        </div>
       </div>
-      <div className="filter-my-project-teacher">
-        <FontAwesomeIcon icon={faFilter} style={{ fontSize: 18 }} />{" "}
-        <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
-        <hr />
-        <div className="content">
-          <div className="content-wrapper">
-            <div className="content-left">
+      <div className="my_project_teacher">
+        <div className="filter-my-project-teacher">
+          <FontAwesomeIcon icon={faFilter} style={{ fontSize: 18 }} />{" "}
+          <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
+          <hr />
+          <Row gutter={24} style={{ padding: "10px" }}>
+            <Col span={8}>
               Tên dự án:{" "}
               <Input
                 type="text"
@@ -207,69 +269,122 @@ const TeacherMyProject = () => {
                 onChange={(e) => {
                   setName(e.target.value);
                 }}
-                style={{ width: "50%", marginLeft: "10px" }}
+                style={{ width: "100%" }}
               />
-            </div>
-            <div className="content-right">
-              Trạng thái:{" "}
+            </Col>
+            <Col span={8}>
+              <span>Nhóm dự án:</span>
+              <Select
+                showSearch
+                style={{ width: "100%" }}
+                placeholder="Chọn thuộc nhóm dự án"
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  (option?.label ?? "").includes(input)
+                }
+                filterSort={(optionA, optionB) =>
+                  (optionA?.label ?? "")
+                    .toLowerCase()
+                    .localeCompare((optionB?.label ?? "").toLowerCase())
+                }
+                value={idGroupProjectSearch}
+                onChange={(e) => setIdGroupProjectSearch(e)}
+                defaultValue={""}
+                options={[
+                  { value: "", label: "Tất cả" },
+                  { value: "0", label: "Không có nhóm" },
+                  ...listGroupProject.map((i) => {
+                    return { value: i.id, label: i.name };
+                  }),
+                ]}
+              />
+            </Col>
+            <Col span={8}>
+              <span>Trạng thái:</span>
+              {""}
               <Select
                 value={status}
                 onChange={(value) => {
                   setStatus(value);
                 }}
-                style={{ width: "50%", marginLeft: "10px" }}
+                style={{
+                  width: "100%",
+                }}
               >
                 <Option value="">Tất cả</Option>
                 <Option value="0">Đã diễn ra</Option>
                 <Option value="1">Đang diễn ra</Option>
                 <Option value="2">Chưa diễn ra</Option>
               </Select>
-            </div>
+            </Col>
+          </Row>
+          <div className="box-btn">
+            <Button
+              className="btn_filter"
+              onClick={search}
+              style={{ marginRight: "15px", backgroundColor: "#E2B357" }}
+            >
+              <FontAwesomeIcon
+                icon={faFilter}
+                style={{ paddingRight: "5px" }}
+              />{" "}
+              <span>Tìm kiếm</span>
+            </Button>
+            <Button className="btn_clean" onClick={clear}>
+              <FontAwesomeIcon
+                icon={faCodeCompare}
+                style={{ paddingRight: "5px" }}
+              />{" "}
+              <span>Làm mới bộ lọc</span>
+            </Button>
           </div>
         </div>
-        <div className="box_btn_filter">
-          <Button className="btn_filter" onClick={search}>
-            Tìm kiếm
-          </Button>
-          <Button
-            className="btn_clear"
-            onClick={clear}
-            style={{ backgroundColor: "rgb(38, 144, 214)" }}
-          >
-            Làm mới bộ lọc
-          </Button>
-        </div>
-      </div>
-      <div className="table_project_teacher_my_project">
-        <div className="title_my_project">
-          {" "}
-          <ProjectOutlined style={{ fontSize: "26px" }} />
-          <span style={{ fontSize: "18px", fontWeight: "500" }}>
-            {" "}
-            Danh sách dự án
-          </span>
-        </div>
-        <div style={{ marginTop: "25px" }}>
-          <Table
-            dataSource={data}
-            rowKey="id"
-            columns={columns}
-            pagination={false}
-            className="table_my_project"
-          />
-          <div className="pagination_box">
-            <Pagination
-              simple
-              current={current}
-              onChange={(value) => {
-                setCurrent(value);
+        <div className="table_project_teacher_my_project">
+          <div className="title_my_project">
+            <ProjectOutlined style={{ fontSize: "26px" }} />
+            <span
+              style={{
+                fontSize: "18px",
+                fontWeight: "500",
+                paddingLeft: "8px",
               }}
-              total={total * 10}
-            />
+            >
+              Danh sách dự án
+            </span>
+          </div>
+          <div
+            style={{ marginTop: "25px", minHeight: "240px", height: "auto" }}
+          >
+            {data.length > 0 ? (
+              <>
+                <Table
+                  dataSource={data}
+                  rowKey="id"
+                  columns={columns}
+                  pagination={false}
+                  className="table_my_project"
+                />
+                <div className="pagination_box">
+                  <Pagination
+                    simple
+                    current={current}
+                    onChange={(value) => {
+                      setCurrent(value);
+                    }}
+                    total={total * 10}
+                  />
+                </div>
+              </>
+            ) : (
+              <Empty
+                imageStyle={{ height: "60px" }}
+                description={<span>Không có dữ liệu</span>}
+              />
+            )}
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

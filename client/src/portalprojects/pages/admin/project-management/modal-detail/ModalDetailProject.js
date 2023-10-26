@@ -1,34 +1,36 @@
-import { Modal, Row, Col, Input, Table, Image, Spin, Select } from "antd";
+import { Modal, Row, Col, Input, Table, Spin, Select, DatePicker } from "antd";
 import "./styleModalDetailProject.css";
 import { useEffect, useState } from "react";
 import { ProjectManagementAPI } from "../../../../api/admin/project-management/projectManagement.api";
-import moment from "moment";
 import { MemberProjectManagementAPI } from "../../../../api/admin/project-management/memberProjectManagement.api";
 import { CategoryProjectManagementAPI } from "../../../../api/admin/project-management/categoryProjectManagement.api";
-import { AdPotalsRoleProjectAPI } from "../../../../api/admin/role-project/AdPotalsRoleProject.api";
-
+import dayjs from "dayjs";
+import { AdGroupProjectAPI } from "../../../../../labreportapp/api/admin/AdGroupProjectAPI";
+import Image from "../../../../helper/img/Image";
+const { RangePicker } = DatePicker;
 const { TextArea } = Input;
-const { Option } = Select;
+
 const ModalDetailProject = ({ visible, onCancel, idProject }) => {
   const [project, setProject] = useState({});
   const [listData, setListData] = useState([]);
   const [listCategoryProjects, setListCategoryProjects] = useState("");
-  const [listRoleProject, setListRoleProject] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [selectedGroupProject, setSelectedGroupProject] = useState(null);
+  const [listGroupProject, setListGroupProject] = useState([]);
 
   useEffect(() => {
     if (idProject !== null && idProject !== "" && visible === true) {
       setListData([]);
-      featchRoleProject(idProject);
+      featDataGroupProject();
       fetchData();
     }
   }, [visible, idProject, onCancel]);
 
-  const featchRoleProject = async (idProject) => {
+  const featDataGroupProject = async () => {
     try {
-      await AdPotalsRoleProjectAPI.getAllRoleProjectByProjId(idProject).then(
+      await AdGroupProjectAPI.getAllGroupToProjectManagement().then(
         (response) => {
-          setListRoleProject(response.data.data);
+          setListGroupProject(response.data.data);
         }
       );
     } catch (error) {
@@ -39,8 +41,9 @@ const ModalDetailProject = ({ visible, onCancel, idProject }) => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      await ProjectManagementAPI.detail(idProject).then((response) => {
+      await ProjectManagementAPI.detailUpdate(idProject).then((response) => {
         setProject(response.data.data);
+        setSelectedGroupProject(response.data.data.groupProjectId);
       });
       const responeListCategoryProject =
         await CategoryProjectManagementAPI.fetchCategoryWithIdProject(
@@ -92,21 +95,13 @@ const ModalDetailProject = ({ visible, onCancel, idProject }) => {
       sorter: (a, b) => a.name.localeCompare(b.name),
       render: (text, record) => {
         return (
-          <div>
-            <Image.PreviewGroup>
-              <Image
-                src={
-                  record.picture === "Images/Default.png"
-                    ? "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-                    : record.picture
-                }
-                alt="Avatar"
-                width={25}
-                height={25}
-                marginRight={-5}
-                className="avatarMember"
-              />
-            </Image.PreviewGroup>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <Image
+              url={record.picture}
+              picxel={25}
+              marginRight={8}
+              name={record.name}
+            />
             <span style={{ paddingLeft: "8px" }}>{record.name}</span>
           </div>
         );
@@ -154,82 +149,116 @@ const ModalDetailProject = ({ visible, onCancel, idProject }) => {
       <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
         <span style={{ fontSize: "18px" }}>Chi tiết dự án</span>
       </div>
-      <div style={{ marginTop: "15px" }}>
-        <Row gutter={16} style={{ marginBottom: "15px" }}>
-          <Col span={12}>
-            <span>Mã dự án:</span> <br />
-            <Input value={project.code} type="text" readOnly />
-          </Col>
-          <Col span={12}>
-            <span>Tên dự án:</span> <br />
-            <Input type="text" value={project.name} readOnly />
-          </Col>
-        </Row>
-        <Row gutter={16} style={{ marginBottom: "15px" }}>
-          <Col span={24}>
-            <span>Thể loại:</span>
-            <Input type="text" value={listCategoryProjects} readOnly />
-          </Col>
-        </Row>
-        <Row gutter={16} style={{ marginBottom: "15px" }}>
-          <Col span={12}>
-            <span>Thời gian bắt đầu:</span> <br />
-            <Input
-              value={moment(project.startTime).format("YYYY-MM-DD")}
-              type="date"
-              readOnly
-            />
-          </Col>
-          <Col span={12}>
-            <span>Thời gian kết thúc:</span> <br />
-            <Input
-              value={moment(project.endTime).utcOffset(7).format("YYYY-MM-DD")}
-              type="date"
-              readOnly
-            />
-          </Col>
-        </Row>
-        <Row gutter={16} style={{ marginBottom: "15px" }}>
-          <Col span={12}>
-            <span>Tiến độ: {project.progress + "%"}</span> <br />
-            <div className="progress-block">
-              <div
-                className="progress-bar"
-                style={{ width: project.progress + "%" }}
-              ></div>
-            </div>
-          </Col>
-          <Col span={12}>
-            <span>Trạng thái:</span> <br />
-            <Input
-              value={
-                project.statusProject === "DA_DIEN_RA"
-                  ? "Đã diễn ra"
-                  : project.statusProject === "DANG_DIEN_RA"
-                  ? "Đang diễn ra"
-                  : "Chưa diễn ra"
-              }
-              readOnly
-            />
-          </Col>
-        </Row>
-        <Row gutter={16} style={{ marginBottom: "15px" }}>
-          <Col span={24}>
-            <span>Mô tả:</span> <br />
-            <TextArea rows={2} value={project.descriptions} readOnly />
-          </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col span={24}>
-            <span>Thành viên:</span>
-          </Col>
-        </Row>
-        <Row>
-          {loading ? (
-            <div className="loading-overlay">
-              <Spin size="large" />
-            </div>
-          ) : (
+      {loading ? (
+        <div
+          className="loading-overlay"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            minHeight: "540px",
+          }}
+        >
+          <Spin size="large" style={{ paddingTop: "50px" }} />
+        </div>
+      ) : (
+        <div style={{ marginTop: "15px" }}>
+          <Row gutter={24} style={{ marginBottom: "15px" }}>
+            <Col span={12}>
+              <span className="notBlank">(*) </span>
+              <span>Mã dự án:</span> <br />
+              <Input value={project.code} type="text" readOnly />
+            </Col>
+            <Col span={12}>
+              <span className="notBlank">(*) </span>
+              <span>Tên dự án:</span> <br />
+              <Input type="text" value={project.name} readOnly />
+            </Col>
+          </Row>
+          <Row gutter={24} style={{ marginBottom: "15px" }}>
+            <Col span={24}>
+              <span className="notBlank">(*) </span>
+              <span>Thể loại:</span>
+              <Input type="text" value={listCategoryProjects} readOnly />
+            </Col>
+          </Row>
+          <Row gutter={24} style={{ marginBottom: "10px" }}>
+            <Col span={12}>
+              <span className="notBlank">(*) </span>
+              <span>Thời gian:</span> <br />
+              <RangePicker
+                style={{ width: "100%" }}
+                format="YYYY-MM-DD"
+                value={[
+                  project.startTime ? dayjs(project.startTime) : null,
+                  project.endTime ? dayjs(project.endTime) : null,
+                ]}
+                changeOnBlur
+              />
+            </Col>
+            <Col span={12}>
+              <span>Nhóm dự án:</span>
+              <Select
+                showSearch
+                style={{ width: "100%" }}
+                placeholder="Chọn thuộc nhóm dự án"
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  (option?.label ?? "").includes(input)
+                }
+                filterSort={(optionA, optionB) =>
+                  (optionA?.label ?? "")
+                    .toLowerCase()
+                    .localeCompare((optionB?.label ?? "").toLowerCase())
+                }
+                value={selectedGroupProject}
+                defaultValue={selectedGroupProject}
+                options={[
+                  { value: null, label: "Không trong nhóm dự án" },
+                  ...listGroupProject.map((i) => {
+                    return { value: i.id, label: i.name };
+                  }),
+                ]}
+              />
+            </Col>
+          </Row>
+          <Row gutter={24} style={{ marginBottom: "15px" }}>
+            <Col span={12}>
+              <span>Tiến độ: {project.progress + "%"}</span> <br />
+              <div className="progress-block">
+                <div
+                  className="progress-bar"
+                  style={{ width: project.progress + "%" }}
+                ></div>
+              </div>
+            </Col>
+            <Col span={12}>
+              <span>Trạng thái:</span> <br />
+              <Input
+                value={
+                  project.statusProject === "DA_DIEN_RA"
+                    ? "Đã diễn ra"
+                    : project.statusProject === "DANG_DIEN_RA"
+                    ? "Đang diễn ra"
+                    : "Chưa diễn ra"
+                }
+                readOnly
+              />
+            </Col>
+          </Row>
+          <Row gutter={16} style={{ marginBottom: "15px" }}>
+            <Col span={24}>
+              <span>Mô tả:</span> <br />
+              <TextArea rows={2} value={project.descriptions} readOnly />
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={24}>
+              <span>Thành viên:</span>
+            </Col>
+          </Row>
+          <Row>
             <Table
               style={{ width: "100%" }}
               dataSource={data.map((item, index) => ({
@@ -244,9 +273,9 @@ const ModalDetailProject = ({ visible, onCancel, idProject }) => {
                 size: "small",
               }}
             />
-          )}
-        </Row>
-      </div>
+          </Row>
+        </div>
+      )}
     </Modal>
   );
 };

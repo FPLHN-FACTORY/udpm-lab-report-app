@@ -21,13 +21,13 @@ public interface AdProjectService {
 
     List<Project> findAllProject(Pageable pageable);
 
+    PageableObject<AdProjectReponse> searchProject(final AdFindProjectRequest rep);
+
     AdProjectReponse createProject(@Valid final AdCreateProjectRequest request);
 
     AdProjectReponse updateProject(@Valid AdUpdateProjectRoleRequest request, String idProject);
 
     AdDetailProjectCateMemberRespone detailUpdate(String idProject);
-
-    PageableObject<AdProjectReponse> searchProject(final AdFindProjectRequest rep);
 
     Project findProjectById(final String id);
 

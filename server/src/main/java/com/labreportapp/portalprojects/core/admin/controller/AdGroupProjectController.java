@@ -53,4 +53,9 @@ public class AdGroupProjectController {
     public ResponseObject getAllProject(@RequestParam("id") String id) {
         return new ResponseObject(adGroupProjectService.getAllProject(id));
     }
+
+    @GetMapping("/get-all")
+    public ResponseObject getAllGroupToProjectManagement() {
+        return new ResponseObject(adGroupProjectService.getAllGroupToProjectManagement());
+    }
 }

@@ -16,4 +16,6 @@ public final class MeFindProjectRequest extends PageableRequest {
     private String nameProject;
 
     private Integer status;
+
+    private String groupProjectId;
 }

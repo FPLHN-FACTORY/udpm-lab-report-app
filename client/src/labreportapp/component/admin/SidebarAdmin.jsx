@@ -328,7 +328,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             />
           }
         >
-          <Link to="/admin/project-dashboard">Thống kê dự án</Link>
+          <Link to="/admin/project-statistics">Thống kê dự án</Link>
         </Menu.Item>
         <div style={{ marginBottom: 15, marginTop: 15 }}>
           <span style={{ marginLeft: 28 }}>

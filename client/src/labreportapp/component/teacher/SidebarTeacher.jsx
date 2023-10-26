@@ -106,7 +106,7 @@ const SidebarTeacherComponent = ({ collapsed, toggleCollapsed }) => {
           className="menu_custom"
           icon={<ProjectOutlined style={{ color: "rgb(226, 179, 87)" }} />}
         >
-          <Link to="/teacher/my-project">Dự án tại xưởng</Link>
+          <Link to="/teacher/my-project">Dự án</Link>
         </Menu.Item>
         <Menu.Item
           key="22"
@@ -117,7 +117,7 @@ const SidebarTeacherComponent = ({ collapsed, toggleCollapsed }) => {
             />
           }
         >
-          <Link to="/teacher/team-factory">Danh sách team xưởng</Link>
+          <Link to="/teacher/team-factory">Danh sách team</Link>
         </Menu.Item>
         <Menu.Item
           key="23"
@@ -128,7 +128,7 @@ const SidebarTeacherComponent = ({ collapsed, toggleCollapsed }) => {
             />
           }
         >
-          <Link to="/teacher/member-factory">Thành viên trong xưởng</Link>
+          <Link to="/teacher/member-factory">Thành viên xưởng</Link>
         </Menu.Item>{" "}
       </Menu>
     </Sider>

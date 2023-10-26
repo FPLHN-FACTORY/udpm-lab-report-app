@@ -52,4 +52,11 @@ export class AdGroupProjectAPI {
       url: url + "/get-all-project?id=" + id,
     });
   }
+
+  static getAllGroupToProjectManagement() {
+    return request({
+      method: "GET",
+      url: url + "/get-all",
+    });
+  }
 }

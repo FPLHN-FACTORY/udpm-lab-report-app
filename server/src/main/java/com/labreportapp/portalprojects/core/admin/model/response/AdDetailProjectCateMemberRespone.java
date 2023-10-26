@@ -37,6 +37,8 @@ public class AdDetailProjectCateMemberRespone {
 
     private String backGroundColor;
 
+    private String groupProjectId;
+
     private List<AdMemberAndRoleProjectCustomResponse> listMemberRole;
 
     private List<ProjectCategory> listCategory;

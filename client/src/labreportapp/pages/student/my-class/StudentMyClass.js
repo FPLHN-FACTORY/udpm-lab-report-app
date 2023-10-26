@@ -229,189 +229,199 @@ const StudentMyClass = () => {
   ];
 
   return (
-    <div className="my_class_my">
+    <>
+      {" "}
       {loading && <LoadingIndicator />}
-      <div>
-        <span style={{ fontSize: "20px" }}>
-          <FontAwesomeIcon icon={faHome} /> Lớp của tôi
-        </span>
-      </div>
-      <div className="filter_my_class">
-        <FontAwesomeIcon icon={faFilter} style={{ fontSize: "18px" }} />{" "}
-        <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
-        <hr />
-        <div className="content_filter">
-          <Row gutter={24} style={{ padding: "5px 2% 0" }}>
-            <Col span={8}>
-              <span>Học kỳ</span>
-              <br />
-              <Select
-                showSearch
-                filterOption={filterOptions}
-                style={{
-                  width: "100%",
-                  margin: "6px 0 10px 0",
-                }}
-                onChange={(e) => {
-                  handleChangeSemester(e);
-                }}
-                value={semester}
-              >
-                <Option value="">Chọn học kỳ</Option>
-                {listSemester.length > 0 &&
-                  listSemester.map((item) => (
-                    <Option value={item.id} key={item.id}>
-                      {item.name}
-                    </Option>
-                  ))}
-              </Select>
-            </Col>
-            <Col span={16}>
-              <span>Hoạt động</span>
-              <br />
-              <Select
-                showSearch
-                filterOption={filterOptions}
-                style={{
-                  width: "100%",
-                  margin: "6px 0 10px 0",
-                }}
-                value={activity}
-                onChange={(e) => {
-                  setActivity(e);
-                }}
-              >
-                <Option value="">Tất cả</Option>
-                {listActivity.length > 0 &&
-                  listActivity.map((item) => (
-                    <Option value={item.id} key={item.id}>
-                      {item.name}
-                    </Option>
-                  ))}
-              </Select>
-            </Col>
-          </Row>
-          <Row gutter={24} style={{ padding: "5px 2% 0" }}>
-            <Col span={8}>
-              <span>Mã lớp</span> <br />
-              <Input
-                onChange={(e) => {
-                  setCode(e.target.value);
-                }}
-                value={code}
-                style={{ marginTop: "6px" }}
-                type="text"
-                placeholder="Nhập mã lớp"
-              />
-            </Col>
-            <Col span={8}>
-              <span>Ca học</span>
-              <br />
-              <Select
-                showSearch
-                filterOption={filterOptions}
-                style={{
-                  width: "100%",
-                  margin: "6px 0 10px 0",
-                }}
-                onChange={(e) => {
-                  setClassPeriod(e);
-                }}
-                value={classPeriod}
-              >
-                <Option value="">Tất cả</Option>
-                {listMeetingPeriod.length > 0 &&
-                  listMeetingPeriod.map((item) => (
-                    <Option value={item.id} key={item.id}>
-                      {item.name} (
-                      {convertHourAndMinuteToString(
-                        item.startHour,
-                        item.startMinute,
-                        item.endHour,
-                        item.endMinute
-                      )}
-                      )
-                    </Option>
-                  ))}
-              </Select>
-            </Col>
-            <Col span={8}>
-              <span>Cấp độ</span> <br />
-              <Select
-                style={{ width: "100%", marginTop: "6px" }}
-                onChange={(e) => {
-                  setLevel(e);
-                }}
-                showSearch
-                filterOption={filterOptions}
-                value={level}
-              >
-                {" "}
-                <Option value={""}>Tất cả</Option>
-                {listLevel.length > 0 &&
-                  listLevel.map((item) => (
-                    <Option value={item.id} key={item.id}>
-                      {item.name}
-                    </Option>
-                  ))}
-              </Select>
-            </Col>
-          </Row>
-        </div>
-        <div className="box_btn_filter_st">
-          <Button
-            className="btn_filter"
-            onClick={handleClickFilter}
-            style={{ marginRight: "15px" }}
-          >
-            <FontAwesomeIcon
-              icon={faFilterCircleDollar}
-              style={{ marginRight: "8px" }}
-            />{" "}
-            Tìm kiếm
-          </Button>
-          <Button
-            className="btn_clear"
-            style={{ backgroundColor: "rgb(38, 144, 214)" }}
-            onClick={clearData}
-          >
-            {" "}
-            <FontAwesomeIcon
-              icon={faChainSlash}
-              style={{ marginRight: "8px" }}
-            />{" "}
-            Làm mới bộ lọc
-          </Button>
-        </div>
-      </div>
-      <div className="table_myclass" style={{ minHeight: "273px" }}>
-        <div className="title_table_myclass">
-          <div style={{ float: "left" }}>
-            {" "}
-            <FontAwesomeIcon icon={faHome} style={{ fontSize: "18px" }} />
-            <span style={{ fontSize: "18px", fontWeight: "500" }}>
-              {" "}
-              Danh sách lớp học
+      <div className="box-one">
+        <div
+          className="heading-box"
+          style={{ fontSize: "18px", paddingLeft: "20px" }}
+        >
+          <span style={{ fontSize: "20px", fontWeight: "500" }}>
+            <span style={{ fontSize: "20px" }}>
+              <FontAwesomeIcon icon={faHome} /> Lớp của tôi
             </span>
+          </span>
+        </div>
+      </div>
+      <div className="my_class_my" style={{ margin: "25px 0 25px 0" }}>
+        <div className="filter_my_class">
+          <FontAwesomeIcon icon={faFilter} style={{ fontSize: "18px" }} />{" "}
+          <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
+          <hr />
+          <div className="content_filter">
+            <Row gutter={24} style={{ padding: "5px 2% 0" }}>
+              <Col span={8}>
+                <span>Học kỳ</span>
+                <br />
+                <Select
+                  showSearch
+                  filterOption={filterOptions}
+                  style={{
+                    width: "100%",
+                    margin: "6px 0 10px 0",
+                  }}
+                  onChange={(e) => {
+                    handleChangeSemester(e);
+                  }}
+                  value={semester}
+                >
+                  <Option value="">Chọn học kỳ</Option>
+                  {listSemester.length > 0 &&
+                    listSemester.map((item) => (
+                      <Option value={item.id} key={item.id}>
+                        {item.name}
+                      </Option>
+                    ))}
+                </Select>
+              </Col>
+              <Col span={16}>
+                <span>Hoạt động</span>
+                <br />
+                <Select
+                  showSearch
+                  filterOption={filterOptions}
+                  style={{
+                    width: "100%",
+                    margin: "6px 0 10px 0",
+                  }}
+                  value={activity}
+                  onChange={(e) => {
+                    setActivity(e);
+                  }}
+                >
+                  <Option value="">Tất cả</Option>
+                  {listActivity.length > 0 &&
+                    listActivity.map((item) => (
+                      <Option value={item.id} key={item.id}>
+                        {item.name}
+                      </Option>
+                    ))}
+                </Select>
+              </Col>
+            </Row>
+            <Row gutter={24} style={{ padding: "5px 2% 0" }}>
+              <Col span={8}>
+                <span>Mã lớp</span> <br />
+                <Input
+                  onChange={(e) => {
+                    setCode(e.target.value);
+                  }}
+                  value={code}
+                  style={{ marginTop: "6px" }}
+                  type="text"
+                  placeholder="Nhập mã lớp"
+                />
+              </Col>
+              <Col span={8}>
+                <span>Ca học</span>
+                <br />
+                <Select
+                  showSearch
+                  filterOption={filterOptions}
+                  style={{
+                    width: "100%",
+                    margin: "6px 0 10px 0",
+                  }}
+                  onChange={(e) => {
+                    setClassPeriod(e);
+                  }}
+                  value={classPeriod}
+                >
+                  <Option value="">Tất cả</Option>
+                  {listMeetingPeriod.length > 0 &&
+                    listMeetingPeriod.map((item) => (
+                      <Option value={item.id} key={item.id}>
+                        {item.name} (
+                        {convertHourAndMinuteToString(
+                          item.startHour,
+                          item.startMinute,
+                          item.endHour,
+                          item.endMinute
+                        )}
+                        )
+                      </Option>
+                    ))}
+                </Select>
+              </Col>
+              <Col span={8}>
+                <span>Cấp độ</span> <br />
+                <Select
+                  style={{ width: "100%", marginTop: "6px" }}
+                  onChange={(e) => {
+                    setLevel(e);
+                  }}
+                  showSearch
+                  filterOption={filterOptions}
+                  value={level}
+                >
+                  {" "}
+                  <Option value={""}>Tất cả</Option>
+                  {listLevel.length > 0 &&
+                    listLevel.map((item) => (
+                      <Option value={item.id} key={item.id}>
+                        {item.name}
+                      </Option>
+                    ))}
+                </Select>
+              </Col>
+            </Row>
+          </div>
+          <div className="box_btn_filter_st">
+            <Button
+              className="btn_filter"
+              onClick={handleClickFilter}
+              style={{ marginRight: "15px" }}
+            >
+              <FontAwesomeIcon
+                icon={faFilterCircleDollar}
+                style={{ marginRight: "8px" }}
+              />{" "}
+              Tìm kiếm
+            </Button>
+            <Button
+              className="btn_clear"
+              style={{ backgroundColor: "rgb(38, 144, 214)" }}
+              onClick={clearData}
+            >
+              {" "}
+              <FontAwesomeIcon
+                icon={faChainSlash}
+                style={{ marginRight: "8px" }}
+              />{" "}
+              Làm mới bộ lọc
+            </Button>
           </div>
         </div>
-        <br />
-        {listClass.length > 0 && (
-          <div style={{ marginTop: "25px" }}>
-            {" "}
-            <Table dataSource={listClass} rowKey="id" columns={columns} />
+        <div className="table_myclass" style={{ minHeight: "273px" }}>
+          <div className="title_table_myclass">
+            <div style={{ float: "left" }}>
+              {" "}
+              <FontAwesomeIcon icon={faHome} style={{ fontSize: "18px" }} />
+              <span style={{ fontSize: "18px", fontWeight: "500" }}>
+                {" "}
+                Danh sách lớp học
+              </span>
+            </div>
           </div>
-        )}
-        {listClass.length === 0 && (
-          <>
-            <Empty
-              imageStyle={{ height: 60 }}
-              description={<span>Không tìm thấy lớp học nào !</span>}
-            />{" "}
-          </>
-        )}
+          <br />
+          {listClass.length > 0 && (
+            <div style={{ marginTop: "25px" }}>
+              {" "}
+              <Table dataSource={listClass} rowKey="id" columns={columns} />
+            </div>
+          )}
+          {listClass.length === 0 && (
+            <>
+              <Empty
+                imageStyle={{ height: 60 }}
+                description={<span>Không tìm thấy lớp học nào !</span>}
+              />{" "}
+            </>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

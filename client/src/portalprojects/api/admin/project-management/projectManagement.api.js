@@ -22,7 +22,9 @@ export class ProjectManagementAPI {
         `&statusProject=` +
         filter.statusProject +
         `&idCategory=` +
-        filter.idCategory,
+        filter.idCategory +
+        `&groupProjectId=` +
+        filter.groupProjectId,
     });
   };
 

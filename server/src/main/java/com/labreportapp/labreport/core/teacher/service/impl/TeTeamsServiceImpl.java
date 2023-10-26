@@ -19,17 +19,20 @@ import com.labreportapp.labreport.core.teacher.repository.TeProjectRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeRoleConfigReposiotry;
 import com.labreportapp.labreport.core.teacher.repository.TeRoleMemberProjectRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeRoleProjectRepository;
+import com.labreportapp.labreport.core.teacher.repository.TeSemesterRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeStudentClassesRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeTeamsRepositoty;
 import com.labreportapp.labreport.core.teacher.service.TeStudentClassesService;
 import com.labreportapp.labreport.core.teacher.service.TeTeamsService;
 import com.labreportapp.labreport.entity.Class;
+import com.labreportapp.labreport.entity.Semester;
 import com.labreportapp.labreport.entity.StudentClasses;
 import com.labreportapp.labreport.entity.Team;
 import com.labreportapp.labreport.infrastructure.constant.RoleDefault;
 import com.labreportapp.labreport.infrastructure.constant.RoleTeam;
 import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.labreport.util.RandomString;
+import com.labreportapp.labreport.util.SemesterHelper;
 import com.labreportapp.portalprojects.entity.Label;
 import com.labreportapp.portalprojects.entity.LabelProject;
 import com.labreportapp.portalprojects.entity.MemberProject;
@@ -45,6 +48,7 @@ import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiExce
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.Synchronized;
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
@@ -67,6 +71,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -120,6 +125,12 @@ public class TeTeamsServiceImpl implements TeTeamsService {
 
     @Autowired
     private TeRoleMemberProjectRepository teRoleMemberProjectRepository;
+
+    @Autowired
+    private SemesterHelper semesterHelper;
+
+    @Autowired
+    private TeSemesterRepository teSemesterRepository;
 
     @Override
     public List<TeTeamsRespone> getAllTeams(final TeFindStudentClasses teFindStudentClasses) {
@@ -233,7 +244,6 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         return teTeamsRepositoty.save(team);
     }
 
-
     @Override
     @Transactional
     @CacheEvict(value = {"membersByProject"}, allEntries = true)
@@ -242,12 +252,22 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         if (!team.isPresent()) {
             throw new RestApiException(Message.TEAM_NOT_EXISTS);
         }
+        String idSemesterCurrent = semesterHelper.getSemesterCurrent();
         Team teamUp = team.get();
         Project project = new Project();
-        project.setCode("PRJ_" + RandomString.random());
-        project.setName("Project" + RandomString.random());
-        project.setStartTime(new Date().getTime());
-        project.setEndTime(new Date().getTime() + 90 * 86400000);
+        if (idSemesterCurrent != null) {
+            Optional<Semester> semesterCurrent = teSemesterRepository.findById(idSemesterCurrent);
+            if (semesterCurrent.isPresent()) {
+                project.setEndTime(DateUtils.truncate(new Date(semesterCurrent.get().getEndTime()), Calendar.DATE).getTime());
+            } else {
+                project.setEndTime(DateUtils.truncate(new Date(), Calendar.DATE).getTime() + 90L * 86400000);
+            }
+        }
+        project.setCode("Project_" + RandomString.random());
+        project.setName("Dự án " + RandomString.random());
+        project.setStartTime(DateUtils.truncate(new Date(), Calendar.DATE).getTime());
+        project.setDescriptions(teamUp.getSubjectName());
+        project.setProgress(0F);
         project.setStatusProject(StatusProject.DANG_DIEN_RA);
         project.setTypeProject(TypeProject.DU_AN_XUONG_THUC_HANH);
         project.setBackgroundColor("rgb(38, 144, 214)");
@@ -299,7 +319,6 @@ public class TeTeamsServiceImpl implements TeTeamsService {
             }
         }
         teRoleMemberProjectRepository.save(roleMemberProjectDefault);
-        System.err.println(teRoleMemberProjectRepository.save(roleMemberProjectDefault));
         return teTeamsRepositoty.save(teamUp);
     }
 

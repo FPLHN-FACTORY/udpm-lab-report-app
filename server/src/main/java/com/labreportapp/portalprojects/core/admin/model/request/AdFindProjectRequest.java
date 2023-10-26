@@ -29,4 +29,6 @@ public class AdFindProjectRequest extends PageableRequest {
 
     private Long endTimeLong;
 
+    private String groupProjectId;
+
 }

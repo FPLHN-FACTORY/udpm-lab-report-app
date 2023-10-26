@@ -9,10 +9,10 @@ import com.labreportapp.portalprojects.core.admin.model.request.AdListMemberUpda
 import com.labreportapp.portalprojects.core.admin.model.request.AdUpdateProjectRoleRequest;
 import com.labreportapp.portalprojects.core.admin.model.response.AdDetailProjectCateMemberRespone;
 import com.labreportapp.portalprojects.core.admin.model.response.AdMemberAndRoleProjectCustomResponse;
-import com.labreportapp.portalprojects.core.admin.model.response.AdMemberRoleBaseResponse;
 import com.labreportapp.portalprojects.core.admin.model.response.AdProjectReponse;
 import com.labreportapp.portalprojects.core.admin.repository.AdLabelProjectRepository;
 import com.labreportapp.portalprojects.core.admin.repository.AdMemberProjectRepository;
+import com.labreportapp.portalprojects.core.admin.repository.AdPotalsGroupProjectReposiory;
 import com.labreportapp.portalprojects.core.admin.repository.AdPotalsRoleConfigRepository;
 import com.labreportapp.portalprojects.core.admin.repository.AdPotalsRoleMemberProjectRepository;
 import com.labreportapp.portalprojects.core.admin.repository.AdPotalsRoleProjectRepository;
@@ -21,6 +21,7 @@ import com.labreportapp.portalprojects.core.admin.repository.AdProjectRepository
 import com.labreportapp.portalprojects.core.admin.service.AdMemberProjectService;
 import com.labreportapp.portalprojects.core.admin.service.AdProjectService;
 import com.labreportapp.portalprojects.core.common.base.PageableObject;
+import com.labreportapp.portalprojects.entity.GroupProject;
 import com.labreportapp.portalprojects.entity.Label;
 import com.labreportapp.portalprojects.entity.LabelProject;
 import com.labreportapp.portalprojects.entity.MemberProject;
@@ -37,6 +38,7 @@ import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiExce
 import com.labreportapp.portalprojects.repository.LabelRepository;
 import com.labreportapp.portalprojects.util.FormUtils;
 import jakarta.validation.Valid;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.CacheEvict;
@@ -47,12 +49,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author hieundph25894
@@ -96,9 +98,28 @@ public class AdProjectServiceImpl implements AdProjectService {
     @Autowired
     private AdMemberProjectService adMemberProjectService;
 
+    @Autowired
+    private AdPotalsGroupProjectReposiory adPotalsGroupProjectReposiory;
+
     @Override
     public List<Project> findAllProject(Pageable pageable) {
         return adProjectRepository.findAllProject(pageable);
+    }
+
+    @Override
+    public PageableObject<AdProjectReponse> searchProject(final AdFindProjectRequest rep) {
+        rep.setStartTimeLong(null);
+        rep.setEndTimeLong(null);
+        if (!rep.getStartTime().equals("")) {
+            rep.setStartTimeLong(DateUtils.truncate(new Date(Long.parseLong(rep.getStartTime())), Calendar.DATE).getTime());
+        }
+        if (!rep.getEndTime().equals("")) {
+            rep.setEndTimeLong(DateUtils.truncate(new Date(Long.parseLong(rep.getEndTime())), Calendar.DATE).getTime());
+        }
+        Pageable pageable = PageRequest.of(rep.getPage() - 1, rep.getSize());
+        Page<AdProjectReponse> reponses = adProjectRepository.findProjectPage(rep, pageable);
+        listProject = reponses.stream().toList();
+        return new PageableObject<>(reponses);
     }
 
     @Override
@@ -117,23 +138,13 @@ public class AdProjectServiceImpl implements AdProjectService {
             throw new RestApiException(Message.TIME_NOT_NULL);
         }
         List<AdCreateMemberProjectRequest> listMember = request.getListMembers();
-//        if (listMember.size() > 0) {
-//            AtomicBoolean checkRoleDefault = new AtomicBoolean(false);
-//            listMember.forEach(m -> {
-//                m.getListRole().forEach(i -> {
-//                    if (i.equals("Không có vai trò mặc định, vui lòng chọn vai trò khác")) {
-//                        checkRoleDefault.set(true);
-//                    }
-//                });
-//            });
-//            if (checkRoleDefault.get()) {
-//                throw new RestApiException(Message.ROLE_DEFAULT_NOT_EMPTY);
-//            }
-//        }
-
         Project project = formUtils.convertToObject(Project.class, request);
-        project.setStartTime(request.getStartTime());
-        project.setEndTime(request.getEndTime());
+        project.setStartTime(DateUtils.truncate(new Date(request.getStartTime()), Calendar.DATE).getTime());
+        project.setEndTime(DateUtils.truncate(new Date(request.getEndTime()), Calendar.DATE).getTime());
+        project.setProgress(0F);
+        project.setBackgroundColor("#59a1e3");
+        project.setTypeProject(TypeProject.DU_AN_XUONG_DU_AN);
+        project.setDescriptions(request.getDescriptions());
         Long currentTime = new Date().getTime();
         if (currentTime < request.getStartTime()) {
             project.setStatusProject(StatusProject.CHUA_DIEN_RA);
@@ -144,9 +155,16 @@ public class AdProjectServiceImpl implements AdProjectService {
         if (request.getEndTime() < currentTime) {
             project.setStatusProject(StatusProject.DA_DIEN_RA);
         }
-        project.setProgress(Float.parseFloat("0"));
-        project.setBackgroundColor("#59a1e3");
-        project.setTypeProject(TypeProject.DU_AN_XUONG_DU_AN);
+
+        if (request.getGroupProjectId() != null) {
+            Optional<GroupProject> groupProject = adPotalsGroupProjectReposiory.findById(request.getGroupProjectId());
+            if (groupProject.isPresent()) {
+                project.setGroupProjectId(groupProject.get().getId());
+            }
+        } else {
+            project.setGroupProjectId(request.getGroupProjectId());
+        }
+
         Project newProject = adProjectRepository.save(project);
         List<String> listCaregoryIds = request.getListCategorysId();
         List<ProjectCategory> newCategoryProject = new ArrayList<>();
@@ -235,7 +253,6 @@ public class AdProjectServiceImpl implements AdProjectService {
                         newRoleMemberProject.add(roleMemberProject);
                     }
                 });
-
             });
         });
         adPotalsRoleMemberProjectRepository.saveAll(newRoleMemberProject);
@@ -259,8 +276,18 @@ public class AdProjectServiceImpl implements AdProjectService {
         project.setCode(request.getCode());
         project.setDescriptions(request.getDescriptions());
         project.setName(request.getName());
-        project.setStartTime(request.getStartTime());
-        project.setEndTime(request.getEndTime());
+        project.setProgress(project.getProgress());
+        project.setStartTime(DateUtils.truncate(new Date(request.getStartTime()), Calendar.DATE).getTime());
+        project.setEndTime(DateUtils.truncate(new Date(request.getEndTime()), Calendar.DATE).getTime());
+        if (request.getGroupProjectId() != null) {
+            Optional<GroupProject> groupProject = adPotalsGroupProjectReposiory.findById(request.getGroupProjectId());
+            if (groupProject.isPresent()) {
+                project.setGroupProjectId(groupProject.get().getId());
+            }
+        } else {
+            project.setGroupProjectId(request.getGroupProjectId());
+        }
+        project.setTypeProject(TypeProject.DU_AN_XUONG_DU_AN);
         Long currentTime = new Date().getTime();
         if (currentTime < request.getStartTime()) {
             project.setStatusProject(StatusProject.CHUA_DIEN_RA);
@@ -271,10 +298,10 @@ public class AdProjectServiceImpl implements AdProjectService {
         if (request.getEndTime() < currentTime) {
             project.setStatusProject(StatusProject.DA_DIEN_RA);
         }
-
         List<AdListMemberUpdateRoleRequest> listMember = request.getListMember();
 
         Project newProject = adProjectRepository.save(project);
+        adProjectCategoryRepository.deleteAllProjectCategoryByIdProject(idProject);
         List<String> listCaregoryIds = request.getListCategorysId();
         List<ProjectCategory> newCategoryProject = new ArrayList<>();
         listCaregoryIds.forEach(item -> {
@@ -289,101 +316,52 @@ public class AdProjectServiceImpl implements AdProjectService {
         List<AdMemberAndRoleProjectCustomResponse> listMemberJoinRole = adMemberProjectService
                 .findAllMemberJoinProject(idProject);
 
-
-//        listMember.forEach(item -> {
-//            Optional<AdMemberAndRoleProjectCustomResponse> objFind = findMemberRoleByMemberId(
-//                    listMemberJoinRole, item.getMemberId());
-//            if (objFind.isPresent()) {
-//                item.getListRole().forEach(role -> {
-//                    if (role.getIdRole().equals(objFind.get().get))
-//                });
-//
-//            }
-//            MemberProject memberProject = new MemberProject();
-//            memberProject.setProjectId(newProject.getId());
-//            memberProject.setMemberId(item.getMemberId());
-//            memberProject.setEmail(item.getEmail());
-//            memberProject.setStatusWork(StatusWork.DANG_LAM);
-//            newMemberProject.add(memberProject);
-//        });
-
-        List<RoleConfig> listRoleConfig = adPotalsRoleConfigRepository.findAll();
-        List<RoleProject> newRoleProject = new ArrayList<>();
-        listRoleConfig.forEach(item -> {
-            RoleProject roleProject = new RoleProject();
-            roleProject.setProjectId(newProject.getId());
-            roleProject.setName(item.getName());
-            roleProject.setDescription(item.getDescription());
-            roleProject.setRoleDefault(item.getRoleDefault());
-            newRoleProject.add(roleProject);
+        listMember.forEach(item -> {
+            Optional<AdMemberAndRoleProjectCustomResponse> objFind = findMemberRoleByMemberId(
+                    listMemberJoinRole, item.getMemberId());
+            if (!objFind.isPresent()) {
+                MemberProject memberProject = new MemberProject();
+                memberProject.setProjectId(newProject.getId());
+                memberProject.setMemberId(item.getMemberId());
+                memberProject.setEmail(item.getEmail());
+                memberProject.setStatusWork(StatusWork.DANG_LAM);
+                newMemberProject.add(memberProject);
+            }
         });
-        List<RoleProject> listRoleProject = adPotalsRoleProjectRepository.saveAll(newRoleProject);
 
         List<RoleMemberProject> newRoleMemberProject = new ArrayList<>();
-        Optional<AdListMemberUpdateRoleRequest> memberDefault = listMember.stream()
-                .filter(i -> i.getMemberId().equals(labReportAppSession.getUserId()))
-                .findFirst();
+        adMemberProjectRepository.saveAll(newMemberProject);
+        List<MemberProject> listMemberProject = adMemberProjectRepository.getAllMemberProjectByIdProject(idProject);
 
-        if (!memberDefault.isPresent()) {
-            MemberProject memberCreateProject = new MemberProject();
-            memberCreateProject.setMemberId(labReportAppSession.getUserId());
-            memberCreateProject.setProjectId(newProject.getId());
-            memberCreateProject.setEmail(labReportAppSession.getEmail());
-            memberCreateProject.setStatusWork(StatusWork.DANG_LAM);
-            memberCreateProject.setId(adMemberProjectRepository.save(memberCreateProject).getId());
-
-            RoleMemberProject roleMemberProjectDefault = new RoleMemberProject();
-            roleMemberProjectDefault.setMemberProjectId(memberCreateProject.getId());
-            Optional<RoleProject> roleProSetDefault = listRoleProject.stream()
-                    .filter(i -> i.getRoleDefault().equals(RoleDefault.DEFAULT))
-                    .findFirst();
-
-            if (roleProSetDefault.isPresent()) {
-                roleMemberProjectDefault.setRoleProjectId(roleProSetDefault.get().getId());
-            } else {
-                if (listRoleProject.size() > 0) {
-                    RoleProject roleProjectAp = listRoleProject.get(0);
-                    roleMemberProjectDefault.setRoleProjectId(roleProjectAp.getId());
-                }
-            }
-            newRoleMemberProject.add(roleMemberProjectDefault);
-        }
-        List<MemberProject> listMemberProject = adMemberProjectRepository.saveAll(newMemberProject);
+        adPotalsRoleMemberProjectRepository.deleteAllRoleMemberProjectByIdProject(idProject);
         listMember.forEach(member -> {
             member.getListRole().forEach(role -> {
-                listRoleProject.forEach(roleProject -> {
-                    if (roleProject.getName().equals(role)) {
+                listMemberProject.forEach(memberProject -> {
+                    if (memberProject.getMemberId().equals(member.getMemberId())) {
                         RoleMemberProject roleMemberProject = new RoleMemberProject();
-                        roleMemberProject.setRoleProjectId(roleProject.getId());
-                        listMemberProject.forEach(memberProject -> {
-                            if (member.getMemberId().equals(memberProject.getMemberId())) {
-                                roleMemberProject.setMemberProjectId(memberProject.getId());
-                            }
-                        });
+                        roleMemberProject.setMemberProjectId(memberProject.getId());
+                        roleMemberProject.setRoleProjectId(role.getIdRole());
                         newRoleMemberProject.add(roleMemberProject);
                     }
                 });
-
             });
         });
         adPotalsRoleMemberProjectRepository.saveAll(newRoleMemberProject);
+
+        if (listMemberProject.size() > listMember.size()) {
+            List<MemberProject> listMemberProjectDeleteAll = listMemberProject.stream()
+                    .filter(member1 -> listMember.stream().noneMatch(member2 -> member1.getMemberId().equals(member2.getMemberId())))
+                    .collect(Collectors.toList());
+            adMemberProjectRepository.deleteAll(listMemberProjectDeleteAll);
+        }
         Optional<AdProjectReponse> projectView = adProjectRepository.findOneProjectById(newProject.getId());
         return projectView.get();
-
     }
 
     private Optional<AdMemberAndRoleProjectCustomResponse> findMemberRoleByMemberId(
             List<AdMemberAndRoleProjectCustomResponse> listMemberRole, String memberId) {
         Optional<AdMemberAndRoleProjectCustomResponse> obj = listMemberRole.stream()
                 .filter(i -> i.getMemberId().equals(memberId) && !memberId.equals(""))
-                .findFirst();
-        return obj;
-    }
-
-    private Optional<AdMemberRoleBaseResponse> findMemberRoleProjByIdRoleProj(
-            List<AdMemberRoleBaseResponse> listRole, String idRoleProj) {
-        Optional<AdMemberRoleBaseResponse> obj = listRole.stream()
-                .filter(i -> i.getIdRole().equals(idRoleProj))
                 .findFirst();
         return obj;
     }
@@ -410,40 +388,8 @@ public class AdProjectServiceImpl implements AdProjectService {
         objReturn.setDescriptions(project.getDescriptions());
         objReturn.setListMemberRole(listMemberRole);
         objReturn.setListCategory(listProjectCategory);
+        objReturn.setGroupProjectId(project.getGroupProjectId());
         return objReturn;
-    }
-
-    @Override
-    public PageableObject<AdProjectReponse> searchProject(final AdFindProjectRequest rep) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date startTime = null;
-        Date endTime = null;
-        if (rep.getStartTime() != null && !rep.getStartTime().equals("null")
-                && !rep.getStartTime().equals("undefined") && !rep.getStartTime().contains("Invalid")) {
-            try {
-                startTime = sdf.parse(rep.getStartTime());
-            } catch (ParseException e) {
-                e.printStackTrace();
-                throw new RestApiException(Message.INVALID_DATE);
-            }
-            Long startTimeLong = startTime.getTime();
-            rep.setStartTimeLong(startTimeLong);
-        }
-        if (rep.getEndTime() != null && !rep.getEndTime().equals("null")
-                && !rep.getEndTime().equals("undefined") && !rep.getEndTime().contains("Invalid")) {
-            try {
-                endTime = sdf.parse(rep.getEndTime());
-            } catch (ParseException e) {
-                e.printStackTrace();
-                throw new RestApiException(Message.INVALID_DATE);
-            }
-            Long endTimeLong = endTime.getTime();
-            rep.setEndTimeLong(endTimeLong);
-        }
-        Pageable pageable = PageRequest.of(rep.getPage() - 1, rep.getSize());
-        Page<AdProjectReponse> reponses = adProjectRepository.findProjectPage(rep, pageable);
-        listProject = reponses.stream().toList();
-        return new PageableObject<>(reponses);
     }
 
     @Override

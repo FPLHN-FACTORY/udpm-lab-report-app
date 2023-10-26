@@ -195,96 +195,108 @@ const StudentSchedule = () => {
   };
 
   return (
-    <div className="shedule" style={{ paddingTop: "50px" }}>
+    <>
       {loading && <LoadingIndicator />}
-      <div className="title_activity_management">
-        {" "}
-        <FontAwesomeIcon icon={faCalendarAlt} size="1x" />
-        <span style={{ marginLeft: "10px" }}>Lịch học</span>
-      </div>
-      <div className="filter-semester">
-        <FontAwesomeIcon icon={faFilter} style={{ fontSize: "20px" }} />{" "}
-        <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
-        <hr />
-        <div className="title__search">
-          Thời gian:{" "}
-          <Select
-            style={{ width: "300px", marginLeft: "5px", textAlign: "left" }}
-            value={searchTime}
-            onChange={handleOptionChange}
-          >
-            <Option value="7">7 ngày tới</Option>
-            <Option value="14">14 ngày tới</Option>
-            <Option value="30">30 ngày tới</Option>
-            <Option value="60">60 ngày tới</Option>
-            <Option value="90">90 ngày tới</Option>
-            <Option value="-7">7 ngày trước</Option>
-            <Option value="-14">14 ngày trước</Option>
-            <Option value="-30">30 ngày trước</Option>
-            <Option value="-60">60 ngày trước</Option>
-            <Option value="-90">90 ngày trước</Option>
-          </Select>
-        </div>
-        <div className="box_btn_filter_st">
-          <Button
-            className="btn_filter"
-            onClick={buttonSearch}
-            style={{ marginRight: "15px" }}
-          >
-            <FontAwesomeIcon
-              icon={faFilterCircleDollar}
-              style={{ marginRight: "5px" }}
-            />{" "}
-            Tìm kiếm
-          </Button>
-          <Button
-            className="btn_clear"
-            style={{ backgroundColor: "rgb(38, 144, 214)" }}
-            onClick={clearData}
-          >
-            <FontAwesomeIcon
-              icon={faChainSlash}
-              style={{ marginRight: "5px" }}
-            />{" "}
-            Làm mới bộ lọc
-          </Button>
-        </div>
-      </div>
-      <div
-        className="table__category_custom"
-        style={{ marginTop: "30px", padding: "20px" }}
-      >
-        <div className="tittle__category">
-          <div>
+      <div className="box-one">
+        <div
+          className="heading-box"
+          style={{ fontSize: "18px", paddingLeft: "20px" }}
+        >
+          <span style={{ fontSize: "20px", fontWeight: "500" }}>
             {" "}
-            {<FontAwesomeIcon icon={faCalendarAlt} style={{ fontSize: 20 }} />}
-            <span style={{ fontSize: "18px", fontWeight: "500" }}>
-              {" "}
-              Lịch học
-            </span>
+            <FontAwesomeIcon icon={faCalendarAlt} size="1x" />
+            <span style={{ marginLeft: "10px" }}>Lịch học</span>
+          </span>
+        </div>
+      </div>
+      <div className="shedule" style={{ paddingTop: "5px" }}>
+        <div className="title_activity_management"></div>
+        <div className="filter-semester">
+          <FontAwesomeIcon icon={faFilter} style={{ fontSize: "20px" }} />{" "}
+          <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
+          <hr />
+          <div className="title__search">
+            Thời gian:{" "}
+            <Select
+              style={{ width: "300px", marginLeft: "5px", textAlign: "left" }}
+              value={searchTime}
+              onChange={handleOptionChange}
+            >
+              <Option value="7">7 ngày tới</Option>
+              <Option value="14">14 ngày tới</Option>
+              <Option value="30">30 ngày tới</Option>
+              <Option value="60">60 ngày tới</Option>
+              <Option value="90">90 ngày tới</Option>
+              <Option value="-7">7 ngày trước</Option>
+              <Option value="-14">14 ngày trước</Option>
+              <Option value="-30">30 ngày trước</Option>
+              <Option value="-60">60 ngày trước</Option>
+              <Option value="-90">90 ngày trước</Option>
+            </Select>
+          </div>
+          <div className="box_btn_filter_st">
+            <Button
+              className="btn_filter"
+              onClick={buttonSearch}
+              style={{ marginRight: "15px" }}
+            >
+              <FontAwesomeIcon
+                icon={faFilterCircleDollar}
+                style={{ marginRight: "5px" }}
+              />{" "}
+              Tìm kiếm
+            </Button>
+            <Button
+              className="btn_clear"
+              style={{ backgroundColor: "rgb(38, 144, 214)" }}
+              onClick={clearData}
+            >
+              <FontAwesomeIcon
+                icon={faChainSlash}
+                style={{ marginRight: "5px" }}
+              />{" "}
+              Làm mới bộ lọc
+            </Button>
           </div>
         </div>
-        <br />
-        <div>
-          <Table
-            dataSource={data}
-            rowKey="id"
-            columns={columns}
-            pagination={false}
-          />
-          <div className="pagination_box">
-            <Pagination
-              simple
-              current={current}
-              onChange={(page) => {
-                setCurrent(page);
-              }}
-              total={total * 10}
+        <div
+          className="table__category_custom"
+          style={{ marginTop: "30px", padding: "20px" }}
+        >
+          <div className="tittle__category">
+            <div>
+              <FontAwesomeIcon
+                icon={faCalendarAlt}
+                style={{ fontSize: "20px" }}
+              />
+              <span style={{ fontSize: "18px", fontWeight: "500" }}>
+                {" "}
+                Lịch học
+              </span>
+            </div>
+          </div>
+          <br />
+          <div>
+            <Table
+              dataSource={data}
+              rowKey="id"
+              columns={columns}
+              pagination={false}
             />
+            <div className="pagination_box">
+              <Pagination
+                simple
+                current={current}
+                onChange={(page) => {
+                  setCurrent(page);
+                }}
+                total={total * 10}
+              />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
