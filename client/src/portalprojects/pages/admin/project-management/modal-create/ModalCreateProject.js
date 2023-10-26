@@ -7,7 +7,6 @@ import {
   Button,
   Select,
   Space,
-  Image,
   Tooltip,
   Table,
   message,
@@ -26,6 +25,7 @@ import { AdPotalsRoleConfigAPI } from "../../../../api/admin/role-config/AdPotal
 import { AdPotalsMemberFactoryAPI } from "../../../../api/admin/member-factory/AdPotalsMemberFactory.api";
 import { GetCategory } from "../../../../app/reducer/admin/category-management/adCategorySlice.reducer";
 import { AdGroupProjectAPI } from "../../../../../labreportapp/api/admin/AdGroupProjectAPI";
+import Image from "../../../../helper/img/Image";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 const { TextArea } = Input;
@@ -290,20 +290,13 @@ const ModalCreateProject = ({ visible, onCancel }) => {
       sorter: (a, b) => a.name.localeCompare(b.name),
       render: (text, record) => {
         return (
-          <div>
-            <Image.PreviewGroup>
-              <Image
-                src={
-                  record.picture === "Images/Default.png"
-                    ? "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-                    : record.picture
-                }
-                alt="Avatar"
-                width={25}
-                height={25}
-                className="avatarMember"
-              />
-            </Image.PreviewGroup>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <Image
+              url={record.picture}
+              picxel={25}
+              marginRight={8}
+              name={record.name}
+            />
             <span style={{ paddingLeft: "8px" }}>{record.name}</span>
           </div>
         );
@@ -547,28 +540,22 @@ const ModalCreateProject = ({ visible, onCancel }) => {
                     key={member.id}
                   >
                     <Tooltip title={member.email}>
-                      <Space>
-                        <Image.PreviewGroup>
-                          <Image
-                            src={
-                              member.picture === "Images/Default.png"
-                                ? "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-                                : member.picture
-                            }
-                            alt="Avatar"
-                            width={25}
-                            height={25}
-                            className="avatarMember"
-                          />
-                        </Image.PreviewGroup>
-                        {member.name +
-                          " " +
-                          member.userName +
-                          " (" +
-                          member.email +
-                          ")"}
-                        {}
-                      </Space>
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        <Image
+                          url={member.picture}
+                          picxel={25}
+                          marginRight={8}
+                          name={member.name}
+                        />
+                        <span>
+                          {member.name +
+                            " " +
+                            member.userName +
+                            " (" +
+                            member.email +
+                            ")"}
+                        </span>
+                      </div>
                     </Tooltip>
                   </Option>
                 ))}{" "}

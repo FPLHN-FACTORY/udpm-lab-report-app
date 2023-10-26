@@ -34,4 +34,14 @@ public interface MeProjectResponse extends IsIdentified {
 
     @Value("#{target.background_color}")
     String getBackgroundColor();
+
+    @Value("#{target.name_group_project}")
+    String getNameGroupProject();
+
+    @Value("#{target.id_group_project}")
+    String getGroupProjectId();
+
+    @Value("#{target.type_project}")
+    Integer getTypeProject();
+
 }

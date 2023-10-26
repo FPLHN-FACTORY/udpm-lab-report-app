@@ -1,10 +1,37 @@
 .box-dash-board {
-  margin: 15px 10px 15px 13px;
+  margin: 25px 25px 25px 23px;
   background-color: rgb(255, 255, 255);
   width: 98%;
   height: auto;
   border-radius: 5px;
   padding: 20px;
+  box-shadow: 0px 0px 20px 1px rgba(148, 148, 148, 0.3);
+  border-radius: 5px;
+}
+
+.box-four-dashboad {
+  box-shadow: 0px 0px 20px 1px rgba(148, 148, 148, 0.3);
+  border-radius: 5px;
+  margin: 25px;
+}
+.box-four-son-dashboad {
+  background-color: rgb(255, 255, 255);
+  padding: 20px;
+  height: auto;
+  box-shadow: 0px 0px 20px 1px rgba(148, 148, 148, 0.3);
+  border-radius: 5px;
+}
+.box-three-dashboad {
+  box-shadow: 0px 0px 20px 1px rgba(148, 148, 148, 0.3);
+  border-radius: 5px;
+  height: auto;
+  margin: 25px;
+}
+
+.box-three-son-dashboad {
+  background-color: rgb(255, 255, 255);
+  padding: 10px;
+  height: auto;
   box-shadow: 0px 0px 20px 1px rgba(148, 148, 148, 0.3);
   border-radius: 5px;
 }

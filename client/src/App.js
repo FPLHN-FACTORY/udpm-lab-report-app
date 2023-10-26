@@ -83,6 +83,7 @@ import TeMemberFactory from "./labreportapp/pages/teacher/member-factory/TeMembe
 import TeTeamFactory from "./labreportapp/pages/teacher/team-factory/TeTeamFactory";
 import StTeamFactory from "./labreportapp/pages/student/team-factory/StTeamFactory";
 import StMemberFactory from "./labreportapp/pages/student/member-factory/StMemberFactory";
+import AdProjectStatistics from "./labreportapp/pages/admin/project-statistics/AdProjectStatistics";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -302,6 +303,16 @@ function App() {
                 <AuthGuard>
                   <DashBoardAdmin>
                     <AdminTrackActivityMetrics />
+                  </DashBoardAdmin>
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/admin/project-statistics"
+              element={
+                <AuthGuard>
+                  <DashBoardAdmin>
+                    <AdProjectStatistics />
                   </DashBoardAdmin>
                 </AuthGuard>
               }

@@ -582,7 +582,7 @@ const TeacherMyClass = () => {
               </>
             ) : (
               <Empty
-                imageStyle={{ height: 60 }}
+                imageStyle={{ height: "60px" }}
                 description={<span>Không có lớp học</span>}
               />
             )}

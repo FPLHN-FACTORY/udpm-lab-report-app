@@ -361,8 +361,11 @@ const StRegisterClass = () => {
   return (
     <>
       {loading && <LoadingIndicator />}
-      <div className="box-general" style={{ paddingTop: 50 }}>
-        <div className="heading-box">
+      <div className="box-one">
+        <div
+          className="heading-box"
+          style={{ fontSize: "18px", paddingLeft: "20px" }}
+        >
           <span style={{ fontSize: "20px", fontWeight: "500" }}>
             <FontAwesomeIcon
               icon={faRegistered}
@@ -371,6 +374,8 @@ const StRegisterClass = () => {
             Đăng ký lớp học
           </span>
         </div>
+      </div>
+      <div className="box-general" style={{ paddingTop: "5px" }}>
         <div className="filter_register">
           <FontAwesomeIcon icon={faFilter} style={{ fontSize: "18px" }} />{" "}
           <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>

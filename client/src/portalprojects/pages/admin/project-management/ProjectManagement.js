@@ -458,49 +458,12 @@ const ProjectManagement = () => {
               }}
               style={{
                 width: "100%",
-                fontSize: "13px",
               }}
             >
-              <Option
-                value=""
-                style={{
-                  backgroundColor: "#DB6C6C",
-                  fontSize: "13px",
-                  color: "white",
-                }}
-              >
-                Tất cả
-              </Option>
-              <Option
-                value="0"
-                style={{
-                  backgroundColor: "rgb(45, 211, 86)",
-                  fontSize: "13px",
-                  color: "white",
-                }}
-              >
-                Đã diễn ra
-              </Option>
-              <Option
-                value="1"
-                style={{
-                  backgroundColor: "rgb(41, 157, 224)",
-                  fontSize: "13px",
-                  color: "white",
-                }}
-              >
-                Đang diễn ra
-              </Option>
-              <Option
-                value="2"
-                style={{
-                  backgroundColor: "rgb(238, 162, 48)",
-                  fontSize: "13px",
-                  color: "white",
-                }}
-              >
-                Chưa diễn ra
-              </Option>
+              <Option value="">Tất cả</Option>
+              <Option value="0">Đã diễn ra</Option>
+              <Option value="1">Đang diễn ra</Option>
+              <Option value="2">Chưa diễn ra</Option>
             </Select>
           </Col>
           <Col span={8}>

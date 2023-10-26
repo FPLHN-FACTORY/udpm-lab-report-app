@@ -1,14 +1,4 @@
-import {
-  Modal,
-  Row,
-  Col,
-  Input,
-  Table,
-  Image,
-  Spin,
-  Select,
-  DatePicker,
-} from "antd";
+import { Modal, Row, Col, Input, Table, Spin, Select, DatePicker } from "antd";
 import "./styleModalDetailProject.css";
 import { useEffect, useState } from "react";
 import { ProjectManagementAPI } from "../../../../api/admin/project-management/projectManagement.api";
@@ -16,6 +6,7 @@ import { MemberProjectManagementAPI } from "../../../../api/admin/project-manage
 import { CategoryProjectManagementAPI } from "../../../../api/admin/project-management/categoryProjectManagement.api";
 import dayjs from "dayjs";
 import { AdGroupProjectAPI } from "../../../../../labreportapp/api/admin/AdGroupProjectAPI";
+import Image from "../../../../helper/img/Image";
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
@@ -104,21 +95,13 @@ const ModalDetailProject = ({ visible, onCancel, idProject }) => {
       sorter: (a, b) => a.name.localeCompare(b.name),
       render: (text, record) => {
         return (
-          <div>
-            <Image.PreviewGroup>
-              <Image
-                src={
-                  record.picture === "Images/Default.png"
-                    ? "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-                    : record.picture
-                }
-                alt="Avatar"
-                width={25}
-                height={25}
-                marginRight={-5}
-                className="avatarMember"
-              />
-            </Image.PreviewGroup>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <Image
+              url={record.picture}
+              picxel={25}
+              marginRight={8}
+              name={record.name}
+            />
             <span style={{ paddingLeft: "8px" }}>{record.name}</span>
           </div>
         );

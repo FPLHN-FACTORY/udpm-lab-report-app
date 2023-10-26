@@ -19,17 +19,20 @@ import com.labreportapp.labreport.core.teacher.repository.TeProjectRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeRoleConfigReposiotry;
 import com.labreportapp.labreport.core.teacher.repository.TeRoleMemberProjectRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeRoleProjectRepository;
+import com.labreportapp.labreport.core.teacher.repository.TeSemesterRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeStudentClassesRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeTeamsRepositoty;
 import com.labreportapp.labreport.core.teacher.service.TeStudentClassesService;
 import com.labreportapp.labreport.core.teacher.service.TeTeamsService;
 import com.labreportapp.labreport.entity.Class;
+import com.labreportapp.labreport.entity.Semester;
 import com.labreportapp.labreport.entity.StudentClasses;
 import com.labreportapp.labreport.entity.Team;
 import com.labreportapp.labreport.infrastructure.constant.RoleDefault;
 import com.labreportapp.labreport.infrastructure.constant.RoleTeam;
 import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.labreport.util.RandomString;
+import com.labreportapp.labreport.util.SemesterHelper;
 import com.labreportapp.portalprojects.entity.Label;
 import com.labreportapp.portalprojects.entity.LabelProject;
 import com.labreportapp.portalprojects.entity.MemberProject;
@@ -122,6 +125,12 @@ public class TeTeamsServiceImpl implements TeTeamsService {
 
     @Autowired
     private TeRoleMemberProjectRepository teRoleMemberProjectRepository;
+
+    @Autowired
+    private SemesterHelper semesterHelper;
+
+    @Autowired
+    private TeSemesterRepository teSemesterRepository;
 
     @Override
     public List<TeTeamsRespone> getAllTeams(final TeFindStudentClasses teFindStudentClasses) {
@@ -235,7 +244,6 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         return teTeamsRepositoty.save(team);
     }
 
-
     @Override
     @Transactional
     @CacheEvict(value = {"membersByProject"}, allEntries = true)
@@ -244,12 +252,20 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         if (!team.isPresent()) {
             throw new RestApiException(Message.TEAM_NOT_EXISTS);
         }
+        String idSemesterCurrent = semesterHelper.getSemesterCurrent();
         Team teamUp = team.get();
         Project project = new Project();
+        if (idSemesterCurrent != null) {
+            Optional<Semester> semesterCurrent = teSemesterRepository.findById(idSemesterCurrent);
+            if (semesterCurrent.isPresent()) {
+                project.setEndTime(DateUtils.truncate(new Date(semesterCurrent.get().getEndTime()), Calendar.DATE).getTime());
+            } else {
+                project.setEndTime(DateUtils.truncate(new Date(), Calendar.DATE).getTime() + 90L * 86400000);
+            }
+        }
         project.setCode("Project_" + RandomString.random());
         project.setName("Dự án " + RandomString.random());
         project.setStartTime(DateUtils.truncate(new Date(), Calendar.DATE).getTime());
-        project.setEndTime(DateUtils.truncate(new Date(), Calendar.DATE).getTime() + 90L * 86400000);
         project.setDescriptions(teamUp.getSubjectName());
         project.setProgress(0F);
         project.setStatusProject(StatusProject.DANG_DIEN_RA);

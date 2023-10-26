@@ -138,121 +138,133 @@ const StAttendance = () => {
     },
   ];
   return (
-    <div className="box-general" style={{ paddingTop: 50 }}>
+    <>
       {isLoading && <LoadingIndicator />}
-      <div className="heading-box">
-        <span style={{ fontSize: "20px", fontWeight: "500" }}>
-          <FontAwesomeIcon icon={faAtlas} style={{ marginRight: "8px" }} /> Điểm
-          danh
-        </span>
-      </div>
-      <div className="filter-semester">
-        <div className="wrapper-filter">
-          <span style={{ marginLeft: "3px" }}>Học kỳ</span>
-          <div className="select-semester" style={{ marginTop: "5px" }}>
-            <Select
-              showSearch
-              style={{
-                width: "100%",
-                margin: "6px 0 10px 0",
-              }}
-              onChange={(e) => {
-                handleChangeSemester(e);
-              }}
-              value={semester}
-            >
-              <Option value="">Chọn học kỳ</Option>
-              {listSemester.length > 0 &&
-                listSemester.map((item) => (
-                  <Option value={item.id} key={item.id}>
-                    {item.name}
-                  </Option>
-                ))}
-            </Select>
-          </div>
-          <span style={{ marginLeft: "3px", fontSize: "13.5px" }}>
-            Lựa chọn học kỳ để hiện thị chi tiết điểm danh
+
+      <div className="box-one">
+        <div
+          className="heading-box"
+          style={{ fontSize: "18px", paddingLeft: "20px" }}
+        >
+          <span style={{ fontSize: "20px", fontWeight: "500" }}>
+            <FontAwesomeIcon icon={faAtlas} style={{ marginRight: "8px" }} />{" "}
+            Điểm danh
           </span>
         </div>
       </div>
-      {listClass.map((item, index) => {
-        return (
-          <>
-            <div className="table-attendence">
-              <div
-                className="header"
+      <div className="box-general" style={{ paddingTop: "5px" }}>
+        <div className="filter-semester">
+          <div className="wrapper-filter">
+            <span style={{ marginLeft: "3px" }}>Học kỳ</span>
+            <div className="select-semester" style={{ marginTop: "5px" }}>
+              <Select
+                showSearch
                 style={{
-                  padding: "10px",
-                  fontSize: "18px",
-                  fontWeight: "500",
-                  display: "flex",
+                  width: "100%",
+                  margin: "6px 0 10px 0",
                 }}
+                onChange={(e) => {
+                  handleChangeSemester(e);
+                }}
+                value={semester}
               >
-                <span className="header-icon">
-                  <FontAwesomeIcon icon={faSchool} />
-                </span>
-                <span className="header-title" style={{ marginLeft: "12px" }}>
-                  Lớp {item.classCode}
-                </span>
-                <span
-                  className="header-absent"
+                <Option value="">Chọn học kỳ</Option>
+                {listSemester.length > 0 &&
+                  listSemester.map((item) => (
+                    <Option value={item.id} key={item.id}>
+                      {item.name}
+                    </Option>
+                  ))}
+              </Select>
+            </div>
+            <span style={{ marginLeft: "3px", fontSize: "13.5px" }}>
+              Lựa chọn học kỳ để hiện thị chi tiết điểm danh
+            </span>
+          </div>
+        </div>
+        {listClass.map((item, index) => {
+          return (
+            <>
+              <div
+                className="table-attendence"
+                style={{ minHeight: "410px", height: "auto" }}
+              >
+                <div
+                  className="header"
                   style={{
-                    marginLeft: "15px",
-                    color: "red",
-                    fontSize: "16.5px",
+                    padding: "10px",
+                    fontSize: "18px",
                     fontWeight: "500",
+                    display: "flex",
                   }}
                 >
-                  (Vắng: {item.attendences.filter((i) => i.status === 1).length}
-                  /{item.attendences.length})
-                </span>
+                  <span className="header-icon">
+                    <FontAwesomeIcon icon={faSchool} />
+                  </span>
+                  <span className="header-title" style={{ marginLeft: "12px" }}>
+                    Lớp {item.classCode}
+                  </span>
+                  <span
+                    className="header-absent"
+                    style={{
+                      marginLeft: "15px",
+                      color: "red",
+                      fontSize: "16.5px",
+                      fontWeight: "500",
+                    }}
+                  >
+                    (Vắng:{" "}
+                    {item.attendences.filter((i) => i.status === 1).length}/
+                    {item.attendences.length})
+                  </span>
+                </div>
+                <div
+                  style={{ borderBottom: "1px solid #ddd", marginTop: "10px" }}
+                ></div>
+                <div className="" style={{ marginTop: "30px" }}>
+                  <Table
+                    dataSource={item.attendences}
+                    columns={columns}
+                    pagination={{ pageSize: 8 }}
+                    locale={{
+                      emptyText: (
+                        <Empty
+                          imageStyle={{ height: 60 }}
+                          style={{
+                            padding: "20px 0px 20px 0",
+                          }}
+                          description={<span>Không có dữ liệu</span>}
+                        />
+                      ),
+                    }}
+                  />
+                </div>
               </div>
-              <div
-                style={{ borderBottom: "1px solid #ddd", marginTop: "10px" }}
-              ></div>
-              <div className="" style={{ marginTop: "30px" }}>
-                <Table
-                  dataSource={item.attendences}
-                  columns={columns}
-                  pagination={{ pageSize: 8 }}
-                  locale={{
-                    emptyText: (
-                      <Empty
-                        imageStyle={{ height: 60 }}
-                        style={{
-                          padding: "20px 0px 20px 0",
-                        }}
-                        description={<span>Không có dữ liệu</span>}
-                      />
-                    ),
-                  }}
-                />
-              </div>
-            </div>
-          </>
-        );
-      })}
-      {listClass.length === 0 && (
-        <div
-          style={{
-            backgroundColor: "white",
-            borderRadius: "5px",
-            paddingTop: "10px",
-            paddingBottom: "30px",
-            marginTop: "25px",
-            boxShadow: "0px 0px 20px 1px rgba(148, 148, 148, 0.3)",
-            minHeight: "423px",
-          }}
-        >
-          <>
-            <Empty
-              imageStyle={{ height: 60 }}
-              description={" Không có dữ liệu"}
-            />
-          </>
-        </div>
-      )}
-    </div>
+            </>
+          );
+        })}
+        {listClass.length === 0 && (
+          <div
+            style={{
+              backgroundColor: "white",
+              borderRadius: "5px",
+              paddingTop: "10px",
+              paddingBottom: "30px",
+              marginTop: "25px",
+              boxShadow: "0px 0px 20px 1px rgba(148, 148, 148, 0.3)",
+              minHeight: "423px",
+            }}
+          >
+            <>
+              <Empty
+                imageStyle={{ height: 60 }}
+                description={" Không có dữ liệu"}
+              />
+            </>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

@@ -14,18 +14,35 @@ import org.springframework.data.repository.query.Param;
 public interface MeProjectRepository extends ProjectRepository {
 
     @Query(value = """
-            SELECT a.id, a.name, a.descriptions, a.start_time, a.end_time,a.status_project as status, a.progress, a.background_image, a.background_color
+            SELECT a.id, a.name, a.descriptions, a.start_time, a.end_time,a.status_project as status, a.progress,
+                a.background_image, a.background_color, a.type_project as type_project,
+                gp.name as name_group_project,
+                gp.id as id_group_project       
             FROM project a JOIN member_project b ON a.id = b.project_id 
+             LEFT JOIN group_project gp on gp.id = a.group_project_id
             WHERE b.member_id = :#{#req.idUser}
             AND (:#{#req.nameProject} IS NULL OR :#{#req.nameProject} LIKE '' OR a.name LIKE %:#{#req.nameProject}%)
             AND (:#{#req.status} IS NULL OR :#{#req.status} LIKE '' OR a.status_project = :#{#req.status})
+            AND 
+                ( :#{#req.groupProjectId} IS NULL 
+                OR :#{#req.groupProjectId} LIKE ''
+                OR :#{#req.groupProjectId} LIKE '0' AND a.group_project_id IS NULL
+                OR a.group_project_id LIKE :#{#req.groupProjectId}
+                )
             ORDER BY a.created_date DESC
             """, countQuery = """
             SELECT COUNT(1) 
             FROM project a JOIN member_project b ON a.id = b.project_id 
+             LEFT JOIN group_project gp on gp.id = a.group_project_id
             WHERE b.member_id = :#{#req.idUser}
             AND (:#{#req.nameProject} IS NULL OR :#{#req.nameProject} LIKE '' OR a.name LIKE %:#{#req.nameProject}%)
             AND (:#{#req.status} IS NULL OR :#{#req.status} LIKE '' OR a.status_project = :#{#req.status})
+            AND 
+                ( :#{#req.groupProjectId} IS NULL 
+                OR :#{#req.groupProjectId} LIKE ''
+                OR :#{#req.groupProjectId} LIKE '0' AND a.group_project_id IS NULL
+                OR a.group_project_id LIKE :#{#req.groupProjectId}
+                )
             ORDER BY a.created_date DESC
             """, nativeQuery = true)
     Page<MeProjectResponse> getAllProjectById(Pageable page, @Param("req") MeFindProjectRequest req);
