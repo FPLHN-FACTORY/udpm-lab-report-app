@@ -14,14 +14,18 @@ import com.labreportapp.labreport.core.student.model.response.StClassConfigurati
 import com.labreportapp.labreport.core.student.model.response.StClassResponse;
 import com.labreportapp.labreport.core.student.repository.StClassConfigurationRepository;
 import com.labreportapp.labreport.core.student.repository.StClassRepository;
+import com.labreportapp.labreport.entity.Class;
 import com.labreportapp.labreport.entity.StudentClasses;
-import com.labreportapp.labreport.infrastructure.apiconstant.ActorConstants;
 import com.labreportapp.labreport.infrastructure.constant.StatusStudentFeedBack;
 import com.labreportapp.labreport.infrastructure.constant.StatusTeam;
+import com.labreportapp.labreport.repository.ClassRepository;
 import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
+import com.labreportapp.portalprojects.infrastructure.constant.Message;
+import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Synchronized;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
@@ -40,6 +45,10 @@ public class AdStudentClassServiceImpl implements AdStudentClassService {
 
     @Autowired
     private AdStudentClassRepository adStudentClassRepository;
+
+    @Autowired
+    @Qualifier(ClassRepository.NAME)
+    private ClassRepository classRepository;
 
     @Autowired
     private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
@@ -128,18 +137,25 @@ public class AdStudentClassServiceImpl implements AdStudentClassService {
         ConcurrentHashMap<String, Boolean> mapStudentCurrent = this.studentClassesCurrent(idClass);
         StClassRequest stClassRequest = new StClassRequest();
         stClassRequest.setIdClass(idClass);
+        Optional<Class> classFind = classRepository.findById(idClass);
+        if (!classFind.isPresent()) {
+            throw new RestApiException(Message.CLASS_NOT_EXISTS);
+        }
         Optional<StClassResponse> conditionClass = stClassRepository.checkConditionCouldJoinOrLeaveClass(stClassRequest);
-
-        List<SimpleResponse> simpleResponse = convertRequestCallApiIdentity.
-                handleCallApiGetUserByRoleAndModule(ActorConstants.ACTOR_STUDENT);
-        Map<String, SimpleResponse> simpleMap = simpleResponse.stream()
-                .collect(Collectors.toMap(SimpleResponse::getEmail, Function.identity()));
-        StClassConfigurationResponse configuration = stClassConfigurationRepository.getClassConfiguration();
-        response.setStatus(true);
-        ConcurrentHashMap<String, Boolean> emailMap = new ConcurrentHashMap<>();
-
         try {
             List<AdImportExcelStudentClasses> listImport = adExcelImportService.importDataStudentClasses(multipartFile);
+            List<String> listEmail = listImport.stream()
+                    .map(AdImportExcelStudentClasses::getEmail)
+                    .filter(Objects::nonNull)
+                    .distinct()
+                    .collect(Collectors.toList());
+            List<SimpleResponse> simpleResponse = convertRequestCallApiIdentity.
+                    handleCallApiGetListUserByListEmail(listEmail);
+            Map<String, SimpleResponse> simpleMap = simpleResponse.stream()
+                    .collect(Collectors.toMap(SimpleResponse::getEmail, Function.identity()));
+            StClassConfigurationResponse configuration = stClassConfigurationRepository.getClassConfiguration();
+            response.setStatus(true);
+            ConcurrentHashMap<String, Boolean> emailMap = new ConcurrentHashMap<>();
             if (listImport.isEmpty()) {
                 response.setStatus(false);
                 response.setMessage("File excel không có dữ liệu!");
@@ -214,6 +230,9 @@ public class AdStudentClassServiceImpl implements AdStudentClassService {
             if (response.getStatus()) {
                 List<StudentClasses> students = new ArrayList<>(mapStudentsSheet.values());
                 adStudentClassRepository.saveAll(students);
+                Integer countStudentClasses = adStudentClassRepository.countStudentClassesByIdClass(idClass);
+                classFind.get().setClassSize(countStudentClasses);
+                classRepository.save(classFind.get());
             }
 
         } catch (Exception e) {

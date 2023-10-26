@@ -158,4 +158,9 @@ public interface AdMemberFactoryRepository extends MemberFactoryRepository {
             ORDER BY a.created_date DESC
             """, nativeQuery = true)
     List<AdExcelMemberFactoryResponse> getListMemberFactory(@Param("req") AdFindMemberFactoryRequest req);
+
+    @Query(value = """
+            SELECT DISTINCT a.email FROM member_factory a
+            """, nativeQuery = true)
+    List<String> getAllEmailMemberFactory();
 }

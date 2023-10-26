@@ -1,16 +1,19 @@
 package com.labreportapp.labreport.core.admin.service.impl;
 
 import com.labreportapp.labreport.core.admin.excel.AdExportExcelMemberFactory;
+import com.labreportapp.labreport.core.admin.excel.AdImportExcelMemberFactoryService;
 import com.labreportapp.labreport.core.admin.model.request.AdFindMemberFactoryRequest;
 import com.labreportapp.labreport.core.admin.model.request.AdUpdateMemberFactoryRequest;
 import com.labreportapp.labreport.core.admin.model.response.AdDetailMemberFactoryResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdExcelMemberFactoryCustom;
 import com.labreportapp.labreport.core.admin.model.response.AdExcelMemberFactoryResponse;
+import com.labreportapp.labreport.core.admin.model.response.AdImportExcelMemberFactoryResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdMemberFactoryCustom;
 import com.labreportapp.labreport.core.admin.model.response.AdMemberFactoryResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdRoleFactoryDefaultResponse;
 import com.labreportapp.labreport.core.admin.repository.AdMemberFactoryRepository;
 import com.labreportapp.labreport.core.admin.service.AdMemberFactoryService;
+import com.labreportapp.labreport.core.common.base.ImportExcelResponse;
 import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.core.common.base.SimpleEntityProjection;
 import com.labreportapp.labreport.core.common.response.SimpleResponse;
@@ -42,11 +45,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -296,4 +302,73 @@ public class AdMemberFactoryServiceImpl implements AdMemberFactoryService {
         });
         return adExportExcelMemberFactory.exportExcel(response, listCustom);
     }
+
+    @Override
+    public ImportExcelResponse importExcel(MultipartFile multipartFile) {
+        ImportExcelResponse response = new ImportExcelResponse();
+        try {
+            response.setStatus(true);
+            AdImportExcelMemberFactoryService adImportExcelClass = new AdImportExcelMemberFactoryService();
+            List<AdImportExcelMemberFactoryResponse> listMemberFactoryResponse = adImportExcelClass.importDataMemberFactory(multipartFile);
+            List<String> listEmail = listMemberFactoryResponse.stream()
+                    .map(AdImportExcelMemberFactoryResponse::getEmail)
+                    .filter(Objects::nonNull)
+                    .distinct()
+                    .collect(Collectors.toList());
+            List<SimpleResponse> listResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListEmail(listEmail);
+            Map<String, SimpleResponse> simpleMap = listResponse.stream()
+                    .collect(Collectors.toMap(SimpleResponse::getEmail, Function.identity()));
+            List<String> listEmailMemberFactory = adMemberFactoryRepository.getAllEmailMemberFactory();
+            listMemberFactoryResponse.parallelStream().forEach(memberFactory -> {
+                if (memberFactory.getEmail().isEmpty()) {
+                    response.setMessage("Email không được để trống");
+                    response.setStatus(false);
+                    return;
+                }
+                if (!memberFactory.getEmail().contains("@")) {
+                    response.setMessage("Email không đúng định dạng");
+                    response.setStatus(false);
+                    return;
+                }
+                SimpleResponse simpleResponse = simpleMap.get(memberFactory.getEmail());
+                if (simpleResponse == null) {
+                    response.setStatus(false);
+                    response.setMessage("Email sinh viên không tồn tại trong hệ thống!");
+                    return;
+                }
+                if (listEmailMemberFactory.contains(memberFactory.getEmail())) {
+                    response.setStatus(false);
+                    response.setMessage("Email " + memberFactory.getEmail() + " đã tồn tại trong danh sách thành viên xưởng");
+                    return;
+                }
+            });
+            if (response.getStatus()) {
+                List<MemberFactory> listMemberFactory = new ArrayList<>();
+                AdRoleFactoryDefaultResponse roleDefault = memberRoleFactoryRepository.findRoleDefault();
+                listResponse.forEach(res -> {
+                    MemberFactory memberFactory = new MemberFactory();
+                    memberFactory.setMemberId(res.getId());
+                    memberFactory.setEmail(res.getEmail());
+                    memberFactory.setStatusMemberFactory(StatusMemberFactory.HOAT_DONG);
+                    listMemberFactory.add(memberFactory);
+                });
+                List<MemberFactory> listMemberFactoryNew = adMemberFactoryRepository.saveAll(listMemberFactory);
+                List<MemberRoleFactory> listMemberRoleFactory = new ArrayList<>();
+                listMemberFactoryNew.forEach(newMF -> {
+                    MemberRoleFactory memberRoleFactory = new MemberRoleFactory();
+                    memberRoleFactory.setMemberFactoryId(newMF.getId());
+                    memberRoleFactory.setRoleFactoryId(roleDefault.getId());
+                    listMemberRoleFactory.add(memberRoleFactory);
+                });
+                memberRoleFactoryRepository.saveAll(listMemberRoleFactory);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            response.setMessage("Lỗi hệ thống");
+            response.setStatus(false);
+            return response;
+        }
+        return response;
+    }
+
 }

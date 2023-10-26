@@ -42,4 +42,9 @@ public interface AdStudentClassRepository extends StudentClassesRepository {
              """, nativeQuery = true)
     Optional<AdStudentClassesRespone> findStudentClassByIdStudent(@Param("idStudent") String id);
 
+    @Query(value = """
+            SELECT DISTINCT COUNT(a.id) FROM student_classes a WHERE a.class_id = :idClass
+             """, nativeQuery = true)
+    Integer countStudentClassesByIdClass(@Param("idClass") String idClass);
+
 }

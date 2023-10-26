@@ -70,4 +70,15 @@ export class AdMemberFactoryAPI {
       params: filter,
     });
   }
+
+  static importExcelMemberFactory(formData) {
+    return request({
+      method: "POST",
+      url: url + `/import-excel`,
+      data: formData,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  }
 }

@@ -8,6 +8,7 @@ import com.labreportapp.labreport.infrastructure.apiconstant.ApiConstants;
 import com.labreportapp.labreport.infrastructure.apiconstant.LabReportAppConstants;
 import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -33,9 +34,12 @@ public class ConvertRequestCallApiIdentity {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Value("${domain.identity}")
+    private String domain;
+
     public List<SimpleResponse> handleCallApiGetListUserByListId(List<String> listIdUser) {
         try {
-            String apiUrl = ApiConstants.API_GET_USER_BY_LIST_ID;
+            String apiUrl = domain + ApiConstants.API_GET_USER_BY_LIST_ID;
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
@@ -69,7 +73,7 @@ public class ConvertRequestCallApiIdentity {
 
     public List<SimpleResponse> handleCallApiGetUserByRoleAndModule(String roleCode) {
         try {
-            String apiUrl = ApiConstants.API_GET_ALL_USER_BY_ROLE_AND_MODULE;
+            String apiUrl = domain + ApiConstants.API_GET_ALL_USER_BY_ROLE_AND_MODULE;
 
             HttpHeaders headers = new HttpHeaders();
             String authorizationToken = "Bearer " + labReportAppSession.getToken();
@@ -92,7 +96,7 @@ public class ConvertRequestCallApiIdentity {
 
     public SimpleResponse handleCallApiGetUserById(String idUSer) {
         try {
-            String apiUrl = ApiConstants.API_GET_USER_BY_ID;
+            String apiUrl = domain + ApiConstants.API_GET_USER_BY_ID;
             HttpHeaders headers = new HttpHeaders();
             String authorizationToken = "Bearer " + labReportAppSession.getToken();
             headers.set("Authorization", authorizationToken);
@@ -113,7 +117,7 @@ public class ConvertRequestCallApiIdentity {
 
     public SimpleResponse handleCallApiGetUserByEmail(String email) {
         try {
-            String apiUrl = ApiConstants.API_GET_USER_BY_EMAIL;
+            String apiUrl = domain + ApiConstants.API_GET_USER_BY_EMAIL;
             HttpHeaders headers = new HttpHeaders();
             String authorizationToken = "Bearer " + labReportAppSession.getToken();
             headers.set("Authorization", authorizationToken);
@@ -132,9 +136,43 @@ public class ConvertRequestCallApiIdentity {
         }
     }
 
+    public List<SimpleResponse> handleCallApiGetListUserByListEmail(List<String> listEmail) {
+        try {
+            String apiUrl = domain + ApiConstants.API_GET_USER_BY_LIST_EMAIL;
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+
+            String authorizationToken = "Bearer " + labReportAppSession.getToken();
+            headers.set("Authorization", authorizationToken);
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonList = null;
+            try {
+                jsonList = objectMapper.writeValueAsString(listEmail);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+                return null;
+            }
+
+            HttpEntity<String> httpEntity = new HttpEntity<>(jsonList, headers);
+
+            ResponseEntity<List<SimpleResponse>> responseEntity =
+                    restTemplate.exchange(apiUrl, HttpMethod.POST, httpEntity,
+                            new ParameterizedTypeReference<List<SimpleResponse>>() {
+                            });
+
+            List<SimpleResponse> response = responseEntity.getBody();
+            return response;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public Object handleCallApiGetRoleUserByIdUserAndModuleCode(String idUSer) {
         try {
-            String apiUrl = ApiConstants.API_GET_ROLES_USER_BY_ID_USER_AND_MODULE_CODE;
+            String apiUrl = domain + ApiConstants.API_GET_ROLES_USER_BY_ID_USER_AND_MODULE_CODE;
             HttpHeaders headers = new HttpHeaders();
             String authorizationToken = "Bearer " + labReportAppSession.getToken();
             headers.set("Authorization", authorizationToken);

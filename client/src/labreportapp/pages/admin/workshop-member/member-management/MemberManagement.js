@@ -36,6 +36,7 @@ import useDebounce from "../../../../../portalprojects/custom-hook/useDebounce";
 import ModalAddMemberFactory from "./modal-add-member-factory/ModalAddMemberFactory";
 import ModalUpdateMemberFactory from "./modal-update-member-factory/ModalUpdateMemberFactory";
 import { convertLongToDate } from "../../../../helper/convertDate";
+import ModalImportExcelMemberFactory from "./modal-import-excel-member-factory/ModalImportExcelMemberFactory";
 
 const MemberManagement = () => {
   useEffect(() => {
@@ -177,6 +178,17 @@ const MemberManagement = () => {
     });
   };
 
+  const [visibleImportExcelMemberFactory, setVisibleImportExcelMemberFactory] =
+    useState(false);
+
+  const openModalImportExcelMemberFactory = (id) => {
+    setVisibleImportExcelMemberFactory(true);
+  };
+
+  const cancelModalImportExcelMemberFactory = () => {
+    setVisibleImportExcelMemberFactory(false);
+  };
+
   return (
     <>
       <div className="box-one">
@@ -240,6 +252,7 @@ const MemberManagement = () => {
                     color: "white",
                     marginRight: 5,
                   }}
+                  onClick={openModalImportExcelMemberFactory}
                 >
                   <FontAwesomeIcon icon={faUpload} style={{ marginRight: 5 }} />
                   Import
@@ -500,6 +513,11 @@ const MemberManagement = () => {
           id={idMemberFactorySelected}
           roles={roles}
           teams={teams}
+        />
+        <ModalImportExcelMemberFactory
+          visible={visibleImportExcelMemberFactory}
+          onCancel={cancelModalImportExcelMemberFactory}
+          fetchData={loadData}
         />
       </div>
     </>
