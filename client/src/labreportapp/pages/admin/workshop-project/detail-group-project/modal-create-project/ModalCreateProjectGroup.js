@@ -12,25 +12,26 @@ import {
   message,
   DatePicker,
 } from "antd";
-import "./styleModalCreateProject.css";
+import "./style-modal-create-project-group.css";
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
-import { useAppDispatch, useAppSelector } from "../../../../app/hook";
-import { ProjectManagementAPI } from "../../../../api/admin/project-management/projectManagement.api";
-import { CreateProject } from "../../../../app/reducer/admin/project-management/projectManagementSlide.reducer";
-import LoadingIndicator from "../../../../helper/loading";
+import { useAppDispatch } from "../../../../../app/hook";
+import { ProjectManagementAPI } from "../../../../../../portalprojects/api/admin/project-management/projectManagement.api";
+import LoadingIndicator from "../../../../../helper/loading";
 import { SearchOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
-import { AdPotalsRoleConfigAPI } from "../../../../api/admin/role-config/AdPotalsRoleConfig.api";
-import { AdPotalsMemberFactoryAPI } from "../../../../api/admin/member-factory/AdPotalsMemberFactory.api";
-import { GetCategory } from "../../../../app/reducer/admin/category-management/adCategorySlice.reducer";
-import { AdGroupProjectAPI } from "../../../../../labreportapp/api/admin/AdGroupProjectAPI";
-import Image from "../../../../helper/img/Image";
+import { AdPotalsRoleConfigAPI } from "../../../../../../portalprojects/api/admin/role-config/AdPotalsRoleConfig.api";
+import { AdPotalsMemberFactoryAPI } from "../../../../../../portalprojects/api/admin/member-factory/AdPotalsMemberFactory.api";
+import Image from "../../../../../helper/img/Image";
+import { CategoryProjectManagementAPI } from "../../../../../../portalprojects/api/admin/project-management/categoryProjectManagement.api";
+import { CreateAddProjectToAdDetailGroupProject } from "../../../../../app/admin/AdDetailGroupProjectSlice.reducer";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 const { TextArea } = Input;
 
-const ModalCreateProject = ({ visible, onCancel }) => {
+const ModalCreateProjectGroup = ({ visible, onCancel, nameGroup }) => {
+  const { id } = useParams();
   const [code, setCode] = useState("");
   const [errorCode, setErrorCode] = useState("");
   const [name, setName] = useState("");
@@ -45,13 +46,10 @@ const ModalCreateProject = ({ visible, onCancel }) => {
   const [listMembers, setListMembers] = useState([]);
   const [listMembersChange, setListMembersChange] = useState([]);
   const [listMemberProjects, setListMemberProjects] = useState([]);
-
+  const [listCategorys, setListCategorys] = useState([]);
   const [listRoleConfig, setListRoleConfig] = useState([]);
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
-  const [listGroupProject, setListGroupProject] = useState([]);
-  const [selectedGroupProject, setSelectedGroupProject] = useState(null);
-  const listCategorys = useAppSelector(GetCategory);
 
   const cancelSuccess = () => {
     onCancel.handleCancelModalCreateSusscess();
@@ -62,8 +60,8 @@ const ModalCreateProject = ({ visible, onCancel }) => {
 
   useEffect(() => {
     featchRoleConfig();
-    featDataGroupProject();
-    featChMultiSelect();
+    fetchDataCategory();
+    featchMemberFactory();
   }, []);
 
   useEffect(() => {
@@ -79,7 +77,6 @@ const ModalCreateProject = ({ visible, onCancel }) => {
         setErrorDescriptions("");
         setErrorTime("");
         setErrorName();
-        setSelectedGroupProject(null);
         setListCategorysChange([]);
         setListMembersChange([]);
         setListMemberProjects([]);
@@ -95,16 +92,10 @@ const ModalCreateProject = ({ visible, onCancel }) => {
     }
   }, [listCategorysChange, listMembersChange]);
 
-  const featDataGroupProject = async () => {
-    try {
-      await AdGroupProjectAPI.getAllGroupToProjectManagement().then(
-        (response) => {
-          setListGroupProject(response.data.data);
-        }
-      );
-    } catch (error) {
-      console.log(error);
-    }
+  const fetchDataCategory = async () => {
+    const responeGetAllCategory =
+      await CategoryProjectManagementAPI.fetchAllCategory();
+    setListCategorys(responeGetAllCategory.data.data);
   };
 
   const featchRoleConfig = async () => {
@@ -117,7 +108,7 @@ const ModalCreateProject = ({ visible, onCancel }) => {
     }
   };
 
-  const featChMultiSelect = async () => {
+  const featchMemberFactory = async () => {
     setLoading(true);
     try {
       await AdPotalsMemberFactoryAPI.getAllMemberActive().then((respone) => {
@@ -135,10 +126,6 @@ const ModalCreateProject = ({ visible, onCancel }) => {
 
   const handleChangeCategorys = (idCategory) => {
     setListCategorysChange(idCategory);
-  };
-
-  const handleChangeGroupProject = (value) => {
-    setSelectedGroupProject(value);
   };
 
   const handleRoleChange = (id, value) => {
@@ -244,7 +231,6 @@ const ModalCreateProject = ({ visible, onCancel }) => {
     if (checkRole > 0) {
       message.error("Vai trò của thành viên không được trống");
     }
-
     if (check === 0) {
       let projectNew = {
         code: code,
@@ -252,7 +238,7 @@ const ModalCreateProject = ({ visible, onCancel }) => {
         descriptions: descriptions,
         startTime: startTime,
         endTime: endTime,
-        groupProjectId: selectedGroupProject,
+        groupProjectId: id,
         listMembers: listMemberProjects,
         listCategorysId: listCategorysChange,
       };
@@ -260,7 +246,7 @@ const ModalCreateProject = ({ visible, onCancel }) => {
         (respone) => {
           message.success("Thêm thành công !");
           let data = respone.data.data;
-          dispatch(CreateProject(data));
+          dispatch(CreateAddProjectToAdDetailGroupProject(data));
           cancelSuccess();
         },
         (error) => {
@@ -387,7 +373,9 @@ const ModalCreateProject = ({ visible, onCancel }) => {
       >
         {" "}
         <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
-          <span style={{ fontSize: "18px" }}>Thêm dự án</span>
+          <span style={{ fontSize: "18px" }}>
+            Thêm dự án vào {nameGroup != null ? nameGroup : "nhóm dự án này"}
+          </span>
         </div>
         <div style={{ marginTop: "15px", borderBottom: "1px solid black" }}>
           <Row gutter={24} style={{ marginBottom: "10px" }}>
@@ -438,34 +426,6 @@ const ModalCreateProject = ({ visible, onCancel }) => {
               <span className="error">{errorTime}</span>
             </Col>
             <Col span={12}>
-              <span>Nhóm dự án:</span>
-              <Select
-                showSearch
-                style={{ width: "100%" }}
-                placeholder="Chọn thuộc nhóm dự án"
-                optionFilterProp="children"
-                filterOption={(input, option) =>
-                  (option?.label ?? "").includes(input)
-                }
-                filterSort={(optionA, optionB) =>
-                  (optionA?.label ?? "")
-                    .toLowerCase()
-                    .localeCompare((optionB?.label ?? "").toLowerCase())
-                }
-                value={selectedGroupProject}
-                onChange={(e) => handleChangeGroupProject(e)}
-                defaultValue={selectedGroupProject}
-                options={[
-                  { value: null, label: "Không trong nhóm dự án" },
-                  ...listGroupProject.map((i) => {
-                    return { value: i.id, label: i.name };
-                  }),
-                ]}
-              />
-            </Col>
-          </Row>
-          <Row gutter={24} style={{ marginBottom: "10px" }}>
-            <Col span={24}>
               <div style={{ width: "100%" }}>
                 {" "}
                 <span className="notBlank">(*) </span>
@@ -626,4 +586,4 @@ const ModalCreateProject = ({ visible, onCancel }) => {
   );
 };
 
-export default ModalCreateProject;
+export default ModalCreateProjectGroup;

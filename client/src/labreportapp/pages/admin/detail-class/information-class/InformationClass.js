@@ -13,7 +13,16 @@ import { SetTTrueToggle } from "../../../../app/admin/AdCollapsedSlice.reducer";
 import { useEffect, useState } from "react";
 import { ClassAPI } from "../../../../api/admin/class-manager/ClassAPI.api";
 import moment from "moment";
-import { Button, Empty, Input, Popconfirm, Spin, Table, Tag, message } from "antd";
+import {
+  Button,
+  Empty,
+  Input,
+  Popconfirm,
+  Spin,
+  Table,
+  Tag,
+  message,
+} from "antd";
 import LoadingIndicator from "../../../../helper/loading";
 import LoadingIndicatorNoOverlay from "../../../../helper/loadingNoOverlay";
 import { toast } from "react-toastify";
@@ -84,7 +93,7 @@ const InformationClass = () => {
   }, [isMoveStudent, isKickStudent]);
 
   let rowSelection = null;
-  if (classDetail.statusTeacherEdit === 0 && students.length > 0) {
+  if (students.length > 0) {
     if (isMoveStudent) {
       rowSelection = {
         renderCell: (checked, record, index, originNode) => {
@@ -787,67 +796,62 @@ const InformationClass = () => {
                     />{" "}
                     Tải mẫu
                   </Button>
-                  {classDetail.statusTeacherEdit === 0 ? (
+                  <Button
+                    onClick={() => {
+                      handleOpenModalClass();
+                    }}
+                    style={{
+                      backgroundColor: "rgb(38, 144, 214)",
+                      color: "white",
+                      marginRight: "5px",
+                    }}
+                  >
+                    <FontAwesomeIcon
+                      icon={faRightFromBracket}
+                      color="white"
+                      style={{ paddingRight: "5px" }}
+                    />
+                    {isMoveStudent === false
+                      ? "Trao đổi sinh viên"
+                      : "Chọn lớp cần chuyển"}
+                  </Button>
+                  <Popconfirm
+                    disabled={!isKickStudent}
+                    placement={"topRight"}
+                    description={
+                      "Bạn có chắc chắn muốn xóa những sinh viên này khỏi lớp không?"
+                    }
+                    okText="Có"
+                    cancelText="Không"
+                    onConfirm={() => {
+                      handleKickStudent();
+                    }}
+                  >
                     <Button
-                      onClick={() => {
-                        handleOpenModalClass();
-                      }}
+                      onClick={() => handleShowStudentsCouldKick()}
                       style={{
-                        backgroundColor: "rgb(38, 144, 214)",
                         color: "white",
+                        backgroundColor: "rgb(55, 137, 220)",
                         marginRight: "5px",
                       }}
                     >
                       <FontAwesomeIcon
-                        icon={faRightFromBracket}
-                        color="white"
-                        style={{ paddingRight: "5px" }}
-                      />
-                      {isMoveStudent === false
-                        ? "Trao đổi sinh viên"
-                        : "Chọn lớp cần chuyển"}
-                    </Button>
-                  ) : (
-                    ""
-                  )}
-
-                  {classDetail.statusTeacherEdit === 0 ? (
-                    <Popconfirm
-                      disabled={!isKickStudent}
-                      placement={"topRight"}
-                      description={
-                        "Bạn có chắc chắn muốn xóa những sinh viên này khỏi lớp không?"
-                      }
-                      okText="Có"
-                      cancelText="Không"
-                      onConfirm={() => {
-                        handleKickStudent();
-                      }}
-                    >
-                      <Button
-                        onClick={() => handleShowStudentsCouldKick()}
+                        icon={faDownload}
+                        size="1x"
                         style={{
-                          color: "white",
                           backgroundColor: "rgb(55, 137, 220)",
-                          marginRight: "5px",
+                          marginRight: "7px",
                         }}
-                      >
-                        <FontAwesomeIcon
-                          icon={faDownload}
-                          size="1x"
-                          style={{
-                            backgroundColor: "rgb(55, 137, 220)",
-                            marginRight: "7px",
-                          }}
-                        />{" "}
-                        {isKickStudent === false
-                          ? "Xóa sinh viên khỏi lớp"
-                          : "Xác nhận xóa"}
-                      </Button>
-                    </Popconfirm>
-                  ) : (
+                      />{" "}
+                      {isKickStudent === false
+                        ? "Xóa sinh viên khỏi lớp"
+                        : "Xác nhận xóa"}
+                    </Button>
+                  </Popconfirm>
+                  {/* )}  */}
+                  {/* : (
                     ""
-                  )}
+                  )} */}
                   <Button
                     onClick={() => {
                       if (!isKickStudent && !isMoveStudent) {
@@ -902,11 +906,11 @@ const InformationClass = () => {
                       }}
                     >
                       <Empty
-                        imageStyle={{ height: 60 }}
+                        imageStyle={{ height: "60px" }}
                         style={{
                           padding: "20px 0px 20px 0",
                         }}
-                        description={<span>Không có sinh viên nào !</span>}
+                        description={<span>Không có dữ liệu</span>}
                       />
                     </p>
                   </>

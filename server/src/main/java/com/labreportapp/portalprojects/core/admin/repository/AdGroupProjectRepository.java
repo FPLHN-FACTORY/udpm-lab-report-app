@@ -3,7 +3,6 @@ package com.labreportapp.portalprojects.core.admin.repository;
 import com.labreportapp.portalprojects.core.admin.model.request.AdFindGroupProjectRequest;
 import com.labreportapp.portalprojects.core.admin.model.response.AdDetailGroupProjectResponse;
 import com.labreportapp.portalprojects.core.admin.model.response.AdGroupProjectResponse;
-import com.labreportapp.portalprojects.entity.Project;
 import com.labreportapp.portalprojects.repository.GroupProjectRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author thangncph26123
