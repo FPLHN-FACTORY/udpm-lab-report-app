@@ -59,4 +59,12 @@ export class AdGroupProjectAPI {
       url: url + "/get-all",
     });
   }
+
+  static updateTitleGroupProject(data) {
+    return request({
+      method: "PUT",
+      url: url + "/title",
+      data: data,
+    });
+  }
 }

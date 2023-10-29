@@ -383,7 +383,6 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
       title: "Vai trò",
       dataIndex: "roleCustome",
       key: "roleCustome",
-
       render: (text, record) => (
         <Select
           mode="multiple"
@@ -398,7 +397,9 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
             value: item.id,
             label: item.name,
           }))}
-        />
+        >
+          {record.listRole.map((item) => item.idRole)}
+        </Select>
       ),
     },
   ];
@@ -555,8 +556,9 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
                 <span>Thành viên:</span>
                 {listMemberChange.length > 0 && (
                   <span style={{ color: "red" }}>
-                    {" "}
-                    (*) Vui lòng chọn vai trò khi đã thêm tất cả thành viên
+                    <i>
+                      (*) Vui lòng chọn vai trò khi đã thêm tất cả thành viên
+                    </i>
                   </span>
                 )}
                 <Select

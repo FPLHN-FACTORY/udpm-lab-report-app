@@ -138,13 +138,17 @@ public class AdProjectServiceImpl implements AdProjectService {
             throw new RestApiException(Message.TIME_NOT_NULL);
         }
         List<AdCreateMemberProjectRequest> listMember = request.getListMembers();
-        Project project = formUtils.convertToObject(Project.class, request);
+        Project project = new Project();
+        project.setCode(request.getCode().trim());
+        project.setName(request.getName().trim());
+        project.setDescriptions(!request.getDescriptions().equals("") ? request.getDescriptions().trim() : "");
+        project.setProgress(project.getProgress());
         project.setStartTime(DateUtils.truncate(new Date(request.getStartTime()), Calendar.DATE).getTime());
         project.setEndTime(DateUtils.truncate(new Date(request.getEndTime()), Calendar.DATE).getTime());
         project.setProgress(0F);
         project.setBackgroundColor("#59a1e3");
         project.setTypeProject(TypeProject.DU_AN_XUONG_DU_AN);
-        project.setDescriptions(request.getDescriptions());
+        project.setDescriptions(!request.getDescriptions().equals("") ? request.getDescriptions().trim() : "");
         Long currentTime = new Date().getTime();
         if (currentTime < request.getStartTime()) {
             project.setStatusProject(StatusProject.CHUA_DIEN_RA);
@@ -273,9 +277,9 @@ public class AdProjectServiceImpl implements AdProjectService {
         if (checkCodeProject != null && !project.getCode().equals(request.getCode())) {
             throw new RestApiException(Message.CODE_PROJECT_ALREADY_EXISTS);
         }
-        project.setCode(request.getCode());
-        project.setDescriptions(request.getDescriptions());
-        project.setName(request.getName());
+        project.setCode(request.getCode().trim());
+        project.setDescriptions(!request.getDescriptions().equals("") ? request.getDescriptions().trim() : "");
+        project.setName(request.getName().trim());
         project.setProgress(project.getProgress());
         project.setStartTime(DateUtils.truncate(new Date(request.getStartTime()), Calendar.DATE).getTime());
         project.setEndTime(DateUtils.truncate(new Date(request.getEndTime()), Calendar.DATE).getTime());

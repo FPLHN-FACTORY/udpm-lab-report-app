@@ -322,12 +322,12 @@ const ProjectManagement = () => {
       },
     },
     {
-      title: "Hành động",
+      title: <div style={{ textAlign: "center" }}>Hành động</div>,
       dataIndex: "actions",
       key: "actions",
       render: (text, record) => (
         <>
-          <div>
+          <div style={{ textAlign: "center" }}>
             <Tooltip title="Xem trello dự án">
               <Link
                 to={`/detail-project/${record.id}`}
@@ -336,7 +336,7 @@ const ProjectManagement = () => {
                 <FontAwesomeIcon
                   icon={faMattressPillow}
                   className="icon"
-                  style={{ width: "19px" }}
+                  style={{ paddingRight: "5px" }}
                 />
               </Link>
             </Tooltip>
@@ -344,7 +344,7 @@ const ProjectManagement = () => {
               <FontAwesomeIcon
                 icon={faEye}
                 className="icon"
-                style={{ paddingRight: "8px" }}
+                style={{ paddingRight: "5px" }}
                 onClick={() => {
                   handleDetailProject(record.id);
                 }}
@@ -379,217 +379,230 @@ const ProjectManagement = () => {
     }
   };
   return (
-    <div className="project_management">
-      {loading && <LoadingIndicator />}{" "}
-      <div className="title_project_management_box">
-        {" "}
-        <ProjectOutlined style={{ fontSize: "26px" }} />
-        <span style={{ marginLeft: "10px" }}>Quản lý dự án</span>
-      </div>
-      <div className="filter_project_management">
-        <FontAwesomeIcon icon={faFilter} style={{ fontSize: "26px" }} />{" "}
-        <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
-        <hr />
-        <Row gutter={24} style={{ marginBottom: "10px", paddingTop: "15px" }}>
-          <Col span={8}>
-            <span>Mã:</span>{" "}
-            <Input
-              type="text"
-              value={codeSearch}
-              onChange={(e) => {
-                setCodeSearch(e.target.value);
-              }}
-            />
-          </Col>
-          <Col span={8}>
-            <span>Tên:</span>
-            <Input
-              type="text"
-              value={nameSearch}
-              onChange={(e) => {
-                setNameSearch(e.target.value);
-              }}
-            />
-          </Col>
-          <Col span={8}>
-            <span>Thể loại:</span>
-            {""}
-            <Select
-              value={idCategorySearch}
-              onChange={(value) => {
-                setIdCategorySearch(value);
-              }}
-              style={{ width: "100%", marginRight: "10px" }}
-            >
-              <Option value="">Tất cả</Option>
-              {listCategorySearch.map((item) => {
-                return (
-                  <Option value={item.id} key={item.id}>
-                    {item.name}
-                  </Option>
-                );
-              })}
-            </Select>
-          </Col>
-        </Row>
-        <Row gutter={24} style={{ marginBottom: "10px" }}>
-          <Col span={8}>
-            <span>Thời gian:</span> <br />
-            <RangePicker
-              style={{ width: "100%" }}
-              format="YYYY-MM-DD"
-              value={[
-                startTimeSearch ? dayjs(startTimeSearch) : null,
-                endTimeSearch ? dayjs(endTimeSearch) : null,
-              ]}
-              onChange={(e) => {
-                handleDateChange(e);
-              }}
-              locale={viVN}
-            />
-          </Col>
-          <Col span={8}>
-            <span>Trạng thái:</span>
-            {""}
-            <Select
-              value={statusProjectSearch}
-              onChange={(value) => {
-                setStatusProjectSearch(value);
-              }}
-              style={{
-                width: "100%",
-              }}
-            >
-              <Option value="">Tất cả</Option>
-              <Option value="0">Đã diễn ra</Option>
-              <Option value="1">Đang diễn ra</Option>
-              <Option value="2">Chưa diễn ra</Option>
-            </Select>
-          </Col>
-          <Col span={8}>
-            <span>Nhóm dự án:</span>
-            <Select
-              showSearch
-              style={{ width: "100%" }}
-              placeholder="Chọn thuộc nhóm dự án"
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                (option?.label ?? "").includes(input)
-              }
-              filterSort={(optionA, optionB) =>
-                (optionA?.label ?? "")
-                  .toLowerCase()
-                  .localeCompare((optionB?.label ?? "").toLowerCase())
-              }
-              value={idGroupProjectSearch}
-              onChange={(e) => setIdGroupProjectSearch(e)}
-              defaultValue={""}
-              options={[
-                { value: "", label: "Tất cả" },
-                { value: "0", label: "Không có nhóm" },
-                ...listGroupProject.map((i) => {
-                  return { value: i.id, label: i.name };
-                }),
-              ]}
-            />
-          </Col>
-        </Row>
-        <div className="box-btn">
-          <Button
-            className="btn_filter"
-            onClick={handleFind}
-            style={{ marginRight: "15px", backgroundColor: "#E2B357" }}
-          >
-            <FontAwesomeIcon icon={faFilter} style={{ paddingRight: "5px" }} />{" "}
-            <span>Tìm kiếm</span>
-          </Button>
-          <Button className="btn_clean" onClick={handleClear}>
-            <FontAwesomeIcon
-              icon={faCodeCompare}
-              style={{ paddingRight: "5px" }}
-            />{" "}
-            <span>Làm mới bộ lọc</span>
-          </Button>
+    <>
+      {loading && <LoadingIndicator />}
+      <div className="box-one">
+        <div
+          className="heading-box"
+          style={{ fontSize: "18px", paddingLeft: "20px" }}
+        >
+          <span style={{ fontSize: "20px", fontWeight: "500" }}>
+            <ProjectOutlined style={{ fontSize: "26px" }} />
+            <span style={{ marginLeft: "10px" }}>Quản lý dự án</span>
+          </span>
         </div>
       </div>
-      <div className="table_project_management">
-        <div className="title_project_management">
-          <div>
-            {" "}
-            <span style={{ fontSize: "18px", fontWeight: "500" }}>
-              {" "}
-              <ProjectOutlined
-                style={{ marginRight: "7px", fontSize: "26px" }}
+      <div className="project_management" style={{ margin: "0" }}>
+        <div className="filter_project_management">
+          <FontAwesomeIcon icon={faFilter} style={{ fontSize: "26px" }} />{" "}
+          <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
+          <hr />
+          <Row gutter={24} style={{ marginBottom: "10px", paddingTop: "15px" }}>
+            <Col span={8}>
+              <span>Mã:</span>{" "}
+              <Input
+                type="text"
+                value={codeSearch}
+                onChange={(e) => {
+                  setCodeSearch(e.target.value);
+                }}
               />
-              Danh sách dự án
-            </span>
-          </div>
-          <div>
+            </Col>
+            <Col span={8}>
+              <span>Tên:</span>
+              <Input
+                type="text"
+                value={nameSearch}
+                onChange={(e) => {
+                  setNameSearch(e.target.value);
+                }}
+              />
+            </Col>
+            <Col span={8}>
+              <span>Thể loại:</span>
+              {""}
+              <Select
+                value={idCategorySearch}
+                onChange={(value) => {
+                  setIdCategorySearch(value);
+                }}
+                style={{ width: "100%", marginRight: "10px" }}
+              >
+                <Option value="">Tất cả</Option>
+                {listCategorySearch.map((item) => {
+                  return (
+                    <Option value={item.id} key={item.id}>
+                      {item.name}
+                    </Option>
+                  );
+                })}
+              </Select>
+            </Col>
+          </Row>
+          <Row gutter={24} style={{ marginBottom: "10px" }}>
+            <Col span={8}>
+              <span>Thời gian:</span> <br />
+              <RangePicker
+                style={{ width: "100%" }}
+                format="YYYY-MM-DD"
+                value={[
+                  startTimeSearch ? dayjs(startTimeSearch) : null,
+                  endTimeSearch ? dayjs(endTimeSearch) : null,
+                ]}
+                onChange={(e) => {
+                  handleDateChange(e);
+                }}
+                locale={viVN}
+              />
+            </Col>
+            <Col span={8}>
+              <span>Trạng thái:</span>
+              {""}
+              <Select
+                value={statusProjectSearch}
+                onChange={(value) => {
+                  setStatusProjectSearch(value);
+                }}
+                style={{
+                  width: "100%",
+                }}
+              >
+                <Option value="">Tất cả</Option>
+                <Option value="0">Đã diễn ra</Option>
+                <Option value="1">Đang diễn ra</Option>
+                <Option value="2">Chưa diễn ra</Option>
+              </Select>
+            </Col>
+            <Col span={8}>
+              <span>Nhóm dự án:</span>
+              <Select
+                showSearch
+                style={{ width: "100%" }}
+                placeholder="Chọn thuộc nhóm dự án"
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  (option?.label ?? "").includes(input)
+                }
+                filterSort={(optionA, optionB) =>
+                  (optionA?.label ?? "")
+                    .toLowerCase()
+                    .localeCompare((optionB?.label ?? "").toLowerCase())
+                }
+                value={idGroupProjectSearch}
+                onChange={(e) => setIdGroupProjectSearch(e)}
+                defaultValue={""}
+                options={[
+                  { value: "", label: "Tất cả" },
+                  { value: "0", label: "Không có nhóm" },
+                  ...listGroupProject.map((i) => {
+                    return { value: i.id, label: i.name };
+                  }),
+                ]}
+              />
+            </Col>
+          </Row>
+          <div className="box-btn">
             <Button
-              style={{
-                color: "white",
-                backgroundColor: "rgb(55, 137, 220)",
-              }}
-              onClick={() => {
-                setShowCreateModal(true);
-              }}
+              className="btn_filter"
+              onClick={handleFind}
+              style={{ marginRight: "15px", backgroundColor: "#E2B357" }}
             >
               <FontAwesomeIcon
-                icon={faCirclePlus}
-                size="1x"
-                style={{
-                  backgroundColor: "rgb(55, 137, 220)",
-                  paddingRight: "7px",
-                }}
+                icon={faFilter}
+                style={{ paddingRight: "5px" }}
               />{" "}
-              Thêm dự án
+              <span>Tìm kiếm</span>
+            </Button>
+            <Button className="btn_clean" onClick={handleClear}>
+              <FontAwesomeIcon
+                icon={faCodeCompare}
+                style={{ paddingRight: "5px" }}
+              />{" "}
+              <span>Làm mới bộ lọc</span>
             </Button>
           </div>
         </div>
-        <div style={{ marginTop: "15px", minHeight: "170px", height: "auto" }}>
-          {data.length > 0 ? (
-            <>
+        <div className="table_project_management">
+          <div className="title_project_management">
+            <div>
               {" "}
-              <Table
-                dataSource={data}
-                rowKey="id"
-                columns={columns}
-                pagination={false}
-              />
-              <div className="pagination_box">
-                <Pagination
-                  simple
-                  current={current}
-                  onChange={(value) => {
-                    setCurrent(value);
-                  }}
-                  total={totalPages * 10}
+              <span style={{ fontSize: "18px", fontWeight: "500" }}>
+                {" "}
+                <ProjectOutlined
+                  style={{ marginRight: "7px", fontSize: "26px" }}
                 />
-              </div>
-            </>
-          ) : (
-            <Empty
-              imageStyle={{ height: "60px" }}
-              description={<span>Không có dữ liệu</span>}
-            />
-          )}
+                Danh sách dự án
+              </span>
+            </div>
+            <div>
+              <Button
+                style={{
+                  color: "white",
+                  backgroundColor: "rgb(55, 137, 220)",
+                }}
+                onClick={() => {
+                  setShowCreateModal(true);
+                }}
+              >
+                <FontAwesomeIcon
+                  icon={faCirclePlus}
+                  size="1x"
+                  style={{
+                    backgroundColor: "rgb(55, 137, 220)",
+                    paddingRight: "7px",
+                  }}
+                />{" "}
+                Thêm dự án
+              </Button>
+            </div>
+          </div>
+          <div
+            style={{ marginTop: "15px", minHeight: "170px", height: "auto" }}
+          >
+            {data.length > 0 ? (
+              <>
+                {" "}
+                <Table
+                  dataSource={data}
+                  rowKey="id"
+                  columns={columns}
+                  pagination={false}
+                />
+                <div className="pagination_box">
+                  <Pagination
+                    simple
+                    current={current}
+                    onChange={(value) => {
+                      setCurrent(value);
+                    }}
+                    total={totalPages * 10}
+                  />
+                </div>
+              </>
+            ) : (
+              <Empty
+                imageStyle={{ height: "60px" }}
+                description={<span>Không có dữ liệu</span>}
+              />
+            )}
+          </div>
+          <ModalDetailProject
+            visible={showDetailModal}
+            onCancel={handleModalDetailCancel}
+            idProject={idProject}
+          />
+          <ModalCreateProject
+            visible={showCreateModal}
+            onCancel={handleCancelCreate}
+          />
+          <ModalUpdateProject
+            visible={showUpdateModal}
+            onCancel={handleCancelCreate}
+            idProject={idProject}
+          />
         </div>
-        <ModalDetailProject
-          visible={showDetailModal}
-          onCancel={handleModalDetailCancel}
-          idProject={idProject}
-        />
-        <ModalCreateProject
-          visible={showCreateModal}
-          onCancel={handleCancelCreate}
-        />
-        <ModalUpdateProject
-          visible={showUpdateModal}
-          onCancel={handleCancelCreate}
-          idProject={idProject}
-        />
       </div>
-    </div>
+    </>
   );
 };
 

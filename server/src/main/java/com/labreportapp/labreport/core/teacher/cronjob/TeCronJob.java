@@ -90,7 +90,7 @@ public class TeCronJob {
                 messagingTemplate.convertAndSend("/portal-projects/update-meeting", "Do giảng viên không điểm danh buổi học hôm nay " +
                         "nên buổi học đã được tự động chuyển thành buổi nghỉ !");
             });
-            sendNotificationFuture.thenRun(this::playCustomSound);
+            //sendNotificationFuture.thenRun(this::playCustomSound);
         }
     }
 

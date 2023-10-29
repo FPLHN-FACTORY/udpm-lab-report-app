@@ -47,7 +47,7 @@ public interface MeMemberProjectRepository extends MemberProjectRepository {
     void deleteRoleMemberProject(@Param("idMemberProject") String idMemberProject);
 
     @Query(value = """
-            SELECT DISTINCT a.member_id FROM member_factory a ORDER BY a.created_date DESC
+            SELECT a.member_id FROM member_factory a ORDER BY a.created_date DESC
             """, nativeQuery = true)
     List<String> getAllMemberFactory();
 }

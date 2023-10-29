@@ -15,11 +15,26 @@ const AdDetailGroupProjectSlice = createSlice({
       state.unshift(data);
       return state;
     },
+    CreateAddProjectToAdDetailGroupProject: (state, action) => {
+      let data = action.payload;
+      let project = {
+        id: data.id,
+        name: data.name,
+        backGroundColor: data.backGroundColor,
+        backGroundImage: data.backGroundImage,
+        descriptions: data.descriptions,
+      };
+      state.unshift(project);
+      return state;
+    },
   },
 });
 
-export const { SetAdDetailGroupProject, CreateAdDetailGroupProject } =
-  AdDetailGroupProjectSlice.actions;
+export const {
+  SetAdDetailGroupProject,
+  CreateAdDetailGroupProject,
+  CreateAddProjectToAdDetailGroupProject,
+} = AdDetailGroupProjectSlice.actions;
 
 export const GetAdDetailGroupProject = (state) => state.adDetailGroupProject;
 

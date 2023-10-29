@@ -3,8 +3,7 @@ body {
 }
 
 .project_management {
-  padding: 25px;
-  padding-top: 50px;
+  padding: 8px 25px 25px 25px;
 }
 
 .title_project_management_box {
@@ -19,7 +18,6 @@ body {
   padding: 0 5px 0 5px;
 }
 
-/* filter */
 .filter_project_management {
   margin-top: 20px;
   background-color: rgb(255, 255, 255);

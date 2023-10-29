@@ -4,6 +4,7 @@ import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.portalprojects.core.admin.model.request.AdCreateGroupProjectRequest;
 import com.labreportapp.portalprojects.core.admin.model.request.AdFindGroupProjectRequest;
 import com.labreportapp.portalprojects.core.admin.model.request.AdUpdateGroupProjectRequest;
+import com.labreportapp.portalprojects.core.admin.model.request.AdUpdateTitleGroupProject;
 import com.labreportapp.portalprojects.core.admin.model.response.AdDetailGroupProjectResponse;
 import com.labreportapp.portalprojects.core.admin.model.response.AdGroupProjectResponse;
 import com.labreportapp.portalprojects.core.admin.repository.AdGroupProjectRepository;
@@ -81,6 +82,19 @@ public class AdGroupProjectServiceImpl implements AdGroupProjectService {
     @Override
     public List<AdDetailGroupProjectResponse> getAllProject(String id) {
         return adGroupProjectRepository.getAllProject(id);
+    }
+
+    @Override
+    @Transactional
+    public AdGroupProjectResponse updateTitleGroupProject(AdUpdateTitleGroupProject request) {
+        Optional<GroupProject> groupProject = adGroupProjectRepository.findById(request.getId());
+        if (!groupProject.isPresent()) {
+            throw new RestApiException(Message.GROUP_PROJECT_NOT_EXISTS);
+        }
+        groupProject.get().setName(request.getName());
+        groupProject.get().setDescription(request.getDescriptions());
+        adGroupProjectRepository.save(groupProject.get());
+        return adGroupProjectRepository.findGroupProjectById(groupProject.get().getId());
     }
 
     @Override
