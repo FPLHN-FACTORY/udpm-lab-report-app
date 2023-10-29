@@ -83,6 +83,8 @@ import TeMemberFactory from "./labreportapp/pages/teacher/member-factory/TeMembe
 import TeTeamFactory from "./labreportapp/pages/teacher/team-factory/TeTeamFactory";
 import StTeamFactory from "./labreportapp/pages/student/team-factory/StTeamFactory";
 import StMemberFactory from "./labreportapp/pages/student/member-factory/StMemberFactory";
+import TeDetailTeamFactory from "./labreportapp/pages/teacher/team-factory/detail-team-factory/TeDetailTeamFactory";
+import StDetailTeamFactory from "./labreportapp/pages/student/team-factory/detail-team-factory/StDetailTeamFactory";
 import AdProjectStatistics from "./labreportapp/pages/admin/project-statistics/AdProjectStatistics";
 
 function App() {
@@ -378,6 +380,16 @@ function App() {
               }
             />
             <Route
+              path="/teacher/member-factory/:id"
+              element={
+                <AuthGuard>
+                  <DashBoardTeacher>
+                    <TeDetailTeamFactory />
+                  </DashBoardTeacher>
+                </AuthGuard>
+              }
+            />
+            <Route
               path="/teacher/team-factory"
               element={
                 <AuthGuard>
@@ -393,6 +405,16 @@ function App() {
                 <AuthGuard>
                   <DashBoardStudent>
                     <StTeamFactory />
+                  </DashBoardStudent>
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/student/member-factory/:id"
+              element={
+                <AuthGuard>
+                  <DashBoardStudent>
+                    <StDetailTeamFactory />
                   </DashBoardStudent>
                 </AuthGuard>
               }

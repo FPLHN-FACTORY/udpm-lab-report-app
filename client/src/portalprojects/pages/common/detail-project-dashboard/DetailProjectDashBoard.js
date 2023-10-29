@@ -24,6 +24,7 @@ import {
 import { Col, Progress, Row, Select } from "antd";
 import { DashboardApi } from "../../../api/dashboard/Dashboard.api";
 import HeaderDetailProject from "../detail-project/HeaderDetailProject";
+import BurndownChart from "./BurndownChart";
 
 const { Option } = Select;
 
@@ -330,6 +331,12 @@ const DetailProjectDashBoard = () => {
                     />
                   </Col>
                 </Row>
+              </div>
+              <div
+                style={{ marginLeft: 150, marginRight: 150, marginBottom: 30 }}
+              >
+                {" "}
+                <BurndownChart />
               </div>
               <h4>Thống kê thẻ theo danh sách</h4>
               <div

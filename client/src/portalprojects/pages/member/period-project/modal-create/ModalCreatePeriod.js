@@ -116,12 +116,7 @@ const ModalCreatePeriod = ({ visible, onCancel }) => {
 
   return (
     <>
-      <Modal
-        visible={visible}
-        onCancel={onCancel}
-        width={750}
-        footer={null}
-      >
+      <Modal visible={visible} onCancel={onCancel} width={750} footer={null}>
         {" "}
         <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
           <span style={{ fontSize: "18px" }}>Cập nhật giai đoạn</span>
@@ -131,6 +126,7 @@ const ModalCreatePeriod = ({ visible, onCancel }) => {
             <Col span={24}>
               <span>Tên giai đoạn:</span> <br />
               <Input
+                placeholder="Nhập tên giai đoạn"
                 value={name}
                 onChange={(e) => {
                   setName(e.target.value);
@@ -169,6 +165,7 @@ const ModalCreatePeriod = ({ visible, onCancel }) => {
             <Col span={12}>
               <span>Mô tả:</span> <br />
               <TextArea
+                placeholder="Nhập mô tả giai đoạn"
                 rows={4}
                 value={descriptions}
                 onChange={(e) => {
@@ -180,6 +177,7 @@ const ModalCreatePeriod = ({ visible, onCancel }) => {
             <Col span={12}>
               <span>Mục tiêu:</span> <br />
               <TextArea
+                placeholder="Nhập mục tiêu"
                 rows={4}
                 value={target}
                 onChange={(e) => {

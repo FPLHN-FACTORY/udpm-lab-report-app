@@ -99,7 +99,7 @@ const DetailGroupProject = () => {
               setSelectedImageUrl(response.data.data.backgroundImage);
             }
             setLoadingWait(false);
-            message.success("Đổi thuộc tính nhóm thành công !");
+            message.success("Cập nhật thành công !");
           })
           .catch((error) => {
             setLoadingWait(false);

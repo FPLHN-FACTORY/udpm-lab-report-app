@@ -25,8 +25,10 @@ import adTypeProjectSliceReducer from "./admin/AdTypeProjectSlice.reducer";
 import adRoleProjectSliceReducer from "./admin/AdRoleProjectSlice.reducer";
 import adTeamSliceReducer from "./admin/AdTeamSlice.reducer";
 import adRoleFactorySliceReducer from "./admin/AdRoleFactorySlice.reducer";
-
-//
+import TeMemberFactorySliceReducer from "./teacher/member-factory/TeMemberFactorySlice.reducer";
+import TeTeamFactorySliceReducer from "./teacher/team-factory/TeTeamFactorySlice.reducer";
+import StMemberFactorySliceReducer from "./student/StMemberFactorySlice.reducer";
+import StTeamFactorySliceReducer from "./student/StTeamFactorySlice.reducer";
 import boardSliceReducer from "../../portalprojects/app/reducer/detail-project/DPBoardSlice.reducer";
 import myProjectSliceReducer from "../../portalprojects/app/reducer/my-project/myProjectSlice.reducer";
 import memberProjectSliceReducer from "../../portalprojects/app/reducer/detail-project/DPMemberProject.reducer";
@@ -53,6 +55,8 @@ import AdMemberFactorySliceReducer from "./admin/AdMemberFactorySlice.reducer";
 import AdDetailTeamSliceReducer from "./admin/AdDetailTeamSlice.reducer";
 import DPRoleProjectSliceReducer from "../../portalprojects/app/reducer/detail-project/DPRoleProjectSlice.reducer";
 import AdGroupProjectToProjectManagementSliceReduce from "./admin/AdGroupProjectToProjectManagementSlice.reduce";
+import TeDetailTeamFactorySliceReducer from "./teacher/team-factory/TeDetailTeamFactorySlice.reducer";
+import StDetailTeamFactorySliceReducer from "./student/StDetailTeamFactorySlice.reducer";
 
 export const store = configureStore({
   reducer: {
@@ -107,8 +111,13 @@ export const store = configureStore({
     userCurrent: UserCurrentReducer,
     adDetailTeam: AdDetailTeamSliceReducer,
     meRoleProject: DPRoleProjectSliceReducer,
-    adGroupProjectToProjectManagement:
-      AdGroupProjectToProjectManagementSliceReduce,
+    adGroupProjectToProjectManagement: AdGroupProjectToProjectManagementSliceReduce,
+    teMemberFactory: TeMemberFactorySliceReducer,
+    teTeamFactory: TeTeamFactorySliceReducer,
+    teDetailTeamFactory: TeDetailTeamFactorySliceReducer,
+    stMemberFactory: StMemberFactorySliceReducer,
+    stTeamFactory: StTeamFactorySliceReducer,
+    stDetailTeamFactory: StDetailTeamFactorySliceReducer,
   },
 });
 
