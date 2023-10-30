@@ -8,7 +8,17 @@ import {
   faObjectGroup,
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
-import { Button, Card, Col, DatePicker, Row, Select, Tag } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  DatePicker,
+  Empty,
+  Row,
+  Select,
+  Table,
+  Tag,
+} from "antd";
 import {
   CheckCircleOutlined,
   CloseCircleOutlined,
@@ -18,11 +28,13 @@ import CanvasJSReact from "@canvasjs/react-charts";
 import { AdProjectStatisticsAPI } from "../../../api/admin/AdProjectStatisticsAPI";
 import dayjs from "dayjs";
 import viVN from "antd/lib/locale/vi_VN";
+import { convertDateLongToString } from "../../../helper/util.helper";
 const { RangePicker } = DatePicker;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 const AdProjectStatistics = () => {
   const [typeChartList, setTypeChartList] = useState("column");
+  const [typeTable, setTypeTable] = useState(1);
   const [listProjectProgress, setListProjectProgress] = useState([]);
   const [listProjectTask, setListProjectTask] = useState([]);
   const [startTimeSearch, setStartTimeSearch] = useState("");
@@ -31,6 +43,7 @@ const AdProjectStatistics = () => {
   const [countProjectNotStart, setCountProjectNotStart] = useState(0);
   const [countProjectStarting, setCountProjectStarting] = useState(0);
   const [countProjectEnding, setCountProjectEnding] = useState(0);
+  const [listProjectTop, setListProjectTop] = useState([]);
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Thống kê dự án xưởng | Lab-Report-App";
@@ -39,6 +52,25 @@ const AdProjectStatistics = () => {
   useEffect(() => {
     featchProject();
   }, [startTimeSearch, endTimeSearch]);
+
+  useEffect(() => {
+    featchProjectTop();
+  }, [startTimeSearch, endTimeSearch, typeTable]);
+
+  const featchProjectTop = async () => {
+    try {
+      let data = {
+        startTime: startTimeSearch,
+        endTime: endTimeSearch,
+        typeProject: typeTable,
+      };
+      await AdProjectStatisticsAPI.getProjectAllTop(data).then((response) => {
+        setListProjectTop(response.data.data);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const featchProject = async () => {
     try {
@@ -140,6 +172,95 @@ const AdProjectStatistics = () => {
       },
     ],
   };
+  const columns = [
+    {
+      title: "#",
+      dataIndex: "stt",
+      key: "stt",
+      sorter: (a, b) => a.stt - b.stt,
+    },
+
+    {
+      title: "Mã",
+      dataIndex: "code",
+      key: "code",
+    },
+    {
+      title: "Tên",
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: "Tiến độ",
+      dataIndex: "progress",
+      key: "progress",
+      sorter: (a, b) => a.progress - b.progress,
+      render: (text, record) => {
+        return <div style={{ textAlign: "center" }}>{record.progress}%</div>;
+      },
+    },
+    {
+      title: <div style={{ textAlign: "center" }}>Thời gian</div>,
+      dataIndex: "startTimeAndEndTime",
+      key: "startTimeAndEndTime",
+      render: (text, record) => {
+        const startTime = convertDateLongToString(record.startTime);
+        const endTime = convertDateLongToString(record.endTime);
+        return (
+          <span>
+            {startTime} - {endTime}
+          </span>
+        );
+      },
+      align: "center",
+    },
+    {
+      title: <div style={{ textAlign: "center" }}>Trạng thái</div>,
+      dataIndex: "statusProject",
+      key: "statusProject",
+      render: (text) => {
+        if (text === "0") {
+          return (
+            <Tag
+              icon={<CheckCircleOutlined />}
+              style={{ width: "120px", textAlign: "center" }}
+              color="success"
+            >
+              Đã diễn ra
+            </Tag>
+          );
+        } else if (text === "1") {
+          return (
+            <Tag
+              icon={<SyncOutlined spin />}
+              style={{ width: "120px", textAlign: "center" }}
+              color="processing"
+            >
+              Đang diễn ra
+            </Tag>
+          );
+        } else {
+          return (
+            <Tag
+              icon={<CloseCircleOutlined />}
+              style={{ width: "120px", textAlign: "center" }}
+              color="error"
+            >
+              Chưa diễn ra
+            </Tag>
+          );
+        }
+      },
+      align: "center",
+    },
+    {
+      title: "Số thành viên",
+      dataIndex: "memberCount",
+      key: "memberCount",
+      sorter: (a, b) => a.memberCount - b.memberCount,
+      align: "center",
+    },
+  ];
   const handleDateChange = (e) => {
     if (e != null) {
       setStartTimeSearch(
@@ -343,6 +464,49 @@ const AdProjectStatistics = () => {
           </div>
           <div style={{ marginTop: "35px", padding: "0px 30px 0px 30px" }}>
             <CanvasJSChart options={dataTasks} />
+          </div>
+          <div style={{ marginTop: "35px", padding: "0px 30px 0px 30px" }}>
+            <span style={{ fontSize: 15 }}>Danh sách:</span>{" "}
+            <Select
+              style={{ width: "auto" }}
+              value={typeTable}
+              onChange={(e) => {
+                setTypeTable(e);
+              }}
+            >
+              <Select.Option value={1}>
+                Top 5 dự án có tiến độ cao nhất
+              </Select.Option>
+              <Select.Option value={2}>
+                Top 5 dự án có tiến độ thấp nhất
+              </Select.Option>
+              <Select.Option value={3}>
+                Top 5 dự án có số thành viên nhiều nhất
+              </Select.Option>
+              <Select.Option value={4}>
+                Top 5 dự án có số thành viên ít nhất
+              </Select.Option>
+            </Select>
+            <div
+              style={{ marginTop: "15px", minHeight: "170px", height: "auto" }}
+            >
+              {listProjectTop.length > 0 ? (
+                <>
+                  {" "}
+                  <Table
+                    dataSource={listProjectTop}
+                    rowKey="id"
+                    columns={columns}
+                    pagination={false}
+                  />
+                </>
+              ) : (
+                <Empty
+                  imageStyle={{ height: "60px" }}
+                  description={<span>Không có dữ liệu</span>}
+                />
+              )}
+            </div>
           </div>
         </div>
       </div>

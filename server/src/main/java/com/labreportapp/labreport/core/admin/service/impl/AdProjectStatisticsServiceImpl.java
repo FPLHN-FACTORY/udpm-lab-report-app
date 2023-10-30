@@ -1,9 +1,11 @@
 package com.labreportapp.labreport.core.admin.service.impl;
 
+import com.labreportapp.labreport.core.admin.model.request.AdFindProjectStatisticTopRequest;
 import com.labreportapp.labreport.core.admin.model.request.AdFindProjectStatisticsRequest;
 import com.labreportapp.labreport.core.admin.model.response.AdCountStatusProjectResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdObjListStatisticsResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdProjectProgressResponse;
+import com.labreportapp.labreport.core.admin.model.response.AdProjectStatisticTopFiveResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdProjectStatisticsProgressTaskResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdProjectTaskResponse;
 import com.labreportapp.labreport.core.admin.service.AdProjectStatisticsService;
@@ -63,5 +65,19 @@ public class AdProjectStatisticsServiceImpl implements AdProjectStatisticsServic
         obj.setCountProjectStarting(count.getCountProjectStarting());
         obj.setCountProjectEnding(count.getCountProjectEnding());
         return obj;
+    }
+
+    @Override
+    public List<AdProjectStatisticTopFiveResponse> getProjectFindTop(final AdFindProjectStatisticTopRequest request) {
+        request.setStartTimeLong(null);
+        request.setEndTimeLong(null);
+        if (!request.getStartTime().equals("")) {
+            request.setStartTimeLong(DateUtils.truncate(new Date(Long.parseLong(request.getStartTime())), Calendar.DATE).getTime());
+        }
+        if (!request.getEndTime().equals("")) {
+            request.setEndTimeLong(DateUtils.truncate(new Date(Long.parseLong(request.getEndTime())), Calendar.DATE).getTime());
+        }
+        System.err.println(request.toString());
+        return adProjectRepository.getProjectFindTop(request);
     }
 }

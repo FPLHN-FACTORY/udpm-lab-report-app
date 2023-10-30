@@ -1,7 +1,9 @@
 package com.labreportapp.portalprojects.core.admin.repository;
 
+import com.labreportapp.labreport.core.admin.model.request.AdFindProjectStatisticTopRequest;
 import com.labreportapp.labreport.core.admin.model.request.AdFindProjectStatisticsRequest;
 import com.labreportapp.labreport.core.admin.model.response.AdCountStatusProjectResponse;
+import com.labreportapp.labreport.core.admin.model.response.AdProjectStatisticTopFiveResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdProjectStatisticsProgressTaskResponse;
 import com.labreportapp.portalprojects.core.admin.model.request.AdFindProjectRequest;
 import com.labreportapp.portalprojects.core.admin.model.response.AdProjectReponse;
@@ -196,9 +198,9 @@ public interface AdProjectRepository extends ProjectRepository {
                 FROM
                     project p
                 WHERE p.type_project = '0' 
-               AND
-                 ( :#{#req.startTimeLong} IS NULL and :#{#req.endTimeLong} IS NULL)
-                OR (:#{#req.startTimeLong} <= p.start_time AND  p.end_time <= :#{#req.endTimeLong} )
+                    AND
+                     ( :#{#req.startTimeLong} IS NULL and :#{#req.endTimeLong} IS NULL)
+                    OR (:#{#req.startTimeLong} <= p.start_time AND  p.end_time <= :#{#req.endTimeLong} )
             )
             SELECT
                 ps.count_project_ending,
@@ -212,4 +214,56 @@ public interface AdProjectRepository extends ProjectRepository {
             """, nativeQuery = true)
     AdCountStatusProjectResponse countProjectStatistic(@Param("req") AdFindProjectStatisticsRequest req);
 
+    @Query(value = """
+            WITH MemberCounts AS (
+                SELECT
+                    mp.project_id,
+                    COUNT(mp.id) AS member_count
+                FROM member_project mp
+                JOIN project p ON p.id = mp.project_id
+                WHERE p.type_project = '0'
+                    AND (
+                        ( :#{#req.startTimeLong} IS NULL and :#{#req.endTimeLong} IS NULL)
+                        OR (:#{#req.startTimeLong} <= p.start_time AND p.end_time <= :#{#req.endTimeLong})
+                    )
+                GROUP BY mp.project_id
+            ),
+            RankedProjects AS (
+                SELECT
+                    p.id AS id,
+                    p.name AS name,
+                    p.code AS code,
+                    p.progress AS progress,
+                    p.start_time AS startTime,
+                    p.end_time AS endTime,
+                    COALESCE(mc.member_count, 0) AS members_count
+                FROM project p
+                LEFT JOIN MemberCounts mc ON p.id = mc.project_id
+                WHERE p.type_project = '0'
+                    AND (
+                        ( :#{#req.startTimeLong} IS NULL and :#{#req.endTimeLong} IS NULL)
+                        OR (:#{#req.startTimeLong} <= p.start_time AND p.end_time <= :#{#req.endTimeLong})
+                    )
+            )
+            SELECT
+                ROW_NUMBER() OVER(ORDER BY
+                    CASE
+                        WHEN :#{#req.typeProject} = 1 THEN -rp.progress
+                        WHEN :#{#req.typeProject} = 2 THEN rp.progress
+                        WHEN :#{#req.typeProject} = 3 THEN -rp.members_count 
+                        WHEN :#{#req.typeProject} = 4 THEN rp.members_count 
+                        ELSE rp.progress
+                    END
+                ) AS stt,
+                rp.id,
+                rp.name,
+                rp.code,
+                rp.progress,
+                rp.members_count,
+                rp.startTime as startTime,
+                rp.endTime as endTime
+            FROM RankedProjects rp
+            LIMIT 5;
+            """, nativeQuery = true)
+    List<AdProjectStatisticTopFiveResponse> getProjectFindTop(@Param("req") AdFindProjectStatisticTopRequest req);
 }

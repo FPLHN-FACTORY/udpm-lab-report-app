@@ -1,5 +1,6 @@
 package com.labreportapp.labreport.core.admin.controller;
 
+import com.labreportapp.labreport.core.admin.model.request.AdFindProjectStatisticTopRequest;
 import com.labreportapp.labreport.core.admin.model.request.AdFindProjectStatisticsRequest;
 import com.labreportapp.labreport.core.admin.service.AdProjectStatisticsService;
 import com.labreportapp.labreport.core.common.base.ResponseObject;
@@ -23,5 +24,10 @@ public class AdProjectStatisticsController {
     @GetMapping
     public ResponseObject getAllProjectDuAn(final AdFindProjectStatisticsRequest request) {
         return new ResponseObject(adProjectStatisticsService.findAllProjectStatisticTypeXuong(request));
+    }
+
+    @GetMapping("/type-project")
+    public ResponseObject getProjectFindTable(final AdFindProjectStatisticTopRequest request) {
+        return new ResponseObject(adProjectStatisticsService.getProjectFindTop(request));
     }
 }
