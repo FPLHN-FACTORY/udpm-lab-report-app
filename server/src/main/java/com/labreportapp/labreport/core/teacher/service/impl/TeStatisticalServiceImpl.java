@@ -32,6 +32,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.RegionUtil;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -98,99 +99,6 @@ public class TeStatisticalServiceImpl implements TeStatisticalService {
             }
         }
         return IndexedColors.WHITE.getIndex();
-    }
-
-    private TeCountMeetingAndSheetRespone configTitle(Workbook workbook, Class classDetail) {
-        Font fontTitle = workbook.createFont();
-        Sheet sheet = workbook.createSheet(classDetail.getCode());
-        Row titleRow = sheet.createRow(0);
-        Cell cellTitle = titleRow.createCell(0);
-        cellTitle.setCellValue("THỐNG KÊ CHI TIẾT LỚP " + classDetail.getCode());
-        cellTitle.setCellStyle(chooseCellStyle("title", workbook, IndexedColors.WHITE.getIndex()));
-        sheet.addMergedRegion(new CellRangeAddress(0, 1, 0, 4));
-        sheet.setColumnWidth(0, 1300);
-
-        sheet.addMergedRegion(new CellRangeAddress(2, 4, 0, 0));
-        sheet.addMergedRegion(new CellRangeAddress(2, 4, 1, 1));
-        sheet.addMergedRegion(new CellRangeAddress(2, 4, 2, 2));
-        sheet.addMergedRegion(new CellRangeAddress(2, 4, 3, 3));
-        sheet.addMergedRegion(new CellRangeAddress(2, 4, 4, 4));
-        sheet.addMergedRegion(new CellRangeAddress(2, 4, 5, 5));
-
-        Row headerRow = sheet.createRow(2);
-        Cell cell0 = headerRow.createCell(0);
-        cell0.setCellValue("STT");
-        cell0.setCellStyle(chooseCellStyle("titleThongKe", workbook, IndexedColors.WHITE.getIndex()));
-
-        Cell cell1 = headerRow.createCell(1);
-        cell1.setCellValue("Họ tên");
-        cell1.setCellStyle(chooseCellStyle("titleThongKe", workbook, IndexedColors.WHITE.getIndex()));
-
-        Cell cell2 = headerRow.createCell(2);
-        cell2.setCellValue("Email");
-        cell2.setCellStyle(chooseCellStyle("titleThongKe", workbook, IndexedColors.WHITE.getIndex()));
-
-        Cell cell3 = headerRow.createCell(3);
-        cell3.setCellValue("Trạng thái");
-        cell3.setCellStyle(chooseCellStyle("titleThongKe", workbook, IndexedColors.WHITE.getIndex()));
-
-        Cell cell4 = headerRow.createCell(4);
-        cell4.setCellValue("Nhóm");
-        cell4.setCellStyle(chooseCellStyle("titleThongKe", workbook, IndexedColors.WHITE.getIndex()));
-
-        Cell cell5 = headerRow.createCell(5);
-        cell5.setCellValue("Chủ đề");
-        cell5.setCellStyle(chooseCellStyle("titleThongKe", workbook, IndexedColors.WHITE.getIndex()));
-
-        sheet.createFreezePane(5, 5);
-
-        TeFindMeetingRequest request = new TeFindMeetingRequest();
-        request.setIdClass(classDetail.getId());
-        List<TeMeetingResponse> listMeeting = teMeetingRepository.findMeetingByIdClass(request);
-        List<TeMeetingResponse> listMeetingSort = listMeeting.stream()
-                .sorted(Comparator.comparing(TeMeetingResponse::getMeetingDate)
-                        .thenComparing(TeMeetingResponse::getName))
-                .collect(Collectors.toList());
-
-        AtomicInteger collTitle = new AtomicInteger(6);
-        Row rowMeeting = sheet.createRow(3);
-        Row rowInforMeeting = sheet.createRow(4);
-        AtomicInteger checkMeger = new AtomicInteger(6);
-
-        if (listMeetingSort.size() > 0) {
-            listMeetingSort.forEach(item -> {
-                Cell cell6 = rowMeeting.createCell(collTitle.get());
-                cell6.setCellValue(item.getName());
-                sheet.addMergedRegion(new CellRangeAddress(3, 3, collTitle.get(), collTitle.get() + 2));
-                cell6.setCellStyle(chooseCellStyle("titleThongKe", workbook, IndexedColors.WHITE.getIndex()));
-
-                Cell cellNote = rowInforMeeting.createCell(collTitle.get());
-                cellNote.setCellValue("Nhận xét");
-                cellNote.setCellStyle(chooseCellStyle("titleThongKe", workbook, IndexedColors.WHITE.getIndex()));
-
-                Cell cellHw = rowInforMeeting.createCell(collTitle.get() + 1);
-                cellHw.setCellValue("Yêu cầu về nhà");
-                cellHw.setCellStyle(chooseCellStyle("titleThongKe", workbook, IndexedColors.WHITE.getIndex()));
-
-                Cell cellReport = rowInforMeeting.createCell(collTitle.get() + 2);
-                cellReport.setCellValue("Báo cáo");
-                cellReport.setCellStyle(chooseCellStyle("titleThongKe", workbook, IndexedColors.WHITE.getIndex()));
-                collTitle.set(collTitle.get() + 3);
-                checkMeger.set(checkMeger.get() + 3);
-            });
-        } else {
-            Cell cell6 = rowMeeting.createCell(collTitle.get());
-            sheet.addMergedRegion(new CellRangeAddress(3, 4, collTitle.get(), collTitle.get() + 1));
-            cell6.setCellValue("Không có buổi học");
-            cell6.setCellStyle(chooseCellStyle("titleMeetingNull", workbook, IndexedColors.WHITE.getIndex()));
-        }
-        Cell cellTitleHw = headerRow.createCell(6);
-        cellTitleHw.setCellValue("Theo dõi tiến độ");
-        sheet.addMergedRegion(new CellRangeAddress(2, 2, 6,
-                checkMeger.get() > 6 ? checkMeger.get() - 1 : 7));
-        cellTitleHw.setCellStyle(chooseCellStyle("titleThongKe", workbook, IndexedColors.WHITE.getIndex()));
-
-        return new TeCountMeetingAndSheetRespone(sheet, checkMeger.get());
     }
 
     @Override
@@ -327,8 +235,10 @@ public class TeStatisticalServiceImpl implements TeStatisticalService {
                 if (tem.getRowEndMeger() != null && tem.getRowStartMeger() != null) {
                     if (tem.getRowEndMeger() - tem.getRowStartMeger() > 1) {
                         for (int i = 4; i < checkColMeger; i++) {
-                            sheet.addMergedRegion(new CellRangeAddress(
-                                    tem.getRowStartMeger(), tem.getRowEndMeger(), i, i));
+                            CellRangeAddress mergedRegion = new CellRangeAddress(
+                                    tem.getRowStartMeger(), tem.getRowEndMeger(), i, i);
+                            sheet.addMergedRegion(mergedRegion);
+                            megerBoder(mergedRegion, sheet);
                         }
                     }
                 }
@@ -343,6 +253,115 @@ public class TeStatisticalServiceImpl implements TeStatisticalService {
             e.printStackTrace();
             return null;
         }
+    }
+
+    private TeCountMeetingAndSheetRespone configTitle(Workbook workbook, Class classDetail) {
+        Font fontTitle = workbook.createFont();
+        Sheet sheet = workbook.createSheet(classDetail.getCode());
+        Row titleRow = sheet.createRow(0);
+        Cell cellTitle = titleRow.createCell(0);
+        cellTitle.setCellValue("THỐNG KÊ CHI TIẾT LỚP " + classDetail.getCode());
+        cellTitle.setCellStyle(chooseCellStyle("title", workbook, IndexedColors.WHITE.getIndex()));
+        sheet.addMergedRegion(new CellRangeAddress(0, 1, 0, 4));
+        sheet.setColumnWidth(0, 1300);
+
+        sheet.createFreezePane(5, 5);
+        Row headerRow = sheet.createRow(2);
+        Cell cell0 = headerRow.createCell(0);
+        cell0.setCellValue("STT");
+        cell0.setCellStyle(chooseCellStyle("titleThongKe", workbook, IndexedColors.WHITE.getIndex()));
+        sheet.addMergedRegion(new CellRangeAddress(2, 4, 0, 0));
+        sheet.addMergedRegion(new CellRangeAddress(2, 4, 1, 1));
+        sheet.addMergedRegion(new CellRangeAddress(2, 4, 2, 2));
+        sheet.addMergedRegion(new CellRangeAddress(2, 4, 3, 3));
+        sheet.addMergedRegion(new CellRangeAddress(2, 4, 4, 4));
+        sheet.addMergedRegion(new CellRangeAddress(2, 4, 5, 5));
+        megerBoder(new CellRangeAddress(2, 4, 0, 0), sheet);
+        megerBoder(new CellRangeAddress(2, 4, 1, 1), sheet);
+        megerBoder(new CellRangeAddress(2, 4, 2, 2), sheet);
+        megerBoder(new CellRangeAddress(2, 4, 3, 3), sheet);
+        megerBoder(new CellRangeAddress(2, 4, 4, 4), sheet);
+        megerBoder(new CellRangeAddress(2, 4, 5, 5), sheet);
+        Cell cell1 = headerRow.createCell(1);
+        cell1.setCellValue("Họ tên");
+        cell1.setCellStyle(chooseCellStyle("titleThongKe", workbook, IndexedColors.WHITE.getIndex()));
+
+        Cell cell2 = headerRow.createCell(2);
+        cell2.setCellValue("Email");
+        cell2.setCellStyle(chooseCellStyle("titleThongKe", workbook, IndexedColors.WHITE.getIndex()));
+
+        Cell cell3 = headerRow.createCell(3);
+        cell3.setCellValue("Trạng thái");
+        cell3.setCellStyle(chooseCellStyle("titleThongKe", workbook, IndexedColors.WHITE.getIndex()));
+
+        Cell cell4 = headerRow.createCell(4);
+        cell4.setCellValue("Nhóm");
+        cell4.setCellStyle(chooseCellStyle("titleThongKe", workbook, IndexedColors.WHITE.getIndex()));
+
+        Cell cell5 = headerRow.createCell(5);
+        cell5.setCellValue("Chủ đề");
+        cell5.setCellStyle(chooseCellStyle("titleThongKe", workbook, IndexedColors.WHITE.getIndex()));
+
+
+        Row rowMeeting = sheet.createRow(3);
+        Row rowInforMeeting = sheet.createRow(4);
+        AtomicInteger checkMeger = new AtomicInteger(6);
+        TeFindMeetingRequest request = new TeFindMeetingRequest();
+        request.setIdClass(classDetail.getId());
+        List<TeMeetingResponse> listMeeting = teMeetingRepository.findMeetingByIdClass(request);
+        List<TeMeetingResponse> listMeetingSort = listMeeting.stream()
+                .sorted(Comparator.comparing(TeMeetingResponse::getMeetingDate)
+                        .thenComparing(TeMeetingResponse::getName))
+                .collect(Collectors.toList());
+
+        AtomicInteger collTitle = new AtomicInteger(6);
+
+        if (listMeetingSort.size() > 0) {
+            listMeetingSort.forEach(item -> {
+                Cell cell6 = rowMeeting.createCell(collTitle.get());
+                cell6.setCellValue(item.getName());
+                CellRangeAddress mergedRegion6 = new CellRangeAddress(3, 3, collTitle.get(), collTitle.get() + 2);
+                sheet.addMergedRegion(mergedRegion6);
+                cell6.setCellStyle(chooseCellStyle("titleThongKe", workbook, IndexedColors.WHITE.getIndex()));
+                megerBoder(mergedRegion6, sheet);
+
+                Cell cellNote = rowInforMeeting.createCell(collTitle.get());
+                cellNote.setCellValue("Nhận xét");
+                cellNote.setCellStyle(chooseCellStyle("titleThongKe", workbook, IndexedColors.WHITE.getIndex()));
+
+                Cell cellHw = rowInforMeeting.createCell(collTitle.get() + 1);
+                cellHw.setCellValue("Yêu cầu về nhà");
+                cellHw.setCellStyle(chooseCellStyle("titleThongKe", workbook, IndexedColors.WHITE.getIndex()));
+
+                Cell cellReport = rowInforMeeting.createCell(collTitle.get() + 2);
+                cellReport.setCellValue("Báo cáo");
+                cellReport.setCellStyle(chooseCellStyle("titleThongKe", workbook, IndexedColors.WHITE.getIndex()));
+                collTitle.set(collTitle.get() + 3);
+                checkMeger.set(checkMeger.get() + 3);
+            });
+        } else {
+            Cell cell6 = rowMeeting.createCell(collTitle.get());
+            CellRangeAddress cellMeger = new CellRangeAddress(3, 4, collTitle.get(), collTitle.get() + 1);
+            sheet.addMergedRegion(cellMeger);
+            cell6.setCellValue("Không có buổi học");
+            cell6.setCellStyle(chooseCellStyle("titleMeetingNull", workbook, IndexedColors.WHITE.getIndex()));
+            megerBoder(cellMeger, sheet);
+        }
+        Cell cellTitleHw = headerRow.createCell(6);
+        cellTitleHw.setCellValue("Theo dõi tiến độ");
+        CellRangeAddress cellTitleMeger = new CellRangeAddress(2, 2, 6,
+                checkMeger.get() > 6 ? checkMeger.get() - 1 : 7);
+        sheet.addMergedRegion(cellTitleMeger);
+        cellTitleHw.setCellStyle(chooseCellStyle("titleThongKe", workbook, IndexedColors.WHITE.getIndex()));
+        megerBoder(cellTitleMeger, sheet);
+        return new TeCountMeetingAndSheetRespone(sheet, checkMeger.get());
+    }
+
+    private void megerBoder(CellRangeAddress cellRangeAddress, Sheet sheet) {
+        RegionUtil.setBorderTop(BorderStyle.THIN, cellRangeAddress, sheet);
+        RegionUtil.setBorderRight(BorderStyle.THIN, cellRangeAddress, sheet);
+        RegionUtil.setBorderBottom(BorderStyle.THIN, cellRangeAddress, sheet);
+        RegionUtil.setBorderLeft(BorderStyle.THIN, cellRangeAddress, sheet);
     }
 
     private CellStyle chooseCellStyle(String type, Workbook workbook, short color) {

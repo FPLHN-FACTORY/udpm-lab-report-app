@@ -140,5 +140,8 @@ public interface AdProjectRepository extends ProjectRepository {
     String findByIdCode(@Param("codeProject") String codeProject,
                         @Param("id") String id);
 
+//       ( :#{#rep.startTimeLong} IS NULL and :#{#rep.endTimeLong} IS NULL
+//    OR pro.start_time >= :#{#rep.startTimeLong} and  pro.end_time <= :#{#rep.endTimeLong} )
+
 
 }

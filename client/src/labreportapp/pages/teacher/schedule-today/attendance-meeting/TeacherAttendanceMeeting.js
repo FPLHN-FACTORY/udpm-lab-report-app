@@ -173,13 +173,7 @@ const TeacherAttendanceMeeting = () => {
       }
       await TeacherAttendanceAPI.createOrUpdate(dataFind).then((respone) => {
         dispatch(UpdateAttendanceMeeting(respone.data.data.listAttendance));
-        let className =
-          respone.data.data.message.length < 27
-            ? "custom-toast-short"
-            : "custom-toast-long";
-        message.success(respone.data.data.message, {
-          className: className,
-        });
+        message.success(respone.data.data.message);
         navigate("/teacher/schedule-today");
       });
     } catch (error) {

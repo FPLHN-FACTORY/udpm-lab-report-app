@@ -46,7 +46,7 @@ const DetailGroupProject = () => {
   const loadDataDetailGroupProject = () => {
     AdGroupProjectAPI.detailGroupProject(id).then((response) => {
       setDetailGroupProject(response.data.data);
-      setName(response.data.data.name);
+      setName(response.data.data.name != null ? response.data.data.name : "");
       setDescriptions(
         response.data.data.descriptions ? response.data.data.descriptions : ""
       );
