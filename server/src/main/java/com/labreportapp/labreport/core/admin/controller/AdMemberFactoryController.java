@@ -25,7 +25,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 /**
- * @author thangncph26123
+ * @author hieundph25894
  */
 @RestController
 @RequestMapping("/admin/member-factory")

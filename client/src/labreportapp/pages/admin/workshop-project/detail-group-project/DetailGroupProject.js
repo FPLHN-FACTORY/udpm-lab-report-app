@@ -46,7 +46,7 @@ const DetailGroupProject = () => {
   const loadDataDetailGroupProject = () => {
     AdGroupProjectAPI.detailGroupProject(id).then((response) => {
       setDetailGroupProject(response.data.data);
-      setName(response.data.data.name);
+      setName(response.data.data.name != null ? response.data.data.name : "");
       setDescriptions(
         response.data.data.descriptions ? response.data.data.descriptions : ""
       );
@@ -193,7 +193,6 @@ const DetailGroupProject = () => {
                 </span>
               )}
             </div>
-
             <div style={{ marginTop: "6px" }}>
               {editDescription ? (
                 <>
@@ -208,6 +207,8 @@ const DetailGroupProject = () => {
                     style={{
                       backgroundColor: "transparent",
                       border: "none",
+                      minWidth: "50%",
+                      width: "auto",
                       borderBottom: "2px solid black",
                       fontWeight: "500",
                     }}
@@ -223,7 +224,16 @@ const DetailGroupProject = () => {
                 </span>
               )}
             </div>
-            {loadingWait && <LoadingBalls />}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                textAlign: "center",
+              }}
+            >
+              {loadingWait && <LoadingBalls />}
+            </div>
           </div>
           <div style={{ marginTop: 25 }}>
             <span style={{ fontSize: 17, marginLeft: 29 }}>

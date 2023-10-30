@@ -385,6 +385,7 @@ const TeacherDashboard = () => {
             />
             <span style={{ fontWeight: "400", fontSize: "18px" }}> Bộ lọc</span>
           </Row>
+          <hr />
           <div className="title-box-two">
             <Row gutter={24} style={{ margin: "5px 10px 5px 10px" }}>
               <Col span={8}>
