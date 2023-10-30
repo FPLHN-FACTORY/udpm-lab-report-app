@@ -1,21 +1,23 @@
 package com.labreportapp.labreport.core.admin.model.response;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 /**
  * @author hieundph25894 - duchieu212
  */
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
 @ToString
-public class AdProjectStatisticsResponse {
+public class AdProjectProgressResponse {
 
-   private Integer countHappent;
+    private String id;
+
+    private String name;
+
+    private String code;
+
+    private Float progress;
 
 }

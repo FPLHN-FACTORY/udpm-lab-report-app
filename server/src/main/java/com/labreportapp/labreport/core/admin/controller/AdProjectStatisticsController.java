@@ -21,7 +21,7 @@ public class AdProjectStatisticsController {
     private AdProjectStatisticsService adProjectStatisticsService;
 
     @GetMapping
-    public ResponseObject getPage(final AdFindProjectStatisticsRequest request) {
-        return new ResponseObject(request);
+    public ResponseObject getAllProjectDuAn(final AdFindProjectStatisticsRequest request) {
+        return new ResponseObject(adProjectStatisticsService.findAllProjectStatisticTypeXuong(request));
     }
 }
