@@ -13,13 +13,9 @@ import lombok.Setter;
 @Setter
 public class MeUpdateNameImageRequest {
 
-    @NotEmpty
-    @NotNull
     @NotBlank
     private String id;
 
-    @NotEmpty
-    @NotNull
     @NotBlank
     private String nameImage;
 }

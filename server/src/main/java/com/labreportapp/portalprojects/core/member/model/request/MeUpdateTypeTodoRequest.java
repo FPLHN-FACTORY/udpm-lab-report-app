@@ -13,15 +13,11 @@ import lombok.Setter;
 @Setter
 public class MeUpdateTypeTodoRequest extends MeTodoAndTodoListRequest{
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String id;
 
     private Integer type;
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String periodId;
 }

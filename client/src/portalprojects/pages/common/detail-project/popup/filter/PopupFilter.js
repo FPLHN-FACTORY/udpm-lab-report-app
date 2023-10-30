@@ -33,8 +33,8 @@ const { Option } = Select;
 
 const PopupFilter = ({ position, onClose }) => {
   const popupRef = useRef(null);
-  
-  const userCurrent = useAppSelector(GetUserCurrent)
+
+  const userCurrent = useAppSelector(GetUserCurrent);
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -427,6 +427,7 @@ const PopupFilter = ({ position, onClose }) => {
                   onChange={handleChangeValueMultiMember}
                   mode="multiple"
                   placeholder="Chọn thành viên"
+                  maxTagCount={2}
                   style={{ width: "320px" }}
                   filterOption={(input, option) => {
                     const name =
@@ -614,6 +615,7 @@ const PopupFilter = ({ position, onClose }) => {
                   onChange={handleChangeLabelFilter}
                   mode="multiple"
                   placeholder="Chọn nhãn"
+                  maxTagCount={3}
                   style={{ width: "320px" }}
                   filterOption={(input, option) =>
                     option.props.children.props.children

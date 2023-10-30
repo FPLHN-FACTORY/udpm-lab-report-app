@@ -41,88 +41,13 @@ public interface TodoRepository extends JpaRepository<Todo, String> {
     Short getIndexTodoMax(@Param("todoListId") String todoListId, @Param("idPeriod") String idPeriod);
 
     @Query(value = """
-            SELECT a.name, (SELECT COUNT(1) FROM to_do b 
-            WHERE b.todo_list_id = a.id AND b.todo_id IS NULL) as List
-            FROM todo_list a WHERE a.project_id = :projectId ORDER BY a.index_todo_list ASC
-            """, nativeQuery = true)
-    List<MeDataDashboardTodoListResoonse> countTodoByTodoListAllProject(@Param("projectId") String projectId);
-
-    @Query(value = """
-            SELECT COUNT(1) FROM to_do a 
-            JOIN todo_list b ON a.todo_list_id = b.id
-            WHERE a.type = 1 AND a.todo_id IS NULL 
-            AND b.project_id = :projectId 
-            AND a.status_todo = :statusTodo
-            """, nativeQuery = true)
-    Integer countTodoByDueDateAllProject(@Param("projectId") String projectId,
-                                         @Param("statusTodo") Integer statusTodo);
-
-    @Query(value = """
-            SELECT COUNT(1) FROM to_do a 
-            JOIN todo_list b ON a.todo_list_id = b.id
-            WHERE a.type = 1 AND a.todo_id IS NULL 
-            AND b.project_id = :projectId 
-            AND a.deadline IS NULL
-            """, nativeQuery = true)
-    Integer countTodoByNoDueDateAllProject(@Param("projectId") String projectId);
-
-    @Query(value = """
-            SELECT DISTINCT
-                SUBSTRING_INDEX(c.email, '@', 1) AS name, (select COUNT(1) from to_do g JOIN assign k ON g.id = k.todo_id
-                WHERE g.todo_id IS NULL AND k.email = c.email) as member
-            FROM
-                todo_list a
-                JOIN to_do b ON b.todo_list_id = a.id
-                LEFT JOIN assign c ON c.todo_id = b.id
-            WHERE
-                a.project_id = :projectId
-                AND c.email IS NOT NULL;
-            """, nativeQuery = true)
-    List<MeDataDashboardMemberResponse> countTodoByMemberAllProject(@Param("projectId") String projectId);
-
-    @Query(value = """
-            SELECT COUNT(1)
-            FROM to_do a
-            JOIN todo_list b ON a.todo_list_id = b.id
-            LEFT JOIN assign c ON a.id = c.todo_id
-            WHERE a.type = 1
-            AND a.todo_id IS NULL
-            AND b.project_id = :projectId 
-            AND c.id IS NULL;
-            """, nativeQuery = true)
-    Integer countTodoByNoMemberAllProject(@Param("projectId") String projectId);
-
-    @Query(value = """
-                select DISTINCT a.name, (Select COUNT(1) from to_do g
-                JOIN label_project_todo k ON g.id = k.todo_id WHERE k.label_project_id = a.id) as label from label_project a
-                JOIN label_project_todo b ON a.id = b.label_project_id
-                JOIN to_do c ON c.id = b.todo_id
-                WHERE a.project_id = :projectId 
-            """, nativeQuery = true)
-    List<MeDataDashboardLabelResponse> countTodoByLabelAllProject(@Param("projectId") String projectId);
-
-    @Query(value = """
-            SELECT COUNT(1)
-            FROM to_do a
-            JOIN todo_list b ON a.todo_list_id = b.id
-            LEFT JOIN label_project_todo c ON a.id = c.todo_id
-            WHERE a.type = 1
-            AND a.todo_id IS NULL
-            AND b.project_id = :projectId 
-            AND c.id IS NULL;
-            """, nativeQuery = true)
-    Integer countTodoByNoLabelAllProject(@Param("projectId") String projectId);
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    @Query(value = """
             SELECT a.name, (SELECT COUNT(1) FROM to_do b JOIN period_todo i ON b.id = i.todo_id
-            WHERE b.todo_list_id = a.id AND b.todo_id IS NULL AND i.period_id = :periodId) as List
+            WHERE b.todo_list_id = a.id AND b.todo_id IS NULL AND (i.period_id = :periodId OR :periodId = 'none')) AS List
             FROM todo_list a WHERE a.project_id = :projectId 
             ORDER BY a.index_todo_list ASC
             """, nativeQuery = true)
     List<MeDataDashboardTodoListResoonse> countTodoByTodoListPeriod(@Param("projectId") String projectId,
-                                      @Param("periodId") String periodId);
+                                                                    @Param("periodId") String periodId);
 
     @Query(value = """
             SELECT COUNT(1) FROM to_do a 
@@ -131,7 +56,7 @@ public interface TodoRepository extends JpaRepository<Todo, String> {
             WHERE a.type = 1 AND a.todo_id IS NULL 
             AND b.project_id = :projectId 
             AND a.status_todo = :statusTodo
-            AND c.period_id = :periodId
+            AND (c.period_id = :periodId OR :periodId = 'none')
             """, nativeQuery = true)
     Integer countTodoByDueDatePeriod(@Param("projectId") String projectId,
                                      @Param("periodId") String periodId,
@@ -144,17 +69,17 @@ public interface TodoRepository extends JpaRepository<Todo, String> {
             WHERE a.type = 1 AND a.todo_id IS NULL 
             AND b.project_id = :projectId 
             AND a.deadline IS NULL
-            AND c.period_id = :periodId
+            AND (c.period_id = :periodId OR :periodId = 'none')
             """, nativeQuery = true)
     Integer countTodoByNoDueDatePeriod(@Param("projectId") String projectId,
                                        @Param("periodId") String periodId);
 
     @Query(value = """
             SELECT DISTINCT
-                SUBSTRING_INDEX(c.email, '@', 1) AS name, (select COUNT(1) from to_do g 
+                SUBSTRING_INDEX(c.email, '@', 1) AS name, (SELECT COUNT(1) from to_do g 
                  JOIN period_todo h ON g.id = h.todo_id
                 JOIN assign k ON g.id = k.todo_id
-                WHERE g.todo_id IS NULL AND k.email = c.email AND h.period_id = :periodId) as member
+                WHERE g.todo_id IS NULL AND k.email = c.email AND (h.period_id = :periodId OR :periodId = 'none')) as member
             FROM
                 todo_list a
                 JOIN to_do b ON b.todo_list_id = a.id
@@ -164,7 +89,7 @@ public interface TodoRepository extends JpaRepository<Todo, String> {
                 AND c.email IS NOT NULL 
             """, nativeQuery = true)
     List<MeDataDashboardMemberResponse> countTodoByMemberPeriod(@Param("projectId") String projectId,
-                                    @Param("periodId") String periodId);
+                                                                @Param("periodId") String periodId);
 
     @Query(value = """
             SELECT COUNT(1)
@@ -176,7 +101,7 @@ public interface TodoRepository extends JpaRepository<Todo, String> {
             AND a.todo_id IS NULL
             AND b.project_id = :projectId 
             AND c.id IS NULL
-            AND d.period_id = :periodId
+            AND (d.period_id = :periodId OR :periodId = 'none')
             """, nativeQuery = true)
     Integer countTodoByNoMemberPeriod(@Param("projectId") String projectId,
                                       @Param("periodId") String periodId);
@@ -184,13 +109,13 @@ public interface TodoRepository extends JpaRepository<Todo, String> {
     @Query(value = """
             select DISTINCT a.name, (Select COUNT(1) from to_do g JOIN period_todo h ON g.id = h.todo_id
                 JOIN label_project_todo k ON g.id = k.todo_id WHERE k.label_project_id = a.id
-                AND h.period_id = :periodId) as label from label_project a
+                AND (h.period_id = :periodId OR :periodId = 'none')) as label from label_project a
                 JOIN label_project_todo b ON a.id = b.label_project_id
                 JOIN to_do c ON c.id = b.todo_id
                 WHERE a.project_id = :projectId 
             """, nativeQuery = true)
     List<MeDataDashboardLabelResponse> countTodoByLabelPeriod(@Param("projectId") String projectId,
-                                   @Param("periodId") String periodId);
+                                                              @Param("periodId") String periodId);
 
     @Query(value = """
             SELECT COUNT(1)
@@ -202,7 +127,7 @@ public interface TodoRepository extends JpaRepository<Todo, String> {
             AND a.todo_id IS NULL
             AND b.project_id = :projectId 
             AND c.id IS NULL
-            AND d.period_id = :periodId
+            AND (d.period_id = :periodId OR :periodId = 'none')
             """, nativeQuery = true)
     Integer countTodoByNoLabelPeriod(@Param("projectId") String projectId,
                                      @Param("periodId") String periodId);

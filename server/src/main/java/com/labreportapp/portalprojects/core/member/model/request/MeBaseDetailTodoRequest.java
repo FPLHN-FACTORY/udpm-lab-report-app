@@ -14,13 +14,10 @@ import org.hibernate.validator.constraints.Length;
 @Setter
 public class MeBaseDetailTodoRequest extends MeTodoAndTodoListRequest{
 
-    @NotEmpty
     @NotBlank
     @Length(max = 100)
     private String name;
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String idTodoCreateOrDelete;
 }

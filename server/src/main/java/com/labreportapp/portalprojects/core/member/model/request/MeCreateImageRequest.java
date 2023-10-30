@@ -16,28 +16,18 @@ import lombok.Setter;
 public class MeCreateImageRequest {
 
     @NotBlank
-    @NotNull
-    @NotEmpty
     private String urlImage;
 
     @NotBlank
-    @NotNull
-    @NotEmpty
     private String nameFileOld;
 
     @NotBlank
-    @NotNull
-    @NotEmpty
     private String idTodo;
 
     @NotBlank
-    @NotNull
-    @NotEmpty
     private String idTodoList;
 
     @NotBlank
-    @NotNull
-    @NotEmpty
     private String projectId;
 //
 //    private String idUser;

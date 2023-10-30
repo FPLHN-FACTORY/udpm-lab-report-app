@@ -14,26 +14,18 @@ import org.hibernate.validator.constraints.Length;
 @Setter
 public class MeUpdateResourceRequest {
 
-    @NotEmpty
     @NotBlank
-    @NotNull
     private String id;
 
     @Length(max = 100)
     private String name;
 
-    @NotEmpty
     @NotBlank
-    @NotNull
     private String url;
 
-    @NotEmpty
     @NotBlank
-    @NotNull
     private String idTodo;
 
-    @NotEmpty
     @NotBlank
-    @NotNull
     private String idTodoList;
 }

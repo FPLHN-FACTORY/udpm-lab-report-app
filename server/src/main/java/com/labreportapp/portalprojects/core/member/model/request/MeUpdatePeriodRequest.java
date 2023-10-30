@@ -13,8 +13,6 @@ import lombok.Setter;
 @Setter
 public class MeUpdatePeriodRequest extends MeBasePeriodRequest{
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String id;
 }

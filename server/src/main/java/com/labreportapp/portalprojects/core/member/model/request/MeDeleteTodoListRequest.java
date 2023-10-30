@@ -14,12 +14,8 @@ import lombok.Setter;
 public class MeDeleteTodoListRequest {
 
     @NotBlank
-    @NotNull
-    @NotEmpty
     private String id;
 
     @NotBlank
-    @NotNull
-    @NotEmpty
     private String projectId;
 }

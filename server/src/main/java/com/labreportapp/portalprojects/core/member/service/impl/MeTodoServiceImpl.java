@@ -27,6 +27,8 @@ import com.labreportapp.portalprojects.core.member.model.response.MeBoardRespons
 import com.labreportapp.portalprojects.core.member.model.response.MeConvertLabelResponse;
 import com.labreportapp.portalprojects.core.member.model.response.MeConvertTodoResponse;
 import com.labreportapp.portalprojects.core.member.model.response.MeCountTodoResponse;
+import com.labreportapp.portalprojects.core.member.model.response.MeDashboardAllCustom;
+import com.labreportapp.portalprojects.core.member.model.response.MeDashboardItemCustom;
 import com.labreportapp.portalprojects.core.member.model.response.MeDataDashboardLabelResponse;
 import com.labreportapp.portalprojects.core.member.model.response.MeDataDashboardMemberResponse;
 import com.labreportapp.portalprojects.core.member.model.response.MeDataDashboardTodoListResoonse;
@@ -84,6 +86,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author thangncph26123
@@ -814,73 +817,77 @@ public class MeTodoServiceImpl implements MeTodoService {
     }
 
     @Override
-    public List<MeDataDashboardTodoListResoonse> countTodoByTodoListAllProject(String projectId) {
-        return meTodoRepository.countTodoByTodoListAllProject(projectId);
-    }
+    public MeDashboardAllCustom dashboardAll(String projectId, String periodId) {
+        MeDashboardAllCustom meDashboardAllCustom = new MeDashboardAllCustom();
 
-    @Override
-    public Integer countTodoByDueDateAllProject(String projectId, Integer statusTodo) {
-        return meTodoRepository.countTodoByDueDateAllProject(projectId, statusTodo);
-    }
+        List<MeDashboardItemCustom> meDashboardItemTodoLists = new ArrayList<>();
+        List<MeDataDashboardTodoListResoonse> listTodoList = meTodoRepository.countTodoByTodoListPeriod(projectId, periodId);
+        meDashboardItemTodoLists = listTodoList.stream()
+                .map(todoList -> {
+                    MeDashboardItemCustom customItem = new MeDashboardItemCustom();
+                    customItem.setLabel(todoList.getName());
+                    customItem.setY((long) todoList.getList());
+                    return customItem;
+                })
+                .collect(Collectors.toList());
+        meDashboardAllCustom.setListDashboardTodoList(meDashboardItemTodoLists);
 
-    @Override
-    public Integer countTodoByNoDueDateAllProject(String projectId) {
-        return meTodoRepository.countTodoByNoDueDateAllProject(projectId);
-    }
+        List<MeDashboardItemCustom> meDashboardItemDueDates = new ArrayList<>();
+        MeDashboardItemCustom meDashboardItemCustomChuaHoanThanh = new MeDashboardItemCustom();
+        meDashboardItemCustomChuaHoanThanh.setLabel("Chưa hoàn thành");
+        meDashboardItemCustomChuaHoanThanh.setY((long) meTodoRepository.countTodoByDueDatePeriod(projectId, periodId, 0));
+        meDashboardItemDueDates.add(meDashboardItemCustomChuaHoanThanh);
+        MeDashboardItemCustom meDashboardItemCustomHoanThanhSom = new MeDashboardItemCustom();
+        meDashboardItemCustomHoanThanhSom.setLabel("Hoàn thành sớm");
+        meDashboardItemCustomHoanThanhSom.setY((long) meTodoRepository.countTodoByDueDatePeriod(projectId, periodId, 2));
+        meDashboardItemDueDates.add(meDashboardItemCustomHoanThanhSom);
+        System.out.println(meDashboardItemCustomHoanThanhSom.toString() + " aaaaaaaaaaa");
+        MeDashboardItemCustom meDashboardItemCustomHoanThanhMuon = new MeDashboardItemCustom();
+        meDashboardItemCustomHoanThanhMuon.setLabel("Hoàn thành muộn");
+        meDashboardItemCustomHoanThanhMuon.setY((long) meTodoRepository.countTodoByDueDatePeriod(projectId, periodId, 3));
+        meDashboardItemDueDates.add(meDashboardItemCustomHoanThanhMuon);
+        MeDashboardItemCustom meDashboardItemCustomQuaHan = new MeDashboardItemCustom();
+        meDashboardItemCustomQuaHan.setLabel("Quá hạn");
+        meDashboardItemCustomQuaHan.setY((long) meTodoRepository.countTodoByDueDatePeriod(projectId, periodId, 4));
+        meDashboardItemDueDates.add(meDashboardItemCustomQuaHan);
+        MeDashboardItemCustom meDashboardItemCustomKhongCoNgayHan = new MeDashboardItemCustom();
+        meDashboardItemCustomKhongCoNgayHan.setLabel("Không có ngày hạn");
+        meDashboardItemCustomKhongCoNgayHan.setY((long) meTodoRepository.countTodoByNoDueDatePeriod(projectId, periodId));
+        meDashboardItemDueDates.add(meDashboardItemCustomKhongCoNgayHan);
+        meDashboardAllCustom.setListDashboardDueDate(meDashboardItemDueDates);
 
-    @Override
-    public List<MeDataDashboardMemberResponse> countTodoByMemberAllProject(String projectId) {
-        return meTodoRepository.countTodoByMemberAllProject(projectId);
-    }
+        List<MeDashboardItemCustom> meDashboardItemMembers = new ArrayList<>();
+        List<MeDataDashboardMemberResponse> listMember = meTodoRepository.countTodoByMemberPeriod(projectId, periodId);
+        meDashboardItemMembers = listMember.stream()
+                .map(todoList -> {
+                    MeDashboardItemCustom customItem = new MeDashboardItemCustom();
+                    customItem.setLabel(todoList.getName());
+                    customItem.setY((long) todoList.getMember());
+                    return customItem;
+                })
+                .collect(Collectors.toList());
+        MeDashboardItemCustom meDashboardItemCustomKoCoThanhVien = new MeDashboardItemCustom();
+        meDashboardItemCustomKoCoThanhVien.setLabel("Thẻ không có thành viên");
+        meDashboardItemCustomKoCoThanhVien.setY((long) meTodoRepository.countTodoByNoMemberPeriod(projectId, periodId));
+        meDashboardItemMembers.add(meDashboardItemCustomKoCoThanhVien);
+        meDashboardAllCustom.setListDashboardMember(meDashboardItemMembers);
 
-    @Override
-    public Integer countTodoByNoMemberAllProject(String projectId) {
-        return meTodoRepository.countTodoByNoMemberAllProject(projectId);
-    }
-
-    @Override
-    public List<MeDataDashboardLabelResponse> countTodoByLabelAllProject(String projectId) {
-        return meTodoRepository.countTodoByLabelAllProject(projectId);
-    }
-
-    @Override
-    public Integer countTodoByNoLabelAllProject(String projectId) {
-        return meTodoRepository.countTodoByNoLabelAllProject(projectId);
-    }
-
-    @Override
-    public List<MeDataDashboardTodoListResoonse> countTodoByTodoListPeriod(String projectId, String periodId) {
-        return meTodoRepository.countTodoByTodoListPeriod(projectId, periodId);
-    }
-
-    @Override
-    public Integer countTodoByDueDatePeriod(String projectId, String periodId, Integer statusTodo) {
-        return meTodoRepository.countTodoByDueDatePeriod(projectId, periodId, statusTodo);
-    }
-
-    @Override
-    public Integer countTodoByNoDueDatePeriod(String projectId, String periodId) {
-        return meTodoRepository.countTodoByNoDueDatePeriod(projectId, periodId);
-    }
-
-    @Override
-    public List<MeDataDashboardMemberResponse> countTodoByMemberPeriod(String projectId, String periodId) {
-        return meTodoRepository.countTodoByMemberPeriod(projectId, periodId);
-    }
-
-    @Override
-    public Integer countTodoByNoMemberPeriod(String projectId, String periodId) {
-        return meTodoRepository.countTodoByNoMemberPeriod(projectId, periodId);
-    }
-
-    @Override
-    public List<MeDataDashboardLabelResponse> countTodoByLabelPeriod(String projectId, String periodId) {
-        return meTodoRepository.countTodoByLabelPeriod(projectId, periodId);
-    }
-
-    @Override
-    public Integer countTodoByNoLabelPeriod(String projectId, String periodId) {
-        return meTodoRepository.countTodoByNoLabelPeriod(projectId, periodId);
+        List<MeDashboardItemCustom> meDashboardItemLabels = new ArrayList<>();
+        List<MeDataDashboardLabelResponse> listLabel = meTodoRepository.countTodoByLabelPeriod(projectId, periodId);
+        meDashboardItemLabels = listLabel.stream()
+                .map(todoList -> {
+                    MeDashboardItemCustom customItem = new MeDashboardItemCustom();
+                    customItem.setLabel(todoList.getName());
+                    customItem.setY((long) todoList.getLabel());
+                    return customItem;
+                })
+                .collect(Collectors.toList());
+        MeDashboardItemCustom meDashboardItemCustomKoCoNhan = new MeDashboardItemCustom();
+        meDashboardItemCustomKoCoNhan.setLabel("Thẻ không có nhãn");
+        meDashboardItemCustomKoCoNhan.setY((long) meTodoRepository.countTodoByNoLabelPeriod(projectId, periodId));
+        meDashboardItemLabels.add(meDashboardItemCustomKoCoNhan);
+        meDashboardAllCustom.setListDashboardLabel(meDashboardItemLabels);
+        return meDashboardAllCustom;
     }
 
     public MeCountTodoResponse updateProgress(String idPeriod, String todoId) {

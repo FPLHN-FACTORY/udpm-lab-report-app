@@ -19,7 +19,13 @@ import com.labreportapp.portalprojects.core.member.model.request.MeUpdateProgres
 import com.labreportapp.portalprojects.core.member.model.request.MeUpdateStatusTodoRequest;
 import com.labreportapp.portalprojects.core.member.model.request.MeUpdateTodoRequest;
 import com.labreportapp.portalprojects.core.member.model.request.MeUpdateTypeTodoRequest;
-import com.labreportapp.portalprojects.core.member.model.response.*;
+import com.labreportapp.portalprojects.core.member.model.response.MeAllDetailTodo;
+import com.labreportapp.portalprojects.core.member.model.response.MeBoardResponse;
+import com.labreportapp.portalprojects.core.member.model.response.MeConvertTodoResponse;
+import com.labreportapp.portalprojects.core.member.model.response.MeDashboardAllCustom;
+import com.labreportapp.portalprojects.core.member.model.response.MeDeleteTodoResponse;
+import com.labreportapp.portalprojects.core.member.model.response.MeDetailTodoResponse;
+import com.labreportapp.portalprojects.core.member.model.response.MeTodoResponse;
 import com.labreportapp.portalprojects.entity.Todo;
 import jakarta.validation.Valid;
 import org.springframework.data.repository.query.Param;
@@ -88,33 +94,5 @@ public interface MeTodoService {
 
     TodoObject updateTypeTodo(@Valid MeUpdateTypeTodoRequest request);
 
-    List<MeDataDashboardTodoListResoonse> countTodoByTodoListAllProject(String projectId);
-
-    Integer countTodoByDueDateAllProject(String projectId, Integer statusTodo);
-
-    Integer countTodoByNoDueDateAllProject(String projectId);
-
-    List<MeDataDashboardMemberResponse> countTodoByMemberAllProject(String projectId);
-
-    Integer countTodoByNoMemberAllProject(String projectId);
-
-    List<MeDataDashboardLabelResponse> countTodoByLabelAllProject(String projectId);
-
-    Integer countTodoByNoLabelAllProject(String projectId);
-
-    //////////////////////////////////////////////////////////////////////////
-
-    List<MeDataDashboardTodoListResoonse> countTodoByTodoListPeriod(String projectId, String periodId);
-
-    Integer countTodoByDueDatePeriod(String projectId, String periodId, Integer statusTodo);
-
-    Integer countTodoByNoDueDatePeriod(String projectId, String periodId);
-
-    List<MeDataDashboardMemberResponse> countTodoByMemberPeriod(String projectId, String periodId);
-
-    Integer countTodoByNoMemberPeriod(String projectId, String periodId);
-
-    List<MeDataDashboardLabelResponse> countTodoByLabelPeriod(String projectId, String periodId);
-
-    Integer countTodoByNoLabelPeriod(String projectId, String periodId);
+    MeDashboardAllCustom dashboardAll(String projectId, String periodId);
 }

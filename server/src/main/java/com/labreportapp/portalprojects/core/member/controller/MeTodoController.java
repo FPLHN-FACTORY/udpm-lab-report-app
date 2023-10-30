@@ -232,7 +232,7 @@ public class MeTodoController {
     @MessageMapping("/sort-todo-created-date/{projectId}/{periodId}")
     @SendTo("/portal-projects/sort-todo-created-date/{projectId}/{periodId}")
     public ResponseObject sortTodoCreatedDate(@RequestBody MeSortTodoRequest request,
-                                           @ModelAttribute DesVarProjectIdAndPeriodIdRequest des
+                                              @ModelAttribute DesVarProjectIdAndPeriodIdRequest des
     ) {
         return new ResponseObject(meTodoService.sortTodoCreatedDate(request));
     }
@@ -240,7 +240,7 @@ public class MeTodoController {
     @MessageMapping("/sort-todo-progress/{projectId}/{periodId}")
     @SendTo("/portal-projects/sort-todo-progress/{projectId}/{periodId}")
     public ResponseObject sortTodoProgress(@RequestBody MeSortTodoRequest request,
-                                              @ModelAttribute DesVarProjectIdAndPeriodIdRequest des
+                                           @ModelAttribute DesVarProjectIdAndPeriodIdRequest des
     ) {
         return new ResponseObject(meTodoService.sortTodoProgress(request));
     }
@@ -248,7 +248,7 @@ public class MeTodoController {
     @MessageMapping("/sort-todo-name/{projectId}/{periodId}")
     @SendTo("/portal-projects/sort-todo-name/{projectId}/{periodId}")
     public ResponseObject sortTodoName(@RequestBody MeSortTodoRequest request,
-                                              @ModelAttribute DesVarProjectIdAndPeriodIdRequest des
+                                       @ModelAttribute DesVarProjectIdAndPeriodIdRequest des
     ) {
         return new ResponseObject(meTodoService.sortTodoName(request));
     }
@@ -261,84 +261,9 @@ public class MeTodoController {
         return new ResponseObject(meTodoService.updateTypeTodo(request));
     }
 
-    @GetMapping("/count-todo-by-todo-list-all-project")
-    public ResponseObject countTodoByTodoListAllProject(@RequestParam("projectId") String projectId) {
-        return new ResponseObject(meTodoService.countTodoByTodoListAllProject(projectId));
+    @GetMapping("/dashboard-all")
+    public ResponseObject dashboardAll(@RequestParam("projectId") String projectId, @RequestParam("periodId") String periodId) {
+        return new ResponseObject(meTodoService.dashboardAll(projectId, periodId));
     }
 
-    @GetMapping("/count-todo-by-due-date-all-project")
-    public ResponseObject countTodoByDueDateAllProject(@RequestParam("projectId") String projectId,
-                                                       @RequestParam("statusTodo") Integer statusTodo) {
-        return new ResponseObject(meTodoService.countTodoByDueDateAllProject(projectId, statusTodo));
-    }
-
-    @GetMapping("/count-todo-by-no-due-date-all-project")
-    public ResponseObject countTodoByNoDueDateAllProject(@RequestParam("projectId") String projectId) {
-        return new ResponseObject(meTodoService.countTodoByNoDueDateAllProject(projectId));
-    }
-
-    @GetMapping("/count-todo-by-member-all-project")
-    public ResponseObject countTodoByMemberAllProject(@RequestParam("projectId") String projectId) {
-        return new ResponseObject(meTodoService.countTodoByMemberAllProject(projectId));
-    }
-
-    @GetMapping("/count-todo-by-no-member-all-project")
-    public ResponseObject countTodoByNoMemberAllProject(@RequestParam("projectId") String projectId) {
-        return new ResponseObject(meTodoService.countTodoByNoMemberAllProject(projectId));
-    }
-
-    @GetMapping("/count-todo-by-label-all-project")
-    public ResponseObject countTodoByLabelAllProject(@RequestParam("projectId") String projectId) {
-        return new ResponseObject(meTodoService.countTodoByLabelAllProject(projectId));
-    }
-
-    @GetMapping("/count-todo-by-no-label-all-project")
-    public ResponseObject countTodoByNoLabelAllProject(@RequestParam("projectId") String projectId) {
-        return new ResponseObject(meTodoService.countTodoByNoLabelAllProject(projectId));
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-
-    @GetMapping("/count-todo-by-todo-list-period")
-    public ResponseObject countTodoByTodoListPeriod(@RequestParam("projectId") String projectId,
-                                                    @RequestParam("periodId") String periodId) {
-        return new ResponseObject(meTodoService.countTodoByTodoListPeriod(projectId, periodId));
-    }
-
-    @GetMapping("/count-todo-by-due-date-period")
-    public ResponseObject countTodoByDueDatePeriod(@RequestParam("projectId") String projectId,
-                                                   @RequestParam("periodId") String periodId,
-                                                   @RequestParam("statusTodo") Integer statusTodo) {
-        return new ResponseObject(meTodoService.countTodoByDueDatePeriod(projectId, periodId, statusTodo));
-    }
-
-    @GetMapping("/count-todo-by-no-due-date-period")
-    public ResponseObject countTodoByNoDueDatePeriod(@RequestParam("projectId") String projectId,
-                                                     @RequestParam("periodId") String periodId) {
-        return new ResponseObject(meTodoService.countTodoByNoDueDatePeriod(projectId, periodId));
-    }
-
-    @GetMapping("/count-todo-by-member-period")
-    public ResponseObject countTodoByMemberPeriod(@RequestParam("projectId") String projectId,
-                                                  @RequestParam("periodId") String periodId) {
-        return new ResponseObject(meTodoService.countTodoByMemberPeriod(projectId, periodId));
-    }
-
-    @GetMapping("/count-todo-by-no-member-period")
-    public ResponseObject countTodoByNoMemberPeriod(@RequestParam("projectId") String projectId,
-                                                    @RequestParam("periodId") String periodId) {
-        return new ResponseObject(meTodoService.countTodoByNoMemberPeriod(projectId, periodId));
-    }
-
-    @GetMapping("/count-todo-by-label-period")
-    public ResponseObject countTodoByLabelPeriod(@RequestParam("projectId") String projectId,
-                                                 @RequestParam("periodId") String periodId) {
-        return new ResponseObject(meTodoService.countTodoByLabelPeriod(projectId, periodId));
-    }
-
-    @GetMapping("/count-todo-by-no-label-period")
-    public ResponseObject countTodoByNoLabelPeriod(@RequestParam("projectId") String projectId,
-                                                   @RequestParam("periodId") String periodId) {
-        return new ResponseObject(meTodoService.countTodoByNoLabelPeriod(projectId, periodId));
-    }
 }

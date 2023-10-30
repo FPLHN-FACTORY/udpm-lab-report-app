@@ -13,9 +13,7 @@ import lombok.Setter;
 @Setter
 public class MeUpdateTodoRequest extends MeTodoAndTodoListRequest{
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String idTodoChange;
 
     private Integer priorityLevel;

@@ -13,19 +13,13 @@ import lombok.Setter;
 @Setter
 public class MeUpdateBackgroundProjectRequest {
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String projectId;
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String name;
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String type;
 
 }

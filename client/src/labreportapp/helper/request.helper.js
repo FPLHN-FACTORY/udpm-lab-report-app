@@ -30,6 +30,9 @@ request.interceptors.response.use(
     if (error.response != null && error.response.status === 400) {
       message.error(error.response.data.message);
     }
+    if (error.response != null && error.response.status === 404) {
+      window.location.href = "/not-found";
+    }
     if (error.response && error.response.status === 500) {
       if (error.response.data.message === "2003") {
         Cookies.remove("token");

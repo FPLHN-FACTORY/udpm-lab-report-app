@@ -13,8 +13,6 @@ import lombok.Setter;
 @Setter
 public class MeCreateDetailTodoRequest extends MeBaseDetailTodoRequest {
 
-    @NotEmpty
     @NotBlank
-    @NotNull
     private String periodId;
 }

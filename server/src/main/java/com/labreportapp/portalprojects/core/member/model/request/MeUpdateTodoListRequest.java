@@ -13,28 +13,18 @@ import lombok.Setter;
 @Setter
 public class MeUpdateTodoListRequest {
 
-    @NotNull
-    @NotEmpty
     @NotBlank
     private String idTodoList;
 
     @NotBlank
-    @NotEmpty
-    @NotNull
     private String idProject;
 
-    @NotNull
-    @NotEmpty
     @NotBlank
     private String indexBefore;
 
-    @NotNull
-    @NotEmpty
     @NotBlank
     private String indexAfter;
 
-    @NotNull
-    @NotEmpty
     @NotBlank
     private String sessionId;
 }

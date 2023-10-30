@@ -13,25 +13,15 @@ import lombok.Setter;
 @Setter
 public class MeUpdateProgressTodoRequest extends MeTodoAndTodoListRequest{
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String id;
 
     private Short progress;
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String periodId;
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String projectId;
 
-//    @NotNull
-//    @NotBlank
-//    @NotEmpty
-//    private String idUser;
 }

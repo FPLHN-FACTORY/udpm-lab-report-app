@@ -13,40 +13,24 @@ import lombok.Setter;
 @Setter
 public class MeDeleteImageRequest {
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String id;
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String nameFile;
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String nameImage;
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String statusImage;
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String idTodo;
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String idTodoList;
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String projectId;
-
-//    private String idUser;
 }

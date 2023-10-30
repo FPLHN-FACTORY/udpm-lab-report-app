@@ -13,19 +13,13 @@ import lombok.Setter;
 @Setter
 public class MeCreateCommentRequest {
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String idTodo;
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String idTodoList;
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String content;
 
 //    private String idUser;

@@ -13,8 +13,6 @@ import lombok.Setter;
 @Setter
 public class MeSortTodoRequest {
 
-    @NotEmpty
-    @NotNull
     @NotBlank
     private String idPeriod;
 

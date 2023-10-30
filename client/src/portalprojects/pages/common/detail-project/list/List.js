@@ -129,9 +129,7 @@ const List = ({ list, index }) => {
       const newSearch = searchParams.toString();
       let newPath = "";
       if (location.pathname.includes("/table")) {
-        newPath = `${location.pathname.replace(/\/[^/]+$/, "")}/${
-          detailProject.id
-        }?${newSearch}`;
+        newPath = `${location.pathname.replace("/table", "")}?${newSearch}`;
       } else {
         newPath = `${location.pathname}?${newSearch}`;
       }

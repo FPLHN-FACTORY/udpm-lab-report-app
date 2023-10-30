@@ -9,7 +9,12 @@ import "./styleDetailProjectDashBoard.css";
 import LoadingIndicator from "../../../helper/loading";
 import { Link, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCogs, faHome, faLineChart } from "@fortawesome/free-solid-svg-icons";
+import {
+  faChartColumn,
+  faCogs,
+  faHome,
+  faLineChart,
+} from "@fortawesome/free-solid-svg-icons";
 import { DetailProjectAPI } from "../../../api/detail-project/detailProject.api";
 import { useEffect } from "react";
 import {
@@ -25,6 +30,9 @@ import { Col, Progress, Row, Select } from "antd";
 import { DashboardApi } from "../../../api/dashboard/Dashboard.api";
 import HeaderDetailProject from "../detail-project/HeaderDetailProject";
 import BurndownChart from "./BurndownChart";
+import CanvasJSReact from "@canvasjs/react-charts";
+
+var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 const { Option } = Select;
 
@@ -35,16 +43,11 @@ const DetailProjectDashBoard = () => {
   const [loading, setLoading] = useState(false);
   const [listPeriod, setListPeriod] = useState([]);
   const [progress, setProgress] = useState(0);
-  const [dataList, setDataList] = useState([]);
-  const [dataDueDate, setDataDueDate] = useState([]);
-  const [dataMember, setDataMember] = useState([]);
-  const [dataLabel, setDataLabel] = useState([]);
   const [idPeriodChange, setIdPeriodChange] = useState("none");
 
   useEffect(() => {
     fetchData();
     loadDataPeriod();
-    loadDataLineChartAllProject();
     document.querySelector(".logo_project").src =
       "https://raw.githubusercontent.com/FPLHN-FACTORY/udpm-common-resources/main/fpoly-udpm/logo-udpm-2.png";
 
@@ -71,185 +74,134 @@ const DetailProjectDashBoard = () => {
     });
   };
 
-  const loadDataLineChartAllProject = () => {
-    setDataList([]);
-    setDataDueDate([]);
-    setDataMember([]);
-    setDataLabel([]);
+  const loadDashboardAll = () => {
     setLoading(true);
+    DashboardApi.dashboardAll(detailProject.id, idPeriodChange).then(
+      (response) => {
+        setDashboardAll(response.data.data);
+        setLoading(false);
+      }
+    );
+  };
+
+  useEffect(() => {
     if (detailProject != null) {
-      setProgress(detailProject.progress);
+      loadDashboardAll();
     }
-    DashboardApi.fetchAllDataDashboardTodoListAllProject(id).then(
-      (response) => {
-        setDataList(response.data.data);
-      }
-    );
-
-    fetchDataAndSetDataDueDate(0, "Chưa hoàn thành");
-    fetchDataAndSetDataDueDate(2, "Hoàn thành sớm");
-    fetchDataAndSetDataDueDate(3, "Hoàn thành muộn");
-    fetchDataAndSetDataDueDate(4, "Quá hạn");
-    fetchDataAndSetDataNoDueDate("Không có ngày hạn");
-
-    DashboardApi.fetchAllDataDashboardMemberAllProject(id).then((response) => {
-      let array = response.data.data;
-
-      DashboardApi.fetchAllDataDashboardNoMemberAllProject(id).then(
-        (response) => {
-          array.push({
-            name: "Thẻ không có thành viên",
-            member: response.data.data,
-          });
-          setDataMember(array);
-        }
-      );
-    });
-
-    DashboardApi.fetchAllDataDashboardLabelAllProject(id).then((response) => {
-      let array = response.data.data;
-
-      DashboardApi.fetchAllDataDashboardNoLabelAllProject(id).then(
-        (response) => {
-          array.push({
-            name: "Thẻ không có nhãn",
-            label: response.data.data,
-          });
-          setDataLabel(array);
-        }
-      );
-    });
-    setTimeout(() => {
-      setLoading(false);
-    }, 300);
-  };
-
-  const fetchDataAndSetDataDueDate = async (status, name) => {
-    try {
-      const response =
-        await DashboardApi.fetchAllDataDashboardDueDateAllProject(id, status);
-      const newData = {
-        name: name,
-        duedate: response.data.data,
-      };
-      setDataDueDate((prevData) => [...prevData, newData]);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const fetchDataAndSetDataNoDueDate = async (name) => {
-    try {
-      const response =
-        await DashboardApi.fetchAllDataDashboardNoDueDateAllProject(id);
-      const newData = {
-        name: name,
-        duedate: response.data.data,
-      };
-      setDataDueDate((prevData) => [...prevData, newData]);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const loadDataLineChartPeriod = (idPeriod) => {
-    setDataList([]);
-    setDataDueDate([]);
-    setDataMember([]);
-    setDataLabel([]);
-    setLoading(true);
-    DashboardApi.detailPeriod(idPeriod).then((response) => {
-      console.log(response.data.data);
-      setProgress(response.data.data.progress);
-    });
-    DashboardApi.fetchAllDataDashboardTodoListPeriod(id, idPeriod).then(
-      (response) => {
-        setDataList(response.data.data);
-      }
-    );
-
-    fetchDataAndSetDataDueDatePeriod(0, "Chưa hoàn thành", idPeriod);
-    fetchDataAndSetDataDueDatePeriod(2, "Hoàn thành sớm", idPeriod);
-    fetchDataAndSetDataDueDatePeriod(3, "Hoàn thành muộn", idPeriod);
-    fetchDataAndSetDataDueDatePeriod(4, "Quá hạn", idPeriod);
-    fetchDataAndSetDataNoDueDatePeriod("Không có ngày hạn", idPeriod);
-
-    DashboardApi.fetchAllDataDashboardMemberPeriod(id, idPeriod).then(
-      (response) => {
-        let array = response.data.data;
-
-        DashboardApi.fetchAllDataDashboardNoMemberPeriod(id, idPeriod).then(
-          (response) => {
-            array.push({
-              name: "Thẻ không có thành viên",
-              member: response.data.data,
-            });
-            setDataMember(array);
-          }
-        );
-      }
-    );
-
-    DashboardApi.fetchAllDataDashboardLabelPeriod(id, idPeriod).then(
-      (response) => {
-        let array = response.data.data;
-
-        DashboardApi.fetchAllDataDashboardNoLabelPeriod(id, idPeriod).then(
-          (response) => {
-            array.push({
-              name: "Thẻ không có nhãn",
-              label: response.data.data,
-            });
-            setDataLabel(array);
-          }
-        );
-      }
-    );
-    setTimeout(() => {
-      setLoading(false);
-    }, 300);
-  };
-
-  const fetchDataAndSetDataDueDatePeriod = async (status, name, idPeriod) => {
-    try {
-      const response = await DashboardApi.fetchAllDataDashboardDueDatePeriod(
-        id,
-        status,
-        idPeriod
-      );
-      const newData = {
-        name: name,
-        duedate: response.data.data,
-      };
-      setDataDueDate((prevData) => [...prevData, newData]);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const fetchDataAndSetDataNoDueDatePeriod = async (name, idPeriod) => {
-    try {
-      const response = await DashboardApi.fetchAllDataDashboardNoDueDatePeriod(
-        id,
-        idPeriod
-      );
-      const newData = {
-        name: name,
-        duedate: response.data.data,
-      };
-      setDataDueDate((prevData) => [...prevData, newData]);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  }, [detailProject, idPeriodChange]);
 
   const handleChangeIdPeriod = (e) => {
     if (e !== "none") {
-      loadDataLineChartPeriod(e);
+      DashboardApi.detailPeriod(e).then((response) => {
+        setProgress(response.data.data.progress);
+      });
     } else {
-      loadDataLineChartAllProject();
+      fetchData();
     }
     setIdPeriodChange(e);
+  };
+
+  const [dashboardAll, setDashboardAll] = useState([]);
+
+  const [typeChartTodoList, setTypeChartTodoList] = useState("column");
+  const [typeChartDueDate, setTypeChartDueDate] = useState("column");
+  const [typeChartMember, setTypeChartMember] = useState("column");
+  const [typeChartLabel, setTypeChartLabel] = useState("column");
+
+  const listType = [
+    { id: 1, key: "bar", name: "Biểu đồ cột ngang" },
+    { id: 2, key: "column", name: "Biểu đồ cột dọc" },
+    { id: 3, key: "pie", name: "Biểu đồ tròn" },
+    { id: 4, key: "line", name: "Biểu đồ đường" },
+    { id: 5, key: "area", name: "Biểu đồ vùng" },
+  ];
+
+  const optionsTodoList = {
+    animationEnabled: true,
+    theme: "light2",
+    title: {
+      text: "Thống kê theo danh sách",
+    },
+    axisX: {
+      title: "Danh sách",
+      reversed: true,
+    },
+    axisY: {
+      title: "Số thẻ trong danh sách",
+      includeZero: true,
+    },
+    data: [
+      {
+        type: typeChartTodoList,
+        dataPoints: dashboardAll.listDashboardTodoList,
+      },
+    ],
+  };
+
+  const optionsDueDate = {
+    animationEnabled: true,
+    theme: "light2",
+    title: {
+      text: "Thống kê theo ngày hạn",
+    },
+    axisX: {
+      title: "Ngày hạn",
+      reversed: true,
+    },
+    axisY: {
+      title: "Số thẻ",
+      includeZero: true,
+    },
+    data: [
+      {
+        type: typeChartDueDate,
+        dataPoints: dashboardAll.listDashboardDueDate,
+      },
+    ],
+  };
+
+  const optionsMember = {
+    animationEnabled: true,
+    theme: "light2",
+    title: {
+      text: "Thống kê theo thành viên",
+    },
+    axisX: {
+      title: "Thành viên",
+      reversed: true,
+    },
+    axisY: {
+      title: "Số thẻ",
+      includeZero: true,
+    },
+    data: [
+      {
+        type: typeChartMember,
+        dataPoints: dashboardAll.listDashboardMember,
+      },
+    ],
+  };
+
+  const optionsLabel = {
+    animationEnabled: true,
+    theme: "light2",
+    title: {
+      text: "Thống kê theo nhãn",
+    },
+    axisX: {
+      title: "Nhãn",
+      reversed: true,
+    },
+    axisY: {
+      title: "Số thẻ",
+      includeZero: true,
+    },
+    data: [
+      {
+        type: typeChartLabel,
+        dataPoints: dashboardAll.listDashboardLabel,
+      },
+    ],
   };
 
   return (
@@ -335,76 +287,97 @@ const DetailProjectDashBoard = () => {
               <div
                 style={{ marginLeft: 150, marginRight: 150, marginBottom: 30 }}
               >
-                {" "}
                 <BurndownChart />
               </div>
-              <h4>Thống kê thẻ theo danh sách</h4>
               <div
-                style={{
-                  marginBottom: "15px",
-                  display: "flex",
-                  justifyContent: "center",
-                }}
+                style={{ marginLeft: 150, marginRight: 150, marginBottom: 30 }}
               >
-                <BarChart width={1150} height={400} data={dataList}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="list" fill="rgb(190, 190, 59)" />
-                </BarChart>
-              </div>{" "}
-              <h4>Thống kê thẻ theo ngày hạn</h4>
-              <div
-                style={{
-                  marginBottom: "15px",
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              >
-                <BarChart width={1150} height={400} data={dataDueDate}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="duedate" fill="rgb(190, 190, 59)" />
-                </BarChart>
-              </div>{" "}
-              <h4>Thống kê thẻ theo thành viên</h4>
-              <div
-                style={{
-                  marginBottom: "15px",
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              >
-                <BarChart width={1150} height={400} data={dataMember}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="member" fill="rgb(190, 190, 59)" />
-                </BarChart>
-              </div>{" "}
-              <h4>Thống kê thẻ theo nhãn</h4>
-              <div
-                style={{
-                  marginBottom: "15px",
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              >
-                <BarChart width={1150} height={400} data={dataLabel}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="label" fill="rgb(190, 190, 59)" />
-                </BarChart>
+                <div style={{ fontSize: 20, fontWeight: 500 }}>
+                  <FontAwesomeIcon
+                    icon={faChartColumn}
+                    style={{ marginRight: 5 }}
+                  />
+                  Các thống kê khác
+                </div>
+
+                <div style={{ marginTop: 35 }}>
+                  <span style={{ fontSize: 15 }}>Dạng biểu đồ:</span>{" "}
+                  <Select
+                    style={{ width: 200 }}
+                    value={typeChartTodoList}
+                    onChange={(e) => {
+                      setTypeChartTodoList(e);
+                    }}
+                  >
+                    {listType.map((item) => {
+                      return (
+                        <Select.Option value={item.key}>
+                          {item.name}
+                        </Select.Option>
+                      );
+                    })}
+                  </Select>
+                  <CanvasJSChart options={optionsTodoList} />
+                </div>
+                <div style={{ marginTop: 40 }}>
+                  <span style={{ fontSize: 15 }}>Dạng biểu đồ:</span>{" "}
+                  <Select
+                    style={{ width: 200 }}
+                    value={typeChartDueDate}
+                    onChange={(e) => {
+                      setTypeChartDueDate(e);
+                    }}
+                  >
+                    {listType.map((item) => {
+                      return (
+                        <Select.Option value={item.key}>
+                          {item.name}
+                        </Select.Option>
+                      );
+                    })}
+                  </Select>
+                  <CanvasJSChart options={optionsDueDate} />
+                </div>
+
+                <div style={{ marginTop: 40 }}>
+                  <span style={{ fontSize: 15 }}>Dạng biểu đồ:</span>{" "}
+                  <Select
+                    style={{ width: 200 }}
+                    value={typeChartMember}
+                    onChange={(e) => {
+                      setTypeChartMember(e);
+                    }}
+                  >
+                    {listType.map((item) => {
+                      return (
+                        <Select.Option value={item.key}>
+                          {item.name}
+                        </Select.Option>
+                      );
+                    })}
+                  </Select>
+                  <CanvasJSChart options={optionsMember} />
+                </div>
+
+                <div style={{ marginTop: 40 }}>
+                  <span style={{ fontSize: 15 }}>Dạng biểu đồ:</span>{" "}
+                  <Select
+                    style={{ width: 200 }}
+                    value={typeChartLabel}
+                    onChange={(e) => {
+                      setTypeChartLabel(e);
+                    }}
+                  >
+                    {listType.map((item) => {
+                      return (
+                        <Select.Option value={item.key}>
+                          {item.name}
+                        </Select.Option>
+                      );
+                    })}
+                  </Select>
+                  <CanvasJSChart options={optionsLabel} />
+                </div>
               </div>
             </div>
           </div>

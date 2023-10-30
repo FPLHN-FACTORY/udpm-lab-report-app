@@ -13,13 +13,9 @@ import lombok.Setter;
 @Setter
 public class MeDeleteLabelProjectRequest {
 
-    @NotEmpty
     @NotBlank
-    @NotNull
     private String id;
 
-    @NotEmpty
     @NotBlank
-    @NotNull
     private String projectId;
 }

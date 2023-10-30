@@ -13,14 +13,10 @@ import lombok.Setter;
 @Setter
 public class MeTodoAndTodoListRequest {
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String idTodo;
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String idTodoList;
 
 }

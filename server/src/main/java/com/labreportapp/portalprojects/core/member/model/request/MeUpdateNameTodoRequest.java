@@ -13,8 +13,6 @@ import lombok.Setter;
 @Setter
 public class MeUpdateNameTodoRequest extends MeTodoAndTodoListRequest{
 
-    @NotNull
-    @NotEmpty
     @NotBlank
     private String name;
 }

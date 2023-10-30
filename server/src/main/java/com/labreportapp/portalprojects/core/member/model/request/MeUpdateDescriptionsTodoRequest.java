@@ -14,15 +14,10 @@ import org.hibernate.validator.constraints.Length;
 @Setter
 public class MeUpdateDescriptionsTodoRequest extends MeTodoAndTodoListRequest{
 
-    @NotNull
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String idTodoUpdate;
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     @Length(max = 5000, message = "Mô tả tối đa 5000 ký tự")
     private String descriptions;
 

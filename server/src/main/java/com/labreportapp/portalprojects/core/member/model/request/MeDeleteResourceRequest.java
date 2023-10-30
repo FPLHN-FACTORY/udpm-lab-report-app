@@ -13,29 +13,19 @@ import lombok.Setter;
 @Setter
 public class MeDeleteResourceRequest {
 
-    @NotEmpty
     @NotBlank
-    @NotNull
     private String id;
 
     private String url;
 
     private String name;
 
-    @NotEmpty
     @NotBlank
-    @NotNull
     private String idTodo;
 
-    @NotEmpty
     @NotBlank
-    @NotNull
     private String idTodoList;
 
-    @NotEmpty
     @NotBlank
-    @NotNull
     private String projectId;
-
-//    private String idUser;
 }

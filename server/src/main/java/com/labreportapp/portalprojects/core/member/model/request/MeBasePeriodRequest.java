@@ -15,7 +15,6 @@ import org.hibernate.validator.constraints.Length;
 @Setter
 public class MeBasePeriodRequest {
 
-    @NotEmpty
     @NotBlank
     @Length(max = EntityProperties.LENGTH_NAME)
     private String name;
@@ -23,18 +22,15 @@ public class MeBasePeriodRequest {
     @Length(max = EntityProperties.LENGTH_DESCRIPTION)
     private String descriptions;
 
-    @NotEmpty
     @NotBlank
     private String startTime;
 
-    @NotEmpty
     @NotBlank
     private String endTime;
 
     @Length(max = EntityProperties.LENGTH_DESCRIPTION)
     private String target;
 
-    @NotNull
     @NotBlank
     private String projectId;
 }

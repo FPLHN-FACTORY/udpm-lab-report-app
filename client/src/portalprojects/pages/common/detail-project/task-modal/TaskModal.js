@@ -267,10 +267,10 @@ const TaskModal = memo(({ open, onCancel, id }) => {
     if (descriptions == null) {
       return;
     }
-    if (descriptions.length > 5000) {
-      message.error("Mô tả không vượt quá 5000 ký tự");
-      return;
-    }
+    // if (descriptions.length > 5000) {
+    //   message.error("Mô tả không vượt quá 5000 ký tự");
+    //   return;
+    // }
     let obj = {
       idTodoUpdate: id,
       descriptions: descriptions,

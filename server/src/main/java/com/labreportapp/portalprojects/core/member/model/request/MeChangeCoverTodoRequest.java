@@ -14,29 +14,19 @@ import org.hibernate.validator.constraints.Length;
 @Setter
 public class MeChangeCoverTodoRequest {
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String idTodo;
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String idImage;
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     @Length(max = 100)
     private String nameFile;
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String idTodoList;
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String status;
 }

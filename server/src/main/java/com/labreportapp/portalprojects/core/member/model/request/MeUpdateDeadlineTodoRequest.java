@@ -17,15 +17,10 @@ public class MeUpdateDeadlineTodoRequest extends MeTodoAndTodoListRequest{
     private String idTodoUpdate;
 
     @NotBlank
-    @NotEmpty
     private String deadline;
 
     private String reminder;
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String projectId;
-
-//    private String idUser;
 }

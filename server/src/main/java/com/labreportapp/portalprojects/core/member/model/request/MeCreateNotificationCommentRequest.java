@@ -19,14 +19,10 @@ public class MeCreateNotificationCommentRequest {
 
 //    private List<String> listEmail;
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String todoId;
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String url;
 //
 //    @NotNull

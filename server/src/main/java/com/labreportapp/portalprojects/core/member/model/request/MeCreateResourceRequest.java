@@ -17,24 +17,16 @@ public class MeCreateResourceRequest {
     @Length(max = 100)
     private String name;
 
-    @NotEmpty
     @NotBlank
-    @NotNull
     private String url;
 
-    @NotEmpty
     @NotBlank
-    @NotNull
     private String idTodo;
 
-    @NotEmpty
     @NotBlank
-    @NotNull
     private String idTodoList;
 
-    @NotEmpty
     @NotBlank
-    @NotNull
     private String projectId;
 
 //    private String idUser;

@@ -13,15 +13,9 @@ import lombok.Setter;
 @Setter
 public class MeDeleteDeadlineTodoRequest extends MeTodoAndTodoListRequest{
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String idTodoDelete;
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String projectId;
-
-//    private String idUser;
 }

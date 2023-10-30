@@ -13,13 +13,9 @@ import lombok.Setter;
 @Setter
 public class MeCreateTodoListRequest {
 
-    @NotEmpty
     @NotBlank
-    @NotNull
     private String name;
 
-    @NotEmpty
     @NotBlank
-    @NotNull
     private String idProject;
 }

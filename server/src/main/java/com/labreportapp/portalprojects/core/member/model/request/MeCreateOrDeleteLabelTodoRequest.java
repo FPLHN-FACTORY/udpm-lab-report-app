@@ -13,13 +13,9 @@ import lombok.Setter;
 @Setter
 public class MeCreateOrDeleteLabelTodoRequest extends MeTodoAndTodoListRequest{
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String idLabel;
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String idTodoCreateOrDelete;
 }

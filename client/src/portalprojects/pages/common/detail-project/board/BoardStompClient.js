@@ -1023,8 +1023,9 @@ const BoardStompClient = (dispatch, useAppSelector, id) => {
     });
 
     stompClient.subscribe("/portal-projects/error/" + sessionId, (mes) => {
-      var errorObject = JSON.parse(mes.body).data;
-      message.error("Lỗi hệ thống");
+      var errorObject = JSON.parse(mes.body);
+      var errorMessages = errorObject.map(error => error.message).join(', ');
+      message.error(errorMessages);
     });
 
     stompClient.subscribe(

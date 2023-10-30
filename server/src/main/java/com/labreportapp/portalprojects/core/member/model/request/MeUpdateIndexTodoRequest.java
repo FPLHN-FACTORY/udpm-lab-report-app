@@ -13,46 +13,30 @@ import lombok.Setter;
 @Setter
 public class MeUpdateIndexTodoRequest {
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String idTodo;
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String idTodoListOld;
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String nameTodoListOld;
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String idTodoListNew;
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String nameTodoListNew;
 
     private Short indexBefore;
 
     private Short indexAfter;
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String periodId;
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String projectId;
-
-//    private String idUser;
 
     private String sessionId;
 }

@@ -13,18 +13,12 @@ import lombok.Setter;
 @Setter
 public class MeDeleteDetailTodoRequest extends MeTodoAndTodoListRequest{
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String id;
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String todoId;
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     private String periodId;
 }

@@ -13,18 +13,12 @@ import lombok.Setter;
 @Setter
 public class MeCreateLabelProjectRequest {
 
-    @NotEmpty
     @NotBlank
-    @NotNull
     private String name;
 
-    @NotEmpty
     @NotBlank
-    @NotNull
     private String color;
 
-    @NotEmpty
     @NotBlank
-    @NotNull
     private String projectId;
 }
