@@ -5,12 +5,14 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * @author hieundph25894-duchieu212
+ * @author hieundph25894 - duchieu212
  */
 @Getter
 @Setter
 @ToString
-public class AdFindProjectStatisticsRequest {
+public class AdFindProjectStatisticTopRequest {
+
+    private Integer typeProject;
 
     private String startTime;
 
