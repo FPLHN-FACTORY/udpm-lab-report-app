@@ -17,7 +17,6 @@ import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -59,7 +58,7 @@ public class AdActivityServiceImpl implements AdActivityService {
             }
         }
         Pageable pageable = PageRequest.of(rep.getPage(), rep.getSize());
-        Page<AdActivityResponse> responses = adActivityRepository.findByNameActivity(rep, pageable);
+        var responses = adActivityRepository.findByNameActivity(rep, pageable);
         return new PageableObject<>(responses);
     }
 

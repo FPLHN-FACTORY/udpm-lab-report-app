@@ -16,6 +16,7 @@ import {
   faWindowRestore,
   faPeopleLine,
   faPeopleGroup,
+  faCheck,
 } from "@fortawesome/free-solid-svg-icons";
 
 import "./style-sidebar.css";
@@ -79,6 +80,18 @@ const SidebarTeacherComponent = ({ collapsed, toggleCollapsed }) => {
         >
           <Link to="/teacher/my-class">Lớp của tôi</Link>
         </Menu.Item>
+        <Menu.Item
+        key="92"
+        className="menu_custom"
+        icon={
+          <FontAwesomeIcon
+            icon={faCheck}
+            style={{ color: "rgb(226, 179, 87)" }}
+          />
+        }
+      >
+        <Link to="/teacher/feedback">Feedback</Link>
+      </Menu.Item>
         <Menu.Item
           key="4"
           className="menu_custom"

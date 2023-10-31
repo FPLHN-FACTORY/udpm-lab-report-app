@@ -84,6 +84,14 @@ const PopupMemberManagement = ({ position, onClose }) => {
 
   const columns = [
     {
+      title: "#",
+      dataIndex: "index",
+      key: "index",
+      render: (text, record, index) => {
+        return <div style={{ textAlign: "center" }}>{index + 1}</div>;
+      },
+    },
+    {
       title: "Họ và tên",
       dataIndex: "name",
       key: "name",
@@ -427,11 +435,11 @@ const PopupMemberManagement = ({ position, onClose }) => {
 
   const columnsTableAddMember = [
     {
-      title: "STT",
-      dataIndex: "stt",
-      key: "stt",
+      title: "#",
+      dataIndex: "#",
+      key: "#",
       render: (text, record, index) => index + 1,
-      width: "7%",
+      width: "5%",
     },
     {
       title: "Email",
@@ -613,6 +621,7 @@ const PopupMemberManagement = ({ position, onClose }) => {
                   columns={columnsTableAddMember}
                   dataSource={listMemberAdd}
                   rowKey="memberId"
+                  pagination={false}
                 />
               </Col>{" "}
             </Row>
@@ -628,6 +637,7 @@ const PopupMemberManagement = ({ position, onClose }) => {
               columns={columns}
               dataSource={memberProject}
               rowKey="id"
+              pagination={false}
             />
           </div>
         </div>

@@ -42,6 +42,9 @@ import {
   faUserTag,
   faObjectGroup,
   faDiagramSuccessor,
+  faChalkboardTeacher,
+  faFeed,
+  faCheck,
 } from "@fortawesome/free-solid-svg-icons";
 
 import "./style-sidebar.css";
@@ -184,10 +187,22 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           }
         >
           <Link to="/admin/class-management">Quản lý lớp học</Link>
+        </Menu.Item>{" "}
+        <Menu.Item
+          key="92"
+          className="menu_custom"
+          icon={
+            <FontAwesomeIcon
+              icon={faCheck}
+              style={{ color: "rgb(226, 179, 87)" }}
+            />
+          }
+        >
+          <Link to="/admin/feedback">Feedback</Link>
         </Menu.Item>
         <Menu.SubMenu
           key="10"
-          title="Thống kê"
+          title="Thống kê xưởng"
           icon={
             <FontAwesomeIcon
               icon={faChartColumn}
@@ -195,6 +210,18 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             />
           }
         >
+          <Menu.Item
+            key="91"
+            className="menu_custom"
+            icon={
+              <FontAwesomeIcon
+                icon={faChalkboardTeacher}
+                style={{ color: "rgb(226, 179, 87)" }}
+              />
+            }
+          >
+            <Link to="/admin/teacher-dashboard">Thống kê giảng viên</Link>
+          </Menu.Item>
           <Menu.Item
             key="11"
             className="menu_custom"
@@ -209,19 +236,20 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
               Triển khai xưởng
             </Link>
           </Menu.Item>
-          <Menu.Item
-            key="12"
-            className="menu_custom"
-            icon={
-              <FontAwesomeIcon
-                icon={faChartPie}
-                style={{ color: "rgb(226, 179, 87)" }}
-              />
-            }
-          >
-            <Link to="/admin/track-activity-metrics">Chỉ số hoạt động</Link>
-          </Menu.Item>
         </Menu.SubMenu>
+        {/* <Menu.Item
+          key="12"
+          className="menu_custom"
+          icon={
+            <FontAwesomeIcon
+              icon={faChartPie}
+              style={{ color: "rgb(226, 179, 87)" }}
+            />
+          }
+        >
+          <Link to="/admin/track-activity-metrics">Chỉ số hoạt động</Link>
+        </Menu.Item>
+        */}
         <div style={{ marginBottom: 15, marginTop: 15 }}>
           <span style={{ marginLeft: 28 }}>
             <FontAwesomeIcon
