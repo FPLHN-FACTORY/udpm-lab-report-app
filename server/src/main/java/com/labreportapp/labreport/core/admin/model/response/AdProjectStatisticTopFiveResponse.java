@@ -31,4 +31,7 @@ public interface AdProjectStatisticTopFiveResponse {
     @Value("#{target.endTime}")
     Long getEndTime();
 
+    @Value("#{target.status_project}")
+    Integer getStatusProject();
+
 }

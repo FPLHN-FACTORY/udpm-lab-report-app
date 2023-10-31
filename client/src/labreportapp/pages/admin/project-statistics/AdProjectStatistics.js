@@ -2,14 +2,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./style-ad-project-statistics.css";
 import {
   faCircleInfo,
-  faCodeCompare,
-  faFilter,
   faLineChart,
+  faMattressPillow,
   faObjectGroup,
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import {
-  Button,
   Card,
   Col,
   DatePicker,
@@ -18,6 +16,7 @@ import {
   Select,
   Table,
   Tag,
+  Tooltip,
 } from "antd";
 import {
   CheckCircleOutlined,
@@ -29,6 +28,8 @@ import { AdProjectStatisticsAPI } from "../../../api/admin/AdProjectStatisticsAP
 import dayjs from "dayjs";
 import viVN from "antd/lib/locale/vi_VN";
 import { convertDateLongToString } from "../../../helper/util.helper";
+import LoadingIndicator from "../../../helper/loading";
+import { Link } from "react-router-dom";
 const { RangePicker } = DatePicker;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
@@ -44,9 +45,12 @@ const AdProjectStatistics = () => {
   const [countProjectStarting, setCountProjectStarting] = useState(0);
   const [countProjectEnding, setCountProjectEnding] = useState(0);
   const [listProjectTop, setListProjectTop] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const MAX_NAME_LENGTH = 10;
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Thống kê dự án xưởng | Lab-Report-App";
+    setLoading(true);
   }, []);
 
   useEffect(() => {
@@ -59,6 +63,7 @@ const AdProjectStatistics = () => {
 
   const featchProjectTop = async () => {
     try {
+      setLoading(true);
       let data = {
         startTime: startTimeSearch,
         endTime: endTimeSearch,
@@ -66,6 +71,7 @@ const AdProjectStatistics = () => {
       };
       await AdProjectStatisticsAPI.getProjectAllTop(data).then((response) => {
         setListProjectTop(response.data.data);
+        setLoading(false);
       });
     } catch (error) {
       console.log(error);
@@ -74,6 +80,7 @@ const AdProjectStatistics = () => {
 
   const featchProject = async () => {
     try {
+      setLoading(true);
       let data = {
         startTime: startTimeSearch,
         endTime: endTimeSearch,
@@ -85,6 +92,7 @@ const AdProjectStatistics = () => {
         setCountProjectStarting(response.data.data.countProjectStarting);
         setCountProjectNotStart(response.data.data.countProjectNotStart);
         setCountGroupProject(response.data.data.countGroupProject);
+        setLoading(false);
       });
     } catch (error) {
       console.log(error);
@@ -109,7 +117,7 @@ const AdProjectStatistics = () => {
       title: "Danh sách dự án",
       reversed: true,
       interval: 1,
-      labels: listProjectTask.map((item) => item.name),
+      labels: listProjectProgress.map((item) => item.name),
       labelAngle: -45,
     },
     axisY: {
@@ -122,9 +130,14 @@ const AdProjectStatistics = () => {
         type: typeChartList,
         dataPoints: listProjectProgress.map((item, index) => {
           return {
-            x: listProjectTask.length > 0 && listProjectTask.length - index,
+            x:
+              listProjectProgress.length > 0 &&
+              listProjectProgress.length - index,
             y: item.progress,
-            label: item.name,
+            label:
+              item.name.length > 15
+                ? item.name.substring(0, 15) + "..."
+                : item.name,
           };
         }),
       },
@@ -146,7 +159,6 @@ const AdProjectStatistics = () => {
     axisY: {
       title: "Số task",
       includeZero: true,
-      labelAngle: -45,
     },
     data: [
       {
@@ -155,9 +167,13 @@ const AdProjectStatistics = () => {
         color: "#3498db",
         showInLegend: true,
         dataPoints: listProjectTask.map((item) => ({
-          label: item.name,
+          label:
+            item.name.length > 15
+              ? item.name.substring(0, 15) + "..."
+              : item.name,
           y: [0, item.totalTasks],
           color: "#3498db",
+          name: item.name + " : " + item.completedTasks,
         })),
       },
       {
@@ -165,13 +181,23 @@ const AdProjectStatistics = () => {
         name: "Số task hoàn thành",
         showInLegend: true,
         dataPoints: listProjectTask.map((item) => ({
-          label: item.name,
+          label:
+            item.name.length > 15
+              ? item.name.substring(0, 15) + "..."
+              : item.name,
           y: [0, item.completedTasks],
           color: "rgb(66, 186, 66)",
+          name: item.name + " : " + item.completedTasks,
         })),
       },
     ],
+    toolTip: {
+      contentFormatter: function (e) {
+        return e.entries[0].dataPoint.name;
+      },
+    },
   };
+
   const columns = [
     {
       title: "#",
@@ -219,7 +245,7 @@ const AdProjectStatistics = () => {
       dataIndex: "statusProject",
       key: "statusProject",
       render: (text) => {
-        if (text === "0") {
+        if (text === 0) {
           return (
             <Tag
               icon={<CheckCircleOutlined />}
@@ -229,7 +255,7 @@ const AdProjectStatistics = () => {
               Đã diễn ra
             </Tag>
           );
-        } else if (text === "1") {
+        } else if (text === 1) {
           return (
             <Tag
               icon={<SyncOutlined spin />}
@@ -260,6 +286,29 @@ const AdProjectStatistics = () => {
       sorter: (a, b) => a.memberCount - b.memberCount,
       align: "center",
     },
+    {
+      title: <div style={{ textAlign: "center" }}>Hành động</div>,
+      dataIndex: "actions",
+      key: "actions",
+      render: (text, record) => (
+        <>
+          <div style={{ textAlign: "center" }}>
+            <Tooltip title="Xem trello dự án">
+              <Link
+                to={`/detail-project/${record.id}`}
+                style={{ color: "black" }}
+              >
+                <FontAwesomeIcon
+                  icon={faMattressPillow}
+                  className="icon"
+                  style={{ paddingRight: "5px" }}
+                />
+              </Link>
+            </Tooltip>
+          </div>
+        </>
+      ),
+    },
   ];
   const handleDateChange = (e) => {
     if (e != null) {
@@ -277,6 +326,7 @@ const AdProjectStatistics = () => {
 
   return (
     <>
+      {loading && <LoadingIndicator />}
       <div className="box-one">
         <div
           className="heading-box"
@@ -325,7 +375,13 @@ const AdProjectStatistics = () => {
           <hr />
           <Row
             gutter={26}
-            style={{ display: "flex", textAlign: "center", paddingTop: "5px" }}
+            style={{
+              paddingTop: "5px",
+              display: "flex",
+              textAlign: "center",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
           >
             <Col span={6}>
               <Card
@@ -345,7 +401,7 @@ const AdProjectStatistics = () => {
                   }}
                   icon={<CloseCircleOutlined style={{ color: "white" }} />}
                 />
-                <span>Chưa diễn ra</span>
+                <span>Chưa diễn ra : </span>
                 <span
                   style={{
                     paddingLeft: "6px",
@@ -373,7 +429,7 @@ const AdProjectStatistics = () => {
                   }}
                   icon={<SyncOutlined spin style={{ color: "white" }} />}
                 />
-                <span>Đang diễn ra</span>
+                <span>Đang diễn ra : </span>
                 <span
                   style={{
                     paddingLeft: "6px",
@@ -401,7 +457,7 @@ const AdProjectStatistics = () => {
                   }}
                   icon={<CheckCircleOutlined style={{ color: "white" }} />}
                 />
-                <span>Đã diễn ra</span>
+                <span>Đã diễn ra : </span>
                 <span
                   style={{
                     paddingLeft: "6px",
@@ -434,7 +490,7 @@ const AdProjectStatistics = () => {
                     />
                   }
                 />
-                <span>Số nhóm dự án</span>
+                <span>Số nhóm dự án : </span>
                 <span
                   style={{
                     paddingLeft: "6px",
@@ -468,7 +524,7 @@ const AdProjectStatistics = () => {
           <div style={{ marginTop: "35px", padding: "0px 30px 0px 30px" }}>
             <span style={{ fontSize: 15 }}>Danh sách:</span>{" "}
             <Select
-              style={{ width: "auto" }}
+              style={{ width: "auto", minWidth: "300px" }}
               value={typeTable}
               onChange={(e) => {
                 setTypeTable(e);

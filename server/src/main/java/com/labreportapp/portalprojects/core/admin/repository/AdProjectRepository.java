@@ -162,7 +162,7 @@ public interface AdProjectRepository extends ProjectRepository {
                  FROM
                      todo_list tl
                  LEFT JOIN to_do td ON tl.id = td.todo_list_id
-                 WHERE td.status_todo IN (1, 2, 3)
+                 WHERE td.status_todo IN (2, 3) AND td.todo_id IS NULL
                  GROUP BY tl.project_id
              )
              SELECT
@@ -236,6 +236,7 @@ public interface AdProjectRepository extends ProjectRepository {
                     p.progress AS progress,
                     p.start_time AS startTime,
                     p.end_time AS endTime,
+                    p.status_project AS status_project,
                     COALESCE(mc.member_count, 0) AS members_count
                 FROM project p
                 LEFT JOIN MemberCounts mc ON p.id = mc.project_id
@@ -244,7 +245,7 @@ public interface AdProjectRepository extends ProjectRepository {
                         ( :#{#req.startTimeLong} IS NULL and :#{#req.endTimeLong} IS NULL)
                         OR (:#{#req.startTimeLong} <= p.start_time AND p.end_time <= :#{#req.endTimeLong})
                     )
-            )
+             )
             SELECT
                 ROW_NUMBER() OVER(ORDER BY
                     CASE
@@ -261,7 +262,8 @@ public interface AdProjectRepository extends ProjectRepository {
                 rp.progress,
                 rp.members_count,
                 rp.startTime as startTime,
-                rp.endTime as endTime
+                rp.endTime as endTime,
+                rp.status_project as status_project
             FROM RankedProjects rp
             LIMIT 5;
             """, nativeQuery = true)

@@ -77,7 +77,6 @@ public class AdProjectStatisticsServiceImpl implements AdProjectStatisticsServic
         if (!request.getEndTime().equals("")) {
             request.setEndTimeLong(DateUtils.truncate(new Date(Long.parseLong(request.getEndTime())), Calendar.DATE).getTime());
         }
-        System.err.println(request.toString());
         return adProjectRepository.getProjectFindTop(request);
     }
 }
