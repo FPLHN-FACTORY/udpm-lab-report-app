@@ -238,7 +238,10 @@ const HeaderDetailProject = () => {
 
   useEffect(() => {
     if (userCurrent != null) {
-      if (userCurrent.role.includes("TEACHER")) {
+      if (userCurrent.role.includes("ADMIN")) {
+        setCheckUrl("/admin/project-management");
+        return;
+      } else if (userCurrent.role.includes("TEACHER")) {
         setCheckUrl("/teacher/my-project");
         return;
       } else {
@@ -250,7 +253,7 @@ const HeaderDetailProject = () => {
 
   return (
     <div className="header-style">
-      <div className="left_header">
+      <div className="left_header" style={{ marginLeft: 8 }}>
         <Link to={checkUrl} style={{ color: "white", textDecoration: "none" }}>
           <FontAwesomeIcon icon={faHome} /> Danh sách dự án{" "}
         </Link>{" "}

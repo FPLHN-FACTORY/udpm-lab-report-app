@@ -32,14 +32,15 @@ import { useState } from "react";
 import { SetDetailTodo } from "../../../app/reducer/detail-project/DPDetailTodoSlice.reducer";
 import TaskModal from "./task-modal/TaskModal";
 import { SetMeRoleProject } from "../../../app/reducer/detail-project/DPRoleProjectSlice.reducer";
+import logoUdpm3 from "../../../../labreportapp/assets/img/logo-udpm-3.png";
+import logoUdpm2 from "../../../../labreportapp/assets/img/logo-udpm-2.png";
 
 const DetailProject = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
 
   const loadData = () => {
-    document.querySelector(".logo_project").src =
-      "https://raw.githubusercontent.com/FPLHN-FACTORY/udpm-common-resources/main/fpoly-udpm/logo-udpm-2.png";
+    document.querySelector(".logo_project").src = logoUdpm2;
     DetailProjectAPI.findProjectById(id)
       .then((response) => {
         dispatch(SetProject(response.data.data));
@@ -85,8 +86,7 @@ const DetailProject = () => {
         })
       );
       if (document.querySelector(".logo_project") != null) {
-        document.querySelector(".logo_project").src =
-          "https://raw.githubusercontent.com/FPLHN-FACTORY/udpm-common-resources/main/fpoly-udpm/logo-udpm-3.png";
+        document.querySelector(".logo_project").src = logoUdpm3;
       }
     };
   }, [id]);

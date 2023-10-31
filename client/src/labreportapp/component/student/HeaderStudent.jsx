@@ -7,6 +7,7 @@ import {
 } from "@ant-design/icons";
 import "./style-header.css";
 import CommonInforUser from "../common/CommonInforUser";
+import logoUdpm3 from "../../assets/img/logo-udpm-3.png";
 
 const { Header } = Layout;
 
@@ -25,11 +26,7 @@ const HeaderStudentComponent = ({ collapsed, toggleCollapsed }) => {
         <div style={{ display: "flex", alignItems: "center" }}>
           <div className="title_logo">
             {" "}
-            <img
-              src="https://raw.githubusercontent.com/FPLHN-FACTORY/udpm-common-resources/main/fpoly-udpm/logo-udpm-3.png"
-              className="logo_project"
-            />{" "}
-            LabReport
+            <img src={logoUdpm3} className="logo_project" /> LabReport
           </div>
           <div
             className="sidebar-toggle"

@@ -262,8 +262,21 @@ public class MeTodoController {
     }
 
     @GetMapping("/dashboard-all")
-    public ResponseObject dashboardAll(@RequestParam("projectId") String projectId, @RequestParam("periodId") String periodId) {
+    public ResponseObject dashboardAll(@RequestParam("projectId") String projectId,
+                                       @RequestParam("periodId") String periodId) {
         return new ResponseObject(meTodoService.dashboardAll(projectId, periodId));
+    }
+
+    @GetMapping("/get-all-todo-type-work")
+    public ResponseObject getAllTodoTypeWork(@RequestParam("projectId") String projectId,
+                                             @RequestParam("periodId") String periodId) {
+        return new ResponseObject(meTodoService.getAllTodoTypeWork(projectId, periodId));
+    }
+
+    @GetMapping("/get-all-todo-complete")
+    public ResponseObject getAllTodoComplete(@RequestParam("projectId") String projectId,
+                                             @RequestParam("periodId") String periodId) {
+        return new ResponseObject(meTodoService.getAllTodoComplete(projectId, periodId));
     }
 
 }

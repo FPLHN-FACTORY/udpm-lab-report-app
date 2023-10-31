@@ -1,67 +1,69 @@
-import React from "react";
-import { Line } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
-import { Chart } from "react-chartjs-2";
+import React, { useEffect, useState } from "react";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
+import CanvasJSReact from "@canvasjs/react-charts";
+import { DashboardApi } from "../../../api/dashboard/Dashboard.api";
 
-const BurndownChart = () => {
-  const chartData = {
-    labels: [
-      "2023-10-01",
-      "2023-10-08",
-      "2023-10-15",
-      "2023-10-22",
-      "2023-10-01",
-      "2023-10-08",
-      "2023-10-15",
-      "2023-10-22",
-      "2023-10-01",
-      "2023-10-08",
-      "2023-10-15",
-      "2023-10-22",
-      "2023-10-01",
-      "2023-10-08",
-      "2023-10-15",
-      "2023-10-22",
-      "2023-10-01",
-      "2023-10-08",
-      "2023-10-15",
-      "2023-10-22",
-      "2023-10-01",
-      "2023-10-08",
-      "2023-10-15",
-      "2023-10-22",
-    ],
-    datasets: [
+var CanvasJSChart = CanvasJSReact.CanvasJSChart;
+
+const BurndownChart = ({ item, allTodoTypeWork, listTodoComplete }) => {
+  const [dateArray, setDateArray] = useState([]);
+
+  useEffect(() => {
+    if (item != null) {
+      console.log(item);
+      const dateA = new Date(item.startTime);
+      const dateB = new Date(item.endTime);
+
+      const timeDifference = dateB - dateA;
+
+      const daysDifference = Math.floor(timeDifference / (1000 * 3600 * 24));
+
+      const dataPoints = [];
+
+      const dataTodoComplete = [];
+
+      const workPerDay = allTodoTypeWork / daysDifference;
+
+      for (let i = item.startTime; i < item.endTime; i += 86400000) {
+        let currentDate = new Date(i);
+        const day = currentDate.getDate();
+        const month = currentDate.getMonth() + 1;
+        const year = currentDate.getFullYear();
+
+        const label = `${day}/${month}/${year}`;
+        const dataPoint = {
+          y: allTodoTypeWork,
+          label: label,
+        };
+
+        allTodoTypeWork = allTodoTypeWork - workPerDay;
+
+        dataPoints.push(dataPoint);
+      }
+
+      setDateArray(dataPoints);
+    }
+  }, [item, allTodoTypeWork, listTodoComplete]);
+
+  const optionsTodoList = {
+    animationEnabled: true,
+    theme: "light2",
+    title: {
+      text: "Burndown",
+    },
+    axisX: {
+      title: "Thời gian",
+      reversed: true,
+    },
+    axisY: {
+      title: "Số công việc còn lại",
+      includeZero: true,
+    },
+    data: [
       {
-        label: "Tiến độ thực tế",
-        data: [20.5, 15, 10, 5],
-        borderColor: "blue",
-        fill: false,
-      },
-      {
-        label: "Tiến độ dự kiến",
-        data: [20, 10, 0, 0, 20],
-        borderColor: "green",
-        fill: false,
+        type: "line",
+        name: "Kết quả dự kiến",
+        dataPoints: dateArray.reverse(),
       },
     ],
   };
@@ -69,18 +71,7 @@ const BurndownChart = () => {
   return (
     <div>
       <div style={{ fontSize: 20, fontWeight: 500 }}>Biểu đồ Burndown</div>
-      <Line
-        data={chartData}
-        options={{
-          scales: {
-            x: [
-              {
-                type: "category",
-              },
-            ],
-          },
-        }}
-      />
+      <CanvasJSChart options={optionsTodoList} />
     </div>
   );
 };

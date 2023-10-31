@@ -95,4 +95,8 @@ public interface MeTodoService {
     TodoObject updateTypeTodo(@Valid MeUpdateTypeTodoRequest request);
 
     MeDashboardAllCustom dashboardAll(String projectId, String periodId);
+
+    Integer getAllTodoTypeWork(String projectId, String periodId);
+
+    List<Todo> getAllTodoComplete(String projectId, String periodId);
 }

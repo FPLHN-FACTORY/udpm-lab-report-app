@@ -68,6 +68,17 @@ public interface TodoRepository extends JpaRepository<Todo, String> {
             JOIN period_todo c ON a.id = c.todo_id
             WHERE a.type = 1 AND a.todo_id IS NULL 
             AND b.project_id = :projectId 
+            AND (c.period_id = :periodId OR :periodId = 'none')
+            """, nativeQuery = true)
+    Integer getAllTodoTypeWork(@Param("projectId") String projectId,
+                               @Param("periodId") String periodId);
+
+    @Query(value = """
+            SELECT COUNT(1) FROM to_do a 
+            JOIN todo_list b ON a.todo_list_id = b.id
+            JOIN period_todo c ON a.id = c.todo_id
+            WHERE a.type = 1 AND a.todo_id IS NULL 
+            AND b.project_id = :projectId 
             AND a.deadline IS NULL
             AND (c.period_id = :periodId OR :periodId = 'none')
             """, nativeQuery = true)
@@ -178,4 +189,17 @@ public interface TodoRepository extends JpaRepository<Todo, String> {
             WHERE c.id = :projectId AND a.progress IS NOT NULL
             """, nativeQuery = true)
     Float getAllTodoInProject(@Param("projectId") String projectId);
+
+    @Query(value = """
+            SELECT a.* FROM to_do a 
+            JOIN todo_list b ON a.todo_list_id = b.id
+            JOIN period_todo c ON a.id = c.todo_id
+            WHERE a.type = 1 AND a.todo_id IS NULL 
+            AND b.project_id = :projectId 
+            AND (c.period_id = :periodId OR :periodId = 'none')
+            AND a.status_todo IN (2, 3)
+            ORDER BY a.completion_time DESC
+            """, nativeQuery = true)
+    List<Todo> getAllTodoComplete(@Param("projectId") String projectId,
+                                  @Param("periodId") String periodId);
 }

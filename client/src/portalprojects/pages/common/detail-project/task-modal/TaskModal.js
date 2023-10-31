@@ -94,7 +94,7 @@ const TaskModal = memo(({ open, onCancel, id }) => {
     const foundList = list.find((item) => item.id === id);
     return foundList ? foundList.name : null;
   };
-  
+
   const detailTodo = useAppSelector(GetDetailTodo);
   const periodCurrent = useAppSelector(GetPeriodCurrent);
   const detailProject = useAppSelector(GetProject);
@@ -133,9 +133,7 @@ const TaskModal = memo(({ open, onCancel, id }) => {
       DetailTodoAPI.detailTodo(id).then((response) => {
         let obj = response.data.data;
         dispatch(SetDetailTodo(obj));
-        setTimeout(() => {
-          setLoading(false);
-        }, 600);
+        setLoading(false);
       });
     }
 
@@ -738,7 +736,20 @@ const TaskModal = memo(({ open, onCancel, id }) => {
                     <span className="completion_content">
                       {formatDateTime(completionTime)}
                     </span>
-                    {completionTime != null && completionTime < deadline && (
+                    {completionTime != null &&
+                      deadline != null &&
+                      completionTime < deadline && (
+                        <span
+                          className="type_completion"
+                          style={{
+                            backgroundColor: "rgb(64, 191, 41)",
+                            color: "white",
+                          }}
+                        >
+                          Hoàn thành sớm
+                        </span>
+                      )}
+                    {completionTime != null && deadline == null && (
                       <span
                         className="type_completion"
                         style={{
@@ -749,17 +760,19 @@ const TaskModal = memo(({ open, onCancel, id }) => {
                         Hoàn thành sớm
                       </span>
                     )}
-                    {completionTime != null && completionTime > deadline && (
-                      <span
-                        className="type_completion"
-                        style={{
-                          backgroundColor: "orange",
-                          color: "white",
-                        }}
-                      >
-                        Hoàn thành muộn
-                      </span>
-                    )}
+                    {completionTime != null &&
+                      deadline != null &&
+                      completionTime > deadline && (
+                        <span
+                          className="type_completion"
+                          style={{
+                            backgroundColor: "orange",
+                            color: "white",
+                          }}
+                        >
+                          Hoàn thành muộn
+                        </span>
+                      )}
                     {completionTime == null &&
                       deadline != null &&
                       new Date().getTime() > deadline && (

@@ -21,4 +21,18 @@ export class DashboardApi {
       url: `/member/todo/dashboard-all?projectId=${projectId}&periodId=${idPeriod}`,
     });
   };
+
+  static getAllTodoTypeWork = (projectId, idPeriod) => {
+    return request({
+      method: "GET",
+      url: `/member/todo/get-all-todo-type-work?projectId=${projectId}&periodId=${idPeriod}`,
+    });
+  };
+
+  static getAllTodoComplete = (projectId, idPeriod) => {
+    return request({
+      method: "GET",
+      url: `/member/todo/get-all-todo-complete?projectId=${projectId}&periodId=${idPeriod}`,
+    });
+  };
 }

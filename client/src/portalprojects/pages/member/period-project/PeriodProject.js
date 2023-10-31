@@ -42,6 +42,8 @@ import ModalUpdatePeriod from "./modal-update/ModalUpdatePeriod";
 import ModalCreatePeriod from "./modal-create/ModalCreatePeriod";
 import LoadingIndicator from "../../../helper/loading";
 import HeaderDetailProject from "../../common/detail-project/HeaderDetailProject";
+import logoUdpm2 from "../../../../labreportapp/assets/img/logo-udpm-2.png";
+import logoUdpm3 from "../../../../labreportapp/assets/img/logo-udpm-3.png";
 
 const { Option } = Select;
 
@@ -75,13 +77,11 @@ const PeriodProject = () => {
 
   useEffect(() => {
     fetchDataPeriod();
-    document.querySelector(".logo_project").src =
-      "https://raw.githubusercontent.com/FPLHN-FACTORY/udpm-common-resources/main/fpoly-udpm/logo-udpm-2.png";
+    document.querySelector(".logo_project").src = logoUdpm2;
 
     return () => {
       if (document.querySelector(".logo_project") != null) {
-        document.querySelector(".logo_project").src =
-          "https://raw.githubusercontent.com/FPLHN-FACTORY/udpm-common-resources/main/fpoly-udpm/logo-udpm-3.png";
+        document.querySelector(".logo_project").src = logoUdpm3;
       }
     };
   }, [current]);

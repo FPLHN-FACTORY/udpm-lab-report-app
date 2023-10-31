@@ -367,6 +367,7 @@ public class MeTodoServiceImpl implements MeTodoService {
         todoFindById.get().setProgress(request.getProgress());
         updateProgressPeriod(request.getPeriodId());
         if (request.getProgress() == 100 && todoFindById.get().getDeadline() == null) {
+            todoFindById.get().setCompletionTime(new Date().getTime());
             todoFindById.get().setStatusTodo(StatusTodo.HOAN_THANH_SOM);
         }
         ActivityTodo activityTodo = new ActivityTodo();
@@ -888,6 +889,16 @@ public class MeTodoServiceImpl implements MeTodoService {
         meDashboardItemLabels.add(meDashboardItemCustomKoCoNhan);
         meDashboardAllCustom.setListDashboardLabel(meDashboardItemLabels);
         return meDashboardAllCustom;
+    }
+
+    @Override
+    public Integer getAllTodoTypeWork(String projectId, String periodId) {
+        return meTodoRepository.getAllTodoTypeWork(projectId, periodId);
+    }
+
+    @Override
+    public List<Todo> getAllTodoComplete(String projectId, String periodId) {
+        return meTodoRepository.getAllTodoComplete(projectId, periodId);
     }
 
     public MeCountTodoResponse updateProgress(String idPeriod, String todoId) {

@@ -1,36 +1,20 @@
 import { useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../../app/hook";
-import { GetPeriodCurrent } from "../../../app/reducer/detail-project/DPPeriodSlice.reducer";
-import {
-  GetProject,
-  SetProject,
-} from "../../../app/reducer/detail-project/DPProjectSlice.reducer";
+import { useAppDispatch } from "../../../app/hook";
+import { SetProject } from "../../../app/reducer/detail-project/DPProjectSlice.reducer";
 import "./styleDetailProjectDashBoard.css";
 import LoadingIndicator from "../../../helper/loading";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faChartColumn,
-  faCogs,
-  faHome,
-  faLineChart,
-} from "@fortawesome/free-solid-svg-icons";
+import { faChartColumn, faLineChart } from "@fortawesome/free-solid-svg-icons";
 import { DetailProjectAPI } from "../../../api/detail-project/detailProject.api";
 import { useEffect } from "react";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-} from "recharts";
 import { Col, Progress, Row, Select } from "antd";
 import { DashboardApi } from "../../../api/dashboard/Dashboard.api";
 import HeaderDetailProject from "../detail-project/HeaderDetailProject";
 import BurndownChart from "./BurndownChart";
 import CanvasJSReact from "@canvasjs/react-charts";
+import logoUdpm2 from "../../../../labreportapp/assets/img/logo-udpm-2.png";
+import logoUdpm3 from "../../../../labreportapp/assets/img/logo-udpm-3.png";
 
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
@@ -45,25 +29,36 @@ const DetailProjectDashBoard = () => {
   const [progress, setProgress] = useState(0);
   const [idPeriodChange, setIdPeriodChange] = useState("none");
 
+  const [allTodoTypeWork, setAllTodoTypeWork] = useState(0);
+
   useEffect(() => {
     fetchData();
     loadDataPeriod();
-    document.querySelector(".logo_project").src =
-      "https://raw.githubusercontent.com/FPLHN-FACTORY/udpm-common-resources/main/fpoly-udpm/logo-udpm-2.png";
+    document.querySelector(".logo_project").src = logoUdpm2;
 
     return () => {
       if (document.querySelector(".logo_project") != null) {
-        document.querySelector(".logo_project").src =
-          "https://raw.githubusercontent.com/FPLHN-FACTORY/udpm-common-resources/main/fpoly-udpm/logo-udpm-3.png";
+        document.querySelector(".logo_project").src = logoUdpm3;
       }
     };
   }, []);
+
+  const loadDataAllTodoTypeWork = () => {
+    DashboardApi.getAllTodoTypeWork(detailProject.id, idPeriodChange).then(
+      (response) => {
+        setAllTodoTypeWork(response.data.data);
+      }
+    );
+  };
+
+  const [itemSelected, setItemSelected] = useState(null);
 
   const fetchData = () => {
     DetailProjectAPI.findProjectById(id).then((response) => {
       setDetailProject(response.data.data);
       dispatch(SetProject(response.data.data));
       setProgress(response.data.data.progress);
+      setItemSelected(response.data.data);
       document.title = "Thống kê | " + response.data.data.name;
     });
   };
@@ -87,16 +82,19 @@ const DetailProjectDashBoard = () => {
   useEffect(() => {
     if (detailProject != null) {
       loadDashboardAll();
+      loadDataAllTodoTypeWork();
     }
   }, [detailProject, idPeriodChange]);
 
   const handleChangeIdPeriod = (e) => {
     if (e !== "none") {
       DashboardApi.detailPeriod(e).then((response) => {
+        setItemSelected(response.data.data);
         setProgress(response.data.data.progress);
       });
     } else {
       fetchData();
+      loadDataAllTodoTypeWork();
     }
     setIdPeriodChange(e);
   };
@@ -109,8 +107,8 @@ const DetailProjectDashBoard = () => {
   const [typeChartLabel, setTypeChartLabel] = useState("column");
 
   const listType = [
-    { id: 1, key: "bar", name: "Biểu đồ cột ngang" },
     { id: 2, key: "column", name: "Biểu đồ cột dọc" },
+    { id: 1, key: "bar", name: "Biểu đồ cột ngang" },
     { id: 3, key: "pie", name: "Biểu đồ tròn" },
     { id: 4, key: "line", name: "Biểu đồ đường" },
     { id: 5, key: "area", name: "Biểu đồ vùng" },
@@ -133,7 +131,10 @@ const DetailProjectDashBoard = () => {
     data: [
       {
         type: typeChartTodoList,
-        dataPoints: dashboardAll.listDashboardTodoList,
+        dataPoints:
+          dashboardAll.listDashboardTodoList != null
+            ? dashboardAll.listDashboardTodoList.reverse()
+            : null,
       },
     ],
   };
@@ -155,7 +156,10 @@ const DetailProjectDashBoard = () => {
     data: [
       {
         type: typeChartDueDate,
-        dataPoints: dashboardAll.listDashboardDueDate,
+        dataPoints:
+          dashboardAll.listDashboardDueDate != null
+            ? dashboardAll.listDashboardDueDate.reverse()
+            : null,
       },
     ],
   };
@@ -177,7 +181,10 @@ const DetailProjectDashBoard = () => {
     data: [
       {
         type: typeChartMember,
-        dataPoints: dashboardAll.listDashboardMember,
+        dataPoints:
+          dashboardAll.listDashboardMember != null
+            ? dashboardAll.listDashboardMember.reverse()
+            : null,
       },
     ],
   };
@@ -199,9 +206,28 @@ const DetailProjectDashBoard = () => {
     data: [
       {
         type: typeChartLabel,
-        dataPoints: dashboardAll.listDashboardLabel,
+        dataPoints:
+          dashboardAll.listDashboardLabel != null
+            ? dashboardAll.listDashboardLabel.reverse()
+            : null,
       },
     ],
+  };
+
+  const [listTodoComplete, setListTodoComplete] = useState([]);
+
+  useEffect(() => {
+    if (detailProject != null) {
+      loadDataAllTodoComplete();
+    }
+  }, [detailProject]);
+
+  const loadDataAllTodoComplete = () => {
+    DashboardApi.getAllTodoComplete(detailProject.id, idPeriodChange).then(
+      (response) => {
+        setListTodoComplete(response.data.data);
+      }
+    );
   };
 
   return (
@@ -287,7 +313,11 @@ const DetailProjectDashBoard = () => {
               <div
                 style={{ marginLeft: 150, marginRight: 150, marginBottom: 30 }}
               >
-                <BurndownChart />
+                <BurndownChart
+                  item={itemSelected}
+                  allTodoTypeWork={allTodoTypeWork}
+                  listTodoComplete={listTodoComplete}
+                />
               </div>
               <div
                 style={{ marginLeft: 150, marginRight: 150, marginBottom: 30 }}
