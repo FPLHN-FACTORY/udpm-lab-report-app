@@ -87,6 +87,8 @@ import TeDetailTeamFactory from "./labreportapp/pages/teacher/team-factory/detai
 import StDetailTeamFactory from "./labreportapp/pages/student/team-factory/detail-team-factory/StDetailTeamFactory";
 import AdProjectStatistics from "./labreportapp/pages/admin/project-statistics/AdProjectStatistics";
 import TeacherFeedBack from "./labreportapp/pages/teacher/feed-back/TeacherFeedBack";
+import AdminFeedback from "./labreportapp/pages/admin/feedback/AdminFeedback";
+import AdminTeacherDashboard from "./labreportapp/pages/admin/admin-teacher-dashboard/AdminTeacherDashboard";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -709,6 +711,26 @@ function App() {
                 <AuthGuard>
                   <DashBoardAdmin>
                     <DetailGroupProject />
+                  </DashBoardAdmin>
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/admin/feedback"
+              element={
+                <AuthGuard>
+                  <DashBoardAdmin>
+                    <AdminFeedback />
+                  </DashBoardAdmin>
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/admin/teacher-dashboard"
+              element={
+                <AuthGuard>
+                  <DashBoardAdmin>
+                    <AdminTeacherDashboard />
                   </DashBoardAdmin>
                 </AuthGuard>
               }
