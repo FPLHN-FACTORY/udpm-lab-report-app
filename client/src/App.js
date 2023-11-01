@@ -86,6 +86,7 @@ import StMemberFactory from "./labreportapp/pages/student/member-factory/StMembe
 import TeDetailTeamFactory from "./labreportapp/pages/teacher/team-factory/detail-team-factory/TeDetailTeamFactory";
 import StDetailTeamFactory from "./labreportapp/pages/student/team-factory/detail-team-factory/StDetailTeamFactory";
 import AdProjectStatistics from "./labreportapp/pages/admin/project-statistics/AdProjectStatistics";
+import TeacherFeedBack from "./labreportapp/pages/teacher/feed-back/TeacherFeedBack";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -350,6 +351,16 @@ function App() {
               }
             />
             <Route
+              path="/teacher/feedback"
+              element={
+                <AuthGuard>
+                  <DashBoardTeacher>
+                    <TeacherFeedBack />
+                  </DashBoardTeacher>
+                </AuthGuard>
+              }
+            />
+            <Route
               path="/teacher/schedule-today/attendance/:idMeeting"
               element={
                 <AuthGuard>
@@ -499,7 +510,6 @@ function App() {
                 </AuthGuard>
               }
             />
-
             <Route
               path="/student/register-class"
               element={
@@ -601,7 +611,7 @@ function App() {
                 </AuthGuard>
               }
             />
-            {/* router detail  meeting task student*/}
+
             <Route
               path="/student/my-class/meeting/detail/:idMeeting"
               element={

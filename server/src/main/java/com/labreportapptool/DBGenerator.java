@@ -29,6 +29,7 @@ import com.labreportapp.labreport.infrastructure.constant.StatusClass;
 import com.labreportapp.labreport.infrastructure.constant.StatusFeedBack;
 import com.labreportapp.labreport.infrastructure.constant.StatusMeeting;
 import com.labreportapp.labreport.infrastructure.constant.StatusMemberFactory;
+import com.labreportapp.labreport.infrastructure.constant.StatusShowFeedback;
 import com.labreportapp.labreport.infrastructure.constant.StatusStudentFeedBack;
 import com.labreportapp.labreport.infrastructure.constant.StatusTeacherEdit;
 import com.labreportapp.labreport.infrastructure.constant.StatusTeam;
@@ -70,7 +71,6 @@ import com.labreportapp.portalprojects.entity.Todo;
 import com.labreportapp.portalprojects.entity.TodoList;
 import com.labreportapp.portalprojects.infrastructure.constant.Constants;
 import com.labreportapp.portalprojects.infrastructure.constant.PriorityLevel;
-import com.labreportapp.portalprojects.infrastructure.constant.RoleMemberProject;
 import com.labreportapp.portalprojects.infrastructure.constant.StatusPeriod;
 import com.labreportapp.portalprojects.infrastructure.constant.StatusProject;
 import com.labreportapp.portalprojects.infrastructure.constant.StatusTodo;
@@ -608,15 +608,15 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses6.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
         studentClasses6.setId(studentClassesRepository.save(studentClasses6).getId());
 
-//        StudentClasses studentClasses7 = new StudentClasses();
-//        studentClasses7.setStudentId("FCB1D931-CB71-4F12-94D6-08DBB66B2F92".toLowerCase());
-//        studentClasses7.setClassId(class1.getId());
-//        studentClasses7.setTeamId(team1.getId());
-//        studentClasses7.setEmail("huynqph26772@fpt.edu.vn");
-//        studentClasses7.setRole(RoleTeam.MEMBER);
-//        studentClasses7.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
-//        studentClasses7.setStatus(StatusTeam.ACTIVE);
-//        studentClasses7.setId(studentClassesRepository.save(studentClasses7).getId());
+        StudentClasses studentClasses7 = new StudentClasses();
+        studentClasses7.setStudentId("FCB1D931-CB71-4F12-94D6-08DBB66B2F92".toLowerCase());
+        studentClasses7.setClassId(class1.getId());
+        studentClasses7.setTeamId(team1.getId());
+        studentClasses7.setEmail("huynqph26772@fpt.edu.vn");
+        studentClasses7.setRole(RoleTeam.MEMBER);
+        studentClasses7.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
+        studentClasses7.setStatus(StatusTeam.ACTIVE);
+        studentClasses7.setId(studentClassesRepository.save(studentClasses7).getId());
 
         StudentClasses studentClasses8 = new StudentClasses();
         studentClasses8.setStudentId("6A85641C-874B-4AD0-B1BA-08DBB743DD7D".toLowerCase());
@@ -759,6 +759,12 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses21.setId(studentClassesRepository.save(studentClasses21).getId());
 
         FeedBack feedBack1 = new FeedBack();
+        feedBack1.setRateQuestion1(1);
+        feedBack1.setRateQuestion2(1);
+        feedBack1.setRateQuestion3(1);
+        feedBack1.setRateQuestion4(1);
+        feedBack1.setRateQuestion5(1);
+        feedBack1.setAverageRate(1F);
         feedBack1.setDescriptions("Day ok #");
         feedBack1.setClassId(class1.getId());
         feedBack1.setStudentId(studentClasses1.getStudentId());
@@ -766,108 +772,249 @@ public class DBGenerator implements CommandLineRunner {
 
         FeedBack feedBack2 = new FeedBack();
         feedBack2.setDescriptions("Day ok #");
+        feedBack2.setRateQuestion1(2);
+        feedBack2.setRateQuestion2(2);
+        feedBack2.setRateQuestion3(2);
+        feedBack2.setRateQuestion4(2);
+        feedBack2.setRateQuestion5(2);
+        feedBack2.setAverageRate(2F);
         feedBack2.setClassId(class1.getId());
+        feedBack2.setStatus(StatusShowFeedback.NO);
         feedBack2.setStudentId(studentClasses2.getStudentId());
         feedBack2.setId(feedBackRepository.save(feedBack2).getId());
 
         FeedBack feedBack3 = new FeedBack();
         feedBack3.setDescriptions("Day ok #");
+        feedBack3.setRateQuestion1(3);
+        feedBack3.setRateQuestion2(3);
+        feedBack3.setRateQuestion3(3);
+        feedBack3.setRateQuestion4(3);
+        feedBack3.setRateQuestion5(3);
+        feedBack3.setAverageRate(3F);
+        feedBack3.setStatus(StatusShowFeedback.NO);
         feedBack3.setClassId(class1.getId());
         feedBack3.setStudentId(studentClasses3.getStudentId());
         feedBack3.setId(feedBackRepository.save(feedBack3).getId());
 
         FeedBack feedBack4 = new FeedBack();
         feedBack4.setDescriptions("Day ok #");
+        feedBack4.setRateQuestion1(4);
+        feedBack4.setRateQuestion2(4);
+        feedBack4.setRateQuestion3(4);
+        feedBack4.setRateQuestion4(4);
+        feedBack4.setRateQuestion5(4);
+        feedBack4.setAverageRate(4F);
+        feedBack4.setStatus(StatusShowFeedback.NO);
         feedBack4.setClassId(class1.getId());
         feedBack4.setStudentId(studentClasses4.getStudentId());
         feedBack4.setId(feedBackRepository.save(feedBack4).getId());
 
         FeedBack feedBack5 = new FeedBack();
         feedBack5.setDescriptions("Day ok #");
-        feedBack5.setClassId(class1.getId());
+        feedBack5.setRateQuestion1(5);
+        feedBack5.setRateQuestion2(5);
+        feedBack5.setRateQuestion3(5);
+        feedBack5.setRateQuestion4(5);
+        feedBack5.setRateQuestion5(5);
+        feedBack5.setAverageRate(5F);
+        feedBack5.setClassId(class1.getId());feedBack5.setStatus(StatusShowFeedback.NO);
         feedBack5.setStudentId(studentClasses5.getStudentId());
         feedBack5.setId(feedBackRepository.save(feedBack5).getId());
 
         FeedBack feedBack6 = new FeedBack();
         feedBack6.setDescriptions("Day ok #");
-        feedBack6.setClassId(class1.getId());
+        feedBack6.setRateQuestion1(1);
+        feedBack6.setRateQuestion2(2);
+        feedBack6.setRateQuestion3(3);
+        feedBack6.setRateQuestion4(4);
+        feedBack6.setRateQuestion5(5);
+        feedBack6.setAverageRate(3F);
+        feedBack6.setClassId(class1.getId());feedBack6.setStatus(StatusShowFeedback.NO);
         feedBack6.setStudentId(studentClasses6.getStudentId());
         feedBack6.setId(feedBackRepository.save(feedBack6).getId());
 
-//        FeedBack feedBack7 = new FeedBack();
-//        feedBack7.setDescriptions("Day ok #");
-//        feedBack7.setClassId(class1.getId());
-//        feedBack7.setStudentId(studentClasses7.getStudentId());
-//        feedBack7.setId(feedBackRepository.save(feedBack7).getId());
+        FeedBack feedBack7 = new FeedBack();
+        feedBack7.setDescriptions("Day ok #");
+        feedBack7.setRateQuestion1(5);
+        feedBack7.setRateQuestion2(4);
+        feedBack7.setRateQuestion3(3);
+        feedBack7.setRateQuestion4(2);
+        feedBack7.setRateQuestion5(1);
+        feedBack7.setAverageRate(3F);
+        feedBack7.setStatus(StatusShowFeedback.NO);
+        feedBack7.setClassId(class1.getId());
+        feedBack7.setStudentId(studentClasses7.getStudentId());
+        feedBack7.setId(feedBackRepository.save(feedBack7).getId());
 
         FeedBack feedBack8 = new FeedBack();
         feedBack8.setDescriptions("Day ok #");
+        feedBack8.setRateQuestion1(3);
+        feedBack8.setRateQuestion2(2);
+        feedBack8.setRateQuestion3(2);
+        feedBack8.setRateQuestion4(3);
+        feedBack8.setRateQuestion5(5);
+        feedBack8.setAverageRate(3F);
         feedBack8.setClassId(class1.getId());
+        feedBack8.setStatus(StatusShowFeedback.YES);
         feedBack8.setStudentId(studentClasses8.getStudentId());
         feedBack8.setId(feedBackRepository.save(feedBack8).getId());
 
         FeedBack feedBack9 = new FeedBack();
         feedBack9.setDescriptions("Day ok #");
+        feedBack9.setRateQuestion1(4);
+        feedBack9.setRateQuestion2(1);
+        feedBack9.setRateQuestion3(1);
+        feedBack9.setRateQuestion4(1);
+        feedBack9.setRateQuestion5(3);
+        feedBack9.setAverageRate((float) ((4 + 1 + 1 + 1 + 3) / 5));
         feedBack9.setClassId(class1.getId());
+        feedBack9.setStatus(StatusShowFeedback.YES);
         feedBack9.setStudentId(studentClasses9.getStudentId());
         feedBack9.setId(feedBackRepository.save(feedBack9).getId());
 
         FeedBack feedBack10 = new FeedBack();
         feedBack10.setDescriptions("Day ok #");
+        feedBack10.setRateQuestion1(4);
+        feedBack10.setRateQuestion2(3);
+        feedBack10.setRateQuestion3(2);
+        feedBack10.setRateQuestion4(4);
+        feedBack10.setRateQuestion5(4);
+        feedBack10.setAverageRate((float) ((4 + 3 + 2 + 2 + 4 + 4) / 5));
         feedBack10.setClassId(class1.getId());
+        feedBack10.setStatus(StatusShowFeedback.NO);
         feedBack10.setStudentId(studentClasses10.getStudentId());
         feedBack10.setId(feedBackRepository.save(feedBack10).getId());
 
         FeedBack feedBack11 = new FeedBack();
         feedBack11.setDescriptions("Day ok #");
+        feedBack11.setRateQuestion1(1);
+        feedBack11.setRateQuestion2(1);
+        feedBack11.setRateQuestion3(1);
+        feedBack11.setRateQuestion4(1);
+        feedBack11.setRateQuestion5(5);
+        feedBack11.setAverageRate((float) ((1 + 1 + 1 + 1) / 5));
         feedBack11.setClassId(class1.getId());
+        feedBack11.setStatus(StatusShowFeedback.YES);
         feedBack11.setStudentId(studentClasses11.getStudentId());
         feedBack11.setId(feedBackRepository.save(feedBack11).getId());
 
         FeedBack feedBack12 = new FeedBack();
-        feedBack12.setDescriptions("Day ok #");
+        feedBack12.setDescriptions("     \uD83E\uDDE1\uD83E\uDDE1Trong buổi này chúng ta sẽ cùng nhau chỉ rõ hơn về vai trò của CODING CONVENTION trong khi lập trình\n" +
+                "                Với sự tham gia của của các GV:\n" +
+                "                1️⃣ Cô Nguyễn Khánh Huyền - HuyenNK6\n" +
+                "                2️⃣ Cô Nguyễn Thuý Hằng - HangNT169\n" +
+                "                3️⃣ Cô Chu Thị Ngân - NganCT4\n" +
+                "\n" +
+                "                ✔️Workshop CODING CONVENTIONS sẽ có các nội dung chính sau đây:\n" +
+                "                ✍️Khái niệm coding conventions\n" +
+                "                ✍️ Tầm quan trọng của convetion trong code như nào\n" +
+                "                ✍️ Các tiêu chí của coding convention trong lập trình\n" +
+                "                ✍️ Quy tắc đặt tên (camelCase, PascalCase, snake_case)…\n" +
+                "\n" +
+                "                \uD83D\uDD25\uD83D\uDD25\uD83D\uDD25 ĐẶC BIỆT \uD83D\uDD25\uD83D\uDD25\uD83D\uDD25\n" +
+                "                ✅ Vận dụng với CẤU TRÚC RẼ NHÁNH & VÒNG LẶP theo quy tiêu chuẩn code\n" +
+                "                ✔️Buổi WORKSHOP này sẽ là bước đệm hoàn hảo giúp các bạn CHUẨN HÓA HOÀN HẢO\n" +
+                "\n" +
+                "                \uD83E\uDDE1\uD83E\uDDE1\uD83E\uDDE1\uD83E\uDDE1\uD83E\uDDE1 WORKSHOP \uD83E\uDDE1\uD83E\uDDE1\uD83E\uDDE1\uD83E\uDDE1\uD83E\uDDE1\n" +
+                "                \uD83D\uDD58 Thời gian: 20:30 - 22:30");
+        feedBack12.setRateQuestion1(2);
+        feedBack12.setRateQuestion2(2);
+        feedBack12.setRateQuestion3(2);
+        feedBack12.setRateQuestion4(3);
+        feedBack12.setRateQuestion5(4);
+        feedBack12.setAverageRate((float) ((2 + 2 + 2 + 3 + 4) / 5));
         feedBack12.setClassId(class1.getId());
+        feedBack12.setStatus(StatusShowFeedback.YES);
         feedBack12.setStudentId(studentClasses12.getStudentId());
         feedBack12.setId(feedBackRepository.save(feedBack12).getId());
 
         FeedBack feedBack13 = new FeedBack();
         feedBack13.setDescriptions("Day ok #");
+        feedBack13.setRateQuestion1(3);
+        feedBack13.setRateQuestion2(2);
+        feedBack13.setRateQuestion3(1);
+        feedBack13.setRateQuestion4(1);
+        feedBack13.setRateQuestion5(2);
+        feedBack13.setAverageRate((float) ((3 + 2 + 1 + 1 + 2) / 5));
         feedBack13.setClassId(class1.getId());
+        feedBack13.setStatus(StatusShowFeedback.YES);
         feedBack13.setStudentId(studentClasses13.getStudentId());
         feedBack13.setId(feedBackRepository.save(feedBack13).getId());
 
         FeedBack feedBack14 = new FeedBack();
         feedBack14.setDescriptions("Day ok #");
+        feedBack14.setRateQuestion1(4);
+        feedBack14.setRateQuestion2(4);
+        feedBack14.setRateQuestion3(1);
+        feedBack14.setRateQuestion4(2);
+        feedBack14.setRateQuestion5(5);
+        feedBack14.setAverageRate((float) ((4 + 4 + 1 + 2 + 5) / 5));
+        feedBack14.setStatus(StatusShowFeedback.YES);
         feedBack14.setClassId(class1.getId());
         feedBack14.setStudentId(studentClasses14.getStudentId());
         feedBack14.setId(feedBackRepository.save(feedBack14).getId());
 
         FeedBack feedBack15 = new FeedBack();
         feedBack15.setDescriptions("Day ok #");
+        feedBack15.setRateQuestion1(1);
+        feedBack15.setRateQuestion2(1);
+        feedBack15.setRateQuestion3(5);
+        feedBack15.setRateQuestion4(1);
+        feedBack15.setRateQuestion5(1);
+        feedBack15.setAverageRate((float) ((1 + 1 + 5 + 1 + 1) / 5));
         feedBack15.setClassId(class1.getId());
+        feedBack15.setStatus(StatusShowFeedback.NO);
         feedBack15.setStudentId(studentClasses15.getStudentId());
         feedBack15.setId(feedBackRepository.save(feedBack15).getId());
 
         FeedBack feedBack16 = new FeedBack();
         feedBack16.setDescriptions("Day ok #");
+        feedBack16.setRateQuestion1(2);
+        feedBack16.setRateQuestion2(1);
+        feedBack16.setRateQuestion3(2);
+        feedBack16.setRateQuestion4(1);
+        feedBack16.setRateQuestion5(2);
+        feedBack16.setAverageRate((float) ((2 + 1 + 2 + 1 + 2) / 5));
         feedBack16.setClassId(class1.getId());
+        feedBack16.setStatus(StatusShowFeedback.NO);
         feedBack16.setStudentId(studentClasses16.getStudentId());
         feedBack16.setId(feedBackRepository.save(feedBack16).getId());
 
         FeedBack feedBack17 = new FeedBack();
         feedBack17.setDescriptions("Day ok #");
+        feedBack17.setRateQuestion1(1);
+        feedBack17.setRateQuestion2(1);
+        feedBack17.setRateQuestion3(1);
+        feedBack17.setRateQuestion4(1);
+        feedBack17.setRateQuestion5(1);
+        feedBack17.setAverageRate(1F);
+        feedBack17.setStatus(StatusShowFeedback.NO);
         feedBack17.setClassId(class1.getId());
         feedBack17.setStudentId(studentClasses17.getStudentId());
         feedBack17.setId(feedBackRepository.save(feedBack17).getId());
 
         FeedBack feedBack18 = new FeedBack();
         feedBack18.setDescriptions("Day ok #");
+        feedBack18.setRateQuestion1(1);
+        feedBack18.setRateQuestion2(1);
+        feedBack18.setRateQuestion3(1);
+        feedBack18.setRateQuestion4(1);
+        feedBack18.setRateQuestion5(2);
+        feedBack18.setAverageRate((float) ((1 + 1 + 1 + 1 + 2) / 5));
         feedBack18.setClassId(class1.getId());
+        feedBack18.setStatus(StatusShowFeedback.NO);
         feedBack18.setStudentId(studentClasses18.getStudentId());
         feedBack18.setId(feedBackRepository.save(feedBack18).getId());
 
         FeedBack feedBack19 = new FeedBack();
         feedBack19.setDescriptions("Day ok #");
+        feedBack19.setRateQuestion1(5);
+        feedBack19.setRateQuestion2(5);
+        feedBack19.setRateQuestion3(5);
+        feedBack19.setRateQuestion4(5);
+        feedBack19.setRateQuestion5(5);
+        feedBack19.setAverageRate(5F);
+        feedBack19.setStatus(StatusShowFeedback.NO);
         feedBack19.setClassId(class1.getId());
         feedBack19.setStudentId(studentClasses19.getStudentId());
         feedBack19.setId(feedBackRepository.save(feedBack19).getId());
@@ -2693,10 +2840,6 @@ public class DBGenerator implements CommandLineRunner {
         memberTeamFactory6.setTeamFactoryId(teamFactory2.getId());
         memberTeamFactory6.setId(memberTeamFactoryRepository.save(memberTeamFactory6).getId());
 
-//        MemberTeamFactory memberTeamFactory7 = new MemberTeamFactory();
-//        memberTeamFactory7.setMemberFactoryId(memberFactory7.getId());
-//        memberTeamFactory7.setTeamFactoryId(teamFactory2.getId());
-//        memberTeamFactory7.setId(memberTeamFactoryRepository.save(memberTeamFactory7).getId());
 
     }
 

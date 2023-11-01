@@ -42,19 +42,15 @@ const TeacherMyClass = () => {
   const [listLevel, setListLevel] = useState([]);
   const [listMeetingPeriod, setListMeetingPeriod] = useState([]);
   const [listMyClass, setListMyClass] = useState([]);
-  const [idSemesterSeach, setIdSemesterSearch] = useState("");
+  const [idSemesterSearch, setIdSemesterSearch] = useState("");
   const [idActivitiSearch, setIdActivitiSearch] = useState("");
   const [idLevelSearch, setIdLevelSearch] = useState("");
-
   const [codeSearch, setCodeSearch] = useState("");
   const [classPeriodSearch, setClassPeriodSearch] = useState("");
-  const [levelSearch, setLevelSearch] = useState("");
   const [clear, setClear] = useState(false);
   const [current, setCurrent] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [loadOne, setLoadOne] = useState(false);
-  const [semesterOne, setSemesterOne] = useState(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -63,7 +59,7 @@ const TeacherMyClass = () => {
     setIdActivitiSearch("");
     setCodeSearch("");
     setClassPeriodSearch("");
-    setLevelSearch("");
+    setIdLevelSearch("");
     dispatch(SetTeacherMyClass([]));
     featchDataLevel();
     featchDataSemester();
@@ -75,28 +71,13 @@ const TeacherMyClass = () => {
   }, [current]);
 
   useEffect(() => {
-    if (loadOne) {
-      const currentTime = new Date();
-      const selectedObject = listSemester.find((item) => {
-        const startTime = new Date(item.startTime).getTime();
-        const endTime = new Date(item.endTime).getTime();
-        return currentTime >= startTime && currentTime <= endTime;
-      });
-      if (selectedObject !== undefined) {
-        setSemesterOne(selectedObject);
-        setIdSemesterSearch(selectedObject.id);
-        setIdActivitiSearch("");
-      } else {
-        setIdSemesterSearch("");
-        setIdActivitiSearch("null");
-      }
-      setLoadOne(true);
+    if (idSemesterSearch !== "") {
+      featchDataActivity(idSemesterSearch);
+    } else {
+      setListActivity([]);
+      setIdActivitiSearch("");
     }
-  }, [loadOne]);
-
-  useEffect(() => {
-    featchDataActivity(idSemesterSeach);
-  }, [idSemesterSeach]);
+  }, [idSemesterSearch]);
 
   useEffect(() => {
     if (clear) {
@@ -107,43 +88,22 @@ const TeacherMyClass = () => {
 
   const featchAllMyClass = async () => {
     setLoading(false);
-    const currentTime = new Date();
-    const selectedObject = listSemester.find((item) => {
-      const startTime = new Date(item.startTime).getTime();
-      const endTime = new Date(item.endTime).getTime();
-      return currentTime >= startTime && currentTime <= endTime;
-    });
-    if (selectedObject !== undefined && idSemesterSeach === "") {
-      setIdSemesterSearch(selectedObject.id);
-      setIdActivitiSearch("");
-    }
     let filter = {
       idActivity: idActivitiSearch,
-      idSemester: idSemesterSeach,
+      idSemester: idSemesterSearch,
       code: codeSearch,
       classPeriod: classPeriodSearch,
-      level: levelSearch,
+      level: idLevelSearch,
       page: current,
       size: 10,
     };
-    if (selectedObject === undefined && idSemesterSeach === "") {
-      filter = {
-        idActivity: "null",
-        idSemester: idSemesterSeach,
-        code: codeSearch,
-        classPeriod: classPeriodSearch,
-        level: levelSearch,
-        page: current,
-        size: 10,
-      };
-    }
+
     try {
       await TeacherMyClassAPI.getAllMyClass(filter).then((respone) => {
         dispatch(SetTeacherMyClass(respone.data.data));
         setTotalPages(parseInt(respone.data.data.totalPages));
         setListMyClass(respone.data.data.data);
         setLoading(true);
-        setLoadOne(true);
       });
     } catch (error) {
       console.log(error);
@@ -171,32 +131,13 @@ const TeacherMyClass = () => {
     }
   };
 
-  const featchDataActivity = async (idSemesterSeach) => {
+  const featchDataActivity = async (idSemesterSearch) => {
     try {
-      await TeacherActivityAPI.getAllActivityByIdSemester(idSemesterSeach).then(
-        (respone) => {
-          const currentTime = new Date();
-          const selectedObject = listSemester.find((item) => {
-            const startTime = new Date(item.startTime).getTime();
-            const endTime = new Date(item.endTime).getTime();
-            return currentTime >= startTime && currentTime <= endTime;
-          });
-          if (selectedObject !== undefined && idSemesterSeach === "") {
-            setSemesterOne(selectedObject);
-            setIdSemesterSearch(selectedObject.id);
-            setIdActivitiSearch("");
-            setListActivity(respone.data.data);
-          }
-          if (idSemesterSeach === "" && selectedObject === undefined) {
-            setListActivity([]);
-            setIdActivitiSearch("");
-          }
-          if (idSemesterSeach !== "") {
-            setListActivity(respone.data.data);
-            setIdActivitiSearch("");
-          }
-        }
-      );
+      await TeacherActivityAPI.getAllActivityByIdSemester(
+        idSemesterSearch
+      ).then((respone) => {
+        setListActivity(respone.data.data);
+      });
     } catch (error) {
       console.log(error);
     }
@@ -217,23 +158,12 @@ const TeacherMyClass = () => {
   };
 
   const handleClear = () => {
-    const currentTime = new Date();
-    const selectedObject = listSemester.find((item) => {
-      const startTime = new Date(item.startTime).getTime();
-      const endTime = new Date(item.endTime).getTime();
-      return currentTime >= startTime && currentTime <= endTime;
-    });
-    if (selectedObject !== undefined) {
-      setIdSemesterSearch(selectedObject.id);
-      setIdActivitiSearch("");
-    } else {
-      setIdSemesterSearch("");
-      setIdActivitiSearch("null");
-      setListActivity([]);
-    }
+    setIdActivitiSearch("");
+    setIdSemesterSearch("");
     setCodeSearch("");
     setClassPeriodSearch("");
-    setLevelSearch("");
+    setIdLevelSearch("");
+    setListActivity([]);
     setClear(true);
   };
   const convertLongToDate = (dateLong) => {
@@ -384,7 +314,7 @@ const TeacherMyClass = () => {
                 <br />
                 {listSemester.length > 0 ? (
                   <Select
-                    value={idSemesterSeach}
+                    value={idSemesterSearch}
                     onChange={(value) => {
                       setIdSemesterSearch(value);
                     }}
@@ -395,9 +325,7 @@ const TeacherMyClass = () => {
                       margin: "6px 0 10px 0",
                     }}
                   >
-                    {semesterOne === null && (
-                      <Option value="">Chọn 1 học kỳ</Option>
-                    )}
+                    <Option value="">Chọn 1 học kỳ</Option>
                     {listSemester.map((item) => {
                       return (
                         <Option
@@ -405,9 +333,7 @@ const TeacherMyClass = () => {
                           key={item.id}
                           style={{ width: "auto" }}
                         >
-                          {item.name} ({convertLongToDate(item.startTime)}
-                          {" - "}
-                          {convertLongToDate(item.endTime)})
+                          {item.name}
                         </Option>
                       );
                     })}
@@ -499,9 +425,9 @@ const TeacherMyClass = () => {
                   <Select
                     showSearch
                     filterOption={filterOptions}
-                    value={levelSearch}
+                    value={idLevelSearch}
                     onChange={(value) => {
-                      setLevelSearch(value);
+                      setIdLevelSearch(value);
                     }}
                     style={{ width: "100%", marginTop: "6px" }}
                   >

@@ -1,12 +1,14 @@
 package com.labreportapp.labreport.core.teacher.repository;
 
 import com.labreportapp.labreport.core.teacher.model.request.TeFindClassRequest;
+import com.labreportapp.labreport.core.teacher.model.request.TeFindClassSelectRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindClassSentStudentRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindClassStatisticalRequest;
 import com.labreportapp.labreport.core.teacher.model.response.TeClassResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeClassStatisticalResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeCountClassReponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeDetailClassResponse;
+import com.labreportapp.labreport.core.teacher.model.response.TeFindClassSelectResponse;
 import com.labreportapp.labreport.entity.Class;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -42,7 +44,7 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
             FROM activity a
             JOIN level l ON l.id = a.level_id
             JOIN class c ON c.activity_id = a.id
-             JOIN meeting_period mp ON mp.id = c.class_period
+            JOIN meeting_period mp ON mp.id = c.class_period
             JOIN semester s ON s.id = a.semester_id
             where c.teacher_id = :#{#req.idTeacher}
             and (:#{#req.idSemester} IS NULL OR :#{#req.idSemester} LIKE '' OR :#{#req.idSemester} LIKE s.id)
@@ -113,29 +115,29 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
 
 
     @Query(value = """
-            SELECT c.id as id_class,
-            c.code as code,
-            c.start_time as start_time,
-            c.password as password,
-          mp.name as class_period,
-            c.class_size as class_size,
-            a.name as activityName,
-            c.descriptions as descriptions,
-            d.name as activityLevel,
-            s.name as semesterName,
-            c.status_class as status_class,
-            a.allow_use_trello as allow_use_trello,
-            c.status_teacher_edit as status_teacher_edit,
-            a.id as activity_id,
-            d.id as level_id,
-            s.id as semester_id
-            FROM activity a
-            JOIN class c ON c.activity_id = a.id
-             JOIN meeting_period mp ON c.class_period = mp.id 
-            JOIN semester s ON s.id = a.semester_id
-            JOIN level d ON d.id = a.level_id
-            where c.id = :#{#id}
-             """, nativeQuery = true)
+              SELECT c.id as id_class,
+              c.code as code,
+              c.start_time as start_time,
+              c.password as password,
+            mp.name as class_period,
+              c.class_size as class_size,
+              a.name as activityName,
+              c.descriptions as descriptions,
+              d.name as activityLevel,
+              s.name as semesterName,
+              c.status_class as status_class,
+              a.allow_use_trello as allow_use_trello,
+              c.status_teacher_edit as status_teacher_edit,
+              a.id as activity_id,
+              d.id as level_id,
+              s.id as semester_id
+              FROM activity a
+              JOIN class c ON c.activity_id = a.id
+               JOIN meeting_period mp ON c.class_period = mp.id 
+              JOIN semester s ON s.id = a.semester_id
+              JOIN level d ON d.id = a.level_id
+              where c.id = :#{#id}
+               """, nativeQuery = true)
     Optional<TeDetailClassResponse> findClassById(@Param("id") String id);
 
     @Query(value = """
@@ -254,5 +256,27 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
              FROM count_teacher ct JOIN count_class cc
             """, nativeQuery = true)
     TeCountClassReponse findCount(@Param("req") TeFindClassStatisticalRequest req);
+
+    @Query(value = """
+            SELECT
+                c.id as id,
+                c.code as code
+            FROM activity a
+            JOIN level l ON l.id = a.level_id
+            JOIN class c ON c.activity_id = a.id
+            JOIN semester s ON s.id = a.semester_id
+            where c.teacher_id = :#{#req.idTeacher}
+            and (:#{#req.idSemester} IS NULL OR :#{#req.idSemester} LIKE '' OR :#{#req.idSemester} LIKE s.id)
+            and (:#{#req.idActivity} IS NULL OR :#{#req.idActivity} LIKE '' OR :#{#req.idActivity} LIKE a.id)
+            """, nativeQuery = true)
+    List<TeFindClassSelectResponse> listClassFindIdActivityAndIdSemester(@Param("req") TeFindClassSelectRequest req);
+
+    List<Class> findAllByActivityIdAndTeacherId(String idActivity, String idTeacher);
+
+    @Query(value = """
+            SELECT c.code as code
+            FROM class c where c.id = :idClass
+            """, nativeQuery = true)
+    String findCodeByIdClass(@Param("idClass") String idClass);
 
 }

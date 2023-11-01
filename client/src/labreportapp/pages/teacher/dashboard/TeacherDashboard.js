@@ -14,7 +14,6 @@ import {
   Pagination,
   Row,
   Select,
-  Statistic,
   Table,
   Tooltip,
   message,
@@ -28,7 +27,6 @@ import { useEffect } from "react";
 import { convertHourAndMinuteToString } from "../../../helper/util.helper";
 import { TeacherStatisticalAPI } from "../../../api/teacher/statistical/TeacherStatistical.api";
 import LoadingIndicator from "../../../helper/loading";
-import { toast } from "react-toastify";
 import LoadingIndicatorNoOverlay from "../../../helper/loadingNoOverlay";
 const { Option } = Select;
 
@@ -44,7 +42,6 @@ const TeacherDashboard = () => {
   const [loading, setLoading] = useState(false);
   const [listClass, setListClass] = useState([]);
   const [loadOne, setLoadOne] = useState(false);
-  const [semesterOne, setSemesterOne] = useState(null);
   const [countClass, setCountClass] = useState({
     classLesson: 0,
     classNumber: 0,
@@ -61,27 +58,12 @@ const TeacherDashboard = () => {
   }, [current]);
 
   useEffect(() => {
-    if (loadOne) {
-      const currentTime = new Date();
-      const selectedObject = listSemester.find((item) => {
-        const startTime = new Date(item.startTime).getTime();
-        const endTime = new Date(item.endTime).getTime();
-        return currentTime >= startTime && currentTime <= endTime;
-      });
-      if (selectedObject !== undefined) {
-        setSemesterOne(selectedObject);
-        setIdSemesterSearch(selectedObject.id);
-        setIdActivitiSearch("");
-      } else {
-        setIdSemesterSearch("");
-        setIdActivitiSearch("null");
-      }
-      setLoadOne(true);
+    if (idSemesterSearch !== "") {
+      featchDataActivity(idSemesterSearch);
+    } else {
+      setListActivity([]);
+      setIdActivitiSearch("");
     }
-  }, [loadOne]);
-
-  useEffect(() => {
-    featchDataActivity(idSemesterSearch);
   }, [idSemesterSearch]);
 
   useEffect(() => {
@@ -93,30 +75,12 @@ const TeacherDashboard = () => {
 
   const featchAllMyClass = async () => {
     setLoading(false);
-    const currentTime = new Date();
-    const selectedObject = listSemester.find((item) => {
-      const startTime = new Date(item.startTime).getTime();
-      const endTime = new Date(item.endTime).getTime();
-      return currentTime >= startTime && currentTime <= endTime;
-    });
-    if (selectedObject !== undefined && idSemesterSearch === "") {
-      setIdSemesterSearch(selectedObject.id);
-      setIdActivitiSearch("");
-    }
     let filter = {
       idActivity: idActivitiSearch,
       idSemester: idSemesterSearch,
       page: current,
       size: 10,
     };
-    if (selectedObject === undefined && idSemesterSearch === "") {
-      filter = {
-        idActivity: "null",
-        idSemester: idSemesterSearch,
-        page: current,
-        size: 10,
-      };
-    }
     try {
       await TeacherStatisticalAPI.getCountClass(filter).then((response) => {
         setCountClass(response.data.data);
@@ -137,11 +101,6 @@ const TeacherDashboard = () => {
       setLoading(false);
       await TeacherSemesterAPI.getAllSemesters().then((respone) => {
         dispatch(SetTeacherSemester(respone.data.data));
-        if (respone.data.data.length > 0) {
-          setIdSemesterSearch(respone.data.data[0].id);
-        } else {
-          setIdSemesterSearch("");
-        }
         setListSemester(respone.data.data);
       });
     } catch (error) {
@@ -152,26 +111,7 @@ const TeacherDashboard = () => {
     try {
       await TeacherActivityAPI.getAllActivityByIdSemester(idSemesterSeach).then(
         (respone) => {
-          const currentTime = new Date();
-          const selectedObject = listSemester.find((item) => {
-            const startTime = new Date(item.startTime).getTime();
-            const endTime = new Date(item.endTime).getTime();
-            return currentTime >= startTime && currentTime <= endTime;
-          });
-          if (selectedObject !== undefined && idSemesterSeach === "") {
-            setSemesterOne(selectedObject);
-            setIdSemesterSearch(selectedObject.id);
-            setIdActivitiSearch("");
-            setListActivity(respone.data.data);
-          }
-          if (idSemesterSeach === "" && selectedObject === undefined) {
-            setListActivity([]);
-            setIdActivitiSearch("");
-          }
-          if (idSemesterSeach !== "") {
-            setListActivity(respone.data.data);
-            setIdActivitiSearch("");
-          }
+          setListActivity(respone.data.data);
         }
       );
     } catch (error) {
@@ -184,20 +124,9 @@ const TeacherDashboard = () => {
   };
 
   const handleClear = () => {
-    const currentTime = new Date();
-    const selectedObject = listSemester.find((item) => {
-      const startTime = new Date(item.startTime).getTime();
-      const endTime = new Date(item.endTime).getTime();
-      return currentTime >= startTime && currentTime <= endTime;
-    });
-    if (selectedObject !== undefined) {
-      setIdSemesterSearch(selectedObject.id);
-      setIdActivitiSearch("");
-    } else {
-      setIdSemesterSearch("");
-      setIdActivitiSearch("null");
-      setListActivity([]);
-    }
+    setIdSemesterSearch("");
+    setIdActivitiSearch("");
+    setListActivity([]);
     setClear(true);
   };
   const convertLongToDateTime = (dateLong) => {
@@ -404,10 +333,7 @@ const TeacherDashboard = () => {
                       margin: "6px 0 10px 0",
                     }}
                   >
-                    {" "}
-                    {semesterOne === null && (
-                      <Option value="">Chọn 1 học kỳ</Option>
-                    )}
+                    <Option value="">Chọn 1 học kỳ</Option>
                     {listSemester.map((item) => {
                       return (
                         <Option
@@ -443,8 +369,14 @@ const TeacherDashboard = () => {
                     <Option value="">Tất cả</Option>
                     {listActivity.map((item) => {
                       return (
-                        <Option value={item.id} key={item.id} title={item.name}>
-                          {item.name}
+                        <Option
+                          value={item.id}
+                          key={item.id}
+                          style={{ width: "auto" }}
+                        >
+                          {item.name} ({convertLongToDate(item.startTime)}
+                          {" - "}
+                          {convertLongToDate(item.endTime)})
                         </Option>
                       );
                     })}

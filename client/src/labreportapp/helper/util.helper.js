@@ -119,3 +119,11 @@ export function convertHourAndMinuteToString(
   const endTime = formatTime(endHour, endMinute);
   return `${startTime} - ${endTime}`;
 }
+
+export const arrayQuestion = [
+  "Q1:  Faculty's punctuality (Sự đúng giờ của giảng viên trong giờ học)",
+  "Q2:  Communication skills (Kỹ năng sư phạm của giảng viên)",
+  "Q3:  Subject coverage (Đảm bảo khối lượng môn học theo chương trình)",
+  "Q4:  Support (Hỗ trợ của giảng viên trong và ngoài giờ)",
+  "Q5:  Factulty's response (Đáp ứng của giảng viên về những thắc mắc của sinh viên trong giờ học)",
+];

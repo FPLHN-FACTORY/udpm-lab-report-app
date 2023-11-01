@@ -3,6 +3,7 @@ package com.labreportapp.labreport.core.teacher.controller;
 import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.core.common.base.ResponseObject;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindClassRequest;
+import com.labreportapp.labreport.core.teacher.model.request.TeFindClassSelectRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindClassSentStudentRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindUpdateStatusClassRequest;
 import com.labreportapp.labreport.core.teacher.model.response.TeClassResponse;
@@ -64,6 +65,16 @@ public class TeClassController {
     @PostMapping("/pass")
     public ResponseObject updateStatusClass(@RequestBody TeFindUpdateStatusClassRequest request) {
         return new ResponseObject(teClassService.updateStatusClass(request));
+    }
+
+    /*
+    todo hàm làm select của màn feedback teacher
+    input : id semester, id activity
+     */
+    @GetMapping("/filter-class")
+    public ResponseObject listClassIdActivityIdSemester(final TeFindClassSelectRequest request) {
+        request.setIdTeacher(labReportAppSession.getUserId());
+        return new ResponseObject(teClassService.listClass(request));
     }
 
 }

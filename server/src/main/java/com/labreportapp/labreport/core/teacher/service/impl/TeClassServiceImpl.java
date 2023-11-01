@@ -3,6 +3,7 @@ package com.labreportapp.labreport.core.teacher.service.impl;
 import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.core.common.response.SimpleResponse;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindClassRequest;
+import com.labreportapp.labreport.core.teacher.model.request.TeFindClassSelectRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindClassSentStudentRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindClassStatisticalRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindUpdateStatusClassRequest;
@@ -10,13 +11,13 @@ import com.labreportapp.labreport.core.teacher.model.response.TeClassResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeClassSentStudentRespone;
 import com.labreportapp.labreport.core.teacher.model.response.TeClassStatisticalResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeDetailClassResponse;
+import com.labreportapp.labreport.core.teacher.model.response.TeFindClassSelectResponse;
+import com.labreportapp.labreport.core.teacher.repository.TeActivityRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeClassConfigurationRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeClassRepository;
-import com.labreportapp.labreport.core.teacher.repository.TeMeetingPeriodRepository;
 import com.labreportapp.labreport.core.teacher.service.TeClassService;
 import com.labreportapp.labreport.entity.Class;
 import com.labreportapp.labreport.entity.ClassConfiguration;
-import com.labreportapp.labreport.entity.MeetingPeriod;
 import com.labreportapp.labreport.infrastructure.constant.StatusClass;
 import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
 import com.labreportapp.labreport.util.SemesterHelper;
@@ -50,6 +51,9 @@ public class TeClassServiceImpl implements TeClassService {
 
     @Autowired
     private SemesterHelper semesterHelper;
+
+    @Autowired
+    private TeActivityRepository teActivityRepository;
 
     @Override
     public PageableObject<TeClassResponse> searchTeacherClass(final TeFindClassRequest teFindClass) {
@@ -158,6 +162,11 @@ public class TeClassServiceImpl implements TeClassService {
         Pageable pageable = PageRequest.of(request.getPage() - 1, request.getSize());
         Page<TeClassStatisticalResponse> pageList = teClassRepository.findClassStatistical(request, pageable);
         return new PageableObject<>(pageList);
+    }
+
+    @Override
+    public List<TeFindClassSelectResponse> listClass(TeFindClassSelectRequest request) {
+        return teClassRepository.listClassFindIdActivityAndIdSemester(request);
     }
 
     public String generateRandomPassword() {

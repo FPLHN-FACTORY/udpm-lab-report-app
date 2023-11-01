@@ -26,4 +26,9 @@ public interface TeActivityRepository extends JpaRepository<Activity, String> {
               """, nativeQuery = true)
     List<TeActivityResponse> getAllByIdSemester(@Param("req") TeFindClassRequest req);
 
+    @Query(value = """
+            SELECT a.id FROM activity a WHERE a.semester_id = :idSemester
+            """, nativeQuery = true)
+    List<String> getOneActivity(@Param("idSemester") String idSemester);
+
 }

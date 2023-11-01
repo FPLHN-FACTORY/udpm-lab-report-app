@@ -3,15 +3,9 @@ import { Layout, Menu, message } from "antd";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faFolder,
-  faTags,
-  faChartLine,
-  faUsers,
-  faCogs,
   faBook,
   faLineChart,
   faHome,
-  faMagicWandSparkles,
   faNewspaper,
   faWindowRestore,
   faPeopleLine,
@@ -21,9 +15,6 @@ import {
 
 import "./style-sidebar.css";
 import { ProjectOutlined } from "@ant-design/icons";
-import SockJS from "sockjs-client";
-import { Stomp } from "@stomp/stompjs";
-import { toast } from "react-toastify";
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -47,7 +38,6 @@ const SidebarTeacherComponent = ({ collapsed, toggleCollapsed }) => {
         <div style={{ marginBottom: 13, marginTop: 15 }}>
           <span style={{ marginLeft: 28 }}>
             <FontAwesomeIcon
-              // icon={faMagicWandSparkles}
               icon={faNewspaper}
               style={{ marginRight: 7, fontSize: 18 }}
             />
@@ -107,7 +97,6 @@ const SidebarTeacherComponent = ({ collapsed, toggleCollapsed }) => {
         <div style={{ marginBottom: 17, marginTop: 15 }}>
           <span style={{ marginLeft: 28 }}>
             <FontAwesomeIcon
-              // icon={faMagicWandSparkles}
               icon={faWindowRestore}
               style={{ marginRight: 7, fontSize: 18 }}
             />
