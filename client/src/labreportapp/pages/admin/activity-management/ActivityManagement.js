@@ -2,7 +2,6 @@ import "./style-activity-management.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFilter,
-  faList,
   faEdit,
   faTags,
   faPlus,
@@ -35,22 +34,20 @@ import {
 import LoadingIndicator from "../../../helper/loading";
 import ModalCreateActivity from "./modal-create/ModalCreateActivity";
 import ModalUpdateActivity from "./modal-update/ModalUpdateActivity";
-import { toast } from "react-toastify";
+import { convertDateLongToString } from "../../../helper/util.helper";
 
 const ActivityManagement = () => {
+  const { id } = useParams();
   const dispatch = useAppDispatch();
   const [name, setName] = useState("");
   const [clear, setClear] = useState(false);
   const [searchName, setSearchName] = useState("");
   const [levelSearch, setLevelSearch] = useState("");
   const [semesterSearch, setSemesterSearch] = useState("");
-
   const [status, setStatus] = useState("");
   const [current, setCurrent] = useState(1);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
-
-  const { id } = useParams();
   const [activity, setActivity] = useState({});
   const [listSemester, setListSemester] = useState([]);
   const [listLevel, setListLevel] = useState([]);
@@ -200,19 +197,10 @@ const ActivityManagement = () => {
       dataIndex: "startTimeAndEndTime",
       key: "startTimeAndEndTime",
       render: (text, record) => {
-        const startTime = new Date(record.startTime);
-        const endTime = new Date(record.endTime);
-
-        const formattedStartTime = `${startTime.getDate()}/${
-          startTime.getMonth() + 1
-        }/${startTime.getFullYear()}`;
-        const formattedEndTime = `${endTime.getDate()}/${
-          endTime.getMonth() + 1
-        }/${endTime.getFullYear()}`;
-
         return (
           <span>
-            {formattedStartTime} - {formattedEndTime}
+            {convertDateLongToString(record.startTime)} -{" "}
+            {convertDateLongToString(record.endTime)}
           </span>
         );
       },

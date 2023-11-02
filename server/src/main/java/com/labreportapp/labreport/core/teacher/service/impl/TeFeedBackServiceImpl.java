@@ -61,10 +61,10 @@ public class TeFeedBackServiceImpl implements TeFeedBackService {
                 .collect(Collectors.toList());
         List<SimpleResponse> listResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idStudentList);
         AtomicInteger stt = new AtomicInteger();
+        stt.set(1);
         listFeedback.forEach(i -> {
             TeFeedbackResponse obj = new TeFeedbackResponse();
-            obj.setStt(stt.get());
-            stt.getAndIncrement();
+            obj.setStt(stt.getAndIncrement());
             obj.setId(i.getId());
             obj.setRateQuestion1(i.getRateQuestion1());
             obj.setRateQuestion2(i.getRateQuestion2());

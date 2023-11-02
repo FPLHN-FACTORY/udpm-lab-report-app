@@ -765,7 +765,7 @@ public class DBGenerator implements CommandLineRunner {
         feedBack1.setRateQuestion4(1);
         feedBack1.setRateQuestion5(1);
         feedBack1.setAverageRate(1F);
-        feedBack1.setDescriptions("Day ok #");
+        feedBack1.setDescriptions("Hiệu feed back cho giảng viên siêu vip pro");
         feedBack1.setClassId(class1.getId());
         feedBack1.setStudentId(studentClasses1.getStudentId());
         feedBack1.setId(feedBackRepository.save(feedBack1).getId());

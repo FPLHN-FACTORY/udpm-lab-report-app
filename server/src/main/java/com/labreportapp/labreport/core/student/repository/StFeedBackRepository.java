@@ -24,11 +24,14 @@ public interface StFeedBackRepository extends FeedBackRepository {
 
     @Query(value = """
             SELECT a.id, ROW_NUMBER() OVER(ORDER BY c.created_date DESC) AS stt,
-            a.code, a.start_time, a.class_period, a.teacher_id, e.name, b.name AS nameActivity
+            a.code, a.start_time, a.class_period, a.teacher_id, e.name, b.name AS nameActivity,
+             mp.name as class_period, mp.start_hour as start_hour, mp.start_minute as start_minute,
+                mp.end_hour as end_hour, mp.end_minute as end_minute
             FROM class a JOIN activity b ON a.activity_id = b.id 
             JOIN semester d ON b.semester_id = d.id
             JOIN student_classes c ON a.id = c.class_id
             JOIN level e ON e.id = b.level_id
+            JOIN meeting_period mp ON a.class_period = mp.id 
             WHERE (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR a.code LIKE %:#{#req.code}%) 
             AND (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR a.class_period = :#{#req.classPeriod}) 
             AND (:#{#req.level} IS NULL OR :#{#req.level} LIKE '' OR e.id = :#{#req.level}) 

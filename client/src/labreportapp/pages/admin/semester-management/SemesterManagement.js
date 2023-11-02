@@ -2,12 +2,10 @@ import "./style-semester-management.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFilter,
-  faHome,
   faLayerGroup,
   faPencil,
   faTrash,
   faPlus,
-  faFeed,
   faFileEdit,
   faFilterCircleDollar,
   faChainSlash,
@@ -31,13 +29,12 @@ import {
   DeleteSemester,
   UpdateStatusFeedback,
 } from "../../../app/admin/AdSemester.reducer";
-import { toast } from "react-toastify";
 import { AdSemesterAPI } from "../../../api/admin/AdSemesterAPI";
-import moment from "moment";
 import React, { useCallback } from "react";
 import ModalCreateSemester from "./modal-create/ModalCreateSemester";
 import ModalUpdateSemester from "./modal-update/ModalUpdateSemester";
 import LoadingIndicator from "../../../helper/loading";
+import { convertDateLongToString } from "../../../helper/util.helper";
 
 const SemesterManagement = () => {
   const [semester, setSemester] = useState(null);
@@ -95,17 +92,10 @@ const SemesterManagement = () => {
       dataIndex: "startTimeAndEndTime",
       key: "startTimeAndEndTime",
       render: (text, record) => {
-        const startTime = new Date(record.startTime);
-        const endTime = new Date(record.endTime);
-        const formattedStartTime = `${startTime.getDate()}/${
-          startTime.getMonth() + 1
-        }/${startTime.getFullYear()}`;
-        const formattedEndTime = `${endTime.getDate()}/${
-          endTime.getMonth() + 1
-        }/${endTime.getFullYear()}`;
         return (
           <span>
-            {formattedStartTime} - {formattedEndTime}
+            {convertDateLongToString(record.startTime)} -{" "}
+            {convertDateLongToString(record.endTime)}
           </span>
         );
       },
@@ -115,17 +105,10 @@ const SemesterManagement = () => {
       dataIndex: "startTimeStudentAndEndTimeStudent",
       key: "startTimeStudentAndEndTimeStudent",
       render: (text, record) => {
-        const startTime = new Date(record.startTimeStudent);
-        const endTime = new Date(record.endTimeStudent);
-        const formattedStartTime = `${startTime.getDate()}/${
-          startTime.getMonth() + 1
-        }/${startTime.getFullYear()}`;
-        const formattedEndTime = `${endTime.getDate()}/${
-          endTime.getMonth() + 1
-        }/${endTime.getFullYear()}`;
         return (
           <span>
-            {formattedStartTime} - {formattedEndTime}
+            {convertDateLongToString(record.startTimeStudent)} -{" "}
+            {convertDateLongToString(record.endTimeStudent)}
           </span>
         );
       },

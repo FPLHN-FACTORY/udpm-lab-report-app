@@ -1,7 +1,6 @@
 import { request } from "../../helper/request.helper";
 
 export class StFeedBackAPI {
-  
   static checkFeedBack() {
     return request({
       method: "GET",
@@ -12,8 +11,7 @@ export class StFeedBackAPI {
   static getAllClassFeedback() {
     return request({
       method: "GET",
-      url:
-        "/student/feedback/get-all-class-feedback",
+      url: "/student/feedback/get-all-class-feedback",
     });
   }
 

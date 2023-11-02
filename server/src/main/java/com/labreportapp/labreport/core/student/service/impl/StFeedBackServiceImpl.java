@@ -1,7 +1,6 @@
 package com.labreportapp.labreport.core.student.service.impl;
 
 import com.labreportapp.labreport.core.common.response.SimpleResponse;
-import com.labreportapp.labreport.core.student.model.request.StCheckFeedBackRequest;
 import com.labreportapp.labreport.core.student.model.request.StFindClassRequest;
 import com.labreportapp.labreport.core.student.model.request.StStudentFeedBackRequest;
 import com.labreportapp.labreport.core.student.model.request.StStudentListFeedBackRequest;
@@ -14,6 +13,7 @@ import com.labreportapp.labreport.entity.FeedBack;
 import com.labreportapp.labreport.entity.Semester;
 import com.labreportapp.labreport.entity.StudentClasses;
 import com.labreportapp.labreport.infrastructure.constant.StatusFeedBack;
+import com.labreportapp.labreport.infrastructure.constant.StatusShowFeedback;
 import com.labreportapp.labreport.infrastructure.constant.StatusStudentFeedBack;
 import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.labreport.repository.SemesterRepository;
@@ -112,6 +112,16 @@ public class StFeedBackServiceImpl implements StFeedBackService {
             FeedBack feedBack = new FeedBack();
             feedBack.setStudentId(labReportAppSession.getUserId());
             feedBack.setClassId(studentFeedBackRequest.getClassId());
+            feedBack.setRateQuestion1(studentFeedBackRequest.getRateQuestion1());
+            feedBack.setRateQuestion2(studentFeedBackRequest.getRateQuestion2());
+            feedBack.setRateQuestion3(studentFeedBackRequest.getRateQuestion3());
+            feedBack.setRateQuestion4(studentFeedBackRequest.getRateQuestion4());
+            feedBack.setRateQuestion5(studentFeedBackRequest.getRateQuestion5());
+            feedBack.setAverageRate((float) (studentFeedBackRequest.getRateQuestion1()
+                    + studentFeedBackRequest.getRateQuestion2() + studentFeedBackRequest.getRateQuestion3()
+                    + studentFeedBackRequest.getRateQuestion4() + studentFeedBackRequest.getRateQuestion5()
+            ) / 5);
+            feedBack.setStatus(studentFeedBackRequest.getStatus() ? StatusShowFeedback.YES : StatusShowFeedback.NO);
             feedBack.setDescriptions(studentFeedBackRequest.getDescriptions());
             listFeedBackNew.add(feedBack);
         }
@@ -140,6 +150,10 @@ public class StFeedBackServiceImpl implements StFeedBackService {
             StMyClassCustom stMyClassCustom = new StMyClassCustom();
             stMyClassCustom.setId(stMyClassResponse.getId());
             stMyClassCustom.setClassPeriod(stMyClassResponse.getClassPeriod());
+            stMyClassCustom.setStartHour(stMyClassResponse.getStartHour());
+            stMyClassCustom.setStartMinute(stMyClassResponse.getStartMinute());
+            stMyClassCustom.setEndHour(stMyClassResponse.getEndHour());
+            stMyClassCustom.setEndMinute(stMyClassResponse.getEndMinute());
             stMyClassCustom.setCode(stMyClassResponse.getCode());
             stMyClassCustom.setLevel(stMyClassResponse.getLevel());
             stMyClassCustom.setNameActivity(stMyClassResponse.getNameActivity());
