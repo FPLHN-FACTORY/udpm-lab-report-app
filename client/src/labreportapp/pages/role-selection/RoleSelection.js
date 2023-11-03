@@ -42,113 +42,107 @@ const RoleSelection = () => {
           {/* Sử dụng justify để canh giữa các cột */}
           {userCurrent != null && (
             <>
-              {userCurrent.role.includes("ADMIN") && (
-                <Col span={8} style={{ padding: 50 }}>
-                  <Link to="/admin">
-                    <Card
-                      hoverable
-                      cover={
-                        <img src={ADMIN} alt="Admin" style={{ height: 200 }} />
-                      }
+              <Col span={8} style={{ padding: 50 }}>
+                <Link to="/admin">
+                  <Card
+                    hoverable
+                    cover={
+                      <img src={ADMIN} alt="Admin" style={{ height: 200 }} />
+                    }
+                    style={{
+                      textAlign: "center",
+                      height: 275,
+                      width: 250,
+                      backgroundColor: "transparent",
+                      border: "none",
+                    }}
+                  >
+                    <Radio.Button
+                      value="ADMIN"
                       style={{
-                        textAlign: "center",
-                        height: 275,
-                        width: 250,
-                        backgroundColor: "transparent",
-                        border: "none",
+                        backgroundColor: "rgb(38, 144, 214)",
+                        color: "white",
                       }}
                     >
-                      <Radio.Button
-                        value="ADMIN"
-                        style={{
-                          backgroundColor: "rgb(38, 144, 214)",
-                          color: "white",
-                        }}
-                      >
-                        <FontAwesomeIcon
-                          icon={faGraduationCap}
-                          style={{ marginRight: 5 }}
-                        />
-                        Quản trị viên
-                      </Radio.Button>
-                    </Card>
-                  </Link>
-                </Col>
-              )}
-              {userCurrent.role.includes("TEACHER") && (
-                <Col span={8} style={{ padding: 50 }}>
-                  <Link to="/teacher">
-                    <Card
-                      hoverable
-                      cover={
-                        <img
-                          src={TEACHER}
-                          alt="Teacher"
-                          style={{ height: 200 }}
-                        />
-                      }
+                      <FontAwesomeIcon
+                        icon={faGraduationCap}
+                        style={{ marginRight: 5 }}
+                      />
+                      Quản trị viên
+                    </Radio.Button>
+                  </Card>
+                </Link>
+              </Col>
+              <Col span={8} style={{ padding: 50 }}>
+                <Link to="/teacher">
+                  <Card
+                    hoverable
+                    cover={
+                      <img
+                        src={TEACHER}
+                        alt="Teacher"
+                        style={{ height: 200 }}
+                      />
+                    }
+                    style={{
+                      textAlign: "center",
+                      height: 275,
+                      width: 250,
+                      backgroundColor: "transparent",
+                      border: "none",
+                    }}
+                  >
+                    <Radio.Button
                       style={{
-                        textAlign: "center",
-                        height: 275,
-                        width: 250,
-                        backgroundColor: "transparent",
-                        border: "none",
+                        backgroundColor: "rgb(38, 144, 214)",
+                        color: "white",
                       }}
+                      value="TEACHER"
                     >
-                      <Radio.Button
-                        style={{
-                          backgroundColor: "rgb(38, 144, 214)",
-                          color: "white",
-                        }}
-                        value="TEACHER"
-                      >
-                        <FontAwesomeIcon
-                          icon={faGraduationCap}
-                          style={{ marginRight: 5 }}
-                        />{" "}
-                        Giảng viên
-                      </Radio.Button>
-                    </Card>
-                  </Link>
-                </Col>
-              )}
-              {userCurrent.role.includes("STUDENT") && (
-                <Col span={8} style={{ padding: 50 }}>
-                  <Link to="/student">
-                    <Card
-                      hoverable
-                      cover={
-                        <img
-                          src={STUDENT}
-                          alt="Student"
-                          style={{ height: 200 }}
-                        />
-                      }
+                      <FontAwesomeIcon
+                        icon={faGraduationCap}
+                        style={{ marginRight: 5 }}
+                      />{" "}
+                      Giảng viên
+                    </Radio.Button>
+                  </Card>
+                </Link>
+              </Col>
+              <Col span={8} style={{ padding: 50 }}>
+                <Link to="/student">
+                  <Card
+                    hoverable
+                    cover={
+                      <img
+                        src={STUDENT}
+                        alt="Student"
+                        style={{ height: 200 }}
+                      />
+                    }
+                    style={{
+                      textAlign: "center",
+                      height: 275,
+                      width: 250,
+                      backgroundColor: "transparent",
+                      border: "none",
+                    }}
+                  >
+                    <Radio.Button
                       style={{
-                        textAlign: "center",
-                        height: 275,
-                        width: 250,
-                        backgroundColor: "transparent",
-                        border: "none",
+                        backgroundColor: "rgb(38, 144, 214)",
+                        color: "white",
                       }}
+                      value="STUDENT"
                     >
-                      <Radio.Button
-                        style={{
-                          backgroundColor: "rgb(38, 144, 214)",
-                          color: "white",
-                        }}
-                        value="STUDENT"
-                      >
-                        <FontAwesomeIcon
-                          icon={faGraduationCap}
-                          style={{ marginRight: 5 }}
-                        />{" "}
-                        Sinh viên
-                      </Radio.Button>
-                    </Card>
-                  </Link>
-                </Col>
-              )}
+                      <FontAwesomeIcon
+                        icon={faGraduationCap}
+                        style={{ marginRight: 5 }}
+                      />{" "}
+                      Sinh viên
+                    </Radio.Button>
+                  </Card>
+                </Link>
+              </Col>
             </>
           )}
         </Row>
