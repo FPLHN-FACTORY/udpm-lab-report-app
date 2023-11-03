@@ -1,22 +1,9 @@
 import {
-  faPlus,
   faFilterCircleDollar,
   faPeopleGroup,
-  faEllipsisV,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  Button,
-  Col,
-  Dropdown,
-  Input,
-  Menu,
-  Pagination,
-  Popconfirm,
-  Row,
-  Tag,
-  message,
-} from "antd";
+import { Button, Col, Input, Pagination, Row, Tag } from "antd";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useAppSelector, useAppDispatch } from "../../../app/hook";
@@ -25,18 +12,14 @@ import {
   GetTeam,
 } from "../../../app/teacher/team-factory/TeTeamFactorySlice.reducer";
 import { TeTeamFactoryAPI } from "../../../api/teacher/team-factory/TeTeamFactoryAPI";
-import { toast } from "react-toastify";
 import LoadingIndicator from "../../../helper/loading";
-import moment from "moment";
-// import "./style-team-management.css";
 import React from "react";
 import { Link } from "react-router-dom";
 import Image from "../../../../portalprojects/helper/img/Image";
 
 const TeTeamFactory = () => {
-  const [team, setTeam] = useState(null);
-  const [name, setName] = useState("");
   const { id } = useParams();
+  const [name, setName] = useState("");
   const [current, setCurrent] = useState(1);
   const [total, setTotal] = useState(0);
   const dispatch = useAppDispatch();
@@ -46,7 +29,6 @@ const TeTeamFactory = () => {
     fetchData();
     window.scrollTo(0, 0);
     document.title = "Danh sách team | Lab-Report-App";
-
     return () => {
       dispatch(SetTeam([]));
     };
@@ -67,8 +49,6 @@ const TeTeamFactory = () => {
   };
 
   const data = useAppSelector(GetTeam);
-
-  
 
   const buttonSearch = () => {
     fetchData();
@@ -94,7 +74,7 @@ const TeTeamFactory = () => {
         >
           <div style={{}}>Danh sách team trong xưởng:</div>
           <div style={{ display: "flex", alignItems: "center", marginTop: 15 }}>
-          <div style={{ flex: 1 }}>
+            <div style={{ flex: 1 }}>
               <Input
                 type="text"
                 placeholder="🔍 Nhập tên nhóm"
@@ -116,7 +96,6 @@ const TeTeamFactory = () => {
                 Tìm kiếm
               </Button>
             </div>
-            
           </div>
           <div className="" style={{ marginTop: 20 }}>
             <div className="header-list-member-factory">
@@ -186,7 +165,6 @@ const TeTeamFactory = () => {
                           {item.numberMember} Thành viên
                         </span>
                       </div>
-                      
                     </Col>
                   </Row>
                 );

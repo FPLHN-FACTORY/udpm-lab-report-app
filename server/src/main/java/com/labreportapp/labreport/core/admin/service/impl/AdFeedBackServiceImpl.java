@@ -22,14 +22,14 @@ import java.util.stream.Collectors;
 public class AdFeedBackServiceImpl implements AdFeedBackService {
 
     @Autowired
-    private AdFeedBackRepository repository;
+    private AdFeedBackRepository adFeedBackRepository;
 
     @Autowired
     private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
 
     @Override
     public List<AdFeedBackCustom> searchFeedBack(String idClass) {
-        List<AdFeedBackResponse> list = repository.getAllFeedBack(idClass);
+        List<AdFeedBackResponse> list = adFeedBackRepository.getAllFeedBack(idClass);
         List<String> idListStudent = list.stream()
                 .map(AdFeedBackResponse::getIdStudent)
                 .filter(Objects::nonNull)
@@ -39,6 +39,12 @@ public class AdFeedBackServiceImpl implements AdFeedBackService {
         List<AdFeedBackCustom> listFeedBackCustom = new ArrayList<>();
         list.forEach(feedback -> {
             AdFeedBackCustom adFeedBackCustom = new AdFeedBackCustom();
+            adFeedBackCustom.setRateQuestion1(feedback.getRateQuestion1());
+            adFeedBackCustom.setRateQuestion2(feedback.getRateQuestion2());
+            adFeedBackCustom.setRateQuestion3(feedback.getRateQuestion3());
+            adFeedBackCustom.setRateQuestion4(feedback.getRateQuestion4());
+            adFeedBackCustom.setRateQuestion5(feedback.getRateQuestion5());
+            adFeedBackCustom.setAverageRate(feedback.getAverageRate());
             adFeedBackCustom.setDescription(feedback.getDescription());
             adFeedBackCustom.setCreatedDate(feedback.getCreatedDate());
             adFeedBackCustom.setIdClass(feedback.getIdClass());
