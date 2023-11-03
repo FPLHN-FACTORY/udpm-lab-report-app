@@ -20,6 +20,7 @@ import Cookies from "js-cookie";
 const List = ({ list, index }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [listTitle, setListTitle] = useState(list.name);
+  const [listTitleCopy, setListTitleCopy] = useState(list.name);
   const [showAddForm, setShowAddForm] = useState(false);
   const [taskName, setTaskName] = useState("");
   const taskListRef = useRef(null);
@@ -37,6 +38,12 @@ const List = ({ list, index }) => {
   };
 
   const handleSaveTitle = () => {
+    if (listTitle.trim() === "") {
+      message.error("Tên danh sách không được để trống");
+      setListTitle(listTitleCopy);
+      setIsEditing(false);
+      return;
+    }
     setIsEditing(false);
     if (titleHistory === listTitle) {
       return;
@@ -230,6 +237,7 @@ const List = ({ list, index }) => {
                 value={taskName}
                 placeholder="Mời nhập tiêu đề của thẻ"
                 onChange={handleTaskNameChange}
+                onPressEnter={handleSaveTask}
                 autoFocus
               />
               <button

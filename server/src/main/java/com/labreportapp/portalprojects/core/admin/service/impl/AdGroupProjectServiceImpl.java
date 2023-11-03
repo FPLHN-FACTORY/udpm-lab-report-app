@@ -62,7 +62,7 @@ public class AdGroupProjectServiceImpl implements AdGroupProjectService {
     }
 
     @Override
-    public AdGroupProjectResponse createGroupProject(AdCreateGroupProjectRequest request) throws IOException {
+    public AdGroupProjectResponse createGroupProject(@Valid AdCreateGroupProjectRequest request) throws IOException {
         GroupProject groupProject = new GroupProject();
         groupProject.setName(request.getName());
         groupProject.setDescription(request.getDescriptions());

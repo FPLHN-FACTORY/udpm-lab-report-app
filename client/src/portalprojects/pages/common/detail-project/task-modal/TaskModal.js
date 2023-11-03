@@ -67,6 +67,7 @@ const TaskModal = memo(({ open, onCancel, id }) => {
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
+  const [nameCopy, setNameCopy] = useState("");
   const [idTodoList, setIdTodoList] = useState("");
   const [nameTodoList, setNameTodoList] = useState("");
   const [listMemberTodo, setListMemberTodo] = useState([]);
@@ -146,6 +147,7 @@ const TaskModal = memo(({ open, onCancel, id }) => {
     dispatch(SetDetailTodo(null));
     setLoading(false);
     setName(null);
+    setNameCopy(null);
     setIdTodoList(null);
     setNameTodoList(null);
     setListMemberTodo([]);
@@ -182,6 +184,7 @@ const TaskModal = memo(({ open, onCancel, id }) => {
     if (detailTodo != null && detailTodo.todoListId != null) {
       document.title = detailTodo.name + " | " + detailProject.name;
       setName(detailTodo.name);
+      setNameCopy(detailTodo.name);
       setIdTodoList(detailTodo.id);
 
       const list = listMemberAPI.filter((member) =>
@@ -390,6 +393,12 @@ const TaskModal = memo(({ open, onCancel, id }) => {
   };
 
   const handleBlur = () => {
+    if (name.trim() === "") {
+      message.error("Tên thẻ không được để trống");
+      setName(nameCopy);
+      setShowInput(false);
+      return;
+    }
     setShowInput(false);
     let obj = {
       name: name,
@@ -521,6 +530,7 @@ const TaskModal = memo(({ open, onCancel, id }) => {
                 onChange={handleChange}
                 autoFocus={true}
                 onPressEnter={handleBlur}
+                onBlur={handleBlur}
                 style={{
                   width: "90%",
                   fontSize: "18px",

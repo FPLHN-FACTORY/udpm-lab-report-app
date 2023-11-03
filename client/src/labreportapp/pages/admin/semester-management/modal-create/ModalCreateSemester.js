@@ -56,7 +56,7 @@ const ModalCreateSemester = ({ visible, onCancel }) => {
       check++;
     } else {
       setErrorStartTime("");
-      if (new Date(startTime) > new Date(endTime)) {
+      if (new Date(startTime).getTime() > new Date(endTime).getTime()) {
         setErrorStartTime(
           "Thời gian bắt đầu không được lớn hơn thời gian kết thúc"
         );
@@ -79,7 +79,7 @@ const ModalCreateSemester = ({ visible, onCancel }) => {
       check++;
     } else {
       setErrorStartTimeStudent("");
-      if (new Date(startTimeStudent) > new Date(endTimeStudent)) {
+      if (new Date(startTimeStudent).getTime() > new Date(endTimeStudent).getTime()) {
         setErrorStartTimeStudent(
           "Thời gian sinh viên bắt đầu không được lớn hơn thời gian sinh viên kết thúc"
         );
@@ -87,7 +87,7 @@ const ModalCreateSemester = ({ visible, onCancel }) => {
       } else {
         setErrorStartTimeStudent("");
       }
-      if (new Date(startTimeStudent) < new Date(startTime)) {
+      if (new Date(startTimeStudent).getTime() < new Date(startTime).getTime()) {
         setErrorStartTimeStudent(
           "Thời gian sinh viên bắt đầu không được nhỏ hơn thời gian học kỳ bắt đầu"
         );
@@ -103,7 +103,7 @@ const ModalCreateSemester = ({ visible, onCancel }) => {
       check++;
     } else {
       setErrorEndTimeStudent("");
-      if (new Date(endTimeStudent) > new Date(endTime)) {
+      if (new Date(endTimeStudent).getTime() > new Date(endTime).getTime()) {
         setErrorEndTimeStudent(
           "Thời gian sinh viên kết thúc không được lớn hơn thời gian học kỳ kết thúc"
         );

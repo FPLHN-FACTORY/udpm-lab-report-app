@@ -265,6 +265,7 @@ const Board = () => {
                     placeholder="Nhập tiêu đề của danh sách"
                     className="input-add-list-form"
                     value={newListTitle}
+                    onPressEnter={handleAddList}
                     autoFocus={true}
                     onChange={(e) => setNewListTitle(e.target.value)}
                   />

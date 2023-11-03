@@ -2,11 +2,12 @@ import "./stylePopupCreateLabel.css";
 import React, { useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTags, faUsers } from "@fortawesome/free-solid-svg-icons";
-import { Button, Col, Input, Row } from "antd";
+import { Button, Col, Input, Row, message } from "antd";
 import { useState } from "react";
 import { GetProject } from "../../../../../../app/reducer/detail-project/DPProjectSlice.reducer";
 import { useAppDispatch, useAppSelector } from "../../../../../../app/hook";
-import { getStompClient } from "../../../stomp-client-config/StompClientManager";import Cookies from "js-cookie";
+import { getStompClient } from "../../../stomp-client-config/StompClientManager";
+import Cookies from "js-cookie";
 
 const PopupCreateLabel = ({ position, onClose }) => {
   const popupRef = useRef(null);
@@ -90,6 +91,10 @@ const PopupCreateLabel = ({ position, onClose }) => {
   };
 
   const handleAddLabel = () => {
+    if (title.trim() === "") {
+      message.error("Tên nhãn không được để trống");
+      return;
+    }
     let obj = {
       name: title,
       color: color,

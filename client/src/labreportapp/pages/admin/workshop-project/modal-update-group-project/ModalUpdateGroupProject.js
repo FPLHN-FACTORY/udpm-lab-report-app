@@ -11,6 +11,7 @@ const { Option } = Select;
 
 const ModalUpdateGroupProject = ({ visible, onCancel, item }) => {
   const [name, setName] = useState("");
+  const [errorName, setErrorName] = useState("");
   const [descriptions, setDescriptions] = useState("");
   //   const [backgroundImage, setBackgroundImage] = useState("");
   const [selectedImageUrl, setSelectedImageUrl] = useState("");
@@ -41,6 +42,13 @@ const ModalUpdateGroupProject = ({ visible, onCancel, item }) => {
   };
 
   const updateGroupProject = () => {
+    let check = 0;
+    if (name.trim() === "") {
+      setErrorName("Tên nhóm dự án không được để trống");
+      check++;
+    } else {
+      setErrorName("");
+    }
     let obj = {
       id: item.id,
       name: name,
@@ -87,7 +95,8 @@ const ModalUpdateGroupProject = ({ visible, onCancel, item }) => {
                   onChange={(e) => {
                     setName(e.target.value);
                   }}
-                />
+                />{" "}
+                <span style={{ color: "red" }}>{errorName}</span>
               </Col>
               <Col span={24} style={{ marginTop: 15 }}>
                 Mô tả:

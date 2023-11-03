@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import "./stylePopupImage.css";
-import { Button, Input, Upload } from "antd";
+import { Button, Input, Upload, message } from "antd";
 import { GetDetailTodo } from "../../../../../app/reducer/detail-project/DPDetailTodoSlice.reducer";
 import { useAppSelector } from "../../../../../app/hook";
 import { GetProject } from "../../../../../app/reducer/detail-project/DPProjectSlice.reducer";
@@ -66,6 +66,10 @@ const PopupImage = ({ position, onClose }) => {
   };
 
   const handleCreateImage = async () => {
+    if (selectedImage == null) {
+      message.error("Hãy chọn file ảnh cần upload");
+      return;
+    }
     setIsLoading(true);
     const newImageType = "image/jpeg";
     let nameFileOld = name === "" ? selectedImage.name : name;

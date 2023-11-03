@@ -451,7 +451,6 @@ public class DBGenerator implements CommandLineRunner {
 
         Project project1 = new Project();
         project1.setCode("Project_1");
-        project1.setGroupProjectId(groupProject1.getId());
         project1.setName("Module điểm thưởng");
         project1.setStartTime(1696260088553L);
         project1.setTypeProject(TypeProject.DU_AN_XUONG_THUC_HANH);
@@ -471,7 +470,6 @@ public class DBGenerator implements CommandLineRunner {
         project2.setTypeProject(TypeProject.DU_AN_XUONG_THUC_HANH);
         project2.setProgress(Float.parseFloat("0"));
         project2.setBackgroundColor("#59a1e3");
-        project2.setGroupProjectId(groupProject1.getId());
         project2.setDescriptions("Mục đích của dự án là để quản lý các dự án của bộ môn PTPM");
         project2.setStatusProject(StatusProject.DANG_DIEN_RA);
         project1.setTypeProject(TypeProject.DU_AN_XUONG_DU_AN);
@@ -483,7 +481,6 @@ public class DBGenerator implements CommandLineRunner {
         project3.setStartTime(1678294800000L);
         project3.setTypeProject(TypeProject.DU_AN_XUONG_THUC_HANH);
         project3.setEndTime(1685379600000L);
-        project3.setGroupProjectId(groupProject1.getId());
         project3.setProgress(Float.parseFloat("0"));
         project3.setBackgroundColor("#59a1e3");
         project3.setDescriptions("Mục đích phục vụ xem bài viết của bộ môn");

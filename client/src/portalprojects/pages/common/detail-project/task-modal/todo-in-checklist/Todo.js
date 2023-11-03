@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Checkbox, Input, Popconfirm, Tooltip } from "antd";
+import { Button, Checkbox, Input, Popconfirm, Tooltip, message } from "antd";
 import "./styleTodo.css"; // Import file CSS
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus } from "@fortawesome/free-solid-svg-icons";
@@ -17,11 +17,13 @@ const Todo = ({ item }) => {
   const periodCurrent = useAppSelector(GetPeriodCurrent);
   const stompClient = getStompClient();
   const [name, setName] = useState(item.name);
+  const [nameCopy, setNameCopy] = useState(item.name);
 
   useEffect(() => {
     if (item != null) {
       setChecked(item.statusTodo === 1 ? true : false);
       setName(item.name);
+      setNameCopy(item.name);
     }
   }, [item]);
 
@@ -75,6 +77,12 @@ const Todo = ({ item }) => {
   };
 
   const handleChangeName = () => {
+    if (name.trim() === "") {
+      message.error("Tên đầu việc không được để trống");
+      setName(nameCopy);
+      setEditing(false);
+      return;
+    }
     setEditing(false);
     let obj = {
       name: name,

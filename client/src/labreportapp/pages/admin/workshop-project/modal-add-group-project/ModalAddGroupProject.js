@@ -9,6 +9,7 @@ import LoadingIndicatorNoOverlay from "../../../../helper/loadingNoOverlay";
 
 const ModalCreateGroupProject = ({ visible, onCancel }) => {
   const [name, setName] = useState("");
+  const [errorName, setErrorName] = useState("");
   const [descriptions, setDescriptions] = useState("");
   //   const [backgroundImage, setBackgroundImage] = useState("");
   const [selectedImageUrl, setSelectedImageUrl] = useState("");
@@ -38,18 +39,27 @@ const ModalCreateGroupProject = ({ visible, onCancel }) => {
   };
 
   const createGroupProject = () => {
-    let obj = {
-      name: name,
-      descriptions: descriptions,
-      file: image,
-    };
-    setLoading(true);
-    AdGroupProjectAPI.createGroupProject(obj).then((response) => {
-      dispatch(CreateAdGroupProject(response.data.data));
-      message.success("Cập nhật thành công");
-      setLoading(false);
-      onCancel();
-    });
+    let check = 0;
+    if (name.trim() === "") {
+      setErrorName("Tên nhóm dự án không được để trống");
+      check++;
+    } else {
+      setErrorName("");
+    }
+    if (check === 0) {
+      let obj = {
+        name: name,
+        descriptions: descriptions,
+        file: image,
+      };
+      setLoading(true);
+      AdGroupProjectAPI.createGroupProject(obj).then((response) => {
+        dispatch(CreateAdGroupProject(response.data.data));
+        message.success("Cập nhật thành công");
+        setLoading(false);
+        onCancel();
+      });
+    }
   };
 
   return (
@@ -84,6 +94,7 @@ const ModalCreateGroupProject = ({ visible, onCancel }) => {
                     setName(e.target.value);
                   }}
                 />
+                <span style={{ color: "red" }}>{errorName}</span>
               </Col>
               <Col span={24} style={{ marginTop: 15 }}>
                 Mô tả:
@@ -128,7 +139,7 @@ const ModalCreateGroupProject = ({ visible, onCancel }) => {
                 }}
                 onClick={createGroupProject}
               >
-               Thêm mới
+                Thêm mới
               </Button>
               <Button
                 style={{

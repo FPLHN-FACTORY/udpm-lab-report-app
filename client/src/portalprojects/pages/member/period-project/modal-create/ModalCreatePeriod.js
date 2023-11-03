@@ -64,7 +64,7 @@ const ModalCreatePeriod = ({ visible, onCancel }) => {
     } else {
       setErrorEndTime("");
     }
-    if (new Date(startTime) > new Date(endTime)) {
+    if (new Date(startTime).getTime() > new Date(endTime).getTime()) {
       setErrorStartTime(
         "Thời gian bắt đầu không được lớn hơn thời gian kết thúc"
       );

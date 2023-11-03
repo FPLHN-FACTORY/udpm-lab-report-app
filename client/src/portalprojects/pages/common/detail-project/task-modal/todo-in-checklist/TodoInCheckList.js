@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Input, Progress } from "antd";
+import { Button, Input, Progress, message } from "antd";
 import Todo from "./Todo";
 import "./styleTodoInCheckList.css";
 import { GetDetailTodo } from "../../../../../app/reducer/detail-project/DPDetailTodoSlice.reducer";
@@ -38,6 +38,10 @@ const TodoInCheckList = () => {
   };
 
   const handleSaveTodo = () => {
+    if (name.trim() === "") {
+      message.error("Tên đầu việc không được để trống");
+      return;
+    }
     let obj = {
       periodId: periodCurrent.id,
       name: name,
@@ -98,6 +102,7 @@ const TodoInCheckList = () => {
               type="text"
               value={name}
               autoFocus={true}
+              onPressEnter={handleSaveTodo}
               onChange={(e) => {
                 setName(e.target.value);
               }}
