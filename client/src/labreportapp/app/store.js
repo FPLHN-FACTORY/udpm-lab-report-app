@@ -57,6 +57,7 @@ import DPRoleProjectSliceReducer from "../../portalprojects/app/reducer/detail-p
 import AdGroupProjectToProjectManagementSliceReduce from "./admin/AdGroupProjectToProjectManagementSlice.reduce";
 import TeDetailTeamFactorySliceReducer from "./teacher/team-factory/TeDetailTeamFactorySlice.reducer";
 import StDetailTeamFactorySliceReducer from "./student/StDetailTeamFactorySlice.reducer";
+import DPDetailProjectCustomReduce from "../../portalprojects/app/reducer/detail-project/DPDetailProjectCustom.reduce";
 
 export const store = configureStore({
   reducer: {
@@ -111,13 +112,15 @@ export const store = configureStore({
     userCurrent: UserCurrentReducer,
     adDetailTeam: AdDetailTeamSliceReducer,
     meRoleProject: DPRoleProjectSliceReducer,
-    adGroupProjectToProjectManagement: AdGroupProjectToProjectManagementSliceReduce,
+    adGroupProjectToProjectManagement:
+      AdGroupProjectToProjectManagementSliceReduce,
     teMemberFactory: TeMemberFactorySliceReducer,
     teTeamFactory: TeTeamFactorySliceReducer,
     teDetailTeamFactory: TeDetailTeamFactorySliceReducer,
     stMemberFactory: StMemberFactorySliceReducer,
     stTeamFactory: StTeamFactorySliceReducer,
     stDetailTeamFactory: StDetailTeamFactorySliceReducer,
+    detailProjectCustom: DPDetailProjectCustomReduce,
   },
 });
 

@@ -373,6 +373,7 @@ public class DBGenerator implements CommandLineRunner {
         class3.setClassSize(1);
         class3.setStatusClass(StatusClass.OPEN);
         class3.setPassword("123456");
+        class3.setStatusTeacherEdit(StatusTeacherEdit.CHO_PHEP);
         class3.setActivityId(activity1.getId());
 //        class3.setTeacherId("1243F96A-42BD-49B3-8E45-08DBB2F9FEB4".toLowerCase());
         class3.setTeacherId("71090c89-f618-41ae-2a8d-08dbb201efe8".toLowerCase());

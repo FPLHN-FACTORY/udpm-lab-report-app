@@ -12,11 +12,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import {
   Button,
+  Empty,
   Input,
   Pagination,
   Popconfirm,
   Select,
   Table,
+  Tag,
   Tooltip,
   message,
 } from "antd";
@@ -35,7 +37,6 @@ import {
   SetPeriodProject,
   DeletePeriodProject,
 } from "../../../app/reducer/member/period-project/periodProjectSlice.reducer";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ModalDetailPeriod from "./modal-detail/ModalDetailPeriod";
 import ModalUpdatePeriod from "./modal-update/ModalUpdatePeriod";
@@ -44,6 +45,17 @@ import LoadingIndicator from "../../../helper/loading";
 import HeaderDetailProject from "../../common/detail-project/HeaderDetailProject";
 import logoUdpm2 from "../../../../labreportapp/assets/img/logo-udpm-2.png";
 import logoUdpm3 from "../../../../labreportapp/assets/img/logo-udpm-3.png";
+import {
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+  SyncOutlined,
+} from "@ant-design/icons";
+import { convertDateLongToString } from "../../../../labreportapp/helper/util.helper";
+import {
+  GetProjectCustom,
+  SetProjectCustom,
+} from "../../../app/reducer/detail-project/DPDetailProjectCustom.reduce";
+import ModalUpdateFiledProject from "./modal-update-filed-project/ModalUpdateFiledProject";
 
 const { Option } = Select;
 
@@ -59,19 +71,19 @@ const PeriodProject = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    fetchData();
-
+    fetchDataProjectCustom();
     return () => {
       dispatch(SetPeriodProject([]));
       dispatch(SetProject([]));
     };
   }, []);
 
-  const fetchData = () => {
-    DetailProjectAPI.findProjectById(id).then((response) => {
-      setDetailProject(response.data.data);
-      dispatch(SetProject(response.data.data));
-      document.title = "Quản lý giai đoạn | " + response.data.data.name;
+  const fetchDataProjectCustom = () => {
+    DetailProjectAPI.findProjectCustomById(id).then((response) => {
+      setDetailProject(response.data.data.project);
+      dispatch(SetProject(response.data.data.project));
+      dispatch(SetProjectCustom(response.data.data.projectCustom));
+      document.title = "Quản lý giai đoạn | " + response.data.data.project.name;
     });
   };
 
@@ -98,12 +110,12 @@ const PeriodProject = () => {
       setLoading(false);
     });
   };
-
+  const dataProject = useAppSelector(GetProjectCustom);
   const data = useAppSelector(GetPeriodProject);
 
   const columns = [
     {
-      title: "STT",
+      title: "#",
       dataIndex: "stt",
       key: "stt",
       sorter: (a, b) => a.stt.localeCompare(b.stt),
@@ -128,23 +140,15 @@ const PeriodProject = () => {
       dataIndex: "startTimeAndEndTime",
       key: "startTimeAndEndTime",
       render: (text, record) => {
-        const startTime = new Date(record.startTime);
-        const endTime = new Date(record.endTime);
-
-        const formattedStartTime = `${startTime.getDate()}/${
-          startTime.getMonth() + 1
-        }/${startTime.getFullYear()}`;
-        const formattedEndTime = `${endTime.getDate()}/${
-          endTime.getMonth() + 1
-        }/${endTime.getFullYear()}`;
-
         return (
           <span>
-            {formattedStartTime} - {formattedEndTime}
+            {convertDateLongToString(record.startTime)}
+            {" - "}
+            {convertDateLongToString(record.endTime)}
           </span>
         );
       },
-      width: "15%",
+      align: "center",
     },
     {
       title: "Trạng thái",
@@ -152,40 +156,39 @@ const PeriodProject = () => {
       key: "status",
       sorter: (a, b) => a.status - b.status,
       render: (text) => {
-        let statusText = "";
         if (text === 0) {
-          statusText = "Đã diễn ra";
           return (
-            <span
-              className="box_span_status"
-              style={{ backgroundColor: "rgb(45, 211, 86)" }}
+            <Tag
+              icon={<CheckCircleOutlined />}
+              style={{ width: "120px", textAlign: "center" }}
+              color="success"
             >
-              {statusText}
-            </span>
+              Đã diễn ra
+            </Tag>
           );
         } else if (text === 1) {
-          statusText = "Đang diễn ra";
           return (
-            <span
-              className="box_span_status"
-              style={{ backgroundColor: "rgb(41, 157, 224)" }}
+            <Tag
+              icon={<SyncOutlined spin />}
+              style={{ width: "120px", textAlign: "center" }}
+              color="processing"
             >
-              {statusText}
-            </span>
+              Đang diễn ra
+            </Tag>
           );
-        } else if (text === 2) {
-          statusText = "Chưa diễn ra";
+        } else {
           return (
-            <span
-              className="box_span_status"
-              style={{ backgroundColor: "rgb(238, 162, 48)" }}
+            <Tag
+              icon={<CloseCircleOutlined />}
+              style={{ width: "120px", textAlign: "center" }}
+              color="error"
             >
-              {statusText}
-            </span>
+              Chưa diễn ra
+            </Tag>
           );
         }
       },
-      width: "15%",
+      align: "center",
     },
     {
       title: "Hành động",
@@ -200,11 +203,13 @@ const PeriodProject = () => {
               onClick={() => {
                 handleTaskClick(record.id);
               }}
+              className="icon"
               size="1x"
             />
           </Tooltip>
           <Tooltip title="Cập nhật">
             <FontAwesomeIcon
+              className="icon"
               onClick={() => {
                 handlePeriodUpdate(record.id);
               }}
@@ -224,6 +229,7 @@ const PeriodProject = () => {
           >
             <Tooltip title="Xóa">
               <FontAwesomeIcon
+                className="icon"
                 style={{ cursor: "pointer" }}
                 icon={faTrash}
                 size="1x"
@@ -238,6 +244,7 @@ const PeriodProject = () => {
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showUpdateFiledProject, setShowUpdateFiledProject] = useState(false);
 
   const handleTaskClick = (id) => {
     document.querySelector("body").style.overflowX = "hidden";
@@ -270,6 +277,11 @@ const PeriodProject = () => {
   const handleModalCreateCancel = () => {
     document.querySelector("body").style.overflowX = "auto";
     setShowCreateModal(false);
+  };
+
+  const handleModalUpdateFiledProjectCancel = () => {
+    document.querySelector("body").style.overflowX = "auto";
+    setShowUpdateFiledProject(false);
   };
 
   const handleSearch = () => {
@@ -325,36 +337,59 @@ const PeriodProject = () => {
                   {" "}
                   <FontAwesomeIcon icon={faCogs} size="1x" /> Thông tin dự án
                 </span>
+                <span>
+                  <Tooltip title="Cập nhật thông tin dự án">
+                    <FontAwesomeIcon
+                      className="icon"
+                      onClick={() => {
+                        setShowUpdateFiledProject(true);
+                      }}
+                      style={{ marginRight: "15px", cursor: "pointer" }}
+                      icon={faPencil}
+                      size="1x"
+                    />
+                  </Tooltip>
+                </span>
                 <div className="group-info">
                   <span
                     className="group-info-item"
                     style={{ marginTop: "10px", marginBottom: "15px" }}
                   >
-                    Mã dự án:
+                    Mã dự án: {dataProject != null ? dataProject.code : ""}
                   </span>
                   <span
                     className="group-info-item"
                     style={{ marginTop: "10px", marginBottom: "15px" }}
                   >
-                    Tên dư án:
+                    Tên dư án: {dataProject != null ? dataProject.name : ""}
                   </span>
                   <span
                     className="group-info-item"
                     style={{ marginTop: "10px", marginBottom: "15px" }}
                   >
-                    Ngày bắt đầu/kết thúc:
+                    Ngày bắt đầu/kết thúc:{" "}
+                    {dataProject != null ? (
+                      <span>
+                        {convertDateLongToString(dataProject.startTime)} {" - "}
+                        {convertDateLongToString(dataProject.endTime)}
+                      </span>
+                    ) : (
+                      ""
+                    )}
                   </span>
                   <span
                     className="group-info-item"
                     style={{ marginTop: "10px", marginBottom: "15px" }}
                   >
-                    Thể loại:
+                    Thể loại:{" "}
+                    {dataProject != null ? dataProject.nameCategorys : ""}
                   </span>
                   <span
                     className="group-info-item"
                     style={{ marginTop: "10px", marginBottom: "15px" }}
                   >
-                    Nhóm dự án:
+                    Nhóm dự án:{" "}
+                    {dataProject != null ? dataProject.nameGroupProject : ""}
                   </span>
                 </div>
               </div>
@@ -379,38 +414,53 @@ const PeriodProject = () => {
                       icon={faPlus}
                       size="1x"
                       style={{
-                        marginRight: "8x",
+                        marginRight: "8px",
                         backgroundColor: "rgb(55, 137, 220)",
                       }}
-                    />{" "}
+                    />
                     Thêm giai đoạn
                   </Button>
                 </div>
               </div>
               <br />
-              <div style={{ marginTop: "25px" }}>
-                <Table
-                  dataSource={data}
-                  rowKey="id"
-                  columns={columns}
-                  pagination={false}
-                />
-                <div className="pagination_box">
-                  <Pagination
-                    simple
-                    current={current}
-                    onChange={(value) => {
-                      setCurrent(value);
-                    }}
-                    total={total * 10}
+              <div
+                style={{
+                  marginTop: "15px",
+                  minHeight: "170px",
+                  height: "auto",
+                }}
+              >
+                {data.length > 0 ? (
+                  <>
+                    {" "}
+                    <Table
+                      dataSource={data}
+                      rowKey="id"
+                      columns={columns}
+                      pagination={false}
+                    />
+                    <div className="pagination_box">
+                      <Pagination
+                        simple
+                        current={current}
+                        onChange={(value) => {
+                          setCurrent(value);
+                        }}
+                        total={total * 10}
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <Empty
+                    imageStyle={{ height: "60px" }}
+                    description={<span>Không có dữ liệu</span>}
                   />
-                </div>
+                )}
               </div>
             </div>
           </div>
         </div>
       </div>
-
       <ModalDetailPeriod
         visible={showDetailModal}
         onCancel={handleModalCancel}
@@ -424,6 +474,11 @@ const PeriodProject = () => {
         visible={showUpdateModal}
         onCancel={handleModalUpdateCancel}
         idPeriod={idPeriod}
+      />
+      <ModalUpdateFiledProject
+        visible={showUpdateFiledProject}
+        onCancel={handleModalUpdateFiledProjectCancel}
+        idProject={id}
       />
     </div>
   );

@@ -2,7 +2,6 @@ package com.labreportapp.portalprojects.core.admin.service;
 
 import com.labreportapp.portalprojects.core.admin.model.request.AdCreateProjectRequest;
 import com.labreportapp.portalprojects.core.admin.model.request.AdFindProjectRequest;
-import com.labreportapp.portalprojects.core.admin.model.request.AdUpdateProjectRequest;
 import com.labreportapp.portalprojects.core.admin.model.request.AdUpdateProjectRoleRequest;
 import com.labreportapp.portalprojects.core.admin.model.response.AdDetailProjectCateMemberRespone;
 import com.labreportapp.portalprojects.core.admin.model.response.AdProjectReponse;
