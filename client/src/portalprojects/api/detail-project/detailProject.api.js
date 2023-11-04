@@ -8,6 +8,21 @@ export class DetailProjectAPI {
     });
   };
 
+  static findProjectCustomById = (idProject) => {
+    return request({
+      method: "GET",
+      url: `/member/project/detail-project-custom/` + idProject,
+    });
+  };
+
+  static updateFiledProject = (data) => {
+    return request({
+      method: "PUT",
+      url: `/member/project/detail-project-custom`,
+      data: data,
+    });
+  };
+
   static findAllPeriodProject = (idProject) => {
     return request({
       method: "GET",

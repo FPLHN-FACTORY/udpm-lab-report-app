@@ -1,12 +1,16 @@
 package com.labreportapp.portalprojects.core.member.repository;
 
+import com.labreportapp.portalprojects.core.admin.model.response.AdProjectReponse;
 import com.labreportapp.portalprojects.core.member.model.request.MeFindProjectRequest;
+import com.labreportapp.portalprojects.core.member.model.response.MeDetailProjectCateResponse;
 import com.labreportapp.portalprojects.core.member.model.response.MeProjectResponse;
 import com.labreportapp.portalprojects.repository.ProjectRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import java.util.Optional;
 
 /**
  * @author thangncph26123
@@ -46,5 +50,28 @@ public interface MeProjectRepository extends ProjectRepository {
             ORDER BY a.created_date DESC
             """, nativeQuery = true)
     Page<MeProjectResponse> getAllProjectById(Pageable page, @Param("req") MeFindProjectRequest req);
+
+    @Query(value = """
+            SELECT DISTINCT pro.id,
+                   pro.name,
+                   pro.code,
+                   pro.descriptions,
+                   pro.status_project,
+                   pro.start_time,
+                   pro.end_time,
+                   pro.progress,
+                   pro.created_date,
+                   pro.background_image,
+                   pro.background_color,
+                   GROUP_CONCAT(cate.name SEPARATOR ', ') as nameCategorys,
+                    gp.name as name_group_project,
+                    gp.id as id_group_project
+             FROM project_category a
+             JOIN project pro on a.project_id = pro.id
+             JOIN category cate on a.category_id = cate.id
+             LEFT JOIN group_project gp on gp.id = pro.group_project_id
+            WHERE pro.id = :idProject
+            """, nativeQuery = true)
+    Optional<MeDetailProjectCateResponse> findOneProjectCategoryById(@Param("idProject") String idProject);
 
 }

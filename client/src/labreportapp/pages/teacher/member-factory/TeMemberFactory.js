@@ -1,19 +1,11 @@
 import {
-  faDownload,
-  faEllipsisV,
   faPeopleGroup,
-  faPlus,
-  faUpload,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  Button,
-  Checkbox,
   Col,
-  Dropdown,
   Input,
-  Menu,
   Pagination,
   Row,
   Select,
