@@ -119,7 +119,7 @@ const ModalCreateActivity = ({
         descriptions: descriptions,
         allowUseTrello: parseInt(allowUseTrello),
       };
-      console.log(code, descriptions, level);
+      
       ActivityManagementAPI.create(obj).then(
         (response) => {
           message.success("Thêm thành công!");

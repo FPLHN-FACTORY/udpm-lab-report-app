@@ -108,7 +108,7 @@ const MemberManagement = () => {
   };
 
   const handleMenuClick = (e, itemId) => {
-    console.log("Chọn mục: ", e.key, "của phần tử:", itemId);
+    
   };
 
   const [visibleAddMemberFactory, setVisibleAddMemberFactory] = useState(false);

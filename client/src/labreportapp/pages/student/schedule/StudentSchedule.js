@@ -39,7 +39,7 @@ const StudentSchedule = () => {
 
   const fetchData = () => {
     const searchTimeAsNumber = parseInt(searchTime);
-    console.log(searchTimeAsNumber);
+    
     setLoading(true);
     let filter = {
       searchTime: searchTimeAsNumber,

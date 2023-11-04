@@ -10,7 +10,7 @@ const BurndownChart = ({ item, allTodoTypeWork, listTodoComplete }) => {
 
   useEffect(() => {
     if (item != null) {
-      console.log(item);
+    
       const dateA = new Date(item.startTime);
       const dateB = new Date(item.endTime);
 

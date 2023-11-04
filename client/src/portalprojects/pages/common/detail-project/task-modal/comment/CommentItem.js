@@ -37,7 +37,7 @@ const ViewEditor = ({ item, reply }) => {
   const userCurrent = useAppSelector(GetUserCurrent)
 
   useEffect(() => {
-    console.log(item);
+
     if (
       listMemberProject != null &&
       listMemberProject.length > 0 &&
@@ -53,7 +53,6 @@ const ViewEditor = ({ item, reply }) => {
     );
     setCheckShowHide(item.memberId === userCurrent.id ? false : true);
     setMember(data);
-    console.log(data);
   };
 
   useEffect(() => {

@@ -1,24 +1,13 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./styleStakeholderManagement.css";
-import {
-  faFilter,
-  faCogs,
-  faPencil,
-} from "@fortawesome/free-solid-svg-icons";
+import { faFilter, faCogs, faPencil } from "@fortawesome/free-solid-svg-icons";
 import { useAppDispatch, useAppSelector } from "../../../app/hook";
 import {
   GetAdStakeholderManagement,
   SetAdStakeholderManagement,
-  
 } from "../../../app/reducer/admin/stakeholder-management/Stakeholder.reducer";
 
-import {
-  Button,
-  Input,
-  Pagination,
-  Table,
-  Tooltip,
-} from "antd";
+import { Button, Input, Pagination, Table, Tooltip } from "antd";
 import ModalUpdateStakeholderManagement from "../stakeholder-management/modal-update/ModalUpdateStakeholderManagement";
 
 import { CommonStakeHolderAPI } from "../../../api/commonAPI";
@@ -37,62 +26,48 @@ const StakeholderManagement = () => {
   const clear = async () => {
     setName("");
     setUserName("");
-    try{
-    await CommonStakeHolderAPI.fetchAll().then((re) => {
-      dispatch(SetAdStakeholderManagement(re.data));
-    });
-  }
-  
-  catch(error){
-    alert("Lỗi hệ thống, vui lòng ấn F5 để tải lại trang");
-
-  }
+    try {
+      await CommonStakeHolderAPI.fetchAll().then((re) => {
+        dispatch(SetAdStakeholderManagement(re.data));
+      });
+    } catch (error) {
+      console.log("Lỗi hệ thống, vui lòng ấn F5 để tải lại trang");
+    }
   };
   useEffect(() => {
     fetchData();
     return () => {
       dispatch(SetAdStakeholderManagement([]));
     };
-    
-
   }, []);
   const fetchData = async () => {
     setIsLoading(true);
-    try{
-    await CommonStakeHolderAPI.fetchAll().then((re) => {
-      dispatch(SetAdStakeholderManagement(re.data));
-    });
-    setIsLoading(false);
-  }
-  
-  catch(error){
-    alert("Lỗi hệ thống, vui lòng ấn F5 để tải lại trang");
-
-  }
+    try {
+      await CommonStakeHolderAPI.fetchAll().then((re) => {
+        dispatch(SetAdStakeholderManagement(re.data));
+      });
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
   const data = useAppSelector(GetAdStakeholderManagement);
   const handleSearch = () => {
-
     const searchResult = data.filter((item) =>
       item.name.toLowerCase().includes(name.toLowerCase())
-      
     );
     const searchResultUser = data.filter((item) =>
       item.userName.toLowerCase().includes(username.toLowerCase())
     );
-    
+
     // dispatch(SetAdStakeholderManagement(searchResult));
     // dispatch(SetAdStakeholderManagement(searchResultUser));
     Promise.all([
       dispatch(SetAdStakeholderManagement(searchResult)),
       dispatch(SetAdStakeholderManagement(searchResultUser)),
-    ]).then(() => {
-      console.log("okokokok");
-    });
-
+    ]).then(() => {});
   };
-  
-  
+
   const columns = [
     {
       title: "STT",
@@ -129,8 +104,8 @@ const StakeholderManagement = () => {
       title: "Hành động",
       dataIndex: "actions",
       key: "actions",
-      
-      render: (text,record) => (
+
+      render: (text, record) => (
         <div>
           <Tooltip title="Cập nhật">
             <FontAwesomeIcon
@@ -146,7 +121,7 @@ const StakeholderManagement = () => {
       ),
     },
   ];
-  
+
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const handleModalUpdateCancel = () => {
     document.querySelector("body").style.overflowX = "auto";
@@ -156,11 +131,10 @@ const StakeholderManagement = () => {
     document.querySelector("body").style.overflowX = "hidden";
     setShowUpdateModal(true);
     setIdStakeHolder(id);
-
   };
   return (
     <div className="stakeholder_management">
-            {isLoading && <LoadingIndicator />}
+      {isLoading && <LoadingIndicator />}
 
       <div className="title_stakeholder_management">
         {" "}
@@ -197,18 +171,11 @@ const StakeholderManagement = () => {
             </div>
           </div>
         </div>
-        
         <div className="box_btn_filter">
-          <Button
-            className="btn_filter"
-              onClick={handleSearch}
-          >
+          <Button className="btn_filter" onClick={handleSearch}>
             Tìm kiếm
           </Button>
-          <Button
-            className="btn_clear"
-              onClick={clear}
-          >
+          <Button className="btn_clear" onClick={clear}>
             Làm mới bộ lọc
           </Button>
         </div>
@@ -236,7 +203,6 @@ const StakeholderManagement = () => {
             }}
           />
         </div>
-          
       </div>
       <ModalUpdateStakeholderManagement
         visible={showUpdateModal}

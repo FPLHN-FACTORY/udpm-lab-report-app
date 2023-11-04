@@ -337,7 +337,7 @@ const TaskModal = memo(({ open, onCancel, id }) => {
         idTodo: detailTodo.id,
         idTodoList: detailTodo.todoListId,
       };
-      console.log(obj);
+      
       if (!isJoin) {
         handleOutAssign(obj);
       } else {

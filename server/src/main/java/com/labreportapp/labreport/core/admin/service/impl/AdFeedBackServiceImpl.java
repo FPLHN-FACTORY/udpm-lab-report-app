@@ -75,7 +75,7 @@ public class AdFeedBackServiceImpl implements AdFeedBackService {
     @Override
     public AdObjFeedbackResponse getAllFeedbackByIdClass(String idClass) {
         AdObjFeedbackResponse objReturn = new AdObjFeedbackResponse();
-        List<FeedBack> listFeedback = repository.getAllFeedBackByIdClass(idClass);
+        List<FeedBack> listFeedback = adFeedBackRepository.getAllFeedBackByIdClass(idClass);
         String codeClass = adClassRepository.findCodeByIdClass(idClass);
         objReturn.setCodeClass(codeClass != null ? codeClass : "");
         List<AdGetFeedbackResponse> listReturn = new ArrayList<>();
@@ -91,7 +91,7 @@ public class AdFeedBackServiceImpl implements AdFeedBackService {
         AtomicInteger stt = new AtomicInteger();
         listFeedback.forEach(i -> {
             AdGetFeedbackResponse obj = new AdGetFeedbackResponse();
-            obj.setStt(stt.get());
+            obj.setStt(stt.get() + 1);
             stt.getAndIncrement();
             obj.setId(i.getId());
             obj.setRateQuestion1(i.getRateQuestion1());

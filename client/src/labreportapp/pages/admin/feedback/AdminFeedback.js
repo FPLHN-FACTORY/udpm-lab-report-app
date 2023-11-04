@@ -12,16 +12,14 @@ import { AdSemesterAPI } from "../../../api/admin/AdSemesterAPI";
 import { Button, Col, Empty, Row, Select, Table, message } from "antd";
 import { ClassAPI } from "../../../api/admin/class-manager/ClassAPI.api";
 import { arrayQuestion } from "../../../helper/util.helper";
-import { useAppSelector } from "../../../app/hook";
-import { GetUserCurrent } from "../../../app/common/UserCurrent.reducer";
 import { AdminFeedBackAPI } from "../../../api/admin/AdFeedBackAPI";
 import { convertDateLongToString } from "../../../helper/util.helper";
 import { SetAdTeacher } from "../../../app/admin/AdTeacherSlice.reducer";
-import { useAppDispatch} from "../../../app/hook";
+import { useAppDispatch } from "../../../app/hook";
 import "./style-admin-feedback.css";
 
-
 const { Option } = Select;
+
 const AdminFeedback = () => {
   const [listFeedBack, setListFeedBack] = useState([]);
   const [teacherDataAll, setTeacherDataAll] = useState([]);
@@ -33,6 +31,7 @@ const AdminFeedback = () => {
   const [idActivity, setIdActivity] = useState("");
   const [idClass, setIdClass] = useState("");
   const [nameClass, setNameClass] = useState("");
+  const [nameTeacherClass, setNameTeacherClass] = useState("");
   const [teacherInfo, setTeacherInfo] = useState(null);
   const dispatch = useAppDispatch();
   useEffect(() => {
@@ -65,7 +64,7 @@ const AdminFeedback = () => {
       const teacherData = responseTeacherData.data.data;
       dispatch(SetAdTeacher(teacherData));
       setTeacherDataAll(teacherData);
-      // console.log(teacherDataAll);
+      
     };
     fetchTeacherData();
   }, []);
@@ -73,7 +72,7 @@ const AdminFeedback = () => {
   const featchDataSemester = async () => {
     try {
       await AdSemesterAPI.getAllSemesters().then((respone) => {
-        setListSemester(respone.data.data);        
+        setListSemester(respone.data.data);
       });
     } catch (error) {
       console.log(error);
@@ -81,11 +80,11 @@ const AdminFeedback = () => {
   };
   const featchDataActivity = async (idSemesterSeach) => {
     try {
-      await ActivityManagementAPI.getAllActivityByIdSemester(idSemesterSeach).then(
-        (respone) => {
-          setListActivity(respone.data.data);
-        }
-      );
+      await ActivityManagementAPI.getAllActivityByIdSemester(
+        idSemesterSeach
+      ).then((respone) => {
+        setListActivity(respone.data.data);
+      });
     } catch (error) {
       console.log(error);
     }
@@ -121,15 +120,24 @@ const AdminFeedback = () => {
   const handleSearch = () => {
     if (idClass !== "") {
       featchDataFeedback(idClass);
+      const selectedClass = listClass.find((item) => item.id === idClass);
+      const userNameTeacher = selectedClass
+        ? selectedClass.userNameTeacher
+        : "";
+      const nameTeacher = selectedClass ? selectedClass.nameTeacher : "Chưa có";
+
+      setNameTeacherClass(nameTeacher + " - " + userNameTeacher);
     } else {
       message.error("Vui lòng chọn lớp học để tìm kiếm !");
     }
   };
+  
   const handleClear = () => {
     setNameClass("");
     setIdSemester("");
     setIdActivity("");
     setIdClass("");
+    setNameTeacherClass("");
     setListActivity([]);
     setListClass([]);
     setListFeedBack([]);
@@ -189,7 +197,13 @@ const AdminFeedback = () => {
       dataIndex: "studentUserName",
       key: "studentUserName",
       render: (text, record) => {
-        return <span>{text}</span>;
+        return (
+          <span>
+            {record.studentName != null
+              ? record.studentName + " - " + record.studentUserName
+              : "-"}
+          </span>
+        );
       },
       align: "center",
     },
@@ -201,8 +215,10 @@ const AdminFeedback = () => {
 
   const handleClassChange = (classId) => {
     // setIdClass(classId)
-    const selectedClass = teacherDataAll.find((classItem) => classItem.id === classId);
-console.log(teacherDataAll);
+    const selectedClass = teacherDataAll.find(
+      (classItem) => classItem.id === classId
+    );
+   
     if (selectedClass) {
       const { userName, name } = selectedClass;
       setTeacherInfo({ userName, name });
@@ -322,15 +338,16 @@ console.log(teacherDataAll);
                     style={{
                       width: "100%",
                       margin: "6px 0 10px 0",
-                      
                     }}
                   >
                     <Option value="">Chọn 1 lớp học</Option>
-                      {listClass.map((item) => {
-                    return (
-                      <Option value={item.idTeacher} key={item.id} title={item.code}>
-                        {item.code}
-                      </Option>
+                    {listClass.map((item) => {
+                      return (
+                        <Option value={item.id} key={item.id}>
+                          {item.userNameTeacher != null
+                            ? item.code + " - " + item.userNameTeacher
+                            : item.code + " - Chưa có"}
+                        </Option>
                       );
                     })}
                   </Select>
@@ -382,14 +399,14 @@ console.log(teacherDataAll);
           <Row>
             <Col span={24} style={{ fontSize: "17px" }}>
               <FontAwesomeIcon icon={faCommentDots} />{" "}
-              <span>Feedback của giảng viên</span>
-    {teacherInfo && (
-      <>
-        <span style={{ marginLeft: "10px" }}>
-          {teacherInfo.userName} - {teacherInfo.name}
-        </span>
-      </>
-    )}
+              <span>Feedback của giảng viên {nameTeacherClass}</span>
+              {teacherInfo && (
+                <>
+                  <span style={{ marginLeft: "10px" }}>
+                    {teacherInfo.userName} - {teacherInfo.name}
+                  </span>
+                </>
+              )}
               {nameClass !== "" && (
                 <>
                   {" "}

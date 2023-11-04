@@ -61,7 +61,6 @@ const SemesterManagement = () => {
       dispatch(SetSemester(response.data.data.data));
       setTotal(response.data.data.totalPages);
       setLoading(false);
-      console.log(response.data.data.data);
     });
   };
   const data = useAppSelector(GetSemester);

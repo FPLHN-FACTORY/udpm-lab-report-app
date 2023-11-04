@@ -23,7 +23,6 @@ const ListActivity = () => {
   }, [detailTodo]);
 
   const showMoreActivity = () => {
-    console.log(currentPage + 1);
     DetailTodoAPI.getPageActivity(detailTodo.id, currentPage + 1).then(
       (response) => {
         dispatch(SetPageActivityDetailTodo(response.data.data));

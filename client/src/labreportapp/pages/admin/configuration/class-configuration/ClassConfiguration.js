@@ -23,7 +23,7 @@ const ClassConfiguration = () => {
   const loadData = () => {
     AdClassCongigurationAPI.getAll().then((response) => {
       setAdClassConfiguration(response.data.data);
-      console.log(response.data.data);
+      
       setIsLoading(false);
     });
   };

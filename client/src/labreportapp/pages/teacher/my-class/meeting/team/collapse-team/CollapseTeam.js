@@ -136,7 +136,7 @@ const CollapseTeam = ({ team, featchMeeting }) => {
         }
       );
     } catch (error) {
-      alert(error.message);
+      console.log(error);
     }
   };
 

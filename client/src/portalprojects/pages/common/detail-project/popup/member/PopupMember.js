@@ -117,7 +117,7 @@ const PopupMember = ({ position, onClose }) => {
 
     const filteredMembers = listMemberProject.filter((item) => {
       const { name, userName } = item;
-      console.log(item);
+
       const searchValue = searchTerm.toLowerCase();
       return (
         name.toLowerCase().includes(searchValue) ||

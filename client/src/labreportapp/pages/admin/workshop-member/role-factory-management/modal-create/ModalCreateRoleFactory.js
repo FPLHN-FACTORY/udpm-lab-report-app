@@ -60,7 +60,7 @@ const ModalCreateRoleFactory = ({ visible, onCancel }) => {
         (response) => {
           message.success("Thêm vai trò thành công!");
           dispatch(AddRoleFactory(response.data.data));
-          console.log(obj.descriptions);
+      
           onCancel();
         },
         (error) => {}

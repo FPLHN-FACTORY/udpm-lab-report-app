@@ -58,7 +58,6 @@ const LevelManagement = () => {
       dispatch(SetLevel(response.data.data.data));
       setTotal(response.data.data.totalPages);
       setLoading(false);
-      console.log(response.data.data.data);
     });
   };
 

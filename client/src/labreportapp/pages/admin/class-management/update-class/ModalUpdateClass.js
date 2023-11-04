@@ -93,7 +93,7 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
       const fetchDetail = (id) => {
         ClassAPI.getAdClassDetailById(id).then(
           (respone) => {
-            console.log(respone.data.data);
+            
             setClassDetail(respone.data.data);
             setIdSemesterSearch(respone.data.data.semesterId);
             setIdActivitiSearch(respone.data.data.activityId);
@@ -135,7 +135,7 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
   useEffect(
     (id) => {
       const featchDataActivity = async (idSemesterSeach) => {
-        console.log(idSemesterSeach);
+        
         await ClassAPI.getAllActivityByIdSemester(idSemesterSeach).then(
           (respone) => {
             setActivityDataAll(respone.data.data);

@@ -130,7 +130,6 @@ const ActivityManagement = () => {
   const handleUpdateActivity = (item) => {
     document.querySelector("body").style.overflowX = "hidden";
     setShowUpdateModal(true);
-    console.log(item);
     setActivity(item);
   };
 

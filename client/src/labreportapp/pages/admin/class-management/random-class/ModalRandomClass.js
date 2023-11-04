@@ -62,10 +62,10 @@ const ModalRandomClass = ({ visible, onCancel, fetchData }) => {
       setActivityDataAll([]);
     } else {
       const featchDataActivity = async (idSemesterSeach) => {
-        console.log(idSemesterSeach);
+        
         await ClassAPI.getAllActivityByIdSemester(idSemesterSeach).then(
           (respone) => {
-            console.log(respone.data.data);
+            
             if (respone.data.data.length === 0) {
               setIdActivitiSearch("none");
               setActivityDataAll([]);

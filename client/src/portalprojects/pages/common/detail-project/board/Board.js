@@ -84,7 +84,6 @@ const Board = () => {
 
       obj.forEach((list) => {
         list.tasks.forEach((task) => {
-          console.log(task.listMemberByIdTodo);
           if (task.listMemberByIdTodo && task.listMemberByIdTodo.length > 0) {
             const filteredMembers = task.listMemberByIdTodo.map((itemId) =>
               listMemberProject.find((member) => member.memberId === itemId)
@@ -131,7 +130,7 @@ const Board = () => {
   }, [board.lists]);
 
   const onDragEnd = (result) => {
-    console.log(result);
+
     const { destination, source, draggableId } = result;
 
     if (!destination) {

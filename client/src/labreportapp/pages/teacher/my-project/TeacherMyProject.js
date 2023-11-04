@@ -87,7 +87,7 @@ const TeacherMyProject = () => {
       setTotal(response.data.data.totalPages);
       setIsLoading(false);
     } catch (error) {
-      alert("Lỗi hệ thống, vui lòng ấn F5 để tải lại trang");
+      console.log(error);
     }
   };
 

@@ -56,7 +56,7 @@ const ModalCreateTeam = ({ visible, onCancel }) => {
         (response) => {
           message.success("Thêm nhóm thành công!");
           dispatch(AddTeam(response.data.data));
-          console.log(obj.descriptions);
+
           onCancel();
         },
         (error) => {}

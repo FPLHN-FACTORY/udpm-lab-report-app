@@ -356,25 +356,6 @@ const PopupMemberManagement = ({ position, onClose }) => {
   const [listMemberNoJoinProject, setListMemberNoJoinProject] = useState([]);
   const [listMemberAdd, setListMemberAdd] = useState([]);
 
-  // const handleRoleChange = (item, value) => {
-  // let obj = {
-  //   idMember: item.memberId,
-  //   idProject: detailProject.id,
-  //   statusWork: parseInt(item.statusWork),
-  //   role: parseInt(value),
-  // };
-
-  // console.log(obj);
-  // const bearerToken = Cookies.get("token");
-  // const headers = {
-  //   Authorization: "Bearer " + bearerToken,
-  // };
-  // stompClient.send(
-  //   "/action/update-member-project/" + detailProject.id,
-  //   headers,
-  //   JSON.stringify(obj)
-  // );
-  // };
   const dispatch = useAppDispatch();
 
   const handleRoleChange = (recordId, value) => {

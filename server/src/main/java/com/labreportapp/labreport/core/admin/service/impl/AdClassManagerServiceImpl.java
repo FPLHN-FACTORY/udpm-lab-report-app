@@ -5,7 +5,18 @@ import com.labreportapp.labreport.core.admin.excel.AdImportExcelClass;
 import com.labreportapp.labreport.core.admin.model.request.AdCreateClassRequest;
 import com.labreportapp.labreport.core.admin.model.request.AdFindClassRequest;
 import com.labreportapp.labreport.core.admin.model.request.AdRandomClassRequest;
-import com.labreportapp.labreport.core.admin.model.response.*;
+import com.labreportapp.labreport.core.admin.model.response.AdActivityClassResponse;
+import com.labreportapp.labreport.core.admin.model.response.AdClassCustomResponse;
+import com.labreportapp.labreport.core.admin.model.response.AdClassResponse;
+import com.labreportapp.labreport.core.admin.model.response.AdDetailClassCustomResponse;
+import com.labreportapp.labreport.core.admin.model.response.AdDetailClassRespone;
+import com.labreportapp.labreport.core.admin.model.response.AdExportExcelClassCustom;
+import com.labreportapp.labreport.core.admin.model.response.AdExportExcelClassResponse;
+import com.labreportapp.labreport.core.admin.model.response.AdFindSelectClassCustom;
+import com.labreportapp.labreport.core.admin.model.response.AdFindSelectClassResponse;
+import com.labreportapp.labreport.core.admin.model.response.AdImportExcelClassResponse;
+import com.labreportapp.labreport.core.admin.model.response.AdListClassCustomResponse;
+import com.labreportapp.labreport.core.admin.model.response.AdSemesterAcResponse;
 import com.labreportapp.labreport.core.admin.repository.AdActivityRepository;
 import com.labreportapp.labreport.core.admin.repository.AdClassConfigurationRepository;
 import com.labreportapp.labreport.core.admin.repository.AdClassRepository;
@@ -484,8 +495,31 @@ public class AdClassManagerServiceImpl implements AdClassService {
     }
 
     @Override
-    public List<AdFindSelectClassResponse> listClass(AdFindClassRequest request) {
-        return repository.listClassFindIdActivityAndIdSemester(request);
+    public List<AdFindSelectClassCustom> listClass(AdFindClassRequest request) {
+        List<AdFindSelectClassResponse> listRepo = repository.listClassFindIdActivityAndIdSemester(request);
+        List<String> idTeacherList = listRepo.stream()
+                .map(AdFindSelectClassResponse::getIdTeacher)
+                .filter(Objects::nonNull)
+                .distinct()
+                .collect(Collectors.toList());
+        List<SimpleResponse> listSimple = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idTeacherList);
+        List<AdFindSelectClassCustom> listCustom = new ArrayList<>();
+        listRepo.forEach(repo -> {
+            AdFindSelectClassCustom adFindSelectClassCustom = new AdFindSelectClassCustom();
+            adFindSelectClassCustom.setId(repo.getId());
+            adFindSelectClassCustom.setCode(repo.getCode());
+            adFindSelectClassCustom.setTeacherId(repo.getIdTeacher());
+            if (repo.getIdTeacher() != null) {
+                listSimple.forEach(simple -> {
+                    if (repo.getIdTeacher().equals(simple.getId())) {
+                        adFindSelectClassCustom.setNameTeacher(simple.getName());
+                        adFindSelectClassCustom.setUserNameTeacher(simple.getUserName());
+                    }
+                });
+            }
+            listCustom.add(adFindSelectClassCustom);
+        });
+        return listCustom;
     }
 
     public void addDataInMapGiangVien(ConcurrentHashMap<String, SimpleResponse> mapAll) {

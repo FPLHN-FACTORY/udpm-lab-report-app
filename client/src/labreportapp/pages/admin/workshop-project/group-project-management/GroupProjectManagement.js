@@ -68,7 +68,7 @@ const GroupProjectManagement = () => {
     };
     setLoading(true);
     AdGroupProjectAPI.getAllGroupProject(filter).then((response) => {
-      console.log(response.data.data.data);
+
       dispatch(SetAdGroupProject(response.data.data.data));
       setTotalPages(response.data.data.totalPages);
       setLoading(false);
@@ -87,8 +87,7 @@ const GroupProjectManagement = () => {
   };
 
   const handleMenuClick = (e, itemId) => {
-    // Xử lý khi chọn một mục trong menu dropdown của phần tử cụ thể (itemId)
-    console.log("Chọn mục: ", e.key, "của phần tử:", itemId);
+
   };
 
   const [showUpdateGroupProject, setShowUpdateGroupProject] = useState(false);

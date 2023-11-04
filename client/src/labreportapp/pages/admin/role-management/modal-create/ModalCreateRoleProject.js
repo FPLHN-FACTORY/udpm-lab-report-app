@@ -59,7 +59,6 @@ const ModalCreateRoleProject = ({ visible, onCancel }) => {
         (response) => {
           message.success("Thêm Loại thành công!");
           dispatch(AddRoleProject(response.data.data));
-          console.log(obj.idProject);
           onCancel();
         },
         (error) => {}

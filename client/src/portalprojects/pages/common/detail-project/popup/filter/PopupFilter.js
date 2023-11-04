@@ -298,7 +298,7 @@ const PopupFilter = ({ position, onClose }) => {
       const memberIdList = listMemberNoUserCurrent
         .filter((member) => member !== userCurrent.id)
         .map((member) => member.memberId);
-      console.log(memberIdList);
+
       setValueMultiMember(memberIdList);
     } else {
       setValueMultiMember([]);

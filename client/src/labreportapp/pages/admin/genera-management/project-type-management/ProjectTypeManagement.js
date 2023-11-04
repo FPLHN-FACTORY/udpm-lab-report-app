@@ -50,7 +50,6 @@ const ProjectTypeManagement = () => {
       size: 10,
     };
     AdTypeProjectAPI.fetchAllTypeProject(filter).then((response) => {
-      console.log(response.data.data.data);
       dispatch(SetTypeProject(response.data.data.data));
       setTotal(response.data.data.totalPages);
       setLoading(false);

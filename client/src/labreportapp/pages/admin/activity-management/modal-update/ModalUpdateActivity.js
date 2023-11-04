@@ -35,7 +35,7 @@ const ModalUpdateActivity = ({
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    console.log(activity);
+ 
     if (visible === true) {
       setName(activity.name);
       setCode(activity.code);
@@ -123,7 +123,7 @@ const ModalUpdateActivity = ({
       setErrorEndTime("Thời gian hoạt động phải nằm trong thời gian kì học");
       check++;
     }
-    console.log(levelNameItem);
+    
     if (check === 0) {
       let obj = {
         id: activity.id,

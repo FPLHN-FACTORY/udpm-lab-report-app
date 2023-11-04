@@ -157,7 +157,7 @@ const HeaderDetailProject = () => {
 
   const handleInputBlur = () => {
     setShowInputChangeNameProject(false);
-    console.log("Input value:", inputValue);
+
   };
 
   const handleInputChange = (e) => {

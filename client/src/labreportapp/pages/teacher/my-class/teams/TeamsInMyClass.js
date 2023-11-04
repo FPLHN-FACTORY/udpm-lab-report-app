@@ -135,7 +135,7 @@ const TeamsInMyClass = () => {
         idTeam: idTeam,
       };
       await TeacherTeamsAPI.createProjectToTeam(dataUp).then((response) => {
-        console.log(response);
+     
         dispatch(UpdateTeam(response.data.data));
         message.success("Tạo trello thành công !");
       });

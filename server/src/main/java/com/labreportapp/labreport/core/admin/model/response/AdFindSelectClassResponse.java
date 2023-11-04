@@ -15,4 +15,5 @@ public interface AdFindSelectClassResponse {
 
     @Value("#{target.idTeacher}")
     String getIdTeacher();
+
 }

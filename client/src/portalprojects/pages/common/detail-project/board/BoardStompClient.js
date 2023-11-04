@@ -327,7 +327,7 @@ const BoardStompClient = (dispatch, useAppSelector, id) => {
               (item) => item.id === obj.labelProjectId
             ),
           };
-          console.log(data);
+     
           dispatch(CreateLabelBoard(data));
         }
       }
@@ -378,7 +378,7 @@ const BoardStompClient = (dispatch, useAppSelector, id) => {
           idTodoList: idTodoList,
           todo: data,
         };
-        console.log(data);
+
         if (
           detailTodoRef.current != null &&
           detailTodoRef.current.id === idTodo
