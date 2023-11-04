@@ -319,6 +319,45 @@ const PeriodProject = () => {
               </span>
             </div>
             <div className="table_project" style={{ marginTop: 5 }}>
+              <div style={{ marginBottom: 20 }}>
+                {" "}
+                <span style={{ fontSize: "18px", fontWeight: "500" }}>
+                  {" "}
+                  <FontAwesomeIcon icon={faCogs} size="1x" /> Thông tin dự án
+                </span>
+                <div className="group-info">
+                  <span
+                    className="group-info-item"
+                    style={{ marginTop: "10px", marginBottom: "15px" }}
+                  >
+                    Mã dự án:
+                  </span>
+                  <span
+                    className="group-info-item"
+                    style={{ marginTop: "10px", marginBottom: "15px" }}
+                  >
+                    Tên dư án:
+                  </span>
+                  <span
+                    className="group-info-item"
+                    style={{ marginTop: "10px", marginBottom: "15px" }}
+                  >
+                    Ngày bắt đầu/kết thúc:
+                  </span>
+                  <span
+                    className="group-info-item"
+                    style={{ marginTop: "10px", marginBottom: "15px" }}
+                  >
+                    Thể loại:
+                  </span>
+                  <span
+                    className="group-info-item"
+                    style={{ marginTop: "10px", marginBottom: "15px" }}
+                  >
+                    Nhóm dự án:
+                  </span>
+                </div>
+              </div>
               <div className="title_my_project">
                 <div style={{ float: "left" }}>
                   {" "}
