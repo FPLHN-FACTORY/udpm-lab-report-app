@@ -14,14 +14,20 @@ import java.util.List;
  * @author quynhncph26201
  */
 @Repository
-public interface AdFeedBackRepository extends JpaRepository<FeedBack , String> {
+public interface AdFeedBackRepository extends JpaRepository<FeedBack, String> {
 
     @Query(value = """
                  SELECT ROW_NUMBER() OVER(ORDER BY c.last_modified_date DESC ) AS stt,
-                  c.descriptions as descriptions,
-                  c.student_id as  idStudent,
-                  c.class_id as class_id,
-                  c.created_date as created_date
+                     c.rate_question1 as rate_question1,
+                     c.rate_question2 as rate_question2,
+                     c.rate_question3 as rate_question3, 
+                     c.rate_question4 as rate_question4,
+                     c.rate_question5 as rate_question5,
+                     c.average_rate as avergare_rate,
+                     c.descriptions as descriptions,
+                     c.student_id as  idStudent,
+                     c.class_id as class_id,
+                     c.created_date as created_date
                   FROM feed_back c 
                   WHERE c.class_id = :#{#idClass}
                   ORDER BY created_date DESC

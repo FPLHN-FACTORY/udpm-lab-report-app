@@ -8,7 +8,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { ControlOutlined, SearchOutlined } from "@ant-design/icons";
 import { Link, useParams } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../../../app/hook";
+import { useAppDispatch } from "../../../../app/hook";
 import { SetTTrueToggle } from "../../../../app/admin/AdCollapsedSlice.reducer";
 import { useEffect, useState } from "react";
 import { ClassAPI } from "../../../../api/admin/class-manager/ClassAPI.api";
@@ -653,13 +653,14 @@ const InformationClass = () => {
                   className="group-info-item"
                   style={{ marginTop: "13px", marginBottom: "15px" }}
                 >
-                  Ca học: &nbsp; {classDetail.classPeriod} -{" "}
+                  Ca học: &nbsp; {classDetail.classPeriod} ({" "}
                   {convertHourAndMinuteToString(
                     classDetail.startHour,
                     classDetail.startMinute,
                     classDetail.endHour,
                     classDetail.endMinute
                   )}
+                  )
                 </span>
               )}
               <span

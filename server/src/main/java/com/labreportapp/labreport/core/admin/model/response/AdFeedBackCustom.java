@@ -12,6 +12,18 @@ public class AdFeedBackCustom {
 
     private Integer stt;
 
+    private Integer rateQuestion1;
+
+    private Integer rateQuestion2;
+
+    private Integer rateQuestion3;
+
+    private Integer rateQuestion4;
+
+    private Integer rateQuestion5;
+
+    private Float averageRate;
+
     private String description;
 
     private String idStudent;

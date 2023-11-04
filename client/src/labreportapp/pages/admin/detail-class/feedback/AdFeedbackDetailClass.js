@@ -4,18 +4,19 @@ import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import { ClassAPI } from "../../../../api/admin/class-manager/ClassAPI.api";
 import { AdminFeedBackAPI } from "../../../../api/admin/AdFeedBackAPI";
-import { useAppDispatch, useAppSelector } from "../../../../app/hook";
-import { Button, Empty, Input, Select, Table } from "antd";
+import { Button, Col, Empty, Input, Row, Table } from "antd";
 import LoadingIndicator from "../../../../helper/loading";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import { faCommentDots, faTableList } from "@fortawesome/free-solid-svg-icons";
+import {
+  arrayQuestion,
+  convertDateLongToString,
+} from "../../../../helper/util.helper";
 
 const AdFeedbackDetailClass = () => {
   const { id } = useParams();
   const [classDetail, setClassDetail] = useState(null);
-  const dispatch = useAppDispatch();
   const [feedback, setFeedBack] = useState([]);
-  const [listStudent, setListStudent] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const featchClass = async () => {
@@ -24,10 +25,13 @@ const AdFeedbackDetailClass = () => {
         setClassDetail(responese.data.data);
         document.title = "Danh sách feedback - " + responese.data.data.code;
       });
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     setLoading(false);
     featchClass();
     featchFeedBack(id);
@@ -51,13 +55,13 @@ const AdFeedbackDetailClass = () => {
       title: "#",
       dataIndex: "stt",
       key: "stt",
-      sorter: (a, b) => a.stt - b.stt,
+      align: "center",
     },
     {
       title: "Họ và tên",
       dataIndex: "nameStudent",
       key: "nameStudent",
-      sorter: (a, b) => a.nameStudent.localeCompare(b.nameStudent),
+      align: "center",
       filterDropdown: ({
         setSelectedKeys,
         selectedKeys,
@@ -103,7 +107,7 @@ const AdFeedbackDetailClass = () => {
       title: "Email",
       dataIndex: "emailStudent",
       key: "emailStudent",
-      sorter: (a, b) => a.nameStudent.localeCompare(b.nameStudent),
+      align: "center",
       filterDropdown: ({
         setSelectedKeys,
         selectedKeys,
@@ -146,32 +150,66 @@ const AdFeedbackDetailClass = () => {
       },
     },
     {
+      title: "Q1",
+      dataIndex: "rateQuestion1",
+      key: "rateQuestion1",
+      align: "center",
+    },
+    {
+      title: "Q2",
+      dataIndex: "rateQuestion2",
+      key: "rateQuestion2",
+      align: "center",
+    },
+    {
+      title: "Q3",
+      dataIndex: "rateQuestion3",
+      key: "rateQuestion3",
+      align: "center",
+    },
+    {
+      title: "Q4",
+      dataIndex: "rateQuestion4",
+      key: "rateQuestion4",
+      align: "center",
+    },
+    {
+      title: "Q5",
+      dataIndex: "rateQuestion5",
+      key: "rateQuestion5",
+      align: "center",
+    },
+    {
+      title: "Trung bình",
+      dataIndex: "averageRate",
+      key: "averageRate",
+      align: "center",
+    },
+    {
       title: "Nội dung",
       dataIndex: "description",
       key: "description",
-      sorter: (a, b) => a.descriptions.localeCompare(b.descriptions),
     },
     {
-      title: "Ngày làm feedback",
+      title: "Thời gian feedback",
       dataIndex: "createdDate",
       key: "createdDate",
       sorter: (a, b) => a.createdDate - b.createdDate,
       render: (createdDate) => {
         const date = new Date(createdDate);
-        const day = date.getDate();
-        const month = date.getMonth() + 1;
-        const year = date.getFullYear();
         const hours = date.getHours();
         const minutes = date.getMinutes();
-        const formattedDate = `${day}/${month}/${year + "  -"}`;
+        const formattedDate = convertDateLongToString(createdDate);
         const formattedTime = `${hours + "h"}:${"" + minutes + "p"}`;
         return (
           <span>
-            {formattedDate}{" "}
-            <span style={{ color: "brown" }}>{formattedTime}</span>
+            {formattedDate}
+            {" - "}
+            <span style={{ color: "red" }}>{formattedTime}</span>
           </span>
         );
       },
+      align: "center",
     },
   ];
 
@@ -257,40 +295,85 @@ const AdFeedbackDetailClass = () => {
               <hr />
             </div>
           </div>
-          <div style={{ marginTop: 15, marginBottom: 12 }}>
-            <span style={{ fontSize: 16 }}>
-              <FontAwesomeIcon
-                icon={faCheck}
-                style={{ marginRight: 7, fontSize: 18 }}
-              />
-              Danh sách feedback:
-            </span>
+          <div style={{ padding: "0 10px 10px 10px" }}>
+            <Row style={{ paddingTop: "10px" }}>
+              <Col span={24} style={{ fontSize: "17px" }}>
+                <FontAwesomeIcon icon={faCommentDots} />{" "}
+                <span>Câu hỏi feedback</span>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={24}>
+                <div className="group-info">
+                  {arrayQuestion.length > 0 &&
+                    arrayQuestion.map((i, index) => {
+                      return (
+                        <div style={{ padding: "15px 0 0px 15px" }} key={index}>
+                          <span key={index}>
+                            {i} <br />
+                          </span>
+                        </div>
+                      );
+                    })}
+                  <br />
+                </div>
+              </Col>
+            </Row>
+            <div style={{ marginTop: 20, marginBottom: 12 }}>
+              <span style={{ fontSize: 16 }}>
+                <FontAwesomeIcon
+                  icon={faTableList}
+                  style={{
+                    marginRight: "10px",
+                    fontSize: "20px",
+                  }}
+                />
+                Danh sách feedback
+              </span>
+            </div>
+            {feedback.length > 0 && (
+              <>
+                <Table
+                  columns={columns}
+                  dataSource={feedback}
+                  key="id"
+                  pagination={false}
+                />
+                <div
+                  style={{
+                    padding: "15px 0 10px 10px",
+                    fontSize: "17px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  <span> Điểm trung bình: </span>
+                  {(
+                    feedback.reduce(
+                      (total, feedback) => total + feedback.averageRate,
+                      0
+                    ) / feedback.length
+                  ).toFixed(2)}
+                </div>
+              </>
+            )}
+            {feedback.length === 0 && (
+              <>
+                <p
+                  style={{
+                    textAlign: "center",
+                    marginTop: "80px",
+                    fontSize: "15px",
+                    color: "red",
+                  }}
+                >
+                  <Empty
+                    imageStyle={{ height: 60 }}
+                    description={<span>Không có dữ liệu</span>}
+                  />{" "}
+                </p>
+              </>
+            )}
           </div>
-          {feedback.length > 0 && (
-            <Table
-              columns={columns}
-              dataSource={feedback}
-              key="id"
-              pagination={false}
-            />
-          )}
-          {feedback.length === 0 && (
-            <>
-              <p
-                style={{
-                  textAlign: "center",
-                  marginTop: "100px",
-                  fontSize: "15px",
-                  color: "red",
-                }}
-              >
-                <Empty
-                  imageStyle={{ height: 60 }}
-                  description={<span>Không có dữ liệu</span>}
-                />{" "}
-              </p>
-            </>
-          )}
         </div>
       </div>
     </div>

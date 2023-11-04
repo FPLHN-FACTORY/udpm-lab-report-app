@@ -164,7 +164,6 @@ const TeacherFeedBack = () => {
       key: "averageRate",
       align: "center",
     },
-
     {
       title: <div style={{ textAlign: "center" }}>Nhận xét</div>,
       dataIndex: "descriptions",
