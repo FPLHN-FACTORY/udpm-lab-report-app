@@ -506,7 +506,10 @@ const TeacherScheduleToday = () => {
           </span>
         </Link>
       </div>
-      <div className="box-two-student-in-my-class">
+      <div
+        className="box-two-student-in-my-class"
+        style={{ paddingTop: 10, marginTop: 20 }}
+      >
         <div className="box-two-student-in-my-class-son">
           <div className="button-menu">
             <Link

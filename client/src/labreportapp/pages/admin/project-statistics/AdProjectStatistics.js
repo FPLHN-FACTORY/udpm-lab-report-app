@@ -341,7 +341,7 @@ const AdProjectStatistics = () => {
           </span>
         </div>
       </div>
-      <div className="box-general" style={{ paddingTop: "0px" }}>
+      <div className="box-general" style={{ paddingTop: 10, marginTop: 0 }}>
         <div className="box-son-general">
           <Row gutter={24} style={{ padding: "0 0 5px 10px" }}>
             <Col span={18}>

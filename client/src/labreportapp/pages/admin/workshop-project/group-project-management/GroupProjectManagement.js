@@ -68,7 +68,6 @@ const GroupProjectManagement = () => {
     };
     setLoading(true);
     AdGroupProjectAPI.getAllGroupProject(filter).then((response) => {
-
       dispatch(SetAdGroupProject(response.data.data.data));
       setTotalPages(response.data.data.totalPages);
       setLoading(false);
@@ -86,9 +85,7 @@ const GroupProjectManagement = () => {
     }));
   };
 
-  const handleMenuClick = (e, itemId) => {
-
-  };
+  const handleMenuClick = (e, itemId) => {};
 
   const [showUpdateGroupProject, setShowUpdateGroupProject] = useState(false);
   const [itemUpdateGroupProject, setItemUpdateGroupProject] = useState(null);
@@ -131,7 +128,7 @@ const GroupProjectManagement = () => {
           </span>
         </div>
       </div>
-      <div className="box-general" style={{ paddingTop: "5px" }}>
+      <div className="box-general" style={{ paddingTop: 10, marginTop: 0 }}>
         <div className="filter-level" style={{ marginBottom: "10px" }}>
           <FontAwesomeIcon icon={faFilter} style={{ fontSize: "19px" }} />{" "}
           <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>

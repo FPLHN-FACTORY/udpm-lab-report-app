@@ -72,6 +72,12 @@ const ModalFileImport = ({ visible, onCancel, idClass, fetchData }) => {
             }}
             placeholder="Chọn file"
           />
+          <div style={{ marginTop: 8 }}>
+            <span style={{ color: "red" }}>
+              (*) Lưu ý: File excel mẫu của chức năng import là file excel được
+              chỉnh sửa sau khi sử dụng chức năng export
+            </span>
+          </div>
           <div style={{ paddingTop: "15px", float: "right", right: 0 }}>
             <Button
               className="btn_filter"

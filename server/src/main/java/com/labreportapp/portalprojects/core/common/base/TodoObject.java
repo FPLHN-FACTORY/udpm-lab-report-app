@@ -18,11 +18,19 @@ import lombok.ToString;
 public class TodoObject {
 
     private Object data;
+
     private Object dataActivity;
+
     private Object dataImage;
+
+    private Object dataTodoProgress;
+
     private String idTodoList;
+
     private String idTodo;
+
     private Short numberTodoComplete;
+
     private Short numberTodo;
 
 }

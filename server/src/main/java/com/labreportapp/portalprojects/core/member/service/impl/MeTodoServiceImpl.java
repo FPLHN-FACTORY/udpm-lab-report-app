@@ -370,6 +370,9 @@ public class MeTodoServiceImpl implements MeTodoService {
             todoFindById.get().setCompletionTime(new Date().getTime());
             todoFindById.get().setStatusTodo(StatusTodo.HOAN_THANH_SOM);
         }
+        if (request.getProgress() < 100) {
+            todoFindById.get().setCompletionTime(null);
+        }
         ActivityTodo activityTodo = new ActivityTodo();
         activityTodo.setTodoId(request.getIdTodo());
         activityTodo.setTodoListId(request.getIdTodoList());
@@ -431,6 +434,7 @@ public class MeTodoServiceImpl implements MeTodoService {
         MeCountTodoResponse meCountTodoResponse = updateProgress(request.getPeriodId(), request.getTodoId());
         TodoObject todoObject = TodoObject.builder().data(todoInCheckList).
                 idTodoList(request.getIdTodoList()).
+                dataTodoProgress(meTodoRepository.findById(todoInCheckList.getTodoId())).
                 idTodo(request.getIdTodo()).
                 numberTodoComplete(meCountTodoResponse.getNumberTodoComplete()).
                 numberTodo(meCountTodoResponse.getNumberTodo()).build();
@@ -911,8 +915,10 @@ public class MeTodoServiceImpl implements MeTodoService {
             if (todo.get().getDeadline() == null) {
                 if (progress == 100) {
                     todo.get().setStatusTodo(StatusTodo.HOAN_THANH_SOM);
+                    todo.get().setCompletionTime(new Date().getTime());
                 } else {
                     todo.get().setStatusTodo(StatusTodo.CHUA_HOAN_THANH);
+                    todo.get().setCompletionTime(null);
                 }
             }
         }

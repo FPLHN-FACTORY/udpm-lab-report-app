@@ -7,10 +7,10 @@ var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 const BurndownChart = ({ item, allTodoTypeWork, listTodoComplete }) => {
   const [dateArray, setDateArray] = useState([]);
+  const [dataTodoArray, setDataTodoArray] = useState([]);
 
   useEffect(() => {
     if (item != null) {
-    
       const dateA = new Date(item.startTime);
       const dateB = new Date(item.endTime);
 
@@ -24,6 +24,8 @@ const BurndownChart = ({ item, allTodoTypeWork, listTodoComplete }) => {
 
       const workPerDay = allTodoTypeWork / daysDifference;
 
+      let allTodoTypeWorkCopy = allTodoTypeWork;
+
       for (let i = item.startTime; i < item.endTime; i += 86400000) {
         let currentDate = new Date(i);
         const day = currentDate.getDate();
@@ -36,12 +38,31 @@ const BurndownChart = ({ item, allTodoTypeWork, listTodoComplete }) => {
           label: label,
         };
 
+        if (i <= new Date().getTime()) {
+          // eslint-disable-next-line no-loop-func
+          listTodoComplete.forEach((item) => {
+            let completionTimeTodo = new Date(item.completionTime);
+            const dayTodo = completionTimeTodo.getDate();
+            const monthTodo = completionTimeTodo.getMonth() + 1;
+            const yearTodo = completionTimeTodo.getFullYear();
+            if (dayTodo === day && monthTodo === month && yearTodo === year) {
+              allTodoTypeWorkCopy = allTodoTypeWorkCopy - 1;
+            }
+          });
+          const dataTodo = {
+            y: allTodoTypeWorkCopy,
+            label: label,
+          };
+          dataTodoComplete.push(dataTodo);
+        }
+
         allTodoTypeWork = allTodoTypeWork - workPerDay;
 
         dataPoints.push(dataPoint);
       }
 
       setDateArray(dataPoints);
+      setDataTodoArray(dataTodoComplete);
     }
   }, [item, allTodoTypeWork, listTodoComplete]);
 
@@ -53,17 +74,28 @@ const BurndownChart = ({ item, allTodoTypeWork, listTodoComplete }) => {
     },
     axisX: {
       title: "Thời gian",
-      reversed: true,
+      reversed: false,
     },
     axisY: {
       title: "Số công việc còn lại",
       includeZero: true,
     },
+    legend: {
+      cursor: "pointer",
+      itemclick: function (e) {},
+    },
     data: [
       {
         type: "line",
         name: "Kết quả dự kiến",
-        dataPoints: dateArray.reverse(),
+        showInLegend: true,
+        dataPoints: dateArray,
+      },
+      {
+        type: "line",
+        name: "Kết quả thực tế",
+        showInLegend: true,
+        dataPoints: dataTodoArray,
       },
     ],
   };

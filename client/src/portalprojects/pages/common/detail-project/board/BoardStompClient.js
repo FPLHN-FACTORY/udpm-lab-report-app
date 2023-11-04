@@ -507,6 +507,7 @@ const BoardStompClient = (dispatch, useAppSelector, id) => {
         let idTodo = JSON.parse(message.body).data.idTodo;
         let idTodoList = JSON.parse(message.body).data.idTodoList;
         let numberTodo = JSON.parse(message.body).data.numberTodo;
+        let dataTodoProgress = JSON.parse(message.body).data.dataTodoProgress;
         let numberTodoComplete = JSON.parse(message.body).data
           .numberTodoComplete;
         let progress = parseInt((numberTodoComplete / numberTodo) * 100);
@@ -518,6 +519,7 @@ const BoardStompClient = (dispatch, useAppSelector, id) => {
             id: data.id,
             status: data.statusTodo,
             progress: progress,
+            completionTime: dataTodoProgress.completionTime
           };
           dispatch(UpdateStatusTodoInCheckList(obj));
         }

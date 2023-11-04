@@ -392,7 +392,10 @@ const ProjectManagement = () => {
           </span>
         </div>
       </div>
-      <div className="project_management" style={{ margin: "0" }}>
+      <div
+        className="project_management"
+        style={{ paddingTop: 10, marginTop: 0 }}
+      >
         <div className="filter_project_management">
           <FontAwesomeIcon icon={faFilter} style={{ fontSize: "26px" }} />{" "}
           <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>

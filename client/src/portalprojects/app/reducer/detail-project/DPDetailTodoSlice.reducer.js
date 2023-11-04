@@ -86,6 +86,7 @@ const DetailTodoSlice = createSlice({
         todo.statusTodo = data.status === "CHUA_HOAN_THANH" ? 0 : 1;
       }
       state.data.progress = data.progress;
+      state.data.completionTime = data.completionTime;
       return state;
     },
     CreateCommentDetailTodo: (state, action) => {
@@ -204,6 +205,7 @@ const DetailTodoSlice = createSlice({
     UpdateProgressDetailTodo: (state, action) => {
       let data = action.payload;
       state.data.progress = data.progress;
+      state.data.completionTime = data.completionTime;
       return state;
     },
     DeleteLabelTodoDetailTodo: (state, action) => {
