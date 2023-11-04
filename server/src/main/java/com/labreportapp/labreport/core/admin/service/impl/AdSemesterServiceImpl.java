@@ -132,4 +132,9 @@ public class AdSemesterServiceImpl implements AdSemesterService {
         adSemesterRepository.save(findSemesterById.get());
         return true;
     }
+
+    @Override
+    public List<AdSemesterResponse> getAllSemesters() {
+        return adSemesterRepository.getAllSemesters();
+    }
 }

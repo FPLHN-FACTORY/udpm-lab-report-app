@@ -50,4 +50,18 @@ public interface AdSemesterRepository extends SemesterRepository {
                     ORDER BY obj.start_time DESC       
             """, nativeQuery = true)
     Page<AdSemesterResponse> searchSemester(@Param("req") AdFindSemesterRequest req, Pageable page);
+
+    @Query(value = """
+            SELECT ROW_NUMBER() OVER(ORDER BY obj.start_time DESC) AS stt,
+            obj.id,
+            obj.name,
+            obj.start_time_student,
+            obj.end_time_student,
+            obj.start_time,
+            obj.end_time,
+            obj.status_feed_back 
+            FROM semester obj 
+            ORDER BY obj.end_time DESC
+            """, nativeQuery = true)
+    List<AdSemesterResponse> getAllSemesters();
 }

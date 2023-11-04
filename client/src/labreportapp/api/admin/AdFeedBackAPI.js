@@ -16,4 +16,14 @@ static getAllFeedBackByIdClass(idClass) {
       url: url + `/get-student?idClass=` + id,
     });
   }
+
+  static getAllFeedbackByIdClass = (idClass) => {
+    return request({
+      method: "GET",
+      url: url + `/filter-class`,
+      params: {
+        idClass: idClass,
+      },
+    });
+  };
 }

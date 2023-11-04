@@ -5,11 +5,7 @@ import com.labreportapp.labreport.core.admin.model.response.AdFeedBackCustom;
 import com.labreportapp.labreport.core.admin.service.AdFeedBackService;
 import com.labreportapp.labreport.core.common.base.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,6 +23,11 @@ public class AdFeedBackController {
     public ResponseObject getFeedBackByIdClass(@PathVariable("idClass") String idClass) {
         List<AdFeedBackCustom> list = adFeedBackSevice.searchFeedBack(idClass);
         return new ResponseObject(list);
+    }
+
+    @GetMapping("/filter-class")
+    public ResponseObject getAllFeedbackDetailIdClass(@RequestParam("idClass") String idClass) {
+        return new ResponseObject(adFeedBackSevice.getAllFeedbackByIdClass(idClass));
     }
 
 }

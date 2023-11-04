@@ -3,6 +3,7 @@ package com.labreportapp.labreport.core.admin.repository;
 import com.labreportapp.labreport.core.admin.model.request.AdFindActivityRequest;
 import com.labreportapp.labreport.core.admin.model.response.AdActivityResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdActivityLevelResponse;
+import com.labreportapp.labreport.core.admin.model.response.AdGetActivityResponse;
 import com.labreportapp.labreport.repository.ActivityRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -143,4 +144,13 @@ public interface AdActivityRepository extends ActivityRepository {
 //    @Query("SELECT act.id FROM Activity act WHERE act.name = :name AND act.id <> :id")
 //    String findByCodeLabel (@Param("code") String codeLabel ,
 //                            @Param("id") String id);
+@Query(value = """
+            SELECT a.id as id, a.name as name, a.start_time as start_time, a.end_time as end_time FROM activity a 
+              WHERE
+            (:#{#req.semesterId} IS NULL 
+             OR :#{#req.semesterId} = '' 
+             OR a.semester_id = :#{#req.semesterId})
+             ORDER BY a.created_date ASC
+            """, nativeQuery = true)
+List<AdGetActivityResponse> getAllByIdSemester(@Param("req") AdFindActivityRequest req);
 }

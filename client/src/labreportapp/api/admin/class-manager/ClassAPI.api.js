@@ -209,4 +209,18 @@ export class ClassAPI {
       responseType: "blob",
     });
   }
+
+  static filterClass(data) {
+    return request({
+      method: "GET",
+      url:
+        url +
+        `/filter-class` +
+        `?idSemester=` +
+        data.idSemester +
+        `&idActivity=` +
+        data.idActivity,
+      data: data,
+    });
+  }
 }

@@ -5,16 +5,7 @@ import com.labreportapp.labreport.core.admin.excel.AdImportExcelClass;
 import com.labreportapp.labreport.core.admin.model.request.AdCreateClassRequest;
 import com.labreportapp.labreport.core.admin.model.request.AdFindClassRequest;
 import com.labreportapp.labreport.core.admin.model.request.AdRandomClassRequest;
-import com.labreportapp.labreport.core.admin.model.response.AdActivityClassResponse;
-import com.labreportapp.labreport.core.admin.model.response.AdClassCustomResponse;
-import com.labreportapp.labreport.core.admin.model.response.AdClassResponse;
-import com.labreportapp.labreport.core.admin.model.response.AdDetailClassCustomResponse;
-import com.labreportapp.labreport.core.admin.model.response.AdDetailClassRespone;
-import com.labreportapp.labreport.core.admin.model.response.AdExportExcelClassCustom;
-import com.labreportapp.labreport.core.admin.model.response.AdExportExcelClassResponse;
-import com.labreportapp.labreport.core.admin.model.response.AdImportExcelClassResponse;
-import com.labreportapp.labreport.core.admin.model.response.AdListClassCustomResponse;
-import com.labreportapp.labreport.core.admin.model.response.AdSemesterAcResponse;
+import com.labreportapp.labreport.core.admin.model.response.*;
 import com.labreportapp.labreport.core.admin.repository.AdActivityRepository;
 import com.labreportapp.labreport.core.admin.repository.AdClassConfigurationRepository;
 import com.labreportapp.labreport.core.admin.repository.AdClassRepository;
@@ -490,6 +481,11 @@ public class AdClassManagerServiceImpl implements AdClassService {
             return response;
         }
         return response;
+    }
+
+    @Override
+    public List<AdFindSelectClassResponse> listClass(AdFindClassRequest request) {
+        return repository.listClassFindIdActivityAndIdSemester(request);
     }
 
     public void addDataInMapGiangVien(ConcurrentHashMap<String, SimpleResponse> mapAll) {

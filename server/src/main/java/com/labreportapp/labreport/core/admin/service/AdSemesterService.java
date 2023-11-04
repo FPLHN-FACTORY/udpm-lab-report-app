@@ -27,4 +27,6 @@ public interface AdSemesterService {
 
     Boolean updateStatusFeedback(String id);
 
+    List<AdSemesterResponse> getAllSemesters();
+
 }

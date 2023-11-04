@@ -3,9 +3,14 @@ package com.labreportapp.labreport.core.admin.service.impl;
 
 import com.labreportapp.labreport.core.admin.model.response.AdFeedBackCustom;
 import com.labreportapp.labreport.core.admin.model.response.AdFeedBackResponse;
+import com.labreportapp.labreport.core.admin.model.response.AdGetFeedbackResponse;
+import com.labreportapp.labreport.core.admin.model.response.AdObjFeedbackResponse;
+import com.labreportapp.labreport.core.admin.repository.AdClassRepository;
 import com.labreportapp.labreport.core.admin.repository.AdFeedBackRepository;
 import com.labreportapp.labreport.core.admin.service.AdFeedBackService;
 import com.labreportapp.labreport.core.common.response.SimpleResponse;
+import com.labreportapp.labreport.entity.FeedBack;
+import com.labreportapp.labreport.infrastructure.constant.StatusShowFeedback;
 import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -26,6 +32,9 @@ public class AdFeedBackServiceImpl implements AdFeedBackService {
 
     @Autowired
     private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
+
+    @Autowired
+    private AdClassRepository adClassRepository;
 
     @Override
     public List<AdFeedBackCustom> searchFeedBack(String idClass) {
@@ -61,6 +70,50 @@ public class AdFeedBackServiceImpl implements AdFeedBackService {
             listFeedBackCustom.add(adFeedBackCustom);
         });
         return listFeedBackCustom;
+    }
+
+    @Override
+    public AdObjFeedbackResponse getAllFeedbackByIdClass(String idClass) {
+        AdObjFeedbackResponse objReturn = new AdObjFeedbackResponse();
+        List<FeedBack> listFeedback = repository.getAllFeedBackByIdClass(idClass);
+        String codeClass = adClassRepository.findCodeByIdClass(idClass);
+        objReturn.setCodeClass(codeClass != null ? codeClass : "");
+        List<AdGetFeedbackResponse> listReturn = new ArrayList<>();
+        if (listFeedback.size() == 0) {
+            objReturn.setListFeedback(listReturn);
+            return objReturn;
+        }
+        List<String> idStudentList = listFeedback.stream()
+                .map(FeedBack::getStudentId)
+                .distinct()
+                .collect(Collectors.toList());
+        List<SimpleResponse> listResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idStudentList);
+        AtomicInteger stt = new AtomicInteger();
+        listFeedback.forEach(i -> {
+            AdGetFeedbackResponse obj = new AdGetFeedbackResponse();
+            obj.setStt(stt.get());
+            stt.getAndIncrement();
+            obj.setId(i.getId());
+            obj.setRateQuestion1(i.getRateQuestion1());
+            obj.setRateQuestion2(i.getRateQuestion2());
+            obj.setRateQuestion3(i.getRateQuestion3());
+            obj.setRateQuestion4(i.getRateQuestion4());
+            obj.setRateQuestion5(i.getRateQuestion5());
+            obj.setAverageRate(i.getAverageRate());
+            obj.setDescriptions(i.getDescriptions());
+            if (i.getStatus() != null && i.getStatus().equals(StatusShowFeedback.YES)) {
+                listResponse.forEach(call -> {
+                    if (i.getStudentId().equals(call.getId())) {
+                        obj.setStudentId(i.getStudentId());
+                        obj.setStudentName(call.getName());
+                        obj.setStudentUserName(call.getUserName());
+                    }
+                });
+            }
+            listReturn.add(obj);
+        });
+        objReturn.setListFeedback(listReturn);
+        return objReturn;
     }
 
 }

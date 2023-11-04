@@ -5,6 +5,7 @@ import com.labreportapp.labreport.core.admin.model.request.AdFindActivityRequest
 import com.labreportapp.labreport.core.admin.model.request.AdUpdateActivityRequest;
 import com.labreportapp.labreport.core.admin.model.response.AdActivityLevelResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdActivityResponse;
+import com.labreportapp.labreport.core.admin.model.response.AdGetActivityResponse;
 import com.labreportapp.labreport.core.admin.repository.AdActivityRepository;
 import com.labreportapp.labreport.core.admin.repository.AdSemesterRepository;
 import com.labreportapp.labreport.core.admin.service.AdActivityService;
@@ -157,6 +158,11 @@ public class AdActivityServiceImpl implements AdActivityService {
     @Override
     public List<AdActivityLevelResponse> getLevel() {
         return adActivityRepository.getAllLevel();
+    }
+
+    @Override
+    public List<AdGetActivityResponse> getAllByIdSemesters(AdFindActivityRequest adFindClass) {
+        return adActivityRepository.getAllByIdSemester(adFindClass);
     }
 
     public Long convertDateToString(String dateStringToLong) {

@@ -5,6 +5,7 @@ import com.labreportapp.labreport.core.admin.model.request.AdFindActivityRequest
 import com.labreportapp.labreport.core.admin.model.request.AdUpdateActivityRequest;
 import com.labreportapp.labreport.core.admin.model.response.AdActivityResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdActivityLevelResponse;
+import com.labreportapp.labreport.core.admin.model.response.AdGetActivityResponse;
 import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.entity.Activity;
 import com.labreportapp.labreport.entity.Semester;
@@ -30,4 +31,5 @@ public interface AdActivityService {
 
     List<AdActivityLevelResponse> getLevel();
 
+    List<AdGetActivityResponse> getAllByIdSemesters(final AdFindActivityRequest adFindClass);
 }
