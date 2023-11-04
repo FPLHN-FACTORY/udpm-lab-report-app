@@ -1,11 +1,7 @@
 package com.labreportapp.labreport.core.admin.repository;
 
 import com.labreportapp.labreport.core.admin.model.request.AdFindClassRequest;
-import com.labreportapp.labreport.core.admin.model.response.AdActivityClassResponse;
-import com.labreportapp.labreport.core.admin.model.response.AdClassResponse;
-import com.labreportapp.labreport.core.admin.model.response.AdDetailClassRespone;
-import com.labreportapp.labreport.core.admin.model.response.AdExportExcelClassResponse;
-import com.labreportapp.labreport.core.admin.model.response.AdSemesterAcResponse;
+import com.labreportapp.labreport.core.admin.model.response.*;
 import com.labreportapp.labreport.entity.Class;
 import com.labreportapp.labreport.repository.ClassRepository;
 import org.springframework.data.domain.Page;
@@ -15,7 +11,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author quynhncph26201
@@ -186,5 +181,26 @@ public interface AdClassRepository extends ClassRepository {
             ORDER BY b.code
             """, nativeQuery = true)
     List<AdExportExcelClassResponse> findClassExportExcel(@Param("req") AdFindClassRequest req);
+
+    @Query(value = """
+            SELECT c.code as code
+            FROM class c where c.id = :idClass
+            """, nativeQuery = true)
+    String findCodeByIdClass(@Param("idClass") String idClass);
+
+    @Query(value = """
+            SELECT
+                c.id as id,
+                c.code as code,
+                c.teacher_id as idTeacher
+            FROM activity a
+            JOIN level l ON l.id = a.level_id
+            JOIN class c ON c.activity_id = a.id
+            JOIN semester s ON s.id = a.semester_id
+            where (:#{#req.idSemester} IS NULL OR :#{#req.idSemester} LIKE '' OR :#{#req.idSemester} LIKE s.id)
+            and (:#{#req.idActivity} IS NULL OR :#{#req.idActivity} LIKE '' OR :#{#req.idActivity} LIKE a.id)
+            """, nativeQuery = true)
+    List<AdFindSelectClassResponse> listClassFindIdActivityAndIdSemester(@Param("req") AdFindClassRequest req);
+
 
 }

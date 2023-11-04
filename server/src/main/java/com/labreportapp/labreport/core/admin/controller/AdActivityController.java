@@ -3,6 +3,7 @@ package com.labreportapp.labreport.core.admin.controller;
 import com.labreportapp.labreport.core.admin.model.request.AdCreatActivityRequest;
 import com.labreportapp.labreport.core.admin.model.request.AdFindActivityRequest;
 import com.labreportapp.labreport.core.admin.model.request.AdUpdateActivityRequest;
+import com.labreportapp.labreport.core.admin.model.response.AdGetActivityResponse;
 import com.labreportapp.labreport.core.admin.service.AdActivityService;
 import com.labreportapp.labreport.core.common.base.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin/activity")
@@ -64,5 +67,11 @@ public class AdActivityController {
     @GetMapping("/activity-level")
     public ResponseObject getLevel(){
         return new ResponseObject(adActivityService.getLevel());
+    }
+
+    @GetMapping("/id-semester")
+    public ResponseObject listActivitySemester(final AdFindActivityRequest adFindClass) {
+        List<AdGetActivityResponse> list = adActivityService.getAllByIdSemesters(adFindClass);
+        return new ResponseObject(list);
     }
 }

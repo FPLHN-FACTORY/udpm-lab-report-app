@@ -152,4 +152,8 @@ public class AdClassController {
         return new ResponseObject(pageList);
     }
 
+    @GetMapping("/filter-class")
+    public ResponseObject listClassIdActivityIdSemester(final AdFindClassRequest request) {
+        return new ResponseObject(service.listClass(request));
+    }
 }

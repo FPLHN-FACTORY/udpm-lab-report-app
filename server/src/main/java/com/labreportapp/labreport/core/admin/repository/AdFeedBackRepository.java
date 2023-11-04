@@ -51,4 +51,9 @@ public interface AdFeedBackRepository extends JpaRepository<FeedBack , String> {
             ORDER BY t.code
             """, nativeQuery = true)
     List<AdStudentClassesResponse> findStudentClassByIdClass(@Param("idClass") String idClass);
+
+    @Query(value = """
+            SELECT * FROM feed_back WHERE class_id = :idClass
+            """, nativeQuery = true)
+    List<FeedBack> getAllFeedBackByIdClass(@Param("idClass") String idClass);
 }

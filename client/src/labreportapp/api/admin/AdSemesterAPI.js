@@ -45,4 +45,11 @@ export class AdSemesterAPI {
       url: url + `/update-status-feedback/` + id,
     });
   };
+
+  static getAllSemesters() {
+    return request({
+      method: "GET",
+      url: url + `/get-all-semesters`,
+    });
+  }
 }

@@ -52,4 +52,11 @@ export class ActivityManagementAPI {
       url: "/admin/activity/activity-level",
     });
   };
+
+  static getAllActivityByIdSemester(id) {
+    return request({
+      method: "GET",
+      url: `/admin/activity/id-semester?semesterId=` + id,
+    });
+  }
 }

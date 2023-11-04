@@ -11,6 +11,9 @@ public interface AdSemesterResponse extends IsIdentified {
     @Value("#{target.stt}")
     Integer STT();
 
+    @Value("#{target.id}")
+    String getId();
+
     @Value("#{target.name}")
     String getName();
 

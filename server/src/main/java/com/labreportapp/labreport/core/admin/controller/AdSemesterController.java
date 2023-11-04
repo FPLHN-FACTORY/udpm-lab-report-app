@@ -64,4 +64,10 @@ public class AdSemesterController {
         return new ResponseObject(adSemesterService.updateStatusFeedback(id));
     }
 
+    @GetMapping("/get-all-semesters")
+    public ResponseObject getAllSemester() {
+        List<AdSemesterResponse> listSemester = adSemesterService.getAllSemesters();
+        return new ResponseObject(listSemester);
+    }
+
 }
