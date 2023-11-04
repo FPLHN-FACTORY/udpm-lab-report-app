@@ -524,12 +524,12 @@ public class TeTeamsServiceImpl implements TeTeamsService {
             }
             ConcurrentHashMap<String, StudentClasses> mapStudent = new ConcurrentHashMap<>();
             addDataStudentDB(mapStudent, idClass);
-            if (listInput.size() != mapStudent.size()) {
-                teExcelResponseMessage.setStatus(false);
-                teExcelResponseMessage.setMessage("Import thất bại. Số lượng sinh viên trong file excel phải bằng với " +
-                        "số lượng sinh viên trong lớp !");
-                return teExcelResponseMessage;
-            }
+//            if (listInput.size() != mapStudent.size()) {
+//                teExcelResponseMessage.setStatus(false);
+//                teExcelResponseMessage.setMessage("Import thất bại. Số lượng sinh viên trong file excel phải bằng với " +
+//                        "số lượng sinh viên trong lớp !");
+//                return teExcelResponseMessage;
+//            }
             teExcelResponseMessage.setStatus(true);
             Map<String, String> teamRoles = new ConcurrentHashMap<>();
             AtomicBoolean checkValidate = new AtomicBoolean(true);
