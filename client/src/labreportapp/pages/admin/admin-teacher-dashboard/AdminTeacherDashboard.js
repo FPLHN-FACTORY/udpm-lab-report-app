@@ -58,7 +58,7 @@ const AdminTeacherDashboard = () => {
       </div>
       <div className="box-general" style={{ paddingTop: 10, marginTop: 0 }}>
         <div className="box-son-general">
-          <div className="" style={{ marginTop: 20 }}>
+          <div className="" style={{ marginTop: 5 }}>
             <div style={{ flex: 1 }}>
               <Input
                 type="text"
