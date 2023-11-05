@@ -13,15 +13,20 @@ const Table = () => {
   const data = useAppSelector(GetListTable);
   const board = useAppSelector(GetBoard);
   const [listViewTable, setListViewTable] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true);
     if (board.lists.length > 0) {
-      setListViewTable(data);
+      if (data.length > 0) {
+        setListViewTable(data);
+        setLoading(false);
+      } else {
+        setLoading(false);
+      }
+    } else {
       setLoading(false);
     }
-  }, [board]);
+  }, [board, data]);
 
   return (
     <div className="table-custom-drag-and-drop">
