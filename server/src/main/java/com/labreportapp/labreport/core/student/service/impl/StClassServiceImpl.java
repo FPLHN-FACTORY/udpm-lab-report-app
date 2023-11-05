@@ -1,6 +1,7 @@
 package com.labreportapp.labreport.core.student.service.impl;
 
 
+import com.labreportapp.labreport.core.admin.model.response.AdExportExcelClassResponse;
 import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.core.common.response.SimpleResponse;
 import com.labreportapp.labreport.core.student.model.request.StClassRequest;
@@ -30,7 +31,9 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class StClassServiceImpl implements StClassService {
@@ -57,7 +60,12 @@ public class StClassServiceImpl implements StClassService {
     public PageableObject<StClassCustomResponse> getAllClassByCriteriaAndIsActive(final StFindClassRequest req) {
         Pageable pageable = PageRequest.of(req.getPage(), req.getSize());
         Page<StClassResponse> getAllClassByCriteria = stClassRepository.getAllClassByCriteriaAndIsActive(req, pageable);
-
+        List<String> distinctTeacherIds = getAllClassByCriteria.getContent().stream()
+                .map(StClassResponse::getIdTeacher)
+                .filter(Objects::nonNull)
+                .distinct()
+                .collect(Collectors.toList());
+        List<SimpleResponse> listResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(distinctTeacherIds);
         List<StClassCustomResponse> responseClassCustom = new ArrayList<>();
         PageableObject<StClassCustomResponse> pageableResponse = new PageableObject<>();
 
@@ -78,6 +86,14 @@ public class StClassServiceImpl implements StClassService {
             stClassCustomResponse.setDescriptions(stClassResponse.getDescriptions());
             stClassCustomResponse.setStartTimeStudent(stClassResponse.getStartTimeStudent());
             stClassCustomResponse.setEndTimeStudent(stClassResponse.getEndTimeStudent());
+            if(stClassResponse.getIdTeacher() != null) {
+                for (SimpleResponse xx : listResponse) {
+                    if(xx.getId().equals(stClassResponse.getIdTeacher())) {
+                        stClassCustomResponse.setNameTeacher(xx.getName());
+                        stClassCustomResponse.setUserNameTeacher(xx.getUserName());
+                    }
+                }
+            }
             responseClassCustom.add(stClassCustomResponse);
         }
 

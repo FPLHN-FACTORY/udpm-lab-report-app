@@ -35,6 +35,9 @@ public interface StClassResponse extends IsIdentified {
     @Value("#{target.name}")
     String getLevel();
 
+    @Value("#{target.idTeacher}")
+    String getIdTeacher();
+
     @Value("#{target.activityName}")
     String getActivityName();
 

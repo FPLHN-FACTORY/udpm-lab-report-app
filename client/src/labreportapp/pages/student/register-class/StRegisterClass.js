@@ -281,6 +281,21 @@ const StRegisterClass = () => {
       align: "center",
     },
     {
+      title: "Giảng viên",
+      dataIndex: "teacher",
+      key: "teacher",
+      align: "center",
+      render: (text, record) => {
+        if (record.userNameTeacher == null) {
+          return <span>Chưa có</span>;
+        } else {
+          return (
+            <span>{record.userNameTeacher + " - " + record.nameTeacher}</span>
+          );
+        }
+      },
+    },
+    {
       title: "Cấp độ",
       dataIndex: "level",
       key: "level",

@@ -668,15 +668,18 @@ const ClassManagement = () => {
               </div>
             </Col>
           </Row>
-          <div className="box_btn_filter" style={{ paddingBottom: "15px" }}>
+          <div
+            className="box_btn_filter"
+            style={{ paddingBottom: 15, marginTop: 15 }}
+          >
             <Button
               className="btn_filter"
               onClick={handleSearchAllByFilter}
-              style={{ marginRight: "15px" }}
+              style={{ marginRight: 15 }}
             >
               <FontAwesomeIcon
                 icon={faFilterCircleDollar}
-                style={{ marginRight: "5px" }}
+                style={{ marginRight: 5 }}
               />{" "}
               Tìm kiếm
             </Button>
@@ -688,7 +691,7 @@ const ClassManagement = () => {
               {" "}
               <FontAwesomeIcon
                 icon={faChainSlash}
-                style={{ marginRight: "5px" }}
+                style={{ marginRight: 5 }}
               />{" "}
               Làm mới bộ lọc
             </Button>

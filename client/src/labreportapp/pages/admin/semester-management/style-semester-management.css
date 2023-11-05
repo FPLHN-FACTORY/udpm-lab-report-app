@@ -70,14 +70,13 @@
 
 .box_btn_filter {
   text-align: center;
-  padding-bottom: 40px;
+  padding-bottom: 10px;
 }
 
 .btn_filter {
   background-color: rgb(35, 145, 214);
   color: white;
   margin-right: 5px;
-
 }
 
 .btn_filter:hover {

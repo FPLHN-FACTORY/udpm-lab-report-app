@@ -347,7 +347,7 @@ const ActivityManagement = () => {
               </div>
             </div>
           </div>
-          <div className="box_btn_filter">
+          <div className="box_btn_filter" style={{ paddingBottom: 10 }}>
             <Button
               className="btn_filter"
               onClick={handleSearch}

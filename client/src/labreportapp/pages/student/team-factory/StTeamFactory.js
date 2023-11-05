@@ -68,14 +68,11 @@ const StTeamFactory = () => {
 
   const data = useAppSelector(GetTeam);
 
-  
-
   const buttonSearch = () => {
     fetchData();
     setCurrent(1);
   };
 
-  
   return (
     <div className="box-general" style={{ paddingTop: 50 }}>
       {loading && <LoadingIndicator />}
@@ -95,11 +92,11 @@ const StTeamFactory = () => {
         >
           <div style={{}}>Danh sách team trong xưởng:</div>
           <div style={{ display: "flex", alignItems: "center", marginTop: 15 }}>
-          <div style={{ flex: 1 }}>
+            <div style={{ flex: 1 }}>
               <Input
                 type="text"
                 placeholder="🔍 Nhập tên nhóm"
-                style={{ width: "85%" }}
+                style={{ width: "65%" }}
                 value={name}
                 onChange={(e) => {
                   setName(e.target.value);
@@ -108,7 +105,7 @@ const StTeamFactory = () => {
               <Button
                 className="btn_filter"
                 onClick={buttonSearch}
-                style={{ marginLeft: "36px" }}
+                style={{ marginLeft: "10px" }}
               >
                 <FontAwesomeIcon
                   icon={faFilterCircleDollar}
@@ -117,7 +114,6 @@ const StTeamFactory = () => {
                 Tìm kiếm
               </Button>
             </div>
-            
           </div>
           <div className="" style={{ marginTop: 20 }}>
             <div className="header-list-member-factory">
@@ -187,7 +183,6 @@ const StTeamFactory = () => {
                           {item.numberMember} Thành viên
                         </span>
                       </div>
-                      
                     </Col>
                   </Row>
                 );

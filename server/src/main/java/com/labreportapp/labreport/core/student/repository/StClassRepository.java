@@ -20,7 +20,7 @@ public interface StClassRepository extends ClassRepository {
             c.class_size, c.start_time, 
             mp.name as class_period, mp.start_hour as start_hour, mp.start_minute as start_minute ,
             mp.end_hour as end_hour, mp.end_minute as end_minute,
-            g.name, ac.name as activityName,
+            g.name, ac.name as activityName, c.teacher_id AS idTeacher,
             s.start_time_student, s.end_time_student, c.descriptions
             FROM class c
             JOIN meeting_period mp ON mp.id = c.class_period

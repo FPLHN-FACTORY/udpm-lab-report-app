@@ -394,7 +394,7 @@ const StudentMyProject = () => {
             <FontAwesomeIcon
               icon={faTableList}
               style={{
-                marginRight: "10px",
+                marginRight: "5px",
                 fontSize: "20px",
               }}
             />
@@ -402,14 +402,13 @@ const StudentMyProject = () => {
               style={{
                 fontSize: "18px",
                 fontWeight: "500",
-                paddingLeft: "8px",
               }}
             >
               Danh sách dự án
             </span>
           </div>
           <div
-            style={{ marginTop: "25px", minHeight: "240px", height: "auto" }}
+            style={{ marginTop: "15px", minHeight: "240px", height: "auto" }}
           >
             {data.length > 0 ? (
               <>

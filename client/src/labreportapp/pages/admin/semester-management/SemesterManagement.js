@@ -266,7 +266,7 @@ const SemesterManagement = () => {
               style={{ width: "300px", marginLeft: "5px" }}
             />
           </div>
-          <div className="box_btn_filter">
+          <div className="box_btn_filter" style={{ paddingBottom: 10 }}>
             <Button
               className="btn_filter"
               onClick={buttonSearch}

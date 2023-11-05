@@ -87,7 +87,7 @@ const TeTeamFactory = () => {
               <Button
                 className="btn_filter"
                 onClick={buttonSearch}
-                style={{ marginLeft: "36px" }}
+                style={{ marginLeft: "10px" }}
               >
                 <FontAwesomeIcon
                   icon={faFilterCircleDollar}

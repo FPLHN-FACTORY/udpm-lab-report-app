@@ -29,6 +29,10 @@ public class StClassCustomResponse {
 
     private String level;
 
+    private String nameTeacher;
+
+    private String userNameTeacher;
+
     private String activityName;
 
     private Long startTimeStudent;

@@ -236,7 +236,7 @@ const MeetingPeriodConfiguration = () => {
               style={{ width: "300px", marginLeft: "5px" }}
             />
           </div>
-          <div className="box_btn_filter">
+          <div className="box_btn_filter" style={{ paddingBottom: 10 }}>
             <Button
               className="btn_filter"
               onClick={buttonSearch}
@@ -262,7 +262,7 @@ const MeetingPeriodConfiguration = () => {
           className="box-son-general"
           style={{ minHeight: "400px", marginTop: "30px" }}
         >
-          <div className="tittle__category" style={{ marginBottom: "20px" }}>
+          <div className="tittle__category" style={{ marginBottom: "15px" }}>
             <div>
               <FontAwesomeIcon
                 icon={faTableList}

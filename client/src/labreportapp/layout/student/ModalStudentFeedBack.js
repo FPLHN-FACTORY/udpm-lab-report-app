@@ -87,10 +87,6 @@ const ModalStudentFeedBack = ({ visible, setVisible }) => {
   };
 
   const createFeedback = () => {
-    if (!isBothTextAreasFilled) {
-      message.error("Hãy nhập đầy đủ feedback của các lớp");
-      return;
-    }
     let obj = {
       listFeedBack: listFeedBack,
     };
