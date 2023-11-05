@@ -10,4 +10,6 @@ import java.util.List;
 public interface AdTeacherService {
 
     List<SimpleResponse> getAllTeacher();
+
+    List<SimpleResponse> getAllTeacherDashBoard(String name);
 }

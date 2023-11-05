@@ -1,0 +1,10 @@
+.header-teacher-dash-board{
+    height: 60px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    background-color: rgb(244, 244, 244);
+    border: 1px solid rgb(216, 216, 216);
+    padding-left: 10px;
+    /* padding-bottom: 5px; */
+    margin-top: 15px;
+  }

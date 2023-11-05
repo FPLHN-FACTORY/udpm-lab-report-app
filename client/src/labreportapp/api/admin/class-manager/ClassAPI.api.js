@@ -1,5 +1,4 @@
 import { request } from "../../../helper/request.helper";
-import { apiDanhSachGiangVien } from "../../../helper/request.helper";
 
 const url = `/admin/class-managerment`;
 export class ClassAPI {

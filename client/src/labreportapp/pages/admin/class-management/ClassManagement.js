@@ -113,12 +113,6 @@ const ClassManagement = () => {
     } catch (error) {}
   };
 
-  // useEffect(() => {
-  //   if (clear) {
-  //     featchAllMyClass();
-  //   }
-  // }, [clear]);
-
   useEffect(() => {
     const fetchTeacherData = async () => {
       const responseTeacherData = await ClassAPI.fetchAllTeacher();

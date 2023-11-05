@@ -28,9 +28,7 @@ import {
 import { AdTeamAPI } from "../../../../api/admin/AdTeamAPI";
 import ModalCreateTeam from "./modal-create/ModalCreateTeam";
 import ModalUpdateTeam from "./modal-update/ModalUpdateTeam";
-import { toast } from "react-toastify";
 import LoadingIndicator from "../../../../helper/loading";
-import moment from "moment";
 import "./style-team-management.css";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -124,9 +122,7 @@ const TeamManagement = () => {
     }));
   };
 
-  const handleMenuClick = (e, itemId) => {
-
-  };
+  const handleMenuClick = (e, itemId) => {};
 
   return (
     <>

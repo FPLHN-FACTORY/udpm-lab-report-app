@@ -24,9 +24,9 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
   const [loadingOverlay, setLoadingOverlay] = useState(false);
   const dispatch = useAppDispatch();
   const [idSemesterSeach, setIdSemesterSearch] = useState("");
-  const [semesterDataAll, setSemesterDataAll] = useState([]); // Dữ liệu semester
+  const [semesterDataAll, setSemesterDataAll] = useState([]); 
   const [idActivitiSearch, setIdActivitiSearch] = useState("");
-  const [activityDataAll, setActivityDataAll] = useState([]); // Dữ liệu activity
+  const [activityDataAll, setActivityDataAll] = useState([]);
   const [selectedItemsPerson, setSelectedItemsPerson] = useState("");
   const [name, setName] = useState("");
   const [code, setCode] = useState("");

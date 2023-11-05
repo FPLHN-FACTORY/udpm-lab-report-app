@@ -18,12 +18,16 @@ import java.util.Optional;
 public interface MeProjectRepository extends ProjectRepository {
 
     @Query(value = """
-            SELECT a.id, a.name, a.descriptions, a.start_time, a.end_time,a.status_project as status, a.progress,
+            SELECT ROW_NUMBER() OVER(ORDER BY a.created_date DESC ) AS stt,
+            a.id, a.name, a.descriptions, a.start_time, a.end_time,a.status_project as status, a.progress,
                 a.background_image, a.background_color, a.type_project as type_project,
                 gp.name as name_group_project,
-                gp.id as id_group_project       
+                gp.id as id_group_project ,
+                GROUP_CONCAT(cate.name SEPARATOR ', ') as nameCategorys     
             FROM project a JOIN member_project b ON a.id = b.project_id 
-             LEFT JOIN group_project gp on gp.id = a.group_project_id
+            LEFT JOIN group_project gp on gp.id = a.group_project_id
+            JOIN project_category pa ON pa.project_id = a.id
+            JOIN category cate on pa.category_id = cate.id
             WHERE b.member_id = :#{#req.idUser}
             AND (:#{#req.nameProject} IS NULL OR :#{#req.nameProject} LIKE '' OR a.name LIKE %:#{#req.nameProject}%)
             AND (:#{#req.status} IS NULL OR :#{#req.status} LIKE '' OR a.status_project = :#{#req.status})
@@ -33,11 +37,15 @@ public interface MeProjectRepository extends ProjectRepository {
                 OR :#{#req.groupProjectId} LIKE '0' AND a.group_project_id IS NULL
                 OR a.group_project_id LIKE :#{#req.groupProjectId}
                 )
+            AND (:#{#req.categoryId} IS NULL OR :#{#req.categoryId} LIKE '' OR cate.id = :#{#req.categoryId})
+            GROUP BY a.id
             ORDER BY a.created_date DESC
             """, countQuery = """
             SELECT COUNT(1) 
             FROM project a JOIN member_project b ON a.id = b.project_id 
              LEFT JOIN group_project gp on gp.id = a.group_project_id
+              JOIN project_category pa ON pa.project_id = a.id
+            JOIN category cate on pa.category_id = cate.id
             WHERE b.member_id = :#{#req.idUser}
             AND (:#{#req.nameProject} IS NULL OR :#{#req.nameProject} LIKE '' OR a.name LIKE %:#{#req.nameProject}%)
             AND (:#{#req.status} IS NULL OR :#{#req.status} LIKE '' OR a.status_project = :#{#req.status})
@@ -47,6 +55,8 @@ public interface MeProjectRepository extends ProjectRepository {
                 OR :#{#req.groupProjectId} LIKE '0' AND a.group_project_id IS NULL
                 OR a.group_project_id LIKE :#{#req.groupProjectId}
                 )
+             AND (:#{#req.categoryId} IS NULL OR :#{#req.categoryId} LIKE '' OR cate.id = :#{#req.categoryId})
+            GROUP BY a.id
             ORDER BY a.created_date DESC
             """, nativeQuery = true)
     Page<MeProjectResponse> getAllProjectById(Pageable page, @Param("req") MeFindProjectRequest req);

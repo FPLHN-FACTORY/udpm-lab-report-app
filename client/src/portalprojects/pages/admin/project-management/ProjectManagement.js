@@ -208,8 +208,8 @@ const ProjectManagement = () => {
       dataIndex: "stt",
       key: "stt",
       sorter: (a, b) => a.stt - b.stt,
+      align: "center",
     },
-
     {
       title: "Mã",
       dataIndex: "code",

@@ -20,11 +20,10 @@ import {
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faChainSlash,
   faCodeCompare,
   faEye,
   faFilter,
-  faFilterCircleDollar,
+  faTableList,
 } from "@fortawesome/free-solid-svg-icons";
 import LoadingIndicator from "../../../helper/loading";
 import {
@@ -35,6 +34,7 @@ import {
 } from "@ant-design/icons";
 import { AdGroupProjectAPI } from "../../../api/admin/AdGroupProjectAPI";
 import { convertDateLongToString } from "../../../helper/util.helper";
+import { TeacherCategoryAPI } from "../../../api/teacher/category/TeacherCategory.api";
 
 const { Option } = Select;
 
@@ -47,6 +47,8 @@ const StudentMyProject = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [listGroupProject, setListGroupProject] = useState([]);
   const [idGroupProjectSearch, setIdGroupProjectSearch] = useState("");
+  const [idCategorySearch, setIdCategorySearch] = useState("");
+  const [listcategory, setListCategory] = useState([]);
 
   useEffect(() => {
     document.title = "Dự án của tôi | Portal-Projects";
@@ -58,7 +60,17 @@ const StudentMyProject = () => {
 
   useEffect(() => {
     featDataGroupProject();
+    fetchDataCategory();
   }, []);
+
+  const fetchDataCategory = async () => {
+    try {
+      await TeacherCategoryAPI.getAllCategory().then((response) => {
+        setListCategory(response.data.data);
+        console.log(response.data.data);
+      });
+    } catch (error) {}
+  };
 
   const featDataGroupProject = async () => {
     try {
@@ -77,6 +89,7 @@ const StudentMyProject = () => {
       nameProject: name,
       status: status === "" ? null : parseInt(status),
       groupProjectId: idGroupProjectSearch,
+      categoryId: idCategorySearch,
       page: current - 1,
     };
     setIsLoading(true);
@@ -100,10 +113,21 @@ const StudentMyProject = () => {
     setName("");
     setStatus("");
     setIdGroupProjectSearch("");
+    setIdCategorySearch("");
   };
+
+  const filterOption = (input, option) =>
+    (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
 
   const data = useAppSelector(GetMyProject);
   const columns = [
+    {
+      title: "#",
+      dataIndex: "stt",
+      key: "stt",
+      sorter: (a, b) => a.stt - b.stt,
+      align: "center",
+    },
     {
       title: "Tên dự án",
       dataIndex: "name",
@@ -133,6 +157,11 @@ const StudentMyProject = () => {
           );
         }
       },
+    },
+    {
+      title: "Thể loại",
+      dataIndex: "nameCategorys",
+      key: "nameCategorys",
     },
     {
       title: "Nhóm dự án",
@@ -224,6 +253,7 @@ const StudentMyProject = () => {
           </div>
         );
       },
+      align: "center",
     },
     {
       title: <div style={{ textAlign: "center" }}>Hành động</div>,
@@ -243,6 +273,7 @@ const StudentMyProject = () => {
 
   return (
     <>
+      {isLoading && <LoadingIndicator />}
       <div className="box-one">
         <div
           className="heading-box"
@@ -260,7 +291,7 @@ const StudentMyProject = () => {
           <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
           <hr />
           <Row gutter={24} style={{ padding: "10px" }}>
-            <Col span={8}>
+            <Col span={12}>
               Tên dự án:{" "}
               <Input
                 type="text"
@@ -271,7 +302,7 @@ const StudentMyProject = () => {
                 style={{ width: "100%" }}
               />
             </Col>
-            <Col span={8}>
+            <Col span={12}>
               <span>Nhóm dự án:</span>
               <Select
                 showSearch
@@ -298,7 +329,27 @@ const StudentMyProject = () => {
                 ]}
               />
             </Col>
-            <Col span={8}>
+          </Row>
+          <Row gutter={24} style={{ padding: "10px" }}>
+            <Col span={12}>
+              <span>Thể loại:</span>
+              <Select
+                showSearch
+                style={{ width: "100%" }}
+                optionFilterProp="children"
+                onChange={(e) => setIdCategorySearch(e)}
+                filterOption={filterOption}
+                defaultValue={""}
+                value={idCategorySearch}
+                options={[
+                  { value: "", label: "Tất cả" },
+                  ...listcategory.map((i) => {
+                    return { value: i.id, label: i.name };
+                  }),
+                ]}
+              />
+            </Col>
+            <Col span={12}>
               <span>Trạng thái:</span>
               {""}
               <Select
@@ -340,7 +391,13 @@ const StudentMyProject = () => {
         </div>
         <div className="table_project_teacher_my_project">
           <div className="title_my_project">
-            <ProjectOutlined style={{ fontSize: "26px" }} />
+            <FontAwesomeIcon
+              icon={faTableList}
+              style={{
+                marginRight: "10px",
+                fontSize: "20px",
+              }}
+            />
             <span
               style={{
                 fontSize: "18px",

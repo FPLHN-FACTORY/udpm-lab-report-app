@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author thangncph26123
@@ -23,4 +24,17 @@ public class AdTeacherServiceImpl implements AdTeacherService {
         List<SimpleResponse> response = convertRequestCallApiIdentity.handleCallApiGetUserByRoleAndModule(ActorConstants.ACTOR_TEACHER);
         return response;
     }
+
+    @Override
+    public List<SimpleResponse> getAllTeacherDashBoard(String name) {
+        List<SimpleResponse> response = convertRequestCallApiIdentity.handleCallApiGetUserByRoleAndModule(ActorConstants.ACTOR_TEACHER);
+        if (name.isEmpty()) {
+            return response;
+        }
+        List<SimpleResponse> results = response.stream()
+                .filter(item -> item.getName().toLowerCase().contains(name.toLowerCase()))
+                .collect(Collectors.toList());
+        return results;
+    }
+
 }

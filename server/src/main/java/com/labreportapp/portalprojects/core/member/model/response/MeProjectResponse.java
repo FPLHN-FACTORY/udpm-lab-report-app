@@ -11,6 +11,8 @@ import org.springframework.data.rest.core.config.Projection;
 @Projection(types = {Project.class})
 public interface MeProjectResponse extends IsIdentified {
 
+    Integer getStt();
+
     @Value("#{target.name}")
     String getName();
 
@@ -43,5 +45,8 @@ public interface MeProjectResponse extends IsIdentified {
 
     @Value("#{target.type_project}")
     Integer getTypeProject();
+
+    @Value("#{target.nameCategorys}")
+    String getNameCategorys();
 
 }
