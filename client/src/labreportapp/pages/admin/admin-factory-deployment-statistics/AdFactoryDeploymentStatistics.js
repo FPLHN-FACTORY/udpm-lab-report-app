@@ -134,7 +134,7 @@ const AdFactoryDeploymentStatistics = () => {
           <hr />{" "}
           <div
             style={{
-              fontSize: 19,
+              fontSize: 18,
               fontWeight: 500,
               marginTop: 15,
               marginBottom: 20,
@@ -350,7 +350,7 @@ const AdFactoryDeploymentStatistics = () => {
             </div>
           </div>
           <div style={{ marginTop: 20, marginLeft: 10, marginRight: 10 }}>
-            <span style={{ fontSize: 20, fontWeight: 500 }}>
+            <span style={{ fontSize: 18, fontWeight: 500 }}>
               <FontAwesomeIcon
                 icon={faChalkboardTeacher}
                 style={{ marginRight: "5px" }}

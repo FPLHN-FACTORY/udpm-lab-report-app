@@ -234,9 +234,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             />
           }
         >
-          <Link to="/admin/factory-deployment-statistics">
-            Triển khai xưởng
-          </Link>
+          <Link to="/admin/factory-deployment-statistics">Thống kê</Link>
         </Menu.Item>
         {/* <Menu.Item
           key="12"
