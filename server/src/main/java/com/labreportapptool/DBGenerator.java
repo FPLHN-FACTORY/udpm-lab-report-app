@@ -460,7 +460,6 @@ public class DBGenerator implements CommandLineRunner {
         project1.setBackgroundColor("rgb(38, 144, 214)");
         project1.setDescriptions("Mục đích xem điểm thưởng");
         project1.setStatusProject(StatusProject.DANG_DIEN_RA);
-        project1.setTypeProject(TypeProject.DU_AN_XUONG_DU_AN);
         project1.setId((projectRepository.save(project1).getId()));
 
         Project project2 = new Project();
@@ -473,7 +472,6 @@ public class DBGenerator implements CommandLineRunner {
         project2.setBackgroundColor("#59a1e3");
         project2.setDescriptions("Mục đích của dự án là để quản lý các dự án của bộ môn PTPM");
         project2.setStatusProject(StatusProject.DANG_DIEN_RA);
-        project1.setTypeProject(TypeProject.DU_AN_XUONG_DU_AN);
         project2.setId((projectRepository.save(project2).getId()));
 
         Project project3 = new Project();

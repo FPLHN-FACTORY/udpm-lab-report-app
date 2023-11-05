@@ -8,7 +8,7 @@ import { useEffect } from "react";
 
 const AdminTeacherDashboard = () => {
   useEffect(() => {
-    document.title = "Thống kê giảng viên | Lab-Report-App";
+    document.title = "Danh sách giảng viên | Lab-Report-App";
   }, []);
   return (
     <>
@@ -22,7 +22,7 @@ const AdminTeacherDashboard = () => {
               icon={faChalkboardTeacher}
               style={{ marginRight: "8px" }}
             />{" "}
-            Thống kê giảng viên
+            Danh sách giảng viên
           </span>
         </div>
       </div>

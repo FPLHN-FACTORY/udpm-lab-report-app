@@ -1,8 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFilter,
-  faCogs,
-  faPencil,
   faPlus,
   faEye,
   faTags,
@@ -12,7 +10,6 @@ import {
   faRandom,
   faChainSlash,
   faFilterCircleDollar,
-  faClose,
 } from "@fortawesome/free-solid-svg-icons";
 import { useAppDispatch, useAppSelector } from "../../../app/hook";
 import {
@@ -37,10 +34,7 @@ import ModalCreateProject from "../../admin/class-management/create-class/ModalC
 import { Link } from "react-router-dom";
 import { SetAdTeacher } from "../../../app/admin/AdTeacherSlice.reducer";
 import ModalUpdateClass from "./update-class/ModalUpdateClass";
-import {
-  convertHourAndMinuteToString,
-  convertMeetingPeriodToTime,
-} from "../../../helper/util.helper";
+import { convertHourAndMinuteToString } from "../../../helper/util.helper";
 import {
   GetAdClassManagement,
   SetMyClass,
@@ -141,10 +135,8 @@ const ClassManagement = () => {
       setActivityDataAll([]);
     } else {
       const featchDataActivity = async (idSemesterSeach) => {
-        
         await ClassAPI.getAllActivityByIdSemester(idSemesterSeach).then(
           (respone) => {
-            
             if (respone.data.data.length === 0) {
               setIdActivitiSearch("none");
               setActivityDataAll([]);
