@@ -34,7 +34,7 @@ public class AdLabelController {
     }
 
     @PostMapping
-    public ResponseObject creatLabel(@RequestBody final AdCreatLabelRequest request) {
+    public ResponseObject creatLabel(@RequestBody AdCreatLabelRequest request) {
         return new ResponseObject(adLabelService.creatLabel(request));
     }
 
@@ -46,17 +46,21 @@ public class AdLabelController {
     @PutMapping("/{id}")
     public ResponseObject updateLabel(@PathVariable("id") String id,
                                       @RequestBody AdUpdateLabelRequest request) {
-        request.setId(id);
-        return new ResponseObject(adLabelService.upadteLabel(request));
+        return new ResponseObject(adLabelService.updateLabel(request));
     }
 
     @GetMapping("/{id}")
-    public ResponseObject getOne (@PathVariable("id") String id){
+    public ResponseObject getOne(@PathVariable("id") String id){
         return new ResponseObject(adLabelService.getOneByIdLable(id));
     }
 
     @GetMapping("/label-status/{status}")
     public ResponseObject getAllIdByStatus (@PathVariable("status") String status){
         return new ResponseObject(adLabelService.getAllIdByStatus(status));
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseObject deleteLabelManage(@PathVariable("id") String id) {
+        return new ResponseObject(adLabelService.deleteLabelById(id));
     }
 }

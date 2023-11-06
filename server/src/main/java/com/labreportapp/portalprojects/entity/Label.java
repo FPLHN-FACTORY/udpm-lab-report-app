@@ -24,8 +24,8 @@ import org.hibernate.annotations.Nationalized;
 @NoArgsConstructor
 public class Label extends PrimaryEntity {
 
-    @Column(length = EntityProperties.LENGTH_CODE, nullable = false)
-    private String code;
+//    @Column(length = EntityProperties.LENGTH_CODE, nullable = true)
+//    private String code;
 
     @Column(length = EntityProperties.LENGTH_NAME_SHORT)
     @Nationalized

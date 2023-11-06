@@ -5,7 +5,7 @@ import {
   faFilterCircleDollar,
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect } from "react";
-import { Button, Col, Empty, Input, Pagination, Row } from "antd";
+import { Button, Col, Empty, Input, Row } from "antd";
 import Image from "../../../helper/img/Image";
 import { AdTeacherDashBoardAPI } from "../../../api/admin/AdTeacherDashBoardAPI";
 import { useState } from "react";

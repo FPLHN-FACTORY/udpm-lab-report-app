@@ -27,8 +27,8 @@ public class LabelProject extends PrimaryEntity {
     @Column(length = EntityProperties.LENGTH_ID)
     private String projectId;
 
-    @Column(length = EntityProperties.LENGTH_CODE, nullable = false)
-    private String code;
+//    @Column(length = EntityProperties.LENGTH_CODE, nullable = false)
+//    private String code;
 
     @Column(length = EntityProperties.LENGTH_NAME_SHORT)
     @Nationalized

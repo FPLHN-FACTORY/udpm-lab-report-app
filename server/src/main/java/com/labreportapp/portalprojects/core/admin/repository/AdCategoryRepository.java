@@ -3,6 +3,7 @@ package com.labreportapp.portalprojects.core.admin.repository;
 import com.labreportapp.portalprojects.core.admin.model.request.AdFindCategoryRequest;
 import com.labreportapp.portalprojects.core.admin.model.response.AdCategoryPesponse;
 import com.labreportapp.portalprojects.entity.Category;
+import com.labreportapp.portalprojects.entity.ProjectCategory;
 import com.labreportapp.portalprojects.repository.CategoryRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

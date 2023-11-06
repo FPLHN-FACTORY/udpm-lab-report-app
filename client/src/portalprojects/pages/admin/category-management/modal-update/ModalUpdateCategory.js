@@ -13,14 +13,18 @@ const ModalUpdateCategory = ({ visible, onCancel, category }) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (category !== null) {
+    if (category !== null && visible) {
       setName(category.name);
       return () => {
         setName("");
-        setErrorName();
+        setErrorName("");
       };
     }
-  }, [category]);
+    if (!visible) {
+      setName("");
+      setErrorName("");
+    }
+  }, [visible]);
 
   const update = () => {
     let check = 0;
@@ -56,12 +60,7 @@ const ModalUpdateCategory = ({ visible, onCancel, category }) => {
 
   return (
     <>
-      <Modal
-        visible={visible}
-        onCancel={onCancel}
-        width={500}
-        footer={null}
-      >
+      <Modal visible={visible} onCancel={onCancel} width={500} footer={null}>
         {" "}
         <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
           <span style={{ fontSize: "18px" }}>Cập nhật thể loại</span>
@@ -84,23 +83,22 @@ const ModalUpdateCategory = ({ visible, onCancel, category }) => {
         <div style={{ textAlign: "right" }}>
           <div style={{ paddingTop: "15px" }}>
             <Button
-              style={{
-                marginRight: "5px",
-                backgroundColor: "rgb(61, 139, 227)",
-                color: "white",
-              }}
-              onClick={update}
-            >
-              Cập nhật
-            </Button>
-            <Button
+              className="btn_filter"
               style={{
                 backgroundColor: "red",
                 color: "white",
+                width: "86px",
               }}
               onClick={onCancel}
             >
               Hủy
+            </Button>{" "}
+            <Button
+              className="btn_clean"
+              style={{ width: "86px", marginLeft: "10px" }}
+              onClick={update}
+            >
+              Cập nhật
             </Button>
           </div>
         </div>

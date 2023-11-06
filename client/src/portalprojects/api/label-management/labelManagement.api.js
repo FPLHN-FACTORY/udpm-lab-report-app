@@ -1,7 +1,6 @@
 import { request } from "../../../labreportapp/helper/request.helper";
 
 export class LabelManagementAPI {
-
   static fetchAll = (filter) => {
     return request({
       method: "GET",
@@ -32,5 +31,11 @@ export class LabelManagementAPI {
       url: `/admin/label` + idLabel,
     });
   };
-}
 
+  static deleteLabelById = (idLabel) => {
+    return request({
+      method: "DELETE",
+      url: `/admin/label/delete/` + idLabel,
+    });
+  };
+}

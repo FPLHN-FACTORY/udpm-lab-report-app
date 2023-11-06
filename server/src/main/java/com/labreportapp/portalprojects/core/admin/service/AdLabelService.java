@@ -19,7 +19,7 @@ public interface AdLabelService {
 
     Label creatLabel(@Valid final AdCreatLabelRequest command);
 
-    Label upadteLabel(@Valid final AdUpdateLabelRequest command);
+    Label updateLabel(@Valid AdUpdateLabelRequest command);
 
     boolean deleteLabel(final String id);
 
@@ -27,4 +27,5 @@ public interface AdLabelService {
 
     List<String> getAllIdByStatus (final String status);
 
+    String deleteLabelById(String id);
 }

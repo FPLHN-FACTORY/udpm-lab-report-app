@@ -31,15 +31,17 @@ const adCategorySlice = createSlice({
         state[index].name = updateCategory.name;
       }
     },
-    
+    DeleteCategory: (state, action) => {
+      const id = action.payload;
+      const newState = state.filter((category) => category.id !== id);
+      state = newState;
+      return state;
+    },
   },
 });
 
-export const {
-  SetCategory,
-  UpdateCategory,
-  CreateCategory,
-} = adCategorySlice.actions;
+export const { SetCategory, UpdateCategory, CreateCategory, DeleteCategory } =
+  adCategorySlice.actions;
 
 export const GetCategory = (state) => state.adCategory;
 

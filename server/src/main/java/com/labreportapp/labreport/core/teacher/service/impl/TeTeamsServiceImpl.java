@@ -279,8 +279,6 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         listLabel.forEach(item -> {
             LabelProject labelProject = new LabelProject();
             labelProject.setProjectId(projectNew.getId());
-            labelProject.setColorLabel(item.getColorLabel());
-            labelProject.setCode(item.getCode());
             labelProject.setName(item.getName());
             newLabelProject.add(labelProject);
         });

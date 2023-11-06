@@ -4,15 +4,25 @@ import {
   faFilter,
   faPencil,
   faPlus,
+  faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import "./styleCategory.css";
-import { Button, Input, Pagination, Table, Tooltip } from "antd";
+import {
+  Button,
+  Input,
+  Pagination,
+  Popconfirm,
+  Table,
+  Tooltip,
+  message,
+} from "antd";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useAppSelector, useAppDispatch } from "../../../app/hook";
 import {
   SetCategory,
   GetCategory,
+  DeleteCategory,
 } from "../../../app/reducer/admin/category-management/adCategorySlice.reducer";
 import { AdCategoryAPI } from "../../../api/admin-category/adCategory.api";
 import "react-toastify/dist/ReactToastify.css";
@@ -44,42 +54,18 @@ const CategoryManagement = () => {
     });
   };
 
-  const data = useAppSelector(GetCategory);
-
-  const columns = [
-    {
-      title: "STT",
-      dataIndex: "stt",
-      key: "stt",
-      //sorter: (a, b) => a.stt.localeCompare(b.stt),
-      render: (text, record, index) => startIndex + index + 1,
-    },
-    {
-      title: "Tên thể loại",
-      dataIndex: "name",
-      key: "name",
-      sorter: (a, b) => a.name.localeCompare(b.name),
-    },
-    {
-      title: "Hành động",
-      dataIndex: "actions",
-      key: "actions",
-      render: (text, record) => (
-        <div>
-          <Tooltip title="Cập nhật">
-            <FontAwesomeIcon
-              onClick={() => {
-                buttonUpdate(record);
-              }}
-              style={{ marginRight: "15px", cursor: "pointer" }}
-              icon={faPencil}
-              size="1x"
-            />
-          </Tooltip>
-        </div>
-      ),
-    },
-  ];
+  const handleDelete = async (id) => {
+    try {
+      setLoading(true);
+      await AdCategoryAPI.deleteCategoryId(id).then((response) => {
+        dispatch(DeleteCategory(response.data.data));
+        message.success("Xóa thể loại thành công");
+        setLoading(false);
+      });
+    } catch (error) {
+      setLoading(false);
+    }
+  };
 
   const [modalUpdate, setModalUpdate] = useState(false);
   const [modalCreate, setModalCreate] = useState(false);
@@ -114,6 +100,56 @@ const CategoryManagement = () => {
   const clearData = () => {
     setName("");
   };
+
+  const data = useAppSelector(GetCategory);
+
+  const columns = [
+    {
+      title: "#",
+      dataIndex: "stt",
+      key: "stt",
+      render: (text, record, index) => startIndex + index + 1,
+      align: "center",
+    },
+    {
+      title: "Tên thể loại",
+      dataIndex: "name",
+      key: "name",
+      sorter: (a, b) => a.name.localeCompare(b.name),
+    },
+    {
+      title: "Hành động",
+      dataIndex: "actions",
+      key: "actions",
+      render: (text, record) => (
+        <div>
+          <Tooltip title="Cập nhật">
+            <FontAwesomeIcon
+              className="icon"
+              onClick={() => {
+                buttonUpdate(record);
+              }}
+              style={{ marginRight: "15px", cursor: "pointer" }}
+              icon={faPencil}
+              size="1x"
+            />
+          </Tooltip>
+          <Tooltip title="Xóa">
+            <Popconfirm
+              title="Bạn có chắc chắn xóa thể loại ?"
+              description={<div>{record.name}</div>}
+              onConfirm={(e) => handleDelete(record.id)}
+              okText="Yes"
+              cancelText="No"
+            >
+              {" "}
+              <FontAwesomeIcon className="icon" icon={faTrashCan} />
+            </Popconfirm>
+          </Tooltip>
+        </div>
+      ),
+    },
+  ];
 
   return (
     <>
@@ -156,7 +192,10 @@ const CategoryManagement = () => {
             <Button
               className="btn__clear"
               onClick={clearData}
-              style={{ backgroundColor: "rgb(38, 144, 214)" }}
+              style={{
+                backgroundColor: "rgb(38, 144, 214)",
+                marginLeft: "10px",
+              }}
             >
               Làm mới bộ lọc
             </Button>
@@ -186,6 +225,7 @@ const CategoryManagement = () => {
                   size="1x"
                   style={{
                     backgroundColor: "rgb(55, 137, 220)",
+                    paddingRight: "5px",
                   }}
                 />{" "}
                 Thêm thể loại

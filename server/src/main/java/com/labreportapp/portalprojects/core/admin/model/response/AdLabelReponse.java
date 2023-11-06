@@ -13,9 +13,6 @@ public interface AdLabelReponse extends IsIdentified {
 
     Integer getSTT();
 
-    @Value("#{target.code}")
-    String getCode();
-
     @Value("#{target.name}")
     String getName();
 

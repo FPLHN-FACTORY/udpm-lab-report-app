@@ -1,22 +1,18 @@
 import { request } from "../../../labreportapp/helper/request.helper";
 
 export class AdCategoryAPI {
-  static fetchAllCategory = (name,page) => {
+  static fetchAllCategory = (name, page) => {
     return request({
       method: "GET",
       url:
         `/admin/category/search` +
         "?name=" +
-        name
-        +
+        name +
         "&page=" +
-        page
-        +
-        "&size=10" 
-        
+        page +
+        "&size=10",
     });
   };
-
 
   static create = (data) => {
     return request({
@@ -33,8 +29,7 @@ export class AdCategoryAPI {
     });
   };
 
-
-  static update = (idCate,data) => {
+  static update = (idCate, data) => {
     return request({
       method: "PUT",
       url: `/admin/category/` + idCate,
@@ -42,5 +37,10 @@ export class AdCategoryAPI {
     });
   };
 
-  
+  static deleteCategoryId = (idCategory) => {
+    return request({
+      method: "DELETE",
+      url: `/admin/category/` + idCategory,
+    });
+  };
 }
