@@ -244,6 +244,7 @@ const ActivityManagement = () => {
             <Tooltip title="Chỉnh sửa chi tiết">
               <FontAwesomeIcon
                 icon={faEdit}
+
                 style={{ marginRight: "9px", color: "rgb(38, 144, 214)" }}
                 size="1x"
                 onClick={() => {

@@ -10,6 +10,7 @@ import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.entity.Semester;
 import com.labreportapp.labreport.infrastructure.constant.StatusFeedBack;
 import com.labreportapp.labreport.util.FormUtils;
+import com.labreportapp.labreport.util.LoggerUtil;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import jakarta.validation.Valid;
@@ -32,6 +33,9 @@ public class AdSemesterServiceImpl implements AdSemesterService {
 
     private List<AdSemesterResponse> adSemesterResponseList;
 
+    @Autowired
+    private LoggerUtil loggerUtil;
+
     @Override
     public List<Semester> findAllSermester(Pageable pageable) {
         return adSemesterRepository.getAllSemester(pageable);
@@ -52,6 +56,7 @@ public class AdSemesterServiceImpl implements AdSemesterService {
             }
         }
         semester.setStatusFeedBack(StatusFeedBack.CHUA_FEEDBACK);
+        loggerUtil.sendLog("Đã thêm mới học kỳ " + obj.getName(), "");
         return adSemesterRepository.save(semester);
     }
 
@@ -81,6 +86,7 @@ public class AdSemesterServiceImpl implements AdSemesterService {
                 throw new RestApiException(Message.TIME_STUDENT_SEMESTER_OVERLOAD);
             }
         }
+
         Semester semester = findCategoryById.get();
         semester.setName(obj.getName());
         semester.setStartTime(obj.getStartTime());

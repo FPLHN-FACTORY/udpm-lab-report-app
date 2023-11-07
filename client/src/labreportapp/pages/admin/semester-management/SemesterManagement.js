@@ -143,6 +143,7 @@ const SemesterManagement = () => {
             >
               <Tooltip title="Bật feedback">
                 <FontAwesomeIcon
+                  className="icon"
                   onClick={() => {}}
                   style={{ marginRight: "19px", cursor: "pointer" }}
                   icon={faFileEdit}
@@ -190,6 +191,7 @@ const SemesterManagement = () => {
           </Popconfirm>
         </div>
       ),
+      align:"center",
     },
   ];
   const [modalUpdate, setModalUpdate] = useState(false);
