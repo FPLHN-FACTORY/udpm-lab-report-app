@@ -23,5 +23,4 @@ public class TePointExcel {
     private Double checkPointPhase2;
 
     private Double finalPoint;
-
 }

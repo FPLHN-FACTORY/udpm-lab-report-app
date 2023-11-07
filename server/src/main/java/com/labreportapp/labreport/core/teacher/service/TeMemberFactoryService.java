@@ -19,4 +19,5 @@ public interface TeMemberFactoryService {
     List<SimpleEntityProjection> getTeams();
 
     Integer getNumberMemberFactory();
+
 }

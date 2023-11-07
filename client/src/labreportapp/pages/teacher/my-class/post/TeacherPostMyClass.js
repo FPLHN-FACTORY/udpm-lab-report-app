@@ -50,6 +50,7 @@ import { GetUserCurrent } from "../../../../app/common/UserCurrent.reducer";
 import { useNavigate } from "react-router-dom";
 
 const TeacherPostMyClass = () => {
+
   const dispatch = useAppDispatch();
   const userRedux = useAppSelector(GetUserCurrent);
   dispatch(SetTTrueToggle());
@@ -70,11 +71,11 @@ const TeacherPostMyClass = () => {
     window.scrollTo(0, 0);
     featchClass(idClass);
     featchPost(idClass);
-
     return () => {
       dispatch(SetPost([]));
     };
   }, []);
+
   const handleSeeMore = () => {
     if (currentPage < totalPage) {
       setCurrentPage((pre) => pre + 1);
@@ -83,6 +84,7 @@ const TeacherPostMyClass = () => {
       setSeeMore(false);
     }
   };
+
   useEffect(() => {
     if (currentPage < totalPage) {
       setSeeMore(true);
@@ -95,16 +97,20 @@ const TeacherPostMyClass = () => {
     }
     featchNextPost(idClass);
   }, [currentPage]);
+
   const showHandleCreate = (value) => {
     setShowCreate(value);
   };
+
   const handleUpdate = async (index) => {
     setShowUpdateIndex(index);
   };
+
   const showHandleUpdate = (obj, value) => {
     setShowUpdate(value);
     setShowUpdateIndex(null);
   };
+
   const featchPost = async (idClass) => {
     setLoading(false);
     try {
@@ -123,6 +129,7 @@ const TeacherPostMyClass = () => {
       });
     } catch (error) {}
   };
+
   const featchNextPost = async (idClass) => {
     try {
       let data = {
@@ -136,6 +143,7 @@ const TeacherPostMyClass = () => {
       });
     } catch (error) {}
   };
+
   const featchClass = async (idClass) => {
     try {
       await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
@@ -148,6 +156,7 @@ const TeacherPostMyClass = () => {
       }, [1000]);
     }
   };
+
   const clickDelete = async (id) => {
     try {
       await TeacherPostAPI.delete(id).then((respone) => {
@@ -156,6 +165,7 @@ const TeacherPostMyClass = () => {
       });
     } catch (error) {}
   };
+
   const handleRandomPass = async () => {
     try {
       await TeacherMyClassAPI.randomPass(idClass).then((respone) => {
@@ -163,6 +173,7 @@ const TeacherPostMyClass = () => {
       });
     } catch (error) {}
   };
+
   const handleUpdateStatusClass = async () => {
     try {
       let objApi = {
@@ -179,6 +190,7 @@ const TeacherPostMyClass = () => {
       });
     } catch (error) {}
   };
+
   const copyToClipboard = () => {
     const tempInput = document.createElement("input");
     tempInput.value = classDetail.passWord;
@@ -189,6 +201,7 @@ const TeacherPostMyClass = () => {
     document.body.removeChild(tempInput);
     message.success("Đã sao chép mật khẩu vào bộ nhớ đệm !");
   };
+  
   const convertLongToDate = (dateLong) => {
     const date = new Date(dateLong);
     const day = String(date.getDate()).padStart(2, "0");
@@ -199,10 +212,12 @@ const TeacherPostMyClass = () => {
     const format = `${day}/${month}/${year}` + ` ${hour}:${minute}`;
     return format;
   };
+
   const handleFullScreen = (value) => {
     setClickShow(value);
     setShowFullScreen(true);
   };
+  
   const handleCancelModal = () => {
     document.querySelector("body").style.overflowX = "hidden";
     setShowFullScreen(false);

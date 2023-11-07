@@ -50,4 +50,5 @@ public class Activity extends PrimaryEntity {
 
     @Column
     private AllowUseTrello allowUseTrello;
+    
 }

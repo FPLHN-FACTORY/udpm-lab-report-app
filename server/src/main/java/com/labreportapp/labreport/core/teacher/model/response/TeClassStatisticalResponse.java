@@ -58,4 +58,10 @@ public interface TeClassStatisticalResponse {
     @Value("#{target.count_post}")
     Integer getCountPost();
 
+    @Value("#{target.count_pass}")
+    Integer getCountPass();
+
+    @Value("#{target.count_faild}")
+    Integer getCountFaild();
+
 }

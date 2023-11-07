@@ -16,4 +16,5 @@ public interface TeTeamFactoryResponse extends IsIdentified {
 
     @Value("#{target.descriptions}")
     String getDescriptions();
+
 }

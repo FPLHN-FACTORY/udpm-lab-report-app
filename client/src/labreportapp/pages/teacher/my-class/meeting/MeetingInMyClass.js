@@ -28,11 +28,11 @@ const MeetingInMyClass = () => {
   const { idClass } = useParams();
   const [classDetail, setClassDetail] = useState({});
   const navigate = useNavigate();
+
   useEffect(() => {
     window.scrollTo(0, 0);
     featchMeeting(idClass);
     featchClass(idClass);
-
     return () => {
       dispatch(SetMeeting([]));
     };

@@ -32,4 +32,5 @@ public class MemberFactory extends PrimaryEntity {
 
     @Column
     private StatusMemberFactory statusMemberFactory;
+
 }

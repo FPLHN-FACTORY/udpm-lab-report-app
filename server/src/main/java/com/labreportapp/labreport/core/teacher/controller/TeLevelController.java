@@ -27,5 +27,4 @@ public class TeLevelController {
         List<TeLevelResponse> list = teLevelService.getAllLevel();
         return new ResponseObject(list);
     }
-
 }

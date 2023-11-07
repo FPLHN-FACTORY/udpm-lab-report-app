@@ -27,5 +27,4 @@ public class TeSemesterController {
         List<TeSemesterResponse> listSemester = teSemesterService.getAllSemester();
         return new ResponseObject(listSemester);
     }
-
 }

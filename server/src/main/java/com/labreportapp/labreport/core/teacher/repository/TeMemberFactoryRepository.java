@@ -15,7 +15,6 @@ import java.util.List;
 /**
  * @author quynhncph26201
  */
-
 public interface TeMemberFactoryRepository extends MemberFactoryRepository {
 
     @Query(value = """

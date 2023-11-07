@@ -43,4 +43,5 @@ public class Semester extends PrimaryEntity {
 
     @Column
     private StatusFeedBack statusFeedBack;
+
 }

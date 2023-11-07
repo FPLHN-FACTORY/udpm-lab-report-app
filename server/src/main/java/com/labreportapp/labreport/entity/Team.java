@@ -40,4 +40,5 @@ public class Team extends PrimaryEntity {
 
     @Column(length = EntityProperties.LENGTH_ID)
     private String projectId;
+
 }

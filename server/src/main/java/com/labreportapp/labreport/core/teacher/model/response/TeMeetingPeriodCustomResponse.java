@@ -21,5 +21,5 @@ public class TeMeetingPeriodCustomResponse {
     private Long startTime;
 
     private Long endTine;
-    
+
 }

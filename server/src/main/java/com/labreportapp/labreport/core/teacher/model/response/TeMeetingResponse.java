@@ -51,4 +51,5 @@ public interface TeMeetingResponse {
 
     @Value("#{target.status_meeting}")
     Integer getStatusMeeting();
+
 }

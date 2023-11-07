@@ -45,7 +45,6 @@ public class TeTeamFactoryServiceImpl implements TeTeamFactoryService {
     @Autowired
     private TeMemberFactoryRepository teMemberFactoryRepository;
 
-
     @Override
     public List<TeamFactory> findAllTeam(Pageable pageable) {
         return teTeamFactoryRepository.getAllTeam(pageable);
@@ -93,7 +92,7 @@ public class TeTeamFactoryServiceImpl implements TeTeamFactoryService {
         List<TeAllMemberFactoryResponse> listCustom = new ArrayList<>();
         listStrIdMember.forEach(idMe -> {
             listResponse.forEach(res -> {
-                if(idMe.getMemberId().equals(res.getId())) {
+                if (idMe.getMemberId().equals(res.getId())) {
                     TeAllMemberFactoryResponse teAllMemberFactoryResponse = new TeAllMemberFactoryResponse();
                     teAllMemberFactoryResponse.setId(idMe.getId());
                     teAllMemberFactoryResponse.setMemberId(idMe.getMemberId());
@@ -135,4 +134,5 @@ public class TeTeamFactoryServiceImpl implements TeTeamFactoryService {
         });
         return listCustom;
     }
+
 }

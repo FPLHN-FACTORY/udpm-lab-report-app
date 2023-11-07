@@ -23,4 +23,5 @@ public class TeMeetingPeriodServiceImpl implements TeMeetingPeriodService {
         List<MeetingPeriod> list = teMeetingPeriodRepository.findAll(Sort.by("name"));
         return list;
     }
+
 }

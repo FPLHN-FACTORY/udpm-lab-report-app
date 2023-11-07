@@ -5,7 +5,6 @@ import com.labreportapp.labreport.core.common.base.ResponseObject;
 import com.labreportapp.labreport.core.teacher.model.request.TeCreatePostRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindPostClassRepquest;
 import com.labreportapp.labreport.core.teacher.model.request.TeUpdatePostRequest;
-import com.labreportapp.labreport.core.teacher.model.response.TePostResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TePostTeacherResponse;
 import com.labreportapp.labreport.core.teacher.service.TePostService;
 import com.labreportapp.labreport.entity.Post;
@@ -54,5 +53,4 @@ public class TePostController {
         Post post = tePostService.deleteById(id);
         return new ResponseObject(post);
     }
-
 }

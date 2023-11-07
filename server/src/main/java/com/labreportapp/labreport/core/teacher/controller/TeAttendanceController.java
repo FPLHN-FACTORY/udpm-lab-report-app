@@ -7,8 +7,6 @@ import com.labreportapp.labreport.core.teacher.model.request.TeFindStudentAttend
 import com.labreportapp.labreport.core.teacher.model.response.TeAttendanceMessageResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeAttendanceResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeAttendanceStudentAllResponse;
-import com.labreportapp.labreport.core.teacher.model.response.TeClassResponse;
-import com.labreportapp.labreport.core.teacher.model.response.TeStudentAttendanceRespone;
 import com.labreportapp.labreport.core.teacher.model.response.TeStudentAttendedDetailRespone;
 import com.labreportapp.labreport.core.teacher.service.TeAttendanceSevice;
 import org.springframework.beans.factory.annotation.Autowired;

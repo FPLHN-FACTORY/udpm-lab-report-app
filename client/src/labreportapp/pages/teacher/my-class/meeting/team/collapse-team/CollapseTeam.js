@@ -25,6 +25,7 @@ const CollapseTeam = ({ team, featchMeeting }) => {
   const [descriptionsReport, setDescriptionsReport] = useState("");
   const [dowloading, setDownloading] = useState(false);
   const [checkTime, setCheckTime] = useState(true);
+  
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Bảng điều khiển - chi tiết buổi học";

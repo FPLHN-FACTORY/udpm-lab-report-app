@@ -6,7 +6,6 @@ import com.labreportapp.labreport.core.teacher.model.request.TeFindStudentAttend
 import com.labreportapp.labreport.core.teacher.model.response.TeAttendanceMessageResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeAttendanceResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeAttendanceStudentAllResponse;
-import com.labreportapp.labreport.core.teacher.model.response.TeStudentAttendanceRespone;
 import com.labreportapp.labreport.core.teacher.model.response.TeStudentAttendedDetailRespone;
 
 import java.util.List;

@@ -15,7 +15,7 @@ public interface ClassRepository extends JpaRepository<Class, String> {
     String NAME = "BaseClassRepository";
 
     @Query(value = """
-            select a.code from class a JOIN activity b ON a.activity_id = b.id
+            SELECT a.code FROM class a JOIN activity b ON a.activity_id = b.id
             WHERE b.id = :idActivity
             ORDER BY CAST(SUBSTRING_INDEX(a.code, '_', -1) AS SIGNED) DESC
             LIMIT 1

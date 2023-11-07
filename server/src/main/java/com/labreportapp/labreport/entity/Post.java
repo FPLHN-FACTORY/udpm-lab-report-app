@@ -33,4 +33,5 @@ public class Post extends PrimaryEntity {
 
     @Column(length = EntityProperties.LENGTH_ID)
     private String classId;
+
 }

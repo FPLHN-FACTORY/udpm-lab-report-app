@@ -23,4 +23,5 @@ public class TeAllMemberFactoryResponse {
     private String picture;
 
     private String userName;
+
 }

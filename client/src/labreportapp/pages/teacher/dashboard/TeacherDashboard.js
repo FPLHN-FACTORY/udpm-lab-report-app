@@ -41,12 +41,12 @@ const TeacherDashboard = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(false);
   const [listClass, setListClass] = useState([]);
-  const [loadOne, setLoadOne] = useState(false);
   const [countClass, setCountClass] = useState({
     classLesson: 0,
     classNumber: 0,
   });
   const [loadingExport, setLoadingExport] = useState(false);
+
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Thống kê";
@@ -88,7 +88,6 @@ const TeacherDashboard = () => {
       await TeacherStatisticalAPI.getStatistical(filter).then((response) => {
         setTotalPages(parseInt(response.data.data.totalPages));
         setListClass(response.data.data.data);
-        setLoadOne(true);
         setLoading(true);
       });
     } catch (error) {
@@ -165,9 +164,10 @@ const TeacherDashboard = () => {
       dataIndex: "stt",
       key: "stt",
       sorter: (a, b) => a.stt - b.stt,
+      align: "center",
     },
     {
-      title: <div style={{ textAlign: "center" }}>Mã lớp</div>,
+      title: <div style={{ textAlign: "center" }}>Lớp</div>,
       dataIndex: "code",
       key: "code",
       sorter: (a, b) => a.code.localeCompare(b.code),
@@ -215,16 +215,24 @@ const TeacherDashboard = () => {
       align: "center",
     },
     {
-      title: <div style={{ textAlign: "center" }}>Hoạt động</div>,
-      dataIndex: "activity",
-      key: "activity",
-      sorter: (a, b) => a.activity.localeCompare(b.activity),
-    },
-    {
       title: <div style={{ textAlign: "center" }}>Cấp độ</div>,
       dataIndex: "level",
       key: "level",
       sorter: (a, b) => a.level.localeCompare(b.level),
+      align: "center",
+    },
+    {
+      title: <div style={{ textAlign: "center" }}>Đạt</div>,
+      dataIndex: "countPass",
+      key: "countPass",
+      sorter: (a, b) => a.countPass - b.countPass,
+      align: "center",
+    },
+    {
+      title: <div style={{ textAlign: "center" }}>Trượt</div>,
+      dataIndex: "countFaild",
+      key: "countFaild",
+      sorter: (a, b) => a.countFaild - b.countFaild,
       align: "center",
     },
     {
@@ -254,6 +262,12 @@ const TeacherDashboard = () => {
       key: "countPost",
       sorter: (a, b) => a.countPost - b.countPost,
       align: "center",
+    },
+    {
+      title: <div style={{ textAlign: "center" }}>Hoạt động</div>,
+      dataIndex: "activity",
+      key: "activity",
+      sorter: (a, b) => a.activity.localeCompare(b.activity),
     },
     {
       title: <div style={{ textAlign: "center" }}>Hành động</div>,
@@ -412,9 +426,9 @@ const TeacherDashboard = () => {
       <div className="box-four-dashboad">
         <div
           className="box-four-son-dashboad"
-          style={{ minHeight: "355px", height: "auto" }}
+          style={{ minHeight: "260px", height: "auto" }}
         >
-          <Row gutter={50} style={{ paddingTop: "14px" }}>
+          <Row gutter={50}>
             <Col span={18}>
               {" "}
               <div>

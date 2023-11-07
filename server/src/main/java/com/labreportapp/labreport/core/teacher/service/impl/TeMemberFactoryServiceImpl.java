@@ -94,4 +94,5 @@ public class TeMemberFactoryServiceImpl implements TeMemberFactoryService {
     public Integer getNumberMemberFactory() {
         return teMemberFactoryRepository.getNumberMemberFactory();
     }
+
 }

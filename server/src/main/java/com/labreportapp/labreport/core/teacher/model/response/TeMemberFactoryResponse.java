@@ -25,4 +25,5 @@ public interface TeMemberFactoryResponse extends IsIdentified {
 
     @Value("#{target.status_member_factory}")
     Integer getStatusMemberFactory();
+    
 }

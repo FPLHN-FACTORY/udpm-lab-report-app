@@ -3,7 +3,9 @@ import { Modal } from "antd";
 import { useEffect, useState } from "react";
 
 const ModalFullScreen = ({ visible, onCancel, item }) => {
+
   const [title, setTitle] = useState("");
+  
   useEffect(() => {
     if (visible === true) {
       setTitle(item);
@@ -11,6 +13,7 @@ const ModalFullScreen = ({ visible, onCancel, item }) => {
       setTitle("");
     }
   }, [visible]);
+
   return (
     <Modal
       open={visible}

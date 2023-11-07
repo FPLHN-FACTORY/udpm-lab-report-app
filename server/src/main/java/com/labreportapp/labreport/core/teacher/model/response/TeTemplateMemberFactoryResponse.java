@@ -13,4 +13,5 @@ public interface TeTemplateMemberFactoryResponse extends IsIdentified {
 
     @Value("#{target.id_member_team_factory}")
     String getIdMemberTeamFactory();
+
 }

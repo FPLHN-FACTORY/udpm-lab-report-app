@@ -51,12 +51,11 @@ const TeamsInMyClass = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   dispatch(SetTTrueToggle());
-
   const { idClass } = useParams();
+
   useEffect(() => {
     window.scrollTo(0, 0);
     fetchData(idClass);
-
     return () => {
       dispatch(SetTeams([]));
     };
@@ -67,6 +66,7 @@ const TeamsInMyClass = () => {
     await featchTeams(idClass);
     await featchStudentClass(idClass);
   };
+
   const featchTeams = async (id) => {
     setLoading(false);
     try {
@@ -135,7 +135,6 @@ const TeamsInMyClass = () => {
         idTeam: idTeam,
       };
       await TeacherTeamsAPI.createProjectToTeam(dataUp).then((response) => {
-     
         dispatch(UpdateTeam(response.data.data));
         message.success("Tạo trello thành công !");
       });

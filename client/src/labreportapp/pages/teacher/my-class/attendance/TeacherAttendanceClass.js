@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { useAppDispatch } from "../../../../app/hook";
 import { SetTTrueToggle } from "../../../../app/teacher/TeCollapsedSlice.reducer";
 import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
-import { toast } from "react-toastify";
 import { TeacherMeetingAPI } from "../../../../api/teacher/meeting/TeacherMeeting.api";
 import { TeacherAttendanceAPI } from "../../../../api/teacher/attendance/TeacherAttendance.api";
 import LoadingIndicator from "../../../../helper/loading";
@@ -55,8 +54,7 @@ const TeacherAttendanceClass = () => {
           }
         }
       );
-    } catch (error) {
-    }
+    } catch (error) {}
   };
   const featchTable = async (idClass) => {
     try {
@@ -65,8 +63,7 @@ const TeacherAttendanceClass = () => {
           setData(responese.data.data);
           setLoading(true);
         })
-        .catch((err) => {
-        });
+        .catch((err) => {});
     } catch (error) {}
   };
   const featchClass = async (idClass) => {

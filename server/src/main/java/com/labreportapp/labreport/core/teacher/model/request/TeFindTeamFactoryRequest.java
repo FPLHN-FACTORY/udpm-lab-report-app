@@ -12,4 +12,5 @@ import lombok.Setter;
 public class TeFindTeamFactoryRequest extends PageableRequest {
 
     private String name;
+    
 }

@@ -13,13 +13,13 @@ import java.util.List;
 public interface MeLabelRepository extends LabelRepository {
 
     @Query(value = """
-            SELECT c.id, c.code, c.name, c.color_label FROM to_do a JOIN label_project_todo b ON a.id = b.todo_id
+            SELECT c.id, c.name, c.color_label FROM to_do a JOIN label_project_todo b ON a.id = b.todo_id
             JOIN label_project c ON b.label_project_id = c.id WHERE a.id = :idTodo
             """, nativeQuery = true)
     List<MeLabelResponse> getAllLabelByIdTodo(@Param("idTodo") String idTodo);
 
     @Query(value = """
-            SELECT a.id, a.code, a.name, a.color_label 
+            SELECT a.id, a.name, a.color_label 
             FROM label_project a 
             JOIN project b ON a.project_id = b.id 
             WHERE b.id = :idProject

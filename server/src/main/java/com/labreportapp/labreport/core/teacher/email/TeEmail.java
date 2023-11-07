@@ -11,8 +11,10 @@ import lombok.Setter;
 public class TeEmail {
 
     private String[] toEmail;
-    private String subject;
-    private String body;
-    private String titleEmail;
 
+    private String subject;
+
+    private String body;
+
+    private String titleEmail;
 }

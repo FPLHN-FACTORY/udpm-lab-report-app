@@ -21,4 +21,5 @@ public class TeCategoryServiceImpl implements TeCategoryService {
     public List<Category> getAllCategory() {
         return teCategoryRepository.findAll();
     }
+
 }

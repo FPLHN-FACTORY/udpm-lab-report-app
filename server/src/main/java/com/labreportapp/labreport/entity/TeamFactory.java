@@ -31,4 +31,5 @@ public class TeamFactory extends PrimaryEntity {
     @Column(length = Integer.MAX_VALUE)
     @Nationalized
     private String descriptions;
+
 }

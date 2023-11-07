@@ -9,12 +9,15 @@ import { TeacherStudentClassesAPI } from "../../../../../api/teacher/student-cla
 import { TeacherMailAPI } from "../../../../../api/teacher/sent-mail/TeacherMailAPI.api";
 import { GetUserCurrent } from "../../../../../app/common/UserCurrent.reducer";
 function Editor({ idClass, showCreate }) {
+
   const [descriptionss, setDescriptionss] = useState("<p><br></p>");
   const dispatch = useAppDispatch();
   const [listMail, setListMail] = useState([]);
+
   useEffect(() => {
     featchStudentClass(idClass);
   }, []);
+
   const config = {
     readonly: false,
     showCharsCounter: false,
@@ -24,6 +27,7 @@ function Editor({ idClass, showCreate }) {
     showFullscreen: false,
     showAbout: false,
   };
+
   const create = () => {
     let empty = 0;
     if (descriptionss.trim() === "<p><br></p>") {
@@ -70,6 +74,7 @@ function Editor({ idClass, showCreate }) {
       );
     }
   };
+
   const featchStudentClass = async (idClass) => {
     try {
       await TeacherStudentClassesAPI.getStudentInClasses(idClass).then(
@@ -81,7 +86,7 @@ function Editor({ idClass, showCreate }) {
         }
       );
     } catch (error) {
-      console.log(error);
+      
     }
   };
   const userRedux = useAppSelector(GetUserCurrent);
@@ -100,7 +105,7 @@ function Editor({ idClass, showCreate }) {
       };
       await TeacherMailAPI.sentMaillTeacherPostToStudent(data);
     } catch (error) {
-      console.log(error);
+      
     }
   };
   return (

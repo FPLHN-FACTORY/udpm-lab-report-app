@@ -23,5 +23,4 @@ public class TeCategoryController {
     public ResponseObject listCategory() {
         return new ResponseObject(teCategoryService.getAllCategory());
     }
-
 }
