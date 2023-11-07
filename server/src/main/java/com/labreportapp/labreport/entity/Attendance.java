@@ -41,4 +41,5 @@ public class Attendance extends PrimaryEntity {
     @Column(length = Integer.MAX_VALUE)
     @Nationalized
     private String notes;
+    
 }

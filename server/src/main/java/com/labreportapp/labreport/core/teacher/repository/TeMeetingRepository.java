@@ -28,17 +28,17 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
 
     @Query(value = """
             SELECT  
-                m.id as id,
-                m.name as name,
-                m.descriptions as descriptions,
-                m.meeting_date as meeting_date,
-                m.type_meeting as type_meeting,
-                  m.meeting_period as id_meeting_period,
-                mp.name as meeting_period, mp.start_hour as start_hour, mp.start_minute as start_minute ,
-                mp.end_hour as end_hour, mp.end_minute as end_minute,
-                m.class_id as class_id,
-                m.teacher_id as teacher_id,
-                m.status_meeting as status_meeting
+                m.id AS id,
+                m.name AS name,
+                m.descriptions AS descriptions,
+                m.meeting_date AS meeting_date,
+                m.type_meeting AS type_meeting,
+                  m.meeting_period AS id_meeting_period,
+                mp.name AS meeting_period, mp.start_hour AS start_hour, mp.start_minute AS start_minute ,
+                mp.end_hour AS end_hour, mp.end_minute AS end_minute,
+                m.class_id AS class_id,
+                m.teacher_id AS teacher_id,
+                m.status_meeting AS status_meeting
             FROM meeting m
             JOIN meeting_period mp ON mp.id = m.meeting_period
             JOIN class c ON c.id = m.class_id
@@ -48,19 +48,19 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
     List<TeMeetingResponse> findMeetingByIdClass(@Param("req") TeFindMeetingRequest req);
 
     @Query(value = """
-            SELECT  m.id as id,
-                m.name as name,
-                m.descriptions as descriptions,
-                m.meeting_date as meeting_date,
-                m.meeting_period as id_meeting_period,
-                mp.name as meeting_period, mp.start_hour as start_hour, mp.start_minute as start_minute ,
-                mp.end_hour as end_hour, mp.end_minute as end_minute,
-                m.type_meeting as type_meeting,
-                mp.name as meeting_period,
-                m.notes as notes,
-                m.class_id as class_id,
-                m.teacher_id as teacher_id,
-                 m.status_meeting as status_meeting
+            SELECT  m.id AS id,
+                m.name AS name,
+                m.descriptions AS descriptions,
+                m.meeting_date AS meeting_date,
+                m.meeting_period AS id_meeting_period,
+                mp.name AS meeting_period, mp.start_hour AS start_hour, mp.start_minute AS start_minute ,
+                mp.end_hour AS end_hour, mp.end_minute AS end_minute,
+                m.type_meeting AS type_meeting,
+                mp.name AS meeting_period,
+                m.notes AS notes,
+                m.class_id AS class_id,
+                m.teacher_id AS teacher_id,
+                 m.status_meeting AS status_meeting
             FROM meeting m
             JOIN meeting_period mp ON mp.id = m.meeting_period
             WHERE m.id = :#{#req.idMeeting}
@@ -91,12 +91,12 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                 h.descriptions AS descriptionsHomeWork,
                 n.id AS idNote,
                 n.descriptions AS descriptionsNote,
-                r.id as idReport,
+                r.id AS idReport,
                 r.descriptions AS descriptionsReport,
-                m.meeting_date as meeting_date,
-                m.meeting_period as id_meeting_period,
-                mp.name as meeting_period, mp.start_hour as start_hour, mp.start_minute as start_minute,
-                mp.end_hour as end_hour, mp.end_minute as end_minute
+                m.meeting_date AS meeting_date,
+                m.meeting_period AS id_meeting_period,
+                mp.name AS meeting_period, mp.start_hour AS start_hour, mp.start_minute AS start_minute,
+                mp.end_hour AS end_hour, mp.end_minute AS end_minute
             FROM meeting m
             JOIN meeting_period mp ON mp.id = m.meeting_period
             JOIN class c ON c.id = m.class_id
@@ -110,13 +110,13 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
 
     @Query(value = """
             SELECT  
-                m.id as id,
-                m.name as name,
-                m.class_id as class_id,
-                m.meeting_date as meeting_date,
-                mp.name as meeting_period, mp.start_hour as start_hour, mp.start_minute as start_minute,
-                mp.end_hour as end_hour, mp.end_minute as end_minute,             
-                m.status_meeting as status_meeting
+                m.id AS id,
+                m.name AS name,
+                m.class_id AS class_id,
+                m.meeting_date AS meeting_date,
+                mp.name AS meeting_period, mp.start_hour AS start_hour, mp.start_minute AS start_minute,
+                mp.end_hour AS end_hour, mp.end_minute AS end_minute,             
+                m.status_meeting AS status_meeting
             FROM meeting m
             JOIN meeting_period mp ON mp.id = m.meeting_period
             JOIN class c ON c.id = m.class_id
@@ -127,20 +127,20 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
 
     @Query(value = """
             SELECT ROW_NUMBER() OVER(ORDER BY m.meeting_date ASC) AS stt,
-                 c.id as id_class,
-                 c.code as code_class,
-                 m.id as id_meeting,
-                 m.meeting_date as meeting_date,
-                 m.meeting_period as id_meeting_period,
-                 mp.name as meeting_period, mp.start_hour as start_hour, mp.start_minute as start_minute ,
-                 mp.end_hour as end_hour, mp.end_minute as end_minute,
-                 m.name as name_meeting,
-                 m.type_meeting as type_meeting,
-                 m.address as address_meeting,
-                 m.descriptions as descriptions_meeting,
-                 l.name as level,
-                 m.notes as notes,
-                 m.status_meeting as status_meeting
+                 c.id AS id_class,
+                 c.code AS code_class,
+                 m.id AS id_meeting,
+                 m.meeting_date AS meeting_date,
+                 m.meeting_period AS id_meeting_period,
+                 mp.name AS meeting_period, mp.start_hour AS start_hour, mp.start_minute AS start_minute ,
+                 mp.end_hour AS end_hour, mp.end_minute AS end_minute,
+                 m.name AS name_meeting,
+                 m.type_meeting AS type_meeting,
+                 m.address AS address_meeting,
+                 m.descriptions AS descriptions_meeting,
+                 l.name AS level,
+                 m.notes AS notes,
+                 m.status_meeting AS status_meeting
              FROM class c
              JOIN meeting m ON m.class_id = c.id
              JOIN meeting_period mp ON mp.id = m.meeting_period
@@ -163,20 +163,20 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
 
     @Query(value = """
             SELECT ROW_NUMBER() OVER(ORDER BY m.meeting_date ASC) AS stt,
-                 c.id as id_class,
-                 c.code as code_class,
-                 m.id as id_meeting,
-                 m.meeting_date as meeting_date,
-                 m.meeting_period as id_meeting_period,
-                 mp.name as meeting_period, mp.start_hour as start_hour, mp.start_minute as start_minute ,
-                 mp.end_hour as end_hour, mp.end_minute as end_minute,
-                 m.name as name_meeting,
-                 m.type_meeting as type_meeting,
-                 m.address as address_meeting,
-                 m.descriptions as descriptions_meeting,
-                 l.name as level,
-                 m.notes as notes,
-                 m.status_meeting as status_meeting
+                 c.id AS id_class,
+                 c.code AS code_class,
+                 m.id AS id_meeting,
+                 m.meeting_date AS meeting_date,
+                 m.meeting_period AS id_meeting_period,
+                 mp.name AS meeting_period, mp.start_hour AS start_hour, mp.start_minute AS start_minute ,
+                 mp.end_hour AS end_hour, mp.end_minute AS end_minute,
+                 m.name AS name_meeting,
+                 m.type_meeting AS type_meeting,
+                 m.address AS address_meeting,
+                 m.descriptions AS descriptions_meeting,
+                 l.name AS level,
+                 m.notes AS notes,
+                 m.status_meeting AS status_meeting
              FROM class c
              JOIN meeting m ON m.class_id = c.id
              JOIN meeting_period mp ON mp.id = m.meeting_period
@@ -272,12 +272,12 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                 h.descriptions AS descriptionsHomeWork,
                 n.id AS idNote,
                 n.descriptions AS descriptionsNote,
-                r.id as idReport,
+                r.id AS idReport,
                 r.descriptions AS descriptionsReport,
-                m.meeting_date as meeting_date,
-                m.meeting_period as id_meeting_period,
-                mp.name as meeting_period, mp.start_hour as start_hour, mp.start_minute as start_minute,
-                mp.end_hour as end_hour, mp.end_minute as end_minute
+                m.meeting_date AS meeting_date,
+                m.meeting_period AS id_meeting_period,
+                mp.name AS meeting_period, mp.start_hour AS start_hour, mp.start_minute AS start_minute,
+                mp.end_hour AS end_hour, mp.end_minute AS end_minute
             FROM meeting m
             JOIN meeting_period mp ON mp.id = m.meeting_period
             JOIN class c ON c.id = m.class_id

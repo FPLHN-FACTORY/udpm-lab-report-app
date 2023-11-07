@@ -16,7 +16,6 @@ import { faRightToBracket } from "@fortawesome/free-solid-svg-icons";
 import { SearchOutlined } from "@ant-design/icons";
 import { convertHourAndMinuteToString } from "../../../../../helper/util.helper";
 import { TeacherStudentClassesAPI } from "../../../../../api/teacher/student-class/TeacherStudentClasses.api";
-import { toast } from "react-toastify";
 import {
   SetStudentClasses,
   GetStudentClasses,
@@ -63,13 +62,9 @@ const ModalSentStudent = ({
       await TeacherMyClassAPI.getClassSentStudent(filter).then((response) => {
         setData(response.data.data.data);
         setTotalPages(response.data.data.totalPages);
-        setTimeout(() => {
-          setLoadingNo(false);
-        }, 120);
+        setLoadingNo(false);
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   const handleSentStudent = async (idClassSent) => {
     try {
@@ -96,9 +91,7 @@ const ModalSentStudent = ({
           }
         }
       );
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   const columns = [
     {

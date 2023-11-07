@@ -17,4 +17,5 @@ public class TeFindClassSelectRequest {
     private String idActivity;
 
     private String idTeacher;
+
 }

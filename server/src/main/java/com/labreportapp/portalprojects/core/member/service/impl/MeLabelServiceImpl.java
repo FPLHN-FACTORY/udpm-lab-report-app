@@ -58,7 +58,6 @@ public class MeLabelServiceImpl implements MeLabelService {
     @CacheEvict(value = {"allLabelsByProject"}, allEntries = true)
     public LabelProject create(@Valid MeCreateLabelProjectRequest request, StompHeaderAccessor headerAccessor) {
         LabelProject labelProject = new LabelProject();
-        labelProject.setCode(String.valueOf(new Date().getTime()));
         labelProject.setName(request.getName());
         labelProject.setColorLabel(request.getColor());
         labelProject.setProjectId(request.getProjectId());

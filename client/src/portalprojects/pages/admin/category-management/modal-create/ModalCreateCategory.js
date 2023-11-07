@@ -50,12 +50,7 @@ const ModalCreateCategory = ({ visible, onCancel }) => {
 
   return (
     <>
-      <Modal
-        visible={visible}
-        onCancel={onCancel}
-        width={500}
-        footer={null}
-      >
+      <Modal visible={visible} onCancel={onCancel} width={500} footer={null}>
         {" "}
         <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
           <span style={{ fontSize: "18px" }}>Thêm mới thể loại</span>
@@ -78,23 +73,22 @@ const ModalCreateCategory = ({ visible, onCancel }) => {
         <div style={{ textAlign: "right" }}>
           <div style={{ paddingTop: "15px" }}>
             <Button
-              style={{
-                marginRight: "5px",
-                backgroundColor: "rgb(61, 139, 227)",
-                color: "white",
-              }}
-              onClick={create}
-            >
-              Thêm
-            </Button>
-            <Button
+              className="btn_filter"
               style={{
                 backgroundColor: "red",
                 color: "white",
+                width: "80px",
               }}
               onClick={onCancel}
             >
               Hủy
+            </Button>{" "}
+            <Button
+              className="btn_clean"
+              style={{ width: "80px", marginLeft: "10px" }}
+              onClick={create}
+            >
+              Thêm
             </Button>
           </div>
         </div>

@@ -20,19 +20,19 @@ public interface TeTeamsRepositoty extends JpaRepository<Team, String> {
 
     @Query(value = """
               WITH MinReport AS (
-                  SELECT MIN(r.id) as id, r.team_id
+                  SELECT MIN(r.id) AS id, r.team_id
                   FROM report r
                   WHERE r.meeting_id = :#{#req.idMeeting}
                   GROUP BY team_id
               )
               SELECT
-                  t.id as id,
-                  t.name as name,
-                  t.subject_name as subjectName,
-                  t.created_date as createdDate,
-                  t.project_id as project_id,
-                  mr.id as report_id,
-                  r.descriptions as descriptions_report
+                  t.id AS id,
+                  t.name AS name,
+                  t.subject_name AS subjectName,
+                  t.created_date AS createdDate,
+                  t.project_id AS project_id,
+                  mr.id AS report_id,
+                  r.descriptions AS descriptions_report
               FROM team t
               LEFT JOIN MinReport mr ON mr.team_id = t.id
               LEFT JOIN report r ON r.id = mr.id
@@ -57,19 +57,19 @@ public interface TeTeamsRepositoty extends JpaRepository<Team, String> {
 
     @Query(value = """
             SELECT  DISTINCT 
-                t.id as idTeam,
-                t.name as nameTeam,
-                m.id as idMeeting,
-                m.name as nameMeeting,
-                m.descriptions as descriptionsMeeting,
-                t.name  as nameTeam,
-                t.subject_name as subjectName,
-                m.created_date as createdDate,
-                h.id as idHomeWork,
-                h.descriptions as descriptionsHomeWork,
-                n.id as idNote,
-                n.descriptions as descriptionsNote,
-                m.class_id as class_id
+                t.id AS idTeam,
+                t.name AS nameTeam,
+                m.id AS idMeeting,
+                m.name AS nameMeeting,
+                m.descriptions AS descriptionsMeeting,
+                t.name  AS nameTeam,
+                t.subject_name AS subjectName,
+                m.created_date AS createdDate,
+                h.id AS idHomeWork,
+                h.descriptions AS descriptionsHomeWork,
+                n.id AS idNote,
+                n.descriptions AS descriptionsNote,
+                m.class_id AS class_id
             FROM team t 
             JOIN meeting m ON m.class_id = t.class_id
             LEFT JOIN home_work h ON h.team_id = t.id

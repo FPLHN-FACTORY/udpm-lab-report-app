@@ -58,4 +58,5 @@ public class Meeting extends PrimaryEntity {
     @Column(length = Integer.MAX_VALUE)
     @Nationalized
     private String notes;
+
 }

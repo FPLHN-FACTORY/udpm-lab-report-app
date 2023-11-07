@@ -5,7 +5,8 @@ package com.labreportapp.labreport.infrastructure.constant;
  */
 public class EntityProperties {
 
-    private EntityProperties(){}
+    private EntityProperties() {
+    }
 
     public static final byte LENGTH_ID = 36;
     public static final short LENGTH_NAME_SHORT = 255;

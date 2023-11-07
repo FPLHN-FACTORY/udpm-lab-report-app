@@ -1883,130 +1883,110 @@ public class DBGenerator implements CommandLineRunner {
         category3.setId(categoryRepository.save(category3).getId());
 
         Label label1 = new Label();
-        label1.setCode("Bug");
         label1.setName("Lỗi");
         label1.setColorLabel(Constants.COLOR_FF4500);
         label1.setId(labelRepository.save(label1).getId());
 
         Label label2 = new Label();
-        label2.setCode("Feature");
         label2.setName("Tính năng");
         label2.setColorLabel(Constants.COLOR_47799C);
         label2.setId(labelRepository.save(label2).getId());
 
         Label label3 = new Label();
-        label3.setCode("Enhancement");
         label3.setName("Cải tiến");
         label3.setColorLabel(Constants.COLOR_FA8072);
         label3.setId(labelRepository.save(label3).getId());
 
         Label label4 = new Label();
-        label4.setCode("Design");
         label4.setName("Thiết kế");
         label4.setColorLabel(Constants.COLOR_ADFF2F);
         label4.setId(labelRepository.save(label4).getId());
 
         Label label5 = new Label();
-        label5.setCode("Marketing");
         label5.setName("Marketing");
         label5.setColorLabel(Constants.COLOR_7AA1E4);
         label5.setId(labelRepository.save(label5).getId());
 
         Label label6 = new Label();
-        label6.setCode("Content");
         label6.setName("Content");
         label6.setColorLabel(Constants.COLOR_FFA500);
         label6.setId(labelRepository.save(label6).getId());
 
         Label label7 = new Label();
-        label7.setCode("Research");
         label7.setName("Nghiên cứu");
         label7.setColorLabel(Constants.COLOR_FFD700);
         label7.setId(labelRepository.save(label7).getId());
 
         Label label8 = new Label();
-        label8.setCode("Infrastructure");
         label8.setName("Hạ tầng");
         label8.setColorLabel(Constants.COLOR_FF6347);
         label8.setId(labelRepository.save(label8).getId());
 
         Label label9 = new Label();
-        label9.setCode("Documentation");
         label9.setName("Tài liệu");
         label9.setColorLabel(Constants.COLOR_FFFF00);
         label9.setId(labelRepository.save(label9).getId());
 
         Label label10 = new Label();
-        label10.setCode("Support");
         label10.setName("Hỗ trợ");
         label10.setColorLabel(Constants.COLOR_EE82EE);
         label10.setId(labelRepository.save(label10).getId());
 
         LabelProject labelProject1 = new LabelProject();
-        labelProject1.setCode(label1.getCode());
         labelProject1.setName(label1.getName());
         labelProject1.setColorLabel(label1.getColorLabel());
         labelProject1.setProjectId(project1.getId());
         labelProject1.setId((labelProjectRepository.save(labelProject1).getId()));
 
         LabelProject labelProject2 = new LabelProject();
-        labelProject2.setCode(label2.getCode());
         labelProject2.setName(label2.getName());
         labelProject2.setColorLabel(label2.getColorLabel());
         labelProject2.setProjectId(project1.getId());
         labelProject2.setId((labelProjectRepository.save(labelProject2).getId()));
 
         LabelProject labelProject3 = new LabelProject();
-        labelProject3.setCode(label3.getCode());
         labelProject3.setName(label3.getName());
         labelProject3.setColorLabel(label3.getColorLabel());
         labelProject3.setProjectId(project1.getId());
         labelProject3.setId((labelProjectRepository.save(labelProject3).getId()));
 
         LabelProject labelProject4 = new LabelProject();
-        labelProject4.setCode(label4.getCode());
         labelProject4.setName(label4.getName());
         labelProject4.setColorLabel(label4.getColorLabel());
         labelProject4.setProjectId(project1.getId());
         labelProject4.setId((labelProjectRepository.save(labelProject4).getId()));
 
         LabelProject labelProject5 = new LabelProject();
-        labelProject5.setCode(label5.getCode());
         labelProject5.setName(label5.getName());
         labelProject5.setColorLabel(label5.getColorLabel());
         labelProject5.setProjectId(project1.getId());
         labelProject5.setId((labelProjectRepository.save(labelProject5).getId()));
 
         LabelProject labelProject6 = new LabelProject();
-        labelProject6.setCode(label6.getCode());
         labelProject6.setName(label6.getName());
         labelProject6.setColorLabel(label6.getColorLabel());
         labelProject6.setProjectId(project1.getId());
         labelProject6.setId((labelProjectRepository.save(labelProject6).getId()));
 
         LabelProject labelProject7 = new LabelProject();
-        labelProject7.setCode(label7.getCode());
         labelProject7.setName(label7.getName());
         labelProject7.setColorLabel(label7.getColorLabel());
         labelProject7.setProjectId(project1.getId());
         labelProject7.setId((labelProjectRepository.save(labelProject7).getId()));
 
         LabelProject labelProject8 = new LabelProject();
-        labelProject8.setCode(label8.getCode());
         labelProject8.setName(label8.getName());
         labelProject8.setColorLabel(label8.getColorLabel());
         labelProject8.setProjectId(project1.getId());
         labelProject8.setId((labelProjectRepository.save(labelProject8).getId()));
 
         LabelProject labelProject9 = new LabelProject();
-        labelProject9.setCode(label9.getCode());
         labelProject9.setName(label9.getName());
         labelProject9.setColorLabel(label9.getColorLabel());
         labelProject9.setProjectId(project1.getId());
         labelProject9.setId((labelProjectRepository.save(labelProject9).getId()));
 
         LabelProject labelProject10 = new LabelProject();
-        labelProject10.setCode(label10.getCode());
         labelProject10.setName(label10.getName());
         labelProject10.setColorLabel(label10.getColorLabel());
         labelProject10.setProjectId(project1.getId());
@@ -2509,70 +2489,60 @@ public class DBGenerator implements CommandLineRunner {
 
 
         LabelProject labelProject1_2 = new LabelProject();
-        labelProject1_2.setCode(label1.getCode());
         labelProject1_2.setName(label1.getName());
         labelProject1_2.setColorLabel(label1.getColorLabel());
         labelProject1_2.setProjectId(project2.getId());
         labelProject1_2.setId((labelProjectRepository.save(labelProject1_2).getId()));
 
         LabelProject labelProject2_2 = new LabelProject();
-        labelProject2_2.setCode(label2.getCode());
         labelProject2_2.setName(label2.getName());
         labelProject2_2.setColorLabel(label2.getColorLabel());
         labelProject2_2.setProjectId(project2.getId());
         labelProject2_2.setId((labelProjectRepository.save(labelProject2_2).getId()));
 
         LabelProject labelProject3_2 = new LabelProject();
-        labelProject3_2.setCode(label3.getCode());
         labelProject3_2.setName(label3.getName());
         labelProject3_2.setColorLabel(label3.getColorLabel());
         labelProject3_2.setProjectId(project2.getId());
         labelProject3_2.setId((labelProjectRepository.save(labelProject3_2).getId()));
 
         LabelProject labelProject4_2 = new LabelProject();
-        labelProject4_2.setCode(label4.getCode());
         labelProject4_2.setName(label4.getName());
         labelProject4_2.setColorLabel(label4.getColorLabel());
         labelProject4_2.setProjectId(project2.getId());
         labelProject4_2.setId((labelProjectRepository.save(labelProject4_2).getId()));
 
         LabelProject labelProject5_2 = new LabelProject();
-        labelProject5_2.setCode(label5.getCode());
         labelProject5_2.setName(label5.getName());
         labelProject5_2.setColorLabel(label5.getColorLabel());
         labelProject5_2.setProjectId(project2.getId());
         labelProject5_2.setId((labelProjectRepository.save(labelProject5_2).getId()));
 
         LabelProject labelProject6_2 = new LabelProject();
-        labelProject6_2.setCode(label6.getCode());
         labelProject6_2.setName(label6.getName());
         labelProject6_2.setColorLabel(label6.getColorLabel());
         labelProject6_2.setProjectId(project2.getId());
         labelProject6_2.setId((labelProjectRepository.save(labelProject6_2).getId()));
 
         LabelProject labelProject7_2 = new LabelProject();
-        labelProject7_2.setCode(label7.getCode());
         labelProject7_2.setName(label7.getName());
         labelProject7_2.setColorLabel(label7.getColorLabel());
         labelProject7_2.setProjectId(project2.getId());
         labelProject7_2.setId((labelProjectRepository.save(labelProject7_2).getId()));
 
         LabelProject labelProject8_2 = new LabelProject();
-        labelProject8_2.setCode(label8.getCode());
         labelProject8_2.setName(label8.getName());
         labelProject8_2.setColorLabel(label8.getColorLabel());
         labelProject8_2.setProjectId(project2.getId());
         labelProject8_2.setId((labelProjectRepository.save(labelProject8_2).getId()));
 
         LabelProject labelProject9_2 = new LabelProject();
-        labelProject9_2.setCode(label9.getCode());
         labelProject9_2.setName(label9.getName());
         labelProject9_2.setColorLabel(label9.getColorLabel());
         labelProject9_2.setProjectId(project2.getId());
         labelProject9_2.setId((labelProjectRepository.save(labelProject9_2).getId()));
 
         LabelProject labelProject10_2 = new LabelProject();
-        labelProject10_2.setCode(label10.getCode());
         labelProject10_2.setName(label10.getName());
         labelProject10_2.setColorLabel(label10.getColorLabel());
         labelProject10_2.setProjectId(project2.getId());

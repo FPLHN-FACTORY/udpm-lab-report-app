@@ -35,4 +35,5 @@ public interface TeClassService {
     PageableObject<TeClassStatisticalResponse> searchClassStatistical(final TeFindClassStatisticalRequest request);
 
     List<TeFindClassSelectResponse> listClass(final TeFindClassSelectRequest request);
+
 }

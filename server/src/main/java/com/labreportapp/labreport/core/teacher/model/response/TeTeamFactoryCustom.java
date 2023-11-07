@@ -24,4 +24,5 @@ public class TeTeamFactoryCustom {
     private Integer numberMember;
 
     private List<SimpleResponse> listMember;
+
 }

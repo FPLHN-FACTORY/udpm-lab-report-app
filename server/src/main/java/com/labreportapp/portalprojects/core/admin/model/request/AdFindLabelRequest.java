@@ -13,6 +13,4 @@ public class AdFindLabelRequest extends PageableRequest {
 
     private String name;
 
-    private String code;
-
 }

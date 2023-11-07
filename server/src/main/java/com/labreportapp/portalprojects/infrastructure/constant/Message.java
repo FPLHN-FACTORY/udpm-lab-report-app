@@ -96,7 +96,9 @@ public enum Message {
     MEMBER_FACTORY_IS_ALREADY_IN_THE_GROUP(PropertiesReader.getProperty(PropertyKeys.MEMBER_FACTORY_IS_ALREADY_IN_THE_GROUP)),
     MEMBER_TEAM_FACTORY_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeys.MEMBER_TEAM_FACTORY_NOT_EXISTS)),
     ROLE_DEFAULT_NOT_EMPTY(PropertiesReader.getProperty(PropertyKeys.ROLE_DEFAULT_NOT_EMPTY)),
-    START_TIME_MORE_THAN_END_TIME(PropertiesReader.getProperty(PropertyKeys.START_TIME_MORE_THAN_END_TIME));
+    START_TIME_MORE_THAN_END_TIME(PropertiesReader.getProperty(PropertyKeys.START_TIME_MORE_THAN_END_TIME)),
+    USING_CATEGORY_CAN_NOT_DELETE(PropertiesReader.getProperty(PropertyKeys.USING_CATEGORY_CAN_NOT_DELETE)),
+    DUPLICATE_LABEL_NAME(PropertiesReader.getProperty(PropertyKeys.DUPLICATE_LABEL_NAME));
 
     private String message;
 

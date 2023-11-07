@@ -52,5 +52,4 @@ public interface TeHomeWorkAndNoteMeetingResponse {
     @Value("#{target.end_minute}")
     Integer getEndMinute();
 
-
 }

@@ -28,4 +28,5 @@ public class MemberRoleFactory extends PrimaryEntity {
 
     @Column(length = EntityProperties.LENGTH_ID)
     private String roleFactoryId;
+
 }

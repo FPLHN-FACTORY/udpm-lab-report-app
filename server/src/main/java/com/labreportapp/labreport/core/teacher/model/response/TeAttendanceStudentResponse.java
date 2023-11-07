@@ -35,4 +35,5 @@ public class TeAttendanceStudentResponse {
     private String email;
 
     private RoleTeam role;
+
 }

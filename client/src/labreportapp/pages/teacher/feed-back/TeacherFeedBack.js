@@ -60,9 +60,7 @@ const TeacherFeedBack = () => {
       await TeacherSemesterAPI.getAllSemesters().then((respone) => {
         setListSemester(respone.data.data);
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   const featchDataActivity = async (idSemesterSeach) => {
     try {
@@ -71,9 +69,7 @@ const TeacherFeedBack = () => {
           setListActivity(respone.data.data);
         }
       );
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   const featchDataClass = async () => {
     try {
@@ -84,9 +80,7 @@ const TeacherFeedBack = () => {
       await TeacherMyClassAPI.filterClass(data).then((respone) => {
         setListClass(respone.data.data);
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const featchDataFeedback = async (idClass) => {
@@ -99,9 +93,7 @@ const TeacherFeedBack = () => {
           setLoading(false);
         }
       );
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleSearch = () => {

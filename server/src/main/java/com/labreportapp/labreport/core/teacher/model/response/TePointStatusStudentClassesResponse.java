@@ -23,4 +23,5 @@ public class TePointStatusStudentClassesResponse {
     private String classId;
 
     private Integer statusTeam;
+    
 }

@@ -25,6 +25,7 @@ import ModalFileImportPoint from "./import-excel/ModalFileImportPoint";
 import { SetTTrueToggle } from "../../../../app/teacher/TeCollapsedSlice.reducer";
 
 const TeacherPointMyClass = () => {
+
   const { idClass } = useParams();
   const dispatch = useAppDispatch();
   const [classDetail, setClassDetail] = useState({});
@@ -33,18 +34,20 @@ const TeacherPointMyClass = () => {
   const [loading, setLoading] = useState(false);
   const [showModalImport, setShowModalImport] = useState(false);
   const navigate = useNavigate();
+
   dispatch(SetTTrueToggle());
   useEffect(() => {
     window.scrollTo(0, 0);
     fetchData(idClass);
-
     return () => {
       dispatch(SetPoint([]));
     };
   }, []);
+
   const fetchData = async (idClass) => {
     await Promise.all([await featchClass(idClass), await featchPoint(idClass)]);
   };
+
   const featchPoint = async (idClass) => {
     try {
       await TeacherPointAPI.getPointByIdClass(idClass).then((response) => {
@@ -54,6 +57,7 @@ const TeacherPointMyClass = () => {
       });
     } catch (error) {}
   };
+
   const featchClass = async (idClass) => {
     try {
       setLoading(false);
@@ -67,6 +71,7 @@ const TeacherPointMyClass = () => {
       }, [1000]);
     }
   };
+
   const handleSave = async () => {
     try {
       const dataToSave = data;
@@ -80,9 +85,11 @@ const TeacherPointMyClass = () => {
       });
     } catch (error) {}
   };
+
   const handleCancelImport = () => {
     setShowModalImport(false);
   };
+  
   const data = useAppSelector(GetPoint);
   return (
     <>

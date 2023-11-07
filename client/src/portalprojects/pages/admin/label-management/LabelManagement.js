@@ -2,32 +2,38 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./styleLabelManagement.css";
 import {
   faFilter,
-  faCogs,
   faList,
   faEdit,
   faPlus,
   faTags,
+  faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
-import { Button, Input, Pagination, Table, Tooltip } from "antd";
+import {
+  Button,
+  Empty,
+  Input,
+  Pagination,
+  Popconfirm,
+  Table,
+  Tooltip,
+  message,
+} from "antd";
 import { useAppDispatch } from "../../../app/hook";
 import LoadingIndicator from "../../../helper/loading";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useAppSelector } from "../../../app/hook";
 import {
+  DeleteLabel,
   GetLabelManagement,
   SetLabelManagement,
 } from "../../../app/reducer/admin/label-management/labelManagementSlice.reducer";
 import { LabelManagementAPI } from "../../../api/label-management/labelManagement.api";
 import ModalCreateLabel from "./modal-create/ModalCreateLabel";
 import ModalUpdateLabel from "./modal-update/ModalUpdateLabel";
-import { GetUserCurrent } from "../../../../labreportapp/app/common/UserCurrent.reducer";
 
 const LabelManagement = () => {
   const dispatch = useAppDispatch();
-  const [name, setName] = useState("");
-  const [colorLabel, setColorLabel] = useState("");
-  const [status, setStatus] = useState("");
   const [current, setCurrent] = useState(1);
   const [total, setTotal] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -35,23 +41,19 @@ const LabelManagement = () => {
   const { id } = useParams();
   const [label, setLabel] = useState(null);
   const [searchName, setSearchName] = useState("");
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
 
   useEffect(() => {
     fetchData();
-
     return () => {
       dispatch(SetLabelManagement([]));
     };
   }, [current]);
 
-  const userCurrent = useAppSelector(GetUserCurrent);
-
   const fetchData = async () => {
     let filter = {
-      idUser: userCurrent.id,
-      nameLabel: name,
       name: searchName,
-      status: status === "" ? null : parseInt(status),
       page: current - 1,
     };
     setIsLoading(true);
@@ -65,16 +67,64 @@ const LabelManagement = () => {
       console.log(error);
     }
   };
+  const handleDelete = async (id) => {
+    try {
+      setIsLoading(true);
+      await LabelManagementAPI.deleteLabelById(id).then((response) => {
+        dispatch(DeleteLabel(response.data.data));
+        message.success("Xóa nhãn thành công");
+        setIsLoading(false);
+      });
+    } catch (error) {
+      setIsLoading(false);
+    }
+  };
+
+  const handleChangeSearch = (e) => {
+    setSearchName(e.target.value);
+  };
+
+  const handleLabelCreate = () => {
+    document.querySelector("body").style.overflowX = "auto";
+    setShowCreateModal(true);
+    setIdLabel(id);
+  };
+
+  const handleModalCreateCancel = () => {
+    document.querySelector("body").style.overflowX = "hidden";
+    setShowCreateModal(false);
+  };
+
+  const handleUpdateLabel = (id, label) => {
+    document.querySelector("body").style.overflowX = "hidden";
+    setShowUpdateModal(true);
+    setIdLabel(id);
+    setLabel(label);
+  };
+
+  const handleModalUpdateCancel = () => {
+    document.querySelector("body").style.overflowX = "hidden";
+    setShowUpdateModal(false);
+  };
+
+  const handleSearch = () => {
+    setCurrent(1);
+    fetchData();
+  };
+
+  const handleClear = () => {
+    setSearchName("");
+  };
 
   const data = useAppSelector(GetLabelManagement);
 
   const columns = [
     {
-      title: "STT",
+      title: "#",
       dataIndex: "index",
-      align: "center",
       key: "index",
       render: (text, record, index) => index + 1,
+      align: "center",
     },
     {
       title: "Tên nhãn",
@@ -112,62 +162,32 @@ const LabelManagement = () => {
       key: "actions",
       render: (text, record) => (
         <div>
-          <Link>
-            <Tooltip title="Chỉnh sửa chi tiết">
-              <FontAwesomeIcon
-                icon={faEdit}
-                size="1x"
-                onClick={() => {
-                  handleUpdateLabel(record.id, record);
-                }}
-              />
-            </Tooltip>
-          </Link>
+          <Tooltip title="Chỉnh sửa chi tiết">
+            <FontAwesomeIcon
+              className="icon"
+              icon={faEdit}
+              size="1x"
+              onClick={() => {
+                handleUpdateLabel(record.id, record);
+              }}
+            />
+          </Tooltip>
+          <Tooltip title="Xóa">
+            <Popconfirm
+              title="Bạn có chắc chắn xóa nhãn ?"
+              description={<div>{record.name}</div>}
+              onConfirm={(e) => handleDelete(record.id)}
+              okText="Yes"
+              cancelText="No"
+            >
+              {" "}
+              <FontAwesomeIcon className="icon" icon={faTrashCan} />
+            </Popconfirm>
+          </Tooltip>
         </div>
       ),
     },
   ];
-
-  const [showCreateModal, setShowCreateModal] = useState(false);
-  const [showUpdateModal, setShowUpdateModal] = useState(false);
-
-  const handleChangeSearch = (e) => {
-    setSearchName(e.target.value);
-  };
-
-  const handleLabelCreate = () => {
-    document.querySelector("body").style.overflowX = "auto";
-    setShowCreateModal(true);
-    setIdLabel(id);
-  };
-
-  const handleModalCreateCancel = () => {
-    document.querySelector("body").style.overflowX = "hidden";
-    setShowCreateModal(false);
-  };
-
-  const handleUpdateLabel = (id, label) => {
-    document.querySelector("body").style.overflowX = "hidden";
-    setShowUpdateModal(true);
-    setIdLabel(id);
-    setLabel(label);
-  };
-
-  const handleModalUpdateCancel = () => {
-    document.querySelector("body").style.overflowX = "hidden";
-    setShowUpdateModal(false);
-  };
-
-  const handleSearch = () => {
-    setCurrent(1);
-    fetchData();
-  };
-
-  const handleClear = () => {
-    setName("");
-    setStatus("");
-    setSearchName("");
-  };
 
   return (
     <>
@@ -211,13 +231,16 @@ const LabelManagement = () => {
             <Button
               className="btn_clear"
               onClick={handleClear}
-              style={{ backgroundColor: "rgb(38, 144, 214)" }}
+              style={{
+                backgroundColor: "rgb(38, 144, 214)",
+                marginLeft: "10px",
+              }}
             >
               Làm mới bộ lọc
             </Button>
           </div>
         </div>
-        <div className="table_label">
+        <div className="table_label" style={{ minHeight: "250px" }}>
           <div className="title_label_management_table">
             <div>
               {" "}
@@ -240,31 +263,39 @@ const LabelManagement = () => {
                   size="1x"
                   style={{
                     backgroundColor: "rgb(55, 137, 220)",
+                    paddingRight: "5px",
                   }}
                 />{" "}
                 Thêm nhãn
               </Button>
             </div>
           </div>
-          <div style={{ marginTop: "10px" }}>
-            <Table
-              className="table_content"
-              pagination={false}
-              columns={columns}
-              rowKey="id"
-              dataSource={data}
-            />
-            <div className="pagination_box">
-              <Pagination
-                simple
-                current={current}
-                onChange={(value) => {
-                  setCurrent(value);
-                }}
-                total={total * 10}
+          {data.length > 0 ? (
+            <div style={{ marginTop: "10px" }}>
+              <Table
+                className="table_content"
+                pagination={false}
+                columns={columns}
+                rowKey="id"
+                dataSource={data}
               />
+              <div className="pagination_box">
+                <Pagination
+                  simple
+                  current={current}
+                  onChange={(value) => {
+                    setCurrent(value);
+                  }}
+                  total={total * 10}
+                />
+              </div>
             </div>
-          </div>
+          ) : (
+            <Empty
+              imageStyle={{ height: "60px" }}
+              description={<span>Không có dữ liệu</span>}
+            />
+          )}
         </div>
         <ModalCreateLabel
           visible={showCreateModal}

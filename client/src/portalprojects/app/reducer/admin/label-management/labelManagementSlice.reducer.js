@@ -24,18 +24,27 @@ const LabelManagementSlice = createSlice({
     },
     UpdateLabelManagement: (state, action) => {
       const updatedLabel = action.payload;
-      const index = state.findIndex(
-        (label) => label.id === updatedLabel.id
-      );
+      const index = state.findIndex((label) => label.id === updatedLabel.id);
       if (index !== -1) {
         state[index].name = updatedLabel.name;
         state[index].colorLabel = updatedLabel.colorLabel;
       }
     },
+    DeleteLabel: (state, action) => {
+      const id = action.payload;
+      const newState = state.filter((i) => i.id !== id);
+      state = newState;
+      return state;
+    },
   },
 });
 
-export const { SetLabelManagement, CreateLabelManagement, UpdateLabelManagement } = LabelManagementSlice.actions;
+export const {
+  SetLabelManagement,
+  CreateLabelManagement,
+  UpdateLabelManagement,
+  DeleteLabel,
+} = LabelManagementSlice.actions;
 
 export const GetLabelManagement = (state) => state.labelManagement;
 

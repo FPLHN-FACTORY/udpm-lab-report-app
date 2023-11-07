@@ -88,5 +88,4 @@ public class TeTeamsController {
         TeExcelResponseMessage teExcelResponseMessage = teTeamsService.importExcelTeam(multipartFile, idClass);
         return new ResponseObject(teExcelResponseMessage);
     }
-
 }

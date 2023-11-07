@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
  * @author hieundph25894
  */
 @Repository
-public interface TeMeetingPeriodRepository extends JpaRepository<MeetingPeriod,String> {
+public interface TeMeetingPeriodRepository extends JpaRepository<MeetingPeriod, String> {
 }

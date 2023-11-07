@@ -1,16 +1,6 @@
-import {
-  faPeopleGroup,
-  faUser,
-} from "@fortawesome/free-solid-svg-icons";
+import { faPeopleGroup, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  Col,
-  Input,
-  Pagination,
-  Row,
-  Select,
-  Tag,
-} from "antd";
+import { Col, Input, Pagination, Row, Select, Tag } from "antd";
 import { useEffect, useState } from "react";
 import React from "react";
 import Image from "../../../../portalprojects/helper/img/Image";
@@ -285,7 +275,6 @@ const TeMemberFactory = () => {
           </div>
         </div>
       </div>
-      
     </div>
   );
 };

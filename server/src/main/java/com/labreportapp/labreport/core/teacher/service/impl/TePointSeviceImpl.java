@@ -354,12 +354,12 @@ public class TePointSeviceImpl implements TePointSevice {
             }
             ConcurrentHashMap<String, SimpleResponse> mapPointStudent = new ConcurrentHashMap<>();
             addDataMapsPointStudent(mapPointStudent, idClass);
-            if (listInput.size() != mapPointStudent.size()) {
-                teExcelResponseMessage.setStatus(false);
-                teExcelResponseMessage.setMessage("Import thất bại. Số lượng sinh viên, số lượng điểm trong " +
-                        "file excel phải bằng với số lượng sinh viên trong lớp, vui lòng export mẫu để sử dụng !");
-                return teExcelResponseMessage;
-            }
+//            if (listInput.size() != mapPointStudent.size()) {
+//                teExcelResponseMessage.setStatus(false);
+//                teExcelResponseMessage.setMessage("Import thất bại. Số lượng sinh viên, số lượng điểm trong " +
+//                        "file excel phải bằng với số lượng sinh viên trong lớp, vui lòng export mẫu để sử dụng !");
+//                return teExcelResponseMessage;
+//            }
             ConcurrentHashMap<String, Point> mapPointStudentDB = new ConcurrentHashMap<>();
             addDataMapsPointStudentDB(mapPointStudentDB, idClass);
             ConcurrentHashMap<String, Point> pointUpdate = new ConcurrentHashMap<>();
@@ -367,8 +367,8 @@ public class TePointSeviceImpl implements TePointSevice {
             teExcelResponseMessage.setMessage("");
             listInput.parallelStream().forEach(point -> {
                 String regexName = "^[^!@#$%^&*()_+|~=`{}\\[\\]:\";'<>?,.\\/\\\\]*$";
-                String regexEmailBasic = "^[a-zA-Z0-9._%+-]+@fpt.edu.vn$";
-                String regexEmail = "^[A-Za-z0-9+_.-]+@(.+)$";
+//                String regexEmailBasic = "^[a-zA-Z0-9._%+-]+@fpt.edu.vn$";
+//                String regexEmail = "^[A-Za-z0-9+_.-]+@(.+)$";
                 String regexEmailExactly = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
                 String regexDouble = "^(?:[0-9](?:\\.\\d*)?|10(?:\\.0*)?)$";
                 if (point.getName().isEmpty()) {

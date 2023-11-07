@@ -4,7 +4,6 @@
   justify-content: center;
   align-items: center;
 }
-
 .content-class {
   margin: 0px 15px 0px 15px;
 }
@@ -12,14 +11,12 @@
   font-size: 17px;
   font-weight: 400;
 }
-
 .box-two-student-in-my-class-son {
   background-color: white;
   padding: 20px;
   box-shadow: 0px 0px 20px 1px rgba(148, 148, 148, 0.3);
   border-radius: 5px;
 }
-
 .box-two-student-in-my-class {
   padding: 25px;
 }
@@ -35,7 +32,6 @@
   color: #333;
   margin-bottom: 10px;
 }
-
 .group-info {
   background-color: #f4f4f4;
   border: 1px solid #ccc;
@@ -43,7 +39,6 @@
   margin-top: 10px;
   border-radius: 5px;
 }
-
 .group-info-item {
   display: block;
   margin-bottom: 10px;

@@ -25,6 +25,8 @@ public interface AdProjectCategoryRepository extends ProjectCategoryRepository {
 
     List<ProjectCategory> findAllByProjectId(String idProject);
 
+    List<ProjectCategory> findAllByCategoryId(@Param("idCategory") String idCategory);
+
     @Modifying
     @Query(value = """
                    WITH category_project_in AS (

@@ -28,5 +28,4 @@ public class TeActivityController {
         List<TeActivityResponse> list = teActivitySevice.getAllByIdSemester(teFindClass);
         return new ResponseObject(list);
     }
-
 }

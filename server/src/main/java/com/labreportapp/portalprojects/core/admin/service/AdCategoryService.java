@@ -27,4 +27,6 @@ public interface AdCategoryService {
 
     List<Category> getAllByIdCate();
 
+    String deleteCategory(String id);
+
 }

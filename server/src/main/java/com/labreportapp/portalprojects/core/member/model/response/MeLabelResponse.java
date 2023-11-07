@@ -11,9 +11,6 @@ import org.springframework.data.rest.core.config.Projection;
 @Projection(types = {Label.class})
 public interface MeLabelResponse extends IsIdentified {
 
-    @Value("#{target.code}")
-    String getCode();
-
     @Value("#{target.name}")
     String getName();
 

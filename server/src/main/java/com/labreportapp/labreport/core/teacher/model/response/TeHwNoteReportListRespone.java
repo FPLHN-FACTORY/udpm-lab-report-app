@@ -57,4 +57,5 @@ public interface TeHwNoteReportListRespone {
 
     @Value("#{target.end_minute}")
     Integer getEndMinute();
+
 }

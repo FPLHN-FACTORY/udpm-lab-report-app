@@ -1,10 +1,7 @@
 import { useParams } from "react-router-dom";
 import { Button, Empty, Input, Modal, Pagination, Spin, Table } from "antd";
 import { useEffect, useState } from "react";
-import {
-  convertHourAndMinuteToString,
-  convertMeetingPeriodToTime,
-} from "../../../../../helper/util.helper";
+import { convertHourAndMinuteToString } from "../../../../../helper/util.helper";
 import { TeacherAttendanceAPI } from "../../../../../api/teacher/attendance/TeacherAttendance.api";
 import { SearchOutlined } from "@ant-design/icons";
 
@@ -14,6 +11,7 @@ const TeModalDetailOneStudent = ({ onCancel, visible, objStudent }) => {
   const [currentDetail, setCurrentDetail] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [loadingNo, setLoadingNo] = useState(true);
+
   useEffect(() => {
     if (visible && objStudent != {}) {
       featchDataAttenStudent(objStudent.idStudent);

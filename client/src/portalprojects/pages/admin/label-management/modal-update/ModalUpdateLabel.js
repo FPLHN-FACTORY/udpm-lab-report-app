@@ -1,72 +1,36 @@
 import "./styleModalUpdateLabel.css";
-import { Modal, Row, Col, Input, Button, message } from "antd";
+import { Modal, Row, Col, Input, Button, message, ColorPicker } from "antd";
 import { useEffect, useState } from "react";
 import { LabelManagementAPI } from "../../../../api/label-management/labelManagement.api";
 import { useAppDispatch } from "../../../../app/hook";
 import { UpdateLabelManagement } from "../../../../app/reducer/admin/label-management/labelManagementSlice.reducer";
-import { toast } from "react-toastify";
+import { DownOutlined } from "@ant-design/icons";
 
 const ModalUpdateLabel = ({ visible, onCancel, idLabel, label }) => {
   const [name, setName] = useState("");
   const [errorName, setErrorName] = useState("");
-  const [colorLabel, setColorLabel] = useState("");
-  const [errorColorLabel, setErrorColorLabel] = useState("");
-  const [errorCode, setErrorCode] = useState("");
+  const [colorLabel, setColorLabel] = useState("rgb(0, 123, 255)");
   const dispatch = useAppDispatch();
-
-  const listColor = [
-    "#089931",
-    "#135f8b",
-    "#423b19",
-    "#5432f6",
-    "#b66366",
-    "#032c3d",
-    "#aa7640",
-    "#717f5f",
-    "#8f0217",
-    "#45657d",
-    "#808000", // Olive
-    "#8fbc8f", // Dark Sea Green
-    "#c0c0c0", // Silver
-    "#778899", // Light Slate Gray
-    "#d3d3d3", // Light Gray
-  ];
-
-  const [hoveredColor, setHoveredColor] = useState(null);
-
-  const handleMouseEnter = (color) => {
-    setHoveredColor(color);
-    setColorLabel(color);
-  };
-
+  const [open, setOpen] = useState(false);
   useEffect(() => {
-    if (label != null) {
-      setHoveredColor(label.colorLabel);
+    if (visible && label != null) {
       setName(label.name);
       setColorLabel(label.colorLabel);
     }
-  }, [label]);
+    if (!visible) {
+      setName("");
+      setColorLabel("rgb(0, 123, 255)");
+      setErrorName("");
+    }
+  }, [visible]);
 
-  // useEffect(() => {
-  //     if (idLabel !== null && idLabel !== "" && visible === true) {
-  //         fetchData();
-  //     }
-
-  //     return () => {
-  //         setName("");
-  //         setColorLabel("");
-  //         setErrorName("");
-  //         setErrorColorLabel("");
-  //     };
-  // }, [idLabel, visible]);
-
-  // const fetchData = (req, res) => {
-  //     LabelManagementAPI.getOne(idLabel).then((response) => {
-  //         let obj = response.data.data;
-  //         setName(obj.name);
-  //         setColorLabel(obj.colorLabel);
-  //     });
-  // };
+  const handleColorChange = (color) => {
+    const { r, g, b, a } = color;
+    const rgbColor = `rgb(${Math.round(r)}, ${Math.round(g)}, ${Math.round(
+      b
+    )})`;
+    setColorLabel(rgbColor);
+  };
 
   const update = () => {
     let check = 0;
@@ -77,17 +41,10 @@ const ModalUpdateLabel = ({ visible, onCancel, idLabel, label }) => {
     } else {
       setErrorName("");
     }
-    if (colorLabel === "") {
-      setErrorColorLabel("Hãy chọn màu sắc!");
-      check++;
-    } else {
-      setErrorColorLabel("");
-    }
+
     if (check === 0) {
       let obj = {
         id: label.id,
-        code: label.code,
-
         name: name,
         colorLabel: colorLabel,
       };
@@ -97,26 +54,19 @@ const ModalUpdateLabel = ({ visible, onCancel, idLabel, label }) => {
           dispatch(UpdateLabelManagement(response.data.data));
           onCancel();
         },
-        (error) => {
-          message.error(error.response.data.message);
-        }
+        (error) => {}
       );
     }
   };
   return (
-    <Modal
-      visible={visible}
-      onCancel={onCancel}
-      width={750}
-      footer={null}
-    >
+    <Modal visible={visible} onCancel={onCancel} width={750} footer={null}>
       {" "}
       <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
         <span style={{ fontSize: "18px" }}>Cập nhật nhãn</span>
       </div>
       <div style={{ marginTop: "15px", borderBottom: "1px solid black" }}>
         <Row gutter={16} style={{ marginBottom: "15px" }}>
-          <Col span={24}>
+          <Col span={21}>
             <span>Tên nhãn:</span> <br />
             <Input
               value={name}
@@ -127,69 +77,47 @@ const ModalUpdateLabel = ({ visible, onCancel, idLabel, label }) => {
             />
             <span className="error">{errorName}</span>
           </Col>
-        </Row>
-        <Row gutter={16} style={{ marginBottom: "15px" }}>
-          <Col span={24}>
-            <span>Màu:</span> <br />
-            <div
-              style={{
-                width: "100px",
-                height: "35px",
-                backgroundColor: hoveredColor,
-                borderRadius: "5px",
-              }}
-            ></div>
-          </Col>
-          <Col span={24}>
+          <Col span={3}>
+            {" "}
             <span>Màu sắc:</span> <br />
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(5, 140px)",
-                gridGap: "10px",
-                marginTop: "10px",
+            <ColorPicker
+              open={open}
+              value={colorLabel}
+              onChange={(e) => {
+                handleColorChange(e.metaColor);
               }}
-            >
-              {listColor.map((item, index) => (
-                <div
-                  key={index}
+              onOpenChange={setOpen}
+              showText={() => (
+                <DownOutlined
+                  rotate={open ? 180 : 0}
                   style={{
-                    width: "100px",
-                    height: "50px",
-                    backgroundColor: item,
-                    borderRadius: "5px",
-                    transition: "transform 0.3s ease",
-                    transform:
-                      hoveredColor === item ? "scale(1.1)" : "scale(1)",
-                    cursor: "pointer",
+                    color: "rgba(0, 0, 0, 0.25)",
                   }}
-                  onClick={() => handleMouseEnter(item)}
-                ></div>
-              ))}
-            </div>
+                />
+              )}
+            />
           </Col>
         </Row>
       </div>
       <div style={{ textAlign: "right" }}>
         <div style={{ paddingTop: "15px" }}>
           <Button
-            style={{
-              marginRight: "5px",
-              backgroundColor: "rgb(61, 139, 227)",
-              color: "white",
-            }}
-            onClick={update}
-          >
-            Cập nhật
-          </Button>
-          <Button
+            className="btn_filter"
             style={{
               backgroundColor: "red",
               color: "white",
+              width: "100px",
             }}
             onClick={onCancel}
           >
             Hủy
+          </Button>{" "}
+          <Button
+            className="btn_clean"
+            style={{ width: "100px", marginLeft: "10px" }}
+            onClick={update}
+          >
+            Cập nhật
           </Button>
         </div>
       </div>

@@ -17,7 +17,7 @@ import java.util.List;
 public interface TeActivityRepository extends JpaRepository<Activity, String> {
 
     @Query(value = """
-              SELECT a.id as id, a.name as name, a.start_time as start_time, a.end_time as end_time FROM activity a 
+              SELECT a.id AS id, a.name AS name, a.start_time AS start_time, a.end_time AS end_time FROM activity a 
               WHERE
             (:#{#req.idSemester} IS NULL 
              OR :#{#req.idSemester} = '' 

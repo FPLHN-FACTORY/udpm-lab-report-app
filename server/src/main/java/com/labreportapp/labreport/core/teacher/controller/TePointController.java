@@ -73,7 +73,6 @@ public class TePointController {
         TeExcelResponseMessage teExcelResponseMessage = tePointSevice.importExcel(multipartFile, idClass);
         return new ResponseObject(teExcelResponseMessage);
     }
-
 }
 
 

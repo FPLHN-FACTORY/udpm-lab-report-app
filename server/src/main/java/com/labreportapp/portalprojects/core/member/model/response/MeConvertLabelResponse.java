@@ -17,8 +17,6 @@ public class MeConvertLabelResponse {
 
     private String id;
 
-    private String code;
-
     private String name;
 
     private String colorLabel;

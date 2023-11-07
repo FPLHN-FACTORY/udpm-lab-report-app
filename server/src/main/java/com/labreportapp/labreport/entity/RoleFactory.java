@@ -35,4 +35,5 @@ public class RoleFactory extends PrimaryEntity {
 
     @Column
     private RoleDefault roleDefault;
+
 }

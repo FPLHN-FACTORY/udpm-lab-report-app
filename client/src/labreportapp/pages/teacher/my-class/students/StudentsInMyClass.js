@@ -33,9 +33,7 @@ const StudentsInMyClass = () => {
   const navigate = useNavigate();
   useEffect(() => {
     window.scrollTo(0, 0);
-
     featchClass(idClass);
-
     return () => {
       dispatch(SetStudentClasses([]));
     };

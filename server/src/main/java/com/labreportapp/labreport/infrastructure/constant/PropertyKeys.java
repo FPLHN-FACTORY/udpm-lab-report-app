@@ -4,6 +4,4 @@ public class PropertyKeys {
 
     private PropertyKeys() {
     }
-
-
 }

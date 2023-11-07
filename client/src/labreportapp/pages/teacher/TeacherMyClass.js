@@ -182,9 +182,10 @@ const TeacherMyClass = () => {
       dataIndex: "stt",
       key: "stt",
       sorter: (a, b) => a.stt - b.stt,
+      align: "center",
     },
     {
-      title: <div style={{ textAlign: "center" }}>Mã lớp</div>,
+      title: <div style={{ textAlign: "center" }}>Lớp</div>,
       dataIndex: "code",
       key: "code",
       sorter: (a, b) => a.code.localeCompare(b.code),
@@ -509,7 +510,7 @@ const TeacherMyClass = () => {
             ) : (
               <Empty
                 imageStyle={{ height: "60px" }}
-                description={<span>Không có lớp học</span>}
+                description={<span>Không có dữ liệu</span>}
               />
             )}
           </div>

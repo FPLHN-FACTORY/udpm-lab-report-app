@@ -22,15 +22,15 @@ import java.util.Optional;
 public interface TeAttendanceRepository extends JpaRepository<Attendance, String> {
 
     @Query(value = """
-            SELECT a.id as idAttendance,
-            a.name as name_meeting,
-            a.status as status,
-            a.notes as notes,
-            a.student_id as student_id,
-            a.meeting_id as meeting_id,
-            m.meeting_date as meeting_date,
-            mp.name as meeting_period, mp.start_hour as start_hour, mp.start_minute as start_minute ,
-            mp.end_hour as end_hour, mp.end_minute as end_minute
+            SELECT a.id AS idAttendance,
+                a.name AS name_meeting,
+                a.status AS status,
+                a.notes AS notes,
+                a.student_id AS student_id,
+                a.meeting_id AS meeting_id,
+                m.meeting_date AS meeting_date,
+                mp.name AS meeting_period, mp.start_hour AS start_hour, mp.start_minute AS start_minute,
+                mp.end_hour AS end_hour, mp.end_minute AS end_minute
             FROM attendance a
             JOIN meeting m ON m.id = a.meeting_id
             JOIN meeting_period mp ON mp.id = m.meeting_period
@@ -39,30 +39,30 @@ public interface TeAttendanceRepository extends JpaRepository<Attendance, String
     List<TeAttendanceResponse> findListAttendanceByIdMeeting(@Param("idMeeting") String idMeeting);
 
     @Query(value = """
-            SELECT a.id as idAttendance,
-            a.name as name_meeting,
-            a.status as status,
-            a.notes as notes,
-            a.student_id as student_id,
-            a.meeting_id as meeting_id,
-            m.meeting_date as meeting_date
+            SELECT a.id AS idAttendance,
+                a.name AS name_meeting,
+                a.status AS status,
+                a.notes AS notes,
+                a.student_id AS student_id,
+                a.meeting_id AS meeting_id,
+                m.meeting_date AS meeting_date
             FROM attendance a
             JOIN meeting m ON m.id = a.meeting_id
-            WHERE a.meeting_id = :#{#req.idMeeting} and a.student_id = :#{#req.idStudent}
+            WHERE a.meeting_id = :#{#req.idMeeting} AND a.student_id = :#{#req.idStudent}
             """, nativeQuery = true)
     Optional<TeAttendanceResponse> findAttendanceByStudentIdAndMeetgId(@Param("req") TeFindAttendanceRequest req);
 
     @Query(value = """
-            SELECT a.id as idAttendance,
-            a.name as name_meeting,
-            a.status as status,
-            a.notes as notes,
-            a.student_id as student_id,
-            a.meeting_id as meeting_id,
-            m.meeting_date as meeting_date
+            SELECT a.id AS idAttendance,
+                a.name AS name_meeting,
+                a.status AS status,
+                a.notes AS notes,
+                a.student_id AS student_id,
+                a.meeting_id AS meeting_id,
+                m.meeting_date AS meeting_date
             FROM attendance a
             RIGHT JOIN meeting m ON m.id = a.meeting_id
-            JOIN class c on c.id = m.class_id
+            JOIN class c ON c.id = m.class_id
             WHERE c.id = :#{#idClass}
             """, nativeQuery = true)
     List<TeAttendanceResponse> findAttendanceByIdClass(@Param("idClass") String idClass);
@@ -72,8 +72,8 @@ public interface TeAttendanceRepository extends JpaRepository<Attendance, String
                     ROW_NUMBER() OVER(ORDER BY m.meeting_date ASC) AS stt,
                     m.name AS name, 
                     m.meeting_date AS meeting_date,
-                    mp.name as meeting_period, mp.start_hour as start_hour, mp.start_minute as start_minute,
-                    mp.end_hour as end_hour, mp.end_minute as end_minute,
+                    mp.name AS meeting_period, mp.start_hour AS start_hour, mp.start_minute AS start_minute,
+                    mp.end_hour AS end_hour, mp.end_minute AS end_minute,
                     m.type_meeting AS type_meeting, 
                     m.teacher_id AS teacher_id,
                     a.status AS status,

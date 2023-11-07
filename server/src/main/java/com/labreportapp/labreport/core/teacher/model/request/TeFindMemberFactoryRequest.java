@@ -16,4 +16,5 @@ public class TeFindMemberFactoryRequest extends PageableRequest {
     private Integer status;
 
     private String roleFactoryId;
+
 }

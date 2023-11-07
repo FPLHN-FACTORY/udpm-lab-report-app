@@ -213,7 +213,6 @@ public class MeTodoServiceImpl implements MeTodoService {
             for (MeLabelResponse lb : listLabel) {
                 MeConvertLabelResponse meConvertLabelResponse = new MeConvertLabelResponse();
                 meConvertLabelResponse.setId(lb.getId());
-                meConvertLabelResponse.setCode(lb.getCode());
                 meConvertLabelResponse.setName(lb.getName());
                 meConvertLabelResponse.setColorLabel(lb.getColorLabel());
                 listMeConvertLabelResponse.add(meConvertLabelResponse);
@@ -846,7 +845,6 @@ public class MeTodoServiceImpl implements MeTodoService {
         meDashboardItemCustomHoanThanhSom.setLabel("Hoàn thành sớm");
         meDashboardItemCustomHoanThanhSom.setY((long) meTodoRepository.countTodoByDueDatePeriod(projectId, periodId, 2));
         meDashboardItemDueDates.add(meDashboardItemCustomHoanThanhSom);
-        System.out.println(meDashboardItemCustomHoanThanhSom.toString() + " aaaaaaaaaaa");
         MeDashboardItemCustom meDashboardItemCustomHoanThanhMuon = new MeDashboardItemCustom();
         meDashboardItemCustomHoanThanhMuon.setLabel("Hoàn thành muộn");
         meDashboardItemCustomHoanThanhMuon.setY((long) meTodoRepository.countTodoByDueDatePeriod(projectId, periodId, 3));

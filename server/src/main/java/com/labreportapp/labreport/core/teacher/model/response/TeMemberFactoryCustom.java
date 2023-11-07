@@ -29,4 +29,5 @@ public class TeMemberFactoryCustom {
     private Integer numberTeam;
 
     private Integer statusMemberFactory;
+    
 }

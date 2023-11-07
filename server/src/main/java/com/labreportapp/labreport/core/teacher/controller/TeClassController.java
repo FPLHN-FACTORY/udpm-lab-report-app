@@ -76,5 +76,4 @@ public class TeClassController {
         request.setIdTeacher(labReportAppSession.getUserId());
         return new ResponseObject(teClassService.listClass(request));
     }
-
 }

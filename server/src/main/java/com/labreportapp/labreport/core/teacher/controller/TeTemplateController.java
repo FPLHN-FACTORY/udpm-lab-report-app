@@ -25,5 +25,4 @@ public class TeTemplateController {
         TemplateReport templateReport = teTemplateReportService.getTemplateReport();
         return new ResponseObject(templateReport);
     }
-
 }

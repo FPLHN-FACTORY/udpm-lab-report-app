@@ -18,10 +18,10 @@ public interface TePostRepository extends JpaRepository<Post, String> {
 
     @Query(value = """
             SELECT DISTINCT
-            p.id as id, 
-            p.descriptions as descriptions,
-             p.created_date as created_date,
-             p.teacher_id as teacher_id,
+            p.id AS id, 
+            p.descriptions AS descriptions,
+             p.created_date AS created_date,
+             p.teacher_id AS teacher_id,
              p.class_id
             FROM post p 
             WHERE p.class_id = :#{#req.idClass}

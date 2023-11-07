@@ -7,6 +7,7 @@ import org.springframework.data.rest.core.config.Projection;
 
 @Projection(types = {Category.class})
 public interface AdCategoryPesponse extends IsIdentified {
+
     @Value("#{target.stt}")
     Integer STT();
 

@@ -186,7 +186,6 @@ public class AdProjectServiceImpl implements AdProjectService {
             LabelProject labelProject = new LabelProject();
             labelProject.setProjectId(newProject.getId());
             labelProject.setColorLabel(item.getColorLabel());
-            labelProject.setCode(item.getCode());
             labelProject.setName(item.getName());
             newLabelProject.add(labelProject);
         });

@@ -1,7 +1,7 @@
 package com.labreportapp.portalprojects.core.admin.model.request;
 
 /**
- * @author NguyenVinh
+ * @author hieundph25894
  */
 
 import jakarta.validation.constraints.NotBlank;
@@ -12,10 +12,6 @@ import lombok.Setter;
 @Setter
 @Getter
 public abstract class AdBaseLabelRequest {
-
-    @NotEmpty
-    @NotBlank
-    private String code;
 
     @NotEmpty
     @NotBlank
