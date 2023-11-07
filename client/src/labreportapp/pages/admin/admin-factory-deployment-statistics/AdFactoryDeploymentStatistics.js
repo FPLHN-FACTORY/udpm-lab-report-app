@@ -234,7 +234,7 @@ const AdFactoryDeploymentStatistics = () => {
                     style={{ fontSize: 18, fontWeight: 500, color: "gray" }}
                   >
                     <FontAwesomeIcon
-                      icon={faLevelUp}
+                      icon={faGraduationCap}
                       style={{ marginRight: "5px" }}
                     />{" "}
                     Tổng số lớp chưa có GV
