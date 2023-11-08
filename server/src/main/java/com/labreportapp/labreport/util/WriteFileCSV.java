@@ -53,7 +53,7 @@ public class WriteFileCSV {
         return "";
     }
 
-    public LoggerObject createLoggerObject(String content, String pathFile) {
+    public LoggerObject createLoggerObject(String content, String codeClass, String pathFile) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date currentDate = new Date();
         String formattedDate = simpleDateFormat.format(currentDate);
@@ -66,7 +66,7 @@ public class WriteFileCSV {
         loggerObject.setCreateDate(formattedDate);
         loggerObject.setMethod(httpServletRequest.getMethod());
         loggerObject.setAuthor(switchAuthor(httpServletRequest.getRequestURI()));
-
+        loggerObject.setCodeClass(codeClass != null && !codeClass.equals("") ? codeClass : null);
         writerLoggerObjectIsNotData(loggerObject);
         return loggerObject;
     }
@@ -108,19 +108,39 @@ public class WriteFileCSV {
         return path;
     }
 
-    public String getPathFileActiveByApi(String tenHocKy) {
+    public String getPathFileSendLogScreen(String tenHocKy) {
         String api = httpServletRequest.getRequestURI();
-        String folder = "";
-        String pathFile = "";
         String pathTemplate = getPropertiesRead(ConfigurationsConstant.PATH_FILE_TEMPLATE_LAB_REPORT_APP);
+        String folderAdmin = pathTemplate + getPathFileByHocKy(tenHocKy) + getPropertiesRead(ConfigurationsConstant.FOLDER_ACTOR_ADMIN);
+        String pathFile = "";
+        System.out.println(api);
         if (api.startsWith("/admin")) {
-            folder = getPathFileByHocKy(tenHocKy) + getPropertiesRead(ConfigurationsConstant.FOLDER_ACTOR_ADMIN);
             if (api.contains("/semester")) {
                 pathFile = pathTemplate + getPropertiesRead(ConfigurationsConstant.NAME_FILE_QUAN_LY_HOC_KY);
             }
+            if (api.contains("/level")) {
+                pathFile = pathTemplate + getPropertiesRead(ConfigurationsConstant.NAME_FILE_QUAN_LY_LEVEL);
+            }
+            if (api.contains("/activity")) {
+                pathFile = pathTemplate + getPropertiesRead(ConfigurationsConstant.NAME_FILE_QUAN_LY_HOAT_DONG);
+            }
+            if (api.contains("/meeting-period-configiration")) {
+                pathFile = pathTemplate + getPropertiesRead(ConfigurationsConstant.NAME_FILE_QUAN_LY_CA_HOC);
+            }
+            if (api.contains("/class-managerment")) {
+                pathFile = folderAdmin + getPropertiesRead(ConfigurationsConstant.NAME_FILE_QUAN_LY_LOP_HOC);
+            }
         }
 
-        System.out.println("========= pathFile: " + pathFile);
+        System.out.println("========= pathFile màn hình: " + pathFile);
         return pathFile;
     }
+
+    public String getPathFileSendLogStreamClass(String tenHocKy) {
+        String pathTemplate = getPropertiesRead(ConfigurationsConstant.PATH_FILE_TEMPLATE_LAB_REPORT_APP);
+        String pathFile = pathTemplate + getPathFileByHocKy(tenHocKy) + ConfigurationsConstant.NAME_FILE_LUONG_LOP_HOC;
+        System.out.println("========= pathFile luồng: " + pathFile);
+        return pathFile;
+    }
+
 }

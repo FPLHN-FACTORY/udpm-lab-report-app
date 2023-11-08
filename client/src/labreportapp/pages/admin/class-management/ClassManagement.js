@@ -10,6 +10,8 @@ import {
   faRandom,
   faChainSlash,
   faFilterCircleDollar,
+  faHistory,
+  faGraduationCap,
 } from "@fortawesome/free-solid-svg-icons";
 import { useAppDispatch, useAppSelector } from "../../../app/hook";
 import {
@@ -340,6 +342,18 @@ const ClassManagement = () => {
               size="1x"
               style={{
                 marginLeft: 7,
+                marginRight: "15px",
+                color: "rgb(38, 144, 214)",
+                cursor: "pointer",
+              }}
+            />
+          </Tooltip>
+          <Tooltip title="Lịch sử lớp">
+            <FontAwesomeIcon
+              icon={faHistory}
+              size="1x"
+              style={{
+                marginLeft: 7,
                 color: "rgb(38, 144, 214)",
                 cursor: "pointer",
               }}
@@ -347,7 +361,7 @@ const ClassManagement = () => {
           </Tooltip>
         </div>
       ),
-      width: "100px",
+      width: "130px",
     },
   ];
 
@@ -465,9 +479,79 @@ const ClassManagement = () => {
           style={{ fontSize: "18px", paddingLeft: "20px" }}
         >
           <span style={{ fontSize: "20px", fontWeight: "500" }}>
-            <FontAwesomeIcon icon={faTags} size="1x" />
+            <FontAwesomeIcon icon={faGraduationCap} size="1x" />
             <span style={{ marginLeft: "10px" }}>Quản lý lớp học</span>
           </span>
+        </div>
+        <div style={{ marginRight: 14 }}>
+          <Button
+            style={{
+              color: "white",
+              backgroundColor: "rgb(55, 137, 220)",
+              marginRight: "5px",
+            }}
+          >
+            <FontAwesomeIcon
+              icon={faDownload}
+              size="1x"
+              style={{
+                backgroundColor: "rgb(55, 137, 220)",
+                marginRight: "7px",
+              }}
+            />{" "}
+            Dowload luồng log
+          </Button>
+          <Button
+            style={{
+              color: "white",
+              backgroundColor: "rgb(55, 137, 220)",
+              marginRight: "5px",
+            }}
+          >
+            <FontAwesomeIcon
+              icon={faHistory}
+              size="1x"
+              style={{
+                backgroundColor: "rgb(55, 137, 220)",
+                marginRight: "7px",
+              }}
+            />{" "}
+            Lịch sử luồng
+          </Button>
+          <Button
+            style={{
+              color: "white",
+              backgroundColor: "rgb(55, 137, 220)",
+              marginRight: "5px",
+            }}
+          >
+            <FontAwesomeIcon
+              icon={faDownload}
+              size="1x"
+              style={{
+                backgroundColor: "rgb(55, 137, 220)",
+                marginRight: "7px",
+              }}
+            />{" "}
+            Dowload log
+          </Button>
+          <Button
+            style={{
+              color: "white",
+              backgroundColor: "rgb(55, 137, 220)",
+              marginRight: "5px",
+            }}
+          >
+            <FontAwesomeIcon
+              icon={faHistory}
+              size="1x"
+              style={{
+                backgroundColor: "rgb(55, 137, 220)",
+                marginRight: "7px",
+              }}
+            />{" "}
+            Lịch sử
+          </Button>
         </div>
       </div>
       <div
@@ -704,7 +788,7 @@ const ClassManagement = () => {
             <div className="table-class-management-info">
               {" "}
               <FontAwesomeIcon
-                icon={faChainSlash}
+                icon={faGraduationCap}
                 style={{ fontSize: "18px" }}
               />
               <span

@@ -4,13 +4,12 @@ import com.labreportapp.labreport.core.admin.model.request.AdUpdateAttendanceReq
 import com.labreportapp.labreport.core.admin.model.request.AdUpdateListAttendanceRequest;
 import com.labreportapp.labreport.core.admin.model.response.AdAttendanceMeetingCustom;
 import com.labreportapp.labreport.core.admin.model.response.AdAttendanceMeetingResponse;
-import com.labreportapp.labreport.core.admin.model.response.AdExportExcelClassResponse;
 import com.labreportapp.labreport.core.admin.repository.AdAttendanceRepository;
 import com.labreportapp.labreport.core.admin.service.AdAttendanceService;
 import com.labreportapp.labreport.core.common.response.SimpleResponse;
 import com.labreportapp.labreport.entity.Attendance;
 import com.labreportapp.labreport.infrastructure.constant.StatusAttendance;
-import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
+import com.labreportapp.labreport.util.CallApiIdentity;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import jakarta.validation.Valid;
@@ -34,7 +33,7 @@ public class AdAttendanceServiceImpl implements AdAttendanceService {
     private AdAttendanceRepository adAttendanceRepository;
 
     @Autowired
-    private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
+    private CallApiIdentity callApiIdentity;
 
     @Override
     public List<AdAttendanceMeetingCustom> getAttendanceByIdMeeting(String idMeeting, String idClass) {
@@ -47,7 +46,7 @@ public class AdAttendanceServiceImpl implements AdAttendanceService {
                 .filter(Objects::nonNull)
                 .distinct()
                 .collect(Collectors.toList());
-        List<SimpleResponse> listSimple = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(distinctStudentIds);
+        List<SimpleResponse> listSimple = callApiIdentity.handleCallApiGetListUserByListId(distinctStudentIds);
         if (listSimple.isEmpty()) {
             return null;
         }

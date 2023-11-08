@@ -11,7 +11,7 @@ import com.labreportapp.labreport.core.admin.service.AdFeedBackService;
 import com.labreportapp.labreport.core.common.response.SimpleResponse;
 import com.labreportapp.labreport.entity.FeedBack;
 import com.labreportapp.labreport.infrastructure.constant.StatusShowFeedback;
-import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
+import com.labreportapp.labreport.util.CallApiIdentity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +31,7 @@ public class AdFeedBackServiceImpl implements AdFeedBackService {
     private AdFeedBackRepository adFeedBackRepository;
 
     @Autowired
-    private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
+    private CallApiIdentity callApiIdentity;
 
     @Autowired
     private AdClassRepository adClassRepository;
@@ -44,7 +44,7 @@ public class AdFeedBackServiceImpl implements AdFeedBackService {
                 .filter(Objects::nonNull)
                 .distinct()
                 .collect(Collectors.toList());
-        List<SimpleResponse> listResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idListStudent);
+        List<SimpleResponse> listResponse = callApiIdentity.handleCallApiGetListUserByListId(idListStudent);
         List<AdFeedBackCustom> listFeedBackCustom = new ArrayList<>();
         list.forEach(feedback -> {
             AdFeedBackCustom adFeedBackCustom = new AdFeedBackCustom();
@@ -87,7 +87,7 @@ public class AdFeedBackServiceImpl implements AdFeedBackService {
                 .map(FeedBack::getStudentId)
                 .distinct()
                 .collect(Collectors.toList());
-        List<SimpleResponse> listResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idStudentList);
+        List<SimpleResponse> listResponse = callApiIdentity.handleCallApiGetListUserByListId(idStudentList);
         AtomicInteger stt = new AtomicInteger();
         listFeedback.forEach(i -> {
             AdGetFeedbackResponse obj = new AdGetFeedbackResponse();

@@ -1,7 +1,6 @@
 package com.labreportapp.labreport.core.student.service.impl;
 
 
-import com.labreportapp.labreport.core.admin.model.response.AdExportExcelClassResponse;
 import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.core.common.response.SimpleResponse;
 import com.labreportapp.labreport.core.student.model.request.StClassRequest;
@@ -17,7 +16,7 @@ import com.labreportapp.labreport.entity.StudentClasses;
 import com.labreportapp.labreport.infrastructure.constant.StatusStudentFeedBack;
 import com.labreportapp.labreport.infrastructure.constant.StatusTeam;
 import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
-import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
+import com.labreportapp.labreport.util.CallApiIdentity;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import lombok.Synchronized;
@@ -54,7 +53,7 @@ public class StClassServiceImpl implements StClassService {
     private LabReportAppSession labReportAppSession;
 
     @Autowired
-    private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
+    private CallApiIdentity callApiIdentity;
 
     @Override
     public PageableObject<StClassCustomResponse> getAllClassByCriteriaAndIsActive(final StFindClassRequest req) {
@@ -65,7 +64,7 @@ public class StClassServiceImpl implements StClassService {
                 .filter(Objects::nonNull)
                 .distinct()
                 .collect(Collectors.toList());
-        List<SimpleResponse> listResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(distinctTeacherIds);
+        List<SimpleResponse> listResponse = callApiIdentity.handleCallApiGetListUserByListId(distinctTeacherIds);
         List<StClassCustomResponse> responseClassCustom = new ArrayList<>();
         PageableObject<StClassCustomResponse> pageableResponse = new PageableObject<>();
 
@@ -125,7 +124,7 @@ public class StClassServiceImpl implements StClassService {
             throw new RestApiException(Message.CLASS_DID_FULL_CLASS_SIZE);
         }
 
-        SimpleResponse responseStudent = convertRequestCallApiIdentity.handleCallApiGetUserById(labReportAppSession.getUserId());
+        SimpleResponse responseStudent = callApiIdentity.handleCallApiGetUserById(labReportAppSession.getUserId());
 
         StudentClasses studentJoinClass = new StudentClasses();
         StClassCustomResponse customResponse = new StClassCustomResponse();

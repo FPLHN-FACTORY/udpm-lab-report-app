@@ -16,7 +16,7 @@ import com.labreportapp.labreport.entity.StudentClasses;
 import com.labreportapp.labreport.infrastructure.apiconstant.ApiConstants;
 import com.labreportapp.labreport.infrastructure.constant.RoleTeam;
 import com.labreportapp.labreport.infrastructure.constant.StatusTeam;
-import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
+import com.labreportapp.labreport.util.CallApiIdentity;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import lombok.Synchronized;
@@ -49,7 +49,7 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
     private RestTemplate restTemplate;
 
     @Autowired
-    private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
+    private CallApiIdentity callApiIdentity;
 
     @Override
     public List<TeStudentCallApiResponse> searchApiStudentClassesByIdClass(String idClass) {
@@ -62,7 +62,7 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
                 .map(TeStudentClassesResponse::getIdStudent)
                 .distinct()
                 .collect(Collectors.toList());
-        List<SimpleResponse> listRespone = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idStudentList);
+        List<SimpleResponse> listRespone = callApiIdentity.handleCallApiGetListUserByListId(idStudentList);
         List<TeStudentCallApiResponse> listReturn = new ArrayList<>();
         if (listRepository.size() == 0 && listRespone.size() == 0) {
             return null;
@@ -100,7 +100,7 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
                 .map(StudentClasses::getStudentId)
                 .distinct()
                 .collect(Collectors.toList());
-        List<SimpleResponse> listRespone = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idStudentList);
+        List<SimpleResponse> listRespone = callApiIdentity.handleCallApiGetListUserByListId(idStudentList);
         List<TeStudentStatusApiResponse> listReturn = new ArrayList<>();
         if (listStudentClass.size() == 0 && listRespone.size() == 0) {
             return null;
@@ -133,7 +133,7 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
                 .map(TePointImportResponse::getIdStudent)
                 .distinct()
                 .collect(Collectors.toList());
-        List<SimpleResponse> listRespone = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idStudentList);
+        List<SimpleResponse> listRespone = callApiIdentity.handleCallApiGetListUserByListId(idStudentList);
         return listRespone;
     }
 
@@ -148,7 +148,7 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
                 .map(TeStudentClassesResponse::getIdStudent)
                 .distinct()
                 .collect(Collectors.toList());
-        List<SimpleResponse> listRespone = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idStudentList);
+        List<SimpleResponse> listRespone = callApiIdentity.handleCallApiGetListUserByListId(idStudentList);
         List<TeStudentCallApiResponse> listReturn = new ArrayList<>();
         listRepository.forEach(reposi -> {
             listRespone.forEach(respone -> {

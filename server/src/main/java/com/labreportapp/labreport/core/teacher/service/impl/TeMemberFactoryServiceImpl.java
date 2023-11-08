@@ -9,7 +9,7 @@ import com.labreportapp.labreport.core.teacher.model.response.TeMemberFactoryRes
 import com.labreportapp.labreport.core.teacher.repository.TeMemberFactoryRepository;
 import com.labreportapp.labreport.core.teacher.service.TeMemberFactoryService;
 import com.labreportapp.labreport.repository.TeamFactoryRepository;
-import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
+import com.labreportapp.labreport.util.CallApiIdentity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -34,7 +34,7 @@ public class TeMemberFactoryServiceImpl implements TeMemberFactoryService {
     private TeMemberFactoryRepository teMemberFactoryRepository;
 
     @Autowired
-    private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
+    private CallApiIdentity callApiIdentity;
 
     @Autowired
     @Qualifier(TeamFactoryRepository.NAME)
@@ -51,7 +51,7 @@ public class TeMemberFactoryServiceImpl implements TeMemberFactoryService {
                 .collect(Collectors.toList());
         List<SimpleResponse> listResponse = new ArrayList<>();
         if (idList != null && idList.size() > 0) {
-            listResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idList);
+            listResponse = callApiIdentity.handleCallApiGetListUserByListId(idList);
         }
         List<SimpleResponse> finalListResponse = listResponse;
         List<TeMemberFactoryCustom> listCustom = new ArrayList<>();

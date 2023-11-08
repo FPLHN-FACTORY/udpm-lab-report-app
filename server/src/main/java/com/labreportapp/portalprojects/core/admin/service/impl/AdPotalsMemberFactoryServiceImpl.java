@@ -3,7 +3,7 @@ package com.labreportapp.portalprojects.core.admin.service.impl;
 import com.labreportapp.labreport.core.common.response.SimpleResponse;
 import com.labreportapp.labreport.entity.MemberFactory;
 import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
-import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
+import com.labreportapp.labreport.util.CallApiIdentity;
 import com.labreportapp.portalprojects.core.admin.model.response.AdPotalsMemberFactoryCustom;
 import com.labreportapp.portalprojects.core.admin.repository.AdPotalsMemberFactoryRepository;
 import com.labreportapp.portalprojects.core.admin.service.AdPotalsMemberFactoryService;
@@ -25,7 +25,7 @@ public class AdPotalsMemberFactoryServiceImpl implements AdPotalsMemberFactorySe
     private AdPotalsMemberFactoryRepository adPotalsMemberFactoryRepository;
 
     @Autowired
-    private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
+    private CallApiIdentity callApiIdentity;
 
     @Autowired
     private LabReportAppSession labReportAppSession;
@@ -48,7 +48,7 @@ public class AdPotalsMemberFactoryServiceImpl implements AdPotalsMemberFactorySe
                 .collect(Collectors.toList());
         List<SimpleResponse> listResponse = new ArrayList<>();
         if (idList != null && idList.size() > 0) {
-            listResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idList);
+            listResponse = callApiIdentity.handleCallApiGetListUserByListId(idList);
         }
         List<SimpleResponse> finalListResponse = listResponse;
         List<AdPotalsMemberFactoryCustom> listReturn = new ArrayList<>();

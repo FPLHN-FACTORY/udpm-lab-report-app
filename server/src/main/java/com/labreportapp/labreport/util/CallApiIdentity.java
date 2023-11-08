@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
  * @author thangncph26123
  */
 @Component
-public class ConvertRequestCallApiIdentity {
+public class CallApiIdentity {
 
     @Autowired
     private LabReportAppSession labReportAppSession;

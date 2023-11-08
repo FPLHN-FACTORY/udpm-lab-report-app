@@ -8,6 +8,7 @@ import {
   GetAdCollapsed,
   Toggle,
 } from "../../app/admin/AdCollapsedSlice.reducer";
+import CommonFooter from "../../component/common/CommonFooter";
 
 const { Content, Sider } = Layout;
 
@@ -57,6 +58,7 @@ const DashBoardAdmin = ({ children }) => {
             }}
           >
             {children}
+            <CommonFooter />
           </Content>
         </Layout>
       </Layout>

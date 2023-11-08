@@ -9,6 +9,8 @@ import {
   faFileEdit,
   faFilterCircleDollar,
   faChainSlash,
+  faHistory,
+  faFileDownload,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   Button,
@@ -19,6 +21,7 @@ import {
   Popconfirm,
   Tag,
   message,
+  Empty,
 } from "antd";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
@@ -35,6 +38,7 @@ import ModalCreateSemester from "./modal-create/ModalCreateSemester";
 import ModalUpdateSemester from "./modal-update/ModalUpdateSemester";
 import LoadingIndicator from "../../../helper/loading";
 import { convertDateLongToString } from "../../../helper/util.helper";
+import ModalShowHistory from "./modal-show-history/ModalShowHistory";
 
 const SemesterManagement = () => {
   const [semester, setSemester] = useState(null);
@@ -191,7 +195,7 @@ const SemesterManagement = () => {
           </Popconfirm>
         </div>
       ),
-      align:"center",
+      align: "center",
     },
   ];
   const [modalUpdate, setModalUpdate] = useState(false);
@@ -230,6 +234,32 @@ const SemesterManagement = () => {
       },
       (error) => {}
     );
+  };
+
+  const dowloadLog = () => {
+    AdSemesterAPI.dowloadLog().then(
+      (response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "hoc_ky.csv";
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  };
+
+  const [visibleHistory, setVisibleHistory] = useState(false);
+
+  const openModalShowHistory = () => {
+    setVisibleHistory(true);
+  };
+
+  const cancelModalHistory = () => {
+    setVisibleHistory(false);
   };
 
   return (
@@ -315,6 +345,42 @@ const SemesterManagement = () => {
                 style={{
                   color: "white",
                   backgroundColor: "rgb(55, 137, 220)",
+                  marginRight: 5,
+                }}
+                onClick={dowloadLog}
+              >
+                <FontAwesomeIcon
+                  icon={faFileDownload}
+                  size="1x"
+                  style={{
+                    backgroundColor: "rgb(55, 137, 220)",
+                    marginRight: "5px",
+                  }}
+                />
+                Dowload log
+              </Button>
+              <Button
+                style={{
+                  color: "white",
+                  backgroundColor: "rgb(55, 137, 220)",
+                  marginRight: 5,
+                }}
+                onClick={openModalShowHistory}
+              >
+                <FontAwesomeIcon
+                  icon={faHistory}
+                  size="1x"
+                  style={{
+                    backgroundColor: "rgb(55, 137, 220)",
+                    marginRight: "5px",
+                  }}
+                />
+                Lịch sử
+              </Button>
+              <Button
+                style={{
+                  color: "white",
+                  backgroundColor: "rgb(55, 137, 220)",
                 }}
                 onClick={buttonCreate}
               >
@@ -331,24 +397,44 @@ const SemesterManagement = () => {
             </div>
           </div>
           <br />
-          <div>
-            <Table
-              dataSource={data}
-              rowKey="id"
-              columns={columns}
-              pagination={false}
-            />
-            <div className="pagination_box">
-              <Pagination
-                simple
-                current={current}
-                onChange={(page) => {
-                  setCurrent(page);
-                }}
-                total={total * 10}
+          {data.length > 0 && (
+            <div>
+              {" "}
+              <Table
+                dataSource={data}
+                rowKey="id"
+                columns={columns}
+                pagination={false}
               />
+              <div className="pagination_box">
+                <Pagination
+                  simple
+                  current={current}
+                  onChange={(page) => {
+                    setCurrent(page);
+                  }}
+                  total={total * 10}
+                />
+              </div>
             </div>
-          </div>
+          )}
+          {data.length === 0 && (
+            <>
+              <p
+                style={{
+                  textAlign: "center",
+                  marginTop: "100px",
+                  fontSize: "15px",
+                  color: "red",
+                }}
+              >
+                <Empty
+                  imageStyle={{ height: 60 }}
+                  description={<span>Không có dữ liệu</span>}
+                />{" "}
+              </p>
+            </>
+          )}
         </div>
         <ModalCreateSemester
           visible={modalCreate}
@@ -358,6 +444,10 @@ const SemesterManagement = () => {
           visible={modalUpdate}
           onCancel={buttonUpdateCancel}
           semester={semester}
+        />
+        <ModalShowHistory
+          visible={visibleHistory}
+          onCancel={cancelModalHistory}
         />
       </div>
     </>

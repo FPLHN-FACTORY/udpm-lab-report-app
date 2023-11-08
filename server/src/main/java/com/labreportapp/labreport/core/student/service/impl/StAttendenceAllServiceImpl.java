@@ -12,7 +12,7 @@ import com.labreportapp.labreport.core.student.repository.StMyClassRepository;
 import com.labreportapp.labreport.core.student.service.StAttendenceAllService;
 import com.labreportapp.labreport.infrastructure.apiconstant.ActorConstants;
 import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
-import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
+import com.labreportapp.labreport.util.CallApiIdentity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +32,7 @@ public class StAttendenceAllServiceImpl implements StAttendenceAllService {
     private StAttendenceAllRepository stAttendenceAllRepository;
 
     @Autowired
-    private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
+    private CallApiIdentity callApiIdentity;
 
     @Autowired
     private LabReportAppSession labReportAppSession;
@@ -47,7 +47,7 @@ public class StAttendenceAllServiceImpl implements StAttendenceAllService {
         List<StMyClassResponse> getClassListByStudentInSemester = stMyClassRepository.getAllClass(stFindClassRequest);
         List<StClassAttendenceAllCustomResponse> response = new ArrayList<>();
 
-        List<SimpleResponse> simplesResponse = convertRequestCallApiIdentity.
+        List<SimpleResponse> simplesResponse = callApiIdentity.
                 handleCallApiGetUserByRoleAndModule(ActorConstants.ACTOR_TEACHER);
 
         Map<String, SimpleResponse> simpleMap = simplesResponse.stream()

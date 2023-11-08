@@ -27,7 +27,7 @@ import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.labreport.repository.StudentClassesRepository;
 import com.labreportapp.labreport.repository.TeamRepository;
 import com.labreportapp.labreport.util.ConvertListIdToString;
-import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
+import com.labreportapp.labreport.util.CallApiIdentity;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import jakarta.validation.Valid;
@@ -78,7 +78,7 @@ public class StTeamClassServiceImpl implements StTeamClassService {
     private LabReportAppSession labReportAppSession;
 
     @Autowired
-    private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
+    private CallApiIdentity callApiIdentity;
 
     @Autowired
     private StMeetingPeriodRepository stMeetingPeriodRepository;
@@ -185,7 +185,7 @@ public class StTeamClassServiceImpl implements StTeamClassService {
                 .filter(Objects::nonNull)
                 .distinct()
                 .collect(Collectors.toList());
-        List<SimpleResponse> listResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idList);
+        List<SimpleResponse> listResponse = callApiIdentity.handleCallApiGetListUserByListId(idList);
         List<StMyStudentTeamCustom> listCustom = new ArrayList<>();
         listRepo.forEach(repo -> {
             StMyStudentTeamCustom stMyStudentTeamCustom = new StMyStudentTeamCustom();
@@ -210,7 +210,7 @@ public class StTeamClassServiceImpl implements StTeamClassService {
     @Override
     public StDetailClassCustomResponse detailClass(String idClass) {
         Class classFind = repository.findById(idClass).get();
-        SimpleResponse response = convertRequestCallApiIdentity.handleCallApiGetUserById(classFind.getTeacherId());
+        SimpleResponse response = callApiIdentity.handleCallApiGetUserById(classFind.getTeacherId());
         StDetailClassCustomResponse stDetailClassCustomResponse = new StDetailClassCustomResponse();
         stDetailClassCustomResponse.setId(classFind.getId());
         stDetailClassCustomResponse.setCode(classFind.getCode());

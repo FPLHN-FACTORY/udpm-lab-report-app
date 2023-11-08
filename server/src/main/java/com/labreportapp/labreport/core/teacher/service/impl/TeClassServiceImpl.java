@@ -19,7 +19,7 @@ import com.labreportapp.labreport.core.teacher.service.TeClassService;
 import com.labreportapp.labreport.entity.Class;
 import com.labreportapp.labreport.entity.ClassConfiguration;
 import com.labreportapp.labreport.infrastructure.constant.StatusClass;
-import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
+import com.labreportapp.labreport.util.CallApiIdentity;
 import com.labreportapp.labreport.util.SemesterHelper;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
@@ -44,7 +44,7 @@ public class TeClassServiceImpl implements TeClassService {
     private TeClassRepository teClassRepository;
 
     @Autowired
-    private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
+    private CallApiIdentity callApiIdentity;
 
     @Autowired
     private TeClassConfigurationRepository teClassConfigurationRepository;
@@ -81,7 +81,7 @@ public class TeClassServiceImpl implements TeClassService {
                 .map(TeClassResponse::getTeacherId)
                 .distinct()
                 .collect(Collectors.toList());
-        List<SimpleResponse> listTeacher = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idUsers);
+        List<SimpleResponse> listTeacher = callApiIdentity.handleCallApiGetListUserByListId(idUsers);
         Page<TeClassSentStudentRespone> pageNew = pageList.map(item -> {
             TeClassSentStudentRespone objNew = new TeClassSentStudentRespone();
             objNew.setStt(item.getStt());

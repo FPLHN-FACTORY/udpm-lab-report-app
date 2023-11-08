@@ -46,11 +46,7 @@ const HeaderStudentComponent = ({ collapsed, toggleCollapsed }) => {
           >
             {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
           </div>
-          <Input
-            placeholder="Tìm kiếm..."
-            prefix={<SearchOutlined />}
-            style={{ width: 200 }}
-          />
+          
         </div>
         <div style={{ display: "flex", alignItems: "center" }}>
           <CommonInforUser />

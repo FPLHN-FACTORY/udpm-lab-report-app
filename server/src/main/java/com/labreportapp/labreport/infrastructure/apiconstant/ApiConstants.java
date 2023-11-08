@@ -5,6 +5,8 @@ package com.labreportapp.labreport.infrastructure.apiconstant;
  */
 public class ApiConstants {
 
+    // API Indentity
+
     public static final String API_GET_USER_BY_LIST_ID = "/api/UserSigns/GetDetailUsers";
 
     public static final String API_GET_USER_BY_ID = "/api/UserSigns/FindById";
@@ -17,4 +19,9 @@ public class ApiConstants {
 
     public static final String API_GET_USER_BY_LIST_EMAIL = "/api/UserSigns/GetUserEmails";
 
+    // API Consumer
+
+    public static final String API_READ_FILE_LOG = "/api/rabbit-consumer/read-log/page";
+
+    public static final String API_DOWLOAD_FILE_LOG = "/api/rabbit-consumer/download-log";
 }

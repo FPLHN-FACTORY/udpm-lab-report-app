@@ -10,7 +10,7 @@ import com.labreportapp.labreport.core.teacher.service.TeFeedBackService;
 import com.labreportapp.labreport.entity.FeedBack;
 import com.labreportapp.labreport.infrastructure.constant.StatusShowFeedback;
 import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
-import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
+import com.labreportapp.labreport.util.CallApiIdentity;
 import com.labreportapp.labreport.util.SemesterHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,7 @@ public class TeFeedBackServiceImpl implements TeFeedBackService {
     private TeFeedbackRepository teFeedbackRepository;
 
     @Autowired
-    private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
+    private CallApiIdentity callApiIdentity;
 
     @Autowired
     private SemesterHelper semesterHelper;
@@ -59,7 +59,7 @@ public class TeFeedBackServiceImpl implements TeFeedBackService {
                 .map(FeedBack::getStudentId)
                 .distinct()
                 .collect(Collectors.toList());
-        List<SimpleResponse> listResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idStudentList);
+        List<SimpleResponse> listResponse = callApiIdentity.handleCallApiGetListUserByListId(idStudentList);
         AtomicInteger stt = new AtomicInteger();
         stt.set(1);
         listFeedback.forEach(i -> {

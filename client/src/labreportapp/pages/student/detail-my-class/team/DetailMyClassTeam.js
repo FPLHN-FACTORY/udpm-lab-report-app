@@ -7,12 +7,25 @@ import { useEffect, useState } from "react";
 import LoadingIndicator from "../../../../helper/loading";
 import { StMyTeamClassAPI } from "../../../../api/student/StTeamClass";
 import {
+  faCircleInfo,
   faEye,
+  faFileDownload,
+  faHistory,
   faRightFromBracket,
   faSignOut,
+  faTableList,
   faUserPlus,
 } from "@fortawesome/free-solid-svg-icons";
-import { Table, Button, Tooltip, Space, Popconfirm, Tag, Empty, message } from "antd";
+import {
+  Table,
+  Button,
+  Tooltip,
+  Space,
+  Popconfirm,
+  Tag,
+  Empty,
+  message,
+} from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { convertMeetingPeriodToNumber } from "../../../../helper/util.helper";
 import { convertLongToDate } from "../../../../helper/convertDate";
@@ -78,9 +91,7 @@ const DetailMyClassTeam = () => {
         message.success("Rời lớp học thành công!");
         navigate(`/student/my-class`);
       })
-      .catch((error) => {
-
-      });
+      .catch((error) => {});
   };
   const [showDetailTeam, setShowDetailTeam] = useState(false);
   const [idSelected, setIdSelected] = useState(null);
@@ -296,8 +307,47 @@ const DetailMyClassTeam = () => {
               ĐIỂM
             </Link>
             <hr />
+            <div
+              style={{
+                marginTop: 17,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              {" "}
+              <div style={{ float: "left" }}>
+                <span style={{ fontSize: "17px", fontWeight: 500 }}>
+                  <FontAwesomeIcon
+                    icon={faCircleInfo}
+                    style={{
+                      marginRight: "10px",
+                      fontSize: "20px",
+                    }}
+                  />
+                  Thông tin lớp học :
+                </span>
+              </div>
+              <div style={{ float: "right" }}>
+                <Button
+                  style={{
+                    color: "white",
+                    backgroundColor: "rgb(55, 137, 220)",
+                  }}
+                >
+                  <FontAwesomeIcon
+                    icon={faHistory}
+                    size="1x"
+                    style={{
+                      backgroundColor: "rgb(55, 137, 220)",
+                      marginRight: "5px",
+                    }}
+                  />
+                  Lịch sử
+                </Button>
+              </div>
+            </div>
             <div className="info-team">
-              <span className="info-heading">Thông tin lớp học:</span>
               <div className="group-info">
                 <span
                   className="group-info-item"
@@ -343,8 +393,17 @@ const DetailMyClassTeam = () => {
             </div>
             {checkStatus && (
               <div>
+                <span style={{ fontSize: "17px", fontWeight: 500 }}>
+                  <FontAwesomeIcon
+                    icon={faCircleInfo}
+                    style={{
+                      marginRight: "10px",
+                      fontSize: "20px",
+                    }}
+                  />
+                  Thông tin nhóm:
+                </span>
                 <div className="info-team">
-                  <span className="info-heading">Thông tin nhóm:</span>
                   <div className="group-info">
                     <span className="group-info-item">
                       Tên nhóm: {detailTeam != null ? detailTeam.name : ""}{" "}
@@ -372,10 +431,14 @@ const DetailMyClassTeam = () => {
                       className="table-member-team"
                       style={{ marginBottom: "15px" }}
                     >
-                      <span
-                        className="info-heading"
-                        style={{ fontSize: "16px" }}
-                      >
+                      <span style={{ fontSize: "17px", fontWeight: 500 }}>
+                        <FontAwesomeIcon
+                          icon={faTableList}
+                          style={{
+                            marginRight: "10px",
+                            fontSize: "20px",
+                          }}
+                        />
                         Danh sách thành viên trong nhóm:
                       </span>
                     </div>
@@ -442,8 +505,15 @@ const DetailMyClassTeam = () => {
                     className="table-member-team"
                     style={{ marginBottom: "7px" }}
                   >
-                    <span className="info-heading" style={{ fontSize: "16px" }}>
-                      Danh sách nhóm trong lớp:
+                    <span style={{ fontSize: "17px", fontWeight: 500 }}>
+                      <FontAwesomeIcon
+                        icon={faTableList}
+                        style={{
+                          marginRight: "10px",
+                          fontSize: "20px",
+                        }}
+                      />
+                      Danh sách nhóm:
                     </span>
                   </div>
                   {listTeam.length > 0 ? (

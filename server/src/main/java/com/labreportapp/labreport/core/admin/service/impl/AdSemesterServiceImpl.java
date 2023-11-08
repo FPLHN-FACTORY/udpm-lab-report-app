@@ -9,6 +9,7 @@ import com.labreportapp.labreport.core.admin.service.AdSemesterService;
 import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.entity.Semester;
 import com.labreportapp.labreport.infrastructure.constant.StatusFeedBack;
+import com.labreportapp.labreport.util.CompareUtil;
 import com.labreportapp.labreport.util.FormUtils;
 import com.labreportapp.labreport.util.LoggerUtil;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
@@ -20,6 +21,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,14 +58,14 @@ public class AdSemesterServiceImpl implements AdSemesterService {
             }
         }
         semester.setStatusFeedBack(StatusFeedBack.CHUA_FEEDBACK);
-        loggerUtil.sendLog("Đã thêm mới học kỳ " + obj.getName(), "");
+        loggerUtil.sendLogScreen("Đã thêm mới học kỳ " + obj.getName(), "");
         return adSemesterRepository.save(semester);
     }
 
     @Override
     public Semester updateSermester(@Valid AdUpdateSemesterRequest obj) {
-        Optional<Semester> findCategoryById = adSemesterRepository.findById(obj.getId());
-        if (!findCategoryById.isPresent()) {
+        Optional<Semester> findSemesterById = adSemesterRepository.findById(obj.getId());
+        if (!findSemesterById.isPresent()) {
             throw new RestApiException(Message.SEMESTER_NOT_EXISTS);
         }
         List<Semester> semesterList = adSemesterRepository.findAllSemester();
@@ -86,8 +88,32 @@ public class AdSemesterServiceImpl implements AdSemesterService {
                 throw new RestApiException(Message.TIME_STUDENT_SEMESTER_OVERLOAD);
             }
         }
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Semester semester = findSemesterById.get();
 
-        Semester semester = findCategoryById.get();
+        String messageNameSemester = CompareUtil.compareAndConvertMessage("tên học kỳ", semester.getName(), obj.getName(), "");
+        loggerUtil.sendLogScreen(messageNameSemester, "");
+
+        String startTimeOld = sdf.format(semester.getStartTime());
+        String startTimeNew = sdf.format(obj.getStartTime());
+        String messageStartTimeSemester = CompareUtil.compareAndConvertMessage("ngày bắt đầu của học kỳ", startTimeOld, startTimeNew, "");
+        loggerUtil.sendLogScreen(messageStartTimeSemester, "");
+
+        String endTimeOld = sdf.format(semester.getEndTime());
+        String endTimeNew = sdf.format(obj.getEndTime());
+        String messageEndTimeSemester = CompareUtil.compareAndConvertMessage("ngày kết thúc của học kỳ", endTimeOld, endTimeNew, "");
+        loggerUtil.sendLogScreen(messageEndTimeSemester, "");
+
+        String startTimeStudentOld = sdf.format(semester.getStartTimeStudent());
+        String startTimeStudentNew = sdf.format(obj.getStartTimeStudent());
+        String messageStartTimeStudent = CompareUtil.compareAndConvertMessage("ngày bắt đầu sinh viên của học kỳ", startTimeStudentOld, startTimeStudentNew, "");
+        loggerUtil.sendLogScreen(messageStartTimeStudent, "");
+
+        String endTimeStudentOld = sdf.format(semester.getEndTimeStudent());
+        String endTimeStudentNew = sdf.format(obj.getEndTimeStudent());
+        String messageEndTimeStudent = CompareUtil.compareAndConvertMessage("ngày kết thúc sinh viên của học kỳ", endTimeStudentOld, endTimeStudentNew, "");
+        loggerUtil.sendLogScreen(messageEndTimeStudent, "");
+
         semester.setName(obj.getName());
         semester.setStartTime(obj.getStartTime());
         semester.setEndTime(obj.getEndTime());
@@ -124,6 +150,7 @@ public class AdSemesterServiceImpl implements AdSemesterService {
             System.out.println(countActivities);
             throw new RestApiException(Message.SEMESTER_ACTIVITY_ALREADY_EXISTS);
         }
+        loggerUtil.sendLogScreen("Đã xóa học kỳ " + findSemesterById.get().getName(), "");
         adSemesterRepository.delete(findSemesterById.get());
         return true;
     }
@@ -136,6 +163,7 @@ public class AdSemesterServiceImpl implements AdSemesterService {
         }
         findSemesterById.get().setStatusFeedBack(StatusFeedBack.DA_FEEDBACK);
         adSemesterRepository.save(findSemesterById.get());
+        loggerUtil.sendLogScreen("Đã bật feedback của học kỳ " + findSemesterById.get().getName(), "");
         return true;
     }
 

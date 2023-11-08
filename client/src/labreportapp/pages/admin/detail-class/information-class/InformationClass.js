@@ -1,9 +1,13 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./style-information-class.css";
 import {
+  faCircleInfo,
   faDownload,
   faEye,
+  faFileDownload,
+  faHistory,
   faRightFromBracket,
+  faTableList,
   faUpload,
 } from "@fortawesome/free-solid-svg-icons";
 import { ControlOutlined, SearchOutlined } from "@ant-design/icons";
@@ -597,8 +601,64 @@ const InformationClass = () => {
             </div>
             <hr />
           </div>
+          <div
+            style={{
+              marginTop: 17,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            {" "}
+            <div style={{ float: "left" }}>
+              <span style={{ fontSize: "17px", fontWeight: 500 }}>
+                <FontAwesomeIcon
+                  icon={faCircleInfo}
+                  style={{
+                    marginRight: "10px",
+                    fontSize: "20px",
+                  }}
+                />
+                Thông tin lớp học :
+              </span>
+            </div>
+            <div style={{ float: "right" }}>
+              <Button
+                style={{
+                  color: "white",
+                  backgroundColor: "rgb(55, 137, 220)",
+                  marginRight: 5,
+                }}
+              >
+                <FontAwesomeIcon
+                  icon={faFileDownload}
+                  size="1x"
+                  style={{
+                    backgroundColor: "rgb(55, 137, 220)",
+                    marginRight: "5px",
+                  }}
+                />
+                Dowload log
+              </Button>
+              <Button
+                style={{
+                  color: "white",
+                  backgroundColor: "rgb(55, 137, 220)",
+                }}
+              >
+                <FontAwesomeIcon
+                  icon={faHistory}
+                  size="1x"
+                  style={{
+                    backgroundColor: "rgb(55, 137, 220)",
+                    marginRight: "5px",
+                  }}
+                />
+                Lịch sử
+              </Button>
+            </div>
+          </div>
           <div className="info-team">
-            <span className="info-heading">Thông tin lớp học:</span>
             <div className="group-info">
               <span
                 className="group-info-item"
@@ -653,7 +713,7 @@ const InformationClass = () => {
                   className="group-info-item"
                   style={{ marginTop: "13px", marginBottom: "15px" }}
                 >
-                  Ca học: &nbsp; {classDetail.classPeriod} ({" "}
+                  Ca học: &nbsp; {classDetail.classPeriod} (
                   {convertHourAndMinuteToString(
                     classDetail.startHour,
                     classDetail.startMinute,
@@ -723,7 +783,14 @@ const InformationClass = () => {
               <br />
               <div style={{ marginBottom: "10px" }}>
                 <div style={{ float: "left" }}>
-                  <span style={{ fontSize: "16px" }}>
+                  <span style={{ fontSize: "17px", fontWeight: 500 }}>
+                    <FontAwesomeIcon
+                      icon={faTableList}
+                      style={{
+                        marginRight: "10px",
+                        fontSize: "20px",
+                      }}
+                    />
                     Danh sách sinh viên trong lớp:
                   </span>
                 </div>

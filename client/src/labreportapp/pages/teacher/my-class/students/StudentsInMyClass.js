@@ -16,6 +16,8 @@ import { SetTTrueToggle } from "../../../../app/teacher/TeCollapsedSlice.reducer
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleInfo,
+  faFileDownload,
+  faHistory,
   faRightFromBracket,
   faTableList,
 } from "@fortawesome/free-solid-svg-icons";
@@ -519,8 +521,16 @@ const StudentsInMyClass = () => {
               <hr />
             </div>
           </div>
-          <div className="info-team">
-            <div style={{ margin: "15px 0px 15px 15px" }}>
+          <div
+            style={{
+              marginTop: 17,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            {" "}
+            <div style={{ float: "left" }}>
               <span style={{ fontSize: "17px", fontWeight: 500 }}>
                 <FontAwesomeIcon
                   icon={faCircleInfo}
@@ -529,9 +539,29 @@ const StudentsInMyClass = () => {
                     fontSize: "20px",
                   }}
                 />
-                Thông tin lớp học :
+                Thông tin lớp học:
               </span>
             </div>
+            <div style={{ float: "right" }}>
+              <Button
+                style={{
+                  color: "white",
+                  backgroundColor: "rgb(55, 137, 220)",
+                }}
+              >
+                <FontAwesomeIcon
+                  icon={faHistory}
+                  size="1x"
+                  style={{
+                    backgroundColor: "rgb(55, 137, 220)",
+                    marginRight: "5px",
+                  }}
+                />
+                Lịch sử
+              </Button>
+            </div>
+          </div>
+          <div className="info-team">
             <div className="group-info">
               <span
                 className="group-info-item"
@@ -643,7 +673,7 @@ const StudentsInMyClass = () => {
                   fontSize: "20px",
                 }}
               />
-              Danh sách sinh viên :
+              Danh sách sinh viên:
               {classDetail.statusTeacherEdit === 0 &&
                 data != null &&
                 data.length > 0 && (

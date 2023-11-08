@@ -13,7 +13,7 @@ import com.labreportapp.labreport.core.teacher.repository.TeTeamFactoryRepositor
 import com.labreportapp.labreport.core.teacher.service.TeTeamFactoryService;
 import com.labreportapp.labreport.entity.MemberFactory;
 import com.labreportapp.labreport.entity.TeamFactory;
-import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
+import com.labreportapp.labreport.util.CallApiIdentity;
 import com.labreportapp.labreport.util.FormUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -40,7 +40,7 @@ public class TeTeamFactoryServiceImpl implements TeTeamFactoryService {
     private FormUtils formUtils = new FormUtils();
 
     @Autowired
-    private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
+    private CallApiIdentity callApiIdentity;
 
     @Autowired
     private TeMemberFactoryRepository teMemberFactoryRepository;
@@ -64,7 +64,7 @@ public class TeTeamFactoryServiceImpl implements TeTeamFactoryService {
             teTeamFactoryCustom.setStt(xx.getStt());
             teTeamFactoryCustom.setNumberMember(teTeamFactoryRepository.countNumberMemberOfTeam(xx.getId()));
             List<String> memberStr = teTeamFactoryRepository.getAllMemberOfTeam(xx.getId());
-            List<SimpleResponse> listResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(memberStr);
+            List<SimpleResponse> listResponse = callApiIdentity.handleCallApiGetListUserByListId(memberStr);
             teTeamFactoryCustom.setListMember(listResponse);
             listCustom.add(teTeamFactoryCustom);
         });
@@ -88,7 +88,7 @@ public class TeTeamFactoryServiceImpl implements TeTeamFactoryService {
                 .filter(Objects::nonNull)
                 .distinct()
                 .collect(Collectors.toList());
-        List<SimpleResponse> listResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idList);
+        List<SimpleResponse> listResponse = callApiIdentity.handleCallApiGetListUserByListId(idList);
         List<TeAllMemberFactoryResponse> listCustom = new ArrayList<>();
         listStrIdMember.forEach(idMe -> {
             listResponse.forEach(res -> {
@@ -116,7 +116,7 @@ public class TeTeamFactoryServiceImpl implements TeTeamFactoryService {
                 .filter(Objects::nonNull)
                 .distinct()
                 .collect(Collectors.toList());
-        List<SimpleResponse> listResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idList);
+        List<SimpleResponse> listResponse = callApiIdentity.handleCallApiGetListUserByListId(idList);
         List<TeAllMemberFactoryResponse> listCustom = new ArrayList<>();
         listMemberFactory.forEach(memberFactory -> {
             listResponse.forEach(response -> {

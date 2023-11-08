@@ -9,7 +9,7 @@ import com.labreportapp.labreport.core.student.model.response.StMemberFactoryRes
 import com.labreportapp.labreport.core.student.repository.StMemberFactoryRepository;
 import com.labreportapp.labreport.core.student.service.StMemberFactoryService;
 import com.labreportapp.labreport.repository.TeamFactoryRepository;
-import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
+import com.labreportapp.labreport.util.CallApiIdentity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -34,7 +34,7 @@ public class StMemberFactoryServiceImpl implements StMemberFactoryService {
     private StMemberFactoryRepository stMemberFactoryRepository;
 
     @Autowired
-    private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
+    private CallApiIdentity callApiIdentity;
 
     @Autowired
     @Qualifier(TeamFactoryRepository.NAME)
@@ -51,7 +51,7 @@ public class StMemberFactoryServiceImpl implements StMemberFactoryService {
                 .collect(Collectors.toList());
         List<SimpleResponse> listResponse = new ArrayList<>();
         if (idList != null && idList.size() > 0) {
-            listResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idList);
+            listResponse = callApiIdentity.handleCallApiGetListUserByListId(idList);
         }
         List<SimpleResponse> finalListResponse = listResponse;
         List<StMemberFactoryCustom> listCustom = new ArrayList<>();

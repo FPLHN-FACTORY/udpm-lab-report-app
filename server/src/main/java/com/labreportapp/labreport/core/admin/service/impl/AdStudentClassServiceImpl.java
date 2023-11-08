@@ -19,7 +19,7 @@ import com.labreportapp.labreport.entity.StudentClasses;
 import com.labreportapp.labreport.infrastructure.constant.StatusStudentFeedBack;
 import com.labreportapp.labreport.infrastructure.constant.StatusTeam;
 import com.labreportapp.labreport.repository.ClassRepository;
-import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
+import com.labreportapp.labreport.util.CallApiIdentity;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import jakarta.servlet.http.HttpServletResponse;
@@ -51,7 +51,7 @@ public class AdStudentClassServiceImpl implements AdStudentClassService {
     private ClassRepository classRepository;
 
     @Autowired
-    private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
+    private CallApiIdentity callApiIdentity;
 
     @Autowired
     private AdExportExcelStudentClasses adExportExcelStudentClasses;
@@ -74,7 +74,7 @@ public class AdStudentClassServiceImpl implements AdStudentClassService {
                 .map(AdStudentClassesRespone::getIdStudent)
                 .collect(Collectors.toList());
 
-        List<SimpleResponse> listRespone = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idStudentList);
+        List<SimpleResponse> listRespone = callApiIdentity.handleCallApiGetListUserByListId(idStudentList);
         List<AdStudentCallApiRespone> listReturn = new ArrayList<>();
         listRepository.forEach(reposi -> {
             listRespone.forEach(respone -> {
@@ -109,7 +109,7 @@ public class AdStudentClassServiceImpl implements AdStudentClassService {
                 .map(AdStudentClassesRespone::getIdStudent)
                 .collect(Collectors.toList());
 
-        List<SimpleResponse> simpleResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idStudentList);
+        List<SimpleResponse> simpleResponse = callApiIdentity.handleCallApiGetListUserByListId(idStudentList);
         List<AdExportExcelStudentsClassCustomResponse> studentsInClassResponse = new ArrayList<>();
 
         for (AdStudentClassesRespone st : studentsInClass) {
@@ -149,7 +149,7 @@ public class AdStudentClassServiceImpl implements AdStudentClassService {
                     .filter(Objects::nonNull)
                     .distinct()
                     .collect(Collectors.toList());
-            List<SimpleResponse> simpleResponse = convertRequestCallApiIdentity.
+            List<SimpleResponse> simpleResponse = callApiIdentity.
                     handleCallApiGetListUserByListEmail(listEmail);
             Map<String, SimpleResponse> simpleMap = simpleResponse.stream()
                     .collect(Collectors.toMap(SimpleResponse::getEmail, Function.identity()));

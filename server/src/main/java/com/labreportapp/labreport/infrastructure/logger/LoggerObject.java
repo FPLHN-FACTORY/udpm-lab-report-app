@@ -35,4 +35,6 @@ public class LoggerObject implements Serializable {
 
     private String content;
 
+    private String codeClass;
+
 }

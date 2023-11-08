@@ -11,7 +11,7 @@ import com.labreportapp.labreport.core.teacher.repository.TePostRepository;
 import com.labreportapp.labreport.core.teacher.service.TePostService;
 import com.labreportapp.labreport.entity.Post;
 import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
-import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
+import com.labreportapp.labreport.util.CallApiIdentity;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +38,7 @@ public class TePostServiceImpl implements TePostService {
     private LabReportAppSession labReportAppSession;
 
     @Autowired
-    private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
+    private CallApiIdentity callApiIdentity;
 
     @Override
     public PageableObject<TePostTeacherResponse> searchPagePost(TeFindPostClassRepquest repquest) {
@@ -48,7 +48,7 @@ public class TePostServiceImpl implements TePostService {
                 .map(TePostResponse::getIdTeacher)
                 .distinct()
                 .collect(Collectors.toList());
-        List<SimpleResponse> listTeacher = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idUsers);
+        List<SimpleResponse> listTeacher = callApiIdentity.handleCallApiGetListUserByListId(idUsers);
         Page<TePostTeacherResponse> pageNew = listPage.map(item -> {
             TePostTeacherResponse objNew = new TePostTeacherResponse();
             objNew.setId(item.getId());
@@ -76,7 +76,7 @@ public class TePostServiceImpl implements TePostService {
         if (request.getDescriptions().equals("")) {
             throw new RestApiException(Message.DESCRIPTIONS_IS_EMPTY);
         }
-        SimpleResponse simpleResponse = convertRequestCallApiIdentity.handleCallApiGetUserById(labReportAppSession.getUserId());
+        SimpleResponse simpleResponse = callApiIdentity.handleCallApiGetUserById(labReportAppSession.getUserId());
         post.setDescriptions(request.getDescriptions());
         post.setCreatedDate(new Date().getTime());
         post.setClassId(request.getIdClass());
@@ -103,7 +103,7 @@ public class TePostServiceImpl implements TePostService {
         if (request.getDescriptions().equals("")) {
             throw new RestApiException(Message.DESCRIPTIONS_IS_EMPTY);
         }
-        SimpleResponse simpleResponse = convertRequestCallApiIdentity.handleCallApiGetUserById(labReportAppSession.getUserId());
+        SimpleResponse simpleResponse = callApiIdentity.handleCallApiGetUserById(labReportAppSession.getUserId());
         Post post = findObj.get();
         post.setCreatedDate(new Date().getTime());
         post.setDescriptions(request.getDescriptions());

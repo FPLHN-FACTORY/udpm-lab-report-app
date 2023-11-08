@@ -10,6 +10,7 @@ import {
 } from "../../app/student/StCollapsedSlice.reducer";
 import { StFeedBackAPI } from "../../api/student/StFeedBackAPI";
 import ModalStudentFeedBack from "./ModalStudentFeedBack";
+import CommonFooter from "../../component/common/CommonFooter";
 
 const { Content, Sider } = Layout;
 
@@ -68,7 +69,8 @@ const DashBoardStudent = ({ children }) => {
               minHeight: "calc(100vh)",
             }}
           >
-            {children}
+            {children} 
+            <CommonFooter />
             <ModalStudentFeedBack
               visible={statusFeedback}
               setVisible={setStatusFeedback}

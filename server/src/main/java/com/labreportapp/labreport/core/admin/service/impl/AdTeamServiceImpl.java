@@ -6,7 +6,6 @@ import com.labreportapp.labreport.core.admin.model.request.AdDeleteListMemberTea
 import com.labreportapp.labreport.core.admin.model.request.AdFindTeamRequest;
 import com.labreportapp.labreport.core.admin.model.request.AdUpdateTeamRequest;
 import com.labreportapp.labreport.core.admin.model.response.AdAllMemberFactoryResponse;
-import com.labreportapp.labreport.core.admin.model.response.AdClassResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdTeamFactoryCustom;
 import com.labreportapp.labreport.core.admin.model.response.AdTeamResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdTemplateMemberFactoryResponse;
@@ -19,7 +18,7 @@ import com.labreportapp.labreport.entity.MemberFactory;
 import com.labreportapp.labreport.entity.MemberTeamFactory;
 import com.labreportapp.labreport.entity.TeamFactory;
 import com.labreportapp.labreport.repository.MemberTeamFactoryRepository;
-import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
+import com.labreportapp.labreport.util.CallApiIdentity;
 import com.labreportapp.labreport.util.FormUtils;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
@@ -51,7 +50,7 @@ public class AdTeamServiceImpl implements AdTeamService {
     private FormUtils formUtils = new FormUtils();
 
     @Autowired
-    private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
+    private CallApiIdentity callApiIdentity;
 
     @Autowired
     private AdMemberFactoryRepository adMemberFactoryRepository;
@@ -98,7 +97,7 @@ public class AdTeamServiceImpl implements AdTeamService {
             adTeamFactoryCustom.setStt(xx.getStt());
             adTeamFactoryCustom.setNumberMember(adTeamRepository.countNumberMemberOfTeam(xx.getId()));
             List<String> memberStr = adTeamRepository.getAllMemberOfTeam(xx.getId());
-            List<SimpleResponse> listResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(memberStr);
+            List<SimpleResponse> listResponse = callApiIdentity.handleCallApiGetListUserByListId(memberStr);
             adTeamFactoryCustom.setListMember(listResponse);
             listCustom.add(adTeamFactoryCustom);
         });
@@ -136,7 +135,7 @@ public class AdTeamServiceImpl implements AdTeamService {
                 .filter(Objects::nonNull)
                 .distinct()
                 .collect(Collectors.toList());
-        List<SimpleResponse> listResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idList);
+        List<SimpleResponse> listResponse = callApiIdentity.handleCallApiGetListUserByListId(idList);
         List<AdAllMemberFactoryResponse> listCustom = new ArrayList<>();
         listStrIdMember.forEach(idMe -> {
             listResponse.forEach(res -> {
@@ -164,7 +163,7 @@ public class AdTeamServiceImpl implements AdTeamService {
                 .filter(Objects::nonNull)
                 .distinct()
                 .collect(Collectors.toList());
-        List<SimpleResponse> listResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idList);
+        List<SimpleResponse> listResponse = callApiIdentity.handleCallApiGetListUserByListId(idList);
         List<AdAllMemberFactoryResponse> listCustom = new ArrayList<>();
         listMemberFactory.forEach(memberFactory -> {
             listResponse.forEach(response -> {

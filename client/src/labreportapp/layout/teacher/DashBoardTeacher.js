@@ -8,6 +8,7 @@ import {
   GetTeCollapsed,
   Toggle,
 } from "../../app/teacher/TeCollapsedSlice.reducer";
+import CommonFooter from "../../component/common/CommonFooter";
 
 const { Content, Sider, Footer } = Layout;
 
@@ -55,7 +56,8 @@ const DashBoardTeacher = ({ children }) => {
               minHeight: "calc(100vh)",
             }}
           >
-            {children}
+            {children} 
+            <CommonFooter />
           </Content>
         </Layout>
       </Layout>

@@ -7,7 +7,7 @@ import com.labreportapp.labreport.core.student.model.response.StPostResponse;
 import com.labreportapp.labreport.core.student.model.response.StPostTeacherResponse;
 import com.labreportapp.labreport.core.student.repository.StPostRepository;
 import com.labreportapp.labreport.core.student.service.StPostService;
-import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
+import com.labreportapp.labreport.util.CallApiIdentity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,7 +25,7 @@ public class StPostServiceImpl implements StPostService {
     @Autowired
     private StPostRepository repository;
     @Autowired
-    private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
+    private CallApiIdentity callApiIdentity;
 
     @Override
     public PageableObject<StPostTeacherResponse> searchPagePost(StFindPostRequest repquest) {
@@ -35,7 +35,7 @@ public class StPostServiceImpl implements StPostService {
                 .map(StPostResponse::getIdTeacher)
                 .distinct()
                 .collect(Collectors.toList());
-        List<SimpleResponse> listTeacher = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idUsers);
+        List<SimpleResponse> listTeacher = callApiIdentity.handleCallApiGetListUserByListId(idUsers);
         Page<StPostTeacherResponse> pageNew = listPage.map(item -> {
             StPostTeacherResponse objNew = new StPostTeacherResponse();
             objNew.setId(item.getId());

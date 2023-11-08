@@ -2,7 +2,7 @@ package com.labreportapp.labreport.infrastructure.security;
 
 import com.labreportapp.labreport.infrastructure.constant.SessionConstant;
 import com.labreportapp.labreport.util.AreRolesEqual;
-import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
+import com.labreportapp.labreport.util.CallApiIdentity;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.CustomException;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
@@ -36,7 +36,7 @@ public class JwtTokenProvider {
     private HttpSession httpSession;
 
     @Autowired
-    private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
+    private CallApiIdentity callApiIdentity;
 
     public Authentication getAuthentication(String token) {
         Claims claims = Jwts.parserBuilder()
@@ -93,7 +93,7 @@ public class JwtTokenProvider {
             }
             Object roleClaim = claims.getBody().get("role");
             String id = claims.getBody().get("id", String.class);
-            Object response = convertRequestCallApiIdentity.handleCallApiGetRoleUserByIdUserAndModuleCode(id);
+            Object response = callApiIdentity.handleCallApiGetRoleUserByIdUserAndModuleCode(id);
             if (!AreRolesEqual.compareObjects(roleClaim, response)) {
                 throw new CustomException(Message.ROLE_USER_CHANGE);
             }

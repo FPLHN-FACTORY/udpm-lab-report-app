@@ -21,4 +21,12 @@ public interface ClassRepository extends JpaRepository<Class, String> {
             LIMIT 1
             """, nativeQuery = true)
     String getMaNhomMaxByIdActivity(@Param("idActivity") String idActivity);
+
+    @Query(value = """
+            SELECT c.name FROM class a 
+            JOIN activity b ON a.activity_id = b.id 
+            JOIN semester c ON b.semester_id = c.id 
+            WHERE a.id = :idClass
+            """, nativeQuery = true)
+    String getNameSemesterByIdClass(@Param("idClass") String idClass);
 }

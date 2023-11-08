@@ -8,7 +8,7 @@ import com.labreportapp.labreport.core.student.model.response.StAttendanceRespon
 import com.labreportapp.labreport.core.student.repository.StAttendanceRepository;
 import com.labreportapp.labreport.core.student.service.StAttendanceService;
 import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
-import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
+import com.labreportapp.labreport.util.CallApiIdentity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,7 +26,7 @@ public class StAttendanceServiceImpl implements StAttendanceService {
     private StAttendanceRepository stAttendanceRepository;
 
     @Autowired
-    private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
+    private CallApiIdentity callApiIdentity;
 
     @Autowired
     private LabReportAppSession labReportAppSession;
@@ -46,7 +46,7 @@ public class StAttendanceServiceImpl implements StAttendanceService {
                 .map(StAttendanceRespone::getTeacherId)
                 .distinct()
                 .collect(Collectors.toList());
-        List<SimpleResponse> listRespone = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idTeacherList);
+        List<SimpleResponse> listRespone = callApiIdentity.handleCallApiGetListUserByListId(idTeacherList);
         List<StAttendanceCallApiRespone> listReturn = new ArrayList<>();
         Page<StAttendanceCallApiRespone> pageReturn = stAttendanceResponeList.map(reposi -> {
             StAttendanceCallApiRespone obj = new StAttendanceCallApiRespone();

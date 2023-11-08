@@ -1,7 +1,7 @@
 package com.labreportapp.portalprojects.core.admin.service.impl;
 
 import com.labreportapp.labreport.core.common.response.SimpleResponse;
-import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
+import com.labreportapp.labreport.util.CallApiIdentity;
 import com.labreportapp.portalprojects.core.admin.model.request.AdCreateMemberProjectRequest;
 import com.labreportapp.portalprojects.core.admin.model.request.AdFindProjectRequest;
 import com.labreportapp.portalprojects.core.admin.model.request.AdUpdateMemberProjectRequest;
@@ -37,7 +37,7 @@ public class AdMemberProjectServiceImpl implements AdMemberProjectService {
     private AdMemberProjectRepository adMemberProjectRepository;
 
     @Autowired
-    private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
+    private CallApiIdentity callApiIdentity;
 
     @Autowired
     private AdPotalsRoleMemberProjectService adPotalsRoleMemberProjectService;
@@ -63,7 +63,7 @@ public class AdMemberProjectServiceImpl implements AdMemberProjectService {
         }
         List<AdRoleMemberProjectDetailResponse> listMemberRole = adPotalsRoleMemberProjectService
                 .getAllRoleMemberProjByIdProj(idProject);
-        List<SimpleResponse> listCall = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idList);
+        List<SimpleResponse> listCall = callApiIdentity.handleCallApiGetListUserByListId(idList);
         listMemberId.forEach(db -> {
             listCall.forEach(call -> {
                 if (db.getMemberId().equals(call.getId())) {

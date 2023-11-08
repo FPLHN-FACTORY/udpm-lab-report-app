@@ -19,7 +19,9 @@ import com.labreportapp.labreport.entity.Meeting;
 import com.labreportapp.labreport.entity.MeetingPeriod;
 import com.labreportapp.labreport.infrastructure.constant.StatusMeeting;
 import com.labreportapp.labreport.infrastructure.constant.TypeMeeting;
-import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
+import com.labreportapp.labreport.util.CallApiIdentity;
+import com.labreportapp.labreport.util.CompareUtil;
+import com.labreportapp.labreport.util.LoggerUtil;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import jakarta.validation.Valid;
@@ -27,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -47,13 +50,16 @@ public class AdMeetingServiceImpl implements AdMeetingService {
     private AdMeetingPeriodRepository adMeetingPeriodRepository;
 
     @Autowired
-    private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
+    private CallApiIdentity callApiIdentity;
 
     @Autowired
     private AdClassRepository adClassRepository;
 
     @Autowired
     private AdActivityRepository adActivityRepository;
+
+    @Autowired
+    private LoggerUtil loggerUtil;
 
     @Override
     public List<AdMeetingCustom> getAllMeetingByIdClass(String idClass) {
@@ -63,7 +69,7 @@ public class AdMeetingServiceImpl implements AdMeetingService {
                 .filter(Objects::nonNull)
                 .distinct()
                 .collect(Collectors.toList());
-        List<SimpleResponse> listSimpleResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(distinctTeacherIds);
+        List<SimpleResponse> listSimpleResponse = callApiIdentity.handleCallApiGetListUserByListId(distinctTeacherIds);
         List<AdMeetingCustom> listCustom = new ArrayList<>();
         listMeeting.forEach(res -> {
             AdMeetingCustom adMeetingCustom = new AdMeetingCustom();
@@ -120,7 +126,7 @@ public class AdMeetingServiceImpl implements AdMeetingService {
         SimpleResponse simple = null;
         if (!request.getTeacherId().equals("") && request.getTeacherId() != null) {
             meeting.setTeacherId(request.getTeacherId());
-            simple = convertRequestCallApiIdentity.handleCallApiGetUserById(request.getTeacherId());
+            simple = callApiIdentity.handleCallApiGetUserById(request.getTeacherId());
         }
         Meeting meetingNew = adMeetingRepository.save(meeting);
         adMeetingRepository.updateNameMeeting(request.getClassId());
@@ -153,6 +159,17 @@ public class AdMeetingServiceImpl implements AdMeetingService {
         if (!meetingFind.isPresent()) {
             throw new RestApiException(Message.MEETING_NOT_EXISTS);
         }
+        Optional<Class> classOptional = adClassRepository.findById(meetingFind.get().getClassId());
+        if (!classOptional.isPresent()) {
+            throw new RestApiException(Message.CLASS_NOT_EXISTS);
+        }
+        String nameSemester = loggerUtil.getNameSemesterByIdClass(classOptional.get().getId());
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        String meetingDateOld = sdf.format(meetingFind.get().getMeetingDate());
+        String meetingDateNew = sdf.format(request.getMeetingDate());
+        String messageMeetingDate = CompareUtil.compareAndConvertMessage("ngày học của buổi học " + meetingFind.get().getName(), meetingDateOld, meetingDateNew, "");
+        loggerUtil.sendLogStreamClass(messageMeetingDate, classOptional.get().getCode(), nameSemester);
+
         meetingFind.get().setMeetingDate(request.getMeetingDate());
         meetingFind.get().setTypeMeeting(TypeMeeting.values()[request.getTypeMeeting()]);
         MeetingPeriod meetingPeriodFind = adMeetingPeriodRepository.findById(request.getMeetingPeriod()).get();
@@ -162,10 +179,11 @@ public class AdMeetingServiceImpl implements AdMeetingService {
         SimpleResponse simple = null;
         if (!request.getTeacherId().equals("") && request.getTeacherId() != null) {
             meetingFind.get().setTeacherId(request.getTeacherId());
-            simple = convertRequestCallApiIdentity.handleCallApiGetUserById(request.getTeacherId());
+            simple = callApiIdentity.handleCallApiGetUserById(request.getTeacherId());
         }
         Meeting meetingNew = adMeetingRepository.save(meetingFind.get());
         adMeetingRepository.updateNameMeeting(meetingFind.get().getClassId());
+
         AdMeetingCustom adMeetingCustom = new AdMeetingCustom();
         adMeetingCustom.setId(meetingNew.getId());
         adMeetingCustom.setMeetingDate(meetingNew.getMeetingDate());
@@ -273,7 +291,7 @@ public class AdMeetingServiceImpl implements AdMeetingService {
         adDetailMeetingResponse.setMeetingDate(meeting.getMeetingDate());
         adDetailMeetingResponse.setStatusMeeting(meeting.getStatusMeeting());
         MeetingPeriod meetingPeriodFind = null;
-        if(meeting.getMeetingPeriod() != null) {
+        if (meeting.getMeetingPeriod() != null) {
             meetingPeriodFind = adMeetingPeriodRepository.findById(meeting.getMeetingPeriod()).get();
             adDetailMeetingResponse.setNameMeetingPeriod(meetingPeriodFind.getName());
             adDetailMeetingResponse.setStartHour(meetingPeriodFind.getStartHour());
@@ -288,7 +306,7 @@ public class AdMeetingServiceImpl implements AdMeetingService {
         adDetailMeetingResponse.setClassId(meeting.getClassId());
         adDetailMeetingResponse.setCodeClass(classFind.getCode());
         if (meeting.getTeacherId() != null) {
-            SimpleResponse simpleResponse = convertRequestCallApiIdentity.handleCallApiGetUserById(meeting.getTeacherId());
+            SimpleResponse simpleResponse = callApiIdentity.handleCallApiGetUserById(meeting.getTeacherId());
             adDetailMeetingResponse.setTeacherId(simpleResponse.getId());
             adDetailMeetingResponse.setUserNameTeacher(simpleResponse.getUserName() + " - " + simpleResponse.getName());
         }

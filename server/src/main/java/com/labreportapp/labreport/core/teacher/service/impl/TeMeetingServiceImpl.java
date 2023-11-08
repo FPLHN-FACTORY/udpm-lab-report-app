@@ -28,7 +28,7 @@ import com.labreportapp.labreport.entity.MeetingPeriod;
 import com.labreportapp.labreport.entity.Note;
 import com.labreportapp.labreport.entity.Report;
 import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
-import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
+import com.labreportapp.labreport.util.CallApiIdentity;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import lombok.Synchronized;
@@ -71,7 +71,7 @@ public class TeMeetingServiceImpl implements TeMeetingService {
     private TeReportRepository teReportRepository;
 
     @Autowired
-    private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
+    private CallApiIdentity callApiIdentity;
 
     @Autowired
     private LabReportAppSession labReportAppSession;
@@ -127,7 +127,7 @@ public class TeMeetingServiceImpl implements TeMeetingService {
                 .map(TeMeetingResponse::getIdTeacher)
                 .distinct()
                 .collect(Collectors.toList());
-        List<SimpleResponse> listRespone = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idTeacherList);
+        List<SimpleResponse> listRespone = callApiIdentity.handleCallApiGetListUserByListId(idTeacherList);
         List<TeMeetingCustomResponse> listReturn = new ArrayList<>();
         list.forEach(reposi -> {
             listRespone.forEach(respone -> {

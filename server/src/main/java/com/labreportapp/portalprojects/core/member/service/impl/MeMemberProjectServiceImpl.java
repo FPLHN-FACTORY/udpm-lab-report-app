@@ -1,7 +1,7 @@
 package com.labreportapp.portalprojects.core.member.service.impl;
 
 import com.labreportapp.labreport.core.common.response.SimpleResponse;
-import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
+import com.labreportapp.labreport.util.CallApiIdentity;
 import com.labreportapp.portalprojects.core.member.model.request.MeCreateMemberProjectRequest;
 import com.labreportapp.portalprojects.core.member.model.request.MeListMemberProjectRequest;
 import com.labreportapp.portalprojects.core.member.model.request.MeMemberProjectCustom;
@@ -54,7 +54,7 @@ public class MeMemberProjectServiceImpl implements MeMemberProjectService {
     private MeProjectRepository meProjectRepository;
 
     @Autowired
-    private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
+    private CallApiIdentity callApiIdentity;
 
     @Autowired
     @Qualifier(RoleMemberProjectRepository.NAME)
@@ -67,7 +67,7 @@ public class MeMemberProjectServiceImpl implements MeMemberProjectService {
         List<String> memberIds = listMemberProject.stream()
                 .map(MeMemberProjectResponse::getMemberId)
                 .collect(Collectors.toList());
-        List<SimpleResponse> listResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(memberIds);
+        List<SimpleResponse> listResponse = callApiIdentity.handleCallApiGetListUserByListId(memberIds);
         List<MeMemberProjectCustom> listCustom = new ArrayList<>();
         listMemberProject.forEach(memberProject -> {
             listResponse.forEach(response -> {
@@ -101,7 +101,7 @@ public class MeMemberProjectServiceImpl implements MeMemberProjectService {
         } else {
             listId = meMemberProjectRepository.getAllMemberFactory();
         }
-        List<SimpleResponse> listResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(listId);
+        List<SimpleResponse> listResponse = callApiIdentity.handleCallApiGetListUserByListId(listId);
         return listResponse;
     }
 

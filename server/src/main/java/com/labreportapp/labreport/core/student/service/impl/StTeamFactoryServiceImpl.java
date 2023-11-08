@@ -12,7 +12,7 @@ import com.labreportapp.labreport.core.student.repository.StTeamFactoryRepositor
 import com.labreportapp.labreport.core.student.service.StTeamFactoryService;
 import com.labreportapp.labreport.entity.MemberFactory;
 import com.labreportapp.labreport.entity.TeamFactory;
-import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
+import com.labreportapp.labreport.util.CallApiIdentity;
 import com.labreportapp.labreport.util.FormUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -39,7 +39,7 @@ public class StTeamFactoryServiceImpl implements StTeamFactoryService {
     private FormUtils formUtils = new FormUtils();
 
     @Autowired
-    private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
+    private CallApiIdentity callApiIdentity;
 
     @Autowired
     private StMemberFactoryRepository stMemberFactoryRepository;
@@ -63,7 +63,7 @@ public class StTeamFactoryServiceImpl implements StTeamFactoryService {
             stTeamFactoryCustom.setStt(xx.getStt());
             stTeamFactoryCustom.setNumberMember(stTeamFactoryRepository.countNumberMemberOfTeam(xx.getId()));
             List<String> memberStr = stTeamFactoryRepository.getAllMemberOfTeam(xx.getId());
-            List<SimpleResponse> listResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(memberStr);
+            List<SimpleResponse> listResponse = callApiIdentity.handleCallApiGetListUserByListId(memberStr);
             stTeamFactoryCustom.setListMember(listResponse);
             listCustom.add(stTeamFactoryCustom);
         });
@@ -87,7 +87,7 @@ public class StTeamFactoryServiceImpl implements StTeamFactoryService {
                 .filter(Objects::nonNull)
                 .distinct()
                 .collect(Collectors.toList());
-        List<SimpleResponse> listResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idList);
+        List<SimpleResponse> listResponse = callApiIdentity.handleCallApiGetListUserByListId(idList);
         List<StAllMemberFactoryResponse> listCustom = new ArrayList<>();
         listStrIdMember.forEach(idMe -> {
             listResponse.forEach(res -> {
@@ -115,7 +115,7 @@ public class StTeamFactoryServiceImpl implements StTeamFactoryService {
                 .filter(Objects::nonNull)
                 .distinct()
                 .collect(Collectors.toList());
-        List<SimpleResponse> listResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idList);
+        List<SimpleResponse> listResponse = callApiIdentity.handleCallApiGetListUserByListId(idList);
         List<StAllMemberFactoryResponse> listCustom = new ArrayList<>();
         listMemberFactory.forEach(memberFactory -> {
             listResponse.forEach(response -> {

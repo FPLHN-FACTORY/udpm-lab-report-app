@@ -25,7 +25,7 @@ import com.labreportapp.labreport.repository.MemberRoleFactoryRepository;
 import com.labreportapp.labreport.repository.MemberTeamFactoryRepository;
 import com.labreportapp.labreport.repository.RoleFactoryRepository;
 import com.labreportapp.labreport.repository.TeamFactoryRepository;
-import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
+import com.labreportapp.labreport.util.CallApiIdentity;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import jakarta.servlet.http.HttpServletResponse;
@@ -82,7 +82,7 @@ public class AdMemberFactoryServiceImpl implements AdMemberFactoryService {
     private MemberTeamFactoryRepository memberTeamFactoryRepository;
 
     @Autowired
-    private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
+    private CallApiIdentity callApiIdentity;
 
     @Autowired
     private AdExportExcelMemberFactory adExportExcelMemberFactory;
@@ -98,7 +98,7 @@ public class AdMemberFactoryServiceImpl implements AdMemberFactoryService {
                 .collect(Collectors.toList());
         List<SimpleResponse> listResponse = new ArrayList<>();
         if (idList != null && idList.size() > 0) {
-            listResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idList);
+            listResponse = callApiIdentity.handleCallApiGetListUserByListId(idList);
         }
         List<SimpleResponse> finalListResponse = listResponse;
         List<AdMemberFactoryCustom> listCustom = new ArrayList<>();
@@ -144,7 +144,7 @@ public class AdMemberFactoryServiceImpl implements AdMemberFactoryService {
 
     @Override
     public AdMemberFactoryCustom addMemberFactory(String email) {
-        SimpleResponse simpleResponse = convertRequestCallApiIdentity.handleCallApiGetUserByEmail(email);
+        SimpleResponse simpleResponse = callApiIdentity.handleCallApiGetUserByEmail(email);
         if (simpleResponse == null) {
             throw new RestApiException(Message.NO_FIND_EMAIL);
         }
@@ -220,7 +220,7 @@ public class AdMemberFactoryServiceImpl implements AdMemberFactoryService {
         if (Objects.isNull(memberFactoryFind)) {
             throw new RestApiException(Message.MEMBER_FACTORY_NOT_EXISTS);
         }
-        SimpleResponse simpleResponse = convertRequestCallApiIdentity.handleCallApiGetUserById(memberFactoryFind.getMemberId());
+        SimpleResponse simpleResponse = callApiIdentity.handleCallApiGetUserById(memberFactoryFind.getMemberId());
         if (simpleResponse == null) {
             throw new RestApiException(Message.MEMBER_FACTORY_NOT_EXISTS);
         }
@@ -282,7 +282,7 @@ public class AdMemberFactoryServiceImpl implements AdMemberFactoryService {
                 .collect(Collectors.toList());
         List<SimpleResponse> listResponse = new ArrayList<>();
         if (idList != null && idList.size() > 0) {
-            listResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idList);
+            listResponse = callApiIdentity.handleCallApiGetListUserByListId(idList);
         }
         List<SimpleResponse> finalListResponse = listResponse;
         List<AdExcelMemberFactoryCustom> listCustom = new ArrayList<>();
@@ -315,7 +315,7 @@ public class AdMemberFactoryServiceImpl implements AdMemberFactoryService {
                     .filter(Objects::nonNull)
                     .distinct()
                     .collect(Collectors.toList());
-            List<SimpleResponse> listResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListEmail(listEmail);
+            List<SimpleResponse> listResponse = callApiIdentity.handleCallApiGetListUserByListEmail(listEmail);
             Map<String, SimpleResponse> simpleMap = listResponse.stream()
                     .collect(Collectors.toMap(SimpleResponse::getEmail, Function.identity()));
             List<String> listEmailMemberFactory = adMemberFactoryRepository.getAllEmailMemberFactory();

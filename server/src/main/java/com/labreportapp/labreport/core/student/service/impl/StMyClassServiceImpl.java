@@ -16,7 +16,7 @@ import com.labreportapp.labreport.entity.StudentClasses;
 import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.labreport.repository.LevelRepository;
 import com.labreportapp.labreport.repository.SemesterRepository;
-import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
+import com.labreportapp.labreport.util.CallApiIdentity;
 import com.labreportapp.labreport.util.SemesterHelper;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
@@ -54,7 +54,7 @@ public class StMyClassServiceImpl implements StMyClassService {
     private LevelRepository levelRepository;
 
     @Autowired
-    private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
+    private CallApiIdentity callApiIdentity;
 
     @Autowired
     private LabReportAppSession labReportAppSession;
@@ -86,7 +86,7 @@ public class StMyClassServiceImpl implements StMyClassService {
                 .filter(Objects::nonNull)
                 .distinct()
                 .collect(Collectors.toList());
-        List<SimpleResponse> listSimpleResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(distinctTeacherIds);
+        List<SimpleResponse> listSimpleResponse = callApiIdentity.handleCallApiGetListUserByListId(distinctTeacherIds);
         List<StMyClassCustom> listCustom = new ArrayList<>();
         for (StMyClassResponse stMyClassResponse : listMyClassResponse) {
             StMyClassCustom stMyClassCustom = new StMyClassCustom();
@@ -119,7 +119,7 @@ public class StMyClassServiceImpl implements StMyClassService {
     @Override
     public List<SimpleResponse> getAllStudentClasses(String idClass) {
         List<String> idList = stMyClassRepository.getAllStudentClasses(idClass);
-        List<SimpleResponse> listResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idList);
+        List<SimpleResponse> listResponse = callApiIdentity.handleCallApiGetListUserByListId(idList);
         return listResponse;
     }
 

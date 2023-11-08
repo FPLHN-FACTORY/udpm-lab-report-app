@@ -31,7 +31,7 @@ import com.labreportapp.labreport.entity.StudentClasses;
 import com.labreportapp.labreport.infrastructure.constant.RoleTeam;
 import com.labreportapp.labreport.infrastructure.constant.StatusAttendance;
 import com.labreportapp.labreport.infrastructure.constant.StatusMeeting;
-import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
+import com.labreportapp.labreport.util.CallApiIdentity;
 import com.labreportapp.labreport.util.DateConverter;
 import lombok.Synchronized;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,7 +75,7 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
     private TeClassRepository teClassRepository;
 
     @Autowired
-    private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
+    private CallApiIdentity callApiIdentity;
 
     @Autowired
     private TeEmailSender teEmailSender;
@@ -334,7 +334,7 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
                 .map(TeStudentAttendanceRespone::getTeacherId)
                 .distinct()
                 .collect(Collectors.toList());
-        List<SimpleResponse> listTeacher = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idUsers);
+        List<SimpleResponse> listTeacher = callApiIdentity.handleCallApiGetListUserByListId(idUsers);
         Page<TeStudentAttendedDetailRespone> pageNew = pageList.map(item -> {
             TeStudentAttendedDetailRespone objNew = new TeStudentAttendedDetailRespone();
             objNew.setStt(item.getStt());

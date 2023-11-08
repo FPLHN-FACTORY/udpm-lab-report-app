@@ -36,7 +36,7 @@ import com.labreportapp.labreport.infrastructure.constant.StatusTeacherEdit;
 import com.labreportapp.labreport.repository.ActivityRepository;
 import com.labreportapp.labreport.repository.LevelRepository;
 import com.labreportapp.labreport.util.ClassHelper;
-import com.labreportapp.labreport.util.ConvertRequestCallApiIdentity;
+import com.labreportapp.labreport.util.CallApiIdentity;
 import com.labreportapp.labreport.util.FormUtils;
 import com.labreportapp.labreport.util.RandomString;
 import com.labreportapp.labreport.util.SemesterHelper;
@@ -82,7 +82,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
     private RestTemplate restTemplate;
 
     @Autowired
-    private ConvertRequestCallApiIdentity convertRequestCallApiIdentity;
+    private CallApiIdentity callApiIdentity;
 
     @Autowired
     @Qualifier(LevelRepository.NAME)
@@ -173,7 +173,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
         if (!request.getTeacherId().equals("")) {
             adClassCustomResponse.setTeacherId(request.getTeacherId());
 
-            SimpleResponse response = convertRequestCallApiIdentity.handleCallApiGetUserById(request.getTeacherId());
+            SimpleResponse response = callApiIdentity.handleCallApiGetUserById(request.getTeacherId());
             adClassCustomResponse.setUserNameTeacher(response.getUserName());
         }
 
@@ -217,7 +217,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
         if (request.getTeacherId() != null && !request.getTeacherId().equals("")) {
             adClassCustomResponse.setTeacherId(request.getTeacherId());
 
-            SimpleResponse response = convertRequestCallApiIdentity.handleCallApiGetUserById(request.getTeacherId());
+            SimpleResponse response = callApiIdentity.handleCallApiGetUserById(request.getTeacherId());
             adClassCustomResponse.setUserNameTeacher(response.getUserName());
         }
         return adClassCustomResponse;
@@ -251,7 +251,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
                 .filter(Objects::nonNull)
                 .distinct()
                 .collect(Collectors.toList());
-        List<SimpleResponse> response = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idList);
+        List<SimpleResponse> response = callApiIdentity.handleCallApiGetListUserByListId(idList);
         List<AdListClassCustomResponse> listClassCustomResponses = new ArrayList<>();
         for (AdClassResponse adClassResponse : listResponse) {
             AdListClassCustomResponse adListClassCustomResponse = new AdListClassCustomResponse();
@@ -318,7 +318,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
                 .filter(Objects::nonNull)
                 .distinct()
                 .collect(Collectors.toList());
-        List<SimpleResponse> listSimpleResponse = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(distinctTeacherIds);
+        List<SimpleResponse> listSimpleResponse = callApiIdentity.handleCallApiGetListUserByListId(distinctTeacherIds);
         List<AdExportExcelClassCustom> listCustom = new ArrayList<>();
         List<AdExportExcelClassCustom> tempListCustom = new ArrayList<>();
         listClassResponse.forEach(res -> {
@@ -371,7 +371,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
         AdDetailClassRespone getOptional = adDetailClassRespone;
         SimpleResponse response = null;
         if (getOptional.getTeacherId() != null) {
-            response = convertRequestCallApiIdentity.handleCallApiGetUserById(getOptional.getTeacherId());
+            response = callApiIdentity.handleCallApiGetUserById(getOptional.getTeacherId());
         }
         customResponse.setId(getOptional.getId());
         customResponse.setCode(getOptional.getCode());
@@ -502,7 +502,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
                 .filter(Objects::nonNull)
                 .distinct()
                 .collect(Collectors.toList());
-        List<SimpleResponse> listSimple = convertRequestCallApiIdentity.handleCallApiGetListUserByListId(idTeacherList);
+        List<SimpleResponse> listSimple = callApiIdentity.handleCallApiGetListUserByListId(idTeacherList);
         List<AdFindSelectClassCustom> listCustom = new ArrayList<>();
         listRepo.forEach(repo -> {
             AdFindSelectClassCustom adFindSelectClassCustom = new AdFindSelectClassCustom();
@@ -523,7 +523,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
     }
 
     public void addDataInMapGiangVien(ConcurrentHashMap<String, SimpleResponse> mapAll) {
-        List<SimpleResponse> giangVienHuongDanList = convertRequestCallApiIdentity.handleCallApiGetUserByRoleAndModule(ActorConstants.ACTOR_TEACHER);
+        List<SimpleResponse> giangVienHuongDanList = callApiIdentity.handleCallApiGetUserByRoleAndModule(ActorConstants.ACTOR_TEACHER);
         getALlPutMapGiangVien(mapAll, giangVienHuongDanList);
     }
 
