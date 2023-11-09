@@ -1,5 +1,6 @@
 package com.labreportapp.labreport.core.admin.controller;
 
+import com.labreportapp.labreport.core.admin.model.request.AdDashboardLabReportAppRequest;
 import com.labreportapp.labreport.core.admin.service.AdDashboardLabReportAppService;
 import com.labreportapp.labreport.core.common.base.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class AdDashboardLabReportAppController {
     private AdDashboardLabReportAppService adDashboardLabReportAppService;
 
     @GetMapping
-    public ResponseObject dashboard() {
-        return new ResponseObject(null);
+    public ResponseObject dashboard(final AdDashboardLabReportAppRequest request) {
+        return new ResponseObject(adDashboardLabReportAppService.dashboard(request));
     }
 }

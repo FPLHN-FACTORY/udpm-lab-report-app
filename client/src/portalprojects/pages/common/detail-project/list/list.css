@@ -54,20 +54,20 @@
 }
 
 .task-list.dragging-over {
-  background-color: #eaecef;
+  background-color: #eaecef !important;
 }
 
 .task-list::-webkit-scrollbar {
-  width: 7px;
+  width: 7px !important;
 }
 
 .task-list::-webkit-scrollbar-thumb {
-  background-color: rgba(9, 30, 66, 0.3);
-  border-radius: 4px;
+  background-color: rgba(9, 30, 66, 0.3) !important;
+  border-radius: 4px !important;
 }
 
 .task-list::-webkit-scrollbar-track {
-  background-color: transparent;
+  background-color: transparent !important;
 }
 
 .add-task-button {

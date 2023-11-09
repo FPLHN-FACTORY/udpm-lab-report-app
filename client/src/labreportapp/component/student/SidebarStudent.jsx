@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Layout, Menu } from "antd";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFolder,
@@ -25,6 +25,14 @@ const { Sider } = Layout;
 const { SubMenu } = Menu;
 
 const SidebarStudentComponent = ({ collapsed, toggleCollapsed }) => {
+  const location = useLocation();
+
+  const [selectedKey, setSelectedKey] = useState("");
+
+  useEffect(() => {
+    setSelectedKey(location.pathname);
+  }, [location]);
+
   return (
     <Sider
       trigger={null}
@@ -39,7 +47,7 @@ const SidebarStudentComponent = ({ collapsed, toggleCollapsed }) => {
         left: 0,
       }}
     >
-      <Menu theme="light" mode="inline">
+      <Menu theme="light" mode="inline" selectedKeys={selectedKey}>
         <div style={{ marginBottom: 13, marginTop: 15 }}>
           <span style={{ marginLeft: 28 }}>
             <FontAwesomeIcon
@@ -52,7 +60,7 @@ const SidebarStudentComponent = ({ collapsed, toggleCollapsed }) => {
           </span>
         </div>
         <Menu.Item
-          key="0"
+          key="/student/register-class"
           className="menu_custom"
           icon={
             <FontAwesomeIcon
@@ -64,7 +72,7 @@ const SidebarStudentComponent = ({ collapsed, toggleCollapsed }) => {
           <Link to="/student/register-class">Đăng ký lớp học</Link>
         </Menu.Item>
         <Menu.Item
-          key="1"
+          key="/student/schedule"
           className="menu_custom"
           icon={
             <FontAwesomeIcon
@@ -76,7 +84,7 @@ const SidebarStudentComponent = ({ collapsed, toggleCollapsed }) => {
           <Link to="/student/schedule">Lịch học</Link>
         </Menu.Item>
         <Menu.Item
-          key="2"
+          key="/student/my-class"
           className="menu_custom"
           icon={
             <FontAwesomeIcon
@@ -88,7 +96,7 @@ const SidebarStudentComponent = ({ collapsed, toggleCollapsed }) => {
           <Link to="/student/my-class">Lớp của tôi</Link>
         </Menu.Item>
         <Menu.Item
-          key="3"
+          key="/student/attendance"
           className="menu_custom"
           icon={
             <FontAwesomeIcon
@@ -100,7 +108,7 @@ const SidebarStudentComponent = ({ collapsed, toggleCollapsed }) => {
           <Link to="/student/attendance">Điểm danh</Link>
         </Menu.Item>
         <Menu.Item
-          key="4"
+          key="/student/poin"
           className="menu_custom"
           icon={
             <FontAwesomeIcon
@@ -121,14 +129,14 @@ const SidebarStudentComponent = ({ collapsed, toggleCollapsed }) => {
           </span>
         </div>
         <Menu.Item
-          key="9"
+          key="/student/my-project"
           className="menu_custom"
           icon={<ProjectOutlined style={{ color: "rgb(226, 179, 87)" }} />}
         >
           <Link to="/student/my-project">Dự án</Link>
         </Menu.Item>
         <Menu.Item
-          key="22"
+          key="/student/team-factory"
           icon={
             <FontAwesomeIcon
               icon={faPeopleLine}
@@ -139,7 +147,7 @@ const SidebarStudentComponent = ({ collapsed, toggleCollapsed }) => {
           <Link to="/student/team-factory">Danh sách team </Link>
         </Menu.Item>
         <Menu.Item
-          key="23"
+          key="/student/member-factory"
           icon={
             <FontAwesomeIcon
               icon={faPeopleGroup}

@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Layout, Menu, message } from "antd";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBook,
@@ -20,6 +20,14 @@ const { Sider } = Layout;
 const { SubMenu } = Menu;
 
 const SidebarTeacherComponent = ({ collapsed, toggleCollapsed }) => {
+  const location = useLocation();
+
+  const [selectedKey, setSelectedKey] = useState("");
+
+  useEffect(() => {
+    setSelectedKey(location.pathname);
+  }, [location]);
+
   return (
     <Sider
       trigger={null}
@@ -34,7 +42,7 @@ const SidebarTeacherComponent = ({ collapsed, toggleCollapsed }) => {
         left: 0,
       }}
     >
-      <Menu theme="light" mode="inline">
+      <Menu theme="light" mode="inline" selectedKeys={selectedKey}>
         <div style={{ marginBottom: 13, marginTop: 15 }}>
           <span style={{ marginLeft: 28 }}>
             <FontAwesomeIcon
@@ -47,7 +55,7 @@ const SidebarTeacherComponent = ({ collapsed, toggleCollapsed }) => {
           </span>
         </div>
         <Menu.Item
-          key="1"
+          key="/teacher/schedule-today"
           className="menu_custom"
           icon={
             <FontAwesomeIcon
@@ -59,7 +67,7 @@ const SidebarTeacherComponent = ({ collapsed, toggleCollapsed }) => {
           <Link to="/teacher/schedule-today">Lịch dạy</Link>
         </Menu.Item>
         <Menu.Item
-          key="2"
+          key="/teacher/my-class"
           className="menu_custom"
           icon={
             <FontAwesomeIcon
@@ -71,19 +79,19 @@ const SidebarTeacherComponent = ({ collapsed, toggleCollapsed }) => {
           <Link to="/teacher/my-class">Lớp của tôi</Link>
         </Menu.Item>
         <Menu.Item
-        key="92"
-        className="menu_custom"
-        icon={
-          <FontAwesomeIcon
-            icon={faCheck}
-            style={{ color: "rgb(226, 179, 87)" }}
-          />
-        }
-      >
-        <Link to="/teacher/feedback">Feedback</Link>
-      </Menu.Item>
+          key="/teacher/feedback"
+          className="menu_custom"
+          icon={
+            <FontAwesomeIcon
+              icon={faCheck}
+              style={{ color: "rgb(226, 179, 87)" }}
+            />
+          }
+        >
+          <Link to="/teacher/feedback">Feedback</Link>
+        </Menu.Item>
         <Menu.Item
-          key="4"
+          key="/teacher/dashboard"
           className="menu_custom"
           icon={
             <FontAwesomeIcon
@@ -104,14 +112,14 @@ const SidebarTeacherComponent = ({ collapsed, toggleCollapsed }) => {
           </span>
         </div>
         <Menu.Item
-          key="3"
+          key="/teacher/my-project"
           className="menu_custom"
           icon={<ProjectOutlined style={{ color: "rgb(226, 179, 87)" }} />}
         >
           <Link to="/teacher/my-project">Dự án</Link>
         </Menu.Item>
         <Menu.Item
-          key="22"
+          key="/teacher/team-factory"
           icon={
             <FontAwesomeIcon
               icon={faPeopleLine}
@@ -122,7 +130,7 @@ const SidebarTeacherComponent = ({ collapsed, toggleCollapsed }) => {
           <Link to="/teacher/team-factory">Danh sách team</Link>
         </Menu.Item>
         <Menu.Item
-          key="23"
+          key="/teacher/member-factory"
           icon={
             <FontAwesomeIcon
               icon={faPeopleGroup}

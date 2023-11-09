@@ -1,59 +1,48 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Layout, Menu } from "antd";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faFolder,
   faTags,
   faUsers,
   faCogs,
-  faBook,
   faLayerGroup,
-  faFolderOpen,
-  faLineChart,
-  faTemperature0,
   faLevelUp,
-  faPersonMilitaryPointing,
-  faTeletype,
-  faGroupArrowsRotate,
-  faMagicWandSparkles,
-  faChartColumn,
-  faConciergeBell,
-  faGripLinesVertical,
   faCog,
   faPeopleGroup,
   faPeopleLine,
   faClock,
-  faChartLine,
-  faChartArea,
   faChartBar,
   faNewspaper,
   faWindowRestore,
   faGraduationCap,
-  faRunning,
   faChalkboard,
   faFile,
-  faChartPie,
   faChartGantt,
   faProjectDiagram,
-  faDiagramProject,
-  faTasks,
   faFolderPlus,
   faUserTag,
   faObjectGroup,
   faDiagramSuccessor,
   faChalkboardTeacher,
-  faFeed,
   faCheck,
   faListAlt,
 } from "@fortawesome/free-solid-svg-icons";
-
+import logoBit from "../../assets/img/logo_bit_1.png";
 import "./style-sidebar.css";
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
 
 const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
+  const location = useLocation();
+
+  const [selectedKey, setSelectedKey] = useState("");
+
+  useEffect(() => {
+    setSelectedKey(location.pathname);
+  }, [location]);
+
   return (
     <Sider
       trigger={null}
@@ -69,7 +58,12 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
         left: 0,
       }}
     >
-      <Menu theme="light" mode="inline" style={{ paddingBottom: 80 }}>
+      <Menu
+        theme="light"
+        mode="inline"
+        style={{ paddingBottom: 80 }}
+        selectedKeys={selectedKey}
+      >
         <div style={{ marginBottom: 15, marginTop: 15 }}>
           <span style={{ marginLeft: 28 }}>
             <FontAwesomeIcon
@@ -92,7 +86,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           }
         >
           <Menu.Item
-            key="2"
+            key="/admin/semester-management"
             className="menu_custom"
             icon={
               <FontAwesomeIcon
@@ -104,7 +98,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             <Link to="/admin/semester-management">Quản lý học kỳ</Link>
           </Menu.Item>
           <Menu.Item
-            key="3"
+            key="/admin/level-management"
             className="menu_custom"
             icon={
               <FontAwesomeIcon
@@ -116,7 +110,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             <Link to="/admin/level-management">Quản lý level</Link>
           </Menu.Item>
           <Menu.Item
-            key="4"
+            key="/admin/activity-management"
             className="menu_custom"
             icon={
               <FontAwesomeIcon
@@ -139,7 +133,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           }
         >
           <Menu.Item
-            key="6"
+            key="/admin/class-configuration"
             className="menu_custom"
             icon={
               <FontAwesomeIcon
@@ -151,7 +145,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             <Link to="/admin/class-configuration">Cấu hình lớp học</Link>
           </Menu.Item>
           <Menu.Item
-            key="7"
+            key="/admin/meeting-period-configuration"
             className="menu_custom"
             icon={
               <FontAwesomeIcon
@@ -165,7 +159,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             </Link>
           </Menu.Item>
           <Menu.Item
-            key="8"
+            key="/admin/template-report"
             className="menu_custom"
             icon={
               <FontAwesomeIcon
@@ -178,7 +172,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           </Menu.Item>
         </Menu.SubMenu>
         <Menu.Item
-          key="9"
+          key="/admin/class-management"
           className="menu_custom"
           icon={
             <FontAwesomeIcon
@@ -200,7 +194,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           }
         >
           <Menu.Item
-            key="91"
+            key="/admin/teacher-dashboard"
             className="menu_custom"
             icon={
               <FontAwesomeIcon
@@ -212,7 +206,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             <Link to="/admin/teacher-dashboard">Danh sách giảng viên</Link>
           </Menu.Item>
           <Menu.Item
-            key="92"
+            key="/admin/feedback"
             className="menu_custom"
             icon={
               <FontAwesomeIcon
@@ -225,7 +219,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           </Menu.Item>
         </Menu.SubMenu>
         <Menu.Item
-          key="11"
+          key="/admin/factory-deployment-statistics"
           className="menu_custom"
           icon={
             <FontAwesomeIcon
@@ -269,7 +263,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           }
         >
           <Menu.Item
-            key="15"
+            key="/admin/category-management"
             icon={
               <FontAwesomeIcon
                 icon={faFolderPlus}
@@ -280,7 +274,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             <Link to="/admin/category-management"> Quản lý thể loại</Link>
           </Menu.Item>
           <Menu.Item
-            key="16"
+            key="/admin/label-management"
             icon={
               <FontAwesomeIcon
                 icon={faTags}
@@ -302,7 +296,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           }
         >
           <Menu.Item
-            key="18"
+            key="/admin/role-project-management"
             icon={
               <FontAwesomeIcon
                 icon={faUserTag}
@@ -324,7 +318,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           }
         >
           <Menu.Item
-            key="20"
+            key="/admin/group-project-management"
             icon={
               <FontAwesomeIcon
                 icon={faObjectGroup}
@@ -335,7 +329,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             <Link to="/admin/group-project-management">Quản lý nhóm dự án</Link>
           </Menu.Item>
           <Menu.Item
-            key="21"
+            key="/admin/project-management"
             icon={
               <FontAwesomeIcon
                 icon={faDiagramSuccessor}
@@ -347,7 +341,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           </Menu.Item>
         </Menu.SubMenu>
         <Menu.Item
-          key="21.1"
+          key="/admin/project-statistics"
           icon={
             <FontAwesomeIcon
               icon={faChartBar}
@@ -369,7 +363,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           </span>
         </div>
         <Menu.Item
-          key="22"
+          key="/admin/team-management"
           icon={
             <FontAwesomeIcon
               icon={faPeopleLine}
@@ -380,7 +374,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           <Link to="/admin/team-management">Quản lý team</Link>
         </Menu.Item>
         <Menu.Item
-          key="23"
+          key="/admin/member-management"
           icon={
             <FontAwesomeIcon
               icon={faPeopleGroup}
@@ -391,7 +385,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           <Link to="/admin/member-management">Quản lý thành viên</Link>
         </Menu.Item>{" "}
         <Menu.Item
-          key="24"
+          key="/admin/role-factory-management"
           icon={
             <FontAwesomeIcon
               icon={faUserTag}
@@ -401,6 +395,24 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
         >
           <Link to="/admin/role-factory-management">Vai trò trong xưởng</Link>
         </Menu.Item>{" "}
+        <div
+          style={{
+            marginTop: 5,
+            justifyContent: "center",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <img
+            src={logoBit}
+            style={{
+              width: 30,
+              height: 30,
+              borderRadius: "50%",
+            }}
+          />{" "}
+          <span>v1.0</span>
+        </div>
       </Menu>
     </Sider>
   );

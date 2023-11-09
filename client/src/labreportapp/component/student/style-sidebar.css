@@ -31,7 +31,7 @@
 }
 
 .sidebar::-webkit-scrollbar {
-  width: 4px !important;
+  width: 6px !important;
 }
 
 .sidebar::-webkit-scrollbar-track {
@@ -39,11 +39,11 @@
 }
 
 .sidebar::-webkit-scrollbar-thumb {
-  background: #888 !important;
+  background: #c2c2c2 !important;
 }
 
 .sidebar::-webkit-scrollbar-thumb:hover {
-  background: #555 !important;
+  background: #c2c2c2 !important;
 }
 
 .logo__ {

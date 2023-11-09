@@ -8,6 +8,7 @@ import {
 import "./style-header.css";
 import CommonInforUser from "../common/CommonInforUser";
 import logoUdpm3 from "../../assets/img/logo-udpm-3.png";
+import logoBit from "../../assets/img/logo_bit.jpg";
 
 const { Header } = Layout;
 
@@ -46,7 +47,6 @@ const HeaderAdminComponent = ({ collapsed, toggleCollapsed }) => {
           >
             {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
           </div>
-          
         </div>
         <div style={{ display: "flex", alignItems: "center" }}>
           <CommonInforUser />

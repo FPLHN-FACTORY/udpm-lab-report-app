@@ -181,7 +181,7 @@ function App() {
 
             <Route
               path="/admin"
-              element={<Navigate replace to="/admin/class-management" />}
+              element={<Navigate replace to="/admin/factory-deployment-statistics" />}
             />
             <Route
               path="/role-selection"

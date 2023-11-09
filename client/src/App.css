@@ -11,23 +11,6 @@
 .App th {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
-body {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(9, 30, 66, 0.3) transparent;
-}
-
-body::-webkit-scrollbar {
-  width: 7px;
-}
-
-body::-webkit-scrollbar-thumb {
-  background-color: rgba(9, 30, 66, 0.3);
-  border-radius: 4px;
-}
-
-body::-webkit-scrollbar-track {
-  background-color: transparent;
-}
 
 .ant-table-wrapper .ant-table-thead > tr > th {
   background-color: #d5b662;
@@ -37,4 +20,25 @@ body::-webkit-scrollbar-track {
 .ant-table-wrapper .ant-table-thead > tr > th:hover {
   background-color: #dad6cc;
   color: rgb(153, 124, 8);
+}
+/* Scoll bar */
+::-webkit-scrollbar {
+  width: 6px !important;
+  height: 10px !important;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  border-radius: 10px !important;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(38, 144, 214) !important;
+  border-radius: 10px !important;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(38, 144, 214) !important;
 }
