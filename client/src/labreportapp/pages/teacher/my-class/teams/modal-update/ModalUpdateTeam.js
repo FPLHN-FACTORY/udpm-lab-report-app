@@ -14,7 +14,6 @@ import {
 } from "antd";
 import "./styleModalUpdateTeam.css";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAppDispatch, useAppSelector } from "../../../../../app/hook";
 import { UpdateTeam } from "../../../../../app/teacher/teams/teamsSlice.reduce";
@@ -188,7 +187,7 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
       };
       await TeacherTeamsAPI.updateTeam(teamUpdate).then(
         (respone) => {
-          message.success("Sửa thông tin nhóm thành công !");
+          message.success("Cập nhật thành công !");
           let data = respone.data.data;
           let dataTableTeam = {
             ...data,

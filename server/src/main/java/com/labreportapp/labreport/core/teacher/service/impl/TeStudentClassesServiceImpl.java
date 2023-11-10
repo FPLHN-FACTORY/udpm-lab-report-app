@@ -17,6 +17,7 @@ import com.labreportapp.labreport.infrastructure.apiconstant.ApiConstants;
 import com.labreportapp.labreport.infrastructure.constant.RoleTeam;
 import com.labreportapp.labreport.infrastructure.constant.StatusTeam;
 import com.labreportapp.labreport.util.CallApiIdentity;
+import com.labreportapp.labreport.util.LoggerUtil;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import lombok.Synchronized;
@@ -50,6 +51,9 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
 
     @Autowired
     private CallApiIdentity callApiIdentity;
+
+    @Autowired
+    private LoggerUtil loggerUtil;
 
     @Override
     public List<TeStudentCallApiResponse> searchApiStudentClassesByIdClass(String idClass) {
@@ -205,20 +209,22 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
     @Transactional
     @Synchronized
     public List<StudentClasses> updateSentStudentClassesToClass(TeSentStudentClassRequest request) {
-        boolean check = false;
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append("Đã chuyển sinh viên: ");
         Optional<Class> classSent = teClassRepository.findById(request.getIdClassSent());
         Optional<Class> classOld = teClassRepository.findById(request.getIdClassOld());
         if (!classSent.isPresent()) {
             throw new RestApiException(Message.CLASS_NOT_EXISTS);
         }
-        List<StudentClasses> studentClasses = teStudentClassesRepository.findStudentClassesByIdClass(request.getIdClassOld());
+        List<StudentClasses> studentClassesOld = teStudentClassesRepository.findStudentClassesByIdClass(request.getIdClassOld());
+        List<SimpleResponse> listInforStudentClassesOld = searchAllStudentByIdClass(request.getIdClassOld());
         List<String> idStudents = request.getListIdStudent();
         List<StudentClasses> studentClassesUp = new ArrayList<>();
         List<Class> classUp = new ArrayList<>();
-        if (request.getListIdStudent().size() == 0 || studentClasses.size() == 0) {
+        if (request.getListIdStudent().size() == 0 || studentClassesOld.size() == 0) {
             return null;
         }
-        studentClasses.forEach(item -> {
+        studentClassesOld.forEach(item -> {
             idStudents.forEach(id -> {
                 if (id.equals(item.getStudentId())) {
                     StudentClasses studentSent = new StudentClasses();
@@ -231,19 +237,29 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
                     studentSent.setTeamId(null);
                     studentSent.setClassId(request.getIdClassSent());
                     studentClassesUp.add(studentSent);
+                    listInforStudentClassesOld.forEach(infor -> {
+                        if (id.equals(item.getStudentId()) && studentSent.getStudentId().equals(infor.getId())) {
+                            stringBuffer.append("" + infor.getName() + " - " + infor.getUserName() + ", ");
+                        }
+                    });
                 }
             });
         });
+        String nameSemester = loggerUtil.getNameSemesterByIdClass(classOld.get().getId());
+        stringBuffer.append(" từ lớp " + classOld.get().getCode() + " qua lớp " + classSent.get().getCode());
+        loggerUtil.sendLogStreamClass(stringBuffer.toString() + " và cập nhật lại sĩ số từ "
+                + classSent.get().getClassSize() + " thành " + (classSent.get().getClassSize() + idStudents.size()), classSent.get().getCode(), nameSemester);
+        loggerUtil.sendLogStreamClass(stringBuffer.toString() + " và cập nhật lại sĩ số từ "
+                + classOld.get().getClassSize() + " thành " + (classOld.get().getClassSize() - idStudents.size()), classOld.get().getCode(), nameSemester);
         Class sent = classSent.get();
         sent.setClassSize(sent.getClassSize() + idStudents.size());
         classUp.add(sent);
         Class old = classOld.get();
-        old.setClassSize(classOld.get().getClassSize() - idStudents.size());
+        old.setClassSize(old.getClassSize() - idStudents.size());
         classUp.add(old);
         teClassRepository.saveAll(classUp);
         return teStudentClassesRepository.saveAll(studentClassesUp);
     }
-
 
     @Override
     public List<TeStudentCallApiResponse> callApiStudent(TeFindStudentApiRequest teFindStudentApiRequest) {

@@ -70,4 +70,8 @@ public class LoggerUtil {
     public String getNameSemesterByIdClass(String idClass) {
         return classRepository.getNameSemesterByIdClass(idClass);
     }
+
+    public String getCodeClassByIdClass(String idClass) {
+        return classRepository.findById(idClass).get().getCode();
+    }
 }

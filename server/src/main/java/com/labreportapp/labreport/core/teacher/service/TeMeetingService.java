@@ -2,7 +2,6 @@ package com.labreportapp.labreport.core.teacher.service;
 
 import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindMeetingRequest;
-import com.labreportapp.labreport.core.teacher.model.request.TeFindScheduleMeetingClassRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindScheduleNowToTime;
 import com.labreportapp.labreport.core.teacher.model.request.TeScheduleUpdateMeetingRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeUpdateHomeWorkAndNoteInMeetingRequest;
@@ -32,7 +31,7 @@ public interface TeMeetingService {
 
     TeHomeWorkAndNoteMeetingResponse updateDetailMeetingTeamByIdMeIdTeam(@Valid TeUpdateHomeWorkAndNoteInMeetingRequest request);
 
-    List<TeScheduleMeetingClassResponse> searchScheduleToDayByIdTeacherAndMeetingDate(final TeFindScheduleMeetingClassRequest request);
+    List<TeScheduleMeetingClassResponse> searchScheduleToDayByIdTeacherAndMeetingDate();
 
     PageableObject<TeScheduleMeetingClassResponse> searchScheduleNowToByIdTeacher(final TeFindScheduleNowToTime request);
 

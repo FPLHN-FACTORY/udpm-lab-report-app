@@ -33,6 +33,7 @@ import com.labreportapp.labreport.infrastructure.constant.StatusAttendance;
 import com.labreportapp.labreport.infrastructure.constant.StatusMeeting;
 import com.labreportapp.labreport.util.CallApiIdentity;
 import com.labreportapp.labreport.util.DateConverter;
+import com.labreportapp.labreport.util.LoggerUtil;
 import lombok.Synchronized;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -80,6 +81,9 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
     @Autowired
     private TeEmailSender teEmailSender;
 
+    @Autowired
+    private LoggerUtil loggerUtil;
+
     @Override
     public List<TeAttendanceResponse> getListCustom(String idMeeting) {
         List<TeAttendanceResponse> list = teAttendanceRepository.findListAttendanceByIdMeeting(idMeeting);
@@ -99,6 +103,8 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
         if (list.size() == 0 && listAttendance.size() == 0) {
             return null;
         }
+        StringBuffer stringBuffer = new StringBuffer();
+        List<SimpleResponse> listInforStudent = teStudentClassesService.searchAllStudentByIdClass(request.getIdClass());
         list.forEach(item -> {
             TeAttendanceResponse obj = findAttendanceByStudentId(listAttendance, item.getIdStudent());
             if (obj != null) {
@@ -131,13 +137,43 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
         });
         List<Attendance> listReturn = teAttendanceRepository.saveAll(listNew);
         Optional<Meeting> meeting = teMeetingRepository.findMeetingById(request.getIdMeeting());
+        stringBuffer.append("Đã cập nhật điểm danh (" + meeting.get().getName() + " - " + request.getCodeClass() + ") ");
         if (meeting.isPresent()) {
+            if (request.getNotes() != null) {
+                if (!request.getNotes().equals(meeting.get().getNotes()) && !request.getNotes().equals("")) {
+                    stringBuffer.append(" và cập nhật ghi chú là `" + request.getNotes().trim() + "`. ");
+                } else if (request.getNotes().equals("")) {
+                    stringBuffer.append(" và xóa ghi chú buổi học.");
+                }
+            } else {
+                if (!request.getNotes().equals("")) {
+                    stringBuffer.append(" và thêm ghi chú buổi học là `" + request.getNotes().trim() + ". ");
+                }
+            }
             Meeting meetingUp = meeting.get();
             meetingUp.setNotes(request.getNotes() == null ? "" : request.getNotes().trim());
             meetingUp.setStatusMeeting(StatusMeeting.BUOI_HOC);
             teMeetingRepository.save(meetingUp);
         }
-        TeAttendanceMessageResponse teAttendanceMessageResponse = randomSetLeadToMember(listReturn, request.getIdMeeting());
+        AtomicInteger countAbsent = new AtomicInteger();
+        countAbsent.set(0);
+        StringBuffer stringBufferCheckAbsent = new StringBuffer();
+        listReturn.forEach(st -> {
+            listInforStudent.forEach(infor -> {
+                if (st.getStudentId().equals(infor.getId()) && st.getStatus() == StatusAttendance.NO) {
+                    countAbsent.set(countAbsent.get() + 1);
+                    stringBufferCheckAbsent.append("" + infor.getName() + " - " + infor.getUserName() + ", ");
+                }
+            });
+        });
+        if (countAbsent.get() > 0) {
+            stringBuffer.append(" Với số sinh viên nghỉ là " + countAbsent.get() + " - Gồm: " + stringBufferCheckAbsent.toString() + ". ");
+        } else {
+            stringBuffer.append(" Với số sinh viên nghỉ là 0. ");
+        }
+        TeAttendanceMessageResponse teAttendanceMessageResponse = randomSetLeadToMember(listReturn, request.getIdMeeting(), stringBuffer);
+        String nameSemester = loggerUtil.getNameSemesterByIdClass(request.getIdClass());
+        loggerUtil.sendLogStreamClass(stringBuffer.toString(), request.getCodeClass(), nameSemester);
         return teAttendanceMessageResponse;
     }
 
@@ -150,7 +186,7 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
         return null;
     }
 
-    private TeAttendanceMessageResponse randomSetLeadToMember(List<Attendance> listAttendance, String idMeeting) {
+    private TeAttendanceMessageResponse randomSetLeadToMember(List<Attendance> listAttendance, String idMeeting, StringBuffer message) {
         TeAttendanceMessageResponse objReturn = new TeAttendanceMessageResponse();
         Optional<Meeting> meetingDetail = teMeetingRepository.findMeetingById(idMeeting);
         Optional<Class> classDetail = teClassRepository.findById(meetingDetail.get().getClassId());
@@ -171,6 +207,7 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
                         objAdd.setIdMeeting(idMeeting);
                         objAdd.setIdStudent(student.getIdStudent());
                         objAdd.setEmail(student.getEmail());
+                        objAdd.setName(student.getName());
                         objAdd.setUsername(student.getUsername());
                         objAdd.setIdTeam(student.getIdTeam());
                         if (student.getRole() == null) {
@@ -197,7 +234,7 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
                             if (studentClassesFind != null) {
                                 studentClassesFind.setRole(RoleTeam.MEMBER);
                                 teStudentClassesRepository.save(studentClassesFind);
-                                List<String> listMail = randomLead(listStudentAttendance, listTeam, listStudentClasses, team.getId());
+                                List<String> listMail = randomLead(listStudentAttendance, listTeam, listStudentClasses, team.getId(), message);
                                 countLeaderAbsent.getAndIncrement();
                                 sentEmail(meetingDetail.get(), classDetail.get(), listMail);
                             }
@@ -228,7 +265,7 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
     }
 
     private List<String> randomLead(List<TeAttendanceStudentResponse> listStudent, List<TeTeamsRespone> listTeam,
-                                    List<StudentClasses> listStudentClasses, String idTeam) {
+                                    List<StudentClasses> listStudentClasses, String idTeam, StringBuffer message) {
         List<String> listSentMail = new ArrayList<>();
         if (listTeam != null && listStudent != null && listStudentClasses != null) {
             List<TeAttendanceStudentResponse> members = listStudent.stream()
@@ -246,6 +283,16 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
                 if (find != null) {
                     find.setRole(RoleTeam.LEADER);
                     teStudentClassesRepository.save(find);
+                    listStudent.forEach(st -> {
+                        if (st.getIdStudent().equals(find.getStudentId())) {
+                            listTeam.forEach(tem -> {
+                                if (tem.getId().equals(find.getTeamId())) {
+                                    message.append("Chuyển sinh viên " + st.getName() + " - " + st.getUsername() +
+                                            " làm trưởng nhóm của " + tem.getName() + ". ");
+                                }
+                            });
+                        }
+                    });
                 }
             } else if (members.size() == 1) {
                 StudentClasses find = listStudentClasses.stream()
@@ -256,6 +303,16 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
                     listSentMail.add(find.getEmail());
                     find.setRole(RoleTeam.LEADER);
                     teStudentClassesRepository.save(find);
+                    listStudent.forEach(st -> {
+                        if (st.getIdStudent().equals(find.getStudentId())) {
+                            listTeam.forEach(tem -> {
+                                if (tem.getId().equals(find.getTeamId())) {
+                                    message.append("Chuyển sinh viên " + st.getName() + " - " + st.getUsername() +
+                                            " làm trưởng nhóm của " + tem.getName() + ". ");
+                                }
+                            });
+                        }
+                    });
                 }
             }
         }

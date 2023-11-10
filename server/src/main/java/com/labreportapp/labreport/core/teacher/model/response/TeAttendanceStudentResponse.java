@@ -30,6 +30,8 @@ public class TeAttendanceStudentResponse {
 
     private String idStudent;
 
+    private String name;
+
     private String username;
 
     private String email;

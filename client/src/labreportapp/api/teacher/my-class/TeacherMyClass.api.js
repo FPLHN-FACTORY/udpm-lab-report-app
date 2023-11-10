@@ -1,6 +1,5 @@
 import { request } from "../../../helper/request.helper";
 const url = `/teacher/class`;
-
 export class TeacherMyClassAPI {
   static getAllMyClass(filter) {
     return request({
@@ -55,7 +54,7 @@ export class TeacherMyClassAPI {
   }
   static randomPass(idClass) {
     return request({
-      method: "POST",
+      method: "PUT",
       url: url + `/pass-random`,
       params: {
         idClass: idClass,
@@ -64,7 +63,7 @@ export class TeacherMyClassAPI {
   }
   static updateStatusClass(data) {
     return request({
-      method: "POST",
+      method: "PUT",
       url: url + `/pass`,
       data: data,
     });
@@ -83,4 +82,11 @@ export class TeacherMyClassAPI {
       data: data,
     });
   }
+  static showHistory = (params) => {
+    return request({
+      method: "GET",
+      url: url + `/history`,
+      params: params,
+    });
+  };
 }

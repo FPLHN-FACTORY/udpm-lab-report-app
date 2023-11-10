@@ -20,6 +20,7 @@ import com.labreportapp.labreport.core.teacher.repository.TeMeetingPeriodReposit
 import com.labreportapp.labreport.core.teacher.repository.TeMeetingRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeNoteRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeReportRepository;
+import com.labreportapp.labreport.core.teacher.repository.TeTeamsRepositoty;
 import com.labreportapp.labreport.core.teacher.service.TeMeetingService;
 import com.labreportapp.labreport.core.teacher.service.TeStudentClassesService;
 import com.labreportapp.labreport.entity.HomeWork;
@@ -27,8 +28,13 @@ import com.labreportapp.labreport.entity.Meeting;
 import com.labreportapp.labreport.entity.MeetingPeriod;
 import com.labreportapp.labreport.entity.Note;
 import com.labreportapp.labreport.entity.Report;
+import com.labreportapp.labreport.entity.Team;
+import com.labreportapp.labreport.infrastructure.constant.StatusMeeting;
+import com.labreportapp.labreport.infrastructure.constant.TypeMeeting;
 import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.labreport.util.CallApiIdentity;
+import com.labreportapp.labreport.util.LoggerUtil;
+import com.labreportapp.labreport.util.SemesterHelper;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import lombok.Synchronized;
@@ -78,6 +84,15 @@ public class TeMeetingServiceImpl implements TeMeetingService {
 
     @Autowired
     private TeMeetingPeriodRepository teMeetingPeriodRepository;
+
+    @Autowired
+    private LoggerUtil loggerUtil;
+
+    @Autowired
+    private TeTeamsRepositoty teTeamsRepositoty;
+
+    @Autowired
+    private SemesterHelper semesterHelper;
 
     @Override
     public TeMeetingResponse searchMeetingAndCheckAttendanceByIdMeeting(TeFindMeetingRequest request) {
@@ -215,27 +230,64 @@ public class TeMeetingServiceImpl implements TeMeetingService {
     @Synchronized
     @Transactional
     public TeHomeWorkAndNoteMeetingResponse updateDetailMeetingTeamByIdMeIdTeam(TeUpdateHomeWorkAndNoteInMeetingRequest request) {
+        Optional<Meeting> meeting = teMeetingRepository.findMeetingById(request.getIdMeeting());
+        Optional<Team> team = teTeamsRepositoty.findById(request.getIdTeam());
+        String codeClass = loggerUtil.getCodeClassByIdClass(meeting.get().getClassId());
+        String nameSemester = loggerUtil.getNameSemesterByIdClass(meeting.get().getClassId());
+        String nameMeeting = meeting.isPresent() ? meeting.get().getName() : "";
+        String nameTeam = team.isPresent() ? team.get().getName() : "";
+        StringBuffer stringHw = new StringBuffer();
+        StringBuffer stringNote = new StringBuffer();
+        StringBuffer stringReport = new StringBuffer();
         HomeWork homeWorkNew = new HomeWork();
         homeWorkNew.setMeetingId(request.getIdMeeting());
         homeWorkNew.setTeamId(request.getIdTeam());
-        homeWorkNew.setName("");
         homeWorkNew.setDescriptions(request.getDescriptionsHomeWork());
         if (request.getIdHomeWork() != null) {
             Optional<HomeWork> objectHW = teHomeWorkRepository.findById(request.getIdHomeWork());
             if (objectHW.isPresent()) {
                 homeWorkNew.setId(objectHW.get().getId());
+                String homeW = "";
+                if (objectHW.get().getDescriptions() != null) {
+                    homeW = objectHW.get().getDescriptions();
+                }
+                if (!request.getDescriptionsHomeWork().equals("") && homeW.equals("")) {
+                    stringHw.append("Đã thêm bài tập về nhà (").append(nameMeeting).append(" - ").append(nameTeam).append(") là `").append(request.getDescriptionsHomeWork()).append("`. ");
+                } else if (!request.getDescriptionsHomeWork().equals("") && !request.getDescriptionsHomeWork().equals(homeW)) {
+                    stringHw.append("Đã cập nhật bài tập về nhà (").append(nameMeeting).append(" - ").append(nameTeam).append(") từ `").append(homeW).append("` thành `").append(request.getDescriptionsHomeWork()).append("`. ");
+                } else if (request.getDescriptionsHomeWork().equals("") && !homeW.equals("")) {
+                    stringHw.append("Đã xóa bài tập về nhà (").append(nameMeeting).append(" - ").append(nameTeam).append("). ");
+                }
+            }
+        } else {
+            if (!request.getDescriptionsHomeWork().equals("")) {
+                stringHw.append("Đã thêm bài tập về nhà (").append(nameMeeting).append(" - ").append(nameTeam).append(") là `").append(request.getDescriptionsHomeWork()).append("`. ");
             }
         }
         teHomeWorkRepository.save(homeWorkNew);
         Note noteNew = new Note();
         noteNew.setMeetingId(request.getIdMeeting());
         noteNew.setTeamId(request.getIdTeam());
-        noteNew.setName("");
         noteNew.setDescriptions(request.getDescriptionsNote());
         if (request.getIdNote() != null) {
             Optional<Note> objectNote = teNoteRepository.findById(request.getIdNote());
             if (objectNote.isPresent()) {
                 noteNew.setId(objectNote.get().getId());
+                String note = "";
+                if (objectNote.get().getDescriptions() != null) {
+                    note = objectNote.get().getDescriptions();
+                }
+                if (!request.getDescriptionsNote().equals("") && note.equals("")) {
+                    stringNote.append("Đã thêm nhận xét (").append(nameMeeting).append(" - ").append(nameTeam).append(") là `").append(request.getDescriptionsNote()).append("`. ");
+                } else if (!request.getDescriptionsNote().equals("") && !request.getDescriptionsNote().equals(note)) {
+                    stringNote.append("Đã cập nhật nhận xét (").append(nameMeeting).append(" - ").append(nameTeam).append(") từ `").append(objectNote.get().getDescriptions()).append("` thành `").append(request.getDescriptionsNote()).append("`. ");
+                } else if (request.getDescriptionsNote().equals("") && !note.equals("")) {
+                    stringNote.append("Đã xóa nhận xét (").append(nameMeeting).append(" - ").append(nameTeam).append("). ");
+                }
+            }
+        } else {
+            if (request.getDescriptionsNote().equals("")) {
+                stringNote.append("Đã thêm nhận xét (").append(nameMeeting).append(" - ").append(nameTeam).append(") là `").append(request.getDescriptionsNote()).append("`. ");
             }
         }
         teNoteRepository.save(noteNew);
@@ -247,12 +299,29 @@ public class TeMeetingServiceImpl implements TeMeetingService {
             Optional<Report> objectReport = teReportRepository.findById(request.getIdReport());
             if (objectReport.isPresent()) {
                 reportNew.setId(objectReport.get().getId());
+                String report = "";
+                if (objectReport.get().getDescriptions() != null) {
+                    report = objectReport.get().getDescriptions();
+                }
+                if (!request.getDescriptionsReport().equals("") && report.equals("")) {
+                    stringReport.append("Đã thêm báo cáo (").append(nameMeeting).append(" - ").append(nameTeam).append(") là `").append(request.getDescriptionsReport()).append("`. ");
+                } else if (!request.getDescriptionsReport().equals("") && !request.getDescriptionsReport().equals(report)) {
+                    stringReport.append("Đã cập nhật báo cáo (").append(nameMeeting).append(" - ").append(nameTeam).append(") từ `").append(objectReport.get().getDescriptions()).append("` thành `").append(request.getDescriptionsReport()).append("`. ");
+                } else if (request.getDescriptionsReport().equals("") && !report.equals("")) {
+                    stringReport.append("Đã xóa báo cáo (").append(nameMeeting).append(" - ").append(nameTeam).append("). ");
+                }
+            }
+        } else {
+            if (request.getDescriptionsReport().equals("")) {
+                stringReport.append("Đã thêm báo báo (").append(nameMeeting).append(" - ").append(nameTeam).append(") là `").append(request.getDescriptionsReport()).append("`. ");
             }
         }
         teReportRepository.save(reportNew);
         TeFindMeetingRequest teFind = new TeFindMeetingRequest();
         teFind.setIdTeam(request.getIdTeam());
         teFind.setIdMeeting(request.getIdMeeting());
+        loggerUtil.sendLogStreamClass(stringNote.toString() + stringHw.toString() + stringReport.toString(),
+                codeClass, nameSemester);
         Optional<TeHomeWorkAndNoteMeetingResponse> objectFind = teMeetingRepository.searchDetailMeetingTeamByIdMeIdTeam(teFind);
         if (!objectFind.isPresent()) {
             return null;
@@ -261,7 +330,8 @@ public class TeMeetingServiceImpl implements TeMeetingService {
     }
 
     @Override
-    public List<TeScheduleMeetingClassResponse> searchScheduleToDayByIdTeacherAndMeetingDate(TeFindScheduleMeetingClassRequest request) {
+    public List<TeScheduleMeetingClassResponse> searchScheduleToDayByIdTeacherAndMeetingDate() {
+        TeFindScheduleMeetingClassRequest request = new TeFindScheduleMeetingClassRequest();
         request.setIdTeacher(labReportAppSession.getUserId());
         List<TeScheduleMeetingClassResponse> list = teMeetingRepository.searchScheduleToDayByIdTeacherAndMeetingDate(request);
         if (list.size() == 0) {
@@ -282,16 +352,49 @@ public class TeMeetingServiceImpl implements TeMeetingService {
 
     @Override
     @Transactional
+    @Synchronized
     public List<TeScheduleMeetingClassResponse> updateAddressMeeting(TeScheduleUpdateMeetingRequest request) {
         List<TeUpdateMeetingRequest> list = request.getListMeeting();
         if (list.size() == 0) {
             throw new RestApiException(Message.SCHEDULE_TODAY_IS_EMPTY);
         }
+        StringBuffer stringBuffer = new StringBuffer();
+        TeFindScheduleMeetingClassRequest req = new TeFindScheduleMeetingClassRequest();
+        req.setIdTeacher(labReportAppSession.getUserId());
+        List<TeScheduleMeetingClassResponse> listMeetingToday = searchScheduleToDayByIdTeacherAndMeetingDate();
         List<Meeting> listNew = new ArrayList<>();
+        String nameSemester = semesterHelper.getNameSemesterCurrent();
         list.forEach(item -> {
-            Meeting meeting = teMeetingRepository.findById(item.getIdMeeting()).get();
-            meeting.setAddress(item.getMeetingAddress() == null ? "" : item.getMeetingAddress().trim());
-            listNew.add(meeting);
+            listMeetingToday.forEach(db -> {
+                if (db.getIdMeeting().equals(item.getIdMeeting())) {
+                    if (!item.getMeetingAddress().equals(db.getMeetingAddress()) && item.getMeetingAddress() != null && !item.getMeetingAddress().equals("") && !db.getMeetingAddress().equals("")) {
+                        stringBuffer.append("Đã cập nhật link học trực truyến " + db.getMeetingName() + " từ `" + db.getMeetingAddress() + "` thành `" + item.getMeetingAddress().trim() + "`. ");
+                        loggerUtil.sendLogStreamClass(stringBuffer.toString(),
+                                item.getCodeClass(), nameSemester);
+                    } else if (db.getMeetingAddress().equals("") && !item.getMeetingAddress().equals("")) {
+                        stringBuffer.append("Đã thêm link học trực truyến " + db.getMeetingName() + " là `" + item.getMeetingAddress().trim() + "`. ");
+                        loggerUtil.sendLogStreamClass(stringBuffer.toString(),
+                                item.getCodeClass(), nameSemester);
+                    } else if (item.getMeetingAddress().equals("")) {
+                        stringBuffer.append("Đã xóa link học trực truyến " + db.getMeetingName() + ". ");
+                        loggerUtil.sendLogStreamClass(stringBuffer.toString(),
+                                item.getCodeClass(), nameSemester);
+                    }
+                    Meeting meeting = new Meeting();
+                    meeting.setId(db.getIdMeeting());
+                    meeting.setName(db.getMeetingName());
+                    meeting.setTeacherId(labReportAppSession.getUserId());
+                    meeting.setMeetingDate(db.getMeetingDate());
+                    meeting.setMeetingPeriod(db.getIdMeetingPeriod());
+                    meeting.setDescriptions(db.getDescriptionsMeeting());
+                    meeting.setClassId(db.getIdClass());
+                    meeting.setStatusMeeting(db.getStatusMeeting().equals("0") ? StatusMeeting.BUOI_HOC : StatusMeeting.BUOI_NGHI);
+                    meeting.setTypeMeeting(db.getTypeMeeting() == 0 ? TypeMeeting.ONLINE : TypeMeeting.OFFLINE);
+                    meeting.setNotes(db.getNotes());
+                    meeting.setAddress(item.getMeetingAddress() == null ? "" : item.getMeetingAddress().trim());
+                    listNew.add(meeting);
+                }
+            });
         });
         teMeetingRepository.saveAll(listNew);
         TeFindScheduleMeetingClassRequest find = new TeFindScheduleMeetingClassRequest();
@@ -299,7 +402,8 @@ public class TeMeetingServiceImpl implements TeMeetingService {
         return teMeetingRepository.searchScheduleToDayByIdTeacherAndMeetingDate(find);
     }
 
-    private List<TeMeetingCustomToAttendanceResponse> sortASCListAttendanceObj(List<TeMeetingCustomToAttendanceResponse> list) {
+    private List<TeMeetingCustomToAttendanceResponse> sortASCListAttendanceObj
+            (List<TeMeetingCustomToAttendanceResponse> list) {
         List<TeMeetingCustomToAttendanceResponse> sortedList = list.stream()
                 .sorted(Comparator.comparing(TeMeetingCustomToAttendanceResponse::getMeetingDate,
                         Comparator.nullsLast(Comparator.naturalOrder()))

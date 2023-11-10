@@ -152,6 +152,8 @@ const TeacherAttendanceMeeting = () => {
       let dataFind = {
         listAttendance: data,
         idMeeting: idMeeting,
+        idClass: classFind.id,
+        codeClass: classFind.code,
         notes: notes,
       };
       let checkTime = false;

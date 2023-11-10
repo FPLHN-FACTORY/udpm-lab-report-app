@@ -23,10 +23,10 @@ import org.hibernate.annotations.Nationalized;
 @Entity
 @Table(name = "home_work")
 public class HomeWork extends PrimaryEntity {
-
-    @Column(length = EntityProperties.LENGTH_NAME)
-    @Nationalized
-    private String name;
+//
+//    @Column(length = EntityProperties.LENGTH_NAME)
+//    @Nationalized
+//    private String name;
 
     @Column(length = Integer.MAX_VALUE)
     @Nationalized

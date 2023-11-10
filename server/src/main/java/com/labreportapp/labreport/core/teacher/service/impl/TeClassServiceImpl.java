@@ -20,9 +20,12 @@ import com.labreportapp.labreport.entity.Class;
 import com.labreportapp.labreport.entity.ClassConfiguration;
 import com.labreportapp.labreport.infrastructure.constant.StatusClass;
 import com.labreportapp.labreport.util.CallApiIdentity;
+import com.labreportapp.labreport.util.CompareUtil;
+import com.labreportapp.labreport.util.LoggerUtil;
 import com.labreportapp.labreport.util.SemesterHelper;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -54,6 +57,9 @@ public class TeClassServiceImpl implements TeClassService {
 
     @Autowired
     private TeActivityRepository teActivityRepository;
+
+    @Autowired
+    private LoggerUtil loggerUtil;
 
     @Override
     public PageableObject<TeClassResponse> searchTeacherClass(final TeFindClassRequest teFindClass) {
@@ -127,24 +133,41 @@ public class TeClassServiceImpl implements TeClassService {
     }
 
     @Override
+    @Transactional
     public Class updateStatusClass(TeFindUpdateStatusClassRequest request) {
         Optional<Class> classFind = teClassRepository.findById(request.getIdClass());
         if (!classFind.isPresent()) {
             throw new RestApiException(Message.CLASS_NOT_EXISTS);
         }
         Class classUp = classFind.get();
+        String nameSemester = loggerUtil.getNameSemesterByIdClass(classFind.get().getId());
+        String message = "";
+        if (request.getStatus() == 0) {
+            message = CompareUtil.compareAndConvertMessage("trạng thái của lớp"
+                    , "Khóa ", "Mở ", "");
+        } else {
+            message = CompareUtil.compareAndConvertMessage("trạng thái của lớp"
+                    , "Mở ", "Khóa ", "");
+        }
+        loggerUtil.sendLogStreamClass(message, classFind.get().getCode(), nameSemester);
         classUp.setStatusClass(request.getStatus() == 0 ? StatusClass.OPEN : StatusClass.LOCK);
         return teClassRepository.save(classUp);
     }
 
     @Override
+    @Transactional
     public Class randomPassword(String idClass) {
         Optional<Class> classFind = teClassRepository.findById(idClass);
         if (!classFind.isPresent()) {
             throw new RestApiException(Message.CLASS_NOT_EXISTS);
         }
+        String nameSemester = loggerUtil.getNameSemesterByIdClass(classFind.get().getId());
+        String passNew = generateRandomPassword();
+        String message = CompareUtil.compareAndConvertMessage("mật khẩu của lớp "
+                , "`" + classFind.get().getPassword() + "`", "`" + passNew + "`", "");
+        loggerUtil.sendLogStreamClass(message, classFind.get().getCode(), nameSemester);
         Class classUp = classFind.get();
-        classUp.setPassword(generateRandomPassword());
+        classUp.setPassword(passNew);
         return teClassRepository.save(classUp);
     }
 

@@ -1292,63 +1292,54 @@ public class DBGenerator implements CommandLineRunner {
 // homework
         //class 1- team 1
         HomeWork homeWork1 = new HomeWork();
-        homeWork1.setName("Bài tập về nhà buổi 1 team bee fly");
         homeWork1.setDescriptions("Tạo entity và mapping dữ liệu - BEE FLY");
         homeWork1.setMeetingId(meeting1.getId());
         homeWork1.setTeamId(team1.getId());
         homeWork1.setId(homeWorkRepository.save(homeWork1).getId());
 
         HomeWork homeWork2 = new HomeWork();
-        homeWork2.setName("Bài tập về nhà buổi 2");
         homeWork2.setDescriptions("Tạo repository sử dụng spring jpa - BEE FLY");
         homeWork2.setMeetingId(meeting2.getId());
         homeWork2.setTeamId(team1.getId());
         homeWork2.setId(homeWorkRepository.save(homeWork2).getId());
 
         HomeWork homeWork3 = new HomeWork();
-        homeWork3.setName("Bài tập về nhà buổi 3");
         homeWork3.setDescriptions("Tạo serice và service implements - BEE FLY");
         homeWork3.setMeetingId(meeting3.getId());
         homeWork3.setTeamId(team1.getId());
         homeWork3.setId(homeWorkRepository.save(homeWork3).getId());
 
         HomeWork homeWork4 = new HomeWork();
-        homeWork4.setName("Bài tập về nhà buổi 4");
         homeWork4.setDescriptions("Tạo model chứa các request và responese - BEE FLY");
         homeWork4.setMeetingId(meeting4.getId());
         homeWork4.setTeamId(team1.getId());
         homeWork4.setId(homeWorkRepository.save(homeWork4).getId());
 
         HomeWork homeWork5 = new HomeWork();
-        homeWork5.setName("Bài tập về nhà buổi 5");
         homeWork5.setDescriptions("Thêm config vào file application.properties - BEE FLY");
         homeWork5.setMeetingId(meeting5.getId());
         homeWork5.setTeamId(team1.getId());
         homeWork5.setId(homeWorkRepository.save(homeWork5).getId());
 
         HomeWork homeWork6 = new HomeWork();
-        homeWork6.setName("Bài tập về nhà buổi 6");
         homeWork6.setDescriptions("Tạo file config message.properties chứa các key validations - BEE FLY");
         homeWork6.setMeetingId(meeting6.getId());
         homeWork6.setTeamId(team1.getId());
         homeWork6.setId(homeWorkRepository.save(homeWork6).getId());
 
         HomeWork homeWork7 = new HomeWork();
-        homeWork7.setName("Bài tập về nhà buổi 7");
         homeWork7.setDescriptions("Thêm 1 số chức năng vào service - BEE FLY");
         homeWork7.setMeetingId(meeting7.getId());
         homeWork7.setTeamId(team1.getId());
         homeWork7.setId(homeWorkRepository.save(homeWork7).getId());
 
         HomeWork homeWork8 = new HomeWork();
-        homeWork8.setName("Bài tập về nhà buổi 8");
         homeWork8.setDescriptions("Tạo package Controller sử dụng SPRINGBOOT - BEE FLY");
         homeWork8.setMeetingId(meeting8.getId());
         homeWork8.setTeamId(team1.getId());
         homeWork8.setId(homeWorkRepository.save(homeWork8).getId());
 
         HomeWork homeWork9 = new HomeWork();
-        homeWork9.setName("Bài tập về nhà buổi 9");
         homeWork9.setDescriptions("Sử dụng @RestController API và Sercurity ADMIN - BEE FLY");
         homeWork9.setMeetingId(meeting9.getId());
         homeWork9.setTeamId(team1.getId());
@@ -1356,56 +1347,48 @@ public class DBGenerator implements CommandLineRunner {
         //note -team 1
 
         Note note1 = new Note();
-        note1.setName("Note buổi 1 team 1 Bee fly");
         note1.setMeetingId(meeting1.getId());
         note1.setTeamId(team1.getId());
         note1.setDescriptions("team 1");
         note1.setId(noteRepository.save(note1).getId());
 
         Note note2 = new Note();
-        note2.setName("Note buổi 2 team 1 Bee fly");
         note2.setMeetingId(meeting2.getId());
         note2.setTeamId(team1.getId());
         note2.setDescriptions("team 1");
         note2.setId(noteRepository.save(note2).getId());
 
         Note note3 = new Note();
-        note3.setName("Note buổi 3 team 2");
         note3.setMeetingId(meeting3.getId());
         note3.setTeamId(team1.getId());
         note3.setDescriptions("Service ok");
         note3.setId(noteRepository.save(note3).getId());
 
         Note note4 = new Note();
-        note4.setName("Note buổi 4 team 2");
         note4.setMeetingId(meeting4.getId());
         note4.setTeamId(team1.getId());
         note4.setDescriptions("Model view ok");
         note4.setId(noteRepository.save(note4).getId());
 
         Note note5 = new Note();
-        note5.setName("Note buổi 5 team 2");
         note5.setMeetingId(meeting5.getId());
         note5.setTeamId(team1.getId());
         note5.setDescriptions("Config ok");
         note5.setId(noteRepository.save(note5).getId());
 
         Note note6 = new Note();
-        note6.setName("Note buổi 6 team 2");
         note6.setMeetingId(meeting6.getId());
         note6.setTeamId(team1.getId());
         note6.setDescriptions("Message config ok");
         note6.setId(noteRepository.save(note6).getId());
 
         Note note7 = new Note();
-        note7.setName("Note buổi 7 team 2");
         note7.setMeetingId(meeting7.getId());
         note7.setTeamId(team1.getId());
         note7.setDescriptions("Chức năng bee fly ok");
         note7.setId(noteRepository.save(note7).getId());
 
         Note note8 = new Note();
-        note8.setName("Note buổi 1 team 2");
         note8.setMeetingId(meeting8.getId());
         note8.setTeamId(team1.getId());
         note8.setDescriptions("Note buoi 8 nhe");

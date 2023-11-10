@@ -12,6 +12,8 @@ public class TeUpdateMeetingRequest {
 
     private String idMeeting;
 
+    private String codeClass;
+
     private String meetingAddress;
 
 }

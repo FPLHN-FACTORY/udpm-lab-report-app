@@ -66,6 +66,7 @@ const ModalSentStudent = ({
       });
     } catch (error) {}
   };
+
   const handleSentStudent = async (idClassSent) => {
     try {
       let dataSent = {
@@ -93,6 +94,7 @@ const ModalSentStudent = ({
       );
     } catch (error) {}
   };
+
   const columns = [
     {
       title: "#",
@@ -107,13 +109,6 @@ const ModalSentStudent = ({
       dataIndex: "code",
       key: "code",
       sorter: (a, b) => a.code.localeCompare(b.code),
-    },
-    {
-      title: <div style={{ textAlign: "center" }}>Sĩ số</div>,
-      dataIndex: "classSize",
-      key: "classSize",
-      sorter: (a, b) => a.classSize - b.classSize,
-      align: "center",
     },
     {
       title: <div style={{ textAlign: "center" }}>Sĩ số</div>,

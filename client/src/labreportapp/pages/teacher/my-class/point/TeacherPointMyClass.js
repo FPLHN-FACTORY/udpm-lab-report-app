@@ -19,13 +19,11 @@ import {
 } from "../../../../app/teacher/point/tePointSlice.reduce";
 import TablePoint from "./table-point-student/TablePoint";
 import LoadingIndicator from "../../../../helper/loading";
-import { toast } from "react-toastify";
 import ButtonExportExcel from "./export-excel/ButtonExportExcel";
 import ModalFileImportPoint from "./import-excel/ModalFileImportPoint";
 import { SetTTrueToggle } from "../../../../app/teacher/TeCollapsedSlice.reducer";
 
 const TeacherPointMyClass = () => {
-
   const { idClass } = useParams();
   const dispatch = useAppDispatch();
   const [classDetail, setClassDetail] = useState({});
@@ -89,7 +87,7 @@ const TeacherPointMyClass = () => {
   const handleCancelImport = () => {
     setShowModalImport(false);
   };
-  
+
   const data = useAppSelector(GetPoint);
   return (
     <>
