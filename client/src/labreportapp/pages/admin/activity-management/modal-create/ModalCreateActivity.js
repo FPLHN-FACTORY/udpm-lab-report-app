@@ -1,5 +1,14 @@
 import "./styleModalCreateActivity.css";
-import { Modal, Row, Col, Input, Button, DatePicker, Select, message } from "antd";
+import {
+  Modal,
+  Row,
+  Col,
+  Input,
+  Button,
+  DatePicker,
+  Select,
+  message,
+} from "antd";
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "../../../../app/hook";
 import { toast } from "react-toastify";
@@ -119,7 +128,7 @@ const ModalCreateActivity = ({
         descriptions: descriptions,
         allowUseTrello: parseInt(allowUseTrello),
       };
-      
+
       ActivityManagementAPI.create(obj).then(
         (response) => {
           message.success("Thêm thành công!");
@@ -156,6 +165,7 @@ const ModalCreateActivity = ({
             <span>Mã:</span> <br />
             <Input
               value={code}
+              placeholder="Nhập mã hoạt động"
               onChange={(e) => {
                 setCode(e.target.value);
               }}
@@ -168,6 +178,7 @@ const ModalCreateActivity = ({
             <span>Tên:</span> <br />
             <Input
               value={name}
+              placeholder="Nhập tên hoạt động"
               onChange={(e) => {
                 setName(e.target.value);
               }}

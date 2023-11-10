@@ -8,7 +8,7 @@ import {
 import "./style-header.css";
 import CommonInforUser from "../common/CommonInforUser";
 import logoUdpm3 from "../../assets/img/logo-udpm-3.png";
-import logoBit from "../../assets/img/logo_bit.jpg";
+import logoBit from "../../assets/img/logo_bit_1.png";
 
 const { Header } = Layout;
 

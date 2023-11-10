@@ -15,7 +15,7 @@ public class CompareUtil {
         if (areValuesDifferent(valueOld, valueNew)) {
             return convertMessage(nameField, valueOld, valueNew, customMessage);
         }
-        return null;
+        return "";
     }
 
     private static boolean areValuesDifferent(Object valueOld, Object valueNew) {

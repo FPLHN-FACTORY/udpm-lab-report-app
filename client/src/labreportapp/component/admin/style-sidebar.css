@@ -60,10 +60,10 @@
 .ant-menu-light .ant-menu-item-selected {
   color: #595959;
   font-weight: 500;
-  background-color: rgb(226, 243, 255);
+  background-color: rgb(255, 242, 198);
 }
 
 .ant-menu-light .ant-menu-submenu-selected > .ant-menu-submenu-title {
-  color: rgb(38, 144, 214);
-  font-weight: 500;
+  color: #595959;
+  font-weight: 700;
 }

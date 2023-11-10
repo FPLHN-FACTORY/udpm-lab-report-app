@@ -91,28 +91,32 @@ public class AdSemesterServiceImpl implements AdSemesterService {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Semester semester = findSemesterById.get();
 
+        StringBuilder stringBuilder = new StringBuilder();
+
         String messageNameSemester = CompareUtil.compareAndConvertMessage("tên học kỳ", semester.getName(), obj.getName(), "");
-        loggerUtil.sendLogScreen(messageNameSemester, "");
+        stringBuilder.append(messageNameSemester).append(!messageNameSemester.equals("") ? ", " : "");
 
         String startTimeOld = sdf.format(semester.getStartTime());
         String startTimeNew = sdf.format(obj.getStartTime());
         String messageStartTimeSemester = CompareUtil.compareAndConvertMessage("ngày bắt đầu của học kỳ", startTimeOld, startTimeNew, "");
-        loggerUtil.sendLogScreen(messageStartTimeSemester, "");
+        stringBuilder.append(messageStartTimeSemester).append(!messageStartTimeSemester.equals("") ? ", " : "");
 
         String endTimeOld = sdf.format(semester.getEndTime());
         String endTimeNew = sdf.format(obj.getEndTime());
         String messageEndTimeSemester = CompareUtil.compareAndConvertMessage("ngày kết thúc của học kỳ", endTimeOld, endTimeNew, "");
-        loggerUtil.sendLogScreen(messageEndTimeSemester, "");
+        stringBuilder.append(messageEndTimeSemester).append(!messageEndTimeSemester.equals("") ? ", " : "");
 
         String startTimeStudentOld = sdf.format(semester.getStartTimeStudent());
         String startTimeStudentNew = sdf.format(obj.getStartTimeStudent());
         String messageStartTimeStudent = CompareUtil.compareAndConvertMessage("ngày bắt đầu sinh viên của học kỳ", startTimeStudentOld, startTimeStudentNew, "");
-        loggerUtil.sendLogScreen(messageStartTimeStudent, "");
+        stringBuilder.append(messageStartTimeStudent).append(!messageStartTimeStudent.equals("") ? ", " : "");
 
         String endTimeStudentOld = sdf.format(semester.getEndTimeStudent());
         String endTimeStudentNew = sdf.format(obj.getEndTimeStudent());
         String messageEndTimeStudent = CompareUtil.compareAndConvertMessage("ngày kết thúc sinh viên của học kỳ", endTimeStudentOld, endTimeStudentNew, "");
-        loggerUtil.sendLogScreen(messageEndTimeStudent, "");
+        stringBuilder.append(messageEndTimeStudent).append(!messageEndTimeStudent.equals("") ? ", " : "");
+
+        loggerUtil.sendLogScreen(stringBuilder.toString(), "");
 
         semester.setName(obj.getName());
         semester.setStartTime(obj.getStartTime());

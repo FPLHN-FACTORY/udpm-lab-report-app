@@ -5,9 +5,11 @@ import jwt_decode from "jwt-decode";
 import { useAppDispatch } from "../app/hook";
 import { SetUserCurrent } from "../app/common/UserCurrent.reducer";
 import { RolesAPI } from "../api/common/RolesAPI";
+import { useLocation } from "react-router";
 
 const AuthGuard = ({ children }) => {
   const dispatch = useAppDispatch();
+  const location = useLocation();
 
   useEffect(() => {
     const token = Cookies.get("token");
@@ -23,7 +25,7 @@ const AuthGuard = ({ children }) => {
       });
       getRolesUser(decodedToken);
     }
-  }, [children]);
+  }, [children, location]);
 
   const getRolesUser = (decodedToken) => {
     RolesAPI.getRolesUser(decodedToken.id).then(
@@ -35,7 +37,7 @@ const AuthGuard = ({ children }) => {
       }
     );
   };
-  
+
   return children;
 };
 

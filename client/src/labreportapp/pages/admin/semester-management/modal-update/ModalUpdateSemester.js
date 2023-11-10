@@ -163,6 +163,7 @@ const ModalUpdateSemester = ({ visible, onCancel, semester }) => {
         <div style={{ marginTop: "15px", borderBottom: "1px solid black" }}>
           <Row gutter={16} style={{ marginBottom: "15px" }}>
             <Col span={24}>
+              <span style={{ color: "red" }}>(*) </span>{" "}
               <span>Tên học kỳ:</span> <br />
               <Input
                 value={name}
@@ -176,6 +177,7 @@ const ModalUpdateSemester = ({ visible, onCancel, semester }) => {
           </Row>
           <Row gutter={16} style={{ marginBottom: "15px" }}>
             <Col span={12}>
+              <span style={{ color: "red" }}>(*) </span>
               <span>Thời gian bắt đầu:</span> <br />
               <Input
                 value={moment(startTime).format("YYYY-MM-DD")}
@@ -187,6 +189,7 @@ const ModalUpdateSemester = ({ visible, onCancel, semester }) => {
               <span className="error">{errorStartTime}</span>
             </Col>
             <Col span={12}>
+              <span style={{ color: "red" }}>(*) </span>{" "}
               <span>Thời gian kết thúc:</span> <br />
               <Input
                 value={moment(endTime).format("YYYY-MM-DD")}
@@ -200,6 +203,7 @@ const ModalUpdateSemester = ({ visible, onCancel, semester }) => {
           </Row>
           <Row gutter={16} style={{ marginBottom: "15px" }}>
             <Col span={12}>
+              <span style={{ color: "red" }}>(*) </span>{" "}
               <span>Thời gian sinh viên bắt đầu:</span> <br />
               <Input
                 value={moment(startTimeStudent).format("YYYY-MM-DD")}
@@ -211,6 +215,7 @@ const ModalUpdateSemester = ({ visible, onCancel, semester }) => {
               <span className="error">{errorStartTimeStudent}</span>
             </Col>
             <Col span={12}>
+              <span style={{ color: "red" }}>(*) </span>{" "}
               <span>Thời gian sinh viên kết thúc:</span> <br />
               <Input
                 value={moment(endTimeStudent).format("YYYY-MM-DD")}

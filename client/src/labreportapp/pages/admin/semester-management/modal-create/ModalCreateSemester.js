@@ -79,7 +79,10 @@ const ModalCreateSemester = ({ visible, onCancel }) => {
       check++;
     } else {
       setErrorStartTimeStudent("");
-      if (new Date(startTimeStudent).getTime() > new Date(endTimeStudent).getTime()) {
+      if (
+        new Date(startTimeStudent).getTime() >
+        new Date(endTimeStudent).getTime()
+      ) {
         setErrorStartTimeStudent(
           "Thời gian sinh viên bắt đầu không được lớn hơn thời gian sinh viên kết thúc"
         );
@@ -87,7 +90,9 @@ const ModalCreateSemester = ({ visible, onCancel }) => {
       } else {
         setErrorStartTimeStudent("");
       }
-      if (new Date(startTimeStudent).getTime() < new Date(startTime).getTime()) {
+      if (
+        new Date(startTimeStudent).getTime() < new Date(startTime).getTime()
+      ) {
         setErrorStartTimeStudent(
           "Thời gian sinh viên bắt đầu không được nhỏ hơn thời gian học kỳ bắt đầu"
         );
@@ -148,9 +153,11 @@ const ModalCreateSemester = ({ visible, onCancel }) => {
         <div style={{ marginTop: "15px", borderBottom: "1px solid black" }}>
           <Row gutter={16} style={{ marginBottom: "15px" }}>
             <Col span={24}>
+              <span style={{ color: "red" }}>(*) </span>{" "}
               <span>Tên học kỳ:</span> <br />
               <Input
                 value={name}
+                placeholder="Nhập tên học kỳ"
                 onChange={(e) => {
                   setName(e.target.value);
                 }}
@@ -161,6 +168,7 @@ const ModalCreateSemester = ({ visible, onCancel }) => {
           </Row>
           <Row gutter={16} style={{ marginBottom: "15px" }}>
             <Col span={12}>
+              <span style={{ color: "red" }}>(*) </span>{" "}
               <span>Thời gian bắt đầu:</span> <br />
               <Input
                 value={startTime}
@@ -172,6 +180,7 @@ const ModalCreateSemester = ({ visible, onCancel }) => {
               <span className="error">{errorStartTime}</span>
             </Col>
             <Col span={12}>
+              <span style={{ color: "red" }}>(*) </span>
               <span>Thời gian kết thúc:</span> <br />
               <Input
                 value={endTime}
@@ -185,6 +194,7 @@ const ModalCreateSemester = ({ visible, onCancel }) => {
           </Row>
           <Row gutter={16} style={{ marginBottom: "15px" }}>
             <Col span={12}>
+              <span style={{ color: "red" }}>(*) </span>{" "}
               <span>Thời gian sinh viên bắt đầu:</span> <br />
               <Input
                 value={startTimeStudent}
@@ -196,6 +206,7 @@ const ModalCreateSemester = ({ visible, onCancel }) => {
               <span className="error">{errorStartTimeStudent}</span>
             </Col>
             <Col span={12}>
+              <span style={{ color: "red" }}>(*) </span>{" "}
               <span>Thời gian sinh viên kết thúc:</span> <br />
               <Input
                 value={endTimeStudent}

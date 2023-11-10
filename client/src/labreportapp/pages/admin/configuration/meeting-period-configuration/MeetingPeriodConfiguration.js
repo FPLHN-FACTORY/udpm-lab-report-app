@@ -230,6 +230,7 @@ const MeetingPeriodConfiguration = () => {
             <Input
               type="text"
               value={name}
+              placeholder="Nhập tên ca"
               onChange={(e) => {
                 setName(e.target.value);
               }}

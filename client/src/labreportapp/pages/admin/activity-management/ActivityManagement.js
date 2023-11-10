@@ -293,7 +293,7 @@ const ActivityManagement = () => {
         style={{ paddingTop: 10, marginTop: 0 }}
       >
         {loading && <LoadingIndicator />}
-        <div className="filter_my_class">
+        <div className="filter_my_class" style={{ padding: 15 }}>
           <FontAwesomeIcon
             icon={faFilter}
             style={{ fontSize: "20px", marginRight: "7px" }}

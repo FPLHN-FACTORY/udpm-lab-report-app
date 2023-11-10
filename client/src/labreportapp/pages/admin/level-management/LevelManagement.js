@@ -183,9 +183,14 @@ const LevelManagement = () => {
       </div>
       <div className="box-general" style={{ paddingTop: 10, marginTop: 0 }}>
         {loading && <LoadingIndicator />}
-        <div className="filter-level" style={{ marginBottom: "10px" }}>
+        <div
+          className="filter-level"
+          style={{ marginBottom: "10px", padding: 15 }}
+        >
           <FontAwesomeIcon icon={faFilter} style={{ fontSize: "20px" }} />{" "}
-          <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
+          <span style={{ fontSize: "18px", fontWeight: "500", marginLeft: 5 }}>
+            Bộ lọc
+          </span>
           <hr />
           <div className="title__search" style={{ marginRight: "60px" }}>
             Tên level:{" "}

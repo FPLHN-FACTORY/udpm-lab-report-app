@@ -71,7 +71,9 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
               style={{ marginRight: 7, fontSize: 18 }}
             />
             {!collapsed && (
-              <span style={{ fontSize: 15 }}>Hoạt động xưởng</span>
+              <span style={{ fontSize: 15, fontWeight: 700 }}>
+                Hoạt động xưởng
+              </span>
             )}
           </span>
         </div>
@@ -228,7 +230,9 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             />
           }
         >
-          <Link to="/admin/factory-deployment-statistics">Thống kê</Link>
+          <Link to="/admin/factory-deployment-statistics">
+            Thống kê triển khai
+          </Link>
         </Menu.Item>
         {/* <Menu.Item
           key="12"
@@ -249,7 +253,9 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
               icon={faWindowRestore}
               style={{ marginRight: 7, fontSize: 18 }}
             />
-            {!collapsed && <span style={{ fontSize: 15 }}>Dự án xưởng</span>}
+            {!collapsed && (
+              <span style={{ fontSize: 15, fontWeight: 700 }}>Dự án xưởng</span>
+            )}
           </span>
         </div>
         <Menu.SubMenu
@@ -358,7 +364,9 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
               style={{ marginRight: 7, fontSize: 18 }}
             />
             {!collapsed && (
-              <span style={{ fontSize: 15 }}>Thành viên xưởng</span>
+              <span style={{ fontSize: 15, fontWeight: 700 }}>
+                Thành viên xưởng
+              </span>
             )}
           </span>
         </div>
@@ -395,24 +403,6 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
         >
           <Link to="/admin/role-factory-management">Vai trò trong xưởng</Link>
         </Menu.Item>{" "}
-        <div
-          style={{
-            marginTop: 5,
-            justifyContent: "center",
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <img
-            src={logoBit}
-            style={{
-              width: 30,
-              height: 30,
-              borderRadius: "50%",
-            }}
-          />{" "}
-          <span>v1.0</span>
-        </div>
       </Menu>
     </Sider>
   );

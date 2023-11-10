@@ -7,7 +7,6 @@ const CommonFooter = () => {
         style={{
           justifyContent: "center",
           color: "gray",
-          marginBottom: 25,
           display: "flex",
           alignItems: "center",
         }}
@@ -21,6 +20,25 @@ const CommonFooter = () => {
           }}
         />{" "}
         <i>Copyright © 2023 by Poly Business Information Technology Hanoi.</i>
+      </div>
+      <div
+        style={{
+          marginLeft: 7,
+          marginBottom: 25,
+          justifyContent: "center",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <img
+          src={LogoFactory}
+          style={{
+            width: 30,
+            height: 30,
+            borderRadius: "50%",
+          }}
+        />{" "}
+        <span>v1.0</span>
       </div>
     </>
   );

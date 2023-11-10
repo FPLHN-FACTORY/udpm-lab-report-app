@@ -279,7 +279,7 @@ const SemesterManagement = () => {
         {loading && <LoadingIndicator />}
         <div
           className="filter-semester"
-          style={{ marginBottom: "10px", marginTop: 0 }}
+          style={{ marginBottom: "10px", marginTop: 0, padding: 15 }}
         >
           <FontAwesomeIcon
             icon={faFilter}
@@ -291,6 +291,7 @@ const SemesterManagement = () => {
             Tên học kỳ:
             <Input
               type="text"
+              placeholder="Nhập tên học kỳ"
               value={name}
               onChange={(e) => {
                 setName(e.target.value);

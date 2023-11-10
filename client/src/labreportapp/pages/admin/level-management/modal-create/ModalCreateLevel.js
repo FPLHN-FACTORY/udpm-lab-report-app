@@ -66,9 +66,11 @@ const ModalCreateLevel = ({ visible, onCancel }) => {
         <div style={{ marginTop: "15px", borderBottom: "1px solid black" }}>
           <Row gutter={16} style={{ marginBottom: "15px" }}>
             <Col span={24}>
+              <span style={{ color: "red" }}>(*) </span>
               <span>Tên Level:</span> <br />
               <Input
                 value={name}
+                placeholder="Nhập tên level"
                 onChange={(e) => {
                   setName(e.target.value);
                 }}

@@ -55,7 +55,9 @@ const SidebarStudentComponent = ({ collapsed, toggleCollapsed }) => {
               style={{ marginRight: 7, fontSize: 18 }}
             />
             {!collapsed && (
-              <span style={{ fontSize: 15 }}>Hoạt động xưởng</span>
+              <span style={{ fontSize: 15, fontWeight: 700 }}>
+                Hoạt động xưởng
+              </span>
             )}
           </span>
         </div>
@@ -125,7 +127,9 @@ const SidebarStudentComponent = ({ collapsed, toggleCollapsed }) => {
               icon={faCogs}
               style={{ marginRight: 7, fontSize: 18 }}
             />
-            {!collapsed && <span style={{ fontSize: 15 }}>Dự án xưởng</span>}
+            {!collapsed && (
+              <span style={{ fontSize: 15, fontWeight: 700 }}>Dự án xưởng</span>
+            )}
           </span>
         </div>
         <Menu.Item

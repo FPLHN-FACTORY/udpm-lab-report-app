@@ -2,18 +2,16 @@ import { Modal, Row, Col, Input, Button, message } from "antd";
 import { useEffect, useState } from "react";
 import { AdMeetingPeriodConfigurationAPI } from "../../../../../api/admin/AdMeetingPeriodConfigurationAPI";
 import { useAppDispatch } from "../../../../../app/hook";
-import {
-    UpdateMeetingPeriodConfiguration
-  } from "../../../../../app/admin/AdMeetingPeriodConfiguration.reducer";
-  import { toast } from "react-toastify";
+import { UpdateMeetingPeriodConfiguration } from "../../../../../app/admin/AdMeetingPeriodConfiguration.reducer";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const ModalUpdateMeetingPeriod = ({ visible, onCancel, meetingPeriod }) => {
   const [name, setName] = useState("");
-  const [startHour, setStartHour] = useState("");
-  const [startMinute, setStartMinute] = useState("");
-  const [endHour, setEndHour] = useState("");
-  const [endMinute, setEndMinute] = useState("");
+  const [startHour, setStartHour] = useState(0);
+  const [startMinute, setStartMinute] = useState(0);
+  const [endHour, setEndHour] = useState(0);
+  const [endMinute, setEndMinute] = useState(0);
   const [errorName, setErrorName] = useState("");
   const [errorStartHour, setErrorStartHour] = useState("");
   const [errorEndHour, setErrorEndHour] = useState("");
@@ -31,10 +29,18 @@ const ModalUpdateMeetingPeriod = ({ visible, onCancel, meetingPeriod }) => {
 
       return () => {
         setName("");
-        setErrorName();
+        setStartHour(0);
+        setStartMinute(0);
+        setEndHour(0);
+        setEndMinute(0);
+        setErrorName("");
+        setErrorStartHour("");
+        setErrorEndHour("");
+        setErrorStartMinute("");
+        setErrorEndMinute("");
       };
     }
-  }, [meetingPeriod]);
+  }, [meetingPeriod, visible]);
 
   const update = () => {
     let check = 0;
@@ -42,13 +48,12 @@ const ModalUpdateMeetingPeriod = ({ visible, onCancel, meetingPeriod }) => {
       setErrorName("Tên Ca không được để trống");
       check++;
     } else {
-      setErrorName("");
-    }
-    if (name.trim().length > 500) {
-      setErrorName("Tên Ca không quá 500 ký tự");
-      check++;
-    } else {
-      setErrorName("");
+      if (name.trim().length > 500) {
+        setErrorName("Tên Ca không quá 500 ký tự");
+        check++;
+      } else {
+        setErrorName("");
+      }
     }
 
     if (startHour === "" || startMinute === "") {
@@ -59,7 +64,7 @@ const ModalUpdateMeetingPeriod = ({ visible, onCancel, meetingPeriod }) => {
       setErrorStartHour("");
       setErrorStartMinute("");
     }
-  
+
     if (endHour === "" || endMinute === "") {
       setErrorEndHour("Giờ kết thúc không được để trống");
       setErrorEndMinute("Phút kết thúc không được để trống");
@@ -68,12 +73,15 @@ const ModalUpdateMeetingPeriod = ({ visible, onCancel, meetingPeriod }) => {
       setErrorEndHour("");
       setErrorEndMinute("");
     }
-  
+
     if (parseInt(startHour) > parseInt(endHour)) {
       setErrorStartHour("Giờ bắt đầu phải nhỏ hơn giờ kết thúc");
       setErrorEndHour("Giờ kết thúc phải lớn hơn giờ bắt đầu");
       check++;
-    } else if (parseInt(startHour) === parseInt(endHour) && parseInt(startMinute) >= parseInt(endMinute)) {
+    } else if (
+      parseInt(startHour) === parseInt(endHour) &&
+      parseInt(startMinute) >= parseInt(endMinute)
+    ) {
       setErrorStartMinute("Phút bắt đầu phải nhỏ hơn phút kết thúc");
       setErrorEndMinute("Phút kết thúc phải lớn hơn phút bắt đầu");
       check++;
@@ -94,7 +102,7 @@ const ModalUpdateMeetingPeriod = ({ visible, onCancel, meetingPeriod }) => {
       setErrorStartHour("");
       setErrorStartMinute("");
     }
-    
+
     if (parseInt(endHour) >= 24) {
       setErrorEndHour("Giờ kết thúc phải nhỏ hơn 24 giờ");
       check++;
@@ -109,15 +117,18 @@ const ModalUpdateMeetingPeriod = ({ visible, onCancel, meetingPeriod }) => {
     if (!Number.isInteger(Number(startHour)) || Number(startHour) <= 0) {
       setErrorStartHour("Giờ bắt đầu phải là số nguyên dương");
       check++;
-    } else if (!Number.isInteger(Number(startMinute)) || Number(startMinute) <= 0) {
+    } else if (
+      !Number.isInteger(Number(startMinute)) ||
+      Number(startMinute) <= 0
+    ) {
       setErrorStartMinute("Phút bắt đầu phải là số nguyên dương");
       check++;
     } else {
       setErrorStartHour("");
       setErrorStartMinute("");
     }
-    
-      if (!Number.isInteger(Number(endHour)) || Number(endHour) <= 0) {
+
+    if (!Number.isInteger(Number(endHour)) || Number(endHour) <= 0) {
       setErrorEndHour("Giờ kết thúc phải là số nguyên dương");
       check++;
     } else if (!Number.isInteger(Number(endMinute)) || Number(endMinute) <= 0) {
@@ -138,7 +149,10 @@ const ModalUpdateMeetingPeriod = ({ visible, onCancel, meetingPeriod }) => {
         endMinute: endMinute,
       };
 
-      AdMeetingPeriodConfigurationAPI.updateMeetingPeriod(obj, meetingPeriod.id).then(
+      AdMeetingPeriodConfigurationAPI.updateMeetingPeriod(
+        obj,
+        meetingPeriod.id
+      ).then(
         (response) => {
           message.success("Cập nhật thành công!");
           dispatch(UpdateMeetingPeriodConfiguration(response.data.data));
@@ -162,11 +176,13 @@ const ModalUpdateMeetingPeriod = ({ visible, onCancel, meetingPeriod }) => {
           <span style={{ fontSize: "18px" }}>Cập nhật Ca</span>
         </div>
         <div style={{ marginTop: "15px", borderBottom: "1px solid black" }}>
-        <Row gutter={16} style={{ marginBottom: "15px" }}>
-            <Col span={24}>
+          <Row style={{ marginBottom: "15px" }}>
+            <Col span={24} style={{ padding: 5 }}>
+              <span style={{ color: "red" }}>(*) </span>
               <span>Tên Ca:</span> <br />
               <Input
                 value={name}
+                placeholder="Nhập tên ca"
                 onChange={(e) => {
                   setName(e.target.value);
                 }}
@@ -174,53 +190,54 @@ const ModalUpdateMeetingPeriod = ({ visible, onCancel, meetingPeriod }) => {
               />
               <span style={{ color: "red" }}>{errorName}</span>
             </Col>
-          </Row>
-          <Row gutter={16} style={{ marginBottom: "15px" }}>
-            <Col span={24}>
+            <Col span={12} style={{ padding: 5 }}>
+              <span style={{ color: "red" }}>(*) </span>{" "}
               <span>Giờ bắt đầu:</span> <br />
               <Input
                 value={startHour}
                 onChange={(e) => {
                   setStartHour(e.target.value);
                 }}
-                type="text"
+                type="number"
               />
               <span style={{ color: "red" }}>{errorStartHour}</span>
             </Col>
-            <Col span={24}>
+            <Col span={12} style={{ padding: 5 }}>
+              <span style={{ color: "red" }}>(*) </span>
               <span>Giờ kết thúc:</span> <br />
               <Input
                 value={endHour}
                 onChange={(e) => {
                   setEndHour(e.target.value);
                 }}
-                type="text"
+                type="number"
               />
               <span style={{ color: "red" }}>{errorEndHour}</span>
             </Col>
-            <Col span={24}>
+            <Col span={12} style={{ padding: 5 }}>
+              <span style={{ color: "red" }}>(*) </span>{" "}
               <span>Phút bắt đầu:</span> <br />
               <Input
                 value={startMinute}
                 onChange={(e) => {
                   setStartMinute(e.target.value);
                 }}
-                type="text"
+                type="number"
               />
               <span style={{ color: "red" }}>{errorStartMinute}</span>
             </Col>
-            <Col span={24}>
+            <Col span={12} style={{ padding: 5 }}>
+              <span style={{ color: "red" }}>(*) </span>{" "}
               <span>Phút kết thúc:</span> <br />
               <Input
                 value={endMinute}
                 onChange={(e) => {
                   setEndMinute(e.target.value);
                 }}
-                type="text"
+                type="number"
               />
               <span style={{ color: "red" }}>{errorEndMinute}</span>
             </Col>
-            
           </Row>
         </div>
         <div style={{ textAlign: "right" }}>
