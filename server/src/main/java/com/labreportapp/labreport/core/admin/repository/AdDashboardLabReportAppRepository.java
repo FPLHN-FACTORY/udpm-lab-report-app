@@ -90,26 +90,32 @@ public interface AdDashboardLabReportAppRepository extends ClassRepository {
                 SELECT a.id, COUNT(b.id) AS number_post
                 FROM class a LEFT JOIN post b ON a.id = b.class_id
                 WHERE a.teacher_id = :idTeacher
+                GROUP BY a.id
             ), NumberTeam AS (
                 SELECT a.id, COUNT(b.id) AS number_team
                 FROM class a LEFT JOIN team b ON a.id = b.class_id
                 WHERE a.teacher_id = :idTeacher
+                GROUP BY a.id
             ), NumberMeeting AS (
                 SELECT a.id, COUNT(b.id) AS number_meeting
                 FROM class a LEFT JOIN meeting b ON a.id = b.class_id
                 WHERE a.teacher_id = :idTeacher
+                GROUP BY a.id
             ), NumberMeetingTookPlace AS (
                 SELECT a.id, COUNT(b.id) AS number_meeting_took_place
                 FROM class a LEFT JOIN meeting b ON a.id = b.class_id
                 WHERE a.teacher_id = :idTeacher AND b.meeting_date <= :currentTime
+                GROUP BY a.id
             ), NumberStudentPass AS (
                 SELECT a.id, COUNT(b.id) AS number_student_pass
                 FROM class a LEFT JOIN student_classes b ON a.id = b.class_id
                 WHERE a.teacher_id = :idTeacher AND b.status = 0
+                GROUP BY a.id
             ), NumberStudentFail AS (
                 SELECT a.id, COUNT(b.id) AS number_student_fail
                 FROM class a LEFT JOIN student_classes b ON a.id = b.class_id
                 WHERE a.teacher_id = :idTeacher AND b.status = 1
+                GROUP BY a.id
             )
             SELECT a.id, a.code, a.class_size, c.name AS name_level,
             b.name AS name_activity, 
@@ -132,6 +138,7 @@ public interface AdDashboardLabReportAppRepository extends ClassRepository {
             WHERE a.teacher_id = :idTeacher
             AND (:idActivity IS NULL OR :idActivity LIKE '' OR b.id = :idActivity) 
             AND (:idSemester IS NULL OR :idSemester LIKE '' OR d.id = :idSemester)
+            GROUP BY a.id
             """, nativeQuery = true)
     List<AdDashboardClassResponse> getListClass(@Param("idTeacher") String idTeacher,
                                                 @Param("idSemester") String idSemester,

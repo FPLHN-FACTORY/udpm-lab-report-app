@@ -63,7 +63,7 @@ const AdFactoryDeploymentStatistics = () => {
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [semester, idActivitiSearch]);
 
   const [dashboard, setDashboard] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
