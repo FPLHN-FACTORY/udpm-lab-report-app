@@ -2,10 +2,10 @@ import { request } from "../../../../helper/request.helper";
 const url = `/teacher/meeting/schedule`;
 
 export class TeacherScheduleTodayAPI {
-  static getAllByIdTe = () => {
+  static getAllScheduleTodayMeeting = () => {
     return request({
       method: "GET",
-      url: url,
+      url: url + `-today`,
     });
   };
 

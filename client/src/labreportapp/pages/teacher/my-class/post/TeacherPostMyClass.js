@@ -50,7 +50,6 @@ import { GetUserCurrent } from "../../../../app/common/UserCurrent.reducer";
 import { useNavigate } from "react-router-dom";
 
 const TeacherPostMyClass = () => {
-
   const dispatch = useAppDispatch();
   const userRedux = useAppSelector(GetUserCurrent);
   dispatch(SetTTrueToggle());
@@ -170,6 +169,7 @@ const TeacherPostMyClass = () => {
     try {
       await TeacherMyClassAPI.randomPass(idClass).then((respone) => {
         dispatch(UpdateClass(respone.data.data));
+        message.success("Đổi mật khẩu thành công !");
       });
     } catch (error) {}
   };
@@ -201,7 +201,7 @@ const TeacherPostMyClass = () => {
     document.body.removeChild(tempInput);
     message.success("Đã sao chép mật khẩu vào bộ nhớ đệm !");
   };
-  
+
   const convertLongToDate = (dateLong) => {
     const date = new Date(dateLong);
     const day = String(date.getDate()).padStart(2, "0");
@@ -217,7 +217,7 @@ const TeacherPostMyClass = () => {
     setClickShow(value);
     setShowFullScreen(true);
   };
-  
+
   const handleCancelModal = () => {
     document.querySelector("body").style.overflowX = "hidden";
     setShowFullScreen(false);
@@ -634,7 +634,7 @@ const TeacherPostMyClass = () => {
                             setTimeout(() => {
                               setDownloading(false);
                               handleSeeMore();
-                            }, 1000);
+                            }, 300);
                           }}
                         >
                           <span

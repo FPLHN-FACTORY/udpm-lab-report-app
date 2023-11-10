@@ -3,7 +3,6 @@ package com.labreportapp.labreport.core.teacher.controller;
 import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.core.common.base.ResponseObject;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindMeetingRequest;
-import com.labreportapp.labreport.core.teacher.model.request.TeFindScheduleMeetingClassRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindScheduleNowToTime;
 import com.labreportapp.labreport.core.teacher.model.request.TeScheduleUpdateMeetingRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeUpdateHomeWorkAndNoteInMeetingRequest;
@@ -70,9 +69,9 @@ public class TeMeetingController {
         return new ResponseObject(find);
     }
 
-    @GetMapping("/schedule")
-    public ResponseObject getScheduleTodayTeacher(final TeFindScheduleMeetingClassRequest request) {
-        List<TeScheduleMeetingClassResponse> list = teMeetingService.searchScheduleToDayByIdTeacherAndMeetingDate(request);
+    @GetMapping("/schedule-today")
+    public ResponseObject getScheduleTodayTeacher() {
+        List<TeScheduleMeetingClassResponse> list = teMeetingService.searchScheduleToDayByIdTeacherAndMeetingDate();
         return new ResponseObject(list);
     }
 

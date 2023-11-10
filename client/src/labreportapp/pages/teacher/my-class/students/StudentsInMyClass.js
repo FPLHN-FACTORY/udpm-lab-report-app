@@ -23,6 +23,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import ModalSentStudent from "./modal-sent-student/ModalSentStudent";
 import { convertDateLongToString } from "../../../../helper/util.helper";
+import TeModalShowHistory from "./modal-show-history/TeModalShowHistory";
 
 const StudentsInMyClass = () => {
   const dispatch = useAppDispatch();
@@ -33,6 +34,7 @@ const StudentsInMyClass = () => {
   const [listIdStudent, setListIdStudent] = useState([]);
   const [showModalSent, setShowModalSent] = useState(false);
   const navigate = useNavigate();
+
   useEffect(() => {
     window.scrollTo(0, 0);
     featchClass(idClass);
@@ -40,6 +42,7 @@ const StudentsInMyClass = () => {
       dispatch(SetStudentClasses([]));
     };
   }, []);
+
   const featchClass = async (idClass) => {
     setLoading(false);
     try {
@@ -403,6 +406,7 @@ const StudentsInMyClass = () => {
       ...columns,
     ];
   }
+  const [showHistory, setShowHistory] = useState(false);
   return (
     <>
       {!loading && <LoadingIndicator />}
@@ -412,6 +416,11 @@ const StudentsInMyClass = () => {
         listIdStudent={checkedList}
         classDetail={classDetail}
         clearCheckedList={clearCheckedList}
+      />{" "}
+      <TeModalShowHistory
+        visible={showHistory}
+        onCancel={() => setShowHistory(!showHistory)}
+        classDetail={classDetail}
       />
       <div className="box-one">
         <Link to="/teacher/my-class" style={{ color: "black" }}>
@@ -548,6 +557,7 @@ const StudentsInMyClass = () => {
                   color: "white",
                   backgroundColor: "rgb(55, 137, 220)",
                 }}
+                onClick={() => setShowHistory(true)}
               >
                 <FontAwesomeIcon
                   icon={faHistory}

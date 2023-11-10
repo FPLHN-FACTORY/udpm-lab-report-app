@@ -104,7 +104,6 @@ public class StMeetingServiceImpl implements StMeetingService {
                 HomeWork homeWorkNew = new HomeWork();
                 homeWorkNew.setMeetingId(request.getIdMeeting());
                 homeWorkNew.setTeamId(request.getIdTeam());
-                homeWorkNew.setName("");
                 homeWorkNew.setDescriptions(request.getDescriptionsHomeWork());
                 if (request.getIdHomeWork() != null) {
                     Optional<HomeWork> objectHW = stHomeWorkRepository.findById(request.getIdHomeWork());
@@ -116,7 +115,6 @@ public class StMeetingServiceImpl implements StMeetingService {
                 Note noteNew = new Note();
                 noteNew.setMeetingId(request.getIdMeeting());
                 noteNew.setTeamId(request.getIdTeam());
-                noteNew.setName("");
                 noteNew.setDescriptions(request.getDescriptionsNote());
                 if (request.getIdNote() != null) {
                     Optional<Note> objectNote = stNoteRepository.findById(request.getIdNote());

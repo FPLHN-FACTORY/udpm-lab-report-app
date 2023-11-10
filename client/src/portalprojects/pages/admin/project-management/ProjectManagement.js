@@ -155,6 +155,7 @@ const ProjectManagement = () => {
     setCurrent(1);
     await handleSearch(1);
   };
+
   const handleClear = async () => {
     setCodeSearch("");
     setNameSearch("");
@@ -378,6 +379,10 @@ const ProjectManagement = () => {
       setEndTimeSearch("");
     }
   };
+
+  const handleTotalPagesChange = (newTotalPages) => {
+    setTotalPages(newTotalPages);
+  };
   return (
     <>
       {loading && <LoadingIndicator />}
@@ -597,6 +602,7 @@ const ProjectManagement = () => {
           <ModalCreateProject
             visible={showCreateModal}
             onCancel={handleCancelCreate}
+            onTotalPagesChange={handleTotalPagesChange}
           />
           <ModalUpdateProject
             visible={showUpdateModal}

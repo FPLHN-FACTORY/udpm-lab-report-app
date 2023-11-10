@@ -6,6 +6,7 @@ import com.labreportapp.labreport.entity.Meeting;
 import com.labreportapp.labreport.entity.MeetingPeriod;
 import com.labreportapp.labreport.infrastructure.constant.StatusMeeting;
 import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Async;
@@ -24,6 +25,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -61,7 +64,7 @@ public class TeCronJob {
     @Async
     @Transactional
     public void updateStatusMeetingJob() {
-        List<Meeting> listMeeting = teMeetingRepository.findMeetingToDayUpdate();
+        List<Meeting> listMeeting = teMeetingRepository.findMeetingToDayUpdate(new Date().getTime());
         if (listMeeting.size() == 0) {
             return;
         }
@@ -82,6 +85,10 @@ public class TeCronJob {
                         }
                     }
                 });
+                if (DateUtils.truncate(new Date(item.getMeetingDate()), Calendar.DATE).getTime() < DateUtils.truncate(new Date(), Calendar.DATE).getTime()) {
+                    item.setStatusMeeting(StatusMeeting.BUOI_NGHI);
+                    listUp.add(item);
+                }
             }
         });
         List<Meeting> savedMeetings = teMeetingRepository.saveAll(listUp);
@@ -94,7 +101,7 @@ public class TeCronJob {
         }
     }
 
-    @Scheduled(cron = "0 */10 * * * *")
+    @Scheduled(cron = "0 */15 * * * *")
     public void runJobUpdateStatus() {
         updateStatusMeetingJob();
     }

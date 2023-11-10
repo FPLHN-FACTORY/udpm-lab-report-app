@@ -20,5 +20,9 @@ public class TeFindListAttendanceRequest {
 
     private String idMeeting;
 
+    private String idClass;
+
+    private String codeClass;
+
     private String notes;
 }

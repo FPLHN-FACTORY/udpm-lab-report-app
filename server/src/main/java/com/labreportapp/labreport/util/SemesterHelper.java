@@ -20,4 +20,8 @@ public class SemesterHelper {
     public String getSemesterCurrent() {
         return semesterRepository.getSemesterCurrent(Calendar.getInstance().getTimeInMillis());
     }
+
+    public String getNameSemesterCurrent() {
+        return semesterRepository.getNameSemesterCurrent(Calendar.getInstance().getTimeInMillis());
+    }
 }

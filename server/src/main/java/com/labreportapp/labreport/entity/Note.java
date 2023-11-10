@@ -24,9 +24,9 @@ import org.hibernate.annotations.Nationalized;
 @Table(name = "note")
 public class Note extends PrimaryEntity {
 
-    @Column(length = EntityProperties.LENGTH_NAME)
-    @Nationalized
-    private String name;
+//    @Column(length = EntityProperties.LENGTH_NAME)
+//    @Nationalized
+//    private String name;
 
     @Column(length = Integer.MAX_VALUE)
     @Nationalized

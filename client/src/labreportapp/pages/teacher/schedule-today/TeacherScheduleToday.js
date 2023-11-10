@@ -62,11 +62,12 @@ const TeacherScheduleToday = () => {
   const featchDataToDay = async () => {
     setLoading(false);
     try {
-      await TeacherScheduleTodayAPI.getAllByIdTe().then((response) => {
-        setDataToday(response.data.data);
-      });
+      await TeacherScheduleTodayAPI.getAllScheduleTodayMeeting().then(
+        (response) => {
+          setDataToday(response.data.data);
+        }
+      );
     } catch (error) {
-      console.log(error);
       setLoading(true);
     }
   };

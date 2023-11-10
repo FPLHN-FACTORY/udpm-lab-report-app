@@ -21,6 +21,9 @@ public interface TeScheduleMeetingClassResponse {
     @Value("#{target.meeting_date}")
     Long getMeetingDate();
 
+    @Value("#{target.id_meeting_period}")
+    String getIdMeetingPeriod();
+
     @Value("#{target.meeting_period}")
     String getMeetingPeriod();
 

@@ -10,9 +10,11 @@ const CustomSwitch = ({ leftLabel, rightLabel, status, items }) => {
   const dispatch = useAppDispatch();
   const data = useAppSelector(GetAttendanceMeeting);
   const [checked, setChecked] = useState(true);
+
   useEffect(() => {
     status === "YES" ? setChecked(true) : setChecked(false);
   }, []);
+
   useEffect(() => {
     const dataNew = data.map((item1) => {
       if (
@@ -31,6 +33,7 @@ const CustomSwitch = ({ leftLabel, rightLabel, status, items }) => {
     });
     dispatch(SetAttendanceMeeting(dataNew));
   }, [checked]);
+
   return (
     <div
       className="custom-switch"

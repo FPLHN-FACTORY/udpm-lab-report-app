@@ -25,7 +25,7 @@ const CollapseTeam = ({ team, featchMeeting }) => {
   const [descriptionsReport, setDescriptionsReport] = useState("");
   const [dowloading, setDownloading] = useState(false);
   const [checkTime, setCheckTime] = useState(true);
-  
+
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Bảng điều khiển - chi tiết buổi học";
@@ -64,9 +64,7 @@ const CollapseTeam = ({ team, featchMeeting }) => {
       await TeacherTempalteReportAPI.getTemplateReport().then((response) => {
         setTempalte(response.data.data);
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const featchHomeWorkNote = async (idTeam) => {
@@ -110,21 +108,22 @@ const CollapseTeam = ({ team, featchMeeting }) => {
         );
         setDownloading(false);
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
+
   const update = async () => {
     try {
       let data = {
         idMeeting: idMeeting,
         idTeam: idTeamDetail,
         idHomeWork: objDetail.idHomeWork,
-        descriptionsHomeWork: descriptionsHomeWork,
+        descriptionsHomeWork:
+          descriptionsHomeWork != null ? descriptionsHomeWork : "",
         idNote: objDetail.idNote,
-        descriptionsNote: descriptionsNote,
+        descriptionsNote: descriptionsNote != null ? descriptionsNote : "",
         idReport: objDetail.idReport,
-        descriptionsReport: descriptionsReport,
+        descriptionsReport:
+          descriptionsReport != null ? descriptionsReport : "",
       };
       await TeacherMeetingHomeWorkNoteAPI.updateHomeWorkAndNote(data).then(
         (response) => {
@@ -136,9 +135,7 @@ const CollapseTeam = ({ team, featchMeeting }) => {
           featchMeeting(idMeeting);
         }
       );
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   return (
@@ -255,7 +252,7 @@ const CollapseTeam = ({ team, featchMeeting }) => {
                     <span className="title-main">Báo cáo:</span>
                     <TextArea
                       rows={10}
-                      placeholder="Báo cáo"
+                      placeholder="Nhập báo cáo"
                       value={descriptionsReport}
                       style={{ readOnly: edit && "false" }}
                       onChange={(e) => setDescriptionsReport(e.target.value)}

@@ -27,4 +27,9 @@ public interface SemesterRepository extends JpaRepository<Semester, String> {
             SELECT id FROM semester WHERE :currentTime BETWEEN start_time AND end_time
             """, nativeQuery = true)
     String getSemesterCurrent(@Param("currentTime") Long currentTime);
+
+    @Query(value = """
+            SELECT name FROM semester WHERE :currentTime BETWEEN start_time AND end_time
+            """, nativeQuery = true)
+    String getNameSemesterCurrent(@Param("currentTime") Long currentTime);
 }

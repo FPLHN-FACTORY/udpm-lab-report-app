@@ -30,7 +30,7 @@ const { RangePicker } = DatePicker;
 const { Option } = Select;
 const { TextArea } = Input;
 
-const ModalCreateProject = ({ visible, onCancel }) => {
+const ModalCreateProject = ({ visible, onCancel, onTotalPagesChange }) => {
   const [code, setCode] = useState("");
   const [errorCode, setErrorCode] = useState("");
   const [name, setName] = useState("");

@@ -126,7 +126,7 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
     List<TeMeetingCustomToAttendanceResponse> findMeetingCustomToAttendanceByIdClass(@Param("idClass") String idClass);
 
     @Query(value = """
-            SELECT ROW_NUMBER() OVER(ORDER BY m.meeting_date ASC) AS stt,
+            SELECT ROW_NUMBER() OVER(ORDER BY m.meeting_date DESC) AS stt,
                  c.id AS id_class,
                  c.code AS code_class,
                  m.id AS id_meeting,
@@ -145,18 +145,19 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
              JOIN meeting m ON m.class_id = c.id
              JOIN meeting_period mp ON mp.id = m.meeting_period
              JOIN activity ac ON ac.id = c.activity_id
-             JOIN level l on l.id = ac.level_id
+             JOIN level l ON l.id = ac.level_id
              WHERE m.teacher_id = :#{#req.idTeacher} AND DATE(FROM_UNIXTIME(m.meeting_date / 1000)) = CURDATE()
-             and m.status_meeting = 0
-             ORDER BY mp.name DESC
+                AND m.status_meeting = 0
+             ORDER BY m.meeting_date DESC,mp.name DESC
             """, countQuery = """
             SELECT DISTINCT(m.id)
                          FROM class c
                          JOIN meeting m ON m.class_id = c.id
                          JOIN meeting_period mp ON mp.id = m.meeting_period
                          JOIN activity ac ON ac.id = c.activity_id
-                         JOIN level l on l.id = ac.level_id
+                         JOIN level l ON l.id = ac.level_id
                          WHERE m.teacher_id = :#{#req.idTeacher} AND DATE(FROM_UNIXTIME(m.meeting_date / 1000)) = CURDATE()
+                       AND m.status_meeting = 0
             """
             , nativeQuery = true)
     List<TeScheduleMeetingClassResponse> searchScheduleToDayByIdTeacherAndMeetingDate(@Param("req") TeFindScheduleMeetingClassRequest req);
@@ -181,7 +182,7 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
              JOIN meeting m ON m.class_id = c.id
              JOIN meeting_period mp ON mp.id = m.meeting_period
              JOIN activity ac ON ac.id = c.activity_id
-             JOIN level l on l.id = ac.level_id
+             JOIN level l ON l.id = ac.level_id
              WHERE m.teacher_id = :#{#req.idTeacher} AND
              (
                      (:#{#req.time} LIKE '-7' AND m.meeting_date BETWEEN
@@ -215,7 +216,7 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                          JOIN meeting m ON m.class_id = c.id
                          JOIN meeting_period mp ON mp.id = m.meeting_period
                          JOIN activity ac ON ac.id = c.activity_id
-                         JOIN level l on l.id = ac.level_id
+                         JOIN level l ON l.id = ac.level_id
                          WHERE m.teacher_id = :#{#req.idTeacher} AND 
                          (
                                  (:#{#req.time} LIKE '-7' AND m.meeting_date BETWEEN
@@ -252,15 +253,15 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                 SELECT m.id AS id_meeting
                 FROM meeting m
                 LEFT JOIN attendance a ON m.id = a.meeting_id
-                WHERE m.status_meeting = 0  AND DATE(FROM_UNIXTIME(m.meeting_date / 1000)) = CURDATE()
+                WHERE m.status_meeting = 0  AND m.meeting_date <= :currentDate
                 AND a.meeting_id IS NULL
             )
             SELECT *  FROM meeting m
-            WHERE DATE(FROM_UNIXTIME(m.meeting_date / 1000)) = CURDATE() AND m.status_meeting = 0
+            WHERE m.status_meeting = 0 AND  m.meeting_date <= :currentDate
                 AND m.id IN (SELECT id_meeting FROM get_meeting_not_attend)
             ORDER BY m.name ASC;
             """, nativeQuery = true)
-    List<Meeting> findMeetingToDayUpdate();
+    List<Meeting> findMeetingToDayUpdate(@Param("currentDate") Long currentDate);
 
     @Query(value = """
             SELECT t.id AS idTeam,
