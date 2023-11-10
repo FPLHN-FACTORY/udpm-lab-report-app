@@ -1,34 +1,42 @@
 package com.labreportapp.labreport.core.admin.model.response;
 
-import lombok.Getter;
-import lombok.Setter;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * @author todo thangncph26123
  */
-@Getter
-@Setter
-public class AdDashboardClassResponse {
+public interface AdDashboardClassResponse {
 
-    private String id;
+    @Value("#{target.id}")
+    String getId();
 
-    private String code;
+    @Value("#{target.code}")
+    String getCode();
 
-    private String nameLevel;
+    @Value("#{target.name_level}")
+    String getNameLevel();
 
-    private String nameActivity;
+    @Value("#{target.name_activity}")
+    String getNameActivity();
 
-    private String classSize;
+    @Value("#{target.class_size}")
+    Integer getClassSize();
 
-    private Integer numberPost;
+    @Value("#{target.number_post}")
+    Integer getNumberPost();
 
-    private Integer numberTeam;
+    @Value("#{target.number_team}")
+    Integer getNumberTeam();
 
-    private Integer numberMeeting;
+    @Value("#{target.number_meeting}")
+    Integer getNumberMeeting();
 
-    private Integer numberMeetingTookPlace;
+    @Value("#{target.number_meeting_took_place}")
+    Integer getNumberMeetingTookPlace();
 
-    private Integer numberStudentPass;
+    @Value("#{target.number_student_pass}")
+    Integer getNumberStudentPass();
 
-    private Integer numberStudentFail;
+    @Value("#{target.number_student_fail}")
+    Integer getNumberStudentFail();
 }

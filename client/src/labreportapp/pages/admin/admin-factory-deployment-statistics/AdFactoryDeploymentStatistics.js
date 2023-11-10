@@ -14,6 +14,9 @@ import {
 import { useEffect, useState } from "react";
 import { Col, Row, Select } from "antd";
 import { ClassAPI } from "../../../api/admin/class-manager/ClassAPI.api";
+import { AdDashboardFactoryAPI } from "../../../api/admin/AdDashboardFactoryAPI";
+import LoadingIndicator from "../../../helper/loading";
+import ItemTeacherDashboard from "./ItemTeacherDashboard";
 const { Option } = Select;
 
 const AdFactoryDeploymentStatistics = () => {
@@ -58,8 +61,30 @@ const AdFactoryDeploymentStatistics = () => {
     }
   }, [semester]);
 
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const [dashboard, setDashboard] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const loadData = () => {
+    setIsLoading(true);
+    let filter = {
+      idSemester: semester,
+      idActivity: idActivitiSearch,
+      userName: "",
+    };
+    AdDashboardFactoryAPI.loadData(filter).then((response) => {
+      console.log(response.data.data);
+      setDashboard(response.data.data);
+      setIsLoading(false);
+    });
+  };
+
   return (
     <>
+      {isLoading && <LoadingIndicator />}
       <div className="box-one">
         <div
           className="heading-box"
@@ -176,7 +201,7 @@ const AdFactoryDeploymentStatistics = () => {
                   </span>{" "}
                   <br /> <br />
                   <span style={{ fontSize: 24, fontWeight: 700, color: "red" }}>
-                    20
+                    {dashboard != null && dashboard.tongSoLopHoc}
                   </span>
                 </Col>
                 <Col
@@ -198,7 +223,7 @@ const AdFactoryDeploymentStatistics = () => {
                   </span>{" "}
                   <br /> <br />
                   <span style={{ fontSize: 24, fontWeight: 700, color: "red" }}>
-                    20
+                    {dashboard != null && dashboard.tongSoGiangVien}
                   </span>
                 </Col>
                 <Col
@@ -220,7 +245,7 @@ const AdFactoryDeploymentStatistics = () => {
                   </span>{" "}
                   <br /> <br />
                   <span style={{ fontSize: 24, fontWeight: 700, color: "red" }}>
-                    20
+                    {dashboard != null && dashboard.tongSoSinhVien}
                   </span>
                 </Col>
                 <Col
@@ -241,7 +266,7 @@ const AdFactoryDeploymentStatistics = () => {
                   </span>{" "}
                   <br /> <br />
                   <span style={{ fontSize: 24, fontWeight: 700, color: "red" }}>
-                    0
+                    {dashboard != null && dashboard.tongSoLopChuaCoGiangVien}
                   </span>
                 </Col>
               </Row>
@@ -278,7 +303,7 @@ const AdFactoryDeploymentStatistics = () => {
                   </span>{" "}
                   <br /> <br />
                   <span style={{ fontSize: 24, fontWeight: 700, color: "red" }}>
-                    20
+                    {dashboard != null && dashboard.tongLopHocDuDieuKien}
                   </span>
                 </Col>
                 <Col
@@ -300,7 +325,7 @@ const AdFactoryDeploymentStatistics = () => {
                   </span>{" "}
                   <br /> <br />
                   <span style={{ fontSize: 24, fontWeight: 700, color: "red" }}>
-                    20
+                    {dashboard != null && dashboard.tongLopHocChuaDuDieuKien}
                   </span>
                 </Col>
                 <Col
@@ -322,7 +347,7 @@ const AdFactoryDeploymentStatistics = () => {
                   </span>{" "}
                   <br /> <br />
                   <span style={{ fontSize: 24, fontWeight: 700, color: "red" }}>
-                    20
+                    {dashboard != null && dashboard.tongLopGiangVienChinhSua}
                   </span>
                 </Col>
                 <Col
@@ -343,7 +368,7 @@ const AdFactoryDeploymentStatistics = () => {
                   </span>{" "}
                   <br /> <br />
                   <span style={{ fontSize: 24, fontWeight: 700, color: "red" }}>
-                    20
+                    {dashboard != null && dashboard.tongSoLevel}
                   </span>
                 </Col>
               </Row>
@@ -357,6 +382,12 @@ const AdFactoryDeploymentStatistics = () => {
               />
               Thống kê giảng viên
             </span>
+          </div>
+          <div style={{ marginTop: 20, marginLeft: 10, marginRight: 10 }}>
+            {dashboard != null &&
+              dashboard.listTeacher.map((item) => {
+                return <ItemTeacherDashboard item={item} />;
+              })}
           </div>
         </div>
       </div>
