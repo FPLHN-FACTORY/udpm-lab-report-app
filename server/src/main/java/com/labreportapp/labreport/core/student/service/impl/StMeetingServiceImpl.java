@@ -10,15 +10,19 @@ import com.labreportapp.labreport.core.student.repository.StLeadTeamRepository;
 import com.labreportapp.labreport.core.student.repository.StMeetingRepository;
 import com.labreportapp.labreport.core.student.repository.StNoteRepository;
 import com.labreportapp.labreport.core.student.repository.StReportRepository;
+import com.labreportapp.labreport.core.student.repository.StTeamRepository;
 import com.labreportapp.labreport.core.student.service.StMeetingService;
 import com.labreportapp.labreport.entity.HomeWork;
 import com.labreportapp.labreport.entity.Meeting;
 import com.labreportapp.labreport.entity.Note;
 import com.labreportapp.labreport.entity.Report;
 import com.labreportapp.labreport.entity.StudentClasses;
+import com.labreportapp.labreport.entity.Team;
 import com.labreportapp.labreport.infrastructure.constant.RoleTeam;
 import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
+import com.labreportapp.labreport.util.LoggerUtil;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
+import com.labreportapp.portalprojects.infrastructure.exception.rest.CustomException;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import lombok.Synchronized;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +57,12 @@ public class StMeetingServiceImpl implements StMeetingService {
     @Autowired
     private LabReportAppSession labReportAppSession;
 
+    @Autowired
+    private LoggerUtil loggerUtil;
+
+    @Autowired
+    private StTeamRepository stTeamRepository;
+
     @Override
     public List<StMeetingResponse> searchMeetingByIdClass(StFindMeetingRequest request) {
         return stMeetingrepository.findMeetingByIdClass(request);
@@ -67,7 +77,7 @@ public class StMeetingServiceImpl implements StMeetingService {
     public StMeetingResponse searchMeetingByIdMeeting(StFindMeetingRequest request) {
         Optional<StMeetingResponse> meeting = stMeetingrepository.searchMeetingByIdMeeting(request);
         if (!meeting.isPresent()) {
-            throw new RestApiException(Message.MEETING_NOT_EXISTS);
+            throw new CustomException(Message.MEETING_NOT_EXISTS);
         }
         if (meeting.get().getMeetingDate() > new Date().getTime()) {
             throw new RestApiException(Message.CHUA_DEN_THOI_GIAN_CUA_BUOI_HOC);
@@ -89,15 +99,24 @@ public class StMeetingServiceImpl implements StMeetingService {
         return stMeetingrepository.getTeamInClass(stFindStudentClasses);
     }
 
+
     @Override
     @Transactional
     @Synchronized
     public StHomeWordAndNoteResponse updateDetailMeetingTeamByLeadTeam(StUpdateHomeWorkAndNotebyLeadTeamRequest request) {
-        Optional<Meeting> meetingFind = stMeetingrepository.findById(request.getIdMeeting());
-        if (!meetingFind.isPresent()) {
+        Optional<Meeting> meeting = stMeetingrepository.findById(request.getIdMeeting());
+        if (!meeting.isPresent()) {
             throw new RestApiException(Message.MEETING_NOT_EXISTS);
         }
-        Optional<StudentClasses> optionalStudentClasses = stLeadTeamRepository.findStudentClassesByStudentIdAndClassId(labReportAppSession.getUserId(), meetingFind.get().getClassId());
+        Optional<StudentClasses> optionalStudentClasses = stLeadTeamRepository.findStudentClassesByStudentIdAndClassId(labReportAppSession.getUserId(), meeting.get().getClassId());
+        Optional<Team> team = stTeamRepository.findById(request.getIdTeam());
+        String codeClass = loggerUtil.getCodeClassByIdClass(meeting.get().getClassId());
+        String nameSemester = loggerUtil.getNameSemesterByIdClass(meeting.get().getClassId());
+        String nameMeeting = meeting.isPresent() ? meeting.get().getName() : "";
+        String nameTeam = team.isPresent() ? team.get().getName() : "";
+        StringBuilder stringHw = new StringBuilder();
+        StringBuilder stringNote = new StringBuilder();
+        StringBuilder stringReport = new StringBuilder();
         if (optionalStudentClasses.isPresent()) {
             StudentClasses studentClasses = optionalStudentClasses.get();
             if (studentClasses.getRole().equals(RoleTeam.LEADER)) {
@@ -109,6 +128,21 @@ public class StMeetingServiceImpl implements StMeetingService {
                     Optional<HomeWork> objectHW = stHomeWorkRepository.findById(request.getIdHomeWork());
                     if (objectHW.isPresent()) {
                         homeWorkNew.setId(objectHW.get().getId());
+                        String homeW = "";
+                        if (objectHW.get().getDescriptions() != null) {
+                            homeW = objectHW.get().getDescriptions();
+                        }
+                        if (!request.getDescriptionsHomeWork().equals("") && homeW.equals("")) {
+                            stringHw.append("Đã thêm bài tập về nhà (").append(nameMeeting).append(" - ").append(nameTeam).append(") là `").append(request.getDescriptionsHomeWork()).append("`. ");
+                        } else if (!request.getDescriptionsHomeWork().equals("") && !request.getDescriptionsHomeWork().equals(homeW)) {
+                            stringHw.append("Đã cập nhật bài tập về nhà (").append(nameMeeting).append(" - ").append(nameTeam).append(") từ `").append(homeW).append("` thành `").append(request.getDescriptionsHomeWork()).append("`. ");
+                        } else if (request.getDescriptionsHomeWork().equals("") && !homeW.equals("")) {
+                            stringHw.append("Đã xóa bài tập về nhà (").append(nameMeeting).append(" - ").append(nameTeam).append("). ");
+                        }
+                    }
+                } else {
+                    if (!request.getDescriptionsHomeWork().equals("")) {
+                        stringHw.append("Đã thêm bài tập về nhà (").append(nameMeeting).append(" - ").append(nameTeam).append(") là `").append(request.getDescriptionsHomeWork()).append("`. ");
                     }
                 }
                 stHomeWorkRepository.save(homeWorkNew);
@@ -120,6 +154,21 @@ public class StMeetingServiceImpl implements StMeetingService {
                     Optional<Note> objectNote = stNoteRepository.findById(request.getIdNote());
                     if (objectNote.isPresent()) {
                         noteNew.setId(objectNote.get().getId());
+                        String note = "";
+                        if (objectNote.get().getDescriptions() != null) {
+                            note = objectNote.get().getDescriptions();
+                        }
+                        if (!request.getDescriptionsNote().equals("") && note.equals("")) {
+                            stringNote.append("Đã thêm nhận xét (").append(nameMeeting).append(" - ").append(nameTeam).append(") là `").append(request.getDescriptionsNote()).append("`. ");
+                        } else if (!request.getDescriptionsNote().equals("") && !request.getDescriptionsNote().equals(note)) {
+                            stringNote.append("Đã cập nhật nhận xét (").append(nameMeeting).append(" - ").append(nameTeam).append(") từ `").append(objectNote.get().getDescriptions()).append("` thành `").append(request.getDescriptionsNote()).append("`. ");
+                        } else if (request.getDescriptionsNote().equals("") && !note.equals("")) {
+                            stringNote.append("Đã xóa nhận xét (").append(nameMeeting).append(" - ").append(nameTeam).append("). ");
+                        }
+                    }
+                } else {
+                    if (request.getDescriptionsNote().equals("")) {
+                        stringNote.append("Đã thêm nhận xét (").append(nameMeeting).append(" - ").append(nameTeam).append(") là `").append(request.getDescriptionsNote()).append("`. ");
                     }
                 }
                 stNoteRepository.save(noteNew);
@@ -131,9 +180,26 @@ public class StMeetingServiceImpl implements StMeetingService {
                     Optional<Report> objectReport = stReportRepository.findById(request.getIdReport());
                     if (objectReport.isPresent()) {
                         reportNew.setId(objectReport.get().getId());
+                        String report = "";
+                        if (objectReport.get().getDescriptions() != null) {
+                            report = objectReport.get().getDescriptions();
+                        }
+                        if (!request.getDescriptionsReport().equals("") && report.equals("")) {
+                            stringReport.append("Đã thêm báo cáo (").append(nameMeeting).append(" - ").append(nameTeam).append(") là `").append(request.getDescriptionsReport()).append("`. ");
+                        } else if (!request.getDescriptionsReport().equals("") && !request.getDescriptionsReport().equals(report)) {
+                            stringReport.append("Đã cập nhật báo cáo (").append(nameMeeting).append(" - ").append(nameTeam).append(") từ `").append(objectReport.get().getDescriptions()).append("` thành `").append(request.getDescriptionsReport()).append("`. ");
+                        } else if (request.getDescriptionsReport().equals("") && !report.equals("")) {
+                            stringReport.append("Đã xóa báo cáo (").append(nameMeeting).append(" - ").append(nameTeam).append("). ");
+                        }
+                    }
+                } else {
+                    if (request.getDescriptionsReport().equals("")) {
+                        stringReport.append("Đã thêm báo báo (").append(nameMeeting).append(" - ").append(nameTeam).append(") là `").append(request.getDescriptionsReport()).append("`. ");
                     }
                 }
                 stReportRepository.save(reportNew);
+                loggerUtil.sendLogStreamClass(stringNote.toString() + stringHw.toString() + stringReport.toString(),
+                        codeClass, nameSemester);
                 StFindMeetingRequest teFind = new StFindMeetingRequest();
                 teFind.setIdTeam(request.getIdTeam());
                 teFind.setIdMeeting(request.getIdMeeting());

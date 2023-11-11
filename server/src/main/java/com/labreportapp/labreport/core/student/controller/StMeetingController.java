@@ -48,14 +48,14 @@ public class StMeetingController {
         return new ResponseObject(find);
     }
 
-    @GetMapping("/homeword-and-note")
+    @GetMapping("/homework-note-report")
     public ResponseObject getStHomeWNoteMeetingDetail(final StFindMeetingRequest request) {
         request.setIdStudent(labReportAppSession.getUserId());
         StHomeWordAndNoteResponse find = service.searchDetailMeetingTeamById(request);
         return new ResponseObject(find);
     }
 
-    @PutMapping("/homeword-and-note")
+    @PutMapping("/homework-note-report")
     public ResponseObject updateStHomeWNoteMeetingDetail(@RequestBody StUpdateHomeWorkAndNotebyLeadTeamRequest request) {
         StHomeWordAndNoteResponse find = service.updateDetailMeetingTeamByLeadTeam(request);
         return new ResponseObject(find);

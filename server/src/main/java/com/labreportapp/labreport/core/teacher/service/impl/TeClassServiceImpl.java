@@ -24,6 +24,7 @@ import com.labreportapp.labreport.util.CompareUtil;
 import com.labreportapp.labreport.util.LoggerUtil;
 import com.labreportapp.labreport.util.SemesterHelper;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
+import com.labreportapp.portalprojects.infrastructure.exception.rest.CustomException;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,7 +119,7 @@ public class TeClassServiceImpl implements TeClassService {
     public TeDetailClassResponse findClassById(final String id) {
         Optional<TeDetailClassResponse> classCheck = teClassRepository.findClassById(id);
         if (!classCheck.isPresent()) {
-            throw new RestApiException(Message.CLASS_NOT_EXISTS);
+            throw new CustomException(Message.CLASS_NOT_EXISTS);
         }
         return classCheck.get();
     }

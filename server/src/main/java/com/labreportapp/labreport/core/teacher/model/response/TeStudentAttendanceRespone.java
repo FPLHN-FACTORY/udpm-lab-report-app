@@ -35,6 +35,9 @@ public interface TeStudentAttendanceRespone extends TeIsIdentified {
     @Value("#{target.type_meeting}")
     Integer getTypeMeeting();
 
+    @Value("#{target.status_meeting}")
+    Integer getStatusMeeting();
+
     @Value("#{target.notes}")
     String getNotes();
 

@@ -61,6 +61,7 @@ const TeacherAttendanceClass = () => {
       await TeacherAttendanceAPI.getAllAttendanceByIdClass(idClass)
         .then((responese) => {
           setData(responese.data.data);
+          console.log(responese.data.data);
           setLoading(true);
         })
         .catch((err) => {});
@@ -230,17 +231,18 @@ const TeacherAttendanceClass = () => {
                       color: "red",
                     }}
                   >
-                    Lưu ý: Điểm danh có 3 trạng thái chính là{" "}
-                    <span style={{ fontWeight: "bold" }}>"Có mặt(P)"</span>,{" "}
-                    <span style={{ fontWeight: "bold" }}>"Vắng mặt(A)"</span> và{" "}
+                    Lưu ý: Điểm danh có 4 trạng thái chính là{" "}
+                    <span style={{ fontWeight: "bold" }}>Buổi nghỉ(N)</span>,{" "}
+                    <span style={{ fontWeight: "bold" }}>Có mặt(P)</span>,{" "}
+                    <span style={{ fontWeight: "bold" }}>Vắng mặt(A)</span> và{" "}
                     <span style={{ fontWeight: "bold" }}>
-                      " Chưa điểm danh (-)"
+                      Chưa điểm danh (-)
                     </span>
                   </span>
                   <br />
                 </div>
               </div>
-              {data !== null && column !== null ? (
+              {column !== null ? (
                 <table
                   className="custom-table-teacher"
                   style={{
@@ -293,8 +295,10 @@ const TeacherAttendanceClass = () => {
                                       <span style={{ color: "green" }}>A</span>
                                     ) : column.statusAttendance === "1" ? (
                                       <span style={{ color: "red" }}>P</span>
+                                    ) : column.statusAttendance === "N" ? (
+                                      <span style={{ color: "blue" }}>N</span>
                                     ) : (
-                                      <span>-</span>
+                                      <span>--</span>
                                     )}
                                   </td>
                                 );

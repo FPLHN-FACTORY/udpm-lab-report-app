@@ -236,9 +236,9 @@ public class TeMeetingServiceImpl implements TeMeetingService {
         String nameSemester = loggerUtil.getNameSemesterByIdClass(meeting.get().getClassId());
         String nameMeeting = meeting.isPresent() ? meeting.get().getName() : "";
         String nameTeam = team.isPresent() ? team.get().getName() : "";
-        StringBuffer stringHw = new StringBuffer();
-        StringBuffer stringNote = new StringBuffer();
-        StringBuffer stringReport = new StringBuffer();
+        StringBuilder stringHw = new StringBuilder();
+        StringBuilder stringNote = new StringBuilder();
+        StringBuilder stringReport = new StringBuilder();
         HomeWork homeWorkNew = new HomeWork();
         homeWorkNew.setMeetingId(request.getIdMeeting());
         homeWorkNew.setTeamId(request.getIdTeam());

@@ -518,7 +518,7 @@ const TeacherAttendanceMeeting = () => {
                     <Input.TextArea
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}
-                      placeholder="Nhập ghi chú"
+                      placeholder="Nhập đánh giá"
                       style={{ width: "80%" }}
                       autoSize={{
                         minRows: 5,

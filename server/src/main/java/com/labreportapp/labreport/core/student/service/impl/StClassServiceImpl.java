@@ -18,7 +18,9 @@ import com.labreportapp.labreport.infrastructure.constant.StatusTeam;
 import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.labreport.util.CallApiIdentity;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
+import com.labreportapp.portalprojects.infrastructure.exception.rest.CustomException;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
+import jakarta.transaction.Transactional;
 import lombok.Synchronized;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -103,11 +105,12 @@ public class StClassServiceImpl implements StClassService {
     }
 
     @Override
+    @Transactional
     @Synchronized
     public StClassCustomResponse joinClass(final StClassRequest req) {
         Optional<Class> findClass = stClassRepository.findById(req.getIdClass());
         if (!findClass.isPresent()) {
-            throw new RestApiException(Message.CLASS_NOT_EXISTS);
+            throw new CustomException(Message.CLASS_NOT_EXISTS);
         }
         Optional<StClassResponse> conditionClass = stClassRepository.checkConditionCouldJoinOrLeaveClass(req);
         if (!conditionClass.isPresent()) {

@@ -75,6 +75,7 @@ public interface TeAttendanceRepository extends JpaRepository<Attendance, String
                     mp.name AS meeting_period, mp.start_hour AS start_hour, mp.start_minute AS start_minute,
                     mp.end_hour AS end_hour, mp.end_minute AS end_minute,
                     m.type_meeting AS type_meeting, 
+                    m.status_meeting AS status_meeting,
                     m.teacher_id AS teacher_id,
                     a.status AS status,
                     a.notes AS notes
@@ -88,7 +89,7 @@ public interface TeAttendanceRepository extends JpaRepository<Attendance, String
             WHERE (a.student_id IS NULL OR a.student_id = :#{#req.idStudent})
             AND st.class_id = :#{#req.idClass}
             GROUP BY m.id,m.name, m.meeting_date, mp.name, mp.start_hour, mp.start_minute, mp.end_hour, mp.end_minute,
-            m.type_meeting, m.teacher_id, a.status, a.notes
+            m.type_meeting, m.status_meeting ,m.teacher_id, a.status, a.notes
             ORDER BY m.meeting_date ASC, mp.name ASC
               """, countQuery = """
              SELECT COUNT(DISTINCT m.id)

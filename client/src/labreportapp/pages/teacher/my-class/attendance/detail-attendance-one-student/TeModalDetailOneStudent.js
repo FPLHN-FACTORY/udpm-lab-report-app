@@ -1,7 +1,19 @@
 import { useParams } from "react-router-dom";
-import { Button, Empty, Input, Modal, Pagination, Spin, Table } from "antd";
+import {
+  Button,
+  Empty,
+  Input,
+  Modal,
+  Pagination,
+  Spin,
+  Table,
+  Tag,
+} from "antd";
 import { useEffect, useState } from "react";
-import { convertHourAndMinuteToString } from "../../../../../helper/util.helper";
+import {
+  convertDateLongToString,
+  convertHourAndMinuteToString,
+} from "../../../../../helper/util.helper";
 import { TeacherAttendanceAPI } from "../../../../../api/teacher/attendance/TeacherAttendance.api";
 import { SearchOutlined } from "@ant-design/icons";
 
@@ -41,19 +53,9 @@ const TeModalDetailOneStudent = ({ onCancel, visible, objStudent }) => {
         setTotalPages(response.data.data.totalPages);
         setLoadingNo(false);
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
-  const convertLongToDate = (dateLong) => {
-    const date = new Date(dateLong);
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const year = date.getFullYear();
-    const format = `${day}/${month}/${year}`;
-    return format;
-  };
   const columns = [
     {
       title: "#",
@@ -109,7 +111,9 @@ const TeModalDetailOneStudent = ({ onCancel, visible, objStudent }) => {
       title: "Ngày học",
       dataIndex: "meetingDate",
       key: "meetingDate",
-      render: (meetingDate) => <span>{convertLongToDate(meetingDate)}</span>,
+      render: (meetingDate) => (
+        <span>{convertDateLongToString(meetingDate)}</span>
+      ),
     },
     {
       title: "Ca",
@@ -189,8 +193,43 @@ const TeModalDetailOneStudent = ({ onCancel, visible, objStudent }) => {
       title: "Hình thức",
       dataIndex: "typeMeeting",
       key: "typeMeeting",
-      render: (typeMeeting) =>
-        typeMeeting === 0 ? <span>Online</span> : <span>Offline</span>,
+      render: (typeMeeting) => {
+        return (
+          <>{typeMeeting === 0 ? <span>Online</span> : <span>Offline</span>}</>
+        );
+      },
+      align: "center",
+    },
+    {
+      title: "Trạng thái buổi dạy",
+      dataIndex: "statusMeeting",
+      key: "statusMeeting",
+      render: (statusMeeting) => {
+        return (
+          <>
+            {statusMeeting === 0 ? (
+              <Tag
+                color="success"
+                style={{
+                  textAlign: "center",
+                }}
+              >
+                Buổi học
+              </Tag>
+            ) : (
+              <Tag
+                color="blue"
+                style={{
+                  textAlign: "center",
+                }}
+              >
+                Buổi nghỉ
+              </Tag>
+            )}
+          </>
+        );
+      },
+      align: "center",
     },
     {
       title: "Ghi chú",
@@ -220,7 +259,7 @@ const TeModalDetailOneStudent = ({ onCancel, visible, objStudent }) => {
       <Modal
         onCancel={onCancel}
         open={visible}
-        width={1100}
+        width={1200}
         footer={null}
         style={{ top: "53px" }}
         bodyStyle={{ overflow: "hidden" }}
