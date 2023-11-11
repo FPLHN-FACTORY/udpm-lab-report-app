@@ -9,7 +9,7 @@ import CollapseMeeting from "../detail-meeting/collapseMeeting/StCollapseMeeting
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import { faHome } from "@fortawesome/free-solid-svg-icons";
-import { toast } from "react-toastify";
+
 const StTeamMeeting = () => {
   const { idMeeting } = useParams();
   const [meeting, setMeeting] = useState({});
@@ -27,20 +27,15 @@ const StTeamMeeting = () => {
         document.title = "Bảng điều khiển - " + response.data.data.name;
         featchTeams(response.data.data.idClass);
       });
-    } catch (error) {
-
-    }
+    } catch (error) {}
   };
 
   const featchTeams = async (id) => {
     try {
       await StudentMeetingAPI.getTeamInMeeting(id).then((responese) => {
-        console.log(responese.data.data);
         setTeam(responese.data.data);
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const convertLongToDate = (dateLong) => {
@@ -103,14 +98,16 @@ const StTeamMeeting = () => {
                   <div className="box-icon-detail">
                     <BookOutlined style={{ color: "white", fontSize: 21 }} />
                   </div>
-                  <span
-                    style={{
-                      fontSize: "24px",
-                      color: "#1967D2",
-                    }}
-                  >
-                    {meeting.name}
-                  </span>
+                  {meeting != null && (
+                    <span
+                      style={{
+                        fontSize: "24px",
+                        color: "#1967D2",
+                      }}
+                    >
+                      {meeting.name} : {meeting.descriptions}
+                    </span>
+                  )}
                 </div>
               </Col>
               <Col span={4}>

@@ -30,6 +30,8 @@ public class TeStudentAttendedDetailRespone {
 
     private Integer typeMeeting;
 
+    private Integer statusMeeting;
+
     private String notes;
 
     private Integer status;

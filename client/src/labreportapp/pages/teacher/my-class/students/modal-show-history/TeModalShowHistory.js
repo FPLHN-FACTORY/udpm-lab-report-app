@@ -93,6 +93,7 @@ const TeModalShowHistory = ({ visible, onCancel, classDetail }) => {
                     style={{ width: "100px", marginLeft: "10px" }}
                     value={size}
                     onChange={(e) => {
+                      setCurrent(1);
                       setSize(e);
                     }}
                   >

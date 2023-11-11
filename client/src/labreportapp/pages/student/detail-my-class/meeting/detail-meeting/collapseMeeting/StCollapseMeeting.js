@@ -3,8 +3,7 @@ import { Button, Col, Row, message } from "antd";
 import "./style-collapse-meeting.css";
 import TextArea from "antd/es/input/TextArea";
 import { StudentMeetingAPI } from "../../../../../../api/student/StMeetingAPI";
-import { useParams } from "react-router";
-import { toast } from "react-toastify";
+import { useParams } from "react-router-dom";
 import { StudentTempalteReportAPI } from "../../../../../../api/student/StTemplateReportAPI";
 import LoadingIndicator from "../../../../../../helper/loading";
 
@@ -101,13 +100,19 @@ const CollapseMeeting = ({ items }) => {
         idMeeting: idMeeting,
         idTeam: items[0].id,
         idHomeWork: objDetail.idHomeWork,
-        descriptionsHomeWork: descriptionsHomeWork,
+        descriptionsHomeWork:
+          descriptionsHomeWork != null ? descriptionsHomeWork : "",
         idNote: objDetail.idNote,
-        descriptionsNote: descriptionsNote,
+        descriptionsNote: descriptionsNote != null ? descriptionsNote : "",
         idReport: objDetail.idReport,
-        descriptionsReport: descriptionsReport,
+        descriptionsReport:
+          descriptionsReport != null ? descriptionsReport : "",
       };
       await StudentMeetingAPI.updateHomeWorkAndNote(data).then((response) => {
+        setDescriptionsHomeWork(response.data.data.descriptionsHomeWork);
+        setDescriptionsNote(response.data.data.descriptionsNote);
+        setDescriptionsReport(response.data.data.descriptionsReport);
+        setObjDetail(response.data.data);
         message.success("Cập nhật thành công");
         clear();
       });

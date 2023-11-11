@@ -6,7 +6,6 @@ import { TeacherMeetingAPI } from "../../../../../../api/teacher/meeting/Teacher
 import { TeacherTempalteReportAPI } from "../../../../../../api/teacher/template-report/TeacherTemplateReport.api";
 import { TeacherMeetingHomeWorkNoteAPI } from "../../../../../../api/teacher/meeting/homework-note/TeacherMeetingHomeWorkNote.api";
 import { useParams } from "react-router";
-import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUsersRectangle } from "@fortawesome/free-solid-svg-icons";
 import { convertStatusByHourMinute } from "../../../../../../helper/util.helper";
@@ -96,7 +95,6 @@ const CollapseTeam = ({ team, featchMeeting }) => {
           setDescriptionsReport(response.data.data.descriptionsReport);
           setObjDetail(response.data.data);
         }
-
         setCheckTime(
           convertStatusByHourMinute(
             response.data.data.meetingDate,

@@ -365,8 +365,11 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
                 TeAttendanceStudentMeetingRespone attendanceObj = new TeAttendanceStudentMeetingRespone();
                 attendanceObj.setIdAttendance(null);
                 attendanceObj.setMeetingDate(meeting.getMeetingDate());
-                attendanceObj.setStatusAttendance(null);
                 attendanceObj.setMeetingPeriod(meeting.getMeetingPeriod());
+                attendanceObj.setStatusAttendance(null);
+                if (meeting.getStatusMeeting() == 1) {
+                    attendanceObj.setStatusAttendance("N");
+                }
                 listAttendance.forEach(attendance -> {
                             if (student.getId().equals(attendance.getIdStudent()) && meeting.getIdMeeting().equals(attendance.getIdMeeting())) {
                                 attendanceObj.setIdAttendance(attendance.getIdAttendance());
@@ -398,6 +401,7 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
             objNew.setIdStudent(item.getId());
             objNew.setMeetingDate(item.getMeetingDate());
             objNew.setTypeMeeting(item.getTypeMeeting());
+            objNew.setStatusMeeting(item.getStatusMeeting());
             objNew.setMeetingPeriod(item.getMeetingPeriod());
             objNew.setStartHour(item.getStartHour());
             objNew.setStartMinute(item.getStartMinute());

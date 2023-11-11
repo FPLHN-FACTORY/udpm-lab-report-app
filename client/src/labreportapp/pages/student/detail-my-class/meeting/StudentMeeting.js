@@ -18,8 +18,8 @@ import React from "react";
 import { SetTTrueToggle } from "../../../../app/student/StCollapsedSlice.reducer";
 import { Empty } from "antd";
 import {
+  convertDateLongToString,
   convertHourAndMinuteToString,
-  convertMeetingPeriodToTime,
 } from "../../../../helper/util.helper";
 const StMeetingMyClass = () => {
   const dispatch = useAppDispatch();
@@ -63,13 +63,6 @@ const StMeetingMyClass = () => {
     }
   };
 
-  const convertLongToDate = (dateLong) => {
-    const date = new Date(dateLong);
-    const format = `${date.getDate()}/${
-      date.getMonth() + 1
-    }/${date.getFullYear()}`;
-    return format;
-  };
   const dataMeeting = useAppSelector(GetMeeting);
 
   return (
@@ -229,7 +222,10 @@ const StMeetingMyClass = () => {
                                       }}
                                     >
                                       {" "}
-                                      {convertLongToDate(record.meetingDate)} -
+                                      {convertDateLongToString(
+                                        record.meetingDate
+                                      )}{" "}
+                                      -
                                       <span>
                                         {" "}
                                         {record.meetingPeriod} (

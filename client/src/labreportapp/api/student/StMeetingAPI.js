@@ -25,7 +25,7 @@ export class StudentMeetingAPI {
       method: "GET",
       url:
         url +
-        `/homeword-and-note?idMeeting=` +
+        `/homework-note-report?idMeeting=` +
         data.idMeeting +
         `&idTeam=` +
         data.idTeam,
@@ -34,7 +34,7 @@ export class StudentMeetingAPI {
   static updateHomeWorkAndNote = (data) => {
     return request({
       method: "PUT",
-      url: url + `/homeword-and-note`,
+      url: url + `/homework-note-report`,
       data: data,
     });
   };
