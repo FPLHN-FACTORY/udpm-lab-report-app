@@ -167,7 +167,7 @@ public class StMeetingServiceImpl implements StMeetingService {
                         }
                     }
                 } else {
-                    if (request.getDescriptionsNote().equals("")) {
+                    if (!request.getDescriptionsNote().equals("")) {
                         stringNote.append("Đã thêm nhận xét (").append(nameMeeting).append(" - ").append(nameTeam).append(") là `").append(request.getDescriptionsNote()).append("`. ");
                     }
                 }
@@ -193,7 +193,7 @@ public class StMeetingServiceImpl implements StMeetingService {
                         }
                     }
                 } else {
-                    if (request.getDescriptionsReport().equals("")) {
+                    if (!request.getDescriptionsReport().equals("")) {
                         stringReport.append("Đã thêm báo báo (").append(nameMeeting).append(" - ").append(nameTeam).append(") là `").append(request.getDescriptionsReport()).append("`. ");
                     }
                 }

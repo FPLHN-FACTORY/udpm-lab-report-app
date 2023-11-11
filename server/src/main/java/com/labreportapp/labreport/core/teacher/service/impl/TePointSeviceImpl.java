@@ -22,6 +22,7 @@ import com.labreportapp.labreport.entity.ClassConfiguration;
 import com.labreportapp.labreport.entity.Point;
 import com.labreportapp.labreport.entity.StudentClasses;
 import com.labreportapp.labreport.infrastructure.constant.StatusTeam;
+import com.labreportapp.labreport.util.LoggerUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Synchronized;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -72,6 +73,9 @@ public class TePointSeviceImpl implements TePointSevice {
 
     @Autowired
     private TeClassConfigurationRepository teClassConfigurationRepository;
+
+    @Autowired
+    private LoggerUtil loggerUtil;
 
     @Override
     public List<TePointStudentInforRespone> getPointStudentByIdClass(String idClass) {
@@ -135,6 +139,12 @@ public class TePointSeviceImpl implements TePointSevice {
         List<StudentClasses> listStudentClass = teStudentClassesRepository.findStudentClassesByIdClass(request.getIdClass());
         List<StudentClasses> listStudentClassUp = new ArrayList<>();
         List<Point> listPointAddOrUp = new ArrayList<>();
+
+        List<SimpleResponse> listInforStudent = teStudentClassesService.searchAllStudentByIdClass(request.getIdClass());
+        StringBuilder message = new StringBuilder();
+        String codeClass = loggerUtil.getCodeClassByIdClass(request.getIdClass());
+        String nameSemester = loggerUtil.getNameSemesterByIdClass(request.getIdClass());
+
         if (listPointDB.size() <= 0) {
             listRequest.forEach(item -> {
                 Point point = new Point();

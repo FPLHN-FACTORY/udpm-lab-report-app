@@ -231,14 +231,45 @@ public class TeMeetingServiceImpl implements TeMeetingService {
     @Transactional
     public TeHomeWorkAndNoteMeetingResponse updateDetailMeetingTeamByIdMeIdTeam(TeUpdateHomeWorkAndNoteInMeetingRequest request) {
         Optional<Meeting> meeting = teMeetingRepository.findMeetingById(request.getIdMeeting());
+        if (!meeting.isPresent()) {
+            throw new RestApiException(Message.MEETING_NOT_EXISTS);
+        }
         Optional<Team> team = teTeamsRepositoty.findById(request.getIdTeam());
         String codeClass = loggerUtil.getCodeClassByIdClass(meeting.get().getClassId());
         String nameSemester = loggerUtil.getNameSemesterByIdClass(meeting.get().getClassId());
-        String nameMeeting = meeting.isPresent() ? meeting.get().getName() : "";
+        String nameMeeting = meeting.get().getName();
         String nameTeam = team.isPresent() ? team.get().getName() : "";
         StringBuilder stringHw = new StringBuilder();
         StringBuilder stringNote = new StringBuilder();
         StringBuilder stringReport = new StringBuilder();
+
+        Note noteNew = new Note();
+        noteNew.setMeetingId(request.getIdMeeting());
+        noteNew.setTeamId(request.getIdTeam());
+        noteNew.setDescriptions(request.getDescriptionsNote());
+        if (request.getIdNote() != null) {
+            Optional<Note> objectNote = teNoteRepository.findById(request.getIdNote());
+            if (objectNote.isPresent()) {
+                noteNew.setId(objectNote.get().getId());
+                String note = "";
+                if (objectNote.get().getDescriptions() != null) {
+                    note = objectNote.get().getDescriptions();
+                }
+                if (!request.getDescriptionsNote().equals("") && note.equals("")) {
+                    stringNote.append("Đã thêm nhận xét (").append(nameMeeting).append(" - ").append(nameTeam).append(") là `").append(request.getDescriptionsNote()).append("`. ");
+                } else if (!request.getDescriptionsNote().equals("") && !request.getDescriptionsNote().equals(note)) {
+                    stringNote.append("Đã cập nhật nhận xét (").append(nameMeeting).append(" - ").append(nameTeam).append(") từ `").append(objectNote.get().getDescriptions()).append("` thành `").append(request.getDescriptionsNote()).append("`. ");
+                } else if (request.getDescriptionsNote().equals("") && !note.equals("")) {
+                    stringNote.append("Đã xóa nhận xét (").append(nameMeeting).append(" - ").append(nameTeam).append("). ");
+                }
+            }
+        } else {
+            if (!request.getDescriptionsNote().equals("")) {
+                stringNote.append("Đã thêm nhận xét (").append(nameMeeting).append(" - ").append(nameTeam).append(") là `").append(request.getDescriptionsNote()).append("`. ");
+            }
+        }
+        teNoteRepository.save(noteNew);
+
         HomeWork homeWorkNew = new HomeWork();
         homeWorkNew.setMeetingId(request.getIdMeeting());
         homeWorkNew.setTeamId(request.getIdTeam());
@@ -265,32 +296,7 @@ public class TeMeetingServiceImpl implements TeMeetingService {
             }
         }
         teHomeWorkRepository.save(homeWorkNew);
-        Note noteNew = new Note();
-        noteNew.setMeetingId(request.getIdMeeting());
-        noteNew.setTeamId(request.getIdTeam());
-        noteNew.setDescriptions(request.getDescriptionsNote());
-        if (request.getIdNote() != null) {
-            Optional<Note> objectNote = teNoteRepository.findById(request.getIdNote());
-            if (objectNote.isPresent()) {
-                noteNew.setId(objectNote.get().getId());
-                String note = "";
-                if (objectNote.get().getDescriptions() != null) {
-                    note = objectNote.get().getDescriptions();
-                }
-                if (!request.getDescriptionsNote().equals("") && note.equals("")) {
-                    stringNote.append("Đã thêm nhận xét (").append(nameMeeting).append(" - ").append(nameTeam).append(") là `").append(request.getDescriptionsNote()).append("`. ");
-                } else if (!request.getDescriptionsNote().equals("") && !request.getDescriptionsNote().equals(note)) {
-                    stringNote.append("Đã cập nhật nhận xét (").append(nameMeeting).append(" - ").append(nameTeam).append(") từ `").append(objectNote.get().getDescriptions()).append("` thành `").append(request.getDescriptionsNote()).append("`. ");
-                } else if (request.getDescriptionsNote().equals("") && !note.equals("")) {
-                    stringNote.append("Đã xóa nhận xét (").append(nameMeeting).append(" - ").append(nameTeam).append("). ");
-                }
-            }
-        } else {
-            if (request.getDescriptionsNote().equals("")) {
-                stringNote.append("Đã thêm nhận xét (").append(nameMeeting).append(" - ").append(nameTeam).append(") là `").append(request.getDescriptionsNote()).append("`. ");
-            }
-        }
-        teNoteRepository.save(noteNew);
+
         Report reportNew = new Report();
         reportNew.setMeetingId(request.getIdMeeting());
         reportNew.setTeamId(request.getIdTeam());
@@ -312,7 +318,7 @@ public class TeMeetingServiceImpl implements TeMeetingService {
                 }
             }
         } else {
-            if (request.getDescriptionsReport().equals("")) {
+            if (!request.getDescriptionsReport().equals("")) {
                 stringReport.append("Đã thêm báo báo (").append(nameMeeting).append(" - ").append(nameTeam).append(") là `").append(request.getDescriptionsReport()).append("`. ");
             }
         }

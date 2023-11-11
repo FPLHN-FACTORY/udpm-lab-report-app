@@ -1,5 +1,6 @@
 package com.labreportapp.labreport.core.teacher.service.impl;
 
+import com.labreportapp.labreport.core.common.response.SimpleResponse;
 import com.labreportapp.labreport.core.teacher.excel.TeExcelImportService;
 import com.labreportapp.labreport.core.teacher.excel.TeExcelImportTeam;
 import com.labreportapp.labreport.core.teacher.model.request.TeCreateProjectToTeamRequest;
@@ -31,6 +32,7 @@ import com.labreportapp.labreport.entity.Team;
 import com.labreportapp.labreport.infrastructure.constant.RoleDefault;
 import com.labreportapp.labreport.infrastructure.constant.RoleTeam;
 import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
+import com.labreportapp.labreport.util.LoggerUtil;
 import com.labreportapp.labreport.util.RandomString;
 import com.labreportapp.labreport.util.SemesterHelper;
 import com.labreportapp.portalprojects.entity.Label;
@@ -70,6 +72,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -78,6 +81,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -132,6 +136,9 @@ public class TeTeamsServiceImpl implements TeTeamsService {
     @Autowired
     private TeSemesterRepository teSemesterRepository;
 
+    @Autowired
+    private LoggerUtil loggerUtil;
+
     @Override
     public List<TeTeamsRespone> getAllTeams(final TeFindStudentClasses teFindStudentClasses) {
         return teTeamsRepositoty.findTeamsByIdClass(teFindStudentClasses);
@@ -139,6 +146,7 @@ public class TeTeamsServiceImpl implements TeTeamsService {
 
     @Override
     @Transactional
+    @Synchronized
     public Team createTeam(@Valid TeCreateTeamsRequest request) {
         List<TeTeamUpdateStudentClassRequest> studentClassesRequest = request.getListStudentClasses();
         int checkLeader = 0;
@@ -150,13 +158,23 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         if (checkLeader > 1) {
             throw new RestApiException(Message.UNIQUE_LEADER_TEAM);
         }
+        StringBuilder message = new StringBuilder();
+        String codeClass = loggerUtil.getCodeClassByIdClass(request.getClassId());
+        String nameSemester = loggerUtil.getNameSemesterByIdClass(request.getClassId());
+
         Team team = new Team();
         team.setName("Nhóm " + teTeamsRepositoty.getNameNhomAuto(request.getClassId()));
         team.setSubjectName(request.getSubjectName());
         team.setClassId(request.getClassId());
         Team teamCreate = teTeamsRepositoty.save(team);
+        message.append("Đã tạo `" + teamCreate.getCode() + "` với chủ đề: `" + teamCreate.getSubjectName() + "`");
         List<StudentClasses> listStudentClasses = teStudentClassesRepository.findStudentClassesByIdClass(request.getClassId());
+        List<SimpleResponse> listInforStudent = teStudentClassesService.searchAllStudentByIdClass(request.getClassId());
         List<StudentClasses> studentClassesNew = new ArrayList<>();
+
+        AtomicInteger countStudentJoinTeam = new AtomicInteger();
+        countStudentJoinTeam.set(0);
+        StringBuilder messageCheckStudentJoin = new StringBuilder();
         studentClassesRequest.forEach(item -> {
             listStudentClasses.forEach(studentDB -> {
                 if (studentDB.getId().equals(item.getIdStudentClass())) {
@@ -168,10 +186,25 @@ public class TeTeamsServiceImpl implements TeTeamsService {
                     studentDB.setClassId(request.getClassId());
                     studentDB.setTeamId(teamCreate.getId());
                     studentClassesNew.add(studentDB);
+                    listInforStudent.forEach(infor -> {
+                        if (infor.getId().equals(studentDB.getStudentId())) {
+                            messageCheckStudentJoin.append(infor.getName()).append(" - ").append(infor.getUserName()).append(" ");
+                            if (studentDB.getRole() == RoleTeam.LEADER) {
+                                messageCheckStudentJoin.append(" làm trưởng nhóm ");
+                            }
+                            message.append(", ");
+                        }
+                    });
                 }
             });
         });
+        if (countStudentJoinTeam.get() > 0) {
+            message.append(" Với số thành viên là " + countStudentJoinTeam.get() + " - Gồm: " + messageCheckStudentJoin.toString() + ". ");
+        } else {
+            message.append(" Với số thành viên là 0. ");
+        }
         teStudentClassesRepository.saveAll(studentClassesNew);
+        loggerUtil.sendLogStreamClass(message.toString(), codeClass, nameSemester);
         return teamCreate;
     }
 
@@ -197,12 +230,28 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         if (checkLeader > 1) {
             throw new RestApiException(Message.UNIQUE_LEADER_TEAM);
         }
-        team.setSubjectName(request.getSubjectName());
-        Optional<TeDetailClassResponse> objClass = teClassRepository.findClassById(team.getClassId());
+        StringBuilder message = new StringBuilder();
+        String codeClass = loggerUtil.getCodeClassByIdClass(team.getClassId());
+        String nameSemester = loggerUtil.getNameSemesterByIdClass(team.getClassId());
+
+        if (!request.getSubjectName().equals("")) {
+            message.append("Đã cập nhật `" + team.getCode() + "` và thêm chủ đề là `" + request.getSubjectName() + "` ");
+        } else if (request.getSubjectName().equals("") && !team.getSubjectName().equals("")) {
+            message.append("Đã cập nhật `" + team.getCode() + "` và xóa chủ đề ");
+        } else if (!request.getSubjectName().equals("") && !team.getSubjectName().equals("")) {
+            message.append("Đã cập nhật `" + team.getCode() + "` và cập nhật chủ đề từ `" +
+                    team.getSubjectName() + "` thành `" + request.getSubjectName() + "` ");
+        }
+        team.setSubjectName(request.getSubjectName() != null ? request.getSubjectName().trim() : "");
         ConcurrentHashMap<String, StudentClasses> mapStudent = new ConcurrentHashMap<>();
         addDataStudentDB(mapStudent, team.getClassId());
         List<StudentClasses> listStudentClassesUpdate = new ArrayList<>();
         List<StudentClasses> listStudentClass = teStudentClassesRepository.findStudentClassesByIdClass(team.getClassId());
+        List<SimpleResponse> listInforStudent = teStudentClassesService.searchAllStudentByIdClass(team.getClassId());
+
+        AtomicInteger countStudentUpdateJoinTeam = new AtomicInteger();
+        countStudentUpdateJoinTeam.set(0);
+        StringBuilder messageCheckUpdate = new StringBuilder();
         studentClassesRequest.forEach(item -> {
             listStudentClass.forEach(stu -> {
                 if (stu.getId().equals(item.getIdStudentClass())) {
@@ -218,12 +267,29 @@ public class TeTeamsServiceImpl implements TeTeamsService {
                     } else {
                         studentClasses.setRole(RoleTeam.MEMBER);
                     }
+                    listInforStudent.forEach(infor -> {
+                        if (infor.getId().equals(item.getIdStudent())) {
+                            messageCheckUpdate.append(infor.getName()).append(" - ").append(infor.getUserName()).append(" ");
+                            if (studentClasses.getRole() == RoleTeam.LEADER) {
+                                messageCheckUpdate.append(" làm trưởng nhóm ");
+                            }
+                            message.append(", ");
+                        }
+                    });
                     studentClasses.setTeamId(team.getId());
                     listStudentClassesUpdate.add(studentClasses);
                 }
             });
         });
-        List<StudentClasses> listDeleteStudenClasses = new ArrayList<>();
+        if (countStudentUpdateJoinTeam.get() > 0) {
+            message.append(" Với số thành viên là " + countStudentUpdateJoinTeam.get() + " - Gồm: " + messageCheckUpdate.toString() + ". ");
+        } else {
+            message.append(" Với số thành viên là 0. ");
+        }
+
+        AtomicInteger countStudentDeleteJoinTeam = new AtomicInteger();
+        countStudentUpdateJoinTeam.set(0);
+        StringBuilder messageCheckDelete = new StringBuilder();
         studentClassesDeleteIdTeamRequest.forEach(item -> {
             listStudentClass.forEach(student -> {
                 if (student.getId().equals(item.getIdStudentClass())) {
@@ -236,12 +302,27 @@ public class TeTeamsServiceImpl implements TeTeamsService {
                     st.setStatusStudentFeedBack(student.getStatusStudentFeedBack());
                     st.setEmail(student.getEmail());
                     st.setStatus(student.getStatus());
+                    listInforStudent.forEach(infor -> {
+                        if (infor.getId().equals(item.getIdStudent())) {
+                            messageCheckDelete.append(infor.getName()).append(" - ").append(infor.getUserName()).append(", ");
+                        }
+                    });
                     listStudentClassesUpdate.add(st);
                 }
             });
         });
+        if (countStudentDeleteJoinTeam.get() > 0) {
+            message.append(" Và xóa ").append(countStudentDeleteJoinTeam.get()).append(" thành viên - Gồm: ").append(messageCheckDelete.toString()).append(" ra khỏi nhóm. ");
+        }
         teStudentClassesRepository.saveAll(listStudentClassesUpdate);
+        loggerUtil.sendLogStreamClass(message.toString(), codeClass, nameSemester);
         return teTeamsRepositoty.save(team);
+    }
+
+    public String convertLongToStringDate(long timestamp) {
+        Date date = new Date(timestamp);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        return sdf.format(date);
     }
 
     @Override
@@ -274,6 +355,17 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         Project projectNew = teProjectRepository.save(project);
         teamUp.setProjectId(projectNew.getId());
 
+        StringBuilder message = new StringBuilder();
+        String codeClass = loggerUtil.getCodeClassByIdClass(teamUp.getClassId());
+        String nameSemester = loggerUtil.getNameSemesterByIdClass(teamUp.getClassId());
+        message.append("Đã tạo trello cho " + teamUp.getCode() + "với Mã dự án: " + projectNew.getCode() + ", " +
+                "Tên dự án: " + project.getName() + " , Thời gian bắt đầu: " + convertLongToStringDate(projectNew.getStartTime()) +
+                ", Thời gian kết thúc: " + convertLongToStringDate(projectNew.getEndTime()) + ", Loại: Dự án xưởng thực hành");
+        if (!project.getDescriptions().equals("")) {
+            message.append(", Mô tả: " + projectNew.getDescriptions());
+        }
+        message.append(" và background mặc định");
+        loggerUtil.sendLogStreamClass(message.toString(), codeClass, nameSemester);
         List<Label> listLabel = teLabelRepository.findAll();
         List<LabelProject> newLabelProject = new ArrayList<>();
         listLabel.forEach(item -> {
@@ -330,6 +422,11 @@ public class TeTeamsServiceImpl implements TeTeamsService {
                 item.setTeamId(null);
                 teStudentClassesRepository.save(item);
             });
+            StringBuilder message = new StringBuilder();
+            String codeClass = loggerUtil.getCodeClassByIdClass(team.getClassId());
+            String nameSemester = loggerUtil.getNameSemesterByIdClass(team.getClassId());
+            message.append("Đã xóa " + team.getCode() + "và xóa tất cả thành viên ra khỏi nhóm. ");
+            loggerUtil.sendLogStreamClass(message.toString(), codeClass, nameSemester);
             teTeamsRepositoty.delete(team);
             return "Xóa nhóm thành công !";
         } else {
