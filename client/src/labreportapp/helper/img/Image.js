@@ -7,7 +7,7 @@ const Image = ({ url, picxel, marginRight, name }) => {
   return (
     <Tooltip title={name}>
       <img
-        src={url === "Images/Default.png" ? Avartar : url}
+        src={url === "/image/Default.png" ? Avartar : url}
         style={{
           width: picxel + "px",
           height: picxel + "px",

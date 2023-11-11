@@ -92,7 +92,6 @@ const TeMemberFactory = () => {
 
   const data = useAppSelector(GetStMemberFactory);
 
-
   return (
     <div className="box-general" style={{ paddingTop: 50 }}>
       {loading && <LoadingIndicator />}
@@ -199,7 +198,7 @@ const TeMemberFactory = () => {
                     >
                       <Image
                         url={
-                          item.picture !== "Images/Default.png"
+                          item.picture !== "/image/Default.png"
                             ? item.picture
                             : LogoTeamFactory
                         }
@@ -294,7 +293,6 @@ const TeMemberFactory = () => {
           </div>
         </div>
       </div>
-      
     </div>
   );
 };

@@ -37,18 +37,12 @@ public class WebSecurityConfiguration {
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .requestMatchers("/roles").permitAll()
-                .requestMatchers("/admin/**").hasAnyAuthority(ActorConstants.ACTOR_TEACHER,
-                ActorConstants.ACTOR_STUDENT,
-                ActorConstants.ACTOR_ADMIN)
-                .requestMatchers("/teacher/**").hasAnyAuthority(ActorConstants.ACTOR_TEACHER,
-                ActorConstants.ACTOR_STUDENT,
-                ActorConstants.ACTOR_ADMIN)
-                .requestMatchers("/student/**").hasAnyAuthority(ActorConstants.ACTOR_TEACHER,
-                ActorConstants.ACTOR_STUDENT,
-                ActorConstants.ACTOR_ADMIN)
+                .requestMatchers("/admin/**").hasAuthority(ActorConstants.ACTOR_ADMIN)
+                .requestMatchers("/teacher/**").hasAuthority(ActorConstants.ACTOR_TEACHER)
+                .requestMatchers("/student/**").hasAuthority(ActorConstants.ACTOR_STUDENT)
                 .requestMatchers("/member/**").hasAnyAuthority(ActorConstants.ACTOR_TEACHER,
-                ActorConstants.ACTOR_STUDENT,
-                ActorConstants.ACTOR_ADMIN);
+                                                                        ActorConstants.ACTOR_STUDENT,
+                                                                        ActorConstants.ACTOR_ADMIN);
         return http.build();
     }
 

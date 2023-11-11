@@ -107,9 +107,7 @@ const MemberManagement = () => {
     }));
   };
 
-  const handleMenuClick = (e, itemId) => {
-    
-  };
+  const handleMenuClick = (e, itemId) => {};
 
   const [visibleAddMemberFactory, setVisibleAddMemberFactory] = useState(false);
 
@@ -358,7 +356,7 @@ const MemberManagement = () => {
                       >
                         <Image
                           url={
-                            item.picture !== "Images/Default.png"
+                            item.picture !== "/image/Default.png"
                               ? item.picture
                               : LogoTeamFactory
                           }

@@ -347,7 +347,7 @@ public class DBGenerator implements CommandLineRunner {
         class1.setPassword("123456");
         class1.setActivityId(activity1.getId());
         //class1.setTeacherId("FA2BAD81-93A5-4F02-B1B7-08DBB743DD7D".toLowerCase());
-        class1.setTeacherId("71090c89-f618-41ae-2a8d-08dbb201efe8".toLowerCase());
+        class1.setTeacherId("D0C790F2-09CD-4879-1F88-08DBE29418E7".toLowerCase());
         class1.setDescriptions("Lớp làm trước đồ án tốt nghiệp bán hàng");
         class1.setStatusClass(StatusClass.OPEN);
         class1.setStatusTeacherEdit(StatusTeacherEdit.CHO_PHEP);
@@ -376,7 +376,7 @@ public class DBGenerator implements CommandLineRunner {
         class3.setStatusTeacherEdit(StatusTeacherEdit.CHO_PHEP);
         class3.setActivityId(activity1.getId());
 //        class3.setTeacherId("1243F96A-42BD-49B3-8E45-08DBB2F9FEB4".toLowerCase());
-        class3.setTeacherId("71090c89-f618-41ae-2a8d-08dbb201efe8".toLowerCase());
+        class3.setTeacherId("D0C790F2-09CD-4879-1F88-08DBE29418E7".toLowerCase());
         class3.setDescriptions("Lớp làm trước dự án 1 bán hàng");
         class3.setId(classRepository.save(class3).getId());
 
@@ -387,7 +387,7 @@ public class DBGenerator implements CommandLineRunner {
         class4.setClassSize(0);
         class4.setPassword("123456");
         class4.setActivityId(activity1.getId());
-        class4.setTeacherId("FA2BAD81-93A5-4F02-B1B7-08DBB743DD7D".toLowerCase());
+        class4.setTeacherId("98B1ECC4-5A71-4E61-1F8E-08DBE29418E7".toLowerCase());
         class4.setDescriptions("Lớp làm trước đồ án tốt nghiệp bán hàng");
         class4.setStatusClass(StatusClass.OPEN);
         class4.setStatusTeacherEdit(StatusTeacherEdit.CHO_PHEP);
@@ -400,7 +400,7 @@ public class DBGenerator implements CommandLineRunner {
         class5.setClassSize(0);
         class5.setPassword("123456");
         class5.setActivityId(activity2.getId());
-        class5.setTeacherId("FA2BAD81-93A5-4F02-B1B7-08DBB743DD7D".toLowerCase());
+        class5.setTeacherId("98B1ECC4-5A71-4E61-1F8E-08DBE29418E7".toLowerCase());
         class5.setDescriptions("Lớp làm trước đồ án tốt nghiệp bán hàng");
         class5.setStatusClass(StatusClass.OPEN);
         class5.setStatusTeacherEdit(StatusTeacherEdit.CHO_PHEP);
@@ -413,7 +413,7 @@ public class DBGenerator implements CommandLineRunner {
         class6.setClassSize(0);
         class6.setPassword("123456");
         class6.setActivityId(activity1.getId());
-        class6.setTeacherId("FA2BAD81-93A5-4F02-B1B7-08DBB743DD7D".toLowerCase());
+        class6.setTeacherId("5F5A9FBD-6426-4FD9-1F8C-08DBE29418E7".toLowerCase());
         class6.setDescriptions("Lớp làm trước đồ án tốt nghiệp bán hàng");
         class6.setStatusClass(StatusClass.OPEN);
         class6.setStatusTeacherEdit(StatusTeacherEdit.CHO_PHEP);
@@ -426,7 +426,7 @@ public class DBGenerator implements CommandLineRunner {
         class7.setClassSize(0);
         class7.setPassword("123456");
         class7.setActivityId(activity1.getId());
-        class7.setTeacherId("FA2BAD81-93A5-4F02-B1B7-08DBB743DD7D".toLowerCase());
+        class7.setTeacherId("5F5A9FBD-6426-4FD9-1F8C-08DBE29418E7".toLowerCase());
         class7.setDescriptions("Lớp làm trước đồ án tốt nghiệp bán hàng");
         class7.setStatusClass(StatusClass.OPEN);
         class7.setStatusTeacherEdit(StatusTeacherEdit.CHO_PHEP);
@@ -544,7 +544,7 @@ public class DBGenerator implements CommandLineRunner {
 // student_ class
         // class 1- team 2 (1-5)
         StudentClasses studentClasses1 = new StudentClasses();
-        studentClasses1.setStudentId("71090C89-F618-41AE-2A8D-08DBB201EFE8".toLowerCase());
+        studentClasses1.setStudentId("D0C790F2-09CD-4879-1F88-08DBE29418E7".toLowerCase());
         studentClasses1.setClassId(class1.getId());
         studentClasses1.setTeamId(team2.getId());
         studentClasses1.setEmail("hieundph25894@fpt.edu.vn");
@@ -554,7 +554,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses1.setId(studentClassesRepository.save(studentClasses1).getId());
 
         StudentClasses studentClasses2 = new StudentClasses();
-        studentClasses2.setStudentId("2435C7D5-9BEC-45AC-9BFE-08DBA87523FE".toLowerCase());
+        studentClasses2.setStudentId("9EA5B27D-F183-4537-BAAE-BECACE5532EA".toLowerCase());
         studentClasses2.setClassId(class1.getId());
         studentClasses2.setTeamId(team2.getId());
         studentClasses2.setEmail("thangncph26123@fpt.edu.vn");
@@ -564,7 +564,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses2.setId(studentClassesRepository.save(studentClasses2).getId());
 
         StudentClasses studentClasses3 = new StudentClasses();
-        studentClasses3.setStudentId("59F0CB47-5BD4-4909-B1C4-08DBB743DD7D".toLowerCase());
+        studentClasses3.setStudentId("61D55010-190E-443D-1F8F-08DBE29418E7".toLowerCase());
         studentClasses3.setClassId(class1.getId());
         studentClasses3.setTeamId(team1.getId());
         studentClasses3.setEmail("vanntph19604@fpt.edu.vn");
@@ -574,7 +574,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses3.setId(studentClassesRepository.save(studentClasses3).getId());
 
         StudentClasses studentClasses4 = new StudentClasses();
-        studentClasses4.setStudentId("F5882312-81A5-4D44-8E44-08DBB2F9FEB4".toLowerCase());
+        studentClasses4.setStudentId("72CA025F-9B77-41BE-1F89-08DBE29418E7".toLowerCase());
         studentClasses4.setClassId(class1.getId());
         studentClasses4.setTeamId(team1.getId());
         studentClasses4.setEmail("quynhncph26201@fpt.edu.vn");
@@ -584,7 +584,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses4.setId(studentClassesRepository.save(studentClasses4).getId());
 
         StudentClasses studentClasses5 = new StudentClasses();
-        studentClasses5.setStudentId("80DE791C-F32B-4E7D-8E46-08DBB2F9FEB4".toLowerCase());
+        studentClasses5.setStudentId("344435E8-E2BC-4A12-1F90-08DBE29418E7".toLowerCase());
         studentClasses5.setClassId(class1.getId());
         studentClasses5.setTeamId(team1.getId());
         studentClasses5.setEmail("hieundph26058@fpt.edu.vn");
@@ -595,7 +595,7 @@ public class DBGenerator implements CommandLineRunner {
 
 //class 1 - team 1 ( 6-10)
         StudentClasses studentClasses6 = new StudentClasses();
-        studentClasses6.setStudentId("2B5C2803-C998-4012-8E47-08DBB2F9FEB4".toLowerCase());
+        studentClasses6.setStudentId("4D8B064E-6F7D-421E-1F91-08DBE29418E7".toLowerCase());
         studentClasses6.setClassId(class1.getId());
         studentClasses6.setTeamId(team1.getId());
         studentClasses6.setEmail("vinhnvph23845@fpt.edu.vn");
@@ -605,17 +605,17 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses6.setId(studentClassesRepository.save(studentClasses6).getId());
 
         StudentClasses studentClasses7 = new StudentClasses();
-        studentClasses7.setStudentId("FCB1D931-CB71-4F12-94D6-08DBB66B2F92".toLowerCase());
+        studentClasses7.setStudentId("3333B766-9DD9-4C58-C374-08DBE28ECB04".toLowerCase());
         studentClasses7.setClassId(class1.getId());
         studentClasses7.setTeamId(team1.getId());
-        studentClasses7.setEmail("huynqph26772@fpt.edu.vn");
+        studentClasses7.setEmail("huynqph26782@fpt.edu.vn");
         studentClasses7.setRole(RoleTeam.MEMBER);
         studentClasses7.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
         studentClasses7.setStatus(StatusTeam.ACTIVE);
         studentClasses7.setId(studentClassesRepository.save(studentClasses7).getId());
 
         StudentClasses studentClasses8 = new StudentClasses();
-        studentClasses8.setStudentId("6A85641C-874B-4AD0-B1BA-08DBB743DD7D".toLowerCase());
+        studentClasses8.setStudentId("B79C39C6-4EF7-4337-1F92-08DBE29418E7".toLowerCase());
         studentClasses8.setClassId(class1.getId());
         studentClasses8.setTeamId(team2.getId());
         studentClasses8.setEmail("hatqph21186@fpt.edu.vn");
@@ -625,7 +625,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses8.setId(studentClassesRepository.save(studentClasses8).getId());
 
         StudentClasses studentClasses9 = new StudentClasses();
-        studentClasses9.setStudentId("B8E51E50-4823-4F9A-B1BC-08DBB743DD7D".toLowerCase());
+        studentClasses9.setStudentId("7DDB4221-602B-4B79-1F93-08DBE29418E7".toLowerCase());
         studentClasses9.setClassId(class1.getId());
         studentClasses9.setTeamId(team2.getId());
         studentClasses9.setEmail("nhatnvph26159@fpt.edu.vn");
@@ -635,7 +635,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses9.setId(studentClassesRepository.save(studentClasses9).getId());
 
         StudentClasses studentClasses10 = new StudentClasses();
-        studentClasses10.setStudentId("B34C613D-8AA5-4865-B1BD-08DBB743DD7D".toLowerCase());
+        studentClasses10.setStudentId("19B3B08E-CD8A-48D1-1F94-08DBE29418E7".toLowerCase());
         studentClasses10.setClassId(class1.getId());
         studentClasses10.setTeamId(team2.getId());
         studentClasses10.setEmail("tuannvph25577@fpt.edu.vn");
@@ -645,7 +645,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses10.setId(studentClassesRepository.save(studentClasses10).getId());
         // class 1- team 3 (11-15)
         StudentClasses studentClasses11 = new StudentClasses();
-        studentClasses11.setStudentId("D3C53418-67EA-47FE-B1BE-08DBB743DD7D".toLowerCase());
+        studentClasses11.setStudentId("32DF0265-D150-48D0-C377-08DBE28ECB04".toLowerCase());
         studentClasses11.setClassId(class1.getId());
         studentClasses11.setTeamId(team3.getId());
         studentClasses11.setEmail("anhdtnph25326@fpt.edu.vn");
@@ -655,7 +655,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses11.setId(studentClassesRepository.save(studentClasses11).getId());
 
         StudentClasses studentClasses12 = new StudentClasses();
-        studentClasses12.setStudentId("07E9748D-CF8C-4D48-B1BF-08DBB743DD7D".toLowerCase());
+        studentClasses12.setStudentId("47F3CA5F-FB7F-4733-3106-08DBE295E52C".toLowerCase());
         studentClasses12.setClassId(class1.getId());
         studentClasses12.setTeamId(team3.getId());
         studentClasses12.setEmail("trangntph19494@fpt.edu.vn");
@@ -665,7 +665,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses12.setId(studentClassesRepository.save(studentClasses12).getId());
 
         StudentClasses studentClasses13 = new StudentClasses();
-        studentClasses13.setStudentId("967C6BB6-0F50-4862-B1C0-08DBB743DD7D".toLowerCase());
+        studentClasses13.setStudentId("167CA279-0E43-429D-1F8A-08DBE29418E7".toLowerCase());
         studentClasses13.setClassId(class1.getId());
         studentClasses13.setTeamId(team3.getId());
         studentClasses13.setEmail("huyvqph25924@fpt.edu.vn");
@@ -675,7 +675,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses13.setId(studentClassesRepository.save(studentClasses13).getId());
 
         StudentClasses studentClasses14 = new StudentClasses();
-        studentClasses14.setStudentId("1D566092-B2DD-49C6-B1C1-08DBB743DD7D".toLowerCase());
+        studentClasses14.setStudentId("7C19D3B3-6198-4A05-C372-08DBE28ECB04".toLowerCase());
         studentClasses14.setClassId(class1.getId());
         studentClasses14.setTeamId(team3.getId());
         studentClasses14.setEmail("hungpvph25929@fpt.edu.vn");
@@ -685,7 +685,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses14.setId(studentClassesRepository.save(studentClasses14).getId());
 
         StudentClasses studentClasses15 = new StudentClasses();
-        studentClasses15.setStudentId("8E0A1E2D-246F-49B7-B1C2-08DBB743DD7D".toLowerCase());
+        studentClasses15.setStudentId("AFFC79E0-BBB3-43D7-1F95-08DBE29418E7".toLowerCase());
         studentClasses15.setClassId(class1.getId());
         studentClasses15.setTeamId(team3.getId());
         studentClasses15.setEmail("hoangdvph25902@fpt.edu.vn");
@@ -695,7 +695,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses15.setId(studentClassesRepository.save(studentClasses15).getId());
 
         StudentClasses studentClasses16 = new StudentClasses();
-        studentClasses16.setStudentId("69CE3C9F-5100-4A4F-B1C3-08DBB743DD7D".toLowerCase());
+        studentClasses16.setStudentId("8C880B0C-5717-4539-1F96-08DBE29418E7".toLowerCase());
         studentClasses16.setClassId(class1.getId());
         studentClasses16.setTeamId(null);
         studentClasses16.setEmail("sonhnph19532@fpt.edu.vn");
@@ -705,7 +705,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses16.setId(studentClassesRepository.save(studentClasses16).getId());
 
         StudentClasses studentClasses17 = new StudentClasses();
-        studentClasses17.setStudentId("33BC7EF4-F150-4D7D-B1C5-08DBB743DD7D".toLowerCase());
+        studentClasses17.setStudentId("237C2164-7463-47DE-3105-08DBE295E52C".toLowerCase());
         studentClasses17.setClassId(class1.getId());
         studentClasses17.setTeamId(null);
         studentClasses17.setEmail("trangdttph27721@fpt.edu.vn");
@@ -715,7 +715,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses17.setId(studentClassesRepository.save(studentClasses17).getId());
 
         StudentClasses studentClasses18 = new StudentClasses();
-        studentClasses18.setStudentId("5529080E-7F8B-49FC-B1C6-08DBB743DD7D".toLowerCase());
+        studentClasses18.setStudentId("9158162A-0C26-43F2-1F97-08DBE29418E7".toLowerCase());
         studentClasses18.setClassId(class1.getId());
         studentClasses18.setTeamId(null);
         studentClasses18.setEmail("cuongnqph26071@fpt.edu.vn");
@@ -725,7 +725,7 @@ public class DBGenerator implements CommandLineRunner {
         studentClasses18.setId(studentClassesRepository.save(studentClasses18).getId());
 
         StudentClasses studentClasses19 = new StudentClasses();
-        studentClasses19.setStudentId("39715979-9A4A-4F5B-B1C7-08DBB743DD7D".toLowerCase());
+        studentClasses19.setStudentId("356F2422-D659-4B4F-1F8B-08DBE29418E7".toLowerCase());
         studentClasses19.setClassId(class1.getId());
         studentClasses19.setTeamId(null);
         studentClasses19.setEmail("dungnpph25823@fpt.edu.vn");
@@ -736,7 +736,7 @@ public class DBGenerator implements CommandLineRunner {
 
         // class 2 - team 5
         StudentClasses studentClasses20 = new StudentClasses();
-        studentClasses20.setStudentId("C5715153-1C04-461D-B1C8-08DBB743DD7D".toLowerCase());
+        studentClasses20.setStudentId("C35E4DB6-745E-40A4-1F98-08DBE29418E7".toLowerCase());
         studentClasses20.setClassId(class3.getId());
         studentClasses20.setTeamId(team5.getId());
         studentClasses20.setEmail("huongvnph27229@fpt.edu.vn");
@@ -746,7 +746,7 @@ public class DBGenerator implements CommandLineRunner {
 
         // class 3 - team 6
         StudentClasses studentClasses21 = new StudentClasses();
-        studentClasses21.setStudentId("09B3E4C8-0E0F-4F03-B1C9-08DBB743DD7D".toLowerCase());
+        studentClasses21.setStudentId("5DAAA022-28CA-4B49-C378-08DBE28ECB04".toLowerCase());
         studentClasses21.setClassId(class2.getId());
         studentClasses21.setTeamId(team6.getId());
         studentClasses21.setEmail("anhltvph25818@fpt.edu.vn");

@@ -180,7 +180,7 @@ const TeMemberFactory = () => {
                     >
                       <Image
                         url={
-                          item.picture !== "Images/Default.png"
+                          item.picture !== "/image/Default.png"
                             ? item.picture
                             : LogoTeamFactory
                         }

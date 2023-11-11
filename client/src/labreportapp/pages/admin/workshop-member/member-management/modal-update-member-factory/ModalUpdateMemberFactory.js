@@ -82,7 +82,7 @@ const ModalUpdateMemberFactory = ({ visible, onCancel, id, roles, teams }) => {
                 }}
                 src={
                   detailMemberFactory != null &&
-                  detailMemberFactory.picture !== "Images/Default.png"
+                  detailMemberFactory.picture !== "/image/Default.png"
                     ? detailMemberFactory.picture
                     : LogoTeamFactory
                 }
