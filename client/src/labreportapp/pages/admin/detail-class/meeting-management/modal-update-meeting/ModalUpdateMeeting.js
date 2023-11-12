@@ -14,6 +14,10 @@ import {
 } from "../../../../../helper/util.helper";
 import { GetAdTeacher } from "../../../../../app/admin/AdTeacherSlice.reducer";
 import { GetAdMeetingPeriod } from "../../../../../app/admin/AdMeetingPeriodSlice.reducer";
+import {
+  SetLoadingFalse,
+  SetLoadingTrue,
+} from "../../../../../app/common/Loading.reducer";
 
 const { Option } = Select;
 
@@ -61,10 +65,11 @@ const ModalUpdateMeeting = ({ item, visible, onCancel }) => {
         descriptions: descriptions,
         teacherId: selectedItemsPerson,
       };
-
+      dispatch(SetLoadingTrue());
       MeetingManagementAPI.updateMeeting(obj).then((response) => {
         dispatch(UpdateMeeting(response.data.data));
         message.success("Cập nhật thành công");
+        dispatch(SetLoadingFalse());
         onCancel();
       });
     }

@@ -6,6 +6,11 @@ import { Button, message } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { toast } from "react-toastify";
 import LoadingIndicator from "../../../../helper/loading";
+import {
+  SetLoadingFalse,
+  SetLoadingTrue,
+} from "../../../../app/common/Loading.reducer";
+import { useAppDispatch } from "../../../../app/hook";
 
 const TemplateReport = () => {
   const [templateReport, setTemplateReport] = useState({ descriptions: "" });
@@ -32,12 +37,17 @@ const TemplateReport = () => {
     }
   };
 
+  const dispatch = useAppDispatch();
+
   const update = (data) => {
-    AdTemplateReportAPI.updateTemplateReportById(data)
-      .then(() => {
+    dispatch(SetLoadingTrue());
+    AdTemplateReportAPI.updateTemplateReportById(data).then(
+      (res) => {
         message.success("Cập nhật thành công!");
-      })
-      .catch(() => {});
+        dispatch(SetLoadingFalse());
+      },
+      (error) => {}
+    );
   };
 
   return (

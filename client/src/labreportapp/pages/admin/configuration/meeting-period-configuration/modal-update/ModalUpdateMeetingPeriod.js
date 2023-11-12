@@ -5,6 +5,10 @@ import { useAppDispatch } from "../../../../../app/hook";
 import { UpdateMeetingPeriodConfiguration } from "../../../../../app/admin/AdMeetingPeriodConfiguration.reducer";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import {
+  SetLoadingFalse,
+  SetLoadingTrue,
+} from "../../../../../app/common/Loading.reducer";
 
 const ModalUpdateMeetingPeriod = ({ visible, onCancel, meetingPeriod }) => {
   const [name, setName] = useState("");
@@ -140,6 +144,7 @@ const ModalUpdateMeetingPeriod = ({ visible, onCancel, meetingPeriod }) => {
     }
 
     if (check === 0) {
+      dispatch(SetLoadingTrue());
       let obj = {
         id: meetingPeriod.id,
         name: name,
@@ -156,6 +161,7 @@ const ModalUpdateMeetingPeriod = ({ visible, onCancel, meetingPeriod }) => {
         (response) => {
           message.success("Cập nhật thành công!");
           dispatch(UpdateMeetingPeriodConfiguration(response.data.data));
+          dispatch(SetLoadingFalse());
           onCancel();
         },
         (error) => {}

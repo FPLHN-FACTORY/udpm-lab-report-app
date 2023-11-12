@@ -58,6 +58,7 @@ import AdGroupProjectToProjectManagementSliceReduce from "./admin/AdGroupProject
 import TeDetailTeamFactorySliceReducer from "./teacher/team-factory/TeDetailTeamFactorySlice.reducer";
 import StDetailTeamFactorySliceReducer from "./student/StDetailTeamFactorySlice.reducer";
 import DPDetailProjectCustomReduce from "../../portalprojects/app/reducer/detail-project/DPDetailProjectCustom.reduce";
+import LoadingReducer from "./common/Loading.reducer";
 
 export const store = configureStore({
   reducer: {
@@ -121,6 +122,7 @@ export const store = configureStore({
     stTeamFactory: StTeamFactorySliceReducer,
     stDetailTeamFactory: StDetailTeamFactorySliceReducer,
     detailProjectCustom: DPDetailProjectCustomReduce,
+    loading: LoadingReducer,
   },
 });
 

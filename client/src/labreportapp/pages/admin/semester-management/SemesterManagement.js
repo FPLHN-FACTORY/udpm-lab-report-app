@@ -39,6 +39,7 @@ import ModalUpdateSemester from "./modal-update/ModalUpdateSemester";
 import LoadingIndicator from "../../../helper/loading";
 import { convertDateLongToString } from "../../../helper/util.helper";
 import ModalShowHistory from "./modal-show-history/ModalShowHistory";
+import { SetLoadingTrue } from "../../../app/common/Loading.reducer";
 
 const SemesterManagement = () => {
   const [semester, setSemester] = useState(null);

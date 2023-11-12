@@ -7,6 +7,10 @@ import "react-toastify/dist/ReactToastify.css";
 import { useAppDispatch } from "../../../../app/hook";
 import TextArea from "antd/es/input/TextArea";
 import moment from "moment";
+import {
+  SetLoadingFalse,
+  SetLoadingTrue,
+} from "../../../../app/common/Loading.reducer";
 
 const { Option } = Select;
 
@@ -62,11 +66,12 @@ const ModalUpdateRoleProject = ({ visible, onCancel, roleProject }) => {
         description: description,
         roleDefault: parseInt(status),
       };
-
+      dispatch(SetLoadingTrue());
       AdRoleProjectAPI.updateRoleProject(obj, roleProject.id).then(
         (response) => {
           message.success("Cập nhật thành công!");
           dispatch(UpdateRoleProject(response.data.data));
+          dispatch(SetLoadingFalse());
           onCancel();
         },
         (error) => {}

@@ -14,6 +14,10 @@ import {
   convertMeetingPeriodToTime,
 } from "../../../../../helper/util.helper";
 import { GetAdMeetingPeriod } from "../../../../../app/admin/AdMeetingPeriodSlice.reducer";
+import {
+  SetLoadingFalse,
+  SetLoadingTrue,
+} from "../../../../../app/common/Loading.reducer";
 
 const { Option } = Select;
 
@@ -55,6 +59,7 @@ const ModalCreateMeeting = ({ visible, onCancel }) => {
     } else {
       setErrorMeetingPeriod("");
     }
+    dispatch(SetLoadingTrue());
     if (check === 0) {
       let obj = {
         meetingDate: moment(meetingDate, "YYYY-MM-DD").valueOf(),
@@ -69,6 +74,7 @@ const ModalCreateMeeting = ({ visible, onCancel }) => {
       MeetingManagementAPI.createMeeting(obj).then((response) => {
         dispatch(CreateMeeting(response.data.data));
         message.success("Thêm thành công");
+        dispatch(SetLoadingFalse());
         onCancel();
       });
     }

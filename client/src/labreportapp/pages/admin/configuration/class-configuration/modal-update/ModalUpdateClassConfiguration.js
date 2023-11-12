@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { AdClassCongigurationAPI } from "../../../../../api/admin/AdClassConfigurationAPI";
 import { toast } from "react-toastify";
 import { Button, Col, Input, Modal, Row, message } from "antd";
+import { useAppDispatch } from "../../../../../app/hook";
+import { SetLoadingFalse, SetLoadingTrue } from "../../../../../app/common/Loading.reducer";
 
 const ModalUpdateClassConfiguration = ({
   loadData,
@@ -40,6 +42,7 @@ const ModalUpdateClassConfiguration = ({
       setErrorMaximumNumberOfBreaks("");
     }
   }, [visible, classConfiguration]);
+  const dispatch = useAppDispatch();
   const update = () => {
     let check = 0;
     if (classSizeMax === null || classSizeMax === "") {
@@ -94,6 +97,7 @@ const ModalUpdateClassConfiguration = ({
     }
 
     if (check === 0) {
+      dispatch(SetLoadingTrue());
       let obj = {
         classSizeMin: +classSizeMin,
         classSizeMax: +classSizeMax,
@@ -103,6 +107,7 @@ const ModalUpdateClassConfiguration = ({
       AdClassCongigurationAPI.update(obj).then(
         () => {
           message.success("Cập nhật thành công!");
+          dispatch(SetLoadingFalse());
           onCancel();
           loadData();
         },

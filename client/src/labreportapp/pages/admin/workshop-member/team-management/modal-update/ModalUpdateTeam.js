@@ -7,6 +7,10 @@ import "react-toastify/dist/ReactToastify.css";
 import { useAppDispatch } from "../../../../../app/hook";
 import TextArea from "antd/es/input/TextArea";
 import moment from "moment";
+import {
+  SetLoadingFalse,
+  SetLoadingTrue,
+} from "../../../../../app/common/Loading.reducer";
 
 const { Option } = Select;
 
@@ -58,11 +62,12 @@ const ModalUpdateTeam = ({ visible, onCancel, team }) => {
         name: name,
         descriptions: descriptions,
       };
-
+      dispatch(SetLoadingTrue());
       AdTeamAPI.updateTeam(obj, team.id).then(
         (response) => {
           message.success("Cập nhật thành công!");
           dispatch(UpdateTeam(response.data.data));
+          dispatch(SetLoadingFalse());
           onCancel();
         },
         (error) => {}

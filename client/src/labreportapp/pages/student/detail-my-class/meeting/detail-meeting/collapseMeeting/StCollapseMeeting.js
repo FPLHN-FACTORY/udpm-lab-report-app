@@ -6,6 +6,7 @@ import { StudentMeetingAPI } from "../../../../../../api/student/StMeetingAPI";
 import { useParams } from "react-router-dom";
 import { StudentTempalteReportAPI } from "../../../../../../api/student/StTemplateReportAPI";
 import LoadingIndicator from "../../../../../../helper/loading";
+import LoadingIndicatorNoOverlay from "../../../../../../helper/loadingNoOverlay";
 
 const CollapseMeeting = ({ items }) => {
   const [activePanel, setActivePanel] = useState(null);
@@ -13,6 +14,7 @@ const CollapseMeeting = ({ items }) => {
   const { idMeeting } = useParams();
   const [objDetail, setObjDetail] = useState({});
   const [loading, setLoading] = useState(false);
+  const [loadingOverlay, setLoadingOverlay] = useState(false);
   const [descriptionsHomeWork, setDescriptionsHomeWork] = useState("");
   const [descriptionsNote, setDescriptionsNote] = useState("");
   const [descriptionsReport, setDescriptionsReport] = useState("");
@@ -95,6 +97,7 @@ const CollapseMeeting = ({ items }) => {
   };
 
   const update = async () => {
+    setLoadingOverlay(true);
     try {
       let data = {
         idMeeting: idMeeting,
@@ -114,6 +117,7 @@ const CollapseMeeting = ({ items }) => {
         setDescriptionsReport(response.data.data.descriptionsReport);
         setObjDetail(response.data.data);
         message.success("Cập nhật thành công");
+        setLoadingOverlay(false);
         clear();
       });
     } catch (error) {
@@ -133,6 +137,7 @@ const CollapseMeeting = ({ items }) => {
   return (
     <div className="lesson-information">
       {!loading && <LoadingIndicator />}
+      {loadingOverlay && <LoadingIndicatorNoOverlay />}
       {items.map((item, index) => (
         <div className="info-team">
           <div className="info-heading" style={{ marginLeft: "40px" }}>

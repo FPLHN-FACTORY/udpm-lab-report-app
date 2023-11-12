@@ -8,6 +8,11 @@ import { ClassAPI } from "../../../../api/admin/class-manager/ClassAPI.api";
 import moment from "moment";
 import { toast } from "react-toastify";
 import LoadingIndicatorNoOverlay from "../../../../helper/loadingNoOverlay";
+import { useAppDispatch } from "../../../../app/hook";
+import {
+  SetLoadingFalse,
+  SetLoadingTrue,
+} from "../../../../app/common/Loading.reducer";
 
 const { Option } = Select;
 
@@ -62,10 +67,8 @@ const ModalRandomClass = ({ visible, onCancel, fetchData }) => {
       setActivityDataAll([]);
     } else {
       const featchDataActivity = async (idSemesterSeach) => {
-        
         await ClassAPI.getAllActivityByIdSemester(idSemesterSeach).then(
           (respone) => {
-            
             if (respone.data.data.length === 0) {
               setIdActivitiSearch("none");
               setActivityDataAll([]);
@@ -79,6 +82,8 @@ const ModalRandomClass = ({ visible, onCancel, fetchData }) => {
       featchDataActivity(idSemesterSeach);
     }
   }, [idSemesterSeach]);
+
+  const dispatch = useAppDispatch();
 
   const randomClass = () => {
     let check = 0;
@@ -106,9 +111,10 @@ const ModalRandomClass = ({ visible, onCancel, fetchData }) => {
         numberRandon: soLopRandom,
         startTime: moment(startTime, "YYYY-MM-DD").valueOf(),
       };
+      dispatch(SetLoadingTrue());
       ClassAPI.randomClass(obj).then((response) => {
         message.success("Random tạo lớp thành công");
-        // setLoading(false);
+        dispatch(SetLoadingFalse());
         fetchData();
         onCancel();
       });
