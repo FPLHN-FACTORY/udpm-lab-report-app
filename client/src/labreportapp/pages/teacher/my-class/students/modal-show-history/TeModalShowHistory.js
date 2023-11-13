@@ -28,6 +28,9 @@ const TeModalShowHistory = ({ visible, onCancel, classDetail }) => {
       title: "Nội dung",
       dataIndex: "content",
       key: "content",
+      render: (text) => {
+        return <div>{text}</div>;
+      },
     },
   ];
 

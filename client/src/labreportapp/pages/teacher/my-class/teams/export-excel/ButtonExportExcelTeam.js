@@ -1,12 +1,15 @@
 import { Button, Spin, message } from "antd";
-import { useState } from "react";
-import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload } from "@fortawesome/free-solid-svg-icons";
 import { TeacherExcelTeamAPI } from "../../../../../api/teacher/teams-class/excel/TeacherExcelTeam.api";
+import { useAppDispatch } from "../../../../../app/hook";
+import {
+  SetLoadingFalse,
+  SetLoadingTrue,
+} from "../../../../../app/common/Loading.reducer";
 
 const ButtonExportExcelTeam = ({ idClass }) => {
-  const [downloading, setDownloading] = useState(false);
+  const dispatch = useAppDispatch();
 
   const convertLongToDateTime = (dateLong) => {
     const date = new Date(dateLong);
@@ -17,6 +20,7 @@ const ButtonExportExcelTeam = ({ idClass }) => {
   };
   const handleExport = async () => {
     try {
+      dispatch(SetLoadingTrue());
       const response = await TeacherExcelTeamAPI.export(idClass);
       const blob = new Blob([response.data], {
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -28,29 +32,24 @@ const ButtonExportExcelTeam = ({ idClass }) => {
         "DanhSachNhom_" + convertLongToDateTime(new Date().getTime()) + ".xlsx";
       link.click();
       window.URL.revokeObjectURL(url);
-      setDownloading(true);
-      setTimeout(() => {
-        setDownloading(false);
-      }, 1500);
+      dispatch(SetLoadingFalse());
       message.success("Export thành công !");
     } catch (error) {
-      console.log(error);
+      dispatch(SetLoadingFalse());
     }
   };
   return (
-    <Spin spinning={downloading}>
-      <Button
-        className="btn_clear"
-        style={{
-          backgroundColor: "rgb(38, 144, 214)",
-          color: "white",
-        }}
-        onClick={handleExport}
-      >
-        <FontAwesomeIcon icon={faDownload} style={{ marginRight: "7px" }} />
-        {downloading ? "Đang tải xuống..." : "Export nhóm"}
-      </Button>
-    </Spin>
+    <Button
+      className="btn_clear"
+      style={{
+        backgroundColor: "rgb(38, 144, 214)",
+        color: "white",
+      }}
+      onClick={handleExport}
+    >
+      <FontAwesomeIcon icon={faDownload} style={{ marginRight: "7px" }} />
+      <span>Export nhóm</span>
+    </Button>
   );
 };
 export default ButtonExportExcelTeam;

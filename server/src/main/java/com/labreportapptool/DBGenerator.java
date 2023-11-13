@@ -1672,7 +1672,7 @@ public class DBGenerator implements CommandLineRunner {
 
         // POINT - Class 1
         Point point1 = new Point();
-        point1.setStudentId("71090C89-F618-41AE-2A8D-08DBB201EFE8".toLowerCase());
+        point1.setStudentId(studentClasses1.getStudentId());
         point1.setClassId(class1.getId());
         point1.setCheckPointPhase1(8.0);
         point1.setCheckPointPhase2(5.0);
@@ -1680,7 +1680,7 @@ public class DBGenerator implements CommandLineRunner {
         point1.setId(pointRepository.save(point1).getId());
 
         Point point2 = new Point();
-        point2.setStudentId("2435C7D5-9BEC-45AC-9BFE-08DBA87523FE".toLowerCase());
+        point2.setStudentId(studentClasses2.getStudentId());
         point2.setClassId(class1.getId());
         point2.setCheckPointPhase1(8.0);
         point2.setCheckPointPhase2(6.0);
@@ -1688,7 +1688,7 @@ public class DBGenerator implements CommandLineRunner {
         point2.setId(pointRepository.save(point2).getId());
 
         Point point3 = new Point();
-        point3.setStudentId("59F0CB47-5BD4-4909-B1C4-08DBB743DD7D".toLowerCase());
+        point3.setStudentId(studentClasses3.getStudentId());
         point3.setClassId(class1.getId());
         point3.setCheckPointPhase1(8.0);
         point3.setCheckPointPhase2(6.0);
@@ -1696,7 +1696,7 @@ public class DBGenerator implements CommandLineRunner {
         point3.setId(pointRepository.save(point3).getId());
 
         Point point4 = new Point();
-        point4.setStudentId("F5882312-81A5-4D44-8E44-08DBB2F9FEB4".toLowerCase());
+        point4.setStudentId(studentClasses4.getStudentId());
         point4.setClassId(class1.getId());
         point4.setCheckPointPhase1(2.0);
         point4.setCheckPointPhase2(2.0);
@@ -1704,7 +1704,7 @@ public class DBGenerator implements CommandLineRunner {
         point4.setId(pointRepository.save(point4).getId());
 
         Point point5 = new Point();
-        point5.setStudentId("80DE791C-F32B-4E7D-8E46-08DBB2F9FEB4".toLowerCase());
+        point5.setStudentId(studentClasses5.getStudentId());
         point5.setClassId(class1.getId());
         point5.setCheckPointPhase1(1.0);
         point5.setCheckPointPhase2(5.0);
@@ -1712,7 +1712,7 @@ public class DBGenerator implements CommandLineRunner {
         point5.setId(pointRepository.save(point5).getId());
 
         Point point6 = new Point();
-        point6.setStudentId("2B5C2803-C998-4012-8E47-08DBB2F9FEB4".toLowerCase());
+        point6.setStudentId(studentClasses6.getStudentId());
         point6.setClassId(class1.getId());
         point6.setCheckPointPhase1(8.0);
         point6.setCheckPointPhase2(8.0);
@@ -1720,7 +1720,7 @@ public class DBGenerator implements CommandLineRunner {
         point6.setId(pointRepository.save(point6).getId());
 
         Point point7 = new Point();
-        point7.setStudentId("FCB1D931-CB71-4F12-94D6-08DBB66B2F92".toLowerCase());
+        point7.setStudentId(studentClasses7.getStudentId());
         point7.setClassId(class1.getId());
         point7.setCheckPointPhase1(5.0);
         point7.setCheckPointPhase2(5.0);
@@ -1728,7 +1728,7 @@ public class DBGenerator implements CommandLineRunner {
         point7.setId(pointRepository.save(point7).getId());
 
         Point point8 = new Point();
-        point8.setStudentId("6A85641C-874B-4AD0-B1BA-08DBB743DD7D".toLowerCase());
+        point8.setStudentId(studentClasses8.getStudentId());
         point8.setClassId(class1.getId());
         point8.setCheckPointPhase1(7.0);
         point8.setCheckPointPhase2(7.0);
@@ -1736,7 +1736,7 @@ public class DBGenerator implements CommandLineRunner {
         point8.setId(pointRepository.save(point8).getId());
 
         Point point9 = new Point();
-        point9.setStudentId("B8E51E50-4823-4F9A-B1BC-08DBB743DD7D".toLowerCase());
+        point9.setStudentId(studentClasses9.getStudentId());
         point9.setClassId(class1.getId());
         point9.setCheckPointPhase1(6.0);
         point9.setCheckPointPhase2(6.0);
@@ -1744,7 +1744,7 @@ public class DBGenerator implements CommandLineRunner {
         point9.setId(pointRepository.save(point9).getId());
 
         Point point10 = new Point();
-        point10.setStudentId("B34C613D-8AA5-4865-B1BD-08DBB743DD7D".toLowerCase());
+        point10.setStudentId(studentClasses10.getStudentId());
         point10.setClassId(class1.getId());
         point10.setCheckPointPhase1(3.0);
         point10.setCheckPointPhase2(3.0);
@@ -1752,7 +1752,7 @@ public class DBGenerator implements CommandLineRunner {
         point10.setId(pointRepository.save(point10).getId());
 
         Point point11 = new Point();
-        point11.setStudentId("D3C53418-67EA-47FE-B1BE-08DBB743DD7D".toLowerCase());
+        point11.setStudentId(studentClasses11.getStudentId());
         point11.setClassId(class1.getId());
         point11.setCheckPointPhase1(2.0);
         point11.setCheckPointPhase2(2.0);
@@ -1760,7 +1760,7 @@ public class DBGenerator implements CommandLineRunner {
         point11.setId(pointRepository.save(point11).getId());
 
         Point point12 = new Point();
-        point12.setStudentId("07E9748D-CF8C-4D48-B1BF-08DBB743DD7D".toLowerCase());
+        point12.setStudentId(studentClasses12.getStudentId());
         point12.setClassId(class1.getId());
         point12.setCheckPointPhase1(1.0);
         point12.setCheckPointPhase2(1.0);
@@ -1768,7 +1768,7 @@ public class DBGenerator implements CommandLineRunner {
         point12.setId(pointRepository.save(point12).getId());
 
         Point point13 = new Point();
-        point13.setStudentId("967C6BB6-0F50-4862-B1C0-08DBB743DD7D".toLowerCase());
+        point13.setStudentId(studentClasses13.getStudentId());
         point13.setClassId(class1.getId());
         point13.setCheckPointPhase1(5.0);
         point13.setCheckPointPhase2(5.0);
@@ -1776,7 +1776,7 @@ public class DBGenerator implements CommandLineRunner {
         point13.setId(pointRepository.save(point13).getId());
 
         Point point14 = new Point();
-        point14.setStudentId("1D566092-B2DD-49C6-B1C1-08DBB743DD7D".toLowerCase());
+        point14.setStudentId(studentClasses14.getStudentId());
         point14.setClassId(class1.getId());
         point14.setCheckPointPhase1(5.0);
         point14.setCheckPointPhase2(5.5);
@@ -1784,7 +1784,7 @@ public class DBGenerator implements CommandLineRunner {
         point14.setId(pointRepository.save(point14).getId());
 
         Point point15 = new Point();
-        point15.setStudentId("8E0A1E2D-246F-49B7-B1C2-08DBB743DD7D".toLowerCase());
+        point15.setStudentId(studentClasses15.getStudentId());
         point15.setClassId(class1.getId());
         point15.setCheckPointPhase1(6.5);
         point15.setCheckPointPhase2(5.5);
@@ -1792,7 +1792,7 @@ public class DBGenerator implements CommandLineRunner {
         point15.setId(pointRepository.save(point15).getId());
 
         Point point16 = new Point();
-        point16.setStudentId("69CE3C9F-5100-4A4F-B1C3-08DBB743DD7D".toLowerCase());
+        point16.setStudentId(studentClasses16.getStudentId());
         point16.setClassId(class1.getId());
         point16.setCheckPointPhase1(7.5);
         point16.setCheckPointPhase2(5.5);
@@ -1800,7 +1800,7 @@ public class DBGenerator implements CommandLineRunner {
         point16.setId(pointRepository.save(point16).getId());
 
         Point point17 = new Point();
-        point17.setStudentId("33BC7EF4-F150-4D7D-B1C5-08DBB743DD7D".toLowerCase());
+        point17.setStudentId(studentClasses17.getStudentId());
         point17.setClassId(class1.getId());
         point17.setCheckPointPhase1(2.5);
         point17.setCheckPointPhase2(5.5);
@@ -1808,7 +1808,7 @@ public class DBGenerator implements CommandLineRunner {
         point17.setId(pointRepository.save(point17).getId());
 
         Point point18 = new Point();
-        point18.setStudentId("5529080E-7F8B-49FC-B1C6-08DBB743DD7D".toLowerCase());
+        point18.setStudentId(studentClasses18.getStudentId());
         point18.setClassId(class1.getId());
         point18.setCheckPointPhase1(10.0);
         point18.setCheckPointPhase2(10.0);
@@ -1816,7 +1816,7 @@ public class DBGenerator implements CommandLineRunner {
         point18.setId(pointRepository.save(point18).getId());
 
         Point point19 = new Point();
-        point19.setStudentId("39715979-9A4A-4F5B-B1C7-08DBB743DD7D".toLowerCase());
+        point19.setStudentId(studentClasses19.getStudentId());
         point19.setClassId(class1.getId());
         point19.setCheckPointPhase1(9.5);
         point19.setCheckPointPhase2(5.5);
@@ -1825,7 +1825,7 @@ public class DBGenerator implements CommandLineRunner {
 
         // POINT - Class 2 - teacher HangNT
         Point point20 = new Point();
-        point20.setStudentId("C5715153-1C04-461D-B1C8-08DBB743DD7D".toLowerCase());
+        point20.setStudentId(studentClasses20.getStudentId());
         point20.setClassId(class3.getId());
         point20.setCheckPointPhase1(8.0);
         point20.setCheckPointPhase2(8.0);
@@ -1834,7 +1834,7 @@ public class DBGenerator implements CommandLineRunner {
 
         // POINT - class 3 - teacher NguyenVV
         Point point21 = new Point();
-        point21.setStudentId("09B3E4C8-0E0F-4F03-B1C9-08DBB743DD7D".toLowerCase());
+        point21.setStudentId(studentClasses21.getStudentId());
         point21.setClassId(class2.getId());
         point21.setCheckPointPhase1(9.0);
         point21.setCheckPointPhase2(9.0);

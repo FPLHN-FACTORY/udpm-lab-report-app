@@ -32,11 +32,14 @@ import {
 import ModalDetailTeam from "./modal-detail/ModalDetailTeam";
 import ModalCreateTeam from "./modal-create/ModalCreateTeam";
 import ModalUpdateTeam from "./modal-update/ModalUpdateTeam";
-import { toast } from "react-toastify";
 import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
 import { SetTTrueToggle } from "../../../../app/teacher/TeCollapsedSlice.reducer";
 import ButtonExportExcelTeam from "./export-excel/ButtonExportExcelTeam";
 import ModalFileImportTeam from "./import-excel/ModalFileImportTeam";
+import {
+  SetLoadingFalse,
+  SetLoadingTrue,
+} from "../../../../app/common/Loading.reducer";
 
 const TeamsInMyClass = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -107,8 +110,10 @@ const TeamsInMyClass = () => {
     setShowDeleteModal(true);
     setTeamDelete(team);
   };
+
   const handleDeleteTeam = async () => {
     try {
+      dispatch(SetLoadingTrue());
       await TeacherTeamsAPI.deleteById(teamDelete.id).then((respone) => {
         message.success(respone.data.data);
         dispatch(DeleteTeam(teamDelete));
@@ -122,23 +127,29 @@ const TeamsInMyClass = () => {
           dispatch(SetStudentClasses(objFilter));
         }
         setTeamDelete({});
+        dispatch(SetLoadingFalse());
         handleCancelModalCreateSusscess();
       });
     } catch (error) {
-      toast.warning("Xóa thất bại !");
+      dispatch(SetLoadingFalse());
+      message.error("Xóa thất bại !");
     }
   };
   const handleCreateproject = async (idTeam) => {
     try {
+      dispatch(SetLoadingTrue());
       let dataUp = {
         idClass: idClass,
         idTeam: idTeam,
       };
       await TeacherTeamsAPI.createProjectToTeam(dataUp).then((response) => {
         dispatch(UpdateTeam(response.data.data));
+        dispatch(SetLoadingFalse());
         message.success("Tạo trello thành công !");
       });
-    } catch (error) {}
+    } catch (error) {
+      dispatch(SetLoadingFalse());
+    }
   };
   const handleCancelModalCreateSusscess = () => {
     document.querySelector("body").style.overflowX = "hidden";

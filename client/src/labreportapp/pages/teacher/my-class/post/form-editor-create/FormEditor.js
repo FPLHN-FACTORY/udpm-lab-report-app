@@ -2,18 +2,19 @@ import React, { useEffect, useState } from "react";
 import JoditEditor from "jodit-react";
 import { TeacherPostAPI } from "../../../../../api/teacher/post/TeacherPost.api";
 import { CreatePost } from "../../../../../app/teacher/post/tePostSlice.reduce";
-import { toast } from "react-toastify";
 import { Button, message } from "antd";
 import { useAppDispatch, useAppSelector } from "../../../../../app/hook";
 import { TeacherStudentClassesAPI } from "../../../../../api/teacher/student-class/TeacherStudentClasses.api";
 import { TeacherMailAPI } from "../../../../../api/teacher/sent-mail/TeacherMailAPI.api";
 import { GetUserCurrent } from "../../../../../app/common/UserCurrent.reducer";
+import {
+  SetLoadingFalse,
+  SetLoadingTrue,
+} from "../../../../../app/common/Loading.reducer";
 function Editor({ idClass, showCreate }) {
-
   const [descriptionss, setDescriptionss] = useState("<p><br></p>");
   const dispatch = useAppDispatch();
   const [listMail, setListMail] = useState([]);
-
   useEffect(() => {
     featchStudentClass(idClass);
   }, []);
@@ -85,9 +86,7 @@ function Editor({ idClass, showCreate }) {
           }
         }
       );
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
   const userRedux = useAppSelector(GetUserCurrent);
   const featchSentMaillToStudent = async (body) => {
@@ -104,9 +103,7 @@ function Editor({ idClass, showCreate }) {
         body: body,
       };
       await TeacherMailAPI.sentMaillTeacherPostToStudent(data);
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
   return (
     <div>

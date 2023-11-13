@@ -22,6 +22,10 @@ import LoadingIndicator from "../../../../helper/loading";
 import ButtonExportExcel from "./export-excel/ButtonExportExcel";
 import ModalFileImportPoint from "./import-excel/ModalFileImportPoint";
 import { SetTTrueToggle } from "../../../../app/teacher/TeCollapsedSlice.reducer";
+import {
+  SetLoadingFalse,
+  SetLoadingTrue,
+} from "../../../../app/common/Loading.reducer";
 
 const TeacherPointMyClass = () => {
   const { idClass } = useParams();
@@ -72,16 +76,20 @@ const TeacherPointMyClass = () => {
 
   const handleSave = async () => {
     try {
+      dispatch(SetLoadingTrue());
       const dataToSave = data;
       let dataFind = {
         listPoint: dataToSave,
         idClass: idClass,
       };
       await TeacherPointAPI.createOrUpdate(dataFind).then((respone) => {
+        dispatch(SetLoadingFalse());
         dispatch(UpdatePoint(respone.data.data));
         message.success("Lưu bảng điểm thành công !");
       });
-    } catch (error) {}
+    } catch (error) {
+      dispatch(SetLoadingFalse());
+    }
   };
 
   const handleCancelImport = () => {

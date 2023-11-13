@@ -8,7 +8,6 @@ import com.labreportapp.labreport.core.teacher.model.request.TeCreateTeamsReques
 import com.labreportapp.labreport.core.teacher.model.request.TeFindStudentClasses;
 import com.labreportapp.labreport.core.teacher.model.request.TeTeamUpdateStudentClassRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeUpdateTeamsRequest;
-import com.labreportapp.labreport.core.teacher.model.response.TeDetailClassResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeExcelResponseMessage;
 import com.labreportapp.labreport.core.teacher.model.response.TeStudentCallApiResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeTeamsRespone;
@@ -76,9 +75,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -190,7 +191,7 @@ public class TeTeamsServiceImpl implements TeTeamsService {
                         if (infor.getId().equals(studentDB.getStudentId())) {
                             messageCheckStudentJoin.append(" " + infor.getName()).append(" - ").append(infor.getUserName());
                             if (studentDB.getRole() == RoleTeam.LEADER) {
-                                messageCheckStudentJoin.append(" làm trưởng nhóm");
+                                messageCheckStudentJoin.append(" trưởng nhóm");
                             }
                             messageCheckStudentJoin.append(",");
                         }
@@ -275,7 +276,7 @@ public class TeTeamsServiceImpl implements TeTeamsService {
                         if (infor.getId().equals(item.getIdStudent())) {
                             messageCheckUpdate.append(" ").append(infor.getName()).append(" - ").append(infor.getUserName());
                             if (studentClasses.getRole() == RoleTeam.LEADER) {
-                                messageCheckUpdate.append(" làm trưởng nhóm");
+                                messageCheckUpdate.append(" trưởng nhóm");
                             }
                             messageCheckUpdate.append(",");
                         }
@@ -326,8 +327,8 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         if (countStudentDeleteJoinTeam.get() > 0) {
             message.append(" Và xóa ").append(countStudentDeleteJoinTeam.get()).append(" thành viên - Gồm: ").append(messageCheckDelete.toString()).append(" ra khỏi nhóm. ");
         }
-        teStudentClassesRepository.saveAll(listStudentClassesUpdate);
         loggerUtil.sendLogStreamClass(message.toString(), codeClass, nameSemester);
+        teStudentClassesRepository.saveAll(listStudentClassesUpdate);
         return teTeamsRepositoty.save(team);
     }
 
@@ -682,7 +683,7 @@ public class TeTeamsServiceImpl implements TeTeamsService {
                     if ("X".equalsIgnoreCase(existingRole)) {
                         teExcelResponseMessage.setStatus(false);
                         teExcelResponseMessage.setMessage(
-                                " Có hai sinh viên làm leader trong cùng một nhóm.");
+                                " Không được chỉ định hơn 1 sinh viên làm trưởng nhóm trong cùng một nhóm.");
                         checkValidate.set(false);
                         return;
                     } else if (student.getNameTeam().isEmpty()) {
@@ -703,8 +704,20 @@ public class TeTeamsServiceImpl implements TeTeamsService {
                     }
                 }
             });
+            HashMap<String, StringBuffer> hashMap = new HashMap<>();
             if (checkValidate.get()) {
+                List<SimpleResponse> listInforStudent = teStudentClassesService.searchAllStudentByIdClass(idClass);
                 List<Team> listTeamDB = checkGetListTeam(listInput, idClass);
+                listTeamDB.forEach(team -> {
+                    StringBuffer stringBuffer = new StringBuffer();
+                    if (team.getSubjectName().equals("")) {
+                        stringBuffer.append(" Đã cập nhật `").append(team.getName()).append("` - Gồm:");
+                    } else {
+                        stringBuffer.append(" Đã cập nhật `").append(team.getName()).append("` với chủ đề `")
+                                .append(team.getSubjectName()).append("` - Gồm:");
+                    }
+                    hashMap.put(team.getName(), stringBuffer);
+                });
                 ConcurrentHashMap<String, Team> mapTeam = new ConcurrentHashMap<>();
                 addDataTeam(mapTeam, listTeamDB);
                 teExcelResponseMessage.setMessage("");
@@ -713,17 +726,47 @@ public class TeTeamsServiceImpl implements TeTeamsService {
                     Team teamFind = mapTeam.get(student.getNameTeam());
                     studentFind.setTeamId(teamFind != null ? teamFind.getId() : null);
                     studentFind.setRole(student.getRole().equalsIgnoreCase("X") ? RoleTeam.LEADER : RoleTeam.MEMBER);
+                    listInforStudent.forEach(infor -> {
+                        if (infor.getId().equals(studentFind.getStudentId()) && teamFind != null) {
+                            if (hashMap.containsKey(teamFind.getName())) {
+                                StringBuffer messageTeam = hashMap.get(teamFind.getName());
+                                messageTeam.append(" ").append(infor.getName()).append(" - ").append(infor.getUserName());
+                                if (studentFind.getRole() == RoleTeam.LEADER) {
+                                    messageTeam.append(" trưởng nhóm");
+                                }
+                                messageTeam.append(",");
+
+                            }
+                        }
+                    });
                     listStudentUp.add(studentFind);
                 });
             }
-            if (teExcelResponseMessage.getStatus() == true) {
+            if (teExcelResponseMessage.getStatus()) {
                 teStudentClassesRepository.saveAll(listStudentUp);
                 teExcelResponseMessage.setMessage("Import nhóm thành công !");
-                return teExcelResponseMessage;
+
+                String codeClass = loggerUtil.getCodeClassByIdClass(idClass);
+                String nameSemester = loggerUtil.getNameSemesterByIdClass(idClass);
+                StringBuilder message = new StringBuilder();
+                Map<String, StringBuffer> sortedHashMap = new TreeMap<>(hashMap);
+//                Map<String, StringBuffer> sortedHashMap = new TreeMap<>(Comparator.comparingInt(key -> Integer.parseInt(key.substring(5))));
+                sortedHashMap.entrySet().stream().forEach(entry -> {
+                    String key = entry.getKey();
+                    StringBuffer value = entry.getValue();
+                    if (value.length() > 0 && value.charAt(value.length() - 1) == ',') {
+                        value.setCharAt(value.length() - 1, '.');
+                    } else if (value.toString().endsWith("-Gồm")) {
+                        int endIndex = value.length() - "-Gồm".length();
+                        value.replace(endIndex, value.length(), ".");
+                    }
+                    message.append(value);
+                });
+                loggerUtil.sendLogStreamClass(message.toString(), codeClass, nameSemester);
             } else {
                 teExcelResponseMessage.setMessage("Import nhóm thất bại. " + teExcelResponseMessage.getMessage());
-                return teExcelResponseMessage;
             }
+            return teExcelResponseMessage;
         } catch (Exception e) {
             e.printStackTrace();
             teExcelResponseMessage.setStatus(false);
@@ -803,19 +846,19 @@ public class TeTeamsServiceImpl implements TeTeamsService {
             }
         }
         List<Team> updatedTeams = new ArrayList<>(teamMap.values());
-        createProjectAndAddMember(listInput, updatedTeams, idClass);
+        //createProjectAndAddMember(listInput, updatedTeams, idClass);
         List<Team> updatedTeamsNE = teTeamsRepositoty.saveAll(updatedTeams);
         List<Team> missingTeams = updatedTeams.stream()
                 .filter(team -> !filteredList.stream().anyMatch(student -> student.getNameTeam().equalsIgnoreCase(team.getName())))
                 .collect(Collectors.toList());
         teTeamsRepositoty.deleteAll(missingTeams);
-        return updatedTeamsNE;
+        return teTeamsRepositoty.getTeamByClassId(idClass);
     }
 
-    private void createProjectAndAddMember(List<TeExcelImportTeam> listInput, List<Team> listTeam, String idClass) {
-        ConcurrentHashMap<String, StudentClasses> mapStudent = new ConcurrentHashMap<>();
-        addDataStudentDB(mapStudent, idClass);
-        Optional<TeDetailClassResponse> objClass = teClassRepository.findClassById(idClass);
+//    private void createProjectAndAddMember(List<TeExcelImportTeam> listInput, List<Team> listTeam, String idClass) {
+//        ConcurrentHashMap<String, StudentClasses> mapStudent = new ConcurrentHashMap<>();
+//        addDataStudentDB(mapStudent, idClass);
+//        Optional<TeDetailClassResponse> objClass = teClassRepository.findClassById(idClass);
 //        if (objClass.isPresent()) {
 //            if (objClass.get().getAllowUseTrello() == 0) {
 //                List<MemberProject> listMemberProjectUpdate = new ArrayList<>();
@@ -870,7 +913,7 @@ public class TeTeamsServiceImpl implements TeTeamsService {
 //                teMemberProjectRepository.saveAll(listMemberProjectUpdate);
 //            }
 //        }
-    }
+//}
 
     private void addDataMemberProject(ConcurrentHashMap<String, MemberProject> map, String idProject) {
         List<MemberProject> listMember = teMemberProjectRepository.findMemberProjectByProjectId(idProject);

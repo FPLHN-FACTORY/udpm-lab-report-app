@@ -6,6 +6,10 @@ import { toast } from "react-toastify";
 import { Button, message } from "antd";
 import { useAppDispatch } from "../../../../../app/hook";
 import { useEffect } from "react";
+import {
+  SetLoadingFalse,
+  SetLoadingTrue,
+} from "../../../../../app/common/Loading.reducer";
 
 function EditorUpdate({ obj, showUpdate }) {
   const [descriptions, setDescriptions] = useState("");
@@ -61,6 +65,7 @@ function EditorUpdate({ obj, showUpdate }) {
           message.success("Sửa bài viết thành công !");
         },
         (error) => {
+          dispatch(SetLoadingFalse());
           message.error(error.response.data.message);
         }
       );

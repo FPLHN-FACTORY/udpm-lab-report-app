@@ -24,6 +24,10 @@ import {
 } from "../../../../../app/teacher/student-class/studentClassesSlice.reduce";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import {
+  SetLoadingFalse,
+  SetLoadingTrue,
+} from "../../../../../app/common/Loading.reducer";
 
 const { Option } = Select;
 
@@ -169,11 +173,24 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
 
   const update = async () => {
     let check = 0;
+    dispatch(SetLoadingTrue());
     if (name.trim() === "") {
       setErrorName("Tên nhóm không được để trống");
       check++;
     } else {
       setErrorName("");
+    }
+    if (listShowTable.length >= 1) {
+      const countRoleZero = listShowTable.filter(
+        (item) => item.role === "0"
+      ).length;
+      if (countRoleZero === 0) {
+        message.error("Phải chỉ định 1 thành viên là trưởng nhóm !");
+        check++;
+      } else if (countRoleZero >= 2) {
+        message.error("Chỉ được chỉ định 1 thành viên là trưởng nhóm !");
+        check++;
+      }
     }
     if (check === 0) {
       let teamUpdate = {
@@ -204,9 +221,14 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
           dispatch(UpdateTeam(dataTableTeam));
           setCheckDataStudent(true);
           cancelSuccess();
+          dispatch(SetLoadingFalse());
         },
-        (error) => {}
+        (error) => {
+          dispatch(SetLoadingFalse());
+        }
       );
+    } else {
+      dispatch(SetLoadingFalse());
     }
   };
   const dataStudentClasses = useAppSelector(GetStudentClasses);

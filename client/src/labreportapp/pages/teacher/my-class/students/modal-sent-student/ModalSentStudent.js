@@ -21,6 +21,10 @@ import {
   GetStudentClasses,
 } from "../../../../../app/teacher/student-class/studentClassesSlice.reduce";
 import { useAppDispatch, useAppSelector } from "../../../../../app/hook";
+import {
+  SetLoadingFalse,
+  SetLoadingTrue,
+} from "../../../../../app/common/Loading.reducer";
 
 const ModalSentStudent = ({
   visible,
@@ -69,6 +73,7 @@ const ModalSentStudent = ({
 
   const handleSentStudent = async (idClassSent) => {
     try {
+      dispatch(SetLoadingTrue());
       let dataSent = {
         listIdStudent: listIdStudent,
         idClassSent: idClassSent,
@@ -85,8 +90,10 @@ const ModalSentStudent = ({
               clearCheckedList(listIdStudent);
               dispatch(SetStudentClasses(objFilter));
             }
+            dispatch(SetLoadingFalse());
             onCancel();
           } else {
+            dispatch(SetLoadingFalse());
             onCancel();
             message.error("Trao đổi sinh viên thất bại !");
           }
@@ -100,7 +107,6 @@ const ModalSentStudent = ({
       title: "#",
       dataIndex: "stt",
       key: "stt",
-      width: "10px",
       sorter: (a, b) => a.stt - b.stt,
       align: "center",
     },

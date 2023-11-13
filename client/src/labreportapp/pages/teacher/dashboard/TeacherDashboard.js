@@ -153,7 +153,7 @@ const TeacherDashboard = () => {
       setLoadingExport(false);
       message.success("Export thành công !");
     } catch (error) {
-      console.log(error);
+      setLoadingExport(false);
     }
   };
 

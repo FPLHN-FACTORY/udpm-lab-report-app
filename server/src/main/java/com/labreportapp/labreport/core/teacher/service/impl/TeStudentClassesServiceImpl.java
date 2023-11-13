@@ -207,8 +207,8 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
     @Transactional
     @Synchronized
     public List<StudentClasses> updateSentStudentClassesToClass(TeSentStudentClassRequest request) {
-        StringBuffer stringBuffer = new StringBuffer();
-        stringBuffer.append("Đã chuyển sinh viên: ");
+        StringBuilder message = new StringBuilder();
+        message.append("Đã chuyển sinh viên: ");
         Optional<Class> classSent = teClassRepository.findById(request.getIdClassSent());
         Optional<Class> classOld = teClassRepository.findById(request.getIdClassOld());
         if (!classSent.isPresent()) {
@@ -237,17 +237,21 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
                     studentClassesUp.add(studentSent);
                     listInforStudentClassesOld.forEach(infor -> {
                         if (id.equals(item.getStudentId()) && studentSent.getStudentId().equals(infor.getId())) {
-                            stringBuffer.append("" + infor.getName() + " - " + infor.getUserName() + ", ");
+                            message.append(" ").append(infor.getName()).append(" - ").append(infor.getUserName()).append(",");
                         }
                     });
                 }
             });
         });
+        if (message.length() > 0 && message.charAt(message.length() - 1) == ',') {
+            message.deleteCharAt(message.length() - 1);
+            message.append(".");
+        }
         String nameSemester = loggerUtil.getNameSemesterByIdClass(classOld.get().getId());
-        stringBuffer.append(" từ lớp " + classOld.get().getCode() + " qua lớp " + classSent.get().getCode());
-        loggerUtil.sendLogStreamClass(stringBuffer.toString() + " và cập nhật lại sĩ số từ "
+        message.append(" Từ lớp " + classOld.get().getCode() + " qua lớp " + classSent.get().getCode());
+        loggerUtil.sendLogStreamClass(message.toString() + " và cập nhật lại sĩ số từ "
                 + classSent.get().getClassSize() + " thành " + (classSent.get().getClassSize() + idStudents.size()), classSent.get().getCode(), nameSemester);
-        loggerUtil.sendLogStreamClass(stringBuffer.toString() + " và cập nhật lại sĩ số từ "
+        loggerUtil.sendLogStreamClass(message.toString() + " và cập nhật lại sĩ số từ "
                 + classOld.get().getClassSize() + " thành " + (classOld.get().getClassSize() - idStudents.size()), classOld.get().getCode(), nameSemester);
         Class sent = classSent.get();
         sent.setClassSize(sent.getClassSize() + idStudents.size());

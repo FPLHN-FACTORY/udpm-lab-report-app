@@ -142,10 +142,8 @@ public class TePointSeviceImpl implements TePointSevice {
 
         List<SimpleResponse> listInforStudent = teStudentClassesService.searchAllStudentByIdClass(request.getIdClass());
         StringBuilder message = new StringBuilder();
-        String codeClass = loggerUtil.getCodeClassByIdClass(request.getIdClass());
-        String nameSemester = loggerUtil.getNameSemesterByIdClass(request.getIdClass());
-
         if (listPointDB.size() <= 0) {
+            message.append("Đã thêm điểm giai đoạn 1, giai đoạn 2: ");
             listRequest.forEach(item -> {
                 Point point = new Point();
                 point.setStudentId(item.getIdStudent());
@@ -155,9 +153,17 @@ public class TePointSeviceImpl implements TePointSevice {
                 point.setFinalPoint((item.getCheckPointPhase1() + item.getCheckPointPhase2()) / 2);
                 point.setCreatedDate(new Date().getTime());
                 point.setLastModifiedDate(new Date().getTime());
+                listInforStudent.forEach(infor -> {
+                    if (infor.getId().equals(point.getStudentId())) {
+                        message.append(" ").append(infor.getName()).append(" - ").append(infor.getUserName())
+                                .append(" ( ").append(point.getCheckPointPhase1()).append(", ").append(point.getCheckPointPhase2()).append(" )").append(",");
+                    }
+                    System.err.println("aaaaaaaaaaaaa");
+                });
                 listPointAddOrUp.add(point);
             });
         } else {
+            message.append("Đã cập nhật điểm giai đoạn 1, giai đoạn 2: ");
             listPointDB.forEach(itemDB -> {
                 listRequest.forEach(item -> {
                     if (itemDB.getStudentId().equals(item.getIdStudent())) {
@@ -169,7 +175,16 @@ public class TePointSeviceImpl implements TePointSevice {
                         point.setCheckPointPhase2(item.getCheckPointPhase2());
                         point.setFinalPoint((item.getCheckPointPhase1() + item.getCheckPointPhase2()) / 2);
                         point.setCreatedDate(itemDB.getCreatedDate());
-                        point.setLastModifiedDate(itemDB.getLastModifiedDate());
+
+                        listInforStudent.forEach(infor -> {
+                            if (infor.getId().equals(item.getIdStudent())
+                                    && !itemDB.getCheckPointPhase1().equals(item.getCheckPointPhase1())
+                                    && !itemDB.getCheckPointPhase2().equals(item.getCheckPointPhase2())) {
+                                message.append(" ").append(infor.getName()).append(" - ").append(infor.getUserName()).
+                                        append(" từ ( ").append(itemDB.getCheckPointPhase1()).append(", ").append(itemDB.getCheckPointPhase2()).append(" )")
+                                        .append(" thành ( ").append(point.getCheckPointPhase1()).append(", ").append(point.getCheckPointPhase2()).append(" )").append(",");
+                            }
+                        });
                         listPointAddOrUp.add(point);
                     }
                 });
@@ -191,6 +206,14 @@ public class TePointSeviceImpl implements TePointSevice {
                 }
             });
         });
+        if (message.length() > 0 && message.charAt(message.length() - 1) == ',') {
+            message.deleteCharAt(message.length() - 1);
+            message.append(".");
+        }
+        System.err.println(message.toString());
+        String codeClass = loggerUtil.getCodeClassByIdClass(request.getIdClass());
+        String nameSemester = loggerUtil.getNameSemesterByIdClass(request.getIdClass());
+        loggerUtil.sendLogStreamClass(message.toString(), codeClass, nameSemester);
         tePointRepository.saveAll(listPointAddOrUp);
         teStudentClassesRepository.saveAll(listStudentClassUp);
         return getPointStudentByIdClass(request.getIdClass());

@@ -22,6 +22,10 @@ import {
   GetStudentClasses,
   SetStudentClasses,
 } from "../../../../../app/teacher/student-class/studentClassesSlice.reduce";
+import {
+  SetLoadingFalse,
+  SetLoadingTrue,
+} from "../../../../../app/common/Loading.reducer";
 
 const { Option } = Select;
 
@@ -136,18 +140,16 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
   };
   const create = () => {
     let check = 0;
-    console.log(dataTable);
-    if (dataTable.length === 1) {
-      if (dataTable[0] !== "1") {
-        if (dataTable[0].role === "1") {
-          message.error("Phải có 1 trưởng nhóm");
-          check++;
-        }
-      }
-    } else if (dataTable.length >= 2) {
-      const countTruongNhom = dataTable.filter((role) => role === "1").length;
-      if (countTruongNhom !== 1) {
-        message.error("Phải có 1 thành viên là trưởng nhóm !");
+    dispatch(SetLoadingTrue());
+    if (dataTable.length >= 1) {
+      const countRoleZero = dataTable.filter(
+        (item) => item.role === "0"
+      ).length;
+      if (countRoleZero === 0) {
+        message.error("Phải chỉ định 1 thành viên là trưởng nhóm !");
+        check++;
+      } else if (countRoleZero >= 2) {
+        message.error("Chỉ được chỉ định 1 thành viên là trưởng nhóm !");
         check++;
       }
     }
@@ -181,9 +183,14 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
           dispatch(CreateTeam(dataAddTable));
           setCheckDataStudent(true);
           cancelSuccess();
+          dispatch(SetLoadingFalse());
         },
-        (error) => {}
+        (error) => {
+          dispatch(SetLoadingFalse());
+        }
       );
+    } else {
+      dispatch(SetLoadingFalse());
     }
   };
   const columns = [
