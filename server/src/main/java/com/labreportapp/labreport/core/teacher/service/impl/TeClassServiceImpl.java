@@ -145,10 +145,10 @@ public class TeClassServiceImpl implements TeClassService {
         String message = "";
         if (request.getStatus() == 0) {
             message = CompareUtil.compareAndConvertMessage("trạng thái của lớp"
-                    , "Khóa ", "Mở ", "");
+                    , "\"Khóa\" ", "\"Mở\". ", "");
         } else {
             message = CompareUtil.compareAndConvertMessage("trạng thái của lớp"
-                    , "Mở ", "Khóa ", "");
+                    , "\"Mở\" ", "\"Khóa\". ", "");
         }
         loggerUtil.sendLogStreamClass(message, classFind.get().getCode(), nameSemester);
         classUp.setStatusClass(request.getStatus() == 0 ? StatusClass.OPEN : StatusClass.LOCK);
@@ -165,7 +165,7 @@ public class TeClassServiceImpl implements TeClassService {
         String nameSemester = loggerUtil.getNameSemesterByIdClass(classFind.get().getId());
         String passNew = generateRandomPassword();
         String message = CompareUtil.compareAndConvertMessage("mật khẩu của lớp "
-                , "`" + classFind.get().getPassword() + "`", "`" + passNew + "`", "");
+                , "\"" + classFind.get().getPassword() + "\"", "\"" + passNew + "\". ", "");
         loggerUtil.sendLogStreamClass(message, classFind.get().getCode(), nameSemester);
         Class classUp = classFind.get();
         classUp.setPassword(passNew);

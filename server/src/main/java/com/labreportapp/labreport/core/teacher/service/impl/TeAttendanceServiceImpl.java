@@ -141,13 +141,13 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
         if (meeting.isPresent()) {
             if (request.getNotes() != null) {
                 if (!request.getNotes().equals(meeting.get().getNotes()) && !request.getNotes().equals("")) {
-                    stringBuffer.append(" và cập nhật ghi chú là `" + request.getNotes().trim() + "`. ");
+                    stringBuffer.append(" và cập nhật ghi chú là \"" + request.getNotes().trim() + "\". ");
                 } else if (request.getNotes().equals("")) {
                     stringBuffer.append(" và xóa ghi chú buổi học.");
                 }
             } else {
                 if (!request.getNotes().equals("")) {
-                    stringBuffer.append(" và thêm ghi chú buổi học là `" + request.getNotes().trim() + ". ");
+                    stringBuffer.append(" và thêm ghi chú buổi học là \"" + request.getNotes().trim() + ". ");
                 }
             }
             Meeting meetingUp = meeting.get();
@@ -170,13 +170,15 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
             stringBufferCheckAbsent.deleteCharAt(stringBufferCheckAbsent.length() - 1);
         }
         if (countAbsent.get() > 0) {
-            stringBuffer.append(" Với số sinh viên nghỉ là " + countAbsent.get() + " - Gồm: " + stringBufferCheckAbsent.toString() + ". ");
+            stringBuffer.append(" Với số sinh viên nghỉ là ").append(countAbsent.get()).append(" - Gồm: ").append(stringBufferCheckAbsent.toString()).append(". ");
         } else {
             stringBuffer.append(" Với số sinh viên nghỉ là 0. ");
         }
         TeAttendanceMessageResponse teAttendanceMessageResponse = randomSetLeadToMember(listReturn, request.getIdMeeting(), stringBuffer);
         String nameSemester = loggerUtil.getNameSemesterByIdClass(request.getIdClass());
         loggerUtil.sendLogStreamClass(stringBuffer.toString(), request.getCodeClass(), nameSemester);
+        listInforStudent.clear();
+        listAttendance.clear();
         return teAttendanceMessageResponse;
     }
 

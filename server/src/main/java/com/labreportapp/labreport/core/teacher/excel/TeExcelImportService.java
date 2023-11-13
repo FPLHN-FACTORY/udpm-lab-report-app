@@ -59,6 +59,7 @@ public class TeExcelImportService {
             object.setSubjectTeam(String.valueOf(getCellValue(row.getCell(5))).trim());
             listTeam.add(object);
         }
+        reapExcelDataFile.getInputStream().close();
         return listTeam;
     }
 

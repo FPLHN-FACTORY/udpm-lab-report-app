@@ -74,6 +74,7 @@ import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -704,19 +705,25 @@ public class TeTeamsServiceImpl implements TeTeamsService {
                     }
                 }
             });
-            HashMap<String, StringBuffer> hashMap = new HashMap<>();
+            HashMap<String, StringBuilder> hashMap = new HashMap<>();
+            StringBuilder messageStudentNotTeam = new StringBuilder();
             if (checkValidate.get()) {
                 List<SimpleResponse> listInforStudent = teStudentClassesService.searchAllStudentByIdClass(idClass);
                 List<Team> listTeamDB = checkGetListTeam(listInput, idClass);
                 listTeamDB.forEach(team -> {
-                    StringBuffer stringBuffer = new StringBuffer();
-                    if (team.getSubjectName().equals("")) {
-                        stringBuffer.append(" Đã cập nhật `").append(team.getName()).append("` - Gồm:");
-                    } else {
-                        stringBuffer.append(" Đã cập nhật `").append(team.getName()).append("` với chủ đề `")
-                                .append(team.getSubjectName()).append("` - Gồm:");
+                    StringBuilder messTeam = new StringBuilder();
+                    String key = team.getName();
+                    if (hashMap.containsKey(key)) {
+                        hashMap.clear();
+                        hashMap.put(key, new StringBuilder().append(""));
                     }
-                    hashMap.put(team.getName(), stringBuffer);
+                    if (team.getSubjectName().equals("")) {
+                        messTeam.append("Đã cập nhật <strong style=\"color: red\">").append(team.getName()).append(" </strong> - Gồm:");
+                    } else {
+                        messTeam.append("Đã cập nhật <strong style=\"color: red\">").append(team.getName()).append("</strong> với chủ đề")
+                                .append(" <strong style=\"color: black\">").append(team.getSubjectName()).append("</strong> - Gồm:");
+                    }
+                    hashMap.put(key, messTeam);
                 });
                 ConcurrentHashMap<String, Team> mapTeam = new ConcurrentHashMap<>();
                 addDataTeam(mapTeam, listTeamDB);
@@ -729,49 +736,81 @@ public class TeTeamsServiceImpl implements TeTeamsService {
                     listInforStudent.forEach(infor -> {
                         if (infor.getId().equals(studentFind.getStudentId()) && teamFind != null) {
                             if (hashMap.containsKey(teamFind.getName())) {
-                                StringBuffer messageTeam = hashMap.get(teamFind.getName());
+                                StringBuilder messageTeam = hashMap.get(teamFind.getName());
                                 messageTeam.append(" ").append(infor.getName()).append(" - ").append(infor.getUserName());
                                 if (studentFind.getRole() == RoleTeam.LEADER) {
-                                    messageTeam.append(" trưởng nhóm");
+                                    messageTeam.append(" <i style=\"color: red\"> trưởng nhóm</i>");
                                 }
-                                messageTeam.append(",");
-
+                                messageTeam.append(" ,");
                             }
+                        } else if (infor.getId().equals(studentFind.getStudentId()) && teamFind == null) {
+                            messageStudentNotTeam.append(" ").append(infor.getName()).append(" - ").append(infor.getUserName()).append(" ,");
                         }
                     });
                     listStudentUp.add(studentFind);
                 });
+                listTeamDB.clear();
+                listInforStudent.clear();
+                mapTeam.clear();
             }
             if (teExcelResponseMessage.getStatus()) {
                 teStudentClassesRepository.saveAll(listStudentUp);
                 teExcelResponseMessage.setMessage("Import nhóm thành công !");
-
                 String codeClass = loggerUtil.getCodeClassByIdClass(idClass);
                 String nameSemester = loggerUtil.getNameSemesterByIdClass(idClass);
                 StringBuilder message = new StringBuilder();
-                Map<String, StringBuffer> sortedHashMap = new TreeMap<>(hashMap);
-//                Map<String, StringBuffer> sortedHashMap = new TreeMap<>(Comparator.comparingInt(key -> Integer.parseInt(key.substring(5))));
-                sortedHashMap.entrySet().stream().forEach(entry -> {
-                    String key = entry.getKey();
-                    StringBuffer value = entry.getValue();
+                Map<String, StringBuilder> sortedHashMap = sortHashMapByKey(hashMap);
+                sortedHashMap.forEach((key, value) -> {
                     if (value.length() > 0 && value.charAt(value.length() - 1) == ',') {
                         value.setCharAt(value.length() - 1, '.');
                     } else if (value.toString().endsWith("-Gồm")) {
                         int endIndex = value.length() - "-Gồm".length();
                         value.replace(endIndex, value.length(), ".");
                     }
-                    message.append(value);
+                    message.append(value.append("<br />"));
+                    hashMap.put(key, new StringBuilder().append(" "));
                 });
-                loggerUtil.sendLogStreamClass(message.toString(), codeClass, nameSemester);
+                if (messageStudentNotTeam.length() > 0 && messageStudentNotTeam.charAt(messageStudentNotTeam.length() - 1) == ',') {
+                    messageStudentNotTeam.setCharAt(messageStudentNotTeam.length() - 1, ' ');
+                    messageStudentNotTeam.append(" ").append(" <span style=\"color: red\">không có nhóm</span>.");
+                }
+                if (messageStudentNotTeam.isEmpty()) {
+                    loggerUtil.sendLogStreamClass(message.toString(), codeClass, nameSemester);
+                } else {
+                    loggerUtil.sendLogStreamClass(message.append(" Với ").append(messageStudentNotTeam.toString()).toString(), codeClass, nameSemester);
+                }
+
+
             } else {
                 teExcelResponseMessage.setMessage("Import nhóm thất bại. " + teExcelResponseMessage.getMessage());
             }
+            listInput.clear();
+            mapStudent.clear();
+            listTeamImportNew.clear();
+            hashMap.clear();
+            file.getInputStream().close();
             return teExcelResponseMessage;
         } catch (Exception e) {
             e.printStackTrace();
             teExcelResponseMessage.setStatus(false);
             teExcelResponseMessage.setMessage("Lỗi hệ thống, vui lòng F5 lại trang !");
             return teExcelResponseMessage;
+        }
+    }
+
+    private Map<String, StringBuilder> sortHashMapByKey(HashMap<String, StringBuilder> unsortedMap) {
+        Map<String, StringBuilder> sortedMap = new TreeMap<>(new KeyComparator());
+        sortedMap.putAll(unsortedMap);
+        unsortedMap.clear();
+        return sortedMap;
+    }
+
+    private static class KeyComparator implements Comparator<String> {
+        @Override
+        public int compare(String key1, String key2) {
+            int num1 = Integer.parseInt(key1.replaceAll("\\D", ""));
+            int num2 = Integer.parseInt(key2.replaceAll("\\D", ""));
+            return Integer.compare(num1, num2);
         }
     }
 
@@ -852,6 +891,7 @@ public class TeTeamsServiceImpl implements TeTeamsService {
                 .filter(team -> !filteredList.stream().anyMatch(student -> student.getNameTeam().equalsIgnoreCase(team.getName())))
                 .collect(Collectors.toList());
         teTeamsRepositoty.deleteAll(missingTeams);
+        listInput.clear();
         return teTeamsRepositoty.getTeamByClassId(idClass);
     }
 
@@ -915,10 +955,10 @@ public class TeTeamsServiceImpl implements TeTeamsService {
 //        }
 //}
 
-    private void addDataMemberProject(ConcurrentHashMap<String, MemberProject> map, String idProject) {
-        List<MemberProject> listMember = teMemberProjectRepository.findMemberProjectByProjectId(idProject);
-        getAllPutAllMemberProject(map, listMember);
-    }
+//    private void addDataMemberProject(ConcurrentHashMap<String, MemberProject> map, String idProject) {
+//        List<MemberProject> listMember = teMemberProjectRepository.findMemberProjectByProjectId(idProject);
+//        getAllPutAllMemberProject(map, listMember);
+//    }
 
     private void getAllPutAllMemberProject
             (ConcurrentHashMap<String, MemberProject> map, List<MemberProject> list) {
@@ -937,6 +977,7 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         for (StudentClasses student : list) {
             map.put(student.getEmail(), student);
         }
+        list.clear();
     }
 
     private void addDataTeam(ConcurrentHashMap<String, Team> mapTeam, List<Team> listTeam) {
@@ -947,5 +988,6 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         for (Team team : listTeam) {
             mapTeam.put(team.getName(), team);
         }
+        listTeam.clear();
     }
 }

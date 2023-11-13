@@ -86,6 +86,7 @@ public class TeTeamsController {
     @PostMapping("/import-excel/{idClass}")
     public ResponseObject importListExcel(@RequestParam("multipartFile") MultipartFile multipartFile, @PathVariable("idClass") String idClass) throws IOException {
         TeExcelResponseMessage teExcelResponseMessage = teTeamsService.importExcelTeam(multipartFile, idClass);
+
         return new ResponseObject(teExcelResponseMessage);
     }
 }

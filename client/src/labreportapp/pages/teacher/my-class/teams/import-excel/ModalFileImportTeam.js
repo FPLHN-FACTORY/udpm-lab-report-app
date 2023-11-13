@@ -1,11 +1,16 @@
 import { Button, Input, Modal, message } from "antd";
 import { TeacherExcelTeamAPI } from "../../../../../api/teacher/teams-class/excel/TeacherExcelTeam.api";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import { useAppDispatch } from "../../../../../app/hook";
+import {
+  SetLoadingFalse,
+  SetLoadingTrue,
+} from "../../../../../app/common/Loading.reducer";
 
 const ModalFileImport = ({ visible, onCancel, idClass, fetchData }) => {
   const [inputFileKey, setInputFileKey] = useState(0);
   const [selectedFile, setSelectedFile] = useState(null);
+  const dispatch = useAppDispatch();
   useEffect(() => {
     if (visible) {
       setSelectedFile(null);
@@ -25,22 +30,28 @@ const ModalFileImport = ({ visible, onCancel, idClass, fetchData }) => {
   };
   const handleImport = async () => {
     if (!selectedFile) {
-      toast.warning("Vui lòng chọn file excel trước khi import !");
+      message.warning("Vui lòng chọn file excel trước khi import !");
       return;
     }
+    dispatch(SetLoadingTrue());
     const formData = new FormData();
     formData.append("multipartFile", selectedFile);
-    await TeacherExcelTeamAPI.import(formData, idClass).then((response) => {
-      onCancel();
-      if (response.data.data.status === true) {
-        fetchData(idClass);
-        message.success(response.data.data.message);
-      } else {
-        message.error(response.data.data.message);
-      }
-      setSelectedFile(null);
-      setInputFileKey((prevKey) => prevKey + 1);
-    });
+    try {
+      await TeacherExcelTeamAPI.import(formData, idClass).then((response) => {
+        if (response.data.data.status === true) {
+          fetchData(idClass);
+          message.success(response.data.data.message);
+        } else {
+          message.error(response.data.data.message);
+        }
+        setSelectedFile(null);
+        setInputFileKey((prevKey) => prevKey + 1);
+        onCancel();
+        dispatch(SetLoadingFalse());
+      });
+    } catch (error) {
+      dispatch(SetLoadingFalse());
+    }
   };
   return (
     <>

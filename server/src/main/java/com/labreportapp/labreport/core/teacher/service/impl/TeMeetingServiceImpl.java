@@ -256,16 +256,16 @@ public class TeMeetingServiceImpl implements TeMeetingService {
                     note = objectNote.get().getDescriptions();
                 }
                 if (!request.getDescriptionsNote().equals("") && note.equals("")) {
-                    stringNote.append("Đã thêm nhận xét (").append(nameMeeting).append(" - ").append(nameTeam).append(") là `").append(request.getDescriptionsNote()).append("`. ");
+                    stringNote.append("Đã thêm nhận xét (").append(nameMeeting).append(" - ").append(nameTeam).append(") là \"").append(request.getDescriptionsNote()).append("\". ");
                 } else if (!request.getDescriptionsNote().equals("") && !request.getDescriptionsNote().equals(note)) {
-                    stringNote.append("Đã cập nhật nhận xét (").append(nameMeeting).append(" - ").append(nameTeam).append(") từ `").append(objectNote.get().getDescriptions()).append("` thành `").append(request.getDescriptionsNote()).append("`. ");
+                    stringNote.append("Đã cập nhật nhận xét (").append(nameMeeting).append(" - ").append(nameTeam).append(") từ \"").append(objectNote.get().getDescriptions()).append("\" thành \"").append(request.getDescriptionsNote()).append("\". ");
                 } else if (request.getDescriptionsNote().equals("") && !note.equals("")) {
                     stringNote.append("Đã xóa nhận xét (").append(nameMeeting).append(" - ").append(nameTeam).append("). ");
                 }
             }
         } else {
             if (!request.getDescriptionsNote().equals("")) {
-                stringNote.append("Đã thêm nhận xét (").append(nameMeeting).append(" - ").append(nameTeam).append(") là `").append(request.getDescriptionsNote()).append("`. ");
+                stringNote.append("Đã thêm nhận xét (").append(nameMeeting).append(" - ").append(nameTeam).append(") là \"").append(request.getDescriptionsNote()).append("\". ");
             }
         }
         teNoteRepository.save(noteNew);
@@ -283,16 +283,16 @@ public class TeMeetingServiceImpl implements TeMeetingService {
                     homeW = objectHW.get().getDescriptions();
                 }
                 if (!request.getDescriptionsHomeWork().equals("") && homeW.equals("")) {
-                    stringHw.append("Đã thêm bài tập về nhà (").append(nameMeeting).append(" - ").append(nameTeam).append(") là `").append(request.getDescriptionsHomeWork()).append("`. ");
+                    stringHw.append("Đã thêm bài tập về nhà (").append(nameMeeting).append(" - ").append(nameTeam).append(") là \"").append(request.getDescriptionsHomeWork()).append("\". ");
                 } else if (!request.getDescriptionsHomeWork().equals("") && !request.getDescriptionsHomeWork().equals(homeW)) {
-                    stringHw.append("Đã cập nhật bài tập về nhà (").append(nameMeeting).append(" - ").append(nameTeam).append(") từ `").append(homeW).append("` thành `").append(request.getDescriptionsHomeWork()).append("`. ");
+                    stringHw.append("Đã cập nhật bài tập về nhà (").append(nameMeeting).append(" - ").append(nameTeam).append(") từ \"").append(homeW).append("\" thành \"").append(request.getDescriptionsHomeWork()).append("\". ");
                 } else if (request.getDescriptionsHomeWork().equals("") && !homeW.equals("")) {
                     stringHw.append("Đã xóa bài tập về nhà (").append(nameMeeting).append(" - ").append(nameTeam).append("). ");
                 }
             }
         } else {
             if (!request.getDescriptionsHomeWork().equals("")) {
-                stringHw.append("Đã thêm bài tập về nhà (").append(nameMeeting).append(" - ").append(nameTeam).append(") là `").append(request.getDescriptionsHomeWork()).append("`. ");
+                stringHw.append("Đã thêm bài tập về nhà (").append(nameMeeting).append(" - ").append(nameTeam).append(") là \"").append(request.getDescriptionsHomeWork()).append("\". ");
             }
         }
         teHomeWorkRepository.save(homeWorkNew);
@@ -310,16 +310,16 @@ public class TeMeetingServiceImpl implements TeMeetingService {
                     report = objectReport.get().getDescriptions();
                 }
                 if (!request.getDescriptionsReport().equals("") && report.equals("")) {
-                    stringReport.append("Đã thêm báo cáo (").append(nameMeeting).append(" - ").append(nameTeam).append(") là `").append(request.getDescriptionsReport()).append("`. ");
+                    stringReport.append("Đã thêm báo cáo (").append(nameMeeting).append(" - ").append(nameTeam).append(") là \"").append(request.getDescriptionsReport()).append("\". ");
                 } else if (!request.getDescriptionsReport().equals("") && !request.getDescriptionsReport().equals(report)) {
-                    stringReport.append("Đã cập nhật báo cáo (").append(nameMeeting).append(" - ").append(nameTeam).append(") từ `").append(objectReport.get().getDescriptions()).append("` thành `").append(request.getDescriptionsReport()).append("`. ");
+                    stringReport.append("Đã cập nhật báo cáo (").append(nameMeeting).append(" - ").append(nameTeam).append(") từ \"").append(objectReport.get().getDescriptions()).append("\" thành \"").append(request.getDescriptionsReport()).append("\". ");
                 } else if (request.getDescriptionsReport().equals("") && !report.equals("")) {
                     stringReport.append("Đã xóa báo cáo (").append(nameMeeting).append(" - ").append(nameTeam).append("). ");
                 }
             }
         } else {
             if (!request.getDescriptionsReport().equals("")) {
-                stringReport.append("Đã thêm báo báo (").append(nameMeeting).append(" - ").append(nameTeam).append(") là `").append(request.getDescriptionsReport()).append("`. ");
+                stringReport.append("Đã thêm báo báo (").append(nameMeeting).append(" - ").append(nameTeam).append(") là \"").append(request.getDescriptionsReport()).append("\". ");
             }
         }
         teReportRepository.save(reportNew);
@@ -374,11 +374,11 @@ public class TeMeetingServiceImpl implements TeMeetingService {
             listMeetingToday.forEach(db -> {
                 if (db.getIdMeeting().equals(item.getIdMeeting())) {
                     if (!item.getMeetingAddress().equals(db.getMeetingAddress()) && item.getMeetingAddress() != null && !item.getMeetingAddress().equals("") && !db.getMeetingAddress().equals("")) {
-                        stringBuffer.append("Đã cập nhật link học trực truyến " + db.getMeetingName() + " từ `" + db.getMeetingAddress() + "` thành `" + item.getMeetingAddress().trim() + "`. ");
+                        stringBuffer.append("Đã cập nhật link học trực truyến " + db.getMeetingName() + " từ \"" + db.getMeetingAddress() + "\" thành \"" + item.getMeetingAddress().trim() + "\". ");
                         loggerUtil.sendLogStreamClass(stringBuffer.toString(),
                                 item.getCodeClass(), nameSemester);
                     } else if (db.getMeetingAddress().equals("") && !item.getMeetingAddress().equals("")) {
-                        stringBuffer.append("Đã thêm link học trực truyến " + db.getMeetingName() + " là `" + item.getMeetingAddress().trim() + "`. ");
+                        stringBuffer.append("Đã thêm link học trực truyến " + db.getMeetingName() + " là \"" + item.getMeetingAddress().trim() + "\". ");
                         loggerUtil.sendLogStreamClass(stringBuffer.toString(),
                                 item.getCodeClass(), nameSemester);
                     } else if (item.getMeetingAddress().equals("")) {
@@ -415,6 +415,7 @@ public class TeMeetingServiceImpl implements TeMeetingService {
                         Comparator.nullsLast(Comparator.naturalOrder()))
                         .thenComparing(TeMeetingCustomToAttendanceResponse::getMeetingPeriod))
                 .collect(Collectors.toList());
+        list.clear();
         return sortedList;
     }
 
@@ -425,6 +426,7 @@ public class TeMeetingServiceImpl implements TeMeetingService {
             return null;
         }
         List<TeMeetingCustomToAttendanceResponse> listReturn = sortASCListAttendanceObj(listMeeting);
+        listMeeting.clear();
         return listReturn;
     }
 

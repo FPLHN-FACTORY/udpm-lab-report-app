@@ -29,7 +29,7 @@ const TeModalShowHistory = ({ visible, onCancel, classDetail }) => {
       dataIndex: "content",
       key: "content",
       render: (text) => {
-        return <div>{text}</div>;
+        return <div dangerouslySetInnerHTML={{ __html: text }}></div>;
       },
     },
   ];

@@ -156,9 +156,8 @@ public class TePointSeviceImpl implements TePointSevice {
                 listInforStudent.forEach(infor -> {
                     if (infor.getId().equals(point.getStudentId())) {
                         message.append(" ").append(infor.getName()).append(" - ").append(infor.getUserName())
-                                .append(" ( ").append(point.getCheckPointPhase1()).append(", ").append(point.getCheckPointPhase2()).append(" )").append(",");
+                                .append(" ( ").append(point.getCheckPointPhase1()).append(" và ").append(point.getCheckPointPhase2()).append(" )").append(",");
                     }
-                    System.err.println("aaaaaaaaaaaaa");
                 });
                 listPointAddOrUp.add(point);
             });
@@ -181,8 +180,8 @@ public class TePointSeviceImpl implements TePointSevice {
                                     && !itemDB.getCheckPointPhase1().equals(item.getCheckPointPhase1())
                                     && !itemDB.getCheckPointPhase2().equals(item.getCheckPointPhase2())) {
                                 message.append(" ").append(infor.getName()).append(" - ").append(infor.getUserName()).
-                                        append(" từ ( ").append(itemDB.getCheckPointPhase1()).append(", ").append(itemDB.getCheckPointPhase2()).append(" )")
-                                        .append(" thành ( ").append(point.getCheckPointPhase1()).append(", ").append(point.getCheckPointPhase2()).append(" )").append(",");
+                                        append(" từ ( ").append(itemDB.getCheckPointPhase1()).append(" và ").append(itemDB.getCheckPointPhase2()).append(" )")
+                                        .append(" thành ( ").append(point.getCheckPointPhase1()).append(" và ").append(point.getCheckPointPhase2()).append(" )").append(",");
                             }
                         });
                         listPointAddOrUp.add(point);
@@ -210,12 +209,17 @@ public class TePointSeviceImpl implements TePointSevice {
             message.deleteCharAt(message.length() - 1);
             message.append(".");
         }
-        System.err.println(message.toString());
         String codeClass = loggerUtil.getCodeClassByIdClass(request.getIdClass());
         String nameSemester = loggerUtil.getNameSemesterByIdClass(request.getIdClass());
         loggerUtil.sendLogStreamClass(message.toString(), codeClass, nameSemester);
         tePointRepository.saveAll(listPointAddOrUp);
         teStudentClassesRepository.saveAll(listStudentClassUp);
+        listInforStudent.clear();
+        listPointAddOrUp.clear();
+        listPointDB.clear();
+        listRequest.clear();
+        listStudentClass.clear();
+        listStudentClassUp.clear();
         return getPointStudentByIdClass(request.getIdClass());
 
     }
