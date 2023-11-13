@@ -7,6 +7,10 @@ import { AddSemester } from "../../../../app/admin/AdSemester.reducer";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAppDispatch } from "../../../../app/hook";
+import {
+  SetLoadingFalse,
+  SetLoadingTrue,
+} from "../../../../app/common/Loading.reducer";
 
 const ModalCreateSemester = ({ visible, onCancel }) => {
   const [name, setName] = useState("");
@@ -119,6 +123,7 @@ const ModalCreateSemester = ({ visible, onCancel }) => {
     }
 
     if (check === 0) {
+      dispatch(SetLoadingTrue());
       let obj = {
         name: name,
         startTime: moment(startTime, "YYYY-MM-DD").valueOf(),
@@ -131,6 +136,7 @@ const ModalCreateSemester = ({ visible, onCancel }) => {
         (response) => {
           message.success("Thêm thành công!");
           dispatch(AddSemester(response.data.data));
+          dispatch(SetLoadingFalse());
           onCancel();
         },
         (error) => {}

@@ -6,6 +6,10 @@ import { UpdateLevel } from "../../../../app/admin/AdLevelManager.reducer";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAppDispatch } from "../../../../app/hook";
+import {
+  SetLoadingFalse,
+  SetLoadingTrue,
+} from "../../../../app/common/Loading.reducer";
 
 const ModalUpdateLevel = ({ visible, onCancel, level }) => {
   const [name, setName] = useState("");
@@ -39,6 +43,7 @@ const ModalUpdateLevel = ({ visible, onCancel, level }) => {
     }
 
     if (check === 0) {
+      dispatch(SetLoadingTrue());
       let obj = {
         id: level.id,
         name: name,
@@ -48,6 +53,7 @@ const ModalUpdateLevel = ({ visible, onCancel, level }) => {
         (response) => {
           message.success("Cập nhật thành công!");
           dispatch(UpdateLevel(response.data.data));
+          dispatch(SetLoadingFalse());
           onCancel();
         },
         (error) => {}

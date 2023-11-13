@@ -89,6 +89,9 @@ import AdProjectStatistics from "./labreportapp/pages/admin/project-statistics/A
 import TeacherFeedBack from "./labreportapp/pages/teacher/feed-back/TeacherFeedBack";
 import AdminFeedback from "./labreportapp/pages/admin/feedback/AdminFeedback";
 import AdminTeacherDashboard from "./labreportapp/pages/admin/admin-teacher-dashboard/AdminTeacherDashboard";
+import LoadingIndicatorNoOverlay from "./labreportapp/helper/loadingNoOverlay";
+import { useAppSelector } from "./labreportapp/app/hook";
+import { GetLoading } from "./labreportapp/app/common/Loading.reducer";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -152,9 +155,12 @@ function App() {
     });
   }
 
+  const loadingNoOverLay = useAppSelector(GetLoading);
+
   return (
     <div className="App scroll-smooth md:scroll-auto">
       <ToastContainer />
+      {loadingNoOverLay && <LoadingIndicatorNoOverlay />}
       <BrowserRouter basename={AppConfig.routerBase}>
         <Suspense>
           <Routes>
@@ -181,7 +187,9 @@ function App() {
 
             <Route
               path="/admin"
-              element={<Navigate replace to="/admin/factory-deployment-statistics" />}
+              element={
+                <Navigate replace to="/admin/factory-deployment-statistics" />
+              }
             />
             <Route
               path="/role-selection"

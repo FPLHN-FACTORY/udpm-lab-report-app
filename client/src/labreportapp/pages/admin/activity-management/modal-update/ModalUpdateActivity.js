@@ -9,6 +9,7 @@ import { Option } from "antd/es/mentions";
 import moment from "moment";
 import dayjs from "dayjs";
 import "dayjs/locale/zh-cn";
+import { SetLoadingFalse, SetLoadingTrue } from "../../../../app/common/Loading.reducer";
 
 const ModalUpdateActivity = ({
   visible,
@@ -125,6 +126,7 @@ const ModalUpdateActivity = ({
     }
     
     if (check === 0) {
+      dispatch(SetLoadingTrue());
       let obj = {
         id: activity.id,
         code: code,
@@ -145,6 +147,7 @@ const ModalUpdateActivity = ({
             levelText: levelNameItem.name,
           };
           dispatch(UpdateActivityManagement(objUpdate));
+          dispatch(SetLoadingFalse());
           onCancel();
         },
         (error) => {}

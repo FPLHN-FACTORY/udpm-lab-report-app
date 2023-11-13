@@ -7,6 +7,10 @@ import { UpdateSemester } from "../../../../app/admin/AdSemester.reducer";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAppDispatch } from "../../../../app/hook";
+import {
+  SetLoadingFalse,
+  SetLoadingTrue,
+} from "../../../../app/common/Loading.reducer";
 
 const ModalUpdateSemester = ({ visible, onCancel, semester }) => {
   const [name, setName] = useState("");
@@ -127,6 +131,7 @@ const ModalUpdateSemester = ({ visible, onCancel, semester }) => {
     }
 
     if (check === 0) {
+      dispatch(SetLoadingTrue());
       let obj = {
         id: semester.id,
         name: name,
@@ -140,6 +145,7 @@ const ModalUpdateSemester = ({ visible, onCancel, semester }) => {
         (response) => {
           message.success("Cập nhật thành công!");
           dispatch(UpdateSemester(response.data.data));
+          dispatch(SetLoadingFalse());
           onCancel();
         },
         (error) => {}

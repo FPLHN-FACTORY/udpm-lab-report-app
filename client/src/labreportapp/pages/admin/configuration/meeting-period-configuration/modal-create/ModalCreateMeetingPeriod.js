@@ -5,6 +5,10 @@ import { AddMeetingPeriodConfiguration } from "../../../../../app/admin/AdMeetin
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAppDispatch } from "../../../../../app/hook";
+import {
+  SetLoadingFalse,
+  SetLoadingTrue,
+} from "../../../../../app/common/Loading.reducer";
 
 const ModalCreateMeetingPeriod = ({ visible, onCancel }) => {
   const [name, setName] = useState("");
@@ -133,6 +137,7 @@ const ModalCreateMeetingPeriod = ({ visible, onCancel }) => {
     }
 
     if (check === 0) {
+      dispatch(SetLoadingTrue());
       let obj = {
         name: name,
         startHour: startHour,
@@ -145,6 +150,7 @@ const ModalCreateMeetingPeriod = ({ visible, onCancel }) => {
         (response) => {
           message.success("Thêm Ca thành công!");
           dispatch(AddMeetingPeriodConfiguration(response.data.data));
+          dispatch(SetLoadingFalse());
           onCancel();
         },
         (error) => {}

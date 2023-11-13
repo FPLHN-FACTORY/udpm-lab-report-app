@@ -110,7 +110,7 @@ const SidebarStudentComponent = ({ collapsed, toggleCollapsed }) => {
           <Link to="/student/attendance">Điểm danh</Link>
         </Menu.Item>
         <Menu.Item
-          key="/student/poin"
+          key="/student/point"
           className="menu_custom"
           icon={
             <FontAwesomeIcon

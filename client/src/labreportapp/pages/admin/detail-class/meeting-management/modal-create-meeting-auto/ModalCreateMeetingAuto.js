@@ -9,8 +9,15 @@ import { useAppDispatch, useAppSelector } from "../../../../../app/hook";
 import { GetAdTeacher } from "../../../../../app/admin/AdTeacherSlice.reducer";
 import moment from "moment";
 import { MeetingManagementAPI } from "../../../../../api/admin/meeting-management/MeetingManagementAPI";
-import { convertHourAndMinuteToString, convertMeetingPeriodToTime } from "../../../../../helper/util.helper";
+import {
+  convertHourAndMinuteToString,
+  convertMeetingPeriodToTime,
+} from "../../../../../helper/util.helper";
 import { GetAdMeetingPeriod } from "../../../../../app/admin/AdMeetingPeriodSlice.reducer";
+import {
+  SetLoadingFalse,
+  SetLoadingTrue,
+} from "../../../../../app/common/Loading.reducer";
 
 const { Option } = Select;
 
@@ -111,6 +118,7 @@ const ModalCreateMeetingAuto = ({ visible, onCancel, fetchData }) => {
     }
 
     if (check === 0) {
+      dispatch(SetLoadingTrue());
       let obj = {
         meetingDate: moment(meetingDate, "YYYY-MM-DD").valueOf(),
         meetingPeriod: meetingPeriod,
@@ -121,6 +129,7 @@ const ModalCreateMeetingAuto = ({ visible, onCancel, fetchData }) => {
         numberDay: parseInt(numberDay),
       };
       MeetingManagementAPI.createMeetingAuto(obj).then((response) => {
+        dispatch(SetLoadingFalse());
         fetchData();
         onCancel();
       });
@@ -171,20 +180,20 @@ const ModalCreateMeetingAuto = ({ visible, onCancel, fetchData }) => {
                 }}
                 style={{ width: "100%" }}
               >
-              <Option value="">Chọn ca học dự kiến</Option>
-              {dataMeetingPeriod.map((item) => {
-                return (
-                  <Option value={item.id} key={item.id}>
-                    {item.name} -{" "}
-                    {convertHourAndMinuteToString(
-                      item.startHour,
-                      item.startMinute,
-                      item.endHour,
-                      item.endMinute
-                    )}
-                  </Option>
-                );
-              })}
+                <Option value="">Chọn ca học dự kiến</Option>
+                {dataMeetingPeriod.map((item) => {
+                  return (
+                    <Option value={item.id} key={item.id}>
+                      {item.name} -{" "}
+                      {convertHourAndMinuteToString(
+                        item.startHour,
+                        item.startMinute,
+                        item.endHour,
+                        item.endMinute
+                      )}
+                    </Option>
+                  );
+                })}
               </Select>{" "}
               <span style={{ color: "red" }}>{errorMeetingPeriod}</span>
             </Col>

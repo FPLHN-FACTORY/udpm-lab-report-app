@@ -8,6 +8,10 @@ import { useAppDispatch } from "../../../../../app/hook";
 import TextArea from "antd/es/input/TextArea";
 import moment from "moment";
 import { parseInt } from "lodash";
+import {
+  SetLoadingFalse,
+  SetLoadingTrue,
+} from "../../../../../app/common/Loading.reducer";
 
 const { Option } = Select;
 
@@ -55,12 +59,12 @@ const ModalCreateRoleFactory = ({ visible, onCancel }) => {
         descriptions: descriptions,
         roleDefault: parseInt(status),
       };
-
+      dispatch(SetLoadingTrue());
       AdRoleFactoryAPI.addRoleFactory(obj).then(
         (response) => {
           message.success("Thêm vai trò thành công!");
           dispatch(AddRoleFactory(response.data.data));
-      
+          dispatch(SetLoadingFalse());
           onCancel();
         },
         (error) => {}

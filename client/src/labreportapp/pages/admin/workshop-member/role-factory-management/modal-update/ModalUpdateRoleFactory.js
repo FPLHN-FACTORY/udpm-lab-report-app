@@ -7,6 +7,10 @@ import "react-toastify/dist/ReactToastify.css";
 import { useAppDispatch } from "../../../../../app/hook";
 import TextArea from "antd/es/input/TextArea";
 import moment from "moment";
+import {
+  SetLoadingFalse,
+  SetLoadingTrue,
+} from "../../../../../app/common/Loading.reducer";
 
 const { Option } = Select;
 
@@ -61,11 +65,12 @@ const ModalUpdateRoleFactory = ({ visible, onCancel, roleFactory }) => {
         descriptions: descriptions,
         roleDefault: parseInt(status),
       };
-
+      dispatch(SetLoadingTrue());
       AdRoleFactoryAPI.updateRoleFactory(obj, roleFactory.id).then(
         (response) => {
           message.success("Cập nhật thành công!");
           dispatch(UpdateRoleFactory(response.data.data));
+          dispatch(SetLoadingFalse());
           onCancel();
         },
         (error) => {}

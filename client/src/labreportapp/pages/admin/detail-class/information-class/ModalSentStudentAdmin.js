@@ -21,6 +21,10 @@ import {
 } from "../../../../app/teacher/student-class/studentClassesSlice.reduce";
 import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import { convertHourAndMinuteToString } from "../../../../helper/util.helper";
+import {
+  SetLoadingFalse,
+  SetLoadingTrue,
+} from "../../../../app/common/Loading.reducer";
 
 const ModalSentStudent = ({
   visible,
@@ -93,6 +97,7 @@ const ModalSentStudent = ({
         idClassSent: idClassSent,
         idClassOld: classDetail.id,
       };
+      dispatch(SetLoadingTrue());
       await ClassAPI.sentStudentClassesToClass(dataSent).then((response) => {
         if (response.data.data) {
           message.success("Trao đổi sinh viên thành công !");
@@ -115,6 +120,7 @@ const ModalSentStudent = ({
             dispatch(SetStudentClasses(objFilter));
           }
           onCancel();
+          dispatch(SetLoadingFalse());
         } else {
           onCancel();
           message.error("Trao đổi sinh viên thất bại !");

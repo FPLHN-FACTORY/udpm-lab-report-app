@@ -26,6 +26,10 @@ import { AdPotalsMemberFactoryAPI } from "../../../../../../portalprojects/api/a
 import Image from "../../../../../helper/img/Image";
 import { CategoryProjectManagementAPI } from "../../../../../../portalprojects/api/admin/project-management/categoryProjectManagement.api";
 import { CreateAddProjectToAdDetailGroupProject } from "../../../../../app/admin/AdDetailGroupProjectSlice.reducer";
+import {
+  SetLoadingFalse,
+  SetLoadingTrue,
+} from "../../../../../app/common/Loading.reducer";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 const { TextArea } = Input;
@@ -242,11 +246,13 @@ const ModalCreateProjectGroup = ({ visible, onCancel, nameGroup }) => {
         listMembers: listMemberProjects,
         listCategorysId: listCategorysChange,
       };
+      dispatch(SetLoadingTrue());
       ProjectManagementAPI.createProject(projectNew).then(
         (respone) => {
           message.success("Thêm thành công !");
           let data = respone.data.data;
           dispatch(CreateAddProjectToAdDetailGroupProject(data));
+          dispatch(SetLoadingFalse());
           cancelSuccess();
         },
         (error) => {

@@ -15,6 +15,10 @@ import { toast } from "react-toastify";
 import { ActivityManagementAPI } from "../../../../api/admin/activity-management/activityManagement.api";
 import { CreateActivityManagement } from "../../../../app/admin/activity-management/activityManagementSlice.reducer";
 import { Option } from "antd/es/mentions";
+import {
+  SetLoadingFalse,
+  SetLoadingTrue,
+} from "../../../../app/common/Loading.reducer";
 
 const ModalCreateActivity = ({
   visible,
@@ -118,6 +122,8 @@ const ModalCreateActivity = ({
       check++;
     }
     if (check === 0) {
+      dispatch(SetLoadingTrue());
+
       let obj = {
         name: name,
         code: code,
@@ -138,8 +144,8 @@ const ModalCreateActivity = ({
             levelNameItem: levelNameItem.name,
           };
           dispatch(CreateActivityManagement(objCreate));
+          dispatch(SetLoadingFalse());
           onCancel();
-          fetchData();
         },
         (error) => {}
       );
