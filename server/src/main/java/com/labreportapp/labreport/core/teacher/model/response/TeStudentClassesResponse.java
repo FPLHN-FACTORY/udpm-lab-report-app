@@ -25,9 +25,6 @@ public interface TeStudentClassesResponse {
     @Value("#{target.idTeam}")
     String getIdTeam();
 
-    @Value("#{target.codeTeam}")
-    String getCodeTeam();
-
     @Value("#{target.nameTeam}")
     String getNameTeam();
 

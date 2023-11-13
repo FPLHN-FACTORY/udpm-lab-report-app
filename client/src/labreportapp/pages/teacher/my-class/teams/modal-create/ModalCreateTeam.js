@@ -26,9 +26,6 @@ import {
 const { Option } = Select;
 
 const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
-  const [code, setCode] = useState("");
-  const [name, setName] = useState("");
-  const [errorName, setErrorName] = useState("");
   const [subjectName, setSubjectName] = useState("");
   const [errorMembers, setErrorMembers] = useState("");
   const [listStudentMulty, setListStudentMulty] = useState([]);
@@ -48,13 +45,8 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
   };
   useEffect(() => {
     if (visible === true) {
-      setErrorMembers("");
       setSubjectName("");
-      setErrorName("");
       setVisitedCreate(true);
-      setSubjectName("");
-      setCode("");
-      setName("");
       setListStudentMulty([]);
       setListStudentClass([]);
       setListStudentsChange([]);
@@ -62,6 +54,7 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
       fetchData(idClass);
     }
   }, [visible]);
+
   useEffect(() => {
     if (visitedCreate === false) {
       fetchData(idClass);
@@ -100,9 +93,7 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
       );
       setListStudentClass(listNotTeams);
       setVisitedCreate(false);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   const featInforStudent = async () => {
     setLoading(false);
@@ -112,9 +103,7 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
       );
       setListStudentMulty(listNotFilter);
       setLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   const featchDataTable = () => {
     const list = dataStudentClasses
@@ -126,9 +115,11 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
       });
     setDataTable(list);
   };
+
   const handleChangeStudents = (idStudent) => {
     setListStudentsChange(idStudent);
   };
+
   const handleRoleChange = (id, value) => {
     let updatedListInfo = dataTable.map((record) => {
       if (record.idStudent === id) {
@@ -145,12 +136,24 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
   };
   const create = () => {
     let check = 0;
+    console.log(dataTable);
+    if (dataTable.length === 1) {
+      if (dataTable[0] !== "1") {
+        if (dataTable[0].role === "1") {
+          message.error("Phải có 1 trưởng nhóm");
+          check++;
+        }
+      }
+    } else if (dataTable.length >= 2) {
+      const countTruongNhom = dataTable.filter((role) => role === "1").length;
+      if (countTruongNhom !== 1) {
+        message.error("Phải có 1 thành viên là trưởng nhóm !");
+        check++;
+      }
+    }
     if (check === 0) {
-      featchDataTable();
       let teamNew = {
-        code: code,
-        name: name,
-        classId: idClass + ``,
+        classId: idClass,
         subjectName: subjectName,
         listStudentClasses: dataTable,
       };
@@ -169,7 +172,6 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
             if (matchedAddedItem != null) {
               return {
                 ...matchedAddedItem,
-                codeTeam: teamNew.code,
                 idTeam: data.id,
               };
             }
@@ -190,13 +192,12 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
       dataIndex: "stt",
       key: "stt",
       render: (text, record, index) => index + 1,
-      width: "7%",
+      align: "center",
     },
     {
       title: "Họ và tên",
       dataIndex: "name",
       key: "name",
-      width: 250,
       sorter: (a, b) => a.name.localeCompare(b.name),
       render: (text, record) => {
         return (
@@ -210,7 +211,6 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
       title: "Email",
       dataIndex: "email",
       key: "email",
-      width: "25%",
       sorter: (a, b) => a.email.localeCompare(b.email),
       sortDirections: ["ascend", "descend"],
     },
@@ -218,7 +218,7 @@ const ModalCreateTeam = ({ visible, onCancel, idClass }) => {
       title: "Vai trò",
       dataIndex: "role",
       key: "role",
-      width: "23%",
+      align: "center",
       sorter: (a, b) => a.role.localeCompare(b.role),
       sortDirections: ["ascend", "descend"],
       render: (text, record) => (

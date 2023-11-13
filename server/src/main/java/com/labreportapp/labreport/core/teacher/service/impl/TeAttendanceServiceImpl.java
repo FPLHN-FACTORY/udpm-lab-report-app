@@ -162,10 +162,13 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
             listInforStudent.forEach(infor -> {
                 if (st.getStudentId().equals(infor.getId()) && st.getStatus() == StatusAttendance.NO) {
                     countAbsent.set(countAbsent.get() + 1);
-                    stringBufferCheckAbsent.append("" + infor.getName() + " - " + infor.getUserName() + ", ");
+                    stringBufferCheckAbsent.append(" ").append(infor.getName()).append(" - ").append(infor.getUserName()).append(",");
                 }
             });
         });
+        if (stringBufferCheckAbsent.length() > 0 && stringBufferCheckAbsent.charAt(stringBufferCheckAbsent.length() - 1) == ',') {
+            stringBufferCheckAbsent.deleteCharAt(stringBufferCheckAbsent.length() - 1);
+        }
         if (countAbsent.get() > 0) {
             stringBuffer.append(" Với số sinh viên nghỉ là " + countAbsent.get() + " - Gồm: " + stringBufferCheckAbsent.toString() + ". ");
         } else {

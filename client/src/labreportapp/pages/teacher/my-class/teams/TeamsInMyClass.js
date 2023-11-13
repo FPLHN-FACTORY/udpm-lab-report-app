@@ -115,7 +115,7 @@ const TeamsInMyClass = () => {
         if (dataStudentClasses != null) {
           const objFilter = dataStudentClasses.map((item) => {
             if (item.idTeam === teamDelete.id) {
-              return { ...item, idTeam: null, codeTeam: null, role: `1` };
+              return { ...item, idTeam: null, role: `1` };
             }
             return item;
           });
@@ -189,12 +189,14 @@ const TeamsInMyClass = () => {
       dataIndex: "stt",
       key: "stt",
       render: (text, record, index) => index + 1,
+      align: "center",
     },
     {
       title: "Tên nhóm",
       dataIndex: "name",
       key: "name",
       sorter: (a, b) => a.name.localeCompare(b.name),
+      align: "center",
     },
     {
       title: "Chủ đề",
@@ -221,11 +223,13 @@ const TeamsInMyClass = () => {
       render: (text, record) => {
         return <span>{convertLongToDate(text)}</span>;
       },
+      align: "center",
     },
     {
       title: "Hành động",
       dataIndex: "actions",
       key: "actions",
+      aligh: "center",
       render: (text, record) => (
         <>
           <div>

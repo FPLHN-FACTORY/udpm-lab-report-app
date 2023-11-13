@@ -28,7 +28,6 @@ import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 const { Option } = Select;
 
 const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
-  const [code, setCode] = useState("");
   const [name, setName] = useState("");
   const [errorName, setErrorName] = useState("");
   const [subjectName, setSubjectName] = useState("");
@@ -59,6 +58,9 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
   };
   useEffect(() => {
     if (visible === true) {
+      setErrorName("");
+      setName("");
+      setSubjectName("");
       setSubjectName(team.subjectName);
       setName(team.name);
       setListStudentsChange([]);
@@ -69,7 +71,6 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
       featchDataStudent();
     } else {
       setSubjectName("");
-      setCode("");
       setName("");
       setErrorName("");
     }
@@ -93,7 +94,6 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
         return {
           ...obj,
           role: `1`,
-          codeTeam: team.code,
           idTeam: team.id,
         };
       });
@@ -159,7 +159,6 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
         return {
           ...item,
           role: value,
-          codeTeam: team.code,
           idTeam: team.id,
         };
       }
@@ -179,7 +178,6 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
     if (check === 0) {
       let teamUpdate = {
         id: team.id,
-        code: code,
         name: name,
         subjectName: subjectName,
         listStudentClasses: listShowTable,
@@ -217,8 +215,8 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
       title: "#",
       dataIndex: "stt",
       key: "stt",
-      width: "12px",
       render: (text, record, index) => index + 1,
+      align: "center",
     },
     {
       title: "Họ và tên",
@@ -245,6 +243,7 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
       title: "Vai trò",
       dataIndex: "role",
       key: "role",
+      align: "center",
       sorter: (a, b) => a.role.localeCompare(b.role),
       sortDirections: ["ascend", "descend"],
       render: (text, record) => (
@@ -262,6 +261,7 @@ const ModalUpdateTeam = ({ visible, onCancel, idClass, team }) => {
       title: "Hành động",
       dataIndex: "actions",
       key: "actions",
+      align: "center",
       render: (text, record) => (
         <>
           <div style={{ textAlign: "center" }}>

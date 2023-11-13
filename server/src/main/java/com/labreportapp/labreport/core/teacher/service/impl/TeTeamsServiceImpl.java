@@ -167,7 +167,7 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         team.setSubjectName(request.getSubjectName());
         team.setClassId(request.getClassId());
         Team teamCreate = teTeamsRepositoty.save(team);
-        message.append("Đã tạo `" + teamCreate.getCode() + "` với chủ đề: `" + teamCreate.getSubjectName() + "`");
+        message.append("Đã tạo `").append(teamCreate.getName()).append("` với chủ đề: `").append(teamCreate.getSubjectName()).append("`. ");
         List<StudentClasses> listStudentClasses = teStudentClassesRepository.findStudentClassesByIdClass(request.getClassId());
         List<SimpleResponse> listInforStudent = teStudentClassesService.searchAllStudentByIdClass(request.getClassId());
         List<StudentClasses> studentClassesNew = new ArrayList<>();
@@ -188,18 +188,22 @@ public class TeTeamsServiceImpl implements TeTeamsService {
                     studentClassesNew.add(studentDB);
                     listInforStudent.forEach(infor -> {
                         if (infor.getId().equals(studentDB.getStudentId())) {
-                            messageCheckStudentJoin.append(infor.getName()).append(" - ").append(infor.getUserName()).append(" ");
+                            messageCheckStudentJoin.append(" " + infor.getName()).append(" - ").append(infor.getUserName());
                             if (studentDB.getRole() == RoleTeam.LEADER) {
-                                messageCheckStudentJoin.append(" làm trưởng nhóm ");
+                                messageCheckStudentJoin.append(" làm trưởng nhóm");
                             }
-                            message.append(", ");
+                            messageCheckStudentJoin.append(",");
                         }
                     });
+                    countStudentJoinTeam.set(countStudentJoinTeam.get() + 1);
                 }
             });
         });
+        if (messageCheckStudentJoin.length() > 0 && messageCheckStudentJoin.charAt(messageCheckStudentJoin.length() - 1) == ',') {
+            messageCheckStudentJoin.deleteCharAt(messageCheckStudentJoin.length() - 1);
+        }
         if (countStudentJoinTeam.get() > 0) {
-            message.append(" Với số thành viên là " + countStudentJoinTeam.get() + " - Gồm: " + messageCheckStudentJoin.toString() + ". ");
+            message.append(" Với số thành viên là ").append(countStudentJoinTeam.get()).append(" - Gồm: ").append(messageCheckStudentJoin.toString()).append(".");
         } else {
             message.append(" Với số thành viên là 0. ");
         }
@@ -234,13 +238,13 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         String codeClass = loggerUtil.getCodeClassByIdClass(team.getClassId());
         String nameSemester = loggerUtil.getNameSemesterByIdClass(team.getClassId());
 
-        if (!request.getSubjectName().equals("")) {
-            message.append("Đã cập nhật `" + team.getCode() + "` và thêm chủ đề là `" + request.getSubjectName() + "` ");
+        if (team.getSubjectName().equals("")) {
+            message.append("Đã cập nhật `" + team.getName() + "` và thêm chủ đề là `" + request.getSubjectName() + "`. ");
         } else if (request.getSubjectName().equals("") && !team.getSubjectName().equals("")) {
-            message.append("Đã cập nhật `" + team.getCode() + "` và xóa chủ đề ");
+            message.append("Đã cập nhật `" + team.getName() + "` và xóa chủ đề. ");
         } else if (!request.getSubjectName().equals("") && !team.getSubjectName().equals("")) {
-            message.append("Đã cập nhật `" + team.getCode() + "` và cập nhật chủ đề từ `" +
-                    team.getSubjectName() + "` thành `" + request.getSubjectName() + "` ");
+            message.append("Đã cập nhật `" + team.getName() + "` và cập nhật chủ đề từ `" +
+                    team.getSubjectName() + "` thành `" + request.getSubjectName() + "`. ");
         }
         team.setSubjectName(request.getSubjectName() != null ? request.getSubjectName().trim() : "");
         ConcurrentHashMap<String, StudentClasses> mapStudent = new ConcurrentHashMap<>();
@@ -269,20 +273,24 @@ public class TeTeamsServiceImpl implements TeTeamsService {
                     }
                     listInforStudent.forEach(infor -> {
                         if (infor.getId().equals(item.getIdStudent())) {
-                            messageCheckUpdate.append(infor.getName()).append(" - ").append(infor.getUserName()).append(" ");
+                            messageCheckUpdate.append(" ").append(infor.getName()).append(" - ").append(infor.getUserName());
                             if (studentClasses.getRole() == RoleTeam.LEADER) {
-                                messageCheckUpdate.append(" làm trưởng nhóm ");
+                                messageCheckUpdate.append(" làm trưởng nhóm");
                             }
-                            message.append(", ");
+                            messageCheckUpdate.append(",");
                         }
                     });
                     studentClasses.setTeamId(team.getId());
+                    countStudentUpdateJoinTeam.set(countStudentUpdateJoinTeam.get() + 1);
                     listStudentClassesUpdate.add(studentClasses);
                 }
             });
         });
+        if (messageCheckUpdate.length() > 0 && messageCheckUpdate.charAt(messageCheckUpdate.length() - 1) == ',') {
+            messageCheckUpdate.deleteCharAt(messageCheckUpdate.length() - 1);
+        }
         if (countStudentUpdateJoinTeam.get() > 0) {
-            message.append(" Với số thành viên là " + countStudentUpdateJoinTeam.get() + " - Gồm: " + messageCheckUpdate.toString() + ". ");
+            message.append(" Với số thành viên là ").append(countStudentUpdateJoinTeam.get()).append(" - Gồm: ").append(messageCheckUpdate.toString()).append(". ");
         } else {
             message.append(" Với số thành viên là 0. ");
         }
@@ -304,13 +312,17 @@ public class TeTeamsServiceImpl implements TeTeamsService {
                     st.setStatus(student.getStatus());
                     listInforStudent.forEach(infor -> {
                         if (infor.getId().equals(item.getIdStudent())) {
-                            messageCheckDelete.append(infor.getName()).append(" - ").append(infor.getUserName()).append(", ");
+                            messageCheckDelete.append(" ").append(infor.getName()).append(" - ").append(infor.getUserName()).append(",");
                         }
                     });
+                    countStudentDeleteJoinTeam.set(countStudentDeleteJoinTeam.get() + 1);
                     listStudentClassesUpdate.add(st);
                 }
             });
         });
+        if (messageCheckDelete.length() > 0 && messageCheckDelete.charAt(messageCheckDelete.length() - 1) == ',') {
+            messageCheckDelete.deleteCharAt(messageCheckDelete.length() - 1);
+        }
         if (countStudentDeleteJoinTeam.get() > 0) {
             message.append(" Và xóa ").append(countStudentDeleteJoinTeam.get()).append(" thành viên - Gồm: ").append(messageCheckDelete.toString()).append(" ra khỏi nhóm. ");
         }
@@ -358,13 +370,11 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         StringBuilder message = new StringBuilder();
         String codeClass = loggerUtil.getCodeClassByIdClass(teamUp.getClassId());
         String nameSemester = loggerUtil.getNameSemesterByIdClass(teamUp.getClassId());
-        message.append("Đã tạo trello cho " + teamUp.getCode() + "với Mã dự án: " + projectNew.getCode() + ", " +
-                "Tên dự án: " + project.getName() + " , Thời gian bắt đầu: " + convertLongToStringDate(projectNew.getStartTime()) +
-                ", Thời gian kết thúc: " + convertLongToStringDate(projectNew.getEndTime()) + ", Loại: Dự án xưởng thực hành");
+        message.append("Đã tạo trello cho `").append(teamUp.getName()).append("` với Mã dự án: ").append(projectNew.getCode()).append(", ").append("Tên dự án: ").append(project.getName()).append(" , Thời gian bắt đầu: ").append(convertLongToStringDate(projectNew.getStartTime())).append(", Thời gian kết thúc: ").append(convertLongToStringDate(projectNew.getEndTime())).append(", Loại: Dự án xưởng thực hành");
         if (!project.getDescriptions().equals("")) {
-            message.append(", Mô tả: " + projectNew.getDescriptions());
+            message.append(", Mô tả: ").append(projectNew.getDescriptions());
         }
-        message.append(" và background mặc định");
+        message.append(" và background mặc định. ");
         loggerUtil.sendLogStreamClass(message.toString(), codeClass, nameSemester);
         List<Label> listLabel = teLabelRepository.findAll();
         List<LabelProject> newLabelProject = new ArrayList<>();
@@ -372,6 +382,7 @@ public class TeTeamsServiceImpl implements TeTeamsService {
             LabelProject labelProject = new LabelProject();
             labelProject.setProjectId(projectNew.getId());
             labelProject.setName(item.getName());
+            labelProject.setColorLabel(item.getColorLabel());
             newLabelProject.add(labelProject);
         });
         teLabelProjectRepository.saveAll(newLabelProject);
@@ -425,7 +436,7 @@ public class TeTeamsServiceImpl implements TeTeamsService {
             StringBuilder message = new StringBuilder();
             String codeClass = loggerUtil.getCodeClassByIdClass(team.getClassId());
             String nameSemester = loggerUtil.getNameSemesterByIdClass(team.getClassId());
-            message.append("Đã xóa " + team.getCode() + "và xóa tất cả thành viên ra khỏi nhóm. ");
+            message.append("Đã xóa `").append(team.getName()).append("` và xóa tất cả thành viên ra khỏi nhóm. ");
             loggerUtil.sendLogStreamClass(message.toString(), codeClass, nameSemester);
             teTeamsRepositoty.delete(team);
             return "Xóa nhóm thành công !";

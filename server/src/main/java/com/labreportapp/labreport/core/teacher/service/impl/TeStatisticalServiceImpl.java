@@ -286,7 +286,7 @@ public class TeStatisticalServiceImpl implements TeStatisticalService {
                 }
                 TeamColor color = new TeamColor();
                 color.setId(team.getId());
-                color.setCode(team.getCode());
+
                 color.setName(team.getName());
                 color.setSubjectName(team.getSubjectName());
                 color.setClassId(team.getClassId());

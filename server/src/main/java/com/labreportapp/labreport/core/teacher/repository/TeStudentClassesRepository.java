@@ -35,7 +35,6 @@ public interface TeStudentClassesRepository extends JpaRepository<StudentClasses
                 sc.role AS role,
                 sc.status AS statusStudent,
                 t.id AS idTeam,
-                t.code AS codeTeam,
                 t.name AS nameTeam,
                 t.subject_name AS subject_name
             FROM student_classes sc
@@ -60,7 +59,6 @@ public interface TeStudentClassesRepository extends JpaRepository<StudentClasses
                 sc.role AS role,
                 sc.status AS statusStudent,
                 t.id AS idTeam,
-                t.code AS codeTeam,
                 t.name AS nameTeam,
                 t.subject_name AS subject_name
             FROM student_classes sc

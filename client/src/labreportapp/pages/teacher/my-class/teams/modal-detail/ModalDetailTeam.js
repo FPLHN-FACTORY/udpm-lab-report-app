@@ -42,7 +42,7 @@ const ModalDetailTeam = ({ visible, onCancel, team, idClass }) => {
       dataIndex: "stt",
       key: "stt",
       render: (text, record, index) => index + 1,
-      width: "10px",
+      align: "center",
     },
     {
       title: "Họ và tên",
@@ -68,7 +68,7 @@ const ModalDetailTeam = ({ visible, onCancel, team, idClass }) => {
       title: "Vai trò",
       dataIndex: "role",
       key: "role",
-      width: "100px",
+      align: "center",
       sorter: (a, b) => a.role.localeCompare(b.role),
       sortDirections: ["ascend", "descend"],
       render: (text, record) => (

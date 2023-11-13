@@ -51,11 +51,6 @@ public interface TeTeamsRepositoty extends JpaRepository<Team, String> {
     List<TeTeamsRespone> findTeamsByIdClass(@Param("req") TeFindStudentClasses req);
 
     @Query(value = """
-                SELECT t.name FROM team t WHERE t.name = :code
-            """, nativeQuery = true)
-    String getTeamByCode(@Param("code") String code);
-
-    @Query(value = """
             SELECT  DISTINCT 
                 t.id AS idTeam,
                 t.name AS nameTeam,
