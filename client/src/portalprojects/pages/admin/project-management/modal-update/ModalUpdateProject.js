@@ -459,7 +459,7 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
                 <span>Thời gian:</span> <br />
                 <RangePicker
                   style={{ width: "100%" }}
-                  format="YYYY-MM-DD"
+                  format="DD-MM-YYYY"
                   value={[
                     startTime ? dayjs(startTime) : null,
                     endTime ? dayjs(endTime) : null,

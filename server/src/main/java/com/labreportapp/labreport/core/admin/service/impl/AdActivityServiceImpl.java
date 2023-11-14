@@ -76,13 +76,10 @@ public class AdActivityServiceImpl implements AdActivityService {
         Activity activity = new Activity();
         activity.setName(command.getName());
         activity.setCode(command.getCode());
-        if (!command.getStartTime().equals("") && !command.getEndTime().equals("")) {
-            Long startTime = convertDateToString(command.getStartTime());
-            Long endTime = convertDateToString(command.getEndTime());
-
-            activity.setStartTime(startTime);
-            activity.setEndTime(endTime);
-        }
+        Long startTime = command.getStartTime();
+        Long endTime = command.getEndTime();
+        activity.setStartTime(startTime);
+        activity.setEndTime(endTime);
         activity.setLevelId(command.getLevel());
         activity.setSemesterId(command.getSemesterId());
         activity.setDescriptions(command.getDescriptions());
@@ -107,13 +104,11 @@ public class AdActivityServiceImpl implements AdActivityService {
         Activity activity = optional.get();
         activity.setName(command.getName());
         activity.setCode(command.getCode());
-        if (!command.getStartTime().equals("") && !command.getEndTime().equals("")) {
-            Long startTime = convertDateToString(command.getStartTime());
-            Long endTime = convertDateToString(command.getEndTime());
+        Long startTime = command.getStartTime();
+        Long endTime = command.getEndTime();
 
-            activity.setStartTime(startTime);
-            activity.setEndTime(endTime);
-        }
+        activity.setStartTime(startTime);
+        activity.setEndTime(endTime);
         activity.setLevelId(command.getLevel());
         activity.setSemesterId(command.getSemesterId());
         activity.setDescriptions(command.getDescriptions());

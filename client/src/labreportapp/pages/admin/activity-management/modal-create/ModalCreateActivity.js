@@ -19,6 +19,8 @@ import {
   SetLoadingFalse,
   SetLoadingTrue,
 } from "../../../../app/common/Loading.reducer";
+import dayjs from "dayjs";
+const { RangePicker } = DatePicker;
 
 const ModalCreateActivity = ({
   visible,
@@ -36,8 +38,7 @@ const ModalCreateActivity = ({
   const [descriptions, setDescriptions] = useState("");
   const [errorName, setErrorName] = useState("");
   const [errorCode, setErrorCode] = useState("");
-  const [errorStartTime, setErrorStartTime] = useState("");
-  const [errorEndTime, setErrorEndTime] = useState("");
+  const [errorTime, setErrorTime] = useState("");
   const [errorLevel, setErrorLevel] = useState("");
   const [errorSemesterId, setErrorSemesterId] = useState("");
   const [allowUseTrello, setAllowUseTrello] = useState("1");
@@ -57,8 +58,7 @@ const ModalCreateActivity = ({
         setSemesterId("");
         setErrorCode("");
         setErrorName("");
-        setErrorStartTime("");
-        setErrorEndTime("");
+        setErrorTime("");
         setErrorLevel("");
         setErrorSemesterId("");
       };
@@ -66,7 +66,6 @@ const ModalCreateActivity = ({
   }, [visible]);
   const create = () => {
     let check = 0;
-    let checkDate = 0;
     if (name.trim() === "") {
       setErrorName("Tên không được để trống");
       check++;
@@ -80,27 +79,10 @@ const ModalCreateActivity = ({
       setErrorCode("");
     }
     if (startTime === "" || startTime === null) {
-      setErrorStartTime("Hãy chọn thời gian bắt đầu");
-      checkDate++;
+      setErrorTime("Hãy chọn thời gian bắt đầu");
       check++;
     } else {
-      setErrorStartTime("");
-    }
-
-    if (endTime === "" || endTime === null) {
-      setErrorEndTime("Hãy chọn thời gian kết thúc");
-      checkDate++;
-      check++;
-    } else {
-      setErrorEndTime("");
-    }
-    if (checkDate === 0) {
-      if (new Date(startTime).getTime() > new Date(endTime).getTime()) {
-        setErrorStartTime(
-          "Thời gian bắt đầu không được lớn hơn thời gian kết thúc"
-        );
-        check++;
-      }
+      setErrorTime("");
     }
     if (level === "") {
       setErrorLevel("Hãy chọn cấp độ");
@@ -113,12 +95,12 @@ const ModalCreateActivity = ({
       (item) => item.id === semesterId
     );
     const levelNameItem = listLevel.find((item) => item.id === level);
-    if (new Date(startTime) < new Date(semesterNameItem.startTime)) {
-      setErrorStartTime("Thời gian hoạt động phải nằm trong thời gian kì học");
+    if (startTime < semesterNameItem.startTime) {
+      setErrorTime("Thời gian hoạt động phải nằm trong thời gian kì học");
       check++;
     }
-    if (new Date(endTime) > new Date(semesterNameItem.endTime)) {
-      setErrorEndTime("Thời gian hoạt động phải nằm trong thời gian kì học");
+    if (new Date(endTime) > semesterNameItem.endTime) {
+      setErrorTime("Thời gian hoạt động phải nằm trong thời gian kì học");
       check++;
     }
     if (check === 0) {
@@ -134,7 +116,6 @@ const ModalCreateActivity = ({
         descriptions: descriptions,
         allowUseTrello: parseInt(allowUseTrello),
       };
-
       ActivityManagementAPI.create(obj).then(
         (response) => {
           message.success("Thêm thành công!");
@@ -143,12 +124,25 @@ const ModalCreateActivity = ({
             nameSemester: semesterNameItem.name,
             levelNameItem: levelNameItem.name,
           };
+          console.log(objCreate);
           dispatch(CreateActivityManagement(objCreate));
           dispatch(SetLoadingFalse());
           onCancel();
         },
         (error) => {}
       );
+    }
+  };
+
+  const handleDateChange = (e) => {
+    if (e != null) {
+      setStartTime(
+        dayjs(e[0]).set({ hour: 0, minute: 0, second: 0 }).valueOf()
+      );
+      setEndTime(dayjs(e[1]).set({ hour: 0, minute: 0, second: 0 }).valueOf());
+    } else {
+      setStartTime(null);
+      setEndTime(null);
     }
   };
 
@@ -181,7 +175,7 @@ const ModalCreateActivity = ({
           </Col>
           <Col span={12} style={{ padding: "5px" }}>
             <span style={{ color: "red" }}>(*) </span>
-            <span>Tên:</span> <br />
+            <span>Tên hoạt động:</span> <br />
             <Input
               value={name}
               placeholder="Nhập tên hoạt động"
@@ -193,29 +187,21 @@ const ModalCreateActivity = ({
             <span className="error">{errorName}</span>
           </Col>
 
-          <Col span={12} style={{ padding: "5px" }}>
-            <span style={{ color: "red" }}>(*) </span>{" "}
-            <span>Thời gian bắt đầu:</span> <br />
-            <Input
-              value={startTime}
+          <Col span={24} style={{ padding: "5px" }}>
+            <span className="notBlank">(*) </span>
+            <span>Thời gian:</span> <br />
+            <RangePicker
+              style={{ width: "100%" }}
+              format="DD-MM-YYYY"
+              value={[
+                startTime ? dayjs(startTime) : null,
+                endTime ? dayjs(endTime) : null,
+              ]}
               onChange={(e) => {
-                setStartTime(e.target.value);
+                handleDateChange(e);
               }}
-              type="date"
-            />
-            <span className="error">{errorStartTime}</span>
-          </Col>
-          <Col span={12} style={{ padding: "5px" }}>
-            <span style={{ color: "red" }}>(*) </span>{" "}
-            <span>Thời gian kết thúc:</span> <br />
-            <Input
-              value={endTime}
-              onChange={(e) => {
-                setEndTime(e.target.value);
-              }}
-              type="date"
-            />
-            <span className="error">{errorEndTime}</span>
+            />{" "}
+            <span className="error">{errorTime}</span>
           </Col>
 
           <Col span={12} style={{ padding: "5px" }}>

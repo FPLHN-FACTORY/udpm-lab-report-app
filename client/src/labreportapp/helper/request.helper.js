@@ -3,8 +3,9 @@ import { AppConfig } from "../../AppConfig";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 import { portIdentity } from "./constants";
-import store from "../app/store";
+import { dispatch } from "../app/store";
 import { message } from "antd";
+import { SetLoadingFalse } from "../app/common/Loading.reducer";
 
 export const request = axios.create({
   baseURL: AppConfig.apiUrl,
@@ -21,6 +22,7 @@ request.interceptors.request.use((config) => {
 request.interceptors.response.use(
   (response) => response,
   (error) => {
+    dispatch(SetLoadingFalse());
     if (
       error.response &&
       (error.response.status === 401 || error.response.status === 403)

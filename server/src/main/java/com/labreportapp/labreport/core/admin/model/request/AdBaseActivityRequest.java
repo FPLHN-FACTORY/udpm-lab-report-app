@@ -20,13 +20,11 @@ public abstract class AdBaseActivityRequest {
     @NotBlank
     private String code;
 
-    @NotEmpty
-    @NotBlank
-    private String startTime;
+    @NotNull
+    private Long startTime;
 
-    @NotEmpty
-    @NotBlank
-    private String endTime;
+    @NotNull
+    private Long endTime;
 
     @NotEmpty
     @NotBlank

@@ -192,14 +192,15 @@ const ActivityManagement = () => {
       sorter: (a, b) => a.name.localeCompare(b.name),
     },
     {
-      title: "Thời gian",
+      title: <div style={{ textAlign: "center" }}>Thời gian</div>,
       dataIndex: "startTimeAndEndTime",
       key: "startTimeAndEndTime",
       render: (text, record) => {
+        const startTime = convertDateLongToString(record.startTime);
+        const endTime = convertDateLongToString(record.endTime);
         return (
           <span>
-            {convertDateLongToString(record.startTime)} -{" "}
-            {convertDateLongToString(record.endTime)}
+            {startTime} - {endTime}
           </span>
         );
       },
@@ -244,7 +245,6 @@ const ActivityManagement = () => {
             <Tooltip title="Chỉnh sửa chi tiết">
               <FontAwesomeIcon
                 icon={faEdit}
-
                 style={{ marginRight: "9px", color: "rgb(38, 144, 214)" }}
                 size="1x"
                 onClick={() => {

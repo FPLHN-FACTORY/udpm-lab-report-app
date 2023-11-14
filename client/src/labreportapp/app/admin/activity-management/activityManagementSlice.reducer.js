@@ -15,10 +15,11 @@ const ActivityManagementSlice = createSlice({
       let newActivity = {
         stt: state.length + 1,
         id: data.id,
+        code: data.code,
         name: data.name,
         startTime: data.startTime,
         endTime: data.endTime,
-        level: parseInt(data.levelText),
+        level: data.levelNameItem,
         semesterId: data.semesterId,
         nameSemester: data.nameSemester,
       };

@@ -1,5 +1,14 @@
 import "./styleModalUpdateActivity.css";
-import { Modal, Row, Col, Input, Button, DatePicker, Select, message } from "antd";
+import {
+  Modal,
+  Row,
+  Col,
+  Input,
+  Button,
+  DatePicker,
+  Select,
+  message,
+} from "antd";
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "../../../../app/hook";
 import { toast } from "react-toastify";
@@ -9,7 +18,11 @@ import { Option } from "antd/es/mentions";
 import moment from "moment";
 import dayjs from "dayjs";
 import "dayjs/locale/zh-cn";
-import { SetLoadingFalse, SetLoadingTrue } from "../../../../app/common/Loading.reducer";
+import {
+  SetLoadingFalse,
+  SetLoadingTrue,
+} from "../../../../app/common/Loading.reducer";
+const { RangePicker } = DatePicker;
 
 const ModalUpdateActivity = ({
   visible,
@@ -28,28 +41,25 @@ const ModalUpdateActivity = ({
   const [descriptions, setDescriptions] = useState("");
   const [errorCode, setErrorCode] = useState("");
   const [errorName, setErrorName] = useState("");
-  const [errorStartTime, setErrorStartTime] = useState("");
-  const [errorEndTime, setErrorEndTime] = useState("");
+  const [errorTime, setErrorTime] = useState("");
   const [errorLevel, setErrorLevel] = useState("");
   const [errorSemesterId, setErrorSemesterId] = useState("");
   const [allowUseTrello, setAllowUseTrello] = useState("1");
   const dispatch = useAppDispatch();
 
   useEffect(() => {
- 
     if (visible === true) {
       setName(activity.name);
       setCode(activity.code);
-      setStartTime(moment(activity.startTime).format("YYYY-MM-DD"));
-      setEndTime(moment(activity.endTime).format("YYYY-MM-DD"));
+      setStartTime(activity.startTime);
+      setEndTime(activity.endTime);
       setLevel(activity.level);
       setSemesterId(activity.semesterId);
       setDescriptions(activity.descriptions);
       setAllowUseTrello(activity.allowUseTrello + "");
       setErrorName("");
       setErrorCode("");
-      setErrorStartTime("");
-      setErrorEndTime("");
+      setErrorTime("");
       setErrorLevel("");
       setErrorSemesterId("");
     } else {
@@ -61,8 +71,7 @@ const ModalUpdateActivity = ({
       setSemesterId("");
       setErrorName("");
       setErrorCode("");
-      setErrorStartTime("");
-      setErrorEndTime("");
+      setErrorTime("");
       setErrorLevel("");
       setErrorSemesterId("");
     }
@@ -84,27 +93,10 @@ const ModalUpdateActivity = ({
       setErrorCode("");
     }
     if (startTime === "" || startTime === null) {
-      setErrorStartTime("Hãy chọn thời gian bắt đầu");
-      checkDate++;
+      setErrorTime("Hãy chọn thời gian bắt đầu");
       check++;
     } else {
-      setErrorStartTime("");
-    }
-    if (endTime === "" || endTime === null) {
-      setErrorEndTime("Hãy chọn thời gian kết thúc");
-      checkDate++;
-      check++;
-    } else {
-      setErrorEndTime("");
-    }
-
-    if (checkDate === 0) {
-      if (new Date(startTime).getTime() > new Date(endTime).getTime()) {
-        setErrorStartTime(
-          "Thời gian bắt đầu không được lớn hơn thời gian kết thúc"
-        );
-        check++;
-      }
+      setErrorTime("");
     }
     if (level === "") {
       setErrorLevel("Hãy chọn cấp độ");
@@ -116,15 +108,15 @@ const ModalUpdateActivity = ({
       (item) => item.id === semesterId
     );
     const levelNameItem = listLevel.find((item) => item.name === level);
-    if (new Date(startTime) < new Date(semesterNameItem.startTime)) {
-      setErrorStartTime("Thời gian hoạt động phải nằm trong thời gian kì học");
+    if (startTime < semesterNameItem.startTime) {
+      setErrorTime("Thời gian hoạt động phải nằm trong thời gian kì học");
       check++;
     }
-    if (new Date(endTime) > new Date(semesterNameItem.endTime)) {
-      setErrorEndTime("Thời gian hoạt động phải nằm trong thời gian kì học");
+    if (new Date(endTime) > semesterNameItem.endTime) {
+      setErrorTime("Thời gian hoạt động phải nằm trong thời gian kì học");
       check++;
     }
-    
+
     if (check === 0) {
       dispatch(SetLoadingTrue());
       let obj = {
@@ -152,6 +144,18 @@ const ModalUpdateActivity = ({
         },
         (error) => {}
       );
+    }
+  };
+  
+  const handleDateChange = (e) => {
+    if (e != null) {
+      setStartTime(
+        dayjs(e[0]).set({ hour: 0, minute: 0, second: 0 }).valueOf()
+      );
+      setEndTime(dayjs(e[1]).set({ hour: 0, minute: 0, second: 0 }).valueOf());
+    } else {
+      setStartTime(null);
+      setEndTime(null);
     }
   };
 
@@ -193,29 +197,21 @@ const ModalUpdateActivity = ({
             <span className="error">{errorName}</span>
           </Col>
 
-          <Col span={12} style={{ padding: "5px" }}>
-            <span style={{ color: "red" }}>(*) </span>{" "}
-            <span>Thời gian bắt đầu:</span> <br />
-            <Input
-              value={startTime}
+          <Col span={24} style={{ padding: "5px" }}>
+            <span className="notBlank">(*) </span>
+            <span>Thời gian:</span> <br />
+            <RangePicker
+              style={{ width: "100%" }}
+              format="DD-MM-YYYY"
+              value={[
+                startTime ? dayjs(startTime) : null,
+                endTime ? dayjs(endTime) : null,
+              ]}
               onChange={(e) => {
-                setStartTime(e.target.value);
+                handleDateChange(e);
               }}
-              type="date"
-            />
-            <span className="error">{errorStartTime}</span>
-          </Col>
-          <Col span={12} style={{ padding: "5px" }}>
-            <span style={{ color: "red" }}>(*) </span>{" "}
-            <span>Thời gian kết thúc:</span> <br />
-            <Input
-              value={endTime}
-              onChange={(e) => {
-                setEndTime(e.target.value);
-              }}
-              type="date"
-            />
-            <span className="error">{errorEndTime}</span>
+            />{" "}
+            <span className="error">{errorTime}</span>
           </Col>
 
           <Col span={12} style={{ padding: "5px" }}>

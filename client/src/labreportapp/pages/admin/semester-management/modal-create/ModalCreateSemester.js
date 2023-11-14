@@ -1,4 +1,4 @@
-import { Modal, Row, Col, Input, Button, message } from "antd";
+import { Modal, Row, Col, Input, Button, message, DatePicker } from "antd";
 import { useEffect, useState } from "react";
 import { AdSemesterAPI } from "../../../../api/admin/AdSemesterAPI";
 import moment from "moment";
@@ -11,18 +11,18 @@ import {
   SetLoadingFalse,
   SetLoadingTrue,
 } from "../../../../app/common/Loading.reducer";
+import dayjs from "dayjs";
+const { RangePicker } = DatePicker;
 
 const ModalCreateSemester = ({ visible, onCancel }) => {
   const [name, setName] = useState("");
   const [errorName, setErrorName] = useState("");
   const [startTime, setStartTime] = useState("");
-  const [errorStartTime, setErrorStartTime] = useState("");
+  const [errorTimeSemester, setErrorTimeSemester] = useState("");
   const [endTime, setEndTime] = useState("");
-  const [errorEndTime, setErrorEndTime] = useState("");
   const [startTimeStudent, setStartTimeStudent] = useState("");
-  const [errorStartTimeStudent, setErrorStartTimeStudent] = useState("");
+  const [errorTimeStudent, setErrorTimeStudent] = useState("");
   const [endTimeStudent, setEndTimeStudent] = useState("");
-  const [errorEndTimeStudent, setErrorEndTimeStudent] = useState("");
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -30,13 +30,11 @@ const ModalCreateSemester = ({ visible, onCancel }) => {
       setName("");
       setStartTime("");
       setEndTime("");
-      setErrorEndTime("");
-      setErrorStartTime("");
-      setErrorName();
+      setErrorTimeSemester("");
+      setErrorName("");
       setStartTimeStudent("");
-      setErrorStartTimeStudent("");
+      setErrorTimeStudent("");
       setEndTimeStudent("");
-      setErrorEndTimeStudent("");
     };
   }, [visible]);
 
@@ -56,69 +54,28 @@ const ModalCreateSemester = ({ visible, onCancel }) => {
     }
 
     if (startTime === "") {
-      setErrorStartTime("Thời gian bắt đầu không được để trống");
+      setErrorTimeSemester("Thời gian bắt đầu không được để trống");
       check++;
     } else {
-      setErrorStartTime("");
-      if (new Date(startTime).getTime() > new Date(endTime).getTime()) {
-        setErrorStartTime(
-          "Thời gian bắt đầu không được lớn hơn thời gian kết thúc"
-        );
-        check++;
-      } else {
-        setErrorStartTime("");
-      }
-    }
-    if (endTime === "") {
-      setErrorEndTime("Thời gian kết thúc không được để trống");
-      check++;
-    } else {
-      setErrorEndTime("");
+      setErrorTimeSemester("");
     }
 
     if (startTimeStudent === "") {
-      setErrorStartTimeStudent(
-        "Thời gian sinh viên bắt đầu không được để trống"
-      );
+      setErrorTimeStudent("Thời gian sinh viên bắt đầu không được để trống");
       check++;
-    } else {
-      setErrorStartTimeStudent("");
-      if (
-        new Date(startTimeStudent).getTime() >
-        new Date(endTimeStudent).getTime()
-      ) {
-        setErrorStartTimeStudent(
-          "Thời gian sinh viên bắt đầu không được lớn hơn thời gian sinh viên kết thúc"
-        );
-        check++;
-      } else {
-        setErrorStartTimeStudent("");
-      }
-      if (
-        new Date(startTimeStudent).getTime() < new Date(startTime).getTime()
-      ) {
-        setErrorStartTimeStudent(
+    } else if (startTimeStudent !== "") {
+      setErrorTimeStudent("");
+      if (startTimeStudent < startTime) {
+        setErrorTimeStudent(
           "Thời gian sinh viên bắt đầu không được nhỏ hơn thời gian học kỳ bắt đầu"
         );
         check++;
-      } else {
-        setErrorStartTimeStudent("");
       }
-    }
-    if (endTimeStudent === "") {
-      setErrorEndTimeStudent(
-        "Thời gian sinh viên kết thúc không được để trống"
-      );
-      check++;
-    } else {
-      setErrorEndTimeStudent("");
-      if (new Date(endTimeStudent).getTime() > new Date(endTime).getTime()) {
-        setErrorEndTimeStudent(
+      if (endTimeStudent > endTime) {
+        setErrorTimeStudent(
           "Thời gian sinh viên kết thúc không được lớn hơn thời gian học kỳ kết thúc"
         );
         check++;
-      } else {
-        setErrorEndTimeStudent("");
       }
     }
 
@@ -126,10 +83,10 @@ const ModalCreateSemester = ({ visible, onCancel }) => {
       dispatch(SetLoadingTrue());
       let obj = {
         name: name,
-        startTime: moment(startTime, "YYYY-MM-DD").valueOf(),
-        endTime: moment(endTime, "YYYY-MM-DD").valueOf(),
-        startTimeStudent: moment(startTimeStudent, "YYYY-MM-DD").valueOf(),
-        endTimeStudent: moment(endTimeStudent, "YYYY-MM-DD").valueOf(),
+        startTime: startTime,
+        endTime: endTime,
+        startTimeStudent: startTimeStudent,
+        endTimeStudent: endTimeStudent,
       };
 
       AdSemesterAPI.addSemester(obj).then(
@@ -141,6 +98,32 @@ const ModalCreateSemester = ({ visible, onCancel }) => {
         },
         (error) => {}
       );
+    }
+  };
+
+  const handleDateChange = (e) => {
+    if (e != null) {
+      setStartTime(
+        dayjs(e[0]).set({ hour: 0, minute: 0, second: 0 }).valueOf()
+      );
+      setEndTime(dayjs(e[1]).set({ hour: 0, minute: 0, second: 0 }).valueOf());
+    } else {
+      setStartTime(null);
+      setEndTime(null);
+    }
+  };
+
+  const handleDateChangeTimeStudent = (e) => {
+    if (e != null) {
+      setStartTimeStudent(
+        dayjs(e[0]).set({ hour: 0, minute: 0, second: 0 }).valueOf()
+      );
+      setEndTimeStudent(
+        dayjs(e[1]).set({ hour: 0, minute: 0, second: 0 }).valueOf()
+      );
+    } else {
+      setStartTimeStudent(null);
+      setEndTimeStudent(null);
     }
   };
 
@@ -173,55 +156,39 @@ const ModalCreateSemester = ({ visible, onCancel }) => {
             </Col>
           </Row>
           <Row gutter={16} style={{ marginBottom: "15px" }}>
-            <Col span={12}>
-              <span style={{ color: "red" }}>(*) </span>{" "}
-              <span>Thời gian bắt đầu:</span> <br />
-              <Input
-                value={startTime}
+            <Col span={24}>
+              <span className="notBlank">(*) </span>
+              <span>Thời gian:</span> <br />
+              <RangePicker
+                style={{ width: "100%" }}
+                format="DD-MM-YYYY"
+                value={[
+                  startTime ? dayjs(startTime) : null,
+                  endTime ? dayjs(endTime) : null,
+                ]}
                 onChange={(e) => {
-                  setStartTime(e.target.value);
+                  handleDateChange(e);
                 }}
-                type="date"
-              />
-              <span className="error">{errorStartTime}</span>
-            </Col>
-            <Col span={12}>
-              <span style={{ color: "red" }}>(*) </span>
-              <span>Thời gian kết thúc:</span> <br />
-              <Input
-                value={endTime}
-                onChange={(e) => {
-                  setEndTime(e.target.value);
-                }}
-                type="date"
-              />
-              <span className="error">{errorEndTime}</span>
+              />{" "}
+              <span className="error">{errorTimeSemester}</span>
             </Col>
           </Row>
           <Row gutter={16} style={{ marginBottom: "15px" }}>
-            <Col span={12}>
-              <span style={{ color: "red" }}>(*) </span>{" "}
-              <span>Thời gian sinh viên bắt đầu:</span> <br />
-              <Input
-                value={startTimeStudent}
+            <Col span={24}>
+              <span className="notBlank">(*) </span>
+              <span>Thời gian sinh viên:</span> <br />
+              <RangePicker
+                style={{ width: "100%" }}
+                format="DD-MM-YYYY"
+                value={[
+                  startTimeStudent ? dayjs(startTimeStudent) : null,
+                  endTimeStudent ? dayjs(endTimeStudent) : null,
+                ]}
                 onChange={(e) => {
-                  setStartTimeStudent(e.target.value);
+                  handleDateChangeTimeStudent(e);
                 }}
-                type="date"
-              />
-              <span className="error">{errorStartTimeStudent}</span>
-            </Col>
-            <Col span={12}>
-              <span style={{ color: "red" }}>(*) </span>{" "}
-              <span>Thời gian sinh viên kết thúc:</span> <br />
-              <Input
-                value={endTimeStudent}
-                onChange={(e) => {
-                  setEndTimeStudent(e.target.value);
-                }}
-                type="date"
-              />
-              <span className="error">{errorEndTimeStudent}</span>
+              />{" "}
+              <span className="error">{errorTimeStudent}</span>
             </Col>
           </Row>
         </div>
