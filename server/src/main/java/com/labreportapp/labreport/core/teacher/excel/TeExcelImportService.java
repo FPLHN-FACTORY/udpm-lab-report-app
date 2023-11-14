@@ -37,6 +37,7 @@ public class TeExcelImportService {
             object.setFinalPoint(String.valueOf(getCellValue(row.getCell(5))).trim());
             listPoint.add(object);
         }
+        reapExcelDataFile.getInputStream().close();
         return listPoint;
     }
 

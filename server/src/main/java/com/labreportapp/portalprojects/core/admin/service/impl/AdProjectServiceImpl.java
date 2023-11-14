@@ -36,7 +36,6 @@ import com.labreportapp.portalprojects.infrastructure.constant.StatusWork;
 import com.labreportapp.portalprojects.infrastructure.constant.TypeProject;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import com.labreportapp.portalprojects.repository.LabelRepository;
-import com.labreportapp.portalprojects.util.FormUtils;
 import jakarta.validation.Valid;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,10 +78,6 @@ public class AdProjectServiceImpl implements AdProjectService {
     @Autowired
     private AdMemberProjectRepository adMemberProjectRepository;
 
-    private FormUtils formUtils = new FormUtils();
-
-    private List<AdProjectReponse> listProject;
-
     @Autowired
     private LabReportAppSession labReportAppSession;
 
@@ -105,6 +100,8 @@ public class AdProjectServiceImpl implements AdProjectService {
     public List<Project> findAllProject(Pageable pageable) {
         return adProjectRepository.findAllProject(pageable);
     }
+
+    private List<AdProjectReponse> listProject;
 
     @Override
     public PageableObject<AdProjectReponse> searchProject(final AdFindProjectRequest rep) {

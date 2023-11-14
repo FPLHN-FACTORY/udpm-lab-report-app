@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Layout, Space } from "antd";
+import { FloatButton, Layout, Space } from "antd";
 import SidebarTeacherComponent from "../../component/teacher/SidebarTeacher";
 import HeaderTeacherComponent from "../../component/teacher/HeaderTeacher";
 import "./style.css";
@@ -49,6 +49,7 @@ const DashBoardTeacher = ({ children }) => {
             collapsed={collapsed}
             toggleCollapsed={toggleCollapsed}
           />
+        
           <Content
             style={{
               marginLeft: collapsed ? 80 : 250,
@@ -56,7 +57,7 @@ const DashBoardTeacher = ({ children }) => {
               minHeight: "calc(100vh)",
             }}
           >
-            {children} 
+            {children}
             <CommonFooter />
           </Content>
         </Layout>

@@ -48,7 +48,9 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.StringJoiner;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * @author hieundph25894
@@ -143,7 +145,6 @@ public class TePointSeviceImpl implements TePointSevice {
         List<SimpleResponse> listInforStudent = teStudentClassesService.searchAllStudentByIdClass(request.getIdClass());
         StringBuilder message = new StringBuilder();
         if (listPointDB.size() <= 0) {
-            message.append("Đã thêm điểm giai đoạn 1, giai đoạn 2: ");
             listRequest.forEach(item -> {
                 Point point = new Point();
                 point.setStudentId(item.getIdStudent());
@@ -156,13 +157,12 @@ public class TePointSeviceImpl implements TePointSevice {
                 listInforStudent.forEach(infor -> {
                     if (infor.getId().equals(point.getStudentId())) {
                         message.append(" ").append(infor.getName()).append(" - ").append(infor.getUserName())
-                                .append(" ( ").append(point.getCheckPointPhase1()).append(" và ").append(point.getCheckPointPhase2()).append(" )").append(",");
+                                .append(" <i style=\"color: black\">(").append(point.getCheckPointPhase1()).append(" và ").append(point.getCheckPointPhase2()).append(")</i>").append(",");
                     }
                 });
                 listPointAddOrUp.add(point);
             });
         } else {
-            message.append("Đã cập nhật điểm giai đoạn 1, giai đoạn 2: ");
             listPointDB.forEach(itemDB -> {
                 listRequest.forEach(item -> {
                     if (itemDB.getStudentId().equals(item.getIdStudent())) {
@@ -174,14 +174,14 @@ public class TePointSeviceImpl implements TePointSevice {
                         point.setCheckPointPhase2(item.getCheckPointPhase2());
                         point.setFinalPoint((item.getCheckPointPhase1() + item.getCheckPointPhase2()) / 2);
                         point.setCreatedDate(itemDB.getCreatedDate());
-
                         listInforStudent.forEach(infor -> {
                             if (infor.getId().equals(item.getIdStudent())
-                                    && !itemDB.getCheckPointPhase1().equals(item.getCheckPointPhase1())
-                                    && !itemDB.getCheckPointPhase2().equals(item.getCheckPointPhase2())) {
-                                message.append(" ").append(infor.getName()).append(" - ").append(infor.getUserName()).
-                                        append(" từ ( ").append(itemDB.getCheckPointPhase1()).append(" và ").append(itemDB.getCheckPointPhase2()).append(" )")
-                                        .append(" thành ( ").append(point.getCheckPointPhase1()).append(" và ").append(point.getCheckPointPhase2()).append(" )").append(",");
+                            ) {
+                                if (!itemDB.getCheckPointPhase1().equals(item.getCheckPointPhase1()) || !itemDB.getCheckPointPhase2().equals(item.getCheckPointPhase2())) {
+                                    message.append(" ").append(infor.getName()).append(" - ").append(infor.getUserName()).
+                                            append(" từ <i style=\"color: black\">(").append(itemDB.getCheckPointPhase1()).append(" và ").append(itemDB.getCheckPointPhase2()).append(")</i>")
+                                            .append(" thành <i style=\"color: red\">(").append(point.getCheckPointPhase1()).append(" và ").append(point.getCheckPointPhase2()).append(")</i>").append(",");
+                                }
                             }
                         });
                         listPointAddOrUp.add(point);
@@ -205,9 +205,13 @@ public class TePointSeviceImpl implements TePointSevice {
                 }
             });
         });
-        if (message.length() > 0 && message.charAt(message.length() - 1) == ',') {
-            message.deleteCharAt(message.length() - 1);
-            message.append(".");
+        if (message.length() > 0) {
+            message.insert(0, "Đã cập nhật điểm giai đoạn 1, giai đoạn 2 của sinh viên: ");
+            if (message.charAt(message.length() - 1) == ',') {
+                message.setCharAt(message.length() - 1, '.');
+            }
+        } else {
+            message.append("Đã cập nhật điểm giai đoạn 1, giai đoạn 2 cho sinh viên nhưng không có sự thay đổi.");
         }
         String codeClass = loggerUtil.getCodeClassByIdClass(request.getIdClass());
         String nameSemester = loggerUtil.getNameSemesterByIdClass(request.getIdClass());
@@ -402,86 +406,112 @@ public class TePointSeviceImpl implements TePointSevice {
             ConcurrentHashMap<String, Point> pointUpdate = new ConcurrentHashMap<>();
             teExcelResponseMessage.setStatus(true);
             teExcelResponseMessage.setMessage("");
+
+            ConcurrentLinkedQueue<String> messagesConcurrent = new ConcurrentLinkedQueue<>();
             listInput.parallelStream().forEach(point -> {
-                String regexName = "^[^!@#$%^&*()_+|~=`{}\\[\\]:\";'<>?,.\\/\\\\]*$";
-//                String regexEmailBasic = "^[a-zA-Z0-9._%+-]+@fpt.edu.vn$";
-//                String regexEmail = "^[A-Za-z0-9+_.-]+@(.+)$";
+                String regexName = "^(?!.*\\d)[\\p{L}'\\-]+(?:\\s[\\p{L}'\\-]+)*$";
                 String regexEmailExactly = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
                 String regexDouble = "^(?:[0-9](?:\\.\\d*)?|10(?:\\.0*)?)$";
                 if (point.getName().isEmpty()) {
                     teExcelResponseMessage.setStatus(false);
-                    teExcelResponseMessage.setMessage(
-                            " Tên sinh viên không được để trống.");
+                    teExcelResponseMessage.setMessage(" Họ tên không được để trống !");
                     return;
                 } else {
                     if (!point.getName().matches(regexName)) {
                         teExcelResponseMessage.setStatus(false);
-                        teExcelResponseMessage.setMessage(
-                                " Tên sinh viên sai định dạng.");
+                        teExcelResponseMessage.setMessage(" Họ tên phải là chữ cái và các chữ cách nhau 1 dấu cách !");
                         return;
                     }
                 }
-
                 if (point.getCheckPointPhase1().isEmpty()) {
                     teExcelResponseMessage.setStatus(false);
-                    teExcelResponseMessage.setMessage(
-                            " Điểm giai đoạn 1 không được để trống.");
+                    teExcelResponseMessage.setMessage(" Điểm giai đoạn 1 không được để trống !");
                     return;
                 }
                 if (point.getCheckPointPhase2().isEmpty()) {
                     teExcelResponseMessage.setStatus(false);
-                    teExcelResponseMessage.setMessage(
-                            " Điểm giai đoạn 2 không được để trống.");
+                    teExcelResponseMessage.setMessage(" Điểm giai đoạn 2 không được để trống !");
                     return;
                 }
                 if (!point.getCheckPointPhase1().matches(regexDouble) || !point.getCheckPointPhase2().matches(regexDouble)) {
                     teExcelResponseMessage.setStatus(false);
-                    teExcelResponseMessage.setMessage(
-                            " Điểm giai đoạn 1 và giai đoạn 2 phải là số từ 0 -> 10");
+                    teExcelResponseMessage.setMessage(" Điểm giai đoạn 1 và giai đoạn 2 phải là số từ 0 tới 10 !");
                     return;
                 }
-
                 SimpleResponse simpleResponse = mapPointStudent.get(point.getEmail());
                 if (point.getEmail().isEmpty()) {
                     teExcelResponseMessage.setStatus(false);
-                    teExcelResponseMessage.setMessage(
-                            " Email không được để trống.");
+                    teExcelResponseMessage.setMessage(" Email không được để trống !");
                     return;
                 } else if (!point.getEmail().matches(regexEmailExactly)) {
                     teExcelResponseMessage.setStatus(false);
-                    teExcelResponseMessage.setMessage(
-                            " Email sai định dạng.");
+                    teExcelResponseMessage.setMessage(" Email sai định dạng !");
                     return;
                 } else {
                     if (simpleResponse == null) {
                         teExcelResponseMessage.setStatus(false);
-                        teExcelResponseMessage.setMessage(" Email của sinh viên không tồn tại.");
+                        teExcelResponseMessage.setMessage(" Email của sinh viên không tồn tại !");
                         return;
                     }
                 }
                 Point pointUpd = mapPointStudentDB.get(simpleResponse.getId());
-                pointUpd.setCheckPointPhase1(Double.parseDouble((point.getCheckPointPhase1())));
-                pointUpd.setCheckPointPhase2(Double.parseDouble((point.getCheckPointPhase2())));
-                pointUpd.setFinalPoint(Double.parseDouble(String.valueOf(
-                        (Double.parseDouble((point.getCheckPointPhase1()))
-                                + Double.parseDouble((point.getCheckPointPhase2()))) / 2)));
-                pointUpdate.put(pointUpd.getStudentId(), pointUpd);
+                double phase1 = Double.parseDouble((point.getCheckPointPhase1()));
+                double phase2 = Double.parseDouble((point.getCheckPointPhase2()));
+                if (pointUpd != null) {
+                    if (pointUpd.getCheckPointPhase1() != phase1 || pointUpd.getCheckPointPhase2() != phase2) {
+                        messagesConcurrent.add(" " + simpleResponse.getName() + " - " + simpleResponse.getUserName() +
+                                " từ <i style=\"color: black\">(" + pointUpd.getCheckPointPhase1() + " và " + pointUpd.getCheckPointPhase2() + ")"
+                                + "</i> thành  <i style=\"color: red\">(" + phase1 + " và " + phase2 + ")</i>,");
+                    }
+                    pointUpd.setCheckPointPhase1(phase1);
+                    pointUpd.setCheckPointPhase2(phase2);
+                    pointUpd.setFinalPoint(Double.parseDouble(String.valueOf((phase1 + phase2) / 2)));
+                    pointUpdate.put(pointUpd.getStudentId(), pointUpd);
+                } else {
+                    Point pointNew = new Point();
+                    pointNew.setClassId(idClass);
+                    pointNew.setCheckPointPhase1(phase1);
+                    pointNew.setCheckPointPhase2(phase2);
+                    pointNew.setStudentId(simpleResponse.getId());
+                    pointNew.setFinalPoint(Double.parseDouble(String.valueOf((phase1 + phase2) / 2)));
+                    pointUpdate.put(pointNew.getStudentId(), pointNew);
+                    messagesConcurrent.add(" " + simpleResponse.getName() + " - " + simpleResponse.getUserName() +
+                            " là <i style=\"color: red\">(" + phase1 + " và " + phase2 + ")</i>,");
+                }
             });
-            if (teExcelResponseMessage.getStatus() == true) {
+            if (teExcelResponseMessage.getStatus()) {
                 tePointRepository.saveAll(pointUpdate.values());
                 teExcelResponseMessage.setMessage("Import điểm thành công !");
-                return teExcelResponseMessage;
+
+                String codeClass = loggerUtil.getCodeClassByIdClass(idClass);
+                String nameSemester = loggerUtil.getNameSemesterByIdClass(idClass);
+                StringBuilder message = new StringBuilder();
+                StringJoiner messageJoiner = new StringJoiner(" ");
+                messagesConcurrent.forEach(messageJoiner::add);
+                if (messageJoiner.length() > 0) {
+                    message.append("Đã cập nhật điểm giai đoạn 1, giai đoạn 2 cho sinh viên: ").append(messageJoiner.toString());
+                    if (message.charAt(message.length() - 1) == ',') {
+                        message.setCharAt(message.length() - 1, '.');
+                    }
+                } else {
+                    message.append("Đã cập nhật điểm giai đoạn 1, giai đoạn 2 cho sinh viên nhưng không có sự thay đổi.");
+                }
+                loggerUtil.sendLogStreamClass(message.toString(), codeClass, nameSemester);
             } else {
                 teExcelResponseMessage.setMessage("Import điểm thất bại. " + teExcelResponseMessage.getMessage());
             }
-        } catch (
-                Exception e) {
+            listInput.clear();
+            mapPointStudent.clear();
+            mapPointStudentDB.clear();
+            messagesConcurrent.clear();
+            file.getInputStream().close();
+            return teExcelResponseMessage;
+        } catch (Exception e) {
             e.printStackTrace();
             teExcelResponseMessage.setStatus(false);
             teExcelResponseMessage.setMessage("Lỗi hệ thống vui lòng F5 lại trang !");
             return teExcelResponseMessage;
         }
-        return teExcelResponseMessage;
     }
 
     public void addDataMapsPointStudent(ConcurrentHashMap<String, SimpleResponse> mapAll, String idClass) {
@@ -494,6 +524,7 @@ public class TePointSeviceImpl implements TePointSevice {
         for (SimpleResponse student : listStudent) {
             mapSimple.put(student.getEmail(), student);
         }
+        listStudent.clear();
     }
 
     public void addDataMapsPointStudentDB(ConcurrentHashMap<String, Point> mapPointDB, String idClass) {
@@ -505,6 +536,7 @@ public class TePointSeviceImpl implements TePointSevice {
         for (Point point : listPointDB) {
             mapPoint.put(point.getStudentId(), point);
         }
+        listPointDB.clear();
     }
 
 
