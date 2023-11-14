@@ -1,6 +1,17 @@
 import { useParams, useNavigate } from "react-router-dom";
 import "./styleTeamsInMyClass.css";
-import { Row, Table, Button, Tooltip, Modal, Empty, Tag, message } from "antd";
+import {
+  Row,
+  Table,
+  Button,
+  Tooltip,
+  Modal,
+  Empty,
+  Tag,
+  message,
+  Tour,
+  Divider,
+} from "antd";
 import { Link } from "react-router-dom";
 import { ControlOutlined } from "@ant-design/icons";
 import { TeacherStudentClassesAPI } from "../../../../api/teacher/student-class/TeacherStudentClasses.api";
@@ -8,7 +19,7 @@ import {
   SetStudentClasses,
   GetStudentClasses,
 } from "../../../../app/teacher/student-class/studentClassesSlice.reduce";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { TeacherTeamsAPI } from "../../../../api/teacher/teams-class/TeacherTeams.api";
 import {
   SetTeams,
@@ -86,9 +97,7 @@ const TeamsInMyClass = () => {
         document.title = "Quản lý nhóm | " + responese.data.data.code;
       });
     } catch (error) {
-      setTimeout(() => {
-        navigate("/teacher/my-class");
-      }, [1000]);
+      navigate("/teacher/my-class");
     }
   };
 
@@ -307,6 +316,7 @@ const TeamsInMyClass = () => {
   const handleCancelImport = () => {
     setShowModalImport(false);
   };
+
   return (
     <div className="teacher-team">
       {!loading && <LoadingIndicator />}
@@ -431,6 +441,7 @@ const TeamsInMyClass = () => {
                 Danh sách nhóm :
               </span>
             </Row>
+
             <Row style={{ marginTop: "10px" }}>
               <ButtonExportExcelTeam idClass={idClass} />
               <Button

@@ -1,8 +1,13 @@
+import { FloatButton } from "antd";
 import LogoFactory from "../../assets/img/logo_bit_1.png";
 
 const CommonFooter = () => {
   return (
     <>
+      {" "}
+      <FloatButton.Group shape="circle" style={{ bottom: 20, right: 20 }}>
+        <FloatButton.BackTop visibilityHeight={0} />
+      </FloatButton.Group>
       <div
         style={{
           justifyContent: "center",

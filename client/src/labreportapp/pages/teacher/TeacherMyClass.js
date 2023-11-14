@@ -33,8 +33,8 @@ import {
 } from "../../app/teacher/my-class/teacherMyClassSlice.reduce";
 import { convertHourAndMinuteToString } from "../../helper/util.helper";
 import { TeacherMeetingPeriodAPI } from "../../api/teacher/meeting-period/TeacherMeetingPeriod.api";
-const { Option } = Select;
 
+const { Option } = Select;
 const TeacherMyClass = () => {
   const dispatch = useAppDispatch();
   const [listSemester, setListSemester] = useState([]);
@@ -154,6 +154,7 @@ const TeacherMyClass = () => {
     setClassPeriodSearch("");
     setIdLevelSearch("");
     setListActivity([]);
+    setCurrent(1);
     setClear(true);
   };
   const convertLongToDate = (dateLong) => {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Button, Select, Table, Pagination, Empty } from "antd";
+import { Modal, Button, Select, Table, Pagination, Empty, Spin } from "antd";
 import { TeacherMyClassAPI } from "../../../../../api/teacher/my-class/TeacherMyClass.api";
 
 const { Option } = Select;
@@ -39,15 +39,17 @@ const TeModalShowHistory = ({ visible, onCancel, classDetail }) => {
   const [totalPages, setTotalPages] = useState(0);
   const [size, setSize] = useState("50");
 
-  const loadDataHistory = () => {
-    TeacherMyClassAPI.showHistory({
-      idClass: classDetail.id,
-      page: current - 1,
-      size: parseInt(size),
-    }).then((response) => {
-      setDataHistory(response.data.data);
-      setTotalPages(response.data.totalPages);
-    });
+  const loadDataHistory = async () => {
+    try {
+      TeacherMyClassAPI.showHistory({
+        idClass: classDetail.id,
+        page: current - 1,
+        size: parseInt(size),
+      }).then((response) => {
+        setDataHistory(response.data.data);
+        setTotalPages(response.data.totalPages);
+      });
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -58,7 +60,7 @@ const TeModalShowHistory = ({ visible, onCancel, classDetail }) => {
 
   return (
     <>
-      <Modal visible={visible} onCancel={onCancel} width={1300} footer={null}>
+      <Modal open={visible} onCancel={onCancel} width={1300} footer={null}>
         <div>
           <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
             <span style={{ fontSize: "18px" }}>Lịch sử</span>

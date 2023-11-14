@@ -53,6 +53,8 @@ const ModalFileImport = ({ visible, onCancel, idClass, fetchData }) => {
       dispatch(SetLoadingFalse());
     }
   };
+
+  
   return (
     <>
       <Modal

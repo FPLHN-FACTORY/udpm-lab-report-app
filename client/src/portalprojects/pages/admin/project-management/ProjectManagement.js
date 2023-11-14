@@ -50,6 +50,7 @@ const { Option } = Select;
 
 const ProjectManagement = () => {
   const dispatch = useAppDispatch();
+  const [size, setSize] = useState(10);
   const [current, setCurrent] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [idProject, setIdProject] = useState("");
@@ -111,9 +112,7 @@ const ProjectManagement = () => {
           setListGroupProject(response.data.data);
         }
       );
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const fetchDataCategory = async () => {
@@ -135,7 +134,7 @@ const ProjectManagement = () => {
         idCategory: idCategorySearch,
         groupProjectId: idGroupProjectSearch,
         page: current,
-        size: 5,
+        size: size,
       };
       const response = await ProjectManagementAPI.featchAll(filter);
       const responseData = response.data.data;
@@ -147,7 +146,6 @@ const ProjectManagement = () => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      console.log(error);
     }
   };
 
@@ -380,9 +378,10 @@ const ProjectManagement = () => {
     }
   };
 
-  const handleTotalPagesChange = (newTotalPages) => {
+  const changeTotalsPage = (newTotalPages) => {
     setTotalPages(newTotalPages);
   };
+
   return (
     <>
       {loading && <LoadingIndicator />}
@@ -602,7 +601,9 @@ const ProjectManagement = () => {
           <ModalCreateProject
             visible={showCreateModal}
             onCancel={handleCancelCreate}
-            onTotalPagesChange={handleTotalPagesChange}
+            changeTotalsPage={changeTotalsPage}
+            totalPages={totalPages}
+            size={size}
           />
           <ModalUpdateProject
             visible={showUpdateModal}

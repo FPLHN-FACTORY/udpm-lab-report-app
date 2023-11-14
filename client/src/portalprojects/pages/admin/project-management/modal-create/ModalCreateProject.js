@@ -17,7 +17,10 @@ import { useEffect, useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import { ProjectManagementAPI } from "../../../../api/admin/project-management/projectManagement.api";
-import { CreateProject } from "../../../../app/reducer/admin/project-management/projectManagementSlide.reducer";
+import {
+  CreateProject,
+  GetProjectManagement,
+} from "../../../../app/reducer/admin/project-management/projectManagementSlide.reducer";
 import LoadingIndicator from "../../../../helper/loading";
 import { SearchOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
@@ -30,7 +33,13 @@ const { RangePicker } = DatePicker;
 const { Option } = Select;
 const { TextArea } = Input;
 
-const ModalCreateProject = ({ visible, onCancel, onTotalPagesChange }) => {
+const ModalCreateProject = ({
+  visible,
+  onCancel,
+  changeTotalsPage,
+  totalPages,
+  size,
+}) => {
   const [code, setCode] = useState("");
   const [errorCode, setErrorCode] = useState("");
   const [name, setName] = useState("");
@@ -52,6 +61,8 @@ const ModalCreateProject = ({ visible, onCancel, onTotalPagesChange }) => {
   const [listGroupProject, setListGroupProject] = useState([]);
   const [selectedGroupProject, setSelectedGroupProject] = useState(null);
   const listCategorys = useAppSelector(GetCategory);
+
+  const dataProject = useAppSelector(GetProjectManagement);
 
   const cancelSuccess = () => {
     onCancel.handleCancelModalCreateSusscess();
@@ -102,9 +113,7 @@ const ModalCreateProject = ({ visible, onCancel, onTotalPagesChange }) => {
           setListGroupProject(response.data.data);
         }
       );
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const featchRoleConfig = async () => {
@@ -112,9 +121,7 @@ const ModalCreateProject = ({ visible, onCancel, onTotalPagesChange }) => {
       await AdPotalsRoleConfigAPI.getAllRoleConfig().then((response) => {
         setListRoleConfig(response.data.data);
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const featChMultiSelect = async () => {
@@ -124,9 +131,7 @@ const ModalCreateProject = ({ visible, onCancel, onTotalPagesChange }) => {
         setListMembers(respone.data.data);
       });
       setLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleChangeMembers = (idMember) => {
@@ -183,9 +188,7 @@ const ModalCreateProject = ({ visible, onCancel, onTotalPagesChange }) => {
         };
       });
       setListMemberProjects(listMemberAdd);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleDateChange = (e) => {
@@ -261,11 +264,14 @@ const ModalCreateProject = ({ visible, onCancel, onTotalPagesChange }) => {
           message.success("Thêm thành công !");
           let data = respone.data.data;
           dispatch(CreateProject(data));
+          if (dataProject != null) {
+            if (dataProject.length + 1 > size) {
+              changeTotalsPage(totalPages + 1);
+            }
+          }
           cancelSuccess();
         },
-        (error) => {
-          console.log(error);
-        }
+        (error) => {}
       );
     }
   };
