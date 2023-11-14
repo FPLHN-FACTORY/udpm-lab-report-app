@@ -534,7 +534,7 @@ const ModalCreateProject = ({ visible, onCancel, onTotalPagesChange }) => {
                   option.label.toLowerCase().indexOf(text.toLowerCase()) !== -1
                 }
               >
-                {listMembers.map((member) => (
+                {listMembers != null && listMembers.map((member) => (
                   <Option
                     label={member.email}
                     value={member.id}

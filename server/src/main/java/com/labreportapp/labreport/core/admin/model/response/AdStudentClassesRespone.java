@@ -27,9 +27,6 @@ public interface AdStudentClassesRespone {
     @Value("#{target.idAttendance}")
     String getIdAttendance();
 
-    @Value("#{target.codeTeam}")
-    String getCodeTeam();
-
     @Value("#{target.nameTeam}")
     String getNameTeam();
 }

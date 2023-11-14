@@ -9,6 +9,7 @@ import {
 import "./styleCategory.css";
 import {
   Button,
+  Empty,
   Input,
   Pagination,
   Popconfirm,
@@ -234,22 +235,42 @@ const CategoryManagement = () => {
           </div>
           <br />
           <div>
-            <Table
-              dataSource={data}
-              rowKey="id"
-              columns={columns}
-              pagination={false}
-            />
-            <div className="pagination_box">
-              <Pagination
-                simple
-                current={current}
-                onChange={(value) => {
-                  setCurrent(value);
-                }}
-                total={total * 10}
-              />
-            </div>
+            {data.length > 0 && (
+              <>
+                <Table
+                  dataSource={data}
+                  rowKey="id"
+                  columns={columns}
+                  pagination={false}
+                />
+                <div className="pagination_box">
+                  <Pagination
+                    simple
+                    current={current}
+                    onChange={(value) => {
+                      setCurrent(value);
+                    }}
+                    total={total * 10}
+                  />
+                </div>
+              </>
+            )}
+            {data.length === 0 && (
+              <>
+                <p
+                  style={{
+                    textAlign: "center",
+                    fontSize: "15px",
+                    color: "red",
+                  }}
+                >
+                  <Empty
+                    imageStyle={{ height: 60 }}
+                    description={<span>Không có dữ liệu</span>}
+                  />{" "}
+                </p>
+              </>
+            )}
           </div>
         </div>
         <ModalCreateCategory

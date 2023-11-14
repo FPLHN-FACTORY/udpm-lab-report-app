@@ -97,7 +97,7 @@ const ModalUpdateMeetingPeriod = ({ visible, onCancel, meetingPeriod }) => {
     }
 
     if (parseInt(startHour) >= 24) {
-      setErrorStartHour("Giờ bắt đầu phải nhỏ hơn 24 phút");
+      setErrorStartHour("Giờ bắt đầu phải nhỏ hơn 24 giờ");
       check++;
     } else if (parseInt(startMinute) >= 60) {
       setErrorStartMinute("Phút bắt đầu phải nhỏ hơn 60 phút");
@@ -118,12 +118,12 @@ const ModalUpdateMeetingPeriod = ({ visible, onCancel, meetingPeriod }) => {
       setErrorEndMinute("");
     }
 
-    if (!Number.isInteger(Number(startHour)) || Number(startHour) <= 0) {
+    if (!Number.isInteger(Number(startHour)) || Number(startHour) < 0) {
       setErrorStartHour("Giờ bắt đầu phải là số nguyên dương");
       check++;
     } else if (
       !Number.isInteger(Number(startMinute)) ||
-      Number(startMinute) <= 0
+      Number(startMinute) < 0
     ) {
       setErrorStartMinute("Phút bắt đầu phải là số nguyên dương");
       check++;
@@ -132,10 +132,10 @@ const ModalUpdateMeetingPeriod = ({ visible, onCancel, meetingPeriod }) => {
       setErrorStartMinute("");
     }
 
-    if (!Number.isInteger(Number(endHour)) || Number(endHour) <= 0) {
+    if (!Number.isInteger(Number(endHour)) || Number(endHour) < 0) {
       setErrorEndHour("Giờ kết thúc phải là số nguyên dương");
       check++;
-    } else if (!Number.isInteger(Number(endMinute)) || Number(endMinute) <= 0) {
+    } else if (!Number.isInteger(Number(endMinute)) || Number(endMinute) < 0) {
       setErrorEndMinute("Phút kết thúc phải là số nguyên dương");
       check++;
     } else {

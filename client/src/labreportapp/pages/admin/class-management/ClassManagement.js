@@ -104,15 +104,18 @@ const ClassManagement = () => {
       statusTeacherEdit: statusTeacherEdit,
     };
 
-    try {
-      await ClassAPI.getAllMyClass(filter).then((respone) => {
+    ClassAPI.getAllMyClass(filter).then((respone) => {
+      if (respone.data.data != null) {
         setTotalPages(parseInt(respone.data.data.totalPages));
         setListClassAll(respone.data.data.data);
         dispatch(SetMyClass(respone.data.data.data));
-
-        setLoading(false);
-      });
-    } catch (error) {}
+      } else {
+        setTotalPages(0);
+        setListClassAll([]);
+        dispatch(SetMyClass([]));
+      }
+      setLoading(false);
+    });
   };
 
   useEffect(() => {

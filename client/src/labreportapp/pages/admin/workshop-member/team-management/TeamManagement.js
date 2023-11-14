@@ -9,6 +9,7 @@ import {
   Button,
   Col,
   Dropdown,
+  Empty,
   Input,
   Menu,
   Pagination,
@@ -304,6 +305,23 @@ const TeamManagement = () => {
                   );
                 })}
               </div>
+              {data.length === 0 && (
+                <>
+                  <p
+                    style={{
+                      textAlign: "center",
+                      marginTop: "20px",
+                      fontSize: "15px",
+                      color: "red",
+                    }}
+                  >
+                    <Empty
+                      imageStyle={{ height: 60 }}
+                      description={<span>Không có dữ liệu</span>}
+                    />{" "}
+                  </p>
+                </>
+              )}
               <div>
                 <div className="pagination_box">
                   <Pagination

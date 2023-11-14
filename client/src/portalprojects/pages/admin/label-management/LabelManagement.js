@@ -291,10 +291,20 @@ const LabelManagement = () => {
               </div>
             </div>
           ) : (
-            <Empty
-              imageStyle={{ height: "60px" }}
-              description={<span>Không có dữ liệu</span>}
-            />
+            <>
+              <p
+                style={{
+                  textAlign: "center",
+                  fontSize: "15px",
+                  color: "red",
+                }}
+              >
+                <Empty
+                  imageStyle={{ height: 60 }}
+                  description={<span>Không có dữ liệu</span>}
+                />{" "}
+              </p>
+            </>
           )}
         </div>
         <ModalCreateLabel

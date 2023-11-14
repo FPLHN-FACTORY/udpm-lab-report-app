@@ -14,6 +14,7 @@ import {
   Card,
   Col,
   Dropdown,
+  Empty,
   Input,
   Menu,
   Pagination,
@@ -292,49 +293,67 @@ const GroupProjectManagement = () => {
                   );
                 })}
             </Row>
-            <Row
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <div>
-                <div
-                  className="pagination_box"
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <Pagination
-                    style={{ marginRight: "10px" }}
-                    simple
-                    current={current}
-                    onChange={(value) => {
-                      setCurrent(value);
-                    }}
-                    total={totalPages * 10}
-                  />
-                  <Select
-                    style={{ width: "100px", marginLeft: "10px" }}
-                    value={size}
-                    onChange={(e) => {
-                      setSize(e);
+            {data.length > 0 && (
+              <Row
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <div>
+                  <div
+                    className="pagination_box"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
                     }}
                   >
-                    <Select.Option value="8">8</Select.Option>
-                    <Select.Option value="25">25</Select.Option>
-                    <Select.Option value="50">50</Select.Option>
-                    <Select.Option value="100">100</Select.Option>
-                    <Select.Option value="250">250</Select.Option>
-                    <Select.Option value="500">500</Select.Option>
-                    <vOption value="1000">1000</vOption>
-                  </Select>
+                    <Pagination
+                      style={{ marginRight: "10px" }}
+                      simple
+                      current={current}
+                      onChange={(value) => {
+                        setCurrent(value);
+                      }}
+                      total={totalPages * 10}
+                    />
+                    <Select
+                      style={{ width: "100px", marginLeft: "10px" }}
+                      value={size}
+                      onChange={(e) => {
+                        setSize(e);
+                      }}
+                    >
+                      <Select.Option value="8">8</Select.Option>
+                      <Select.Option value="25">25</Select.Option>
+                      <Select.Option value="50">50</Select.Option>
+                      <Select.Option value="100">100</Select.Option>
+                      <Select.Option value="250">250</Select.Option>
+                      <Select.Option value="500">500</Select.Option>
+                      <vOption value="1000">1000</vOption>
+                    </Select>
+                  </div>
                 </div>
-              </div>
-            </Row>
+              </Row>
+            )}
+            {data.length === 0 && (
+              <>
+                <p
+                  style={{
+                    textAlign: "center",
+                    fontSize: "15px",
+                    color: "red",
+                  }}
+                >
+                  <Empty
+                    imageStyle={{ height: 60 }}
+                    description={<span>Không có dữ liệu</span>}
+                  />{" "}
+                </p>
+              </>
+            )}
           </div>
           <ModalUpdateGroupProject
             visible={showUpdateGroupProject}

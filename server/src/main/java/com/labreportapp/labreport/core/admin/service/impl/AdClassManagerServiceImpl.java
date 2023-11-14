@@ -35,8 +35,8 @@ import com.labreportapp.labreport.infrastructure.constant.StatusClass;
 import com.labreportapp.labreport.infrastructure.constant.StatusTeacherEdit;
 import com.labreportapp.labreport.repository.ActivityRepository;
 import com.labreportapp.labreport.repository.LevelRepository;
-import com.labreportapp.labreport.util.ClassHelper;
 import com.labreportapp.labreport.util.CallApiIdentity;
+import com.labreportapp.labreport.util.ClassHelper;
 import com.labreportapp.labreport.util.FormUtils;
 import com.labreportapp.labreport.util.RandomString;
 import com.labreportapp.labreport.util.SemesterHelper;
@@ -243,8 +243,15 @@ public class AdClassManagerServiceImpl implements AdClassService {
             }
         }
         Pageable pageable = PageRequest.of(adFindClass.getPage() - 1, adFindClass.getSize());
-        ClassConfiguration classConfiguration = adClassConfigurationRepository.findAll().get(0);
-        adFindClass.setValueClassSize(classConfiguration.getClassSizeMin());
+        List<ClassConfiguration> classConfigurationList = adClassConfigurationRepository.findAll();
+        ClassConfiguration classConfiguration = null;
+        PageableObject<AdListClassCustomResponse> pageableObject = new PageableObject<>();
+        if (!classConfigurationList.isEmpty() && classConfigurationList != null) {
+            classConfiguration = adClassConfigurationRepository.findAll().get(0);
+            adFindClass.setValueClassSize(classConfiguration.getClassSizeMin());
+        } else {
+            return null;
+        }
         Page<AdClassResponse> pageList = repository.findClassBySemesterAndActivity(adFindClass, pageable);
         List<AdClassResponse> listResponse = pageList.getContent();
         List<String> idList = listResponse.stream()
@@ -285,7 +292,6 @@ public class AdClassManagerServiceImpl implements AdClassService {
             }
             listClassCustomResponses.add(adListClassCustomResponse);
         }
-        PageableObject<AdListClassCustomResponse> pageableObject = new PageableObject<>();
         pageableObject.setData(listClassCustomResponses);
         pageableObject.setCurrentPage(pageList.getNumber());
         pageableObject.setTotalPages(pageList.getTotalPages());

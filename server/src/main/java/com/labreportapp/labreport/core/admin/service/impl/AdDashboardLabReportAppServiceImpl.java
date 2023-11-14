@@ -97,18 +97,20 @@ public class AdDashboardLabReportAppServiceImpl implements AdDashboardLabReportA
         List<String> teacherIds = adDashboardLabReportAppRepository.getListGiangVien(request);
         List<SimpleResponse> listSimple = callApiIdentity.handleCallApiGetListUserByListId(teacherIds);
         List<AdDashboardTeacherResponse> listTeacher = new ArrayList<>();
-        listSimple.forEach(simple -> {
-            AdDashboardTeacherResponse adDashboardTeacherResponse = new AdDashboardTeacherResponse();
-            adDashboardTeacherResponse.setId(simple.getId());
-            adDashboardTeacherResponse.setEmail(simple.getEmail());
-            adDashboardTeacherResponse.setName(simple.getName());
-            adDashboardTeacherResponse.setUserName(simple.getUserName());
-            adDashboardTeacherResponse.setPicture(simple.getPicture());
-            List<AdDashboardClassResponse> listClass = adDashboardLabReportAppRepository.getListClass(simple.getId(),
-                    request.getIdSemester(), request.getIdActivity(), new Date().getTime());
-            adDashboardTeacherResponse.setListClass(listClass);
-            listTeacher.add(adDashboardTeacherResponse);
-        });
+        if (listSimple != null && !listSimple.isEmpty()) {
+            listSimple.forEach(simple -> {
+                AdDashboardTeacherResponse adDashboardTeacherResponse = new AdDashboardTeacherResponse();
+                adDashboardTeacherResponse.setId(simple.getId());
+                adDashboardTeacherResponse.setEmail(simple.getEmail());
+                adDashboardTeacherResponse.setName(simple.getName());
+                adDashboardTeacherResponse.setUserName(simple.getUserName());
+                adDashboardTeacherResponse.setPicture(simple.getPicture());
+                List<AdDashboardClassResponse> listClass = adDashboardLabReportAppRepository.getListClass(simple.getId(),
+                        request.getIdSemester(), request.getIdActivity(), new Date().getTime());
+                adDashboardTeacherResponse.setListClass(listClass);
+                listTeacher.add(adDashboardTeacherResponse);
+            });
+        }
         response.setListTeacher(listTeacher);
         return response;
     }

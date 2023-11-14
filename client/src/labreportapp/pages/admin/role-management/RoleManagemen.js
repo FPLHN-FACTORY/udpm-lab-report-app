@@ -20,6 +20,7 @@ import {
   Popconfirm,
   message,
   Tag,
+  Empty,
 } from "antd";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
@@ -50,7 +51,7 @@ const RoleManagement = () => {
   useEffect(() => {
     fetchData();
     window.scrollTo(0, 0);
-    document.title = "Quản lý vai trò | Lab-Report-App";
+    document.title = "Quản lý vai trò trong dự án | Lab-Report-App";
   }, [current]);
 
   const fetchData = () => {
@@ -298,22 +299,42 @@ const RoleManagement = () => {
             </div>
           </div>
           <div>
-            <Table
-              dataSource={data}
-              rowKey="id"
-              columns={columns}
-              pagination={false}
-            />
-            <div className="pagination_box">
-              <Pagination
-                simple
-                current={current}
-                onChange={(page) => {
-                  setCurrent(page);
-                }}
-                total={total * 10}
-              />
-            </div>
+            {data.length > 0 && (
+              <>
+                <Table
+                  dataSource={data}
+                  rowKey="id"
+                  columns={columns}
+                  pagination={false}
+                />
+                <div className="pagination_box">
+                  <Pagination
+                    simple
+                    current={current}
+                    onChange={(page) => {
+                      setCurrent(page);
+                    }}
+                    total={total * 10}
+                  />
+                </div>
+              </>
+            )}
+            {data.length === 0 && (
+              <>
+                <p
+                  style={{
+                    textAlign: "center",
+                    fontSize: "15px",
+                    color: "red",
+                  }}
+                >
+                  <Empty
+                    imageStyle={{ height: 60 }}
+                    description={<span>Không có dữ liệu</span>}
+                  />{" "}
+                </p>
+              </>
+            )}
           </div>
         </div>
         <ModalCreateRoleProject

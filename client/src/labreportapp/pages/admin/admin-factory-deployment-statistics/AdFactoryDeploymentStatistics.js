@@ -12,7 +12,7 @@ import {
   faUserAltSlash,
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
-import { Col, Row, Select } from "antd";
+import { Col, Empty, Row, Select } from "antd";
 import { ClassAPI } from "../../../api/admin/class-manager/ClassAPI.api";
 import { AdDashboardFactoryAPI } from "../../../api/admin/AdDashboardFactoryAPI";
 import LoadingIndicator from "../../../helper/loading";
@@ -388,6 +388,23 @@ const AdFactoryDeploymentStatistics = () => {
               dashboard.listTeacher.map((item) => {
                 return <ItemTeacherDashboard item={item} />;
               })}
+            {(dashboard == null || dashboard.listTeacher.length === 0) && (
+              <>
+                <p
+                  style={{
+                    textAlign: "center",
+                    marginTop: "100px",
+                    fontSize: "15px",
+                    color: "red",
+                  }}
+                >
+                  <Empty
+                    imageStyle={{ height: 60 }}
+                    description={<span>Không có dữ liệu</span>}
+                  />{" "}
+                </p>
+              </>
+            )}
           </div>
         </div>
       </div>

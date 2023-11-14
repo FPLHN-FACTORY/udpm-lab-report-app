@@ -20,7 +20,6 @@ public interface AdStudentClassRepository extends StudentClassesRepository {
             sc.role as role,
             sc.status as statusStudent,
             t.id as idTeam,
-            t.code as codeTeam,
             t.name as nameTeam,
             f.id as idFeedBack,
             at.id as idAttendance
