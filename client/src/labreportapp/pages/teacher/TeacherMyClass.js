@@ -105,9 +105,7 @@ const TeacherMyClass = () => {
         setListMyClass(respone.data.data.data);
         setLoading(true);
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const featchDataSemester = async () => {
@@ -116,9 +114,7 @@ const TeacherMyClass = () => {
         dispatch(SetTeacherSemester(respone.data.data));
         setListSemester(respone.data.data);
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const featchDataLevel = async () => {
@@ -126,9 +122,7 @@ const TeacherMyClass = () => {
       await TeacherLevelAPI.getAllLevel().then((respone) => {
         setListLevel(respone.data.data);
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const featchDataActivity = async (idSemesterSearch) => {
@@ -138,9 +132,7 @@ const TeacherMyClass = () => {
       ).then((respone) => {
         setListActivity(respone.data.data);
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const featchDataMeetingPeriod = async () => {
@@ -148,9 +140,7 @@ const TeacherMyClass = () => {
       await TeacherMeetingPeriodAPI.getPeriod().then((respone) => {
         setListMeetingPeriod(respone.data.data);
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleSearch = async () => {

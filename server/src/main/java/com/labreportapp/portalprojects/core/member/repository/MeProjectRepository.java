@@ -61,6 +61,29 @@ public interface MeProjectRepository extends ProjectRepository {
             """, nativeQuery = true)
     Page<MeProjectResponse> getAllProjectById(Pageable page, @Param("req") MeFindProjectRequest req);
 
+//    @Query(value = """
+//            SELECT DISTINCT pro.id,
+//                   pro.name,
+//                   pro.code,
+//                   pro.descriptions,
+//                   pro.status_project,
+//                   pro.start_time,
+//                   pro.end_time,
+//                   pro.progress,
+//                   pro.created_date,
+//                   pro.background_image,
+//                   pro.background_color,
+//                   GROUP_CONCAT(cate.name SEPARATOR ', ') as nameCategorys,
+//                    gp.name as name_group_project,
+//                    gp.id as id_group_project
+//             FROM project_category a
+//             JOIN project pro on a.project_id = pro.id
+//             JOIN category cate on a.category_id = cate.id
+//             LEFT JOIN group_project gp on gp.id = pro.group_project_id
+//            WHERE pro.id = :idProject
+//            """, nativeQuery = true)
+//    Optional<MeDetailProjectCateResponse> findOneProjectCategoryById(@Param("idProject") String idProject);
+
     @Query(value = """
             SELECT DISTINCT pro.id,
                    pro.name,
@@ -74,14 +97,15 @@ public interface MeProjectRepository extends ProjectRepository {
                    pro.background_image,
                    pro.background_color,
                    GROUP_CONCAT(cate.name SEPARATOR ', ') as nameCategorys,
-                    gp.name as name_group_project,
-                    gp.id as id_group_project
-             FROM project_category a
-             JOIN project pro on a.project_id = pro.id
-             JOIN category cate on a.category_id = cate.id
+                   gp.name as name_group_project,
+                   gp.id as id_group_project
+             FROM project pro
+             LEFT JOIN project_category a on a.project_id = pro.id
+             LEFT JOIN category cate on a.category_id = cate.id
              LEFT JOIN group_project gp on gp.id = pro.group_project_id
-            WHERE pro.id = :idProject
+             WHERE pro.id = :idProject
             """, nativeQuery = true)
     Optional<MeDetailProjectCateResponse> findOneProjectCategoryById(@Param("idProject") String idProject);
+
 
 }

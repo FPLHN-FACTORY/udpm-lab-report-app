@@ -26,10 +26,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../../app/hook";
-import {
-  GetProject,
-  SetProject,
-} from "../../../app/reducer/detail-project/DPProjectSlice.reducer";
+import { SetProject } from "../../../app/reducer/detail-project/DPProjectSlice.reducer";
 import { DetailProjectAPI } from "../../../api/detail-project/detailProject.api";
 import { PeriodProjectAPI } from "../../../api/period-project/periodProject.api";
 import {
@@ -48,6 +45,7 @@ import logoUdpm3 from "../../../../labreportapp/assets/img/logo-udpm-3.png";
 import {
   CheckCircleOutlined,
   CloseCircleOutlined,
+  ExclamationCircleOutlined,
   SyncOutlined,
 } from "@ant-design/icons";
 import { convertDateLongToString } from "../../../../labreportapp/helper/util.helper";
@@ -382,14 +380,28 @@ const PeriodProject = () => {
                     style={{ marginTop: "10px", marginBottom: "15px" }}
                   >
                     Thể loại:{" "}
-                    {dataProject != null ? dataProject.nameCategorys : ""}
+                    {dataProject != null &&
+                    dataProject.nameCategorys != null ? (
+                      dataProject.nameCategorys
+                    ) : (
+                      <Tag icon={<ExclamationCircleOutlined />} color="warning">
+                        Không có thể loại
+                      </Tag>
+                    )}
                   </span>
                   <span
                     className="group-info-item"
                     style={{ marginTop: "10px", marginBottom: "15px" }}
                   >
                     Nhóm dự án:{" "}
-                    {dataProject != null ? dataProject.nameGroupProject : ""}
+                    {dataProject != null &&
+                    dataProject.nameGroupProject != null ? (
+                      dataProject.nameGroupProject
+                    ) : (
+                      <Tag icon={<ExclamationCircleOutlined />} color="warning">
+                        Không có nhóm dự án
+                      </Tag>
+                    )}
                   </span>
                 </div>
               </div>
