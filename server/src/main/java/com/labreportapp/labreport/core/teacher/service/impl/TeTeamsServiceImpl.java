@@ -11,10 +11,12 @@ import com.labreportapp.labreport.core.teacher.model.request.TeUpdateTeamsReques
 import com.labreportapp.labreport.core.teacher.model.response.TeExcelResponseMessage;
 import com.labreportapp.labreport.core.teacher.model.response.TeStudentCallApiResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeTeamsRespone;
+import com.labreportapp.labreport.core.teacher.repository.TeCategoryRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeClassRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeLabelProjectRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeLabelRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeMemberProjectRepository;
+import com.labreportapp.labreport.core.teacher.repository.TeProjectCategoryRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeProjectRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeRoleConfigReposiotry;
 import com.labreportapp.labreport.core.teacher.repository.TeRoleMemberProjectRepository;
@@ -34,10 +36,12 @@ import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.labreport.util.LoggerUtil;
 import com.labreportapp.labreport.util.RandomString;
 import com.labreportapp.labreport.util.SemesterHelper;
+import com.labreportapp.portalprojects.entity.Category;
 import com.labreportapp.portalprojects.entity.Label;
 import com.labreportapp.portalprojects.entity.LabelProject;
 import com.labreportapp.portalprojects.entity.MemberProject;
 import com.labreportapp.portalprojects.entity.Project;
+import com.labreportapp.portalprojects.entity.ProjectCategory;
 import com.labreportapp.portalprojects.entity.RoleConfig;
 import com.labreportapp.portalprojects.entity.RoleMemberProject;
 import com.labreportapp.portalprojects.entity.RoleProject;
@@ -140,6 +144,12 @@ public class TeTeamsServiceImpl implements TeTeamsService {
 
     @Autowired
     private LoggerUtil loggerUtil;
+
+    @Autowired
+    private TeProjectCategoryRepository teProjectCategoryRepository;
+
+    @Autowired
+    private TeCategoryRepository teCategoryRepository;
 
     @Override
     public List<TeTeamsRespone> getAllTeams(final TeFindStudentClasses teFindStudentClasses) {
@@ -378,6 +388,7 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         }
         message.append(" và background mặc định. ");
         loggerUtil.sendLogStreamClass(message.toString(), codeClass, nameSemester);
+
         List<Label> listLabel = teLabelRepository.findAll();
         List<LabelProject> newLabelProject = new ArrayList<>();
         listLabel.forEach(item -> {

@@ -72,7 +72,7 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
 
   useEffect(() => {
     if (visible) {
-      featMemberAndCaregoryAddProject();
+      feachMemberRoleProject();
     }
   }, [listCategorysChange, listMemberChange]);
 
@@ -95,9 +95,7 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
       await AdPotalsMemberFactoryAPI.getAllMemberActive().then((respone) => {
         setListMember(respone.data.data);
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const featDataGroupProject = async () => {
@@ -107,9 +105,7 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
           setListGroupProject(response.data.data);
         }
       );
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const featchRoleProject = async (idProject) => {
@@ -119,9 +115,7 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
           setListRoleProject(response.data.data);
         }
       );
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const featchProject = async () => {
@@ -147,12 +141,10 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
           setLoading(false);
         }, 200);
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
-  const featMemberAndCaregoryAddProject = async () => {
+  const feachMemberRoleProject = async () => {
     try {
       const memberRoles = {};
       listMemberRole.forEach((memberRole) => {
@@ -183,9 +175,7 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
         };
       });
       setListUpdateMember(updatedListMemberJoinCreate);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleChangeGroupProject = (value) => {
@@ -298,9 +288,7 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
           dispatch(UpdateProject(data));
           cancelUpdateSuccess();
         },
-        (error) => {
-          console.log(error);
-        }
+        (error) => {}
       );
     }
   };

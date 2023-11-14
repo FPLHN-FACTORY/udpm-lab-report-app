@@ -74,9 +74,7 @@ const ModalUpdateFiledProject = ({ visible, onCancel, idProject }) => {
       const responeGetAllCategory =
         await CategoryProjectManagementAPI.fetchAllCategory();
       setListCategory(responeGetAllCategory.data.data);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const featDataGroupProject = async () => {
@@ -86,9 +84,7 @@ const ModalUpdateFiledProject = ({ visible, onCancel, idProject }) => {
           setListGroupProject(response.data.data);
         }
       );
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const featchProject = async () => {
@@ -107,9 +103,7 @@ const ModalUpdateFiledProject = ({ visible, onCancel, idProject }) => {
         );
         setLoading(false);
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleChangeGroupProject = (value) => {
@@ -185,9 +179,7 @@ const ModalUpdateFiledProject = ({ visible, onCancel, idProject }) => {
           dispatch(SetProjectCustom(response.data.data.projectCustom));
           onCancel();
         },
-        (error) => {
-          console.log(error);
-        }
+        (error) => {}
       );
     }
   };
