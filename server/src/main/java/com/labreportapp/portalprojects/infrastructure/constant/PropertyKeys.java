@@ -97,5 +97,7 @@ public class PropertyKeys {
     public static final String ROLE_DEFAULT_NOT_EMPTY = "role.default.not.empty";
     public static final String USING_CATEGORY_CAN_NOT_DELETE = "using.category.can.not.delete";
     public static final String DUPLICATE_LABEL_NAME = "duplicate.label.name";
+    public static final String SESSION_EXPIRED = "session.expired";
+    public static final String ROLE_HAS_CHANGE = "role.has.change";
 
 }

@@ -1,8 +1,6 @@
 import axios from "axios";
 import { AppConfig } from "../../AppConfig";
-import { toast } from "react-toastify";
 import Cookies from "js-cookie";
-import { portIdentity } from "./constants";
 import { dispatch } from "../app/store";
 import { message } from "antd";
 import { SetLoadingFalse } from "../app/common/Loading.reducer";
@@ -23,30 +21,21 @@ request.interceptors.response.use(
   (response) => response,
   (error) => {
     dispatch(SetLoadingFalse());
-    if (
-      error.response &&
-      (error.response.status === 401 || error.response.status === 403)
-    ) {
+    if (error.response && error.response.status === 401) {
       window.location.href = "/not-authorization";
     }
-    if (error.response != null && error.response.status === 400) {
+    if (error.response && error.response.status === 403) {
+      window.location.href = "/forbidden";
+    }
+    if (error.response && error.response.status === 406) {
+      window.location.href = "/not-aceptable/status=" + error.response.data;
+    }
+    if (error.response && error.response.status === 400) {
       message.error(error.response.data.message);
     }
-    if (error.response != null && error.response.status === 404) {
-      window.location.href = "/not-found";
-    }
     if (error.response && error.response.status === 500) {
-      if (error.response.data.message === "2003") {
-        Cookies.remove("token");
-        Cookies.remove("userCurrent");
-        alert("Quyền của người dùng đã bị thay đổi. Vui lòng đăng nhập lại !");
-        window.location.href = portIdentity;
-      }
-      if (error.response.data.message === "2002") {
-        Cookies.remove("token");
-        Cookies.remove("userCurrent");
-        window.location.href = portIdentity;
-      }
+      message.error(error.response.data.message);
+      // window.location.href = "/error";
     }
     throw error;
   }

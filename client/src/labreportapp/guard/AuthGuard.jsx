@@ -5,16 +5,15 @@ import jwt_decode from "jwt-decode";
 import { useAppDispatch } from "../app/hook";
 import { SetUserCurrent } from "../app/common/UserCurrent.reducer";
 import { RolesAPI } from "../api/common/RolesAPI";
-import { useLocation } from "react-router";
 
 const AuthGuard = ({ children }) => {
   const dispatch = useAppDispatch();
-  const location = useLocation();
 
   useEffect(() => {
     const token = Cookies.get("token");
     window.scrollTo(0, 0);
-    if (token == null) {
+
+    if (token == null || token === undefined) {
       window.location.href = portIdentity;
       return null;
     } else {
@@ -25,7 +24,7 @@ const AuthGuard = ({ children }) => {
       });
       getRolesUser(decodedToken);
     }
-  }, [children, location]);
+  }, []);
 
   const getRolesUser = (decodedToken) => {
     RolesAPI.getRolesUser(decodedToken.id).then(

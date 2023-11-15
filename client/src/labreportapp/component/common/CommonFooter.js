@@ -5,7 +5,13 @@ const CommonFooter = () => {
   return (
     <>
       {" "}
-      <FloatButton.Group shape="circle" style={{ bottom: 20, right: 20 }}>
+      <FloatButton.Group
+        shape="circle"
+        style={{
+          bottom: 20,
+          right: 20,
+        }}
+      >
         <FloatButton.BackTop visibilityHeight={0} />
       </FloatButton.Group>
       <div

@@ -2,7 +2,7 @@ import React from "react";
 import { Result, Button } from "antd";
 import { useNavigate } from "react-router-dom"; // Sử dụng nếu bạn muốn điều hướng trang
 
-function Forbidden() {
+function NotAuthorized() {
   const navigate = useNavigate();
 
   const handleGoBack = () => {
@@ -12,7 +12,7 @@ function Forbidden() {
   return (
     <Result
       status="403"
-      title="Forbidden"
+      title="Not Authorized"
       subTitle="Xin lỗi, bạn không được phép truy cập trang này."
       extra={
         <Button type="primary" onClick={handleGoBack}>
@@ -23,4 +23,4 @@ function Forbidden() {
   );
 }
 
-export default Forbidden;
+export default NotAuthorized;

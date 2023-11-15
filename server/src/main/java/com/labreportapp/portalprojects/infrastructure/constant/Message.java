@@ -98,7 +98,9 @@ public enum Message {
     ROLE_DEFAULT_NOT_EMPTY(PropertiesReader.getProperty(PropertyKeys.ROLE_DEFAULT_NOT_EMPTY)),
     START_TIME_MORE_THAN_END_TIME(PropertiesReader.getProperty(PropertyKeys.START_TIME_MORE_THAN_END_TIME)),
     USING_CATEGORY_CAN_NOT_DELETE(PropertiesReader.getProperty(PropertyKeys.USING_CATEGORY_CAN_NOT_DELETE)),
-    DUPLICATE_LABEL_NAME(PropertiesReader.getProperty(PropertyKeys.DUPLICATE_LABEL_NAME));
+    DUPLICATE_LABEL_NAME(PropertiesReader.getProperty(PropertyKeys.DUPLICATE_LABEL_NAME)),
+    SESSION_EXPIRED(PropertiesReader.getProperty(PropertyKeys.SESSION_EXPIRED)),
+    ROLE_HAS_CHANGE(PropertiesReader.getProperty(PropertyKeys.ROLE_HAS_CHANGE));
 
     private String message;
 

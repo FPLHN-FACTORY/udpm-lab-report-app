@@ -80,7 +80,7 @@ public class JwtTokenProvider {
         }
     }
 
-    public boolean validateToken(String token) {
+    public String validateToken(String token) {
         try {
             Jws<Claims> claims = Jwts.parserBuilder()
                     .setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes()))
@@ -89,17 +89,17 @@ public class JwtTokenProvider {
 
             Date expirationDate = claims.getBody().getExpiration();
             if (expirationDate.before(new Date())) {
-                throw new RestApiException(Message.INVALID_TOKEN);
+                return Message.SESSION_EXPIRED.getMessage();
             }
             Object roleClaim = claims.getBody().get("role");
             String id = claims.getBody().get("id", String.class);
             Object response = callApiIdentity.handleCallApiGetRoleUserByIdUserAndModuleCode(id);
             if (!AreRolesEqual.compareObjects(roleClaim, response)) {
-                throw new CustomException(Message.ROLE_USER_CHANGE);
+                return Message.ROLE_HAS_CHANGE.getMessage();
             }
-            return true;
+            return "";
         } catch (JwtException | IllegalArgumentException e) {
-            throw new RestApiException(Message.INVALID_TOKEN);
+            return null;
         }
     }
 }

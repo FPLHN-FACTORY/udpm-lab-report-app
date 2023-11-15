@@ -1,5 +1,7 @@
 import NotFound from "./labreportapp/pages/404";
-import NotAuthorized from "./labreportapp/pages/403";
+import NotAuthorized from "./labreportapp/pages/401";
+import Forbidden from "./labreportapp/pages/403";
+import ErrorComponent from "./labreportapp/pages/500";
 import AuthGuard from "./labreportapp/guard/AuthGuard";
 import "./App.css";
 import { ToastContainer, toast } from "react-toastify";
@@ -92,6 +94,7 @@ import AdminTeacherDashboard from "./labreportapp/pages/admin/admin-teacher-dash
 import LoadingIndicatorNoOverlay from "./labreportapp/helper/loadingNoOverlay";
 import { useAppSelector } from "./labreportapp/app/hook";
 import { GetLoading } from "./labreportapp/app/common/Loading.reducer";
+import NotAceptable from "./labreportapp/pages/not-aceptable";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -120,40 +123,40 @@ function App() {
   }
 
   let tokenCookies = Cookies.get("token");
-  if (tokenCookies) {
-    const userCurrent = jwt_decode(tokenCookies);
-    stompClientAll.connect({}, () => {
-      stompClientAll.subscribe(
-        "/portal-projects/create-notification/" + userCurrent.id,
-        (response) => {
-          message.success("Bạn có thông báo mới");
-          playNotificationSound();
+  // if (tokenCookies) {
+  //   const userCurrent = jwt_decode(tokenCookies);
+  //   stompClientAll.connect({}, () => {
+  //     stompClientAll.subscribe(
+  //       "/portal-projects/create-notification/" + userCurrent.id,
+  //       (response) => {
+  //         message.success("Bạn có thông báo mới");
+  //         playNotificationSound();
 
-          DetailProjectAPI.countNotification(userCurrent.id).then(
-            (response) => {
-              dispatch(SetCountNotifications(response.data.data));
-            }
-          );
+  //         DetailProjectAPI.countNotification(userCurrent.id).then(
+  //           (response) => {
+  //             dispatch(SetCountNotifications(response.data.data));
+  //           }
+  //         );
 
-          DetailProjectAPI.fetchAllNotification(userCurrent.id, 0).then(
-            (response) => {
-              dispatch(SetListNotification(response.data.data.data));
-              dispatch(SetCurrentPage(response.data.data.currentPage));
-              dispatch(SetToTalPages(response.data.data.totalPages));
-            }
-          );
-        }
-      );
-      if (userCurrent != null && userCurrent.role.includes("ADMIN")) {
-        stompClientAll.subscribe(
-          "/portal-projects/update-meeting",
-          (response) => {
-            message.success("Thông báo : " + response.body);
-          }
-        );
-      }
-    });
-  }
+  //         DetailProjectAPI.fetchAllNotification(userCurrent.id, 0).then(
+  //           (response) => {
+  //             dispatch(SetListNotification(response.data.data.data));
+  //             dispatch(SetCurrentPage(response.data.data.currentPage));
+  //             dispatch(SetToTalPages(response.data.data.totalPages));
+  //           }
+  //         );
+  //       }
+  //     );
+  //     if (userCurrent != null && userCurrent.role.includes("ADMIN")) {
+  //       stompClientAll.subscribe(
+  //         "/portal-projects/update-meeting",
+  //         (response) => {
+  //           message.success("Thông báo : " + response.body);
+  //         }
+  //       );
+  //     }
+  //   });
+  // }
 
   const loadingNoOverLay = useAppSelector(GetLoading);
 
@@ -169,7 +172,9 @@ function App() {
 
             <Route path="/not-found" element={<NotFound />} />
             <Route path="/not-authorization" element={<NotAuthorized />} />
-
+            <Route path="/forbidden" element={<Forbidden />} />
+            <Route path="/error" element={<ErrorComponent />} />
+            <Route path="/not-aceptable/*" element={<NotAceptable />} />
             <Route
               path="/"
               element={<Navigate replace to="/role-selection" />}

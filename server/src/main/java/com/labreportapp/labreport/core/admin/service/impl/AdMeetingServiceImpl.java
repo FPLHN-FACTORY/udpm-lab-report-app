@@ -163,17 +163,31 @@ public class AdMeetingServiceImpl implements AdMeetingService {
         if (!classOptional.isPresent()) {
             throw new RestApiException(Message.CLASS_NOT_EXISTS);
         }
+        StringBuilder stringBuilder = new StringBuilder();
         String nameSemester = loggerUtil.getNameSemesterByIdClass(classOptional.get().getId());
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String meetingDateOld = sdf.format(meetingFind.get().getMeetingDate());
         String meetingDateNew = sdf.format(request.getMeetingDate());
         String messageMeetingDate = CompareUtil.compareAndConvertMessage("ngày học của buổi học " + meetingFind.get().getName(), meetingDateOld, meetingDateNew, "");
-        loggerUtil.sendLogStreamClass(messageMeetingDate, classOptional.get().getCode(), nameSemester);
+        stringBuilder.append(messageMeetingDate);
+
+        if (TypeMeeting.values()[request.getTypeMeeting()] != meetingFind.get().getTypeMeeting()) {
+            if (request.getTypeMeeting() == 0) {
+                stringBuilder.append(". Đã cập nhật hình thức học của buổi học " + meetingFind.get().getName() + " từ Offline thành Online");
+            } else {
+                stringBuilder.append(". Đã cập nhật hình thức học của buổi học " + meetingFind.get().getName() + " từ Online thành Offline");
+            }
+        }
+        MeetingPeriod meetingPeriodNew = adMeetingPeriodRepository.findById(request.getMeetingPeriod()).get();
+        MeetingPeriod meetingPeriodOld = adMeetingPeriodRepository.findById(meetingFind.get().getMeetingPeriod()).get();
+        String messageMeetingPeriod = CompareUtil.compareAndConvertMessage("ca học của buổi học " + meetingFind.get().getName(), meetingPeriodOld, meetingPeriodNew, "");
+        stringBuilder.append(messageMeetingPeriod);
+        loggerUtil.sendLogStreamClass(stringBuilder.toString(), classOptional.get().getCode(), nameSemester);
 
         meetingFind.get().setMeetingDate(request.getMeetingDate());
         meetingFind.get().setTypeMeeting(TypeMeeting.values()[request.getTypeMeeting()]);
-        MeetingPeriod meetingPeriodFind = adMeetingPeriodRepository.findById(request.getMeetingPeriod()).get();
-        meetingFind.get().setMeetingPeriod(meetingPeriodFind.getId());
+
+        meetingFind.get().setMeetingPeriod(meetingPeriodNew.getId());
         meetingFind.get().setAddress(request.getAddress());
         meetingFind.get().setDescriptions(request.getDescriptions());
         SimpleResponse simple = null;
@@ -188,11 +202,11 @@ public class AdMeetingServiceImpl implements AdMeetingService {
         adMeetingCustom.setId(meetingNew.getId());
         adMeetingCustom.setMeetingDate(meetingNew.getMeetingDate());
         adMeetingCustom.setMeetingPeriodId(request.getMeetingPeriod());
-        adMeetingCustom.setNameMeetingPeriod(meetingPeriodFind.getName());
-        adMeetingCustom.setStartHour(meetingPeriodFind.getStartHour());
-        adMeetingCustom.setStartMinute(meetingPeriodFind.getStartMinute());
-        adMeetingCustom.setEndHour(meetingPeriodFind.getEndHour());
-        adMeetingCustom.setEndMinute(meetingPeriodFind.getEndMinute());
+        adMeetingCustom.setNameMeetingPeriod(meetingPeriodNew.getName());
+        adMeetingCustom.setStartHour(meetingPeriodNew.getStartHour());
+        adMeetingCustom.setStartMinute(meetingPeriodNew.getStartMinute());
+        adMeetingCustom.setEndHour(meetingPeriodNew.getEndHour());
+        adMeetingCustom.setEndMinute(meetingPeriodNew.getEndMinute());
         adMeetingCustom.setTypeMeeting(meetingNew.getTypeMeeting() == TypeMeeting.ONLINE ? 0 : 1);
         adMeetingCustom.setDescriptions(meetingNew.getDescriptions());
         adMeetingCustom.setName(meetingNew.getName());

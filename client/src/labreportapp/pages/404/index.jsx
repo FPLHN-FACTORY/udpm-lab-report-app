@@ -6,11 +6,11 @@ function NotFound() {
   return (
     <Result
       status="404"
-      title="404"
+      title="Not Found"
       subTitle="Xin lỗi, trang bạn đang tìm kiếm không tồn tại."
       extra={
         <Link to="/">
-          <Button type="primary">Trang chủ</Button>
+          <Button type="primary">Về trang chủ</Button>
         </Link>
       }
     />
