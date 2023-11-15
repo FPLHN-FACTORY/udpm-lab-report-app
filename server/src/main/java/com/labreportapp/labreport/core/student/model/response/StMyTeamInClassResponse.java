@@ -8,9 +8,6 @@ import org.springframework.beans.factory.annotation.Value;
  */
 public interface StMyTeamInClassResponse extends IsIdentified {
 
-    @Value("#{target.code}")
-    String getCode();
-
     @Value("#{target.name}")
     String getName();
 

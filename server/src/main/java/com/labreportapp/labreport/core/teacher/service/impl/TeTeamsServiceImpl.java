@@ -653,7 +653,8 @@ public class TeTeamsServiceImpl implements TeTeamsService {
             teExcelResponseMessage.setMessage("");
             listInput.parallelStream().forEach(student -> {
                 String regexRole = "^[Xx]?$";
-                String regexName = "^(?!.*\\d)[\\p{L}'\\-]+(?:\\s[\\p{L}'\\-]+)*$";
+                //  String regexName = "^(?!.*\\d)[\\p{L}'\\-]+(?:\\s[\\p{L}'\\-]+)*$";
+                String regexName = "^[\\p{L}'\\-\\d]+(?:\\s[\\p{L}'\\-\\d]+)*$";
                 String regexEmailExactly = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
                 if (student.getName().isEmpty()) {
                     teExcelResponseMessage.setStatus(false);

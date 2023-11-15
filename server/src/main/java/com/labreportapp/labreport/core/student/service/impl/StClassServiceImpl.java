@@ -17,6 +17,7 @@ import com.labreportapp.labreport.infrastructure.constant.StatusStudentFeedBack;
 import com.labreportapp.labreport.infrastructure.constant.StatusTeam;
 import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.labreport.util.CallApiIdentity;
+import com.labreportapp.labreport.util.LoggerUtil;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.CustomException;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
@@ -57,6 +58,9 @@ public class StClassServiceImpl implements StClassService {
     @Autowired
     private CallApiIdentity callApiIdentity;
 
+    @Autowired
+    private LoggerUtil loggerUtil;
+
     @Override
     public PageableObject<StClassCustomResponse> getAllClassByCriteriaAndIsActive(final StFindClassRequest req) {
         Pageable pageable = PageRequest.of(req.getPage(), req.getSize());
@@ -87,9 +91,9 @@ public class StClassServiceImpl implements StClassService {
             stClassCustomResponse.setDescriptions(stClassResponse.getDescriptions());
             stClassCustomResponse.setStartTimeStudent(stClassResponse.getStartTimeStudent());
             stClassCustomResponse.setEndTimeStudent(stClassResponse.getEndTimeStudent());
-            if(stClassResponse.getIdTeacher() != null) {
+            if (stClassResponse.getIdTeacher() != null) {
                 for (SimpleResponse xx : listResponse) {
-                    if(xx.getId().equals(stClassResponse.getIdTeacher())) {
+                    if (xx.getId().equals(stClassResponse.getIdTeacher())) {
                         stClassCustomResponse.setNameTeacher(xx.getName());
                         stClassCustomResponse.setUserNameTeacher(xx.getUserName());
                     }
@@ -145,7 +149,16 @@ public class StClassServiceImpl implements StClassService {
                 Class classOfStudentWantJoin = findClass.get();
                 classOfStudentWantJoin.setClassSize(classOfStudentWantJoin.getClassSize() + 1);
                 Class updatedClass = stClassRepository.save(classOfStudentWantJoin);
-
+                SimpleResponse simpleResponse = callApiIdentity.handleCallApiGetUserById(studentInClass.getStudentId());
+                if (simpleResponse != null) {
+                    StringBuilder message = new StringBuilder();
+                    String nameSemester = loggerUtil.getNameSemesterByIdClass(req.getIdClass());
+                    message.append("Sinh viên \"").append(simpleResponse.getName()).append(" - ")
+                            .append(simpleResponse.getUserName()).append("\"").append(" đã <i style=\"color: red\">tham gia</i> lớp học")
+                            .append(" và cập nhật sĩ số từ ").append(updatedClass.getClassSize() - 1)
+                            .append(" thành ").append(updatedClass.getClassSize()).append(".");
+                    loggerUtil.sendLogStreamClass(message.toString(), updatedClass.getCode(), nameSemester);
+                }
                 customResponse.setClassCode(updatedClass.getCode());
                 customResponse.setClassSize(updatedClass.getClassSize());
             } else {

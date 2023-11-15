@@ -36,4 +36,11 @@ export class StMyClassAPI {
       url: "/student/my-class/get-all-student-classes?idClass=" + idClass,
     });
   }
+  static showHistory = (params) => {
+    return request({
+      method: "GET",
+      url: "/student/my-class/history",
+      params: params,
+    });
+  };
 }

@@ -26,8 +26,9 @@ import com.labreportapp.labreport.infrastructure.constant.StatusTeam;
 import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.labreport.repository.StudentClassesRepository;
 import com.labreportapp.labreport.repository.TeamRepository;
-import com.labreportapp.labreport.util.ConvertListIdToString;
 import com.labreportapp.labreport.util.CallApiIdentity;
+import com.labreportapp.labreport.util.ConvertListIdToString;
+import com.labreportapp.labreport.util.LoggerUtil;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import jakarta.validation.Valid;
@@ -83,6 +84,9 @@ public class StTeamClassServiceImpl implements StTeamClassService {
     @Autowired
     private StMeetingPeriodRepository stMeetingPeriodRepository;
 
+    @Autowired
+    private LoggerUtil loggerUtil;
+
     public List<StStudentCallApiResponse> callApi() {
         String apiUrl = ApiConstants.API_GET_USER_BY_ID;
 
@@ -120,6 +124,20 @@ public class StTeamClassServiceImpl implements StTeamClassService {
             studentClasses.setRole(RoleTeam.MEMBER);
         }
         studentClassesRepository.save(studentClasses);
+        SimpleResponse simpleResponse = callApiIdentity.handleCallApiGetUserById(studentClasses.getStudentId());
+        if (simpleResponse != null) {
+            Optional<Team> teamOptional = teamRepository.findById(studentClasses.getTeamId());
+            if (teamOptional.isEmpty()) {
+                throw new RestApiException(Message.TEAM_NOT_EXISTS);
+            }
+            StringBuilder message = new StringBuilder();
+            String codeClass = loggerUtil.getCodeClassByIdClass(request.getIdClass());
+            String nameSemester = loggerUtil.getNameSemesterByIdClass(request.getIdClass());
+            message.append("Sinh viên \"").append(simpleResponse.getName()).append(" - ")
+                    .append(simpleResponse.getUserName()).append("\"").append(" đã tham gia vào nhóm:  \"")
+                    .append(teamOptional.get().getName()).append("\".");
+            loggerUtil.sendLogStreamClass(message.toString(), codeClass, nameSemester);
+        }
         return request.getIdTeam();
     }
 
@@ -133,11 +151,26 @@ public class StTeamClassServiceImpl implements StTeamClassService {
         if (studentClasses.getTeamId() == null) {
             throw new RestApiException(Message.STUDENT_HAD_NOT_TEAM);
         }
+        String idTeam = studentClasses.getTeamId();
         studentClasses.setTeamId(null);
         studentClasses.setRole(null);
         studentClasses.setStatus(null);
-        studentClasses.setEmail(null);
+        studentClasses.setEmail(studentClasses.getEmail());
         studentClassesRepository.save(studentClasses);
+        SimpleResponse simpleResponse = callApiIdentity.handleCallApiGetUserById(studentClasses.getStudentId());
+        if (simpleResponse != null) {
+            Optional<Team> teamOptional = teamRepository.findById(idTeam);
+            if (teamOptional.isEmpty()) {
+                throw new RestApiException(Message.TEAM_NOT_EXISTS);
+            }
+            StringBuilder message = new StringBuilder();
+            String codeClass = loggerUtil.getCodeClassByIdClass(request.getIdClass());
+            String nameSemester = loggerUtil.getNameSemesterByIdClass(request.getIdClass());
+            message.append("Sinh viên \"").append(simpleResponse.getName()).append(" - ")
+                    .append(simpleResponse.getUserName()).append("\"").append(" đã rời khỏi nhóm: \"")
+                    .append(teamOptional.get().getName()).append("\".");
+            loggerUtil.sendLogStreamClass(message.toString(), codeClass, nameSemester);
+        }
         return request.getIdClass();
     }
 
@@ -219,9 +252,9 @@ public class StTeamClassServiceImpl implements StTeamClassService {
         if (classFind.getClassPeriod() != null) {
             Optional<MeetingPeriod> meetingPeriod = stMeetingPeriodRepository
                     .findById(classFind.getClassPeriod());
-          if(meetingPeriod.isPresent()){
-              stDetailClassCustomResponse.setClassPeriod(meetingPeriod.get().getName());
-          }
+            if (meetingPeriod.isPresent()) {
+                stDetailClassCustomResponse.setClassPeriod(meetingPeriod.get().getName());
+            }
         }
         stDetailClassCustomResponse.setDescriptions(classFind.getDescriptions());
         stDetailClassCustomResponse.setActivityId(classFind.getActivityId());

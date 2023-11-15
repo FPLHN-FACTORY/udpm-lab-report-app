@@ -249,10 +249,10 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
         }
         String nameSemester = loggerUtil.getNameSemesterByIdClass(classOld.get().getId());
         message.append(" Từ lớp " + classOld.get().getCode() + " qua lớp " + classSent.get().getCode());
-        loggerUtil.sendLogStreamClass(message.toString() + " và cập nhật lại sĩ số từ "
-                + classSent.get().getClassSize() + " thành " + (classSent.get().getClassSize() + idStudents.size()), classSent.get().getCode(), nameSemester);
-        loggerUtil.sendLogStreamClass(message.toString() + " và cập nhật lại sĩ số từ "
-                + classOld.get().getClassSize() + " thành " + (classOld.get().getClassSize() - idStudents.size()), classOld.get().getCode(), nameSemester);
+        loggerUtil.sendLogStreamClass(message.toString() + " và cập nhật sĩ số từ "
+                + classSent.get().getClassSize() + " thành " + (classSent.get().getClassSize() + idStudents.size()) + ".", classSent.get().getCode(), nameSemester);
+        loggerUtil.sendLogStreamClass(message.toString() + " và cập nhật sĩ số từ "
+                + classOld.get().getClassSize() + " thành " + (classOld.get().getClassSize() - idStudents.size()) + ".", classOld.get().getCode(), nameSemester);
         Class sent = classSent.get();
         sent.setClassSize(sent.getClassSize() + idStudents.size());
         classUp.add(sent);
