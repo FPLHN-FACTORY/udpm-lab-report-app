@@ -17,6 +17,7 @@ import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.labreport.repository.LevelRepository;
 import com.labreportapp.labreport.repository.SemesterRepository;
 import com.labreportapp.labreport.util.CallApiIdentity;
+import com.labreportapp.labreport.util.LoggerUtil;
 import com.labreportapp.labreport.util.SemesterHelper;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
@@ -61,6 +62,9 @@ public class StMyClassServiceImpl implements StMyClassService {
 
     @Autowired
     private SemesterHelper semesterHelper;
+
+    @Autowired
+    private LoggerUtil loggerUtil;
 
     @Override
     public List<StMyClassCustom> getAllClass(final StFindClassRequest req) {
@@ -128,15 +132,24 @@ public class StMyClassServiceImpl implements StMyClassService {
         Optional<Class> findCurrentMyClass = stClassRepository.findById(req.getIdClass());
         Optional<StudentClasses> findStudentInClass = stStudentClassesRepository.
                 findStudentClassesByClassIdAndStudentId(req.getIdClass(), labReportAppSession.getUserId());
-
         if (findStudentInClass.isPresent()) {
             Optional<StClassResponse> conditionClass = stClassRepository.checkConditionCouldJoinOrLeaveClass(req);
-            if (!conditionClass.isPresent()) {
+            if (conditionClass.isEmpty()) {
                 throw new RestApiException(Message.YOU_DONT_LEAVE_CLASS);
             } else {
                 stStudentClassesRepository.delete(findStudentInClass.get());
                 findCurrentMyClass.get().setClassSize(findCurrentMyClass.get().getClassSize() - 1);
-                stClassRepository.save(findCurrentMyClass.get());
+                Class classSave = stClassRepository.save(findCurrentMyClass.get());
+                SimpleResponse simpleResponse = callApiIdentity.handleCallApiGetUserById(findStudentInClass.get().getStudentId());
+                if (simpleResponse != null) {
+                    StringBuilder message = new StringBuilder();
+                    String nameSemester = loggerUtil.getNameSemesterByIdClass(req.getIdClass());
+                    message.append("Sinh viên \"").append(simpleResponse.getName()).append(" - ")
+                            .append(simpleResponse.getUserName()).append("\"").append(" đã <i style=\"color: red\">rời khỏi</i>  lớp học")
+                            .append(" và cập nhật sĩ số từ ").append(classSave.getClassSize() - 1)
+                            .append(" thành ").append(classSave.getClassSize()).append(".");
+                    loggerUtil.sendLogStreamClass(message.toString(), conditionClass.get().getCode(), nameSemester);
+                }
             }
         }
     }

@@ -267,6 +267,8 @@ const ModalCreateProject = ({
           if (dataProject != null) {
             if (dataProject.length + 1 > size) {
               changeTotalsPage(totalPages + 1);
+            } else if (dataProject.length + 1 === 1) {
+              changeTotalsPage(1);
             }
           }
           cancelSuccess();
@@ -540,32 +542,33 @@ const ModalCreateProject = ({
                   option.label.toLowerCase().indexOf(text.toLowerCase()) !== -1
                 }
               >
-                {listMembers != null && listMembers.map((member) => (
-                  <Option
-                    label={member.email}
-                    value={member.id}
-                    key={member.id}
-                  >
-                    <Tooltip title={member.email}>
-                      <div style={{ display: "flex", alignItems: "center" }}>
-                        <Image
-                          url={member.picture}
-                          picxel={25}
-                          marginRight={8}
-                          name={member.name}
-                        />
-                        <span>
-                          {member.name +
-                            " " +
-                            member.userName +
-                            " (" +
-                            member.email +
-                            ")"}
-                        </span>
-                      </div>
-                    </Tooltip>
-                  </Option>
-                ))}{" "}
+                {listMembers != null &&
+                  listMembers.map((member) => (
+                    <Option
+                      label={member.email}
+                      value={member.id}
+                      key={member.id}
+                    >
+                      <Tooltip title={member.email}>
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          <Image
+                            url={member.picture}
+                            picxel={25}
+                            marginRight={8}
+                            name={member.name}
+                          />
+                          <span>
+                            {member.name +
+                              " " +
+                              member.userName +
+                              " (" +
+                              member.email +
+                              ")"}
+                          </span>
+                        </div>
+                      </Tooltip>
+                    </Option>
+                  ))}{" "}
               </Select>
             </Col>
           </Row>

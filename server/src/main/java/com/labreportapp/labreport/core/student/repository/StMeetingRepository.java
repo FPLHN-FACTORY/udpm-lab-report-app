@@ -78,7 +78,7 @@ public interface StMeetingRepository extends JpaRepository<Meeting, String> {
     Optional<StHomeWordAndNoteResponse> searchDetailMeetingTeamByIdMeIdTeam(@Param("req") StFindMeetingRequest req);
 
     @Query(value = """
-            SELECT a.id, a.code , a.name , a.subject_name , a.class_id FROM team a
+            SELECT a.id, a.name , a.subject_name , a.class_id FROM team a
             JOIN student_classes b ON b.team_id = a.id
              WHERE
              a.class_id = :#{#req.idClass} AND b.student_id = :#{#req.idStudent}

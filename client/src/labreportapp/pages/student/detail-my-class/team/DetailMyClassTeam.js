@@ -2,14 +2,13 @@ import { useParams } from "react-router-dom";
 import "./style-detail-my-class-team.css";
 import { Link, useNavigate } from "react-router-dom";
 import { ControlOutlined, ProjectOutlined } from "@ant-design/icons";
-import { useAppDispatch, useAppSelector } from "../../../../app/hook";
+import { useAppDispatch } from "../../../../app/hook";
 import { useEffect, useState } from "react";
 import LoadingIndicator from "../../../../helper/loading";
 import { StMyTeamClassAPI } from "../../../../api/student/StTeamClass";
 import {
   faCircleInfo,
   faEye,
-  faFileDownload,
   faHistory,
   faRightFromBracket,
   faSignOut,
@@ -27,14 +26,13 @@ import {
   message,
 } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { convertMeetingPeriodToNumber } from "../../../../helper/util.helper";
 import { convertLongToDate } from "../../../../helper/convertDate";
 import ModalDetailTeam from "./modal-detail-team/ModalDetailTeam";
 import LoadingIndicatorNoOverlay from "../../../../helper/loadingNoOverlay";
 import { SetTTrueToggle } from "../../../../app/student/StCollapsedSlice.reducer";
 import { StMyClassAPI } from "../../../../api/student/StMyClassAPI";
-import { toast } from "react-toastify";
 import { SetStStudentClasses } from "../../../../app/student/StStudentClasses.reducer";
+import StModalShowHistory from "./modal-show-history/StModalShowHistory";
 
 const DetailMyClassTeam = () => {
   const dispatch = useAppDispatch();
@@ -47,6 +45,7 @@ const DetailMyClassTeam = () => {
   const [listStudentMyTeam, setStudentMyTeam] = useState([]);
   const [listTeam, setListTeam] = useState([]);
   const [detailTeam, setDetailTeam] = useState(null);
+  const [showHistory, setShowHistory] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -143,10 +142,11 @@ const DetailMyClassTeam = () => {
   }, []);
   const columns = [
     {
-      title: "STT",
+      title: "#",
       dataIndex: "stt",
       key: "stt",
       render: (text, record, index) => <>{index + 1}</>,
+      align: "center",
     },
     {
       title: "Họ và tên",
@@ -165,15 +165,17 @@ const DetailMyClassTeam = () => {
       render: (text, record, index) => (
         <>{record.role === 0 ? "Trưởng nhóm" : "Thành viên"}</>
       ),
+      align: "center",
     },
   ];
 
   const columnsTeam = [
     {
-      title: "STT",
+      title: "#",
       dataIndex: "stt",
       key: "stt",
       render: (text, record, index) => <>{index + 1}</>,
+      align: "center",
     },
     {
       title: "Tên nhóm",
@@ -233,6 +235,11 @@ const DetailMyClassTeam = () => {
     <div style={{ paddingTop: "35px" }}>
       {isLoading && <LoadingIndicator />}
       {isLoadingOverlay && <LoadingIndicatorNoOverlay />}
+      <StModalShowHistory
+        visible={showHistory}
+        onCancel={() => setShowHistory(!showHistory)}
+        classDetail={detailClass}
+      />
       <div className="title-student-my-class">
         <span style={{ paddingLeft: "20px" }}>
           <ControlOutlined style={{ fontSize: "22px" }} />
@@ -334,6 +341,7 @@ const DetailMyClassTeam = () => {
                     color: "white",
                     backgroundColor: "rgb(55, 137, 220)",
                   }}
+                  onClick={() => setShowHistory(true)}
                 >
                   <FontAwesomeIcon
                     icon={faHistory}

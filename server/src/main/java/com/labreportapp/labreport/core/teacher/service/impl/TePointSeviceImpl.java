@@ -409,7 +409,7 @@ public class TePointSeviceImpl implements TePointSevice {
 
             ConcurrentLinkedQueue<String> messagesConcurrent = new ConcurrentLinkedQueue<>();
             listInput.parallelStream().forEach(point -> {
-                String regexName = "^(?!.*\\d)[\\p{L}'\\-]+(?:\\s[\\p{L}'\\-]+)*$";
+                String regexName = "^[\\p{L}'\\-\\d]+(?:\\s[\\p{L}'\\-\\d]+)*$";
                 String regexEmailExactly = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
                 String regexDouble = "^(?:[0-9](?:\\.\\d*)?|10(?:\\.0*)?)$";
                 if (point.getName().isEmpty()) {

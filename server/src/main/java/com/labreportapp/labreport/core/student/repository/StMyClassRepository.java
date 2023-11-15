@@ -44,7 +44,7 @@ public interface StMyClassRepository extends ClassRepository {
     List<StMyClassResponse> getAllClass(@Param("req") StFindClassRequest req);
 
     @Query(value = """
-            SELECT a.id, a.code , a.name , a.subject_name , a.class_id FROM team a
+            SELECT a.id, a.name , a.subject_name , a.class_id FROM team a
              WHERE
              (:#{#req.idClass} IS NULL
              OR :#{#req.idClass} = ''

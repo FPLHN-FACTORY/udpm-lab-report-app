@@ -12,7 +12,10 @@ import LoadingIndicator from "../../../helper/loading";
 import { Button, Col, Input, Row, Select, Table, Tooltip, Empty } from "antd";
 import { StMyClassAPI } from "../../../api/student/StMyClassAPI";
 import { Link } from "react-router-dom";
-import { convertHourAndMinuteToString } from "../../../helper/util.helper";
+import {
+  convertDateLongToString,
+  convertHourAndMinuteToString,
+} from "../../../helper/util.helper";
 import { StLevelAPI } from "../../../api/student/StLevelAPI";
 import { StMeetingPeriodAPI } from "../../../api/student/StMeetingPeriodAPI";
 
@@ -113,19 +116,13 @@ const StudentMyClass = () => {
     setClassPeriod("");
     setLevel("");
   };
-  const convertLongToDate = (dateLong) => {
-    const date = new Date(dateLong);
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const year = date.getFullYear();
-    const format = `${day}/${month}/${year}`;
-    return format;
-  };
+
   const columns = [
     {
-      title: "STT",
+      title: "#",
       dataIndex: "stt",
       sorter: (a, b) => a.stt - b.stt,
+      align: "center",
       key: "stt",
     },
     {
@@ -139,7 +136,8 @@ const StudentMyClass = () => {
       dataIndex: "startTime",
       key: "startTime",
       sorter: (a, b) => a.startTime - b.startTime,
-      render: (text, record) => convertLongToDate(record.startTime),
+      render: (text, record) => convertDateLongToString(record.startTime),
+      align: "center",
     },
     {
       title: "Ca",
@@ -153,6 +151,7 @@ const StudentMyClass = () => {
           return <span>{text}</span>;
         }
       },
+      align: "center",
     },
     {
       title: "Thời gian",
@@ -206,6 +205,7 @@ const StudentMyClass = () => {
       title: "Cấp độ",
       dataIndex: "level",
       key: "level",
+      align: "center",
     },
     {
       title: "Hoạt động",

@@ -16,7 +16,6 @@ import { SetTTrueToggle } from "../../../../app/teacher/TeCollapsedSlice.reducer
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleInfo,
-  faFileDownload,
   faHistory,
   faRightFromBracket,
   faTableList,
@@ -33,6 +32,7 @@ const StudentsInMyClass = () => {
   const { idClass } = useParams();
   const [listIdStudent, setListIdStudent] = useState([]);
   const [showModalSent, setShowModalSent] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -406,7 +406,7 @@ const StudentsInMyClass = () => {
       ...columns,
     ];
   }
-  const [showHistory, setShowHistory] = useState(false);
+
   return (
     <>
       {!loading && <LoadingIndicator />}
