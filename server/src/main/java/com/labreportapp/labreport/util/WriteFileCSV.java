@@ -124,23 +124,33 @@ public class WriteFileCSV {
             if (api.contains("/activity")) {
                 pathFile = pathTemplate + getPropertiesRead(ConfigurationsConstant.NAME_FILE_QUAN_LY_HOAT_DONG);
             }
-            if (api.contains("/meeting-period-configiration")) {
-                pathFile = pathTemplate + getPropertiesRead(ConfigurationsConstant.NAME_FILE_QUAN_LY_CA_HOC);
-            }
             if (api.contains("/class-managerment")) {
                 pathFile = folderAdmin + getPropertiesRead(ConfigurationsConstant.NAME_FILE_QUAN_LY_LOP_HOC);
+            }
+            if (api.contains("/meeting-period-configiration")) {
+                pathFile = pathTemplate + getPropertiesRead(ConfigurationsConstant.NAME_FILE_QUAN_LY_CA_HOC);
             }
             if (api.contains("/class-configuration")) {
                 pathFile = pathTemplate + getPropertiesRead(ConfigurationsConstant.NAME_FILE_CAU_HINH_LOP_HOC);
             }
-            if (api.contains("/meeting-period-configuration")) {
-                pathFile = pathTemplate + getPropertiesRead(ConfigurationsConstant.NAME_FILE_CAU_HINH_LOP_HOC);
-            }
             if (api.contains("/template-report")) {
-                pathFile = pathTemplate + getPropertiesRead(ConfigurationsConstant.NAME_FILE_CAU_HINH_LOP_HOC);
+                pathFile = pathTemplate + getPropertiesRead(ConfigurationsConstant.NAME_FILE_CAU_HINH_TEMPLATE_BAO_CAO);
+            }
+            if (api.contains("/admin/category")) {
+                pathFile = pathTemplate + getPropertiesRead(ConfigurationsConstant.NAME_FILE_QUAN_LY_THE_LOAI);
+            }
+            if (api.contains("/admin/label")) {
+                pathFile = pathTemplate + getPropertiesRead(ConfigurationsConstant.NAME_FILE_QUAN_LY_NHAN);
+            }
+            if (api.contains("/admin/role-config")) {
+                pathFile = pathTemplate + getPropertiesRead(ConfigurationsConstant.NAME_FILE_QUAN_LY_VAI_TRO_TRONG_DU_AN);
+            }
+            if (api.contains("/admin/role-factory")) {
+                pathFile = pathTemplate + getPropertiesRead(ConfigurationsConstant.NAME_FILE_QUAN_LY_VAI_TRO_TRONG_XUONG);
+            } if (api.contains("/admin/team")) {
+                pathFile = pathTemplate + getPropertiesRead(ConfigurationsConstant.NAME_FILE_QUAN_LY_NHOM_TRONG_XUONG);
             }
         }
-
         System.out.println("========= pathFile màn hình: " + pathFile);
         return pathFile;
     }

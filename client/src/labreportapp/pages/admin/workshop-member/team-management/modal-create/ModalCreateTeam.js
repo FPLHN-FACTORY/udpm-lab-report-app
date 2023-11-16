@@ -1,23 +1,32 @@
 import { Modal, Row, Col, Input, Button, Select, message } from "antd";
 import { useEffect, useState } from "react";
 import { AdTeamAPI } from "../../../../../api/admin/AdTeamAPI";
-import { AddTeam } from "../../../../../app/admin/AdTeamSlice.reducer";
+import { AddTeam, GetTeam } from "../../../../../app/admin/AdTeamSlice.reducer";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useAppDispatch } from "../../../../../app/hook";
+import { useAppDispatch, useAppSelector } from "../../../../../app/hook";
 import TextArea from "antd/es/input/TextArea";
 import moment from "moment";
-import { SetLoadingFalse, SetLoadingTrue } from "../../../../../app/common/Loading.reducer";
+import {
+  SetLoadingFalse,
+  SetLoadingTrue,
+} from "../../../../../app/common/Loading.reducer";
 
 const { Option } = Select;
 
-const ModalCreateTeam = ({ visible, onCancel }) => {
+const ModalCreateTeam = ({
+  visible,
+  onCancel,
+  changeTotalsPage,
+  totalPages,
+  size,
+}) => {
   const [name, setName] = useState("");
   const [descriptions, setDescription] = useState("");
   const [errorName, setErrorName] = useState("");
   const [errorDescription, setErrorDescription] = useState("");
   const dispatch = useAppDispatch();
-
+  const data = useAppSelector(GetTeam);
   useEffect(() => {
     return () => {
       setName("");
@@ -55,9 +64,16 @@ const ModalCreateTeam = ({ visible, onCancel }) => {
       dispatch(SetLoadingTrue());
       AdTeamAPI.addTeam(obj).then(
         (response) => {
-          message.success("Thêm nhóm thành công!");
+          message.success("Thêm nhóm thành công !");
           dispatch(AddTeam(response.data.data));
           dispatch(SetLoadingFalse());
+          if (data != null) {
+            if (data.length + 1 > size) {
+              changeTotalsPage(totalPages + 1);
+            } else if (data.length + 1 === 1) {
+              changeTotalsPage(1);
+            }
+          }
           onCancel();
         },
         (error) => {}

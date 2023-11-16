@@ -2,15 +2,25 @@ import "./styleModalCreateLabel.css";
 import { Modal, Row, Col, Input, Button, message, ColorPicker } from "antd";
 import { useEffect, useState } from "react";
 import { LabelManagementAPI } from "../../../../api/label-management/labelManagement.api";
-import { useAppDispatch } from "../../../../app/hook";
-import { CreateLabelManagement } from "../../../../app/reducer/admin/label-management/labelManagementSlice.reducer";
+import { useAppDispatch, useAppSelector } from "../../../../app/hook";
+import {
+  CreateLabelManagement,
+  GetLabelManagement,
+} from "../../../../app/reducer/admin/label-management/labelManagementSlice.reducer";
 import { DownOutlined } from "@ant-design/icons";
 
-const ModalCreateLabel = ({ visible, onCancel }) => {
+const ModalCreateLabel = ({
+  visible,
+  onCancel,
+  changeTotalsPage,
+  totalPages,
+  size,
+}) => {
   const [name, setName] = useState("");
   const [errorName, setErrorName] = useState("");
   const [colorLabel, setColorLabel] = useState("rgb(0, 123, 255)");
   const dispatch = useAppDispatch();
+  const data = useAppSelector(GetLabelManagement);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -52,6 +62,13 @@ const ModalCreateLabel = ({ visible, onCancel }) => {
         (response) => {
           message.success("Thêm thành công!");
           dispatch(CreateLabelManagement(response.data.data));
+          if (data != null) {
+            if (data.length + 1 > size) {
+              changeTotalsPage(totalPages + 1);
+            } else if (data.length + 1 === 1) {
+              changeTotalsPage(1);
+            }
+          }
           onCancel();
         },
         (error) => {

@@ -10,6 +10,7 @@ import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.entity.RoleFactory;
 import com.labreportapp.labreport.infrastructure.constant.RoleDefault;
 import com.labreportapp.labreport.util.FormUtils;
+import com.labreportapp.labreport.util.LoggerUtil;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import jakarta.validation.Valid;
@@ -37,6 +38,9 @@ public class AdRoleFactoryServiceImpl implements AdRoleFactoryService {
 
     private List<AdRoleFactoryResponse> adRoleFactoryResponseList;
 
+    @Autowired
+    private LoggerUtil loggerUtil;
+
     @Override
     public List<RoleFactory> findAllRoleFactory(Pageable pageable) {
         return adRoleFactoryRepository.getAllRoleFactory(pageable);
@@ -51,6 +55,7 @@ public class AdRoleFactoryServiceImpl implements AdRoleFactoryService {
         roleFactory.setRoleDefault(obj.getRoleDefault() == 0 ? RoleDefault.DEFAULT : RoleDefault.NO_DEFAULT);
         roleFactory.setDescriptions(obj.getDescriptions());
         roleFactory.setName(obj.getName());
+        loggerUtil.sendLogScreen("Đã thêm vai trò trong xưởng mới: " + roleFactory.getName() + ".", "");
         return adRoleFactoryRepository.save(roleFactory);
     }
 
@@ -65,6 +70,21 @@ public class AdRoleFactoryServiceImpl implements AdRoleFactoryService {
                 throw new RestApiException(Message.ROLE_CONFIG_ONLY_HAVA_ONE);
             }
         }
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Đã cập nhật vai trò trong xưởng có tên " + findById.get().getName()+": ");
+        if (!findById.get().getName().equals(obj.getName())) {
+            stringBuilder.append(" tên của vai trò từ ").append(findById.get().getName()).append(" thành ").append(obj.getName()).append(",");
+        }
+        if (!findById.get().getDescriptions().equals(obj.getDescriptions())) {
+            stringBuilder.append(" mô tả của vai trò từ ").append(findById.get().getDescriptions()).append(" thành ").append(obj.getDescriptions()).append(",");
+        }
+        if (!findById.get().getRoleDefault().equals(RoleDefault.values()[obj.getRoleDefault()])) {
+            stringBuilder.append(" quyền mặc định từ ").append(findById.get().getRoleDefault()).append(" thành ").append(RoleDefault.values()[obj.getRoleDefault()]).append(",");
+        }
+        if (stringBuilder.length() > 0 && stringBuilder.charAt(stringBuilder.length() - 1) == ',') {
+            stringBuilder.setCharAt(stringBuilder.length() - 1, '.');
+        }
+        loggerUtil.sendLogScreen(stringBuilder.toString(), "");
         RoleFactory roleFactory = findById.get();
         roleFactory.setName(obj.getName());
         roleFactory.setDescriptions(obj.getDescriptions());
@@ -90,6 +110,7 @@ public class AdRoleFactoryServiceImpl implements AdRoleFactoryService {
         if (countRoles != null && countRoles > 0) {
             throw new RestApiException(Message.ROLE_FACTORY_HAVE_MEMBER);
         }
+        loggerUtil.sendLogScreen("Đã xóa vai trò trong xưởng có tên là " + findRoleFactoryById.get().getName() + ".", "");
         adRoleFactoryRepository.delete(findRoleFactoryById.get());
         return true;
     }

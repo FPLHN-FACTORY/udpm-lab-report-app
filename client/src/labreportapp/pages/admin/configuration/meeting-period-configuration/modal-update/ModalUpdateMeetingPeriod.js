@@ -159,7 +159,7 @@ const ModalUpdateMeetingPeriod = ({ visible, onCancel, meetingPeriod }) => {
         meetingPeriod.id
       ).then(
         (response) => {
-          message.success("Cập nhật thành công!");
+          message.success("Cập nhật thành công !");
           dispatch(UpdateMeetingPeriodConfiguration(response.data.data));
           dispatch(SetLoadingFalse());
           onCancel();

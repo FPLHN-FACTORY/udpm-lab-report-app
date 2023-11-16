@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Button, Select, Table, Pagination, Empty, Spin } from "antd";
-import { TeacherMyClassAPI } from "../../../../../api/teacher/my-class/TeacherMyClass.api";
+import { Modal, Button, Select, Table, Pagination, Empty } from "antd";
+import { AdMeetingPeriodConfigurationAPI } from "../../../../../api/admin/AdMeetingPeriodConfigurationAPI";
 
 const { Option } = Select;
 
-const TeModalShowHistory = ({ visible, onCancel, classDetail }) => {
+const ModalHistoryMeetingPeriod = ({ visible, onCancel }) => {
   const columns = [
     {
       title: "Email người thực hiện",
@@ -38,8 +38,7 @@ const TeModalShowHistory = ({ visible, onCancel, classDetail }) => {
 
   const loadDataHistory = async () => {
     try {
-      TeacherMyClassAPI.showHistory({
-        idClass: classDetail.id,
+      AdMeetingPeriodConfigurationAPI.showHistory({
         page: current - 1,
         size: parseInt(size),
       }).then((response) => {
@@ -144,4 +143,4 @@ const TeModalShowHistory = ({ visible, onCancel, classDetail }) => {
     </>
   );
 };
-export default TeModalShowHistory;
+export default ModalHistoryMeetingPeriod;

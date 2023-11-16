@@ -3,6 +3,8 @@ import {
   faFilterCircleDollar,
   faPeopleGroup,
   faEllipsisV,
+  faFileDownload,
+  faHistory,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -34,6 +36,7 @@ import "./style-team-management.css";
 import React from "react";
 import { Link } from "react-router-dom";
 import Image from "../../../../../portalprojects/helper/img/Image";
+import ModalHistoryTeamFactory from "./modal-history-team-factory/ModalHistoryTeamFactory";
 
 const TeamManagement = () => {
   const [team, setTeam] = useState(null);
@@ -124,7 +127,31 @@ const TeamManagement = () => {
   };
 
   const handleMenuClick = (e, itemId) => {};
+  const dowloadLog = () => {
+    AdTeamAPI.dowloadLog().then(
+      (response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "nhom_trong_xuong.csv";
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      (error) => {}
+    );
+  };
+  const [visibleHistory, setVisibleHistory] = useState(false);
+  const openModalShowHistory = () => {
+    setVisibleHistory(true);
+  };
 
+  const cancelModalHistory = () => {
+    setVisibleHistory(false);
+  };
+
+  const changeTotalsPage = (newTotalPages) => {
+    setTotal(newTotalPages);
+  };
   return (
     <>
       {" "}
@@ -179,6 +206,42 @@ const TeamManagement = () => {
                 </Button>
               </div>
               <div>
+                <Button
+                  style={{
+                    color: "white",
+                    backgroundColor: "rgb(55, 137, 220)",
+                    marginRight: 5,
+                  }}
+                  onClick={dowloadLog}
+                >
+                  <FontAwesomeIcon
+                    icon={faFileDownload}
+                    size="1x"
+                    style={{
+                      backgroundColor: "rgb(55, 137, 220)",
+                      marginRight: "5px",
+                    }}
+                  />
+                  Dowload log
+                </Button>
+                <Button
+                  style={{
+                    color: "white",
+                    backgroundColor: "rgb(55, 137, 220)",
+                    marginRight: 5,
+                  }}
+                  onClick={openModalShowHistory}
+                >
+                  <FontAwesomeIcon
+                    icon={faHistory}
+                    size="1x"
+                    style={{
+                      backgroundColor: "rgb(55, 137, 220)",
+                      marginRight: "5px",
+                    }}
+                  />
+                  Lịch sử
+                </Button>
                 <Button
                   style={{
                     backgroundColor: "rgb(38, 144, 214)",
@@ -338,11 +401,18 @@ const TeamManagement = () => {
             <ModalCreateTeam
               visible={modalCreate}
               onCancel={buttonCreateCancel}
+              changeTotalsPage={changeTotalsPage}
+              totalPages={total}
+              size={10}
             />
             <ModalUpdateTeam
               visible={modalUpdate}
               onCancel={buttonUpdateCancel}
               team={team}
+            />{" "}
+            <ModalHistoryTeamFactory
+              visible={visibleHistory}
+              onCancel={cancelModalHistory}
             />
           </div>
         </div>

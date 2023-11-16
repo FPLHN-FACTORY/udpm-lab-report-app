@@ -18,9 +18,12 @@ public class ConfigurationsConstant {
     public static final String NAME_FILE_QUAN_LY_LOP_HOC = "lop_hoc_csv";
 
     public static final String NAME_FILE_CAU_HINH_LOP_HOC = "cau_hinh_lop_hoc_csv";
-    public static final String NAME_FILE_CAU_HINH_CA_HOC = "cau_hinh_ca_hoc_csv";
-    public static final String NAME_FILE_CAU_HINH_BAO_CAO = "cau_hinh_bao_cao_csv";
-
+    public static final String NAME_FILE_CAU_HINH_TEMPLATE_BAO_CAO = "cau_hinh_template_bao_cao_csv";
+    public static final String NAME_FILE_QUAN_LY_THE_LOAI = "the_loai_csv";
+    public static final String NAME_FILE_QUAN_LY_NHAN = "nhan_csv";
+    public static final String NAME_FILE_QUAN_LY_VAI_TRO_TRONG_DU_AN = "vai_tro_trong_du_an_csv";
+    public static final String NAME_FILE_QUAN_LY_VAI_TRO_TRONG_XUONG = "vai_tro_trong_xuong_csv";
+    public static final String NAME_FILE_QUAN_LY_NHOM_TRONG_XUONG ="nhom_trong_xuong_csv";
 
     public static final String FOLDER_ACTOR_TEACHER = "actor_teacher";
 

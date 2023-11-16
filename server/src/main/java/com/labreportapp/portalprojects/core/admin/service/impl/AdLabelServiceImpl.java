@@ -1,5 +1,6 @@
 package com.labreportapp.portalprojects.core.admin.service.impl;
 
+import com.labreportapp.labreport.util.LoggerUtil;
 import com.labreportapp.portalprojects.core.admin.model.request.AdCreatLabelRequest;
 import com.labreportapp.portalprojects.core.admin.model.request.AdFindLabelRequest;
 import com.labreportapp.portalprojects.core.admin.model.request.AdUpdateLabelRequest;
@@ -31,6 +32,9 @@ public class AdLabelServiceImpl implements AdLabelService {
 
     private List<AdLabelReponse> listLabel;
 
+    @Autowired
+    private LoggerUtil loggerUtil;
+
     @Override
     public PageableObject<AdLabelReponse> searchLabel(final AdFindLabelRequest rep) {
         Pageable pageable = PageRequest.of(rep.getPage(), rep.getSize());
@@ -49,6 +53,7 @@ public class AdLabelServiceImpl implements AdLabelService {
         Label label = new Label();
         label.setName(command.getName());
         label.setColorLabel(command.getColorLabel());
+        loggerUtil.sendLogScreen("Đã thêm nhãn mới: " + label.getName()+".", "");
         return adlabelReopsitory.save(label);
     }
 
@@ -63,6 +68,18 @@ public class AdLabelServiceImpl implements AdLabelService {
         if (nameFind != null && !optional.get().getName().equals(command.getName())) {
             throw new RestApiException(Message.DUPLICATE_LABEL_NAME);
         }
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Đã cập nhật nhãn:");
+        if (!optional.get().getName().equals(command.getName())) {
+            stringBuilder.append(" tên của nhãn từ ").append(optional.get().getName()).append(" thành ").append(command.getName()).append(",");
+        }
+        if (!optional.get().getColorLabel().equals(command.getColorLabel())) {
+            stringBuilder.append(" màu của nhãn từ ").append(optional.get().getColorLabel()).append(" thành ").append(command.getColorLabel()).append(",");
+        }
+        if (stringBuilder.length() > 0 && stringBuilder.charAt(stringBuilder.length() - 1) == ',') {
+            stringBuilder.setCharAt(stringBuilder.length() - 1, '.');
+        }
+        loggerUtil.sendLogScreen(stringBuilder.toString(), "");
         Label label = optional.get();
         label.setName(command.getName());
         label.setColorLabel(command.getColorLabel());
@@ -76,6 +93,7 @@ public class AdLabelServiceImpl implements AdLabelService {
         if (!optional.isPresent()) {
             throw new RestApiException(Message.LABEL_NOT_EXISTS);
         }
+        loggerUtil.sendLogScreen("Đã xóa nhãn: " + optional.get().getName()+".", "");
         adlabelReopsitory.delete(optional.get());
         return true;
     }
@@ -101,6 +119,7 @@ public class AdLabelServiceImpl implements AdLabelService {
         if (!optional.isPresent()) {
             throw new RestApiException(Message.LABEL_NOT_EXISTS);
         }
+        loggerUtil.sendLogScreen("Đã xóa nhãn: " + optional.get().getName()+".", "");
         adlabelReopsitory.delete(optional.get());
         return id;
     }

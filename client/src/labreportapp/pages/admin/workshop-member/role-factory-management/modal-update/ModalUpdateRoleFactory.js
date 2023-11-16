@@ -68,7 +68,7 @@ const ModalUpdateRoleFactory = ({ visible, onCancel, roleFactory }) => {
       dispatch(SetLoadingTrue());
       AdRoleFactoryAPI.updateRoleFactory(obj, roleFactory.id).then(
         (response) => {
-          message.success("Cập nhật thành công!");
+          message.success("Cập nhật thành công !");
           dispatch(UpdateRoleFactory(response.data.data));
           dispatch(SetLoadingFalse());
           onCancel();

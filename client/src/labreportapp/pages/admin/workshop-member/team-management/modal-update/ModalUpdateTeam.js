@@ -2,11 +2,9 @@ import { Modal, Row, Col, Input, Button, Select, message } from "antd";
 import { useEffect, useState } from "react";
 import { AdTeamAPI } from "../../../../../api/admin/AdTeamAPI";
 import { UpdateTeam } from "../../../../../app/admin/AdTeamSlice.reducer";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAppDispatch } from "../../../../../app/hook";
 import TextArea from "antd/es/input/TextArea";
-import moment from "moment";
 import {
   SetLoadingFalse,
   SetLoadingTrue,
@@ -65,7 +63,7 @@ const ModalUpdateTeam = ({ visible, onCancel, team }) => {
       dispatch(SetLoadingTrue());
       AdTeamAPI.updateTeam(obj, team.id).then(
         (response) => {
-          message.success("Cập nhật thành công!");
+          message.success("Cập nhật thành công !");
           dispatch(UpdateTeam(response.data.data));
           dispatch(SetLoadingFalse());
           onCancel();

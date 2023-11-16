@@ -7,6 +7,8 @@ import {
   faPlus,
   faTags,
   faTrashCan,
+  faFileDownload,
+  faHistory,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   Button,
@@ -31,6 +33,7 @@ import {
 import { LabelManagementAPI } from "../../../api/label-management/labelManagement.api";
 import ModalCreateLabel from "./modal-create/ModalCreateLabel";
 import ModalUpdateLabel from "./modal-update/ModalUpdateLabel";
+import ModalHistoryLabel from "./modal-history-label/ModalHistoryLabel";
 
 const LabelManagement = () => {
   const dispatch = useAppDispatch();
@@ -63,9 +66,7 @@ const LabelManagement = () => {
       dispatch(SetLabelManagement(listLabelManagement));
       setTotal(response.data.data.totalPages);
       setIsLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   const handleDelete = async (id) => {
     try {
@@ -189,6 +190,31 @@ const LabelManagement = () => {
     },
   ];
 
+  const dowloadLog = () => {
+    LabelManagementAPI.dowloadLog().then(
+      (response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "nhan.csv";
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      (error) => {}
+    );
+  };
+  const [visibleHistory, setVisibleHistory] = useState(false);
+  const openModalShowHistory = () => {
+    setVisibleHistory(true);
+  };
+
+  const cancelModalHistory = () => {
+    setVisibleHistory(false);
+  };
+
+  const changeTotalsPage = (newTotalPages) => {
+    setTotal(newTotalPages);
+  };
   return (
     <>
       <div className="box-one">
@@ -255,6 +281,42 @@ const LabelManagement = () => {
                 style={{
                   color: "white",
                   backgroundColor: "rgb(55, 137, 220)",
+                  marginRight: 5,
+                }}
+                onClick={dowloadLog}
+              >
+                <FontAwesomeIcon
+                  icon={faFileDownload}
+                  size="1x"
+                  style={{
+                    backgroundColor: "rgb(55, 137, 220)",
+                    marginRight: "5px",
+                  }}
+                />
+                Dowload log
+              </Button>
+              <Button
+                style={{
+                  color: "white",
+                  backgroundColor: "rgb(55, 137, 220)",
+                  marginRight: 5,
+                }}
+                onClick={openModalShowHistory}
+              >
+                <FontAwesomeIcon
+                  icon={faHistory}
+                  size="1x"
+                  style={{
+                    backgroundColor: "rgb(55, 137, 220)",
+                    marginRight: "5px",
+                  }}
+                />
+                Lịch sử
+              </Button>
+              <Button
+                style={{
+                  color: "white",
+                  backgroundColor: "rgb(55, 137, 220)",
                 }}
                 onClick={handleLabelCreate}
               >
@@ -310,12 +372,19 @@ const LabelManagement = () => {
         <ModalCreateLabel
           visible={showCreateModal}
           onCancel={handleModalCreateCancel}
+          changeTotalsPage={changeTotalsPage}
+          totalPages={total}
+          size={10}
         />
         <ModalUpdateLabel
           visible={showUpdateModal}
           onCancel={handleModalUpdateCancel}
           idLabel={idLabel}
           label={label}
+        />
+        <ModalHistoryLabel
+          visible={visibleHistory}
+          onCancel={cancelModalHistory}
         />
       </div>
     </>

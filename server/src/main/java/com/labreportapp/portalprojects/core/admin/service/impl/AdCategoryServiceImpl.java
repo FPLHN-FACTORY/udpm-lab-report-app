@@ -1,5 +1,6 @@
 package com.labreportapp.portalprojects.core.admin.service.impl;
 
+import com.labreportapp.labreport.util.LoggerUtil;
 import com.labreportapp.portalprojects.core.admin.model.request.AdBaseCategoryRequest;
 import com.labreportapp.portalprojects.core.admin.model.request.AdFindCategoryRequest;
 import com.labreportapp.portalprojects.core.admin.model.request.AdUpdateCategoryRequest;
@@ -38,6 +39,9 @@ public class AdCategoryServiceImpl implements AdCategoryService {
 
     private List<AdCategoryPesponse> adCategoryPesponseList;
 
+    @Autowired
+    private LoggerUtil loggerUtil;
+
     @Override
     public List<Category> getAllCategory(Pageable pageable) {
         return adCategoryRepository.getAllCategory(pageable);
@@ -56,6 +60,7 @@ public class AdCategoryServiceImpl implements AdCategoryService {
                 + time.getDayOfMonth() + time.getHour() + time.getMinute() + time.getSecond();
         adBaseCategoryRequest.setCode(code);
         Category category = formUtils.convertToObject(Category.class, adBaseCategoryRequest);
+        loggerUtil.sendLogScreen("Đã thêm thể loại mới: " + category.getName()+".", "");
         return adCategoryRepository.save(category);
     }
 
@@ -65,6 +70,9 @@ public class AdCategoryServiceImpl implements AdCategoryService {
         Optional<Category> findCategoryById = adCategoryRepository.findById(adUpdateCategoryRequest.getId());
         if (!findCategoryById.isPresent()) {
             throw new RestApiException(Message.CATEGORY_NOT_EXISTS);
+        }
+        if (!findCategoryById.get().getName().equals(adUpdateCategoryRequest.getName())) {
+            loggerUtil.sendLogScreen("Đã cập nhật thể loại: tên thể loại từ " + findCategoryById.get().getName() + " thành " + adUpdateCategoryRequest.getName()+".", "");
         }
         Category category = findCategoryById.get();
         category.setCode(adUpdateCategoryRequest.getCode());
@@ -105,6 +113,7 @@ public class AdCategoryServiceImpl implements AdCategoryService {
         if (listKey != null && listKey.size() > 0) {
             throw new RestApiException(Message.USING_CATEGORY_CAN_NOT_DELETE);
         }
+        loggerUtil.sendLogScreen("Đã xóa thể loại " + optional.get().getName()+".", "");
         adCategoryRepository.delete(optional.get());
         return id;
     }

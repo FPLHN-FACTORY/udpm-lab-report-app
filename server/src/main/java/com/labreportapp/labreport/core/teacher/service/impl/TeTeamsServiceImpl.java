@@ -200,7 +200,7 @@ public class TeTeamsServiceImpl implements TeTeamsService {
                         if (infor.getId().equals(studentDB.getStudentId())) {
                             messageCheckStudentJoin.append(" ").append(infor.getName()).append(" - ").append(infor.getUserName());
                             if (studentDB.getRole() == RoleTeam.LEADER) {
-                                messageCheckStudentJoin.append(" <i style=\"color: red\"> trưởng nhóm</i>");
+                                messageCheckStudentJoin.append(" trưởng nhóm");
                             }
                             messageCheckStudentJoin.append(",");
                         }
@@ -284,7 +284,7 @@ public class TeTeamsServiceImpl implements TeTeamsService {
                         if (infor.getId().equals(item.getIdStudent())) {
                             messageCheckUpdate.append(" ").append(infor.getName()).append(" - ").append(infor.getUserName());
                             if (studentClasses.getRole() == RoleTeam.LEADER) {
-                                messageCheckUpdate.append(" <i style=\"color: red\"> trưởng nhóm</i>");
+                                messageCheckUpdate.append("  trưởng nhóm");
                             }
                             messageCheckUpdate.append(",");
                         }
@@ -604,7 +604,7 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         return cellStyle;
     }
 
-    private List<TeExcelImportTeam> listTeamImportNew = new ArrayList<>();
+    private final List<TeExcelImportTeam> listTeamImportNew = new ArrayList<>();
 
     private boolean isExcelFile(MultipartFile file) {
         Workbook workbookCheck = null;
@@ -724,13 +724,12 @@ public class TeTeamsServiceImpl implements TeTeamsService {
                     String key = team.getName();
                     if (hashMap.containsKey(key)) {
                         hashMap.clear();
-                        hashMap.put(key, new StringBuilder().append(""));
                     }
                     if (team.getSubjectName().equals("")) {
-                        messTeam.append("Đã cập nhật <strong style=\"color: red\">").append(team.getName()).append(" </strong> - Gồm:");
+                        messTeam.append("Đã cập nhật \"").append(team.getName()).append("\" - Gồm:");
                     } else {
-                        messTeam.append("Đã cập nhật <strong style=\"color: red\">").append(team.getName()).append("</strong> với chủ đề")
-                                .append(" <strong style=\"color: black\">").append(team.getSubjectName()).append("</strong> - Gồm:");
+                        messTeam.append("Đã cập nhật \"").append(team.getName()).append("\" với chủ đề")
+                                .append(" ").append(team.getSubjectName()).append(" - Gồm:");
                     }
                     hashMap.put(key, messTeam);
                 });
@@ -749,7 +748,7 @@ public class TeTeamsServiceImpl implements TeTeamsService {
                                     StringBuilder messageTeam = hashMap.get(teamFind.getName());
                                     messageTeam.append(" ").append(infor.getName()).append(" - ").append(infor.getUserName());
                                     if (studentFind.getRole() == RoleTeam.LEADER) {
-                                        messageTeam.append(" <i style=\"color: red\"> trưởng nhóm</i>");
+                                        messageTeam.append("  trưởng nhóm");
                                     }
                                     messageTeam.append(",");
                                 }
@@ -779,12 +778,13 @@ public class TeTeamsServiceImpl implements TeTeamsService {
                         int endIndex = value.length() - "-Gồm".length();
                         value.replace(endIndex, value.length(), ".");
                     }
-                    message.append(value.append("<br />"));
-                    hashMap.put(key, new StringBuilder().append(" "));
+//                    message.append(value.append("<br />"));
+                    message.append(value.append(". "));
+                    hashMap.put(key, new StringBuilder().append(","));
                 });
                 if (messageStudentNotTeam.length() > 0 && messageStudentNotTeam.charAt(messageStudentNotTeam.length() - 1) == ',') {
                     messageStudentNotTeam.setCharAt(messageStudentNotTeam.length() - 1, ' ');
-                    messageStudentNotTeam.append(" ").append(" <span style=\"color: red\">không có nhóm</span>.");
+                    messageStudentNotTeam.append(" ").append(" không có nhóm.");
                 }
                 if (messageStudentNotTeam.isEmpty()) {
                     loggerUtil.sendLogStreamClass(message.toString(), codeClass, nameSemester);

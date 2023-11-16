@@ -35,6 +35,7 @@ import ModalCreateMeetingPeriod from "./modal-create/ModalCreateMeetingPeriod";
 import ModalUpdateMeetingPeriod from "./modal-update/ModalUpdateMeetingPeriod";
 import { toast } from "react-toastify";
 import LoadingIndicator from "../../../../helper/loading";
+import ModalHistoryMeetingPeriod from "./modal-history-configuration-meeting-period/ModalHistoryMeetingPeriod";
 
 const MeetingPeriodConfiguration = () => {
   const [meetingPeriod, setMeetingPeriod] = useState(null);
@@ -138,7 +139,7 @@ const MeetingPeriodConfiguration = () => {
             />
           </Tooltip>
           <Popconfirm
-            title="Xóa Ca"
+            title="Xóa ca học"
             description="Bạn có chắc chắn muốn xóa Ca này không?"
             onConfirm={() => {
               buttonDelete(record.id);
@@ -200,7 +201,7 @@ const MeetingPeriodConfiguration = () => {
   const buttonDelete = (id) => {
     AdMeetingPeriodConfigurationAPI.deleteMeetingPeriod(id).then(
       (response) => {
-        message.success("Xóa thành công!");
+        message.success("Xóa thành công !");
         dispatch(DeleteMeetingPeriodConfiguration(response.data.data));
         fetchData();
       },
@@ -222,7 +223,7 @@ const MeetingPeriodConfiguration = () => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const a = document.createElement("a");
         a.href = url;
-        a.download = "cau_hinh_ca_hoc.csv";
+        a.download = "ca_hoc.csv";
         a.click();
         window.URL.revokeObjectURL(url);
       },
@@ -385,6 +386,10 @@ const MeetingPeriodConfiguration = () => {
           visible={modalUpdate}
           onCancel={buttonUpdateCancel}
           meetingPeriod={meetingPeriod}
+        />
+        <ModalHistoryMeetingPeriod
+          visible={visibleHistory}
+          onCancel={cancelModalHistory}
         />
       </div>
     </>

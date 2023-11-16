@@ -20,6 +20,7 @@ import com.labreportapp.labreport.entity.TeamFactory;
 import com.labreportapp.labreport.repository.MemberTeamFactoryRepository;
 import com.labreportapp.labreport.util.CallApiIdentity;
 import com.labreportapp.labreport.util.FormUtils;
+import com.labreportapp.labreport.util.LoggerUtil;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import jakarta.validation.Valid;
@@ -59,6 +60,9 @@ public class AdTeamServiceImpl implements AdTeamService {
     @Qualifier(MemberTeamFactoryRepository.NAME)
     private MemberTeamFactoryRepository memberTeamFactoryRepository;
 
+    @Autowired
+    private LoggerUtil loggerUtil;
+
     @Override
     public List<TeamFactory> findAllTeam(Pageable pageable) {
         return adTeamRepository.getAllTeam(pageable);
@@ -67,6 +71,7 @@ public class AdTeamServiceImpl implements AdTeamService {
     @Override
     public TeamFactory createTeam(AdCreateTeamRequest obj) {
         TeamFactory team = formUtils.convertToObject(TeamFactory.class, obj);
+        loggerUtil.sendLogScreen("Đã thêm nhóm mới trong xưởng có tên là: " + team.getName() + ".", "");
         return adTeamRepository.save(team);
     }
 
@@ -76,10 +81,21 @@ public class AdTeamServiceImpl implements AdTeamService {
         if (!findById.isPresent()) {
             throw new RestApiException(Message.TEAM_NOT_EXISTS);
         }
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Đã cập nhật nhóm trong xưởng có tên " + findById.get().getName() + ": ");
+        if (!findById.get().getName().equals(obj.getName())) {
+            stringBuilder.append(" tên của nhóm từ ").append(findById.get().getName()).append(" thành ").append(obj.getName()).append(",");
+        }
+        if (!findById.get().getDescriptions().equals(obj.getDescriptions())) {
+            stringBuilder.append(" mô tả nhóm từ ").append(findById.get().getDescriptions()).append(" thành ").append(obj.getDescriptions()).append(",");
+        }
+        if (stringBuilder.length() > 0 && stringBuilder.charAt(stringBuilder.length() - 1) == ',') {
+            stringBuilder.setCharAt(stringBuilder.length() - 1, '.');
+        }
+        loggerUtil.sendLogScreen(stringBuilder.toString(), "");
         TeamFactory team = findById.get();
         team.setName(obj.getName());
         team.setDescriptions(obj.getDescriptions());
-
         return adTeamRepository.save(team);
     }
 
@@ -118,6 +134,7 @@ public class AdTeamServiceImpl implements AdTeamService {
         if (countTeams != null && countTeams > 0) {
             throw new RestApiException(Message.TEAM_MEMBER_TEAM_ALREADY_EXISTS);
         }
+        loggerUtil.sendLogScreen("Đã xóa nhóm trong xưởng có tên là " + findTeamById.get().getName() + ".", "");
         adTeamRepository.delete(findTeamById.get());
         return id;
     }
@@ -139,7 +156,7 @@ public class AdTeamServiceImpl implements AdTeamService {
         List<AdAllMemberFactoryResponse> listCustom = new ArrayList<>();
         listStrIdMember.forEach(idMe -> {
             listResponse.forEach(res -> {
-                if(idMe.getMemberId().equals(res.getId())) {
+                if (idMe.getMemberId().equals(res.getId())) {
                     AdAllMemberFactoryResponse adAllMemberFactoryResponse = new AdAllMemberFactoryResponse();
                     adAllMemberFactoryResponse.setId(idMe.getId());
                     adAllMemberFactoryResponse.setMemberId(idMe.getMemberId());
@@ -202,7 +219,7 @@ public class AdTeamServiceImpl implements AdTeamService {
     @Override
     public String deleteMemberTeamFactory(String id) {
         Optional<MemberTeamFactory> memberTeamFactoryFind = memberTeamFactoryRepository.findById(id);
-        if(!memberTeamFactoryFind.isPresent()) {
+        if (!memberTeamFactoryFind.isPresent()) {
             throw new RestApiException(Message.MEMBER_TEAM_FACTORY_NOT_EXISTS);
         }
         memberTeamFactoryRepository.delete(memberTeamFactoryFind.get());
@@ -212,7 +229,7 @@ public class AdTeamServiceImpl implements AdTeamService {
     @Override
     public List<String> deleteListMemberTeamFactory(@Valid AdDeleteListMemberTeamFactoryRequest request) {
         List<MemberTeamFactory> memberTeamFactoryList = memberTeamFactoryRepository.findAllById(request.getListIdMemberFactory());
-        if(memberTeamFactoryList.isEmpty()) {
+        if (memberTeamFactoryList.isEmpty()) {
             throw new RestApiException(Message.MEMBER_TEAM_FACTORY_NOT_EXISTS);
         }
         memberTeamFactoryRepository.deleteAll(memberTeamFactoryList);
