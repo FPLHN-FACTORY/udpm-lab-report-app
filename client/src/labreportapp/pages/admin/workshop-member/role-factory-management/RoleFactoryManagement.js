@@ -3,13 +3,12 @@ import {
   faFilterCircleDollar,
   faChainSlash,
   faTableList,
-  faClock,
   faTrash,
   faPencil,
   faFilter,
-  faTeletype,
-  faPersonMilitaryPointing,
   faPeopleGroup,
+  faFileDownload,
+  faHistory,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -34,11 +33,10 @@ import {
 import { AdRoleFactoryAPI } from "../../../../api/admin/AdRoleFactoryAPI";
 import ModalCreateRoleFactory from "./modal-create/ModalCreateRoleFactory";
 import ModalUpdateRoleFactory from "./modal-update/ModalUpdateRoleFactory";
-import { toast } from "react-toastify";
 import LoadingIndicator from "../../../../helper/loading";
-import moment from "moment";
 import "./style-role-factory-management.css";
 import React from "react";
+import ModalHistoryRoleFactory from "./modal-history-role-factory/ModalHistoryRoleFactory";
 
 const RoleFactoryManagement = () => {
   const [roleFactory, setRoleFactory] = useState(null);
@@ -194,14 +192,38 @@ const RoleFactoryManagement = () => {
   const buttonDelete = (id) => {
     AdRoleFactoryAPI.deleteRoleFactory(id).then(
       (response) => {
-        message.success("Xóa thành công!");
+        message.success("Xóa thành công !");
         dispatch(DeleteRoleFactory(response.data.data));
         fetchData();
       },
       (error) => {}
     );
   };
+  const dowloadLog = () => {
+    AdRoleFactoryAPI.dowloadLog().then(
+      (response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "vai_tro_trong_xuong.csv";
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      (error) => {}
+    );
+  };
+  const [visibleHistory, setVisibleHistory] = useState(false);
+  const openModalShowHistory = () => {
+    setVisibleHistory(true);
+  };
 
+  const cancelModalHistory = () => {
+    setVisibleHistory(false);
+  };
+
+  const changeTotalsPage = (newTotalPages) => {
+    setTotal(newTotalPages);
+  };
   return (
     <>
       {" "}
@@ -279,8 +301,43 @@ const RoleFactoryManagement = () => {
                 Danh sách vai trò
               </span>
             </div>
-
             <div>
+              <Button
+                style={{
+                  color: "white",
+                  backgroundColor: "rgb(55, 137, 220)",
+                  marginRight: 5,
+                }}
+                onClick={dowloadLog}
+              >
+                <FontAwesomeIcon
+                  icon={faFileDownload}
+                  size="1x"
+                  style={{
+                    backgroundColor: "rgb(55, 137, 220)",
+                    marginRight: "5px",
+                  }}
+                />
+                Dowload log
+              </Button>
+              <Button
+                style={{
+                  color: "white",
+                  backgroundColor: "rgb(55, 137, 220)",
+                  marginRight: 5,
+                }}
+                onClick={openModalShowHistory}
+              >
+                <FontAwesomeIcon
+                  icon={faHistory}
+                  size="1x"
+                  style={{
+                    backgroundColor: "rgb(55, 137, 220)",
+                    marginRight: "5px",
+                  }}
+                />
+                Lịch sử
+              </Button>
               <Button
                 style={{
                   color: "white",
@@ -343,11 +400,18 @@ const RoleFactoryManagement = () => {
         <ModalCreateRoleFactory
           visible={modalCreate}
           onCancel={buttonCreateCancel}
+          changeTotalsPage={changeTotalsPage}
+          totalPages={total}
+          size={10}
         />
         <ModalUpdateRoleFactory
           visible={modalUpdate}
           onCancel={buttonUpdateCancel}
           roleFactory={roleFactory}
+        />{" "}
+        <ModalHistoryRoleFactory
+          visible={visibleHistory}
+          onCancel={cancelModalHistory}
         />
       </div>
     </>

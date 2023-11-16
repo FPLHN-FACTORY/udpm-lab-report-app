@@ -6,9 +6,14 @@ import com.labreportapp.labreport.core.admin.service.AdRoleFactoryService;
 import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.core.common.base.ResponseObject;
 import com.labreportapp.labreport.entity.RoleFactory;
+import com.labreportapp.labreport.infrastructure.logger.LoggerObject;
+import com.labreportapp.labreport.util.CallApiConsumer;
+import com.labreportapp.labreport.util.LoggerUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,8 +26,15 @@ import java.util.List;
 @RequestMapping("/admin/role-factory")
 @CrossOrigin(origins = {"*"}, maxAge = -1)
 public class AdRoleFactoryController {
+
     @Autowired
     private AdRoleFactoryService adRoleFactoryService;
+
+    @Autowired
+    private LoggerUtil loggerUtil;
+
+    @Autowired
+    private CallApiConsumer callApiConsumer;
 
     @GetMapping("/page/{page}")
     public ResponseEntity<?> getAllRoleFactory(@PathVariable int page) {
@@ -57,5 +69,21 @@ public class AdRoleFactoryController {
                                      @RequestBody AdUpdateRoleFactoryRequest obj) {
         obj.setId(id);
         return new ResponseObject(adRoleFactoryService.updateRoleFactory(obj));
+    }
+
+    @GetMapping("/download-log")
+    public ResponseEntity<Resource> downloadCsv() {
+        String pathFile = loggerUtil.getPathFileSendLogScreen("");
+        return callApiConsumer.handleCallApiDowloadFileLog(pathFile);
+    }
+
+    @GetMapping("/history")
+    public ResponseEntity<?> showHistory(@RequestParam(name = "page", defaultValue = "0") Integer page,
+                                         @RequestParam(name = "size", defaultValue = "50") Integer size
+    ) {
+        String pathFile = loggerUtil.getPathFileSendLogScreen("");
+        LoggerObject loggerObject = new LoggerObject();
+        loggerObject.setPathFile(pathFile);
+        return new ResponseEntity<>(callApiConsumer.handleCallApiReadFileLog(loggerObject, page, size), HttpStatus.OK);
     }
 }

@@ -148,7 +148,7 @@ const ModalCreateMeetingPeriod = ({ visible, onCancel }) => {
 
       AdMeetingPeriodConfigurationAPI.addMeetingPeriod(obj).then(
         (response) => {
-          message.success("Thêm Ca thành công!");
+          message.success("Thêm ca thành công !");
           dispatch(AddMeetingPeriodConfiguration(response.data.data));
           dispatch(SetLoadingFalse());
           onCancel();

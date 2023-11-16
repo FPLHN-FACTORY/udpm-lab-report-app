@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Button, Select, Table, Pagination, Empty } from "antd";
-import { AdLevelAPI } from "../../../../api/admin/AdLevelManagerAPI";
 import { ActivityManagementAPI } from "../../../../api/admin/activity-management/activityManagement.api";
 
 const { Option } = Select;

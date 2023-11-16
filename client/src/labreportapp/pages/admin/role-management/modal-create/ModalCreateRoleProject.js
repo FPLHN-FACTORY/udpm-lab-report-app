@@ -1,12 +1,14 @@
 import { Modal, Row, Col, Input, Button, Select, message, Radio } from "antd";
 import { useEffect, useState } from "react";
 import { AdRoleProjectAPI } from "../../../../api/admin/AdRoleProjectAPI";
-import { AddRoleProject } from "../../../../app/admin/AdRoleProjectSlice.reducer";
+import {
+  AddRoleProject,
+  GetRoleProject,
+} from "../../../../app/admin/AdRoleProjectSlice.reducer";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useAppDispatch } from "../../../../app/hook";
+import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import TextArea from "antd/es/input/TextArea";
-import moment from "moment";
 import {
   SetLoadingFalse,
   SetLoadingTrue,
@@ -14,14 +16,20 @@ import {
 
 const { Option } = Select;
 
-const ModalCreateRoleProject = ({ visible, onCancel }) => {
+const ModalCreateRoleProject = ({
+  visible,
+  onCancel,
+  changeTotalsPage,
+  totalPages,
+  size,
+}) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [errorName, setErrorName] = useState("");
   const [errorDescription, setErrorDescription] = useState("");
   const [status, setStatus] = useState("1");
   const dispatch = useAppDispatch();
-
+  const data = useAppSelector(GetRoleProject);
   useEffect(() => {
     return () => {
       setName("");
@@ -64,6 +72,13 @@ const ModalCreateRoleProject = ({ visible, onCancel }) => {
           message.success("Thêm Loại thành công!");
           dispatch(AddRoleProject(response.data.data));
           dispatch(SetLoadingFalse());
+          if (data != null) {
+            if (data.length + 1 > size) {
+              changeTotalsPage(totalPages + 1);
+            } else if (data.length + 1 === 1) {
+              changeTotalsPage(1);
+            }
+          }
           onCancel();
         },
         (error) => {}

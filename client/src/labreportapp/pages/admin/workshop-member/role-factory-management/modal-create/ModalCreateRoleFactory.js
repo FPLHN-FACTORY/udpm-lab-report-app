@@ -1,12 +1,13 @@
 import { Modal, Row, Col, Input, Button, Select, message, Radio } from "antd";
 import { useEffect, useState } from "react";
 import { AdRoleFactoryAPI } from "../../../../../api/admin/AdRoleFactoryAPI";
-import { AddRoleFactory } from "../../../../../app/admin/AdRoleFactorySlice.reducer";
-import { toast } from "react-toastify";
+import {
+  AddRoleFactory,
+  GetRoleFactory,
+} from "../../../../../app/admin/AdRoleFactorySlice.reducer";
 import "react-toastify/dist/ReactToastify.css";
-import { useAppDispatch } from "../../../../../app/hook";
+import { useAppDispatch, useAppSelector } from "../../../../../app/hook";
 import TextArea from "antd/es/input/TextArea";
-import moment from "moment";
 import { parseInt } from "lodash";
 import {
   SetLoadingFalse,
@@ -15,14 +16,20 @@ import {
 
 const { Option } = Select;
 
-const ModalCreateRoleFactory = ({ visible, onCancel }) => {
+const ModalCreateRoleFactory = ({
+  visible,
+  onCancel,
+  changeTotalsPage,
+  totalPages,
+  size,
+}) => {
   const [name, setName] = useState("");
   const [status, setStatus] = useState("1");
   const [descriptions, setDescription] = useState("");
   const [errorName, setErrorName] = useState("");
   const [errorDescription, setErrorDescription] = useState("");
   const dispatch = useAppDispatch();
-
+  const data = useAppSelector(GetRoleFactory);
   useEffect(() => {
     return () => {
       setName("");
@@ -62,9 +69,16 @@ const ModalCreateRoleFactory = ({ visible, onCancel }) => {
       dispatch(SetLoadingTrue());
       AdRoleFactoryAPI.addRoleFactory(obj).then(
         (response) => {
-          message.success("Thêm vai trò thành công!");
+          message.success("Thêm vai trò thành công !");
           dispatch(AddRoleFactory(response.data.data));
           dispatch(SetLoadingFalse());
+          if (data != null) {
+            if (data.length + 1 > size) {
+              changeTotalsPage(totalPages + 1);
+            } else if (data.length + 1 === 1) {
+              changeTotalsPage(1);
+            }
+          }
           onCancel();
         },
         (error) => {}

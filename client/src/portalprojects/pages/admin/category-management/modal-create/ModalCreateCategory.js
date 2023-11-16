@@ -1,15 +1,24 @@
 import { Modal, Row, Col, Input, Button, message } from "antd";
 import { useEffect, useState } from "react";
 import { AdCategoryAPI } from "../../../../api/admin-category/adCategory.api";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useAppDispatch } from "../../../../app/hook";
-import { CreateCategory } from "../../../../app/reducer/admin/category-management/adCategorySlice.reducer";
+import { useAppDispatch, useAppSelector } from "../../../../app/hook";
+import {
+  CreateCategory,
+  GetCategory,
+} from "../../../../app/reducer/admin/category-management/adCategorySlice.reducer";
 
-const ModalCreateCategory = ({ visible, onCancel }) => {
+const ModalCreateCategory = ({
+  visible,
+  onCancel,
+  changeTotalsPage,
+  totalPages,
+  size,
+}) => {
   const [name, setName] = useState("");
   const [errorName, setErrorName] = useState("");
   const dispatch = useAppDispatch();
+  const data = useAppSelector(GetCategory);
 
   useEffect(() => {
     return () => {
@@ -39,6 +48,13 @@ const ModalCreateCategory = ({ visible, onCancel }) => {
         (response) => {
           message.success("Thêm thành công!");
           dispatch(CreateCategory(response.data.data));
+          if (data != null) {
+            if (data.length + 1 > size) {
+              changeTotalsPage(totalPages + 1);
+            } else if (data.length + 1 === 1) {
+              changeTotalsPage(1);
+            }
+          }
           onCancel();
         },
         (error) => {

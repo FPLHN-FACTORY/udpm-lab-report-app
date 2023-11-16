@@ -37,6 +37,7 @@ export class AdMeetingPeriodConfigurationAPI {
       url: url + `/delete/` + id,
     });
   };
+
   static dowloadLog = () => {
     return request({
       method: "GET",

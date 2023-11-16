@@ -5,6 +5,8 @@ import {
   faPencil,
   faPlus,
   faTrashCan,
+  faFileDownload,
+  faHistory,
 } from "@fortawesome/free-solid-svg-icons";
 import "./styleCategory.css";
 import {
@@ -30,6 +32,7 @@ import "react-toastify/dist/ReactToastify.css";
 import ModalCreateCategory from "./modal-create/ModalCreateCategory";
 import ModalUpdateCategory from "./modal-update/ModalUpdateCategory";
 import LoadingIndicator from "../../../helper/loading";
+import ModalHistoryCategory from "./modal-history-category/ModalHistoryCategory";
 
 const CategoryManagement = () => {
   const [category, setCategory] = useState(null);
@@ -151,6 +154,31 @@ const CategoryManagement = () => {
       ),
     },
   ];
+  const [visibleHistory, setVisibleHistory] = useState(false);
+  const openModalShowHistory = () => {
+    setVisibleHistory(true);
+  };
+  const cancelModalHistory = () => {
+    setVisibleHistory(false);
+  };
+
+  const dowloadLog = () => {
+    AdCategoryAPI.dowloadLog().then(
+      (response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "the_loai.csv";
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      (error) => {}
+    );
+  };
+
+  const changeTotalsPage = (newTotalPages) => {
+    setTotal(newTotalPages);
+  };
 
   return (
     <>
@@ -218,6 +246,42 @@ const CategoryManagement = () => {
                 style={{
                   color: "white",
                   backgroundColor: "rgb(55, 137, 220)",
+                  marginRight: 5,
+                }}
+                onClick={dowloadLog}
+              >
+                <FontAwesomeIcon
+                  icon={faFileDownload}
+                  size="1x"
+                  style={{
+                    backgroundColor: "rgb(55, 137, 220)",
+                    marginRight: "5px",
+                  }}
+                />
+                Dowload log
+              </Button>
+              <Button
+                style={{
+                  color: "white",
+                  backgroundColor: "rgb(55, 137, 220)",
+                  marginRight: 5,
+                }}
+                onClick={openModalShowHistory}
+              >
+                <FontAwesomeIcon
+                  icon={faHistory}
+                  size="1x"
+                  style={{
+                    backgroundColor: "rgb(55, 137, 220)",
+                    marginRight: "5px",
+                  }}
+                />
+                Lịch sử
+              </Button>
+              <Button
+                style={{
+                  color: "white",
+                  backgroundColor: "rgb(55, 137, 220)",
                 }}
                 onClick={buttonCreate}
               >
@@ -276,11 +340,18 @@ const CategoryManagement = () => {
         <ModalCreateCategory
           visible={modalCreate}
           onCancel={buttonCreateCancel}
+          changeTotalsPage={changeTotalsPage}
+          totalPages={total}
+          size={10}
         />
         <ModalUpdateCategory
           visible={modalUpdate}
           onCancel={buttonUpdateCancel}
           category={category}
+        />
+        <ModalHistoryCategory
+          visible={visibleHistory}
+          onCancel={cancelModalHistory}
         />
       </div>
     </>

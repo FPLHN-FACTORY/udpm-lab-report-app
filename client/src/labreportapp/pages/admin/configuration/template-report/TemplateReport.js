@@ -1,4 +1,8 @@
-import { faTemperature0 } from "@fortawesome/free-solid-svg-icons";
+import {
+  faFileDownload,
+  faHistory,
+  faTemperature0,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { AdTemplateReportAPI } from "../../../../api/admin/AdTemplateReportAPI";
@@ -11,6 +15,7 @@ import {
   SetLoadingTrue,
 } from "../../../../app/common/Loading.reducer";
 import { useAppDispatch } from "../../../../app/hook";
+import ModalHistoryTemplateReport from "./modal-history-template-report/ModalHistoryTemplateReport";
 
 const TemplateReport = () => {
   const [templateReport, setTemplateReport] = useState({ descriptions: "" });
@@ -49,7 +54,27 @@ const TemplateReport = () => {
       (error) => {}
     );
   };
+  const [visibleHistory, setVisibleHistory] = useState(false);
+  const openModalShowHistory = () => {
+    setVisibleHistory(true);
+  };
+  const cancelModalHistory = () => {
+    setVisibleHistory(false);
+  };
 
+  const dowloadLog = () => {
+    AdTemplateReportAPI.dowloadLog().then(
+      (response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "cau_hinh_template_bao_cao.csv";
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      (error) => {}
+    );
+  };
   return (
     <>
       <div className="box-one">
@@ -93,7 +118,46 @@ const TemplateReport = () => {
                 Xác nhận
               </Button>
             )}
+            <div style={{ float: "right" }}>
+              <Button
+                style={{
+                  color: "white",
+                  backgroundColor: "rgb(55, 137, 220)",
+                  marginRight: 5,
+                }}
+                onClick={dowloadLog}
+              >
+                <FontAwesomeIcon
+                  icon={faFileDownload}
+                  size="1x"
+                  style={{
+                    backgroundColor: "rgb(55, 137, 220)",
+                    marginRight: "5px",
+                  }}
+                />
+                Dowload log
+              </Button>
+              <Button
+                style={{
+                  color: "white",
+                  backgroundColor: "rgb(55, 137, 220)",
+                  marginRight: 5,
+                }}
+                onClick={openModalShowHistory}
+              >
+                <FontAwesomeIcon
+                  icon={faHistory}
+                  size="1x"
+                  style={{
+                    backgroundColor: "rgb(55, 137, 220)",
+                    marginRight: "5px",
+                  }}
+                />
+                Lịch sử
+              </Button>
+            </div>
           </div>
+
           <div
             style={{
               width: "100%",
@@ -116,6 +180,10 @@ const TemplateReport = () => {
           </div>
         </div>
       </div>
+      <ModalHistoryTemplateReport
+        visible={visibleHistory}
+        onCancel={cancelModalHistory}
+      />
     </>
   );
 };

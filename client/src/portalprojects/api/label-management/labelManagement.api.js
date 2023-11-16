@@ -38,4 +38,19 @@ export class LabelManagementAPI {
       url: `/admin/label/delete/` + idLabel,
     });
   };
+  static dowloadLog = () => {
+    return request({
+      method: "GET",
+      url: `/admin/label/download-log`,
+      responseType: "blob",
+    });
+  };
+
+  static showHistory = (params) => {
+    return request({
+      method: "GET",
+      url: `/admin/label/history`,
+      params: params,
+    });
+  };
 }

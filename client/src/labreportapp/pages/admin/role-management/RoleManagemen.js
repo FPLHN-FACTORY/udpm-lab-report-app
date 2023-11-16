@@ -3,12 +3,12 @@ import {
   faFilterCircleDollar,
   faChainSlash,
   faTableList,
-  faClock,
   faTrash,
   faPencil,
   faFilter,
-  faTeletype,
   faPersonMilitaryPointing,
+  faFileDownload,
+  faHistory,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -33,11 +33,10 @@ import {
 import { AdRoleProjectAPI } from "../../../api/admin/AdRoleProjectAPI";
 import ModalCreateRoleProject from "./modal-create/ModalCreateRoleProject";
 import ModalUpdateRoleProject from "./modal-update/ModalUpdateRoleProject";
-import { toast } from "react-toastify";
 import LoadingIndicator from "../../../helper/loading";
-import moment from "moment";
 import "./style-role-management.css";
 import React from "react";
+import ModalHistoryRole from "./modal-history-role/ModalHistoryRole";
 
 const RoleManagement = () => {
   const [roleProject, setRoleProject] = useState(null);
@@ -200,7 +199,31 @@ const RoleManagement = () => {
       (error) => {}
     );
   };
+  const dowloadLog = () => {
+    AdRoleProjectAPI.dowloadLog().then(
+      (response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "vai_tro_trong_du_an.csv";
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      (error) => {}
+    );
+  };
+  const [visibleHistory, setVisibleHistory] = useState(false);
+  const openModalShowHistory = () => {
+    setVisibleHistory(true);
+  };
 
+  const cancelModalHistory = () => {
+    setVisibleHistory(false);
+  };
+
+  const changeTotalsPage = (newTotalPages) => {
+    setTotal(newTotalPages);
+  };
   return (
     <>
       <div className="box-one">
@@ -221,7 +244,6 @@ const RoleManagement = () => {
       </div>
       <div className="box-general" style={{ paddingTop: 10, marginTop: 0 }}>
         {loading && <LoadingIndicator />}
-
         <div className="filter-level">
           <FontAwesomeIcon icon={faFilter} style={{ fontSize: "20px" }} />{" "}
           <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
@@ -283,6 +305,42 @@ const RoleManagement = () => {
                 style={{
                   color: "white",
                   backgroundColor: "rgb(55, 137, 220)",
+                  marginRight: 5,
+                }}
+                onClick={dowloadLog}
+              >
+                <FontAwesomeIcon
+                  icon={faFileDownload}
+                  size="1x"
+                  style={{
+                    backgroundColor: "rgb(55, 137, 220)",
+                    marginRight: "5px",
+                  }}
+                />
+                Dowload log
+              </Button>
+              <Button
+                style={{
+                  color: "white",
+                  backgroundColor: "rgb(55, 137, 220)",
+                  marginRight: 5,
+                }}
+                onClick={openModalShowHistory}
+              >
+                <FontAwesomeIcon
+                  icon={faHistory}
+                  size="1x"
+                  style={{
+                    backgroundColor: "rgb(55, 137, 220)",
+                    marginRight: "5px",
+                  }}
+                />
+                Lịch sử
+              </Button>
+              <Button
+                style={{
+                  color: "white",
+                  backgroundColor: "rgb(55, 137, 220)",
                 }}
                 onClick={buttonCreate}
               >
@@ -340,11 +398,18 @@ const RoleManagement = () => {
         <ModalCreateRoleProject
           visible={modalCreate}
           onCancel={buttonCreateCancel}
+          changeTotalsPage={changeTotalsPage}
+          totalPages={total}
+          size={10}
         />
         <ModalUpdateRoleProject
           visible={modalUpdate}
           onCancel={buttonUpdateCancel}
           roleProject={roleProject}
+        />{" "}
+        <ModalHistoryRole
+          visible={visibleHistory}
+          onCancel={cancelModalHistory}
         />
       </div>
     </>

@@ -43,4 +43,21 @@ export class AdCategoryAPI {
       url: `/admin/category/` + idCategory,
     });
   };
+
+  
+  static dowloadLog = () => {
+    return request({
+      method: "GET",
+      url: `/admin/category/download-log`,
+      responseType: "blob",
+    });
+  };
+
+  static showHistory = (params) => {
+    return request({
+      method: "GET",
+      url:  `/admin/category/history`,
+      params: params,
+    });
+  };
 }
