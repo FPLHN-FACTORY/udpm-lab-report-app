@@ -9,6 +9,7 @@ import com.labreportapp.labreport.core.admin.service.AdLevelService;
 import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.entity.Level;
 import com.labreportapp.labreport.util.FormUtils;
+import com.labreportapp.labreport.util.LoggerUtil;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import jakarta.validation.Valid;
@@ -36,6 +37,9 @@ public class AdLevelServiceImpl implements AdLevelService {
 
     private List<AdLevelResponse> adLevelResponsesList;
 
+    @Autowired
+    private LoggerUtil loggerUtil;
+
     @Override
     public List<Level> findAllLevel(Pageable pageable) {
         return adLevelRepository.getAllLevel(pageable);
@@ -44,6 +48,7 @@ public class AdLevelServiceImpl implements AdLevelService {
     @Override
     public Level createLevel(@Valid AdCreateLevelRequest obj) {
         Level level = formUtils.convertToObject(Level.class, obj);
+        loggerUtil.sendLogScreen("Đã thêm Level mới \"" + level.getName() + "\"", "");
         return adLevelRepository.save(level);
     }
 
@@ -54,7 +59,12 @@ public class AdLevelServiceImpl implements AdLevelService {
             throw new RestApiException(Message.SEMESTER_NOT_EXISTS);
         }
         Level level = findById.get();
+        StringBuilder message = new StringBuilder();
+        if (!level.getName().equals(obj.getName())) {
+            message.append("Đã cập nhật tên level từ \"").append(level.getName()).append("\" thành ").append("\"").append(obj.getName()).append(".");
+        }
         level.setName(obj.getName());
+        loggerUtil.sendLogScreen(message.toString(), "");
         return adLevelRepository.save(level);
     }
 
@@ -78,6 +88,7 @@ public class AdLevelServiceImpl implements AdLevelService {
             throw new RestApiException(Message.LEVEL_ACTIVITY_ALREADY_EXISTS);
         }
         adLevelRepository.delete(findLevelById.get());
+        loggerUtil.sendLogScreen("Đã xóa level \"" + findLevelById.get().getName() + "\".", "");
         return true;
     }
 }

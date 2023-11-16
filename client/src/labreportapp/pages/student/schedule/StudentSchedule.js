@@ -6,10 +6,9 @@ import {
   faChainSlash,
   faFilterCircleDollar,
 } from "@fortawesome/free-solid-svg-icons";
-import { Button, Input, Pagination, Table, Select } from "antd";
+import { Button, Input, Pagination, Table, Select, Empty } from "antd";
 import { Option } from "antd/es/mentions";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
 import { useAppSelector, useAppDispatch } from "../../../app/hook";
 import {
   SetSchedule,
@@ -21,7 +20,6 @@ import LoadingIndicator from "../../../helper/loading";
 import {
   convertDateLongToString,
   convertHourAndMinuteToString,
-  convertMeetingPeriodToTime,
 } from "../../../helper/util.helper";
 import { SearchOutlined } from "@ant-design/icons";
 
@@ -39,7 +37,7 @@ const StudentSchedule = () => {
 
   const fetchData = () => {
     const searchTimeAsNumber = parseInt(searchTime);
-    
+
     setLoading(true);
     let filter = {
       searchTime: searchTimeAsNumber,
@@ -58,7 +56,7 @@ const StudentSchedule = () => {
 
   const columns = [
     {
-      title: "STT",
+      title: "#",
       dataIndex: "stt",
       key: "stt",
       render: (text, record, index) => (current - 1) * 10 + index + 1,
@@ -114,6 +112,7 @@ const StudentSchedule = () => {
       title: "Ngày",
       dataIndex: "meetingDate",
       key: "meetingDate",
+      align: "center",
       sorter: (a, b) => a.meetingDate - b.meetingDate,
       render: (text, record) => {
         return <span>{convertDateLongToString(text)}</span>;
@@ -130,6 +129,7 @@ const StudentSchedule = () => {
       title: "Thời gian",
       dataIndex: "timePeriod",
       key: "timePeriod",
+      align: "center",
       render: (text, record) => {
         if (record.meetingPeriod == null) {
           return <span>Chưa có</span>;
@@ -146,7 +146,6 @@ const StudentSchedule = () => {
           );
         }
       },
-      align: "center",
     },
     {
       title: "Hình thức học",
@@ -209,7 +208,7 @@ const StudentSchedule = () => {
           </span>
         </div>
       </div>
-      <div className="shedule" style={{ paddingTop: "5px" }}>
+      <div className="shedule" style={{ paddingTop: "0px" }}>
         <div className="title_activity_management"></div>
         <div className="filter-semester">
           <FontAwesomeIcon icon={faFilter} style={{ fontSize: "20px" }} />{" "}
@@ -261,7 +260,7 @@ const StudentSchedule = () => {
         </div>
         <div
           className="table__category_custom"
-          style={{ marginTop: "30px", padding: "20px" }}
+          style={{ marginTop: "25px", padding: "20px" }}
         >
           <div className="tittle__category">
             <div>
@@ -276,24 +275,32 @@ const StudentSchedule = () => {
             </div>
           </div>
           <br />
-          <div>
-            <Table
-              dataSource={data}
-              rowKey="id"
-              columns={columns}
-              pagination={false}
-            />
-            <div className="pagination_box">
-              <Pagination
-                simple
-                current={current}
-                onChange={(page) => {
-                  setCurrent(page);
-                }}
-                total={total * 10}
+          {data != null && data.length > 0 ? (
+            <div>
+              <Table
+                dataSource={data}
+                rowKey="id"
+                columns={columns}
+                pagination={false}
               />
+              <div className="pagination_box">
+                <Pagination
+                  simple
+                  current={current}
+                  onChange={(page) => {
+                    setCurrent(page);
+                  }}
+                  total={total * 10}
+                />
+              </div>
             </div>
-          </div>
+          ) : (
+            <Empty
+              style={{ padding: "80px 0 20px 0" }}
+              imageStyle={{ height: "60px" }}
+              description={<span>Không có dữ liệu</span>}
+            />
+          )}
         </div>
       </div>
     </>

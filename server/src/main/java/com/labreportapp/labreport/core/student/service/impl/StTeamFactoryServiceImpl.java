@@ -91,7 +91,7 @@ public class StTeamFactoryServiceImpl implements StTeamFactoryService {
         List<StAllMemberFactoryResponse> listCustom = new ArrayList<>();
         listStrIdMember.forEach(idMe -> {
             listResponse.forEach(res -> {
-                if(idMe.getMemberId().equals(res.getId())) {
+                if (idMe.getMemberId().equals(res.getId())) {
                     StAllMemberFactoryResponse stAllMemberFactoryResponse = new StAllMemberFactoryResponse();
                     stAllMemberFactoryResponse.setId(idMe.getId());
                     stAllMemberFactoryResponse.setMemberId(idMe.getMemberId());

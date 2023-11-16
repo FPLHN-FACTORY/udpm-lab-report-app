@@ -22,20 +22,6 @@ const ModalStudentFeedBack = ({ visible, setVisible }) => {
   const initialRatings = listFeedBack.map(() => 0);
   const [ratings, setRatings] = useState(initialRatings);
 
-  useEffect(() => {
-    const allTextAreasFilled = listFeedBack.every(
-      (feedback) =>
-        feedback.descriptions.trim() !== "" &&
-        feedback.rateQuestion1 !== 0 &&
-        feedback.rateQuestion2 !== 0 &&
-        feedback.rateQuestion3 !== 0 &&
-        feedback.rateQuestion4 !== 0 &&
-        feedback.rateQuestion5 !== 0 &&
-        feedback.status !== null
-    );
-    setIsBothTextAreasFilled(allTextAreasFilled);
-  }, [listFeedBack]);
-
   const handleFeedbackChange = (index, value) => {
     const updatedFeedback = [...listFeedBack];
     updatedFeedback[index].descriptions = value;
@@ -86,16 +72,33 @@ const ModalStudentFeedBack = ({ visible, setVisible }) => {
     });
   };
 
+  useEffect(() => {
+    const allTextAreasFilled = listFeedBack.every(
+      (feedback) =>
+        feedback.rateQuestion1 !== 0 &&
+        feedback.rateQuestion2 !== 0 &&
+        feedback.rateQuestion3 !== 0 &&
+        feedback.rateQuestion4 !== 0 &&
+        feedback.rateQuestion5 !== 0 &&
+        feedback.status !== null
+    );
+    setIsBothTextAreasFilled(allTextAreasFilled);
+  }, [listFeedBack]);
+
   const createFeedback = () => {
-    let obj = {
-      listFeedBack: listFeedBack,
-    };
-    setIsLoading(true);
-    StFeedBackAPI.createFeedBack(obj).then((response) => {
-      message.success("FeedBack thành công");
-      setIsLoading(false);
-      setVisible(false);
-    });
+    if (!isBothTextAreasFilled) {
+      message.warning("5 câu hỏi không được để trống vote sao !");
+    } else {
+      let obj = {
+        listFeedBack: listFeedBack,
+      };
+      setIsLoading(true);
+      StFeedBackAPI.createFeedBack(obj).then((response) => {
+        message.success("Feedback thành công !");
+        setIsLoading(false);
+        setVisible(false);
+      });
+    }
   };
 
   useEffect(() => {

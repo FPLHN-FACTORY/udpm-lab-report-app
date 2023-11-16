@@ -15,4 +15,20 @@ export class AdClassCongigurationAPI {
       data: data,
     });
   };
+
+  static dowloadLog = () => {
+    return request({
+      method: "GET",
+      url: `/admin/class-configuration/download-log`,
+      responseType: "blob",
+    });
+  };
+
+  static showHistory = (params) => {
+    return request({
+      method: "GET",
+      url: `/admin/class-configuration/history`,
+      params: params,
+    });
+  };
 }

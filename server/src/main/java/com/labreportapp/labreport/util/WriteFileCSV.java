@@ -130,6 +130,15 @@ public class WriteFileCSV {
             if (api.contains("/class-managerment")) {
                 pathFile = folderAdmin + getPropertiesRead(ConfigurationsConstant.NAME_FILE_QUAN_LY_LOP_HOC);
             }
+            if (api.contains("/class-configuration")) {
+                pathFile = pathTemplate + getPropertiesRead(ConfigurationsConstant.NAME_FILE_CAU_HINH_LOP_HOC);
+            }
+            if (api.contains("/meeting-period-configuration")) {
+                pathFile = pathTemplate + getPropertiesRead(ConfigurationsConstant.NAME_FILE_CAU_HINH_LOP_HOC);
+            }
+            if (api.contains("/template-report")) {
+                pathFile = pathTemplate + getPropertiesRead(ConfigurationsConstant.NAME_FILE_CAU_HINH_LOP_HOC);
+            }
         }
 
         System.out.println("========= pathFile màn hình: " + pathFile);

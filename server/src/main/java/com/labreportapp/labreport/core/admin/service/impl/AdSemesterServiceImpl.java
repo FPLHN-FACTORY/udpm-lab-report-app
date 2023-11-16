@@ -151,7 +151,6 @@ public class AdSemesterServiceImpl implements AdSemesterService {
         }
         Integer countActivities = adSemesterRepository.countActivitiesBySemesterId(id);
         if (countActivities > 0) {
-            System.out.println(countActivities);
             throw new RestApiException(Message.SEMESTER_ACTIVITY_ALREADY_EXISTS);
         }
         loggerUtil.sendLogScreen("Đã xóa học kỳ " + findSemesterById.get().getName(), "");

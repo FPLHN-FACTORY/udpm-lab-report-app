@@ -6,6 +6,7 @@ import com.labreportapp.labreport.core.admin.model.response.AdClassConfiguration
 import com.labreportapp.labreport.core.admin.repository.AdClassConfigurationRepository;
 import com.labreportapp.labreport.core.admin.service.AdCLassConfigurationService;
 import com.labreportapp.labreport.entity.ClassConfiguration;
+import com.labreportapp.labreport.util.LoggerUtil;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import jakarta.validation.Valid;
@@ -22,6 +23,9 @@ public class AdClassConfigurationServiceImpl implements AdCLassConfigurationServ
 
     @Autowired
     private AdClassConfigurationRepository adClassConfigurationRepository;
+
+    @Autowired
+    private LoggerUtil loggerUtil;
 
     @Override
     public List<AdClassConfigurationCustomResponse> getAllClassConfiguration() {
@@ -51,6 +55,27 @@ public class AdClassConfigurationServiceImpl implements AdCLassConfigurationServ
         if (optionalClassConfiguration == null) {
             throw new RestApiException(Message.CLASS_NOT_EXISTS);
         }
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Đã cập nhật cấu hình lớp học: ");
+        if (!optionalClassConfiguration.getClassSizeMax().equals(adUpdateClassConfigurationRequest.getClassSizeMax())) {
+            stringBuilder.append(" số lượng tối đa từ ").append(optionalClassConfiguration.getClassSizeMax()).append(" thành ").append(adUpdateClassConfigurationRequest.getClassSizeMax())
+                    .append(",");
+        }
+        if (!optionalClassConfiguration.getClassSizeMin().equals(adUpdateClassConfigurationRequest.getClassSizeMin())) {
+            stringBuilder.append(" số lượng thiểu từ ").append(optionalClassConfiguration.getClassSizeMin()).append(" thành ").append(adUpdateClassConfigurationRequest.getClassSizeMin())
+                    .append(",");
+        }
+        if (!optionalClassConfiguration.getPointMin().equals(adUpdateClassConfigurationRequest.getPointMin())) {
+            stringBuilder.append(" điểm tối thiểu từ ").append(optionalClassConfiguration.getPointMin()).append(" thành ").append(adUpdateClassConfigurationRequest.getPointMin())
+                    .append(",");
+        }
+        if (!optionalClassConfiguration.getMaximumNumberOfBreaks().equals(adUpdateClassConfigurationRequest.getMaximumNumberOfBreaks())) {
+            stringBuilder.append(" tỉ lệ nghỉ từ ").append(optionalClassConfiguration.getMaximumNumberOfBreaks()).append("% thành ").append(adUpdateClassConfigurationRequest.getMaximumNumberOfBreaks()).append("%")
+                    .append(",");
+        }
+        if (stringBuilder.length() > 0 && stringBuilder.charAt(stringBuilder.length() - 1) == ',') {
+            stringBuilder.setCharAt(stringBuilder.length() - 1, '.');}
+        loggerUtil.sendLogScreen(stringBuilder.toString(), "");
         optionalClassConfiguration.setClassSizeMax(adUpdateClassConfigurationRequest.getClassSizeMax());
         optionalClassConfiguration.setClassSizeMin(adUpdateClassConfigurationRequest.getClassSizeMin());
         optionalClassConfiguration.setPointMin(adUpdateClassConfigurationRequest.getPointMin());

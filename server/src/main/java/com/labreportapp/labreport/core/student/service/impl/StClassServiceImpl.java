@@ -131,9 +131,7 @@ public class StClassServiceImpl implements StClassService {
         if (findClass.get().getClassSize() == configurationSizeMax) {
             throw new RestApiException(Message.CLASS_DID_FULL_CLASS_SIZE);
         }
-
         SimpleResponse responseStudent = callApiIdentity.handleCallApiGetUserById(labReportAppSession.getUserId());
-
         StudentClasses studentJoinClass = new StudentClasses();
         StClassCustomResponse customResponse = new StClassCustomResponse();
 
@@ -167,7 +165,6 @@ public class StClassServiceImpl implements StClassService {
                 throw new RestApiException(Message.ERROR_UNKNOWN);
             }
         }
-
         return customResponse;
     }
 

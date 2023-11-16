@@ -9,6 +9,7 @@ import com.labreportapp.labreport.core.admin.service.AdMeetingPeriodConfiguratio
 import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.entity.MeetingPeriod;
 import com.labreportapp.labreport.util.FormUtils;
+import com.labreportapp.labreport.util.LoggerUtil;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import jakarta.validation.Valid;
@@ -36,6 +37,9 @@ public class AdMeetingPeriodConfigurationServiceImpl implements AdMeetingPeriodC
 
     private List<AdMeetingPeriodConfigurationResponse> adMeetingPeriodResponsesList;
 
+    @Autowired
+    private LoggerUtil loggerUtil;
+
     @Override
     public List<MeetingPeriod> findAllMeetingPeriod(Pageable pageable) {
         return adMeetingPeriodRepository.getAllMeetingPeriod(pageable);
@@ -44,6 +48,7 @@ public class AdMeetingPeriodConfigurationServiceImpl implements AdMeetingPeriodC
     @Override
     public MeetingPeriod createMeetingPeriod(@Valid AdCreateMeetingPeriodRequest obj) {
         MeetingPeriod meetingPeriod = formUtils.convertToObject(MeetingPeriod.class, obj);
+        loggerUtil.sendLogScreen("Đã thêm cấu hình ca học mới " + obj.getName()+" .", "");
         return adMeetingPeriodRepository.save(meetingPeriod);
     }
 
@@ -53,6 +58,8 @@ public class AdMeetingPeriodConfigurationServiceImpl implements AdMeetingPeriodC
         if (!findById.isPresent()) {
             throw new RestApiException(Message.PERIOD_NOT_EXISTS);
         }
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Đã cập nhật lại ca học ");
         MeetingPeriod meetingPeriod = findById.get();
         meetingPeriod.setName(obj.getName());
         meetingPeriod.setStartMinute(obj.getStartMinute());

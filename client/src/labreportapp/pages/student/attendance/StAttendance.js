@@ -152,7 +152,7 @@ const StAttendance = () => {
           </span>
         </div>
       </div>
-      <div className="box-general" style={{ paddingTop: "5px" }}>
+      <div className="box-general" style={{ paddingTop: "0px" }}>
         <div className="filter-semester">
           <div className="wrapper-filter">
             <span style={{ marginLeft: "3px" }}>Học kỳ</span>

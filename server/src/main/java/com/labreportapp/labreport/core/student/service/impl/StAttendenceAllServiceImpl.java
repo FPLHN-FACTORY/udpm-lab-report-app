@@ -43,17 +43,12 @@ public class StAttendenceAllServiceImpl implements StAttendenceAllService {
         StFindClassRequest stFindClassRequest = new StFindClassRequest();
         stFindClassRequest.setSemesterId(req.getIdSemester());
         stFindClassRequest.setStudentId(req.getIdStudent());
-
         List<StMyClassResponse> getClassListByStudentInSemester = stMyClassRepository.getAllClass(stFindClassRequest);
         List<StClassAttendenceAllCustomResponse> response = new ArrayList<>();
-
         List<SimpleResponse> simplesResponse = callApiIdentity.
                 handleCallApiGetUserByRoleAndModule(ActorConstants.ACTOR_TEACHER);
-
         Map<String, SimpleResponse> simpleMap = simplesResponse.stream()
                 .collect(Collectors.toMap(SimpleResponse::getId, Function.identity()));
-
-
         for (StMyClassResponse classResponse : getClassListByStudentInSemester) {
             StClassAttendenceAllCustomResponse classAttendenceResponse = new StClassAttendenceAllCustomResponse();
             classAttendenceResponse.setId(classResponse.getId());
@@ -78,8 +73,10 @@ public class StAttendenceAllServiceImpl implements StAttendenceAllService {
                         attendenceInClass.setEndHour(att.getEndHour());
                         attendenceInClass.setEndMinute(att.getEndMinute());
                         SimpleResponse simpleResponse = simpleMap.get(att.getTeacherId());
-                        attendenceInClass.setTeacherUsername(att.getTeacherId().equals(simpleResponse.getId())
-                                ? simpleResponse.getUserName() : null);
+                        if (simpleResponse != null) {
+                            attendenceInClass.setTeacherUsername(att.getTeacherId() != null ? att.getTeacherId().equals(simpleResponse.getId())
+                                    ? simpleResponse.getUserName() : null : null);
+                        }
                         customAttendenceListResponses.add(attendenceInClass);
                     }
             );

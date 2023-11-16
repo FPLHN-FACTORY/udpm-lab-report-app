@@ -414,8 +414,9 @@ const StudentMyClass = () => {
           {listClass.length === 0 && (
             <>
               <Empty
-                imageStyle={{ height: 60 }}
-                description={<span>Không tìm thấy lớp học nào !</span>}
+                style={{ paddingTop: "80px" }}
+                imageStyle={{ height: "60px" }}
+                description={<span>Không có dữ liệu</span>}
               />{" "}
             </>
           )}
