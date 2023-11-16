@@ -76,7 +76,7 @@ public class StMeetingServiceImpl implements StMeetingService {
     @Override
     public StMeetingResponse searchMeetingByIdMeeting(StFindMeetingRequest request) {
         Optional<StMeetingResponse> meeting = stMeetingrepository.searchMeetingByIdMeeting(request);
-        if (!meeting.isPresent()) {
+        if (meeting.isEmpty()) {
             throw new CustomException(Message.MEETING_NOT_EXISTS);
         }
         if (meeting.get().getMeetingDate() > new Date().getTime()) {
@@ -105,14 +105,14 @@ public class StMeetingServiceImpl implements StMeetingService {
     @Synchronized
     public StHomeWordAndNoteResponse updateDetailMeetingTeamByLeadTeam(StUpdateHomeWorkAndNotebyLeadTeamRequest request) {
         Optional<Meeting> meeting = stMeetingrepository.findById(request.getIdMeeting());
-        if (!meeting.isPresent()) {
+        if (meeting.isEmpty()) {
             throw new RestApiException(Message.MEETING_NOT_EXISTS);
         }
         Optional<StudentClasses> optionalStudentClasses = stLeadTeamRepository.findStudentClassesByStudentIdAndClassId(labReportAppSession.getUserId(), meeting.get().getClassId());
         Optional<Team> team = stTeamRepository.findById(request.getIdTeam());
         String codeClass = loggerUtil.getCodeClassByIdClass(meeting.get().getClassId());
         String nameSemester = loggerUtil.getNameSemesterByIdClass(meeting.get().getClassId());
-        String nameMeeting = meeting.isPresent() ? meeting.get().getName() : "";
+        String nameMeeting = meeting.get().getName();
         String nameTeam = team.isPresent() ? team.get().getName() : "";
         StringBuilder stringHw = new StringBuilder();
         StringBuilder stringNote = new StringBuilder();

@@ -4,18 +4,22 @@ import {
   faCogs,
   faLayerGroup,
   faEdit,
+  faFileDownload,
+  faHistory,
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { Button, Table } from "antd";
 import { AdClassCongigurationAPI } from "../../../../api/admin/AdClassConfigurationAPI";
 import ModalUpdateClassConfiguration from "./modal-update/ModalUpdateClassConfiguration";
 import LoadingIndicator from "../../../../helper/loading";
+import ModalShowHistoryConfigurationClass from "./modal-show-history-configuration-class/ModalShowHistoryConfigurationClass";
 
 const ClassConfiguration = () => {
   const [adClassConfiguration, setAdClassConfiguration] = useState([]);
 
   useEffect(() => {
     setIsLoading(true);
+    window.scrollTo(0, 0);
     loadData();
     document.title = "Cấu hình lớp học | Lab-Report-App";
   }, []);
@@ -23,7 +27,6 @@ const ClassConfiguration = () => {
   const loadData = () => {
     AdClassCongigurationAPI.getAll().then((response) => {
       setAdClassConfiguration(response.data.data);
-      
       setIsLoading(false);
     });
   };
@@ -60,6 +63,29 @@ const ClassConfiguration = () => {
       key: "chiSo",
     },
   ];
+
+  const [visibleHistory, setVisibleHistory] = useState(false);
+  const openModalShowHistory = () => {
+    setVisibleHistory(true);
+  };
+  const cancelModalHistory = () => {
+    setVisibleHistory(false);
+  };
+
+  const dowloadLog = () => {
+    AdClassCongigurationAPI.dowloadLog().then(
+      (response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "cau_hinh_lop_hoc.csv";
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      (error) => {}
+    );
+  };
+
   return (
     <>
       <div className="box-one">
@@ -96,6 +122,42 @@ const ClassConfiguration = () => {
                 style={{
                   color: "white",
                   backgroundColor: "rgb(55, 137, 220)",
+                  marginRight: 5,
+                }}
+                onClick={dowloadLog}
+              >
+                <FontAwesomeIcon
+                  icon={faFileDownload}
+                  size="1x"
+                  style={{
+                    backgroundColor: "rgb(55, 137, 220)",
+                    marginRight: "5px",
+                  }}
+                />
+                Dowload log
+              </Button>
+              <Button
+                style={{
+                  color: "white",
+                  backgroundColor: "rgb(55, 137, 220)",
+                  marginRight: 5,
+                }}
+                onClick={openModalShowHistory}
+              >
+                <FontAwesomeIcon
+                  icon={faHistory}
+                  size="1x"
+                  style={{
+                    backgroundColor: "rgb(55, 137, 220)",
+                    marginRight: "5px",
+                  }}
+                />
+                Lịch sử
+              </Button>
+              <Button
+                style={{
+                  color: "white",
+                  backgroundColor: "rgb(55, 137, 220)",
                 }}
                 onClick={() => setShowUpdateModal(true)}
               >
@@ -124,6 +186,10 @@ const ClassConfiguration = () => {
           visible={showUpdateModal}
           onCancel={handleModalUpdateCancel}
           classConfiguration={adClassConfiguration}
+        />
+        <ModalShowHistoryConfigurationClass
+          visible={visibleHistory}
+          onCancel={cancelModalHistory}
         />
       </div>
     </>

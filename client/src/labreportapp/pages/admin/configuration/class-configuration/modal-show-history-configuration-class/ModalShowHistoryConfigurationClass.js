@@ -1,21 +1,10 @@
 import React, { useEffect, useState } from "react";
-import {
-  Modal,
-  Row,
-  Col,
-  Input,
-  Button,
-  Select,
-  message,
-  Table,
-  Pagination,
-  Empty,
-} from "antd";
-import { AdSemesterAPI } from "../../../../api/admin/AdSemesterAPI";
+import { Modal, Button, Select, Table, Pagination, Empty } from "antd";
+import { AdClassCongigurationAPI } from "../../../../../api/admin/AdClassConfigurationAPI";
 
 const { Option } = Select;
 
-const ModalShowHistory = ({ visible, onCancel }) => {
+const ModalShowHistoryConfigurationClass = ({ visible, onCancel }) => {
   const columns = [
     {
       title: "Email người thực hiện",
@@ -39,6 +28,9 @@ const ModalShowHistory = ({ visible, onCancel }) => {
       title: "Nội dung",
       dataIndex: "content",
       key: "content",
+      render: (text) => {
+        return <div dangerouslySetInnerHTML={{ __html: text }}></div>;
+      },
     },
   ];
 
@@ -47,15 +39,16 @@ const ModalShowHistory = ({ visible, onCancel }) => {
   const [totalPages, setTotalPages] = useState(0);
   const [size, setSize] = useState("50");
 
-  const loadDataHistory = () => {
-    AdSemesterAPI.showHistory({
-      page: current - 1,
-      size: parseInt(size),
-    }).then((response) => {
-      console.log(response.data);
-      setDataHistory(response.data.data);
-      setTotalPages(response.data.totalPages);
-    });
+  const loadDataHistory = async () => {
+    try {
+      AdClassCongigurationAPI.showHistory({
+        page: current - 1,
+        size: parseInt(size),
+      }).then((response) => {
+        setDataHistory(response.data.data);
+        setTotalPages(response.data.totalPages);
+      });
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -66,13 +59,13 @@ const ModalShowHistory = ({ visible, onCancel }) => {
 
   return (
     <>
-      <Modal visible={visible} onCancel={onCancel} width={1300} footer={null}>
+      <Modal open={visible} onCancel={onCancel} width={1300} footer={null}>
         <div>
           <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
             <span style={{ fontSize: "18px" }}>Lịch sử</span>
           </div>
           <div style={{ marginTop: "15px", borderBottom: "1px solid black" }}>
-            {dataHistory != null && (
+            {dataHistory != null ? (
               <>
                 {" "}
                 <Table
@@ -104,6 +97,7 @@ const ModalShowHistory = ({ visible, onCancel }) => {
                     style={{ width: "100px", marginLeft: "10px" }}
                     value={size}
                     onChange={(e) => {
+                      setCurrent(1);
                       setSize(e);
                     }}
                   >
@@ -116,26 +110,24 @@ const ModalShowHistory = ({ visible, onCancel }) => {
                   </Select>
                 </div>{" "}
               </>
+            ) : (
+              <>
+                <p
+                  style={{
+                    textAlign: "center",
+                    marginTop: "100px",
+                    fontSize: "15px",
+                    color: "red",
+                  }}
+                >
+                  <Empty
+                    imageStyle={{ height: 60 }}
+                    description={<span>Không có dữ liệu</span>}
+                  />{" "}
+                </p>
+              </>
             )}
           </div>
-          {dataHistory.length === 0 && (
-            <>
-              <p
-                style={{
-                  textAlign: "center",
-                  marginTop: "100px",
-                  fontSize: "15px",
-                  color: "red",
-                }}
-              >
-                <Empty
-                  imageStyle={{ height: 60 }}
-                  description={<span>Không có dữ liệu</span>}
-                />{" "}
-              </p>
-            </>
-          )}
-
           <div style={{ textAlign: "right" }}>
             <div style={{ paddingTop: "15px" }}>
               <Button
@@ -154,4 +146,4 @@ const ModalShowHistory = ({ visible, onCancel }) => {
     </>
   );
 };
-export default ModalShowHistory;
+export default ModalShowHistoryConfigurationClass;

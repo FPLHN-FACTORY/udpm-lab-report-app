@@ -45,6 +45,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayOutputStream;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -98,7 +100,7 @@ public class TePointSeviceImpl implements TePointSevice {
                     student.setIdStudent(point.getIdStudent());
                     student.setUsername(infor.getUsername());
                     student.setNameStudent(infor.getName());
-                    student.setStatusTeam(infor.getStatusTeam());
+                    student.setStatusTeam(infor.getStatusTeam() != null ? infor.getStatusTeam() : 1);
                     if (point.getNameTeam() == null) {
                         student.setNameTeam("");
                     } else {
@@ -151,7 +153,9 @@ public class TePointSeviceImpl implements TePointSevice {
                 point.setClassId(item.getIdClass());
                 point.setCheckPointPhase1(item.getCheckPointPhase1());
                 point.setCheckPointPhase2(item.getCheckPointPhase2());
-                point.setFinalPoint((item.getCheckPointPhase1() + item.getCheckPointPhase2()) / 2);
+                double average = (item.getCheckPointPhase1() + item.getCheckPointPhase2()) / 2;
+                BigDecimal roundedValue = new BigDecimal(average).setScale(2, RoundingMode.UP);
+                point.setFinalPoint(roundedValue.doubleValue());
                 point.setCreatedDate(new Date().getTime());
                 point.setLastModifiedDate(new Date().getTime());
                 listInforStudent.forEach(infor -> {
@@ -172,7 +176,9 @@ public class TePointSeviceImpl implements TePointSevice {
                         point.setClassId(itemDB.getClassId());
                         point.setCheckPointPhase1(item.getCheckPointPhase1());
                         point.setCheckPointPhase2(item.getCheckPointPhase2());
-                        point.setFinalPoint((item.getCheckPointPhase1() + item.getCheckPointPhase2()) / 2);
+                        double average = (item.getCheckPointPhase1() + item.getCheckPointPhase2()) / 2;
+                        BigDecimal roundedValue = new BigDecimal(average).setScale(2, RoundingMode.UP);
+                        point.setFinalPoint(roundedValue.doubleValue());
                         point.setCreatedDate(itemDB.getCreatedDate());
                         listInforStudent.forEach(infor -> {
                             if (infor.getId().equals(item.getIdStudent())
@@ -465,7 +471,9 @@ public class TePointSeviceImpl implements TePointSevice {
                     }
                     pointUpd.setCheckPointPhase1(phase1);
                     pointUpd.setCheckPointPhase2(phase2);
-                    pointUpd.setFinalPoint(Double.parseDouble(String.valueOf((phase1 + phase2) / 2)));
+                    double average = (phase1 + phase2) / 2;
+                    BigDecimal roundedValue = new BigDecimal(average).setScale(2, RoundingMode.UP);
+                    pointUpd.setFinalPoint(roundedValue.doubleValue());
                     pointUpdate.put(pointUpd.getStudentId(), pointUpd);
                 } else {
                     Point pointNew = new Point();
@@ -473,7 +481,9 @@ public class TePointSeviceImpl implements TePointSevice {
                     pointNew.setCheckPointPhase1(phase1);
                     pointNew.setCheckPointPhase2(phase2);
                     pointNew.setStudentId(simpleResponse.getId());
-                    pointNew.setFinalPoint(Double.parseDouble(String.valueOf((phase1 + phase2) / 2)));
+                    double average = (phase1 + phase2) / 2;
+                    BigDecimal roundedValue = new BigDecimal(average).setScale(2, RoundingMode.UP);
+                    pointNew.setFinalPoint(roundedValue.doubleValue());
                     pointUpdate.put(pointNew.getStudentId(), pointNew);
                     messagesConcurrent.add(" " + simpleResponse.getName() + " - " + simpleResponse.getUserName() +
                             " là <i style=\"color: red\">(" + phase1 + " và " + phase2 + ")</i>,");

@@ -22,8 +22,10 @@ import java.util.stream.Collectors;
  */
 @Service
 public class StPostServiceImpl implements StPostService {
+
     @Autowired
     private StPostRepository repository;
+
     @Autowired
     private CallApiIdentity callApiIdentity;
 

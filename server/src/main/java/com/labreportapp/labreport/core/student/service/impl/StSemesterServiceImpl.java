@@ -25,4 +25,5 @@ public class StSemesterServiceImpl implements StSemesterService {
     public List<SimpleEntityProjection> getAllSemester() {
         return semesterRepository.getAllSimpleEntityProjection();
     }
+
 }

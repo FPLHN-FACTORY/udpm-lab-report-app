@@ -7,6 +7,8 @@ import {
   faPencil,
   faFilterCircleDollar,
   faChainSlash,
+  faFileDownload,
+  faHistory,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -24,7 +26,6 @@ import "./style-level-management.css";
 import { useAppSelector, useAppDispatch } from "../../../app/hook";
 import { AdLevelAPI } from "../../../api/admin/AdLevelManagerAPI";
 import React from "react";
-import { toast } from "react-toastify";
 import {
   SetLevel,
   GetLevel,
@@ -33,6 +34,7 @@ import {
 import ModalCreateLevel from "./modal-create/ModalCreateLevel";
 import ModalUpdateLevel from "./modal-update/ModalUpdateLevel";
 import LoadingIndicator from "../../../helper/loading";
+import ModalShowHistoryLevel from "./modal-show-history-level/ModalShowHistoryLevel";
 const LevelManagement = () => {
   const [level, setLevel] = useState(null);
   const [name, setName] = useState("");
@@ -69,13 +71,14 @@ const LevelManagement = () => {
       dataIndex: "stt",
       key: "stt",
       render: (text, record, index) => (current - 1) * 10 + index + 1,
+      align: "center",
     },
     {
-      title: "Tên Level",
+      title: "Tên level",
       dataIndex: "name",
       key: "name",
       sorter: (a, b) => a.name.localeCompare(b.name),
-      width: "30%",
+      align: "center",
     },
     {
       title: "Hành động",
@@ -168,6 +171,32 @@ const LevelManagement = () => {
     );
   };
 
+  const dowloadLog = () => {
+    AdLevelAPI.dowloadLog().then(
+      (response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "level.csv";
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      (error) => {}
+    );
+  };
+  const [visibleHistory, setVisibleHistory] = useState(false);
+  const openModalShowHistory = () => {
+    setVisibleHistory(true);
+  };
+
+  const cancelModalHistory = () => {
+    setVisibleHistory(false);
+  };
+
+  const changeTotalsPage = (newTotalPages) => {
+    setTotal(newTotalPages);
+  };
+
   return (
     <>
       <div className="box-one">
@@ -243,8 +272,43 @@ const LevelManagement = () => {
                 Danh sách level
               </span>
             </div>
-
             <div>
+              <Button
+                style={{
+                  color: "white",
+                  backgroundColor: "rgb(55, 137, 220)",
+                  marginRight: 5,
+                }}
+                onClick={dowloadLog}
+              >
+                <FontAwesomeIcon
+                  icon={faFileDownload}
+                  size="1x"
+                  style={{
+                    backgroundColor: "rgb(55, 137, 220)",
+                    marginRight: "5px",
+                  }}
+                />
+                Dowload log
+              </Button>
+              <Button
+                style={{
+                  color: "white",
+                  backgroundColor: "rgb(55, 137, 220)",
+                  marginRight: 5,
+                }}
+                onClick={openModalShowHistory}
+              >
+                <FontAwesomeIcon
+                  icon={faHistory}
+                  size="1x"
+                  style={{
+                    backgroundColor: "rgb(55, 137, 220)",
+                    marginRight: "5px",
+                  }}
+                />
+                Lịch sử
+              </Button>
               <Button
                 style={{
                   color: "white",
@@ -283,11 +347,21 @@ const LevelManagement = () => {
             </div>
           </div>
         </div>
-        <ModalCreateLevel visible={modalCreate} onCancel={buttonCreateCancel} />
+        <ModalCreateLevel
+          visible={modalCreate}
+          onCancel={buttonCreateCancel}
+          changeTotalsPage={changeTotalsPage}
+          totalPages={total}
+          size={10}
+        />
         <ModalUpdateLevel
           visible={modalUpdate}
           onCancel={buttonUpdateCancel}
           level={level}
+        />
+        <ModalShowHistoryLevel
+          visible={visibleHistory}
+          onCancel={cancelModalHistory}
         />
       </div>
     </>

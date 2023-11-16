@@ -2,17 +2,28 @@ import { Modal, Row, Col, Input, Button, message } from "antd";
 import { useEffect, useState } from "react";
 import { AdLevelAPI } from "../../../../api/admin/AdLevelManagerAPI";
 import { useAppSelector } from "../../../../app/hook";
-import { AddLevel } from "../../../../app/admin/AdLevelManager.reducer";
-import { toast } from "react-toastify";
+import {
+  AddLevel,
+  GetLevel,
+} from "../../../../app/admin/AdLevelManager.reducer";
 import "react-toastify/dist/ReactToastify.css";
 import { useAppDispatch } from "../../../../app/hook";
-import { SetLoadingFalse, SetLoadingTrue } from "../../../../app/common/Loading.reducer";
+import {
+  SetLoadingFalse,
+  SetLoadingTrue,
+} from "../../../../app/common/Loading.reducer";
 
-const ModalCreateLevel = ({ visible, onCancel }) => {
+const ModalCreateLevel = ({
+  visible,
+  onCancel,
+  changeTotalsPage,
+  totalPages,
+  size,
+}) => {
   const [name, setName] = useState("");
   const [errorName, setErrorName] = useState("aaa");
   const dispatch = useAppDispatch();
-
+  const data = useAppSelector(GetLevel);
   useEffect(() => {
     return () => {
       setName("");
@@ -46,6 +57,13 @@ const ModalCreateLevel = ({ visible, onCancel }) => {
           message.success("Thêm thành công!");
           dispatch(AddLevel(response.data.data));
           dispatch(SetLoadingFalse());
+          if (data != null) {
+            if (data.length + 1 > size) {
+              changeTotalsPage(totalPages + 1);
+            } else if (data.length + 1 === 1) {
+              changeTotalsPage(1);
+            }
+          }
           onCancel();
         },
         (error) => {}

@@ -13,6 +13,7 @@ import java.util.List;
  * @author quynhncph26201
  */
 public interface AdLevelService {
+
     List<Level> findAllLevel(Pageable pageable);
 
     Level createLevel(@Valid final AdCreateLevelRequest obj);

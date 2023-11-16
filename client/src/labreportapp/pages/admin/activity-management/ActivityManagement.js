@@ -9,6 +9,8 @@ import {
   faAddressCard,
   faFilterCircleDollar,
   faChainSlash,
+  faFileDownload,
+  faHistory,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   Button,
@@ -35,6 +37,7 @@ import LoadingIndicator from "../../../helper/loading";
 import ModalCreateActivity from "./modal-create/ModalCreateActivity";
 import ModalUpdateActivity from "./modal-update/ModalUpdateActivity";
 import { convertDateLongToString } from "../../../helper/util.helper";
+import ModalShowHistoryActivity from "./modal-show-history-activity/ModalShowHistoryActivity";
 
 const ActivityManagement = () => {
   const { id } = useParams();
@@ -55,6 +58,7 @@ const ActivityManagement = () => {
   useEffect(() => {
     fetchSemesterData();
     fetchLevelData();
+    window.scrollTo(0, 0);
     document.title = "Quản lý hoạt động | Lab-Report-App";
   }, []);
 
@@ -74,6 +78,7 @@ const ActivityManagement = () => {
       };
     }
   }, [clear]);
+
   const fetchData = async () => {
     let filter = {
       name: searchName,
@@ -88,9 +93,7 @@ const ActivityManagement = () => {
       dispatch(SetActivityManagement(listActivityManagement));
       setTotal(response.data.data.totalPages);
       setLoading(false);
-    } catch (error) {
-      console.error("Lỗi hệ thống, vui lòng ấn F5 để tải lại trang");
-    }
+    } catch (error) {}
   };
 
   const fetchSemesterData = async () => {
@@ -166,9 +169,7 @@ const ActivityManagement = () => {
         message.success("Xóa thành công!");
         dispatch(DeleteActivityManagement(id));
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const data = useAppSelector(GetActivityManagement);
@@ -275,6 +276,33 @@ const ActivityManagement = () => {
       ),
     },
   ];
+
+  const [visibleHistory, setVisibleHistory] = useState(false);
+  const openModalShowHistory = () => {
+    setVisibleHistory(true);
+  };
+  const cancelModalHistory = () => {
+    setVisibleHistory(false);
+  };
+
+  const changeTotalsPage = (newTotalPages) => {
+    setTotal(newTotalPages);
+  };
+  const dowloadLog = () => {
+    ActivityManagementAPI.dowloadLog().then(
+      (response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "hoat_dong.csv";
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  };
   return (
     <>
       <div className="box-one">
@@ -374,7 +402,6 @@ const ActivityManagement = () => {
         <div className="table_activity_management">
           <div className="title_activity_management_table">
             <div>
-              {" "}
               {
                 <FontAwesomeIcon
                   icon={faAddressCard}
@@ -387,6 +414,42 @@ const ActivityManagement = () => {
               </span>
             </div>
             <div>
+              <Button
+                style={{
+                  color: "white",
+                  backgroundColor: "rgb(55, 137, 220)",
+                  marginRight: 5,
+                }}
+                onClick={dowloadLog}
+              >
+                <FontAwesomeIcon
+                  icon={faFileDownload}
+                  size="1x"
+                  style={{
+                    backgroundColor: "rgb(55, 137, 220)",
+                    marginRight: "5px",
+                  }}
+                />
+                Dowload log
+              </Button>
+              <Button
+                style={{
+                  color: "white",
+                  backgroundColor: "rgb(55, 137, 220)",
+                  marginRight: 5,
+                }}
+                onClick={openModalShowHistory}
+              >
+                <FontAwesomeIcon
+                  icon={faHistory}
+                  size="1x"
+                  style={{
+                    backgroundColor: "rgb(55, 137, 220)",
+                    marginRight: "5px",
+                  }}
+                />
+                Lịch sử
+              </Button>
               <Button
                 style={{
                   color: "white",
@@ -431,7 +494,9 @@ const ActivityManagement = () => {
           onCancel={handleModalCreateCancel}
           listSemester={listSemester}
           listLevel={listLevel}
-          fetchData={fetchData}
+          changeTotalsPage={changeTotalsPage}
+          totalPages={total}
+          size={10}
         />
         <ModalUpdateActivity
           visible={showUpdateModal}
@@ -440,6 +505,10 @@ const ActivityManagement = () => {
           activity={activity}
           listLevel={listLevel}
           fetchData={fetchData}
+        />
+        <ModalShowHistoryActivity
+          visible={visibleHistory}
+          onCancel={cancelModalHistory}
         />
       </div>
     </>

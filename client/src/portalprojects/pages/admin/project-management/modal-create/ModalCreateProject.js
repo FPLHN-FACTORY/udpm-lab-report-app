@@ -57,10 +57,10 @@ const ModalCreateProject = ({
 
   const [listRoleConfig, setListRoleConfig] = useState([]);
   const [loading, setLoading] = useState(false);
-  const dispatch = useAppDispatch();
   const [listGroupProject, setListGroupProject] = useState([]);
   const [selectedGroupProject, setSelectedGroupProject] = useState(null);
   const listCategorys = useAppSelector(GetCategory);
+  const dispatch = useAppDispatch();
 
   const dataProject = useAppSelector(GetProjectManagement);
 

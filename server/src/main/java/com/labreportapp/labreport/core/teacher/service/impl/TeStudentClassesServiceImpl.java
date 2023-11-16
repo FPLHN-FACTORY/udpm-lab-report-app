@@ -82,7 +82,7 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
                     obj.setIdStudent(respone.getId());
                     obj.setIdStudentClass(reposi.getIdStudentClass());
                     obj.setRole(reposi.getRole());
-                    obj.setStatusStudent(reposi.getStatusStudent());
+                    obj.setStatusStudent(reposi.getStatusStudent() != null ? reposi.getStatusStudent() : "1");
                     obj.setIdTeam(reposi.getIdTeam());
                     obj.setNameTeam(reposi.getNameTeam());
                     obj.setSubjectName(reposi.getSubjectName());
@@ -117,7 +117,7 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
                     obj.setName(respone.getName());
                     obj.setEmail(reposi.getEmail());
                     obj.setUsername(respone.getUserName());
-                    obj.setStatusTeam(reposi.getStatus().equals(StatusTeam.ACTIVE) ? 0 : 1);
+                    obj.setStatusTeam(reposi.getStatus() != null ? reposi.getStatus().equals(StatusTeam.ACTIVE) ? 0 : 1 : 1);
                     listReturn.add(obj);
                 }
             });

@@ -37,5 +37,19 @@ export class AdMeetingPeriodConfigurationAPI {
       url: url + `/delete/` + id,
     });
   };
-  
+  static dowloadLog = () => {
+    return request({
+      method: "GET",
+      url: url + `/download-log`,
+      responseType: "blob",
+    });
+  };
+
+  static showHistory = (params) => {
+    return request({
+      method: "GET",
+      url: url + `/history`,
+      params: params,
+    });
+  };
 }

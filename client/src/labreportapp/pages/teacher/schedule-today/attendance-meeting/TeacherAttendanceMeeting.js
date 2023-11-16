@@ -461,10 +461,10 @@ const TeacherAttendanceMeeting = () => {
                   color: "red",
                 }}
               >
-                Mặc định trạng thái điểm danh của sinh viên là "Có mặt". Giảng
-                viên chuyển từ <b>"Có mặt"</b> thành <b>"Vắng mặt"</b> nếu sinh
-                viên vi phạm một trong những nội quy như ra ngoài không lý do,
-                mất trật tự,...
+                Mặc định trạng thái điểm danh của sinh viên là <b>"Có mặt"</b>.
+                Giảng viên chuyển từ <b>"Có mặt"</b> thành <b>"Vắng mặt"</b> nếu
+                sinh viên vi phạm một trong những nội quy như ra ngoài không lý
+                do, mất trật tự,...
               </span>
               <br />
               <span

@@ -10,10 +10,13 @@ import {
   message,
 } from "antd";
 import { useEffect, useState } from "react";
-import { useAppDispatch } from "../../../../app/hook";
+import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import { toast } from "react-toastify";
 import { ActivityManagementAPI } from "../../../../api/admin/activity-management/activityManagement.api";
-import { CreateActivityManagement } from "../../../../app/admin/activity-management/activityManagementSlice.reducer";
+import {
+  CreateActivityManagement,
+  GetActivityManagement,
+} from "../../../../app/admin/activity-management/activityManagementSlice.reducer";
 import { Option } from "antd/es/mentions";
 import {
   SetLoadingFalse,
@@ -28,6 +31,9 @@ const ModalCreateActivity = ({
   listSemester,
   listLevel,
   fetchData,
+  changeTotalsPage,
+  totalPages,
+  size,
 }) => {
   const [name, setName] = useState("");
   const [code, setCode] = useState("");
@@ -43,6 +49,7 @@ const ModalCreateActivity = ({
   const [errorSemesterId, setErrorSemesterId] = useState("");
   const [allowUseTrello, setAllowUseTrello] = useState("1");
   const dispatch = useAppDispatch();
+  const data = useAppSelector(GetActivityManagement);
 
   useEffect(() => {
     if (visible === true) {
@@ -124,9 +131,15 @@ const ModalCreateActivity = ({
             nameSemester: semesterNameItem.name,
             levelNameItem: levelNameItem.name,
           };
-          console.log(objCreate);
           dispatch(CreateActivityManagement(objCreate));
           dispatch(SetLoadingFalse());
+          if (data != null) {
+            if (data.length + 1 > size) {
+              changeTotalsPage(totalPages + 1);
+            } else if (data.length + 1 === 1) {
+              changeTotalsPage(1);
+            }
+          }
           onCancel();
         },
         (error) => {}

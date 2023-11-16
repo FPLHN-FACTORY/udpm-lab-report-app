@@ -13,6 +13,7 @@ import java.util.List;
  * @author quynhncph26201
  */
 public interface AdMeetingPeriodConfigurationService {
+
     List<MeetingPeriod> findAllMeetingPeriod(Pageable pageable);
 
     MeetingPeriod createMeetingPeriod(@Valid final AdCreateMeetingPeriodRequest obj);

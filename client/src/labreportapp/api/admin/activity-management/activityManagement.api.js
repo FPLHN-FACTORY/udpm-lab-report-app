@@ -59,4 +59,20 @@ export class ActivityManagementAPI {
       url: `/admin/activity/id-semester?semesterId=` + id,
     });
   }
+
+  static dowloadLog = () => {
+    return request({
+      method: "GET",
+      url: `/admin/activity/download-log`,
+      responseType: "blob",
+    });
+  };
+
+  static showHistory = (params) => {
+    return request({
+      method: "GET",
+      url: `/admin/activity/history`,
+      params: params,
+    });
+  };
 }
