@@ -5,6 +5,8 @@ import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.infrastructure.apiconstant.ApiConstants;
 import com.labreportapp.labreport.infrastructure.logger.LoggerObject;
 import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
+import com.labreportapp.portalprojects.infrastructure.constant.Message;
+import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -70,7 +72,6 @@ public class CallApiConsumer {
 
             return responseEntity;
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }

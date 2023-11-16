@@ -24,7 +24,7 @@ const AuthGuard = ({ children }) => {
       });
       getRolesUser(decodedToken);
     }
-  }, []);
+  }, [children]);
 
   const getRolesUser = (decodedToken) => {
     RolesAPI.getRolesUser(decodedToken.id).then(

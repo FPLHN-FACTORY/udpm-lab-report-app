@@ -99,7 +99,7 @@ import NotAceptable from "./labreportapp/pages/not-aceptable";
 function App() {
   const dispatch = useAppDispatch();
   const socket = new SockJS(
-    "http://localhost:2509/portal-projects-websocket-endpoint"
+    AppConfig.apiUrl + "/portal-projects-websocket-endpoint"
   );
   let stompClientAll = Stomp.over(socket, {
     heartbeatIncoming: 10000,
@@ -123,40 +123,40 @@ function App() {
   }
 
   let tokenCookies = Cookies.get("token");
-  // if (tokenCookies) {
-  //   const userCurrent = jwt_decode(tokenCookies);
-  //   stompClientAll.connect({}, () => {
-  //     stompClientAll.subscribe(
-  //       "/portal-projects/create-notification/" + userCurrent.id,
-  //       (response) => {
-  //         message.success("Bạn có thông báo mới");
-  //         playNotificationSound();
+  if (tokenCookies) {
+    const userCurrent = jwt_decode(tokenCookies);
+    stompClientAll.connect({}, () => {
+      stompClientAll.subscribe(
+        "/portal-projects/create-notification/" + userCurrent.id,
+        (response) => {
+          message.success("Bạn có thông báo mới");
+          playNotificationSound();
 
-  //         DetailProjectAPI.countNotification(userCurrent.id).then(
-  //           (response) => {
-  //             dispatch(SetCountNotifications(response.data.data));
-  //           }
-  //         );
+          DetailProjectAPI.countNotification(userCurrent.id).then(
+            (response) => {
+              dispatch(SetCountNotifications(response.data.data));
+            }
+          );
 
-  //         DetailProjectAPI.fetchAllNotification(userCurrent.id, 0).then(
-  //           (response) => {
-  //             dispatch(SetListNotification(response.data.data.data));
-  //             dispatch(SetCurrentPage(response.data.data.currentPage));
-  //             dispatch(SetToTalPages(response.data.data.totalPages));
-  //           }
-  //         );
-  //       }
-  //     );
-  //     if (userCurrent != null && userCurrent.role.includes("ADMIN")) {
-  //       stompClientAll.subscribe(
-  //         "/portal-projects/update-meeting",
-  //         (response) => {
-  //           message.success("Thông báo : " + response.body);
-  //         }
-  //       );
-  //     }
-  //   });
-  // }
+          DetailProjectAPI.fetchAllNotification(userCurrent.id, 0).then(
+            (response) => {
+              dispatch(SetListNotification(response.data.data.data));
+              dispatch(SetCurrentPage(response.data.data.currentPage));
+              dispatch(SetToTalPages(response.data.data.totalPages));
+            }
+          );
+        }
+      );
+      if (userCurrent != null && userCurrent.role.includes("ADMIN")) {
+        stompClientAll.subscribe(
+          "/portal-projects/update-meeting",
+          (response) => {
+            message.success("Thông báo : " + response.body);
+          }
+        );
+      }
+    });
+  }
 
   const loadingNoOverLay = useAppSelector(GetLoading);
 

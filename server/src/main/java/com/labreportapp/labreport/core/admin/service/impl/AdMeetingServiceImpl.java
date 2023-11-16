@@ -180,8 +180,13 @@ public class AdMeetingServiceImpl implements AdMeetingService {
         }
         MeetingPeriod meetingPeriodNew = adMeetingPeriodRepository.findById(request.getMeetingPeriod()).get();
         MeetingPeriod meetingPeriodOld = adMeetingPeriodRepository.findById(meetingFind.get().getMeetingPeriod()).get();
-        String messageMeetingPeriod = CompareUtil.compareAndConvertMessage("ca học của buổi học " + meetingFind.get().getName(), meetingPeriodOld, meetingPeriodNew, "");
+        String messageMeetingPeriod = CompareUtil.compareAndConvertMessage("ca học của buổi học " + meetingFind.get().getName(), meetingPeriodOld.getName(), meetingPeriodNew.getName(), "");
         stringBuilder.append(messageMeetingPeriod);
+
+        String messageAddressNew = request.getAddress();
+        String messageAddressOld = meetingFind.get().getAddress();
+        String messageAddress = CompareUtil.compareAndConvertMessage("địa chỉ của buổi học " + meetingFind.get().getName(), messageAddressOld, messageAddressNew, "");
+        stringBuilder.append(messageAddress);
         loggerUtil.sendLogStreamClass(stringBuilder.toString(), classOptional.get().getCode(), nameSemester);
 
         meetingFind.get().setMeetingDate(request.getMeetingDate());

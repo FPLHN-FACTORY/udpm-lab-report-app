@@ -25,6 +25,7 @@ import {
   Col,
   Empty,
   Tag,
+  message,
 } from "antd";
 import LoadingIndicator from "../../../helper/loading";
 
@@ -49,6 +50,9 @@ import {
   GetAdMeetingPeriod,
   SetAdMeetingPeriod,
 } from "../../../app/admin/AdMeetingPeriodSlice.reducer";
+import ModalShowHistory from "../detail-class/information-class/ModalShowHistory";
+import ModalShowHistoryDetail from "./modal-show-history-detail/ModalShowHistoryDetail";
+import ModalShowHistoryLogLuong from "./modal-show-history-log-luong/ModalShowHistoryLogLuong";
 
 const ClassManagement = () => {
   const { Option } = Select;
@@ -181,6 +185,7 @@ const ClassManagement = () => {
     setSelectedItems("");
     loadDataLevel();
     setSelectedItemsPerson("");
+    loadDataSemesterCurrent();
   }, []);
 
   const dataMeetingPeriod = useAppSelector(GetAdMeetingPeriod);
@@ -354,6 +359,9 @@ const ClassManagement = () => {
           <Tooltip title="Lịch sử lớp">
             <FontAwesomeIcon
               icon={faHistory}
+              onClick={() => {
+                openHistoryDetail(record.id);
+              }}
               size="1x"
               style={{
                 marginLeft: 7,
@@ -474,6 +482,72 @@ const ClassManagement = () => {
     setShowImportModal(false);
   };
 
+  const [showHistoryDetail, setShowHistoryDetail] = useState(false);
+  const [selectedIdClass, setSelectedIdClass] = useState(null);
+
+  const openHistoryDetail = (id) => {
+    setSelectedIdClass(id);
+    setShowHistoryDetail(true);
+  };
+
+  const cancelModalHistoryDetail = () => {
+    setShowHistoryDetail(false);
+    setSelectedIdClass(null);
+  };
+
+  const [idSemesterCurrent, setIdSemesterCurrent] = useState("");
+
+  const loadDataSemesterCurrent = () => {
+    ClassAPI.getSemesterCurrent().then((res) => {
+      setIdSemesterCurrent(res.data.data);
+    });
+  };
+
+  const dowloadLogLuong = () => {
+    if (idSemesterCurrent === "" && idSemesterSeach === "") {
+      message.error("Hãy chọn học kỳ để dowload file log");
+      return;
+    }
+    let idSemester =
+      idSemesterSeach !== "" ? idSemesterSeach : idSemesterCurrent;
+    ClassAPI.dowloadLogLuong(idSemester).then(
+      (response) => {
+        if (response.data.size === 0) {
+          message.error("File log không tồn tại");
+        } else {
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "luong_lop_hoc.csv";
+          a.click();
+          window.URL.revokeObjectURL(url);
+        }
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  };
+
+  const [selectedIdSemester, setSelectedIdSemester] = useState(null);
+  const [showHistoryLogLuong, setShowHistoryLogLuong] = useState(false);
+
+  const openModalShowHistoryLogLuong = () => {
+    if (idSemesterCurrent === "" && idSemesterSeach === "") {
+      message.error("Hãy chọn học kỳ để xem lịch sử luồng log lớp học");
+      return;
+    }
+    let idSemester =
+      idSemesterSeach !== "" ? idSemesterSeach : idSemesterCurrent;
+    setSelectedIdSemester(idSemester);
+    setShowHistoryLogLuong(true);
+  };
+
+  const cancelModalHistoryLogLuong = () => {
+    setSelectedIdSemester(null);
+    setShowHistoryLogLuong(false);
+  };
+
   return (
     <>
       <div className="box-one">
@@ -493,6 +567,7 @@ const ClassManagement = () => {
               backgroundColor: "rgb(55, 137, 220)",
               marginRight: "5px",
             }}
+            onClick={dowloadLogLuong}
           >
             <FontAwesomeIcon
               icon={faDownload}
@@ -510,6 +585,7 @@ const ClassManagement = () => {
               backgroundColor: "rgb(55, 137, 220)",
               marginRight: "5px",
             }}
+            onClick={openModalShowHistoryLogLuong}
           >
             <FontAwesomeIcon
               icon={faHistory}
@@ -970,6 +1046,16 @@ const ClassManagement = () => {
           visible={showImportModal}
           onCancel={handleCancelModalImportClass}
           fetchData={featchAllMyClass}
+        />
+        <ModalShowHistoryDetail
+          id={selectedIdClass}
+          visible={showHistoryDetail}
+          onCancel={cancelModalHistoryDetail}
+        />
+        <ModalShowHistoryLogLuong
+          idSemester={selectedIdSemester}
+          visible={showHistoryLogLuong}
+          onCancel={cancelModalHistoryLogLuong}
         />
       </div>
     </>

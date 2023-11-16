@@ -27,7 +27,7 @@ public interface StClassRepository extends ClassRepository {
             JOIN activity ac ON c.activity_id = ac.id
             JOIN level g ON g.id = ac.level_id
             JOIN semester s ON ac.semester_id = s.id
-            WHERE curdate() >= FROM_UNIXTIME(s.start_time_student / 1000) and curdate() <= FROM_UNIXTIME(s.end_time_student / 1000)
+            WHERE :currentTime >= s.start_time_student and :currentTime <= s.end_time_student
             AND (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR c.code LIKE %:#{#req.code}%) 
             AND (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR mp.id = :#{#req.classPeriod}) 
             AND (:#{#req.level} IS NULL OR :#{#req.level} LIKE '' OR g.id = :#{#req.level}) 
@@ -49,17 +49,17 @@ public interface StClassRepository extends ClassRepository {
               AND s.id = :#{#req.semesterId}
               ORDER BY c.created_date DESC
             """, nativeQuery = true)
-    Page<StClassResponse> getAllClassByCriteriaAndIsActive(@Param("req") StFindClassRequest req, Pageable pageable);
+    Page<StClassResponse> getAllClassByCriteriaAndIsActive(@Param("req") StFindClassRequest req, Pageable pageable, @Param("currentTime") Long currentTime);
 
     @Query(value = """
             SELECT c.code
             FROM class c
-           JOIN meeting_period mp ON mp.id = c.class_period
+            JOIN meeting_period mp ON mp.id = c.class_period
             JOIN activity ac ON c.activity_id = ac.id
             JOIN semester s ON ac.semester_id = s.id
-            WHERE curdate() >= FROM_UNIXTIME(s.start_time_student / 1000)
-            AND curdate() <= FROM_UNIXTIME(s.end_time_student / 1000)
+            WHERE :currentTime >= s.start_time_student
+            AND :currentTime <= s.end_time_student
             AND (:#{#req.idClass} IS NULL OR :#{#req.idClass} LIKE '' OR c.id = :#{#req.idClass}) 
             """, nativeQuery = true)
-    Optional<StClassResponse> checkConditionCouldJoinOrLeaveClass(@Param("req") StClassRequest req);
+    Optional<StClassResponse> checkConditionCouldJoinOrLeaveClass(@Param("req") StClassRequest req, @Param("currentTime") Long currentTime);
 }

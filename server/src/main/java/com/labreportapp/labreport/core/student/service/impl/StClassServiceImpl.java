@@ -31,6 +31,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -64,7 +65,7 @@ public class StClassServiceImpl implements StClassService {
     @Override
     public PageableObject<StClassCustomResponse> getAllClassByCriteriaAndIsActive(final StFindClassRequest req) {
         Pageable pageable = PageRequest.of(req.getPage(), req.getSize());
-        Page<StClassResponse> getAllClassByCriteria = stClassRepository.getAllClassByCriteriaAndIsActive(req, pageable);
+        Page<StClassResponse> getAllClassByCriteria = stClassRepository.getAllClassByCriteriaAndIsActive(req, pageable, Calendar.getInstance().getTimeInMillis());
         List<String> distinctTeacherIds = getAllClassByCriteria.getContent().stream()
                 .map(StClassResponse::getIdTeacher)
                 .filter(Objects::nonNull)
@@ -116,9 +117,9 @@ public class StClassServiceImpl implements StClassService {
         if (!findClass.isPresent()) {
             throw new CustomException(Message.CLASS_NOT_EXISTS);
         }
-        Optional<StClassResponse> conditionClass = stClassRepository.checkConditionCouldJoinOrLeaveClass(req);
+        Optional<StClassResponse> conditionClass = stClassRepository.checkConditionCouldJoinOrLeaveClass(req, Calendar.getInstance().getTimeInMillis());
         if (!conditionClass.isPresent()) {
-            throw new RestApiException("Bạn chưa thể vào lớp");
+            throw new RestApiException(Message.YOU_CANNOT_ENTER_CLASS_YET);
         }
         Optional<StudentClasses> findStudentClasses = stStudentClassesRepository.
                 findStudentClassesByClassIdAndStudentId(req.getIdClass(), labReportAppSession.getUserId());

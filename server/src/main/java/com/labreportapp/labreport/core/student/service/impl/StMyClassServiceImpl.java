@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -133,7 +134,7 @@ public class StMyClassServiceImpl implements StMyClassService {
         Optional<StudentClasses> findStudentInClass = stStudentClassesRepository.
                 findStudentClassesByClassIdAndStudentId(req.getIdClass(), labReportAppSession.getUserId());
         if (findStudentInClass.isPresent()) {
-            Optional<StClassResponse> conditionClass = stClassRepository.checkConditionCouldJoinOrLeaveClass(req);
+            Optional<StClassResponse> conditionClass = stClassRepository.checkConditionCouldJoinOrLeaveClass(req, Calendar.getInstance().getTimeInMillis());
             if (conditionClass.isEmpty()) {
                 throw new RestApiException(Message.YOU_DONT_LEAVE_CLASS);
             } else {

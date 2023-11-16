@@ -52,7 +52,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                     throw new RuntimeException(message);
                 }
             } else {
-                throw new AccessDeniedException("UNAUTHORIZED");
+//                throw new AccessDeniedException("UNAUTHORIZED");
             }
             filterChain.doFilter(request, response);
         } catch (AccessDeniedException e) {

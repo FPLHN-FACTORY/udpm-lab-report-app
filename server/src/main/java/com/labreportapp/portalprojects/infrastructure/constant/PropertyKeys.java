@@ -99,5 +99,7 @@ public class PropertyKeys {
     public static final String DUPLICATE_LABEL_NAME = "duplicate.label.name";
     public static final String SESSION_EXPIRED = "session.expired";
     public static final String ROLE_HAS_CHANGE = "role.has.change";
+    public static final String YOU_CANNOT_ENTER_CLASS_YET = "you.cannot.enter.class.yet";
+    public static final String FILE_NOT_FOUND = "file.not.found";
 
 }

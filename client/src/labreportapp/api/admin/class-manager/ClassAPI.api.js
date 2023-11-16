@@ -222,4 +222,43 @@ export class ClassAPI {
       data: data,
     });
   }
+
+  static showHistoryAll = (params) => {
+    return request({
+      method: "GET",
+      url: url + `/history-all`,
+      params: params,
+    });
+  };
+
+  static dowloadLogAll = (idClass) => {
+    return request({
+      method: "GET",
+      url: url + `/download-log-all?idClass=` + idClass,
+      responseType: "blob",
+    });
+  };
+
+  static getSemesterCurrent = () => {
+    return request({
+      method: "GET",
+      url: url + `/semester-current`,
+    });
+  };
+
+  static dowloadLogLuong = (idSemester) => {
+    return request({
+      method: "GET",
+      url: url + `/download-log-luong?idSemester=` + idSemester,
+      responseType: "blob",
+    });
+  };
+
+  static showHistoryLogLuong = (filter) => {
+    return request({
+      method: "GET",
+      url: url + `/history-log-luong`,
+      params: filter,
+    });
+  };
 }

@@ -31,6 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -140,7 +141,7 @@ public class AdStudentClassServiceImpl implements AdStudentClassService {
         if (!classFind.isPresent()) {
             throw new RestApiException(Message.CLASS_NOT_EXISTS);
         }
-        Optional<StClassResponse> conditionClass = stClassRepository.checkConditionCouldJoinOrLeaveClass(stClassRequest);
+        Optional<StClassResponse> conditionClass = stClassRepository.checkConditionCouldJoinOrLeaveClass(stClassRequest, Calendar.getInstance().getTimeInMillis());
         try {
             List<AdImportExcelStudentClasses> listImport = adExcelImportService.importDataStudentClasses(multipartFile);
             List<String> listEmail = listImport.stream()

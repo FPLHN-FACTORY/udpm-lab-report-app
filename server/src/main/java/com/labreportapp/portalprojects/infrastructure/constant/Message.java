@@ -100,7 +100,9 @@ public enum Message {
     USING_CATEGORY_CAN_NOT_DELETE(PropertiesReader.getProperty(PropertyKeys.USING_CATEGORY_CAN_NOT_DELETE)),
     DUPLICATE_LABEL_NAME(PropertiesReader.getProperty(PropertyKeys.DUPLICATE_LABEL_NAME)),
     SESSION_EXPIRED(PropertiesReader.getProperty(PropertyKeys.SESSION_EXPIRED)),
-    ROLE_HAS_CHANGE(PropertiesReader.getProperty(PropertyKeys.ROLE_HAS_CHANGE));
+    ROLE_HAS_CHANGE(PropertiesReader.getProperty(PropertyKeys.ROLE_HAS_CHANGE)),
+    YOU_CANNOT_ENTER_CLASS_YET(PropertiesReader.getProperty(PropertyKeys.YOU_CANNOT_ENTER_CLASS_YET)),
+    FILE_NOT_FOUND(PropertiesReader.getProperty(PropertyKeys.FILE_NOT_FOUND));
 
     private String message;
 

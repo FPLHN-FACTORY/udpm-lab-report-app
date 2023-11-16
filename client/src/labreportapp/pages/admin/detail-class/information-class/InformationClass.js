@@ -32,6 +32,7 @@ import LoadingIndicatorNoOverlay from "../../../../helper/loadingNoOverlay";
 import { toast } from "react-toastify";
 import ModalSentStudentAdmin from "./ModalSentStudentAdmin";
 import { convertHourAndMinuteToString } from "../../../../helper/util.helper";
+import ModalShowHistory from "./ModalShowHistory";
 
 const InformationClass = () => {
   const { id } = useParams();
@@ -515,6 +516,32 @@ const InformationClass = () => {
     }
   };
 
+  const [visibleHistory, setVisibleHistory] = useState(false);
+
+  const openModalShowHistory = () => {
+    setVisibleHistory(true);
+  };
+
+  const cancelModalHistory = () => {
+    setVisibleHistory(false);
+  };
+
+  const dowloadLogAll = () => {
+    ClassAPI.dowloadLogAll(id).then(
+      (response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "luong_lop_hoc.csv";
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  };
+
   return (
     <div className="box-general-custom">
       {isLoading && <LoadingIndicator />}
@@ -629,6 +656,7 @@ const InformationClass = () => {
                   backgroundColor: "rgb(55, 137, 220)",
                   marginRight: 5,
                 }}
+                onClick={dowloadLogAll}
               >
                 <FontAwesomeIcon
                   icon={faFileDownload}
@@ -645,6 +673,7 @@ const InformationClass = () => {
                   color: "white",
                   backgroundColor: "rgb(55, 137, 220)",
                 }}
+                onClick={openModalShowHistory}
               >
                 <FontAwesomeIcon
                   icon={faHistory}
@@ -988,6 +1017,10 @@ const InformationClass = () => {
           </div>
         </div>
       </div>
+      <ModalShowHistory
+        visible={visibleHistory}
+        onCancel={cancelModalHistory}
+      />
     </div>
   );
 };

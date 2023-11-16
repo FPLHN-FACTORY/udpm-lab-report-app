@@ -19,6 +19,8 @@ import org.springframework.validation.annotation.Validated;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author todo thangncph26123
@@ -93,9 +95,11 @@ public class AdDashboardLabReportAppServiceImpl implements AdDashboardLabReportA
 
         Integer tongSoLevel = adDashboardLabReportAppRepository.getTongSoLevel();
         response.setTongSoLevel(tongSoLevel);
-
         List<String> teacherIds = adDashboardLabReportAppRepository.getListGiangVien(request);
-        List<SimpleResponse> listSimple = callApiIdentity.handleCallApiGetListUserByListId(teacherIds);
+        List<String> filteredTeacherIds = teacherIds.stream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+        List<SimpleResponse> listSimple = callApiIdentity.handleCallApiGetListUserByListId(filteredTeacherIds);
         List<AdDashboardTeacherResponse> listTeacher = new ArrayList<>();
         if (listSimple != null && !listSimple.isEmpty()) {
             listSimple.forEach(simple -> {

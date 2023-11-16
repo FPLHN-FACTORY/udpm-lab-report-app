@@ -15,8 +15,15 @@ import com.labreportapp.labreport.core.teacher.model.request.TeSentStudentClassR
 import com.labreportapp.labreport.core.teacher.model.response.TeClassSentStudentRespone;
 import com.labreportapp.labreport.core.teacher.service.TeClassService;
 import com.labreportapp.labreport.core.teacher.service.TeStudentClassesService;
+import com.labreportapp.labreport.infrastructure.logger.LoggerObject;
+import com.labreportapp.labreport.repository.SemesterRepository;
+import com.labreportapp.labreport.util.CallApiConsumer;
+import com.labreportapp.labreport.util.LoggerUtil;
+import com.labreportapp.labreport.util.SemesterHelper;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -52,6 +59,19 @@ public class AdClassController {
 
     @Autowired
     private AdClassService service;
+
+    @Autowired
+    private CallApiConsumer callApiConsumer;
+
+    @Autowired
+    private LoggerUtil loggerUtil;
+
+    @Autowired
+    @Qualifier(SemesterRepository.NAME)
+    private SemesterRepository semesterRepository;
+
+    @Autowired
+    private SemesterHelper semesterHelper;
 
     @GetMapping("")
     public ResponseObject getAll() {
@@ -156,4 +176,50 @@ public class AdClassController {
     public ResponseObject listClassIdActivityIdSemester(final AdFindClassRequest request) {
         return new ResponseObject(service.listClass(request));
     }
+
+    @GetMapping("/download-log-all")
+    public ResponseEntity<Resource> downloadCsvAll(@RequestParam(name = "idClass", defaultValue = "") String idClass) {
+        String nameSemester = loggerUtil.getNameSemesterByIdClass(idClass);
+        String pathFile = loggerUtil.getPathFileSendLogStreamClass(nameSemester);
+        return callApiConsumer.handleCallApiDowloadFileLog(pathFile);
+    }
+
+    @GetMapping("/history-all")
+    public ResponseEntity<?> showHistoryAll(@RequestParam(name = "page", defaultValue = "0") Integer page,
+                                            @RequestParam(name = "size", defaultValue = "50") Integer size,
+                                            @RequestParam(name = "idClass", defaultValue = "") String idClass
+    ) {
+        String nameSemester = loggerUtil.getNameSemesterByIdClass(idClass);
+        String pathFile = loggerUtil.getPathFileSendLogStreamClass(nameSemester);
+        LoggerObject loggerObject = new LoggerObject();
+        loggerObject.setCodeClass(loggerUtil.getCodeClassByIdClass(idClass));
+        loggerObject.setPathFile(pathFile);
+        return new ResponseEntity<>(callApiConsumer.handleCallApiReadFileLog(loggerObject, page, size), HttpStatus.OK);
+    }
+
+    @GetMapping("/semester-current")
+    public ResponseObject getSemesterCurrent() {
+        String idSemesterCurrent = semesterHelper.getSemesterCurrent();
+        return new ResponseObject(idSemesterCurrent);
+    }
+
+    @GetMapping("/download-log-luong")
+    public ResponseEntity<Resource> downloadCsvLuong(@RequestParam(name = "idSemester", defaultValue = "") String idSemester) {
+        String nameSemester = semesterRepository.findById(idSemester).get().getName();
+        String pathFile = loggerUtil.getPathFileSendLogStreamClass(nameSemester);
+        return callApiConsumer.handleCallApiDowloadFileLog(pathFile);
+    }
+
+    @GetMapping("/history-log-luong")
+    public ResponseEntity<?> showHistoryLogLuong(@RequestParam(name = "page", defaultValue = "0") Integer page,
+                                                 @RequestParam(name = "size", defaultValue = "50") Integer size,
+                                                 @RequestParam(name = "idSemester", defaultValue = "") String idSemester
+    ) {
+        String nameSemester = semesterRepository.findById(idSemester).get().getName();
+        String pathFile = loggerUtil.getPathFileSendLogStreamClass(nameSemester);
+        LoggerObject loggerObject = new LoggerObject();
+        loggerObject.setPathFile(pathFile);
+        return new ResponseEntity<>(callApiConsumer.handleCallApiReadFileLog(loggerObject, page, size), HttpStatus.OK);
+    }
+
 }
