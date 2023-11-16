@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/member/role-project")
-@CrossOrigin("*")
 public class MeRoleProjectController {
 
     @Autowired

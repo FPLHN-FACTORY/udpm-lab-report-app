@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/teacher/feedback")
-@CrossOrigin(origins = {"*"})
 public class TeFeedBackController {
 
     @Autowired

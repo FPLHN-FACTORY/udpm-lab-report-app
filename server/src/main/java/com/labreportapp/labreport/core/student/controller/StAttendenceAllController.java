@@ -14,7 +14,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/student/attendence")
-@CrossOrigin("*")
 public class StAttendenceAllController {
 
   @Autowired

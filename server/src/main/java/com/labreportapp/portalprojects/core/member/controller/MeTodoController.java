@@ -41,7 +41,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/member/todo")
-@CrossOrigin("*")
 public class MeTodoController {
 
     @Autowired

@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/member/comment")
-@CrossOrigin("*")
 public class MeCommentController {
 
     @Autowired

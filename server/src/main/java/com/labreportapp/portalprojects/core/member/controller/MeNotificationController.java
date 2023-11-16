@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/member/notification")
-@CrossOrigin("*")
 public class MeNotificationController {
 
     @Autowired

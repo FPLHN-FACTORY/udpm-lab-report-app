@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/admin/potals/role-project")
-@CrossOrigin(origins = {"*"}, maxAge = -1)
 public class AdPotalsRoleProjectController {
 
     @Autowired

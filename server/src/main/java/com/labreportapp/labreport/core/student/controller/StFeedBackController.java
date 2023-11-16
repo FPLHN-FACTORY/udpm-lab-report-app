@@ -23,7 +23,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/student/feedback")
-@CrossOrigin("*")
 public class StFeedBackController {
 
     @Autowired

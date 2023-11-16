@@ -26,7 +26,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/admin/category")
-@CrossOrigin(origins = {"*"}, maxAge = -1)
 public class AdCategoryController {
 
     @Autowired

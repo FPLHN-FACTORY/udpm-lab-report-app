@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/admin/meeting")
-@CrossOrigin("*")
 public class AdMeetingController {
 
     @Autowired

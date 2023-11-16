@@ -15,7 +15,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/student/point")
-@CrossOrigin("*")
 public class StPointAllController {
 
     @Autowired

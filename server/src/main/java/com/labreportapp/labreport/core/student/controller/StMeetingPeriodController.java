@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/student/meeting-period")
-@CrossOrigin(origins = {"*"})
 public class StMeetingPeriodController {
 
     @Autowired

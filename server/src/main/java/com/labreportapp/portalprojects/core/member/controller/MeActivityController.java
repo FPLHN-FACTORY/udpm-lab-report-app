@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/member/activity")
-@CrossOrigin("*")
 public class MeActivityController {
 
     @Autowired

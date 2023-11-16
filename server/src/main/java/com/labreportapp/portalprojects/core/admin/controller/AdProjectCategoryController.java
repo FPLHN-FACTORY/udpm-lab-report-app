@@ -21,7 +21,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/admin/project-category")
-@CrossOrigin(origins = {"*"})
 public class AdProjectCategoryController {
 
     @Autowired

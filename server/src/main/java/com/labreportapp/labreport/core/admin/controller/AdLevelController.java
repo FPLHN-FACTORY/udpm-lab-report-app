@@ -36,7 +36,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/admin/level")
-@CrossOrigin(origins = {"*"}, maxAge = -1)
 public class AdLevelController {
 
     @Autowired

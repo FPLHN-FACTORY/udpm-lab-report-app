@@ -26,7 +26,6 @@ import java.io.ByteArrayOutputStream;
  */
 @RestController
 @RequestMapping("/teacher/statistical")
-@CrossOrigin(origins = {"*"})
 public class TeStatisticalController {
 
     @Autowired

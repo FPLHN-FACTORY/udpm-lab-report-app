@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/student/my-class/team")
-@CrossOrigin("*")
 public class StTeamClassController {
 
     @Autowired

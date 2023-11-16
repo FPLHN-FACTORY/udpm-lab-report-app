@@ -30,7 +30,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/admin/role-config")
-@CrossOrigin(origins = {"*"}, maxAge = -1)
 public class AdRoleProjectController {
 
     @Autowired

@@ -28,7 +28,6 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @RestController
 @RequestMapping("/member/image")
-@CrossOrigin("*")
 public class MeImageController {
 
     @Autowired

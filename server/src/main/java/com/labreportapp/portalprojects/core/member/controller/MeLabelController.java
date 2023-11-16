@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/member/label")
-@CrossOrigin("*")
 public class MeLabelController {
 
     @Autowired

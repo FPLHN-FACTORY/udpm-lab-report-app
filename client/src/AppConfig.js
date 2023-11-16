@@ -1,4 +1,4 @@
 export const AppConfig = {
-  apiUrl: "http://localhost:2509",
+  apiUrl: "https://localhost:2509",
   routerBase: "",
 };

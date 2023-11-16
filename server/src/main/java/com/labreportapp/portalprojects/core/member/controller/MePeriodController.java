@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/member/period")
-@CrossOrigin("*")
 public class MePeriodController {
 
     @Autowired

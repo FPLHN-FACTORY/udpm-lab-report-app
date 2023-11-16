@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/member/resource")
-@CrossOrigin("*")
 public class MeResourceController {
 
     @Autowired

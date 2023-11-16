@@ -30,7 +30,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/teacher/class")
-@CrossOrigin(origins = {"*"})
 public class TeClassController {
 
     @Autowired

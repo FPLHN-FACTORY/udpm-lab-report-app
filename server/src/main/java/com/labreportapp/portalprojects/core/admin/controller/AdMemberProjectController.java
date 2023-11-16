@@ -15,7 +15,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/admin/member-project")
-@CrossOrigin(origins = {"*"})
 public class AdMemberProjectController {
 
     @Autowired

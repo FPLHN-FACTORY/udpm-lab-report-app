@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/admin/template-report")
-@CrossOrigin(origins = {"*"})
 public class AdTemplateReportController {
     @Autowired
     private AdTemplateReportService adTemplateReportService;

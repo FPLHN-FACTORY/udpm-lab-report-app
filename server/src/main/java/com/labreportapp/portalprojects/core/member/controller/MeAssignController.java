@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/member/assign")
-@CrossOrigin("*")
 public class MeAssignController {
 
     @Autowired

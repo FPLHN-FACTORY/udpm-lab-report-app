@@ -4,7 +4,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/stakeholder")
-@CrossOrigin(origins = {"*"})
 public class StStakeholderProjectController {
 
 

@@ -17,7 +17,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/student/team-factory")
-@CrossOrigin(origins = {"*"}, maxAge = -1)
 public class StTeamFactoryController {
 
     @Autowired

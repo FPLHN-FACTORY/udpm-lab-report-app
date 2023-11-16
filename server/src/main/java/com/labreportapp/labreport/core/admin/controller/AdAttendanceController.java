@@ -4,7 +4,6 @@ import com.labreportapp.labreport.core.admin.model.request.AdUpdateListAttendanc
 import com.labreportapp.labreport.core.admin.service.AdAttendanceService;
 import com.labreportapp.labreport.core.common.base.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/admin/attendance")
-@CrossOrigin("*")
 public class AdAttendanceController {
 
     @Autowired

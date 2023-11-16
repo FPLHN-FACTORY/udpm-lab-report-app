@@ -17,7 +17,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/teacher/activity")
-@CrossOrigin(origins = {"*"})
 public class TeActivityController {
 
     @Autowired

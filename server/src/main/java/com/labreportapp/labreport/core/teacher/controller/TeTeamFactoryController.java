@@ -22,7 +22,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/teacher/team-factory")
-@CrossOrigin(origins = {"*"}, maxAge = -1)
 public class TeTeamFactoryController {
 
     @Autowired

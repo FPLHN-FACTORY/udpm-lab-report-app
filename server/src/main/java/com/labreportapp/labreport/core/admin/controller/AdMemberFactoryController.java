@@ -29,7 +29,6 @@ import java.io.IOException;
  */
 @RestController
 @RequestMapping("/admin/member-factory")
-@CrossOrigin(origins = {"*"}, maxAge = -1)
 public class AdMemberFactoryController {
 
     @Autowired

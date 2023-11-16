@@ -36,7 +36,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/admin/meeting-period-configiration")
-@CrossOrigin(origins = {"*"}, maxAge = -1)
 public class AdMeetingPeriodConfugurationController {
 
     @Autowired

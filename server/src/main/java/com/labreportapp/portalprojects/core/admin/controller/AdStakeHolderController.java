@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/stakeholder")
-@CrossOrigin("*")
 public class AdStakeHolderController {
 
     @Autowired

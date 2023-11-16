@@ -14,7 +14,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/admin/feed-back")
-@CrossOrigin(origins = {"*"})
 public class AdFeedBackController {
     @Autowired
     private AdFeedBackService adFeedBackSevice;

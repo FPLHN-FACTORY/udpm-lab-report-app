@@ -30,7 +30,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/admin/team")
-@CrossOrigin(origins = {"*"}, maxAge = -1)
 public class AdTeamController {
 
     @Autowired

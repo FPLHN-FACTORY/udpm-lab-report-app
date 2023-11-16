@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/student/activity")
-@CrossOrigin("*")
 public class StActivityController {
 
     @Autowired

@@ -35,7 +35,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/teacher/teams")
-@CrossOrigin(origins = {"*"})
 public class TeTeamsController {
 
     @Autowired

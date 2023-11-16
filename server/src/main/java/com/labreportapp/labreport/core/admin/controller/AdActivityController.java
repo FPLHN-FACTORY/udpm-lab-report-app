@@ -28,7 +28,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/admin/activity")
-@CrossOrigin(origins = {"*"})
 public class AdActivityController {
 
     @Autowired

@@ -19,7 +19,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/admin/role-factory")
-@CrossOrigin(origins = {"*"}, maxAge = -1)
 public class AdRoleFactoryController {
     @Autowired
     private AdRoleFactoryService adRoleFactoryService;

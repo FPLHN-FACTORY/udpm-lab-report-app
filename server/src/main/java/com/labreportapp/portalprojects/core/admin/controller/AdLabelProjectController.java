@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/admin/label-project")
-@CrossOrigin(origins = {"*"})
 public class AdLabelProjectController {
 
 }

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/admin/project-statistics")
-@CrossOrigin(origins = {"*"}, maxAge = -1)
 public class AdProjectStatisticsController {
 
     @Autowired

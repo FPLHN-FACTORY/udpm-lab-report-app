@@ -31,7 +31,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/teacher/point")
-@CrossOrigin(origins = {"*"})
 public class TePointController {
 
     @Autowired

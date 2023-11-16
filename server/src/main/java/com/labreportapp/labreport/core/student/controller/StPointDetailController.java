@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/student/my-class")
-@CrossOrigin("*")
 public class StPointDetailController {
 
     @Autowired

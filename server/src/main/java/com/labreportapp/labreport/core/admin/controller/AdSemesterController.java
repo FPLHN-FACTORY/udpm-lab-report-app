@@ -33,7 +33,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/admin/semester")
-@CrossOrigin(origins = {"*"}, maxAge = -1)
 public class AdSemesterController {
 
     @Autowired

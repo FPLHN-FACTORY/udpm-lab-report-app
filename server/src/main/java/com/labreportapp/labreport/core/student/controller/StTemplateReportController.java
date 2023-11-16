@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/student-template-report")
-@CrossOrigin(origins = {"*"})
 public class StTemplateReportController {
     @Autowired
     private StTemplateReportService stTemplateReportService;

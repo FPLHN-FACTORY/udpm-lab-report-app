@@ -25,7 +25,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/admin/student-classes")
-@CrossOrigin(origins = {"*"})
 public class AdStudentClassController {
 
     @Autowired

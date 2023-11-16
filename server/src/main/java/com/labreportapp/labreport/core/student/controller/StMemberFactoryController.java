@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/student/member-factory")
-@CrossOrigin(origins = {"*"}, maxAge = -1)
 public class StMemberFactoryController {
 
     @Autowired

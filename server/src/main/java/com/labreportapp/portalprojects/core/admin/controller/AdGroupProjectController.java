@@ -25,7 +25,6 @@ import java.io.IOException;
  */
 @RestController
 @RequestMapping("/admin/group-project")
-@CrossOrigin(origins = {"*"}, maxAge = -1)
 public class AdGroupProjectController {
 
     @Autowired

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/admin/potals/member-factory")
-@CrossOrigin(origins = {"*"}, maxAge = -1)
 public class AdPotalsMemberFactoryController {
 
     @Autowired

@@ -16,7 +16,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/student/my-class")
-@CrossOrigin("*")
 public class StAttendanceController {
 
     @Autowired

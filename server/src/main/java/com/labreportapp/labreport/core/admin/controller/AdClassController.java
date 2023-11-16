@@ -48,7 +48,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/admin/class-managerment")
-@CrossOrigin("*")
 public class AdClassController {
 
     @Autowired

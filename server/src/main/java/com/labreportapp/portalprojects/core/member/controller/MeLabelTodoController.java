@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/member/label-todo")
-@CrossOrigin("*")
 public class MeLabelTodoController {
 
     @Autowired

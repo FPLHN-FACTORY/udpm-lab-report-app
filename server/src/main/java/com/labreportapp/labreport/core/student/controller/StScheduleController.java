@@ -22,7 +22,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/student/schedule")
-@CrossOrigin(origins = {"*"}, maxAge = -1)
 public class StScheduleController {
 
     @Autowired

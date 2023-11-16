@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/admin/dashboard-lab-report-app")
-@CrossOrigin("*")
 public class AdDashboardLabReportAppController {
 
     @Autowired
