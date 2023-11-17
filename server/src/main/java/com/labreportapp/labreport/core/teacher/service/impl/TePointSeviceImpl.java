@@ -21,8 +21,11 @@ import com.labreportapp.labreport.entity.Class;
 import com.labreportapp.labreport.entity.ClassConfiguration;
 import com.labreportapp.labreport.entity.Point;
 import com.labreportapp.labreport.entity.StudentClasses;
+import com.labreportapp.labreport.infrastructure.constant.StatusClass;
 import com.labreportapp.labreport.infrastructure.constant.StatusTeam;
 import com.labreportapp.labreport.util.LoggerUtil;
+import com.labreportapp.portalprojects.infrastructure.constant.Message;
+import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Synchronized;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -50,6 +53,7 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.StringJoiner;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -138,6 +142,13 @@ public class TePointSeviceImpl implements TePointSevice {
     @Synchronized
     @Transactional
     public List<TePointStudentInforRespone> addOrUpdatePoint(TeFindListPointRequest request) {
+        Optional<Class> classFind = teClassRepository.findById(request.getIdClass());
+        if (classFind.isEmpty()) {
+            throw new RestApiException(Message.CLASS_NOT_EXISTS);
+        }
+        if (classFind.get().getStatusClass().equals(StatusClass.LOCK)) {
+            throw new RestApiException("Lớp học đã khóa, không thể cập nhật điểm !");
+        }
         List<TeFindPointRequest> listRequest = request.getListPoint();
         List<Point> listPointDB = tePointRepository.getAllByClassId(request.getIdClass());
         List<StudentClasses> listStudentClass = teStudentClassesRepository.findStudentClassesByIdClass(request.getIdClass());
@@ -161,7 +172,7 @@ public class TePointSeviceImpl implements TePointSevice {
                 listInforStudent.forEach(infor -> {
                     if (infor.getId().equals(point.getStudentId())) {
                         message.append(" ").append(infor.getName()).append(" - ").append(infor.getUserName())
-                                .append(" <i style=\"color: black\">(").append(point.getCheckPointPhase1()).append(" và ").append(point.getCheckPointPhase2()).append(")</i>").append(",");
+                                .append(" (").append(point.getCheckPointPhase1()).append(" và ").append(point.getCheckPointPhase2()).append(")").append(",");
                     }
                 });
                 listPointAddOrUp.add(point);
@@ -185,8 +196,8 @@ public class TePointSeviceImpl implements TePointSevice {
                             ) {
                                 if (!itemDB.getCheckPointPhase1().equals(item.getCheckPointPhase1()) || !itemDB.getCheckPointPhase2().equals(item.getCheckPointPhase2())) {
                                     message.append(" ").append(infor.getName()).append(" - ").append(infor.getUserName()).
-                                            append(" từ <i style=\"color: black\">(").append(itemDB.getCheckPointPhase1()).append(" và ").append(itemDB.getCheckPointPhase2()).append(")</i>")
-                                            .append(" thành <i style=\"color: red\">(").append(point.getCheckPointPhase1()).append(" và ").append(point.getCheckPointPhase2()).append(")</i>").append(",");
+                                            append(" từ (").append(itemDB.getCheckPointPhase1()).append(" và ").append(itemDB.getCheckPointPhase2()).append(")")
+                                            .append(" thành (").append(point.getCheckPointPhase1()).append(" và ").append(point.getCheckPointPhase2()).append(")").append(",");
                                 }
                             }
                         });
@@ -386,6 +397,13 @@ public class TePointSeviceImpl implements TePointSevice {
     @Transactional
     public TeExcelResponseMessage importExcel(MultipartFile file, String idClass) {
         TeExcelResponseMessage teExcelResponseMessage = new TeExcelResponseMessage();
+        Optional<Class> classFind = teClassRepository.findById(idClass);
+        if (classFind.isEmpty()) {
+            throw new RestApiException(Message.CLASS_NOT_EXISTS);
+        }
+        if (classFind.get().getStatusClass().equals(StatusClass.LOCK)) {
+            throw new RestApiException("Lớp học đã khóa, không thể cập nhật điểm !");
+        }
         try {
             boolean isExcelFile = isExcelFile(file);
             if (!isExcelFile) {
@@ -466,8 +484,8 @@ public class TePointSeviceImpl implements TePointSevice {
                 if (pointUpd != null) {
                     if (pointUpd.getCheckPointPhase1() != phase1 || pointUpd.getCheckPointPhase2() != phase2) {
                         messagesConcurrent.add(" " + simpleResponse.getName() + " - " + simpleResponse.getUserName() +
-                                " từ <i style=\"color: black\">(" + pointUpd.getCheckPointPhase1() + " và " + pointUpd.getCheckPointPhase2() + ")"
-                                + "</i> thành  <i style=\"color: red\">(" + phase1 + " và " + phase2 + ")</i>,");
+                                " từ (" + pointUpd.getCheckPointPhase1() + " và " + pointUpd.getCheckPointPhase2() + ")"
+                                + " thành  (" + phase1 + " và " + phase2 + "),");
                     }
                     pointUpd.setCheckPointPhase1(phase1);
                     pointUpd.setCheckPointPhase2(phase2);
@@ -486,7 +504,7 @@ public class TePointSeviceImpl implements TePointSevice {
                     pointNew.setFinalPoint(roundedValue.doubleValue());
                     pointUpdate.put(pointNew.getStudentId(), pointNew);
                     messagesConcurrent.add(" " + simpleResponse.getName() + " - " + simpleResponse.getUserName() +
-                            " là <i style=\"color: red\">(" + phase1 + " và " + phase2 + ")</i>,");
+                            " là (" + phase1 + " và " + phase2 + "),");
                 }
             });
             if (teExcelResponseMessage.getStatus()) {

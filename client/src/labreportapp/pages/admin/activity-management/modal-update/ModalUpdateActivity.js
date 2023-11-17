@@ -11,11 +11,9 @@ import {
 } from "antd";
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "../../../../app/hook";
-import { toast } from "react-toastify";
 import { ActivityManagementAPI } from "../../../../api/admin/activity-management/activityManagement.api";
 import { UpdateActivityManagement } from "../../../../app/admin/activity-management/activityManagementSlice.reducer";
 import { Option } from "antd/es/mentions";
-import moment from "moment";
 import dayjs from "dayjs";
 import "dayjs/locale/zh-cn";
 import {
@@ -56,7 +54,7 @@ const ModalUpdateActivity = ({
       setLevel(activity.level);
       setSemesterId(activity.semesterId);
       setDescriptions(activity.descriptions);
-      setAllowUseTrello(activity.allowUseTrello + "");
+      setAllowUseTrello(activity.allowUseTrello);
       setErrorName("");
       setErrorCode("");
       setErrorTime("");
@@ -128,11 +126,11 @@ const ModalUpdateActivity = ({
         level: levelNameItem.id,
         semesterId: semesterId,
         descriptions: descriptions,
-        allowUseTrello: parseInt(allowUseTrello),
+        allowUseTrello: allowUseTrello,
       };
       ActivityManagementAPI.update(obj).then(
         (response) => {
-          message.success("Cập nhật thành công!");
+          message.success("Cập nhật thành công !");
           let objUpdate = {
             ...response.data.data,
             nameSemesterText: semesterNameItem.name,
@@ -146,7 +144,7 @@ const ModalUpdateActivity = ({
       );
     }
   };
-  
+
   const handleDateChange = (e) => {
     if (e != null) {
       setStartTime(
@@ -263,8 +261,8 @@ const ModalUpdateActivity = ({
                 setAllowUseTrello(e);
               }}
             >
-              <Option value="1">Không cho phép</Option>
-              <Option value="0">Cho phép</Option>
+              <Option value={1}>Không cho phép</Option>
+              <Option value={0}>Cho phép</Option>
             </Select>
           </Col>
           <Col span={24} style={{ padding: "5px", marginBottom: "10px" }}>

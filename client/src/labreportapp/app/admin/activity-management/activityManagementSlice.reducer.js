@@ -22,6 +22,8 @@ const ActivityManagementSlice = createSlice({
         level: data.levelNameItem,
         semesterId: data.semesterId,
         nameSemester: data.nameSemester,
+        descriptions: data.descriptions,
+        allowUseTrello: data.allowUseTrello === "CHO_PHEP" ? 0 : 1,
       };
       state.unshift(newActivity);
       return state;
@@ -38,6 +40,9 @@ const ActivityManagementSlice = createSlice({
         state[index].endTime = updateActivity.endTime;
         state[index].level = updateActivity.levelText;
         state[index].nameSemester = updateActivity.nameSemesterText;
+        state[index].descriptions = updateActivity.descriptions;
+        state[index].allowUseTrello =
+          updateActivity.allowUseTrello === "CHO_PHEP" ? 0 : 1;
       }
     },
     DeleteActivityManagement: (state, action) => {

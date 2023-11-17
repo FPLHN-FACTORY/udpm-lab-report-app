@@ -166,7 +166,7 @@ const ActivityManagement = () => {
   const handleDeleteActivity = async (id) => {
     try {
       await ActivityManagementAPI.delete(id).then((response) => {
-        message.success("Xóa thành công!");
+        message.success("Xóa thành công !");
         dispatch(DeleteActivityManagement(id));
       });
     } catch (error) {}

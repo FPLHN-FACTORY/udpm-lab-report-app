@@ -497,8 +497,9 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
                 />
               </Col>
             </Row>
+
             <Row gutter={24} style={{ marginBottom: "10px" }}>
-              <Col span={24}>
+              <Col span={12}>
                 <div style={{ width: "100%" }}>
                   {" "}
                   <span className="notBlank">(*) </span>
@@ -511,6 +512,7 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
                       height: "auto",
                     }}
                     value={listCategorysChange}
+                    maxTagCount={3}
                     onChange={handleChangeCategorys}
                     optionLabelProp="label"
                     filterOption={(text, option) =>
@@ -538,9 +540,7 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
                   </span>
                 </div>
               </Col>
-            </Row>
-            <Row gutter={24} style={{ marginBottom: "10px" }}>
-              <Col span={24}>
+              <Col span={12}>
                 <span>Thành viên:</span>
                 {listMemberChange.length > 0 && (
                   <span style={{ color: "red" }}>
@@ -554,8 +554,9 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
                   placeholder="Thêm thành viên"
                   style={{
                     width: "100%",
-                    height: "auto",
+                    height: "40px",
                   }}
+                  maxTagCount={2}
                   value={listMemberChange}
                   onChange={handleChangeMembers}
                   optionLabelProp="label"
@@ -609,7 +610,6 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
             <Row gutter={24} style={{ marginBottom: "10px" }}>
               {" "}
               <Col span={24}>
-                <span className="notBlank">*</span>
                 <span>Mô tả:</span> <br />
                 <TextArea
                   placeholder="Nhập mô tả"

@@ -1,7 +1,10 @@
 package com.labreportapp.portalprojects.core.admin.service.impl;
 
+import com.labreportapp.labreport.core.common.response.SimpleResponse;
 import com.labreportapp.labreport.infrastructure.constant.RoleDefault;
 import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
+import com.labreportapp.labreport.util.CallApiIdentity;
+import com.labreportapp.labreport.util.LoggerUtil;
 import com.labreportapp.portalprojects.core.admin.model.request.AdCreateMemberProjectRequest;
 import com.labreportapp.portalprojects.core.admin.model.request.AdCreateProjectRequest;
 import com.labreportapp.portalprojects.core.admin.model.request.AdFindProjectRequest;
@@ -10,6 +13,8 @@ import com.labreportapp.portalprojects.core.admin.model.request.AdUpdateProjectR
 import com.labreportapp.portalprojects.core.admin.model.response.AdDetailProjectCateMemberRespone;
 import com.labreportapp.portalprojects.core.admin.model.response.AdMemberAndRoleProjectCustomResponse;
 import com.labreportapp.portalprojects.core.admin.model.response.AdProjectReponse;
+import com.labreportapp.portalprojects.core.admin.repository.AdCategoryRepository;
+import com.labreportapp.portalprojects.core.admin.repository.AdGroupProjectRepository;
 import com.labreportapp.portalprojects.core.admin.repository.AdLabelProjectRepository;
 import com.labreportapp.portalprojects.core.admin.repository.AdMemberProjectRepository;
 import com.labreportapp.portalprojects.core.admin.repository.AdPotalsGroupProjectReposiory;
@@ -21,6 +26,7 @@ import com.labreportapp.portalprojects.core.admin.repository.AdProjectRepository
 import com.labreportapp.portalprojects.core.admin.service.AdMemberProjectService;
 import com.labreportapp.portalprojects.core.admin.service.AdProjectService;
 import com.labreportapp.portalprojects.core.common.base.PageableObject;
+import com.labreportapp.portalprojects.entity.Category;
 import com.labreportapp.portalprojects.entity.GroupProject;
 import com.labreportapp.portalprojects.entity.Label;
 import com.labreportapp.portalprojects.entity.LabelProject;
@@ -48,11 +54,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
@@ -95,6 +103,18 @@ public class AdProjectServiceImpl implements AdProjectService {
 
     @Autowired
     private AdPotalsGroupProjectReposiory adPotalsGroupProjectReposiory;
+
+    @Autowired
+    private LoggerUtil loggerUtil;
+
+    @Autowired
+    private CallApiIdentity callApiIdentity;
+
+    @Autowired
+    private AdGroupProjectRepository adGroupProjectRepository;
+
+    @Autowired
+    private AdCategoryRepository adCategoryRepository;
 
     @Override
     public List<Project> findAllProject(Pageable pageable) {
@@ -157,16 +177,30 @@ public class AdProjectServiceImpl implements AdProjectService {
             project.setStatusProject(StatusProject.DA_DIEN_RA);
         }
 
+        GroupProject groupProjectOld = null;
         if (request.getGroupProjectId() != null) {
             Optional<GroupProject> groupProject = adPotalsGroupProjectReposiory.findById(request.getGroupProjectId());
             if (groupProject.isPresent()) {
-                project.setGroupProjectId(groupProject.get().getId());
+                groupProject.ifPresent(value -> project.setGroupProjectId(value.getId()));
+                groupProjectOld = groupProject.get();
             }
+
         } else {
             project.setGroupProjectId(request.getGroupProjectId());
         }
-
         Project newProject = adProjectRepository.save(project);
+
+        StringBuilder message = new StringBuilder();
+        message.append("Đã tạo dự án xưởng mới: ").append("  Mã dự án: ").append(newProject.getCode()).append(", ").append("Tên dự án: ").append(project.getName()).append(" , Thời gian bắt đầu/kết thúc: ").append(convertLongToStringDate(newProject.getStartTime())).append("/").append(convertLongToStringDate(newProject.getEndTime()));
+        if (!project.getDescriptions().equals("")) {
+            message.append(", Mô tả: ").append(newProject.getDescriptions());
+        }
+        message.append(", Background mặc định. ");
+        StringBuilder messageGroupProject = new StringBuilder();
+        if (groupProjectOld != null) {
+            messageGroupProject.append(" Nhóm dự án: ").append(groupProjectOld.getName()).append(".");
+        }
+
         List<String> listCaregoryIds = request.getListCategorysId();
         List<ProjectCategory> newCategoryProject = new ArrayList<>();
         listCaregoryIds.forEach(item -> {
@@ -177,6 +211,19 @@ public class AdProjectServiceImpl implements AdProjectService {
         });
         adProjectCategoryRepository.saveAll(newCategoryProject);
 
+        StringBuilder messageCategory = new StringBuilder();
+        List<Category> listCategoryDb = adCategoryRepository.findAll();
+        newCategoryProject.forEach(cateNew -> {
+            listCategoryDb.forEach(cate -> {
+                if (cateNew.getCategoryId().equals(cate.getId())) {
+                    messageCategory.append(" ").append(cate.getName()).append(",");
+                }
+            });
+        });
+        if (messageCategory.length() > 0 && messageCategory.charAt(messageCategory.length() - 1) == ',') {
+            messageCategory.insert(0, " Thể loại: ");
+            messageCategory.setCharAt(messageCategory.length() - 1, '.');
+        }
         List<Label> listLabel = labelRepository.findAll();
         List<LabelProject> newLabelProject = new ArrayList<>();
         listLabel.forEach(item -> {
@@ -255,9 +302,42 @@ public class AdProjectServiceImpl implements AdProjectService {
                 });
             });
         });
-        adPotalsRoleMemberProjectRepository.saveAll(newRoleMemberProject);
+        List<RoleMemberProject> listMemberRoleSave = adPotalsRoleMemberProjectRepository.saveAll(newRoleMemberProject);
+
+        StringBuilder messageStudentRole = new StringBuilder();
+        List<String> idStudentList = listMemberProject.stream()
+                .map(MemberProject::getMemberId)
+                .distinct()
+                .collect(Collectors.toList());
+        List<SimpleResponse> listRespone = callApiIdentity.handleCallApiGetListUserByListId(idStudentList);
+
+        listMemberProject.forEach(member -> {
+            listRespone.forEach(infor -> {
+                if (member.getMemberId().equals(infor.getId())) {
+                    messageStudentRole.append(" ").append(infor.getName()).append(" - ").append(infor.getUserName());
+//                        listRoleProject.forEach(role -> {
+//                            if (role.getId().equals(i.getRoleProjectId())) {
+//                                messageStudentRole.append(" ").append(role.getName());
+//                            }
+//                        });
+                    messageStudentRole.append(",");
+                }
+
+            });
+        });
+        if (messageStudentRole.length() > 0 && messageStudentRole.charAt(messageStudentRole.length() - 1) == ',') {
+            messageStudentRole.insert(0, " Thành viên: ");
+            messageStudentRole.setCharAt(messageStudentRole.length() - 1, '.');
+        }
+        loggerUtil.sendLogScreen(message.toString() + messageCategory.toString() + messageGroupProject.toString() + messageStudentRole.toString(), "");
         Optional<AdProjectReponse> projectView = adProjectRepository.findOneProjectById(newProject.getId());
         return projectView.get();
+    }
+
+    public String convertLongToStringDate(long timestamp) {
+        Date date = new Date(timestamp);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        return sdf.format(date);
     }
 
     @Override
@@ -265,7 +345,7 @@ public class AdProjectServiceImpl implements AdProjectService {
     @CacheEvict(value = {"membersByProject"}, allEntries = true)
     public AdProjectReponse updateProject(@Valid AdUpdateProjectRoleRequest request, String idProject) {
         Optional<Project> projectCheck = adProjectRepository.findById(idProject);
-        if (!projectCheck.isPresent()) {
+        if (projectCheck.isEmpty()) {
             throw new RestApiException(Message.PROJECT_NOT_EXISTS);
         }
         String checkCodeProject = adProjectRepository.findByIdCode(request.getCode(), idProject);
@@ -273,16 +353,40 @@ public class AdProjectServiceImpl implements AdProjectService {
         if (checkCodeProject != null && !project.getCode().equals(request.getCode())) {
             throw new RestApiException(Message.CODE_PROJECT_ALREADY_EXISTS);
         }
+        StringBuilder message = new StringBuilder();
+        message.append("Đã cập nhật dự án xưởng có mã-tên \"").append(projectCheck.get().getCode()).append(" - ").append(projectCheck.get().getName()).append("\": ");
+
+        if (!project.getCode().equals(request.getCode())) {
+            message.append(" Mã của  dự án từ: ").append(project.getCode()).append(" thành ").append(request.getCode()).append(",");
+        }
+        if (!project.getName().equals(request.getName())) {
+            message.append(" Tên của dự án từ: ").append(project.getName()).append(" thành ").append(request.getName()).append(",");
+        }
+        if (!project.getStartTime().equals(request.getStartTime()) || !project.getEndTime().equals(request.getEndTime())) {
+            message.append(" Thời gian của  dự án án từ: ").append(convertLongToStringDate(project.getStartTime()))
+                    .append("/").append(convertLongToStringDate(project.getEndTime()))
+                    .append(" thành ").append(convertLongToStringDate(request.getStartTime()))
+                    .append("/").append(convertLongToStringDate(request.getEndTime())).append(",");
+        }
+        if (!project.getDescriptions().equals(request.getDescriptions())) {
+            message.append(" Mô tả của dự án từ: ").append(project.getDescriptions()).append(" thành ").append(request.getDescriptions()).append(",");
+        }
         project.setCode(request.getCode().trim());
         project.setDescriptions(!request.getDescriptions().equals("") ? request.getDescriptions().trim() : "");
         project.setName(request.getName().trim());
         project.setProgress(project.getProgress());
         project.setStartTime(DateUtils.truncate(new Date(request.getStartTime()), Calendar.DATE).getTime());
         project.setEndTime(DateUtils.truncate(new Date(request.getEndTime()), Calendar.DATE).getTime());
+        StringBuilder messageGroupProject = new StringBuilder();
         if (request.getGroupProjectId() != null) {
-            Optional<GroupProject> groupProject = adPotalsGroupProjectReposiory.findById(request.getGroupProjectId());
-            if (groupProject.isPresent()) {
-                project.setGroupProjectId(groupProject.get().getId());
+            Optional<GroupProject> groupProjectOld = adPotalsGroupProjectReposiory.findById(projectCheck.get().getGroupProjectId());
+            Optional<GroupProject> groupProjectNew = adPotalsGroupProjectReposiory.findById(request.getGroupProjectId());
+            groupProjectNew.ifPresent(value -> project.setGroupProjectId(value.getId()));
+            if (groupProjectOld.isPresent() && groupProjectNew.isPresent()) {
+                if (!groupProjectOld.get().getId().equals(groupProjectNew.get().getId())) {
+                    messageGroupProject.append(" Nhóm dự án từ ").append(groupProjectOld.get().getName())
+                            .append(" thành ").append(groupProjectNew.get().getName()).append(".");
+                }
             }
         } else {
             project.setGroupProjectId(request.getGroupProjectId());
@@ -312,6 +416,20 @@ public class AdProjectServiceImpl implements AdProjectService {
         });
         adProjectCategoryRepository.saveAll(newCategoryProject);
 
+        StringBuilder messageCategory = new StringBuilder();
+        List<Category> listCategoryDb = adCategoryRepository.findAll();
+        newCategoryProject.forEach(cateNew -> {
+            listCategoryDb.forEach(cate -> {
+                if (cateNew.getCategoryId().equals(cate.getId())) {
+                    messageCategory.append(" ").append(cate.getName()).append(",");
+                }
+            });
+        });
+        if (messageCategory.length() > 0 && (messageCategory.charAt(messageCategory.length() - 1) == ',')) {
+            messageCategory.insert(0, " Thể loại: ");
+            messageCategory.setCharAt(messageCategory.length() - 1, '.');
+        }
+
         List<MemberProject> newMemberProject = new ArrayList<>();
         List<AdMemberAndRoleProjectCustomResponse> listMemberJoinRole = adMemberProjectService
                 .findAllMemberJoinProject(idProject);
@@ -330,9 +448,12 @@ public class AdProjectServiceImpl implements AdProjectService {
         });
 
         List<RoleMemberProject> newRoleMemberProject = new ArrayList<>();
-        adMemberProjectRepository.saveAll(newMemberProject);
+        List<MemberProject> listMemberProjectSave = adMemberProjectRepository.saveAll(newMemberProject);
         List<MemberProject> listMemberProject = adMemberProjectRepository.getAllMemberProjectByIdProject(idProject);
 
+        StringBuilder messageStudentRole = new StringBuilder();
+        ConcurrentHashMap<String, SimpleResponse> mapInforStudent = new ConcurrentHashMap<>();
+        addDataMapsInforStudent(mapInforStudent, listMemberProject);
         adPotalsRoleMemberProjectRepository.deleteAllRoleMemberProjectByIdProject(idProject);
         listMember.forEach(member -> {
             member.getListRole().forEach(role -> {
@@ -342,20 +463,62 @@ public class AdProjectServiceImpl implements AdProjectService {
                         roleMemberProject.setMemberProjectId(memberProject.getId());
                         roleMemberProject.setRoleProjectId(role.getIdRole());
                         newRoleMemberProject.add(roleMemberProject);
+
                     }
                 });
             });
         });
-        adPotalsRoleMemberProjectRepository.saveAll(newRoleMemberProject);
+        listMemberProjectSave.forEach(member -> {
+            SimpleResponse infor = mapInforStudent.get(member.getMemberId());
+            if (infor != null) {
+                messageStudentRole.append(" ").append(infor.getName()).append(" - ").append(infor.getUserName());
+            }
+            messageStudentRole.append(",");
+        });
+        if (messageStudentRole.length() > 0 && messageStudentRole.charAt(messageStudentRole.length() - 1) == ',') {
+            messageStudentRole.insert(0, " Thêm thành viên: ");
+            messageStudentRole.setCharAt(messageStudentRole.length() - 1, '.');
+        }
 
+        adPotalsRoleMemberProjectRepository.saveAll(newRoleMemberProject);
+        StringBuilder messageStudentRoleDelete = new StringBuilder();
         if (listMemberProject.size() > listMember.size()) {
             List<MemberProject> listMemberProjectDeleteAll = listMemberProject.stream()
                     .filter(member1 -> listMember.stream().noneMatch(member2 -> member1.getMemberId().equals(member2.getMemberId())))
                     .collect(Collectors.toList());
+            listMemberProjectDeleteAll.forEach(member -> {
+                SimpleResponse studentFind = mapInforStudent.get(member.getMemberId());
+                if (studentFind != null) {
+                    messageStudentRoleDelete.append(" ").append(studentFind.getName()).append(" - ").append(studentFind.getUserName());
+                }
+                messageStudentRoleDelete.append(",");
+            });
             adMemberProjectRepository.deleteAll(listMemberProjectDeleteAll);
         }
+        if (messageStudentRoleDelete.length() > 0 && messageStudentRoleDelete.charAt(messageStudentRoleDelete.length() - 1) == ',') {
+            messageStudentRoleDelete.insert(0, " Xóa thành viên: ");
+            messageStudentRoleDelete.setCharAt(messageStudentRoleDelete.length() - 1, '.');
+        }
+        loggerUtil.sendLogScreen(message.toString() + messageCategory.toString() + messageGroupProject.toString() + messageStudentRole.toString() + messageStudentRoleDelete.toString(), "");
         Optional<AdProjectReponse> projectView = adProjectRepository.findOneProjectById(newProject.getId());
         return projectView.get();
+    }
+
+    public void addDataMapsInforStudent(ConcurrentHashMap<String, SimpleResponse> mapAll, List<MemberProject> listMemberProject) {
+        List<String> idStudentList = listMemberProject.stream()
+                .map(MemberProject::getMemberId)
+                .distinct()
+                .collect(Collectors.toList());
+        List<SimpleResponse> listRespone = callApiIdentity.handleCallApiGetListUserByListId(idStudentList);
+        getAllPutMapInfor(mapAll, listRespone);
+    }
+
+    public void getAllPutMapInfor
+            (ConcurrentHashMap<String, SimpleResponse> mapSimple, List<SimpleResponse> listStudent) {
+        for (SimpleResponse student : listStudent) {
+            mapSimple.put(student.getId(), student);
+        }
+        listStudent.clear();
     }
 
     private Optional<AdMemberAndRoleProjectCustomResponse> findMemberRoleByMemberId(

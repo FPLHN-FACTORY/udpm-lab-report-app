@@ -51,7 +51,6 @@ import { useNavigate } from "react-router-dom";
 
 const TeacherPostMyClass = () => {
   const dispatch = useAppDispatch();
-  const userRedux = useAppSelector(GetUserCurrent);
   dispatch(SetTTrueToggle());
   const { idClass } = useParams();
   const [loading, setLoading] = useState(false);
@@ -150,9 +149,7 @@ const TeacherPostMyClass = () => {
         document.title = "Bài đăng | " + responese.data.data.code;
       });
     } catch (error) {
-      setTimeout(() => {
-        navigate("/teacher/my-class");
-      }, [1000]);
+      navigate("/teacher/my-class");
     }
   };
 
@@ -368,7 +365,7 @@ const TeacherPostMyClass = () => {
                                   />
                                   <span>Đặt lại mật khẩu</span>
                                 </Menu.Item>
-                                <Popconfirm
+                                {/* <Popconfirm
                                   title="Thông báo"
                                   description={
                                     classDetail.statusClass === 0
@@ -402,7 +399,7 @@ const TeacherPostMyClass = () => {
                                       </>
                                     )}
                                   </Menu.Item>
-                                </Popconfirm>
+                                </Popconfirm> */}
                                 <Menu.Item key="3">
                                   <div onClick={copyToClipboard}>
                                     <FontAwesomeIcon
@@ -427,7 +424,7 @@ const TeacherPostMyClass = () => {
                       </div>
                     </div>
                     <p className="infor-main" style={{ paddingTop: "20px" }}>
-                      {classDetail.passWord}
+                      {classDetail.passWord != null?classDetail.passWord:"Không có mật khẩu"}
                       <FontAwesomeIcon
                         style={{ paddingLeft: "12px" }}
                         icon={faExpand}

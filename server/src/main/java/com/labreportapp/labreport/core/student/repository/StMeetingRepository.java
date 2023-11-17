@@ -91,4 +91,12 @@ public interface StMeetingRepository extends JpaRepository<Meeting, String> {
             """, nativeQuery = true)
     Integer getRoleByIdStudent(@Param("req") StFindMeetingRequest req);
 
+    @Query(value = """
+            SELECT COUNT(m.class_id)
+            FROM meeting m
+            WHERE m.meeting_date <= :currentDate
+                AND m.class_id = :classId
+                      """, nativeQuery = true)
+    Integer countMeetingLessonByIdClass(@Param("currentDate") Long currentDate, @Param("classId") String classId);
+
 }

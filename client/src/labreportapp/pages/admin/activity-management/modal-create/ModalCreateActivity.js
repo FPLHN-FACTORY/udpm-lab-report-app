@@ -125,7 +125,7 @@ const ModalCreateActivity = ({
       };
       ActivityManagementAPI.create(obj).then(
         (response) => {
-          message.success("Thêm thành công!");
+          message.success("Thêm thành công !");
           let objCreate = {
             ...response.data.data,
             nameSemester: semesterNameItem.name,

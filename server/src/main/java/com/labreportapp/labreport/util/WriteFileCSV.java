@@ -147,8 +147,12 @@ public class WriteFileCSV {
             }
             if (api.contains("/admin/role-factory")) {
                 pathFile = pathTemplate + getPropertiesRead(ConfigurationsConstant.NAME_FILE_QUAN_LY_VAI_TRO_TRONG_XUONG);
-            } if (api.contains("/admin/team")) {
+            }
+            if (api.contains("/admin/team")) {
                 pathFile = pathTemplate + getPropertiesRead(ConfigurationsConstant.NAME_FILE_QUAN_LY_NHOM_TRONG_XUONG);
+            }
+            if (api.contains("/admin/project")) {
+                pathFile = pathTemplate + getPropertiesRead(ConfigurationsConstant.NAME_FILE_QUAN_LY_DU_AN_TRONG_XUONG);
             }
         }
         System.out.println("========= pathFile màn hình: " + pathFile);
