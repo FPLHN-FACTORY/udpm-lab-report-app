@@ -749,7 +749,7 @@ const ClassManagement = () => {
           <Row>
             <Col span={12} style={{ padding: "10px" }}>
               <div className="inputCode">
-                <span>Mã Lớp</span>
+                <span>Mã lớp</span>
                 <br />
                 <Input
                   placeholder="Nhập mã lớp"
