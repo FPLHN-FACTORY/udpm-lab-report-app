@@ -38,6 +38,7 @@ import com.labreportapp.labreport.repository.LevelRepository;
 import com.labreportapp.labreport.util.CallApiIdentity;
 import com.labreportapp.labreport.util.ClassHelper;
 import com.labreportapp.labreport.util.FormUtils;
+import com.labreportapp.labreport.util.LoggerUtil;
 import com.labreportapp.labreport.util.RandomString;
 import com.labreportapp.labreport.util.SemesterHelper;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
@@ -57,6 +58,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -69,7 +71,8 @@ import java.util.stream.Collectors;
  */
 @Service
 @Validated
-public class AdClassManagerServiceImpl implements AdClassService {
+public class
+AdClassManagerServiceImpl implements AdClassService {
 
     private FormUtils formUtils = new FormUtils();
 
@@ -97,6 +100,9 @@ public class AdClassManagerServiceImpl implements AdClassService {
 
     @Autowired
     private SemesterHelper semesterHelper;
+
+    @Autowired
+    private LoggerUtil loggerUtil;
 
     @Autowired
     @Qualifier(ActivityRepository.NAME)
@@ -144,7 +150,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
         classNew.setCode(classHelper.genMaLopTheoHoatDong(request.getActivityId()));
         classNew.setClassSize(0);
         classNew.setClassPeriod(request.getClassPeriod());
-        classNew.setPassword(RandomString.random());
+        classNew.setPassword(null);
         classNew.setStatusTeacherEdit(StatusTeacherEdit.values()[request.getStatusTeacherEdit()]);
         Optional<Activity> activityFind = adActivityRepository.findById(request.getActivityId());
         if (!activityFind.isPresent()) {
@@ -156,6 +162,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
             classNew.setTeacherId(request.getTeacherId());
         }
         repository.save(classNew);
+
         AdClassCustomResponse adClassCustomResponse = new AdClassCustomResponse();
         adClassCustomResponse.setId(classNew.getId());
         adClassCustomResponse.setClassSize(classNew.getClassSize());
@@ -177,7 +184,17 @@ public class AdClassManagerServiceImpl implements AdClassService {
             SimpleResponse response = callApiIdentity.handleCallApiGetUserById(request.getTeacherId());
             adClassCustomResponse.setUserNameTeacher(response.getUserName());
         }
-
+        StringBuilder stringBuilder = new StringBuilder();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        stringBuilder.append("Đã tạo lớp học " + adClassCustomResponse.getCode());
+        stringBuilder.append(", sĩ số là: " + adClassCustomResponse.getClassSize());
+        stringBuilder.append("ca học của lớp là: " + adClassCustomResponse.getClassPeriod());
+        stringBuilder.append(", thuộc hoạt động: " + adClassCustomResponse.getActivityName());
+        stringBuilder.append(", thời gian bắt đầu học là: " + sdf.format(adClassCustomResponse.getStartTime()));
+        stringBuilder.append(", quyền giảng viên chỉnh sửa là: " + (adClassCustomResponse.getStatusTeacherEdit() == 0 ? "Cho phép" : "Không cho phép"));
+        String nameSemester = loggerUtil.getNameSemesterByIdClass(adClassCustomResponse.getId());
+        loggerUtil.sendLogScreen(stringBuilder.toString(), nameSemester);
+        loggerUtil.sendLogStreamClass(stringBuilder.toString(), adClassCustomResponse.getCode(), nameSemester);
         return adClassCustomResponse;
     }
 
@@ -199,6 +216,10 @@ public class AdClassManagerServiceImpl implements AdClassService {
         if (request.getTeacherId() != null && !request.getTeacherId().equals("")) {
             classNew.setTeacherId(request.getTeacherId());
         }
+        String classPeriodOld = classNew.getClassPeriod();
+        String classPeriodNew = request.getClassPeriod();
+        String message
+
         repository.save(classNew);
         AdClassCustomResponse adClassCustomResponse = new AdClassCustomResponse();
         adClassCustomResponse.setId(classNew.getId());
@@ -426,7 +447,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
                 classNew.setStartTime(request.getStartTime());
                 classNew.setActivityId(request.getActivityId());
                 classNew.setCode(codeActivity + "_" + (count++));
-                classNew.setPassword(RandomString.random());
+                classNew.setPassword(null);
                 classNew.setStatusTeacherEdit(StatusTeacherEdit.KHONG_CHO_PHEP);
                 listClass.add(classNew);
             }

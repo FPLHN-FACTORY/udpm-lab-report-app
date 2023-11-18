@@ -6,6 +6,7 @@ import com.labreportapp.labreport.core.admin.excel.AdImportExcelStudentClasses;
 import com.labreportapp.labreport.core.admin.model.response.AdExportExcelStudentsClassCustomResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdStudentCallApiRespone;
 import com.labreportapp.labreport.core.admin.model.response.AdStudentClassesRespone;
+import com.labreportapp.labreport.core.admin.repository.AdClassRepository;
 import com.labreportapp.labreport.core.admin.repository.AdStudentClassRepository;
 import com.labreportapp.labreport.core.admin.service.AdStudentClassService;
 import com.labreportapp.labreport.core.common.response.SimpleResponse;
@@ -20,6 +21,7 @@ import com.labreportapp.labreport.infrastructure.constant.StatusStudentFeedBack;
 import com.labreportapp.labreport.infrastructure.constant.StatusTeam;
 import com.labreportapp.labreport.repository.ClassRepository;
 import com.labreportapp.labreport.util.CallApiIdentity;
+import com.labreportapp.labreport.util.LoggerUtil;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import jakarta.servlet.http.HttpServletResponse;
@@ -65,6 +67,12 @@ public class AdStudentClassServiceImpl implements AdStudentClassService {
 
     @Autowired
     private StClassRepository stClassRepository;
+
+    @Autowired
+    private AdClassRepository adClassRepository;
+
+    @Autowired
+    private LoggerUtil loggerUtil;
 
     @Override
     public List<AdStudentCallApiRespone> findStudentClassByIdClass(String idClass) {
@@ -229,6 +237,17 @@ public class AdStudentClassServiceImpl implements AdStudentClassService {
             });
             if (response.getStatus()) {
                 List<StudentClasses> students = new ArrayList<>(mapStudentsSheet.values());
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("Đã thêm những sinh viên sau vào lớp: ");
+                students.forEach(st -> {
+                    stringBuilder.append(st.getEmail() + ", ");
+                });
+                Optional<Class> classOptional = adClassRepository.findById(stClassRequest.getIdClass());
+                if (!classOptional.isPresent()) {
+                    throw new RestApiException(Message.CLASS_NOT_EXISTS);
+                }
+                String nameSemester = loggerUtil.getNameSemesterByIdClass(classOptional.get().getId());
+                loggerUtil.sendLogStreamClass(stringBuilder.toString(), classOptional.get().getCode(), nameSemester);
                 adStudentClassRepository.saveAll(students);
                 Integer countStudentClasses = adStudentClassRepository.countStudentClassesByIdClass(idClass);
                 classFind.get().setClassSize(countStudentClasses);

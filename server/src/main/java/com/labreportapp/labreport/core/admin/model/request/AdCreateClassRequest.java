@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 public class AdCreateClassRequest {
 
-    @NotNull
+    @NotBlank
     private String classPeriod;
 
     @NotNull

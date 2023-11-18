@@ -129,6 +129,17 @@ public class AdMeetingServiceImpl implements AdMeetingService {
             simple = callApiIdentity.handleCallApiGetUserById(request.getTeacherId());
         }
         Meeting meetingNew = adMeetingRepository.save(meeting);
+        Optional<Class> classOptional = adClassRepository.findById(meetingNew.getClassId());
+        if (!classOptional.isPresent()) {
+            throw new RestApiException(Message.CLASS_NOT_EXISTS);
+        }
+        StringBuilder stringBuilder = new StringBuilder();
+        String nameSemester = loggerUtil.getNameSemesterByIdClass(classOptional.get().getId());
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        stringBuilder.append("Đã tạo buổi học với thời gian buổi học là: " + sdf.format(request.getMeetingDate()));
+        stringBuilder.append(", với ca học là: " + meetingPeriodFind.getName());
+        stringBuilder.append(", với hình thức của buổi học là: " + (TypeMeeting.values()[request.getTypeMeeting()] == TypeMeeting.ONLINE ? "Online" : "Offline"));
+        loggerUtil.sendLogStreamClass(stringBuilder.toString(), classOptional.get().getCode(), nameSemester);
         adMeetingRepository.updateNameMeeting(request.getClassId());
         AdMeetingCustom adMeetingCustom = new AdMeetingCustom();
         adMeetingCustom.setId(meetingNew.getId());
@@ -237,6 +248,14 @@ public class AdMeetingServiceImpl implements AdMeetingService {
             }
             adMeetingRepository.deleteById(id);
             adMeetingRepository.updateNameMeeting(meetingFind.get().getClassId());
+            Optional<Class> classOptional = adClassRepository.findById(meetingFind.get().getClassId());
+            if (!classOptional.isPresent()) {
+                throw new RestApiException(Message.CLASS_NOT_EXISTS);
+            }
+            StringBuilder stringBuilder = new StringBuilder();
+            String nameSemester = loggerUtil.getNameSemesterByIdClass(classOptional.get().getId());
+            stringBuilder.append("Đã xóa buổi học " + meetingFind.get().getName() + ".");
+            loggerUtil.sendLogStreamClass(stringBuilder.toString(), classOptional.get().getCode(), nameSemester);
             return id;
         } else {
             throw new RestApiException(Message.DANG_CO_DU_LIEU_LIEN_QUAN_KHONG_THE_XOA_BUOI_HOC);
@@ -249,9 +268,20 @@ public class AdMeetingServiceImpl implements AdMeetingService {
         if (listMeeting.isEmpty()) {
             throw new RestApiException(Message.MEETING_NOT_EXISTS);
         }
+        SimpleResponse simpleResponse = callApiIdentity.handleCallApiGetUserById(request.getTeacherId());
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Đã cập nhật giảng viên của những buổi học: ");
         for (Meeting meeting : listMeeting) {
             meeting.setTeacherId(request.getTeacherId());
+            stringBuilder.append(meeting.getName() + ", ");
         }
+        stringBuilder.append(" thành: " + simpleResponse.getName() + " - " + simpleResponse.getUserName());
+        Optional<Class> classOptional = adClassRepository.findById(listMeeting.get(0).getClassId());
+        if (!classOptional.isPresent()) {
+            throw new RestApiException(Message.CLASS_NOT_EXISTS);
+        }
+        String nameSemester = loggerUtil.getNameSemesterByIdClass(classOptional.get().getId());
+        loggerUtil.sendLogStreamClass(stringBuilder.toString(), classOptional.get().getCode(), nameSemester);
         adMeetingRepository.saveAll(listMeeting);
         return null;
     }
@@ -288,7 +318,19 @@ public class AdMeetingServiceImpl implements AdMeetingService {
                 listMeeting.add(meeting);
                 meetingDateInMillis += request.getNumberDay() * 24 * 60 * 60 * 1000;
             }
-            adMeetingRepository.saveAll(listMeeting);
+            List<Meeting> listMeetingNew = adMeetingRepository.saveAll(listMeeting);
+            StringBuilder stringBuilder = new StringBuilder();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            listMeetingNew.forEach(meeting -> {
+                stringBuilder.append("Đã tạo buổi học với thời gian buổi học là: " + sdf.format(meeting.getMeetingDate()));
+                stringBuilder.append(", với hình thức của buổi học là: " + (meeting.getTypeMeeting() == TypeMeeting.ONLINE ? "Online" : "Offline") + ". ");
+            });
+            Optional<Class> classOptional = adClassRepository.findById(listMeeting.get(0).getClassId());
+            if (!classOptional.isPresent()) {
+                throw new RestApiException(Message.CLASS_NOT_EXISTS);
+            }
+            String nameSemester = loggerUtil.getNameSemesterByIdClass(classOptional.get().getId());
+            loggerUtil.sendLogStreamClass(stringBuilder.toString(), classOptional.get().getCode(), nameSemester);
             adMeetingRepository.updateNameMeeting(request.getClassId());
         } catch (Exception e) {
             e.printStackTrace();
