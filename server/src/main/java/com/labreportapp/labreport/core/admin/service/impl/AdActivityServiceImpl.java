@@ -117,6 +117,7 @@ public class AdActivityServiceImpl implements AdActivityService {
 
         Activity activity = optional.get();
         StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Đã cập nhật hoạt động có mã-tên là : \"").append(activity.getCode()).append(" - ").append(activity.getName()).append("\". ");
         String messageCode = CompareUtil.compareAndConvertMessage("mã của hoạt động", activity.getCode(), command.getCode(), "");
         stringBuilder.append(messageCode).append(!messageCode.equals("") ? ", " : "");
 

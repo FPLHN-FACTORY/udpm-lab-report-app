@@ -8,6 +8,7 @@ import com.labreportapp.labreport.core.student.model.response.StClassResponse;
 import com.labreportapp.labreport.core.student.model.response.StMyClassCustom;
 import com.labreportapp.labreport.core.student.model.response.StMyClassResponse;
 import com.labreportapp.labreport.core.student.repository.StClassRepository;
+import com.labreportapp.labreport.core.student.repository.StMeetingRepository;
 import com.labreportapp.labreport.core.student.repository.StMyClassRepository;
 import com.labreportapp.labreport.core.student.repository.StStudentClassesRepository;
 import com.labreportapp.labreport.core.student.service.StMyClassService;
@@ -27,6 +28,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -63,6 +65,9 @@ public class StMyClassServiceImpl implements StMyClassService {
 
     @Autowired
     private SemesterHelper semesterHelper;
+
+    @Autowired
+    private StMeetingRepository stMeetingRepository;
 
     @Autowired
     private LoggerUtil loggerUtil;
@@ -135,6 +140,10 @@ public class StMyClassServiceImpl implements StMyClassService {
                 findStudentClassesByClassIdAndStudentId(req.getIdClass(), labReportAppSession.getUserId());
         if (findStudentInClass.isPresent()) {
             Optional<StClassResponse> conditionClass = stClassRepository.checkConditionCouldJoinOrLeaveClass(req, Calendar.getInstance().getTimeInMillis());
+            Integer countLessonMeeting = stMeetingRepository.countMeetingLessonByIdClass(new Date().getTime(), req.getIdClass());
+            if (countLessonMeeting > 0) {
+                throw new RestApiException("Lớp học đã diễn ra, không thể rời lớp học !");
+            }
             if (conditionClass.isEmpty()) {
                 throw new RestApiException(Message.YOU_DONT_LEAVE_CLASS);
             } else {

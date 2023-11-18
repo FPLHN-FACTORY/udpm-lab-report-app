@@ -7,12 +7,15 @@ import {
   faCodeCompare,
   faCirclePlus,
   faMattressPillow,
+  faFileDownload,
+  faHistory,
+  faTableList,
+  faBarsProgress,
 } from "@fortawesome/free-solid-svg-icons";
 import "./styleProjectManagement.css";
 import {
   CheckCircleOutlined,
   CloseCircleOutlined,
-  ProjectOutlined,
   SyncOutlined,
 } from "@ant-design/icons";
 import {
@@ -45,6 +48,7 @@ import { AdGroupProjectAPI } from "../../../../../src/labreportapp/api/admin/AdG
 import { SetCategory } from "../../../app/reducer/admin/category-management/adCategorySlice.reducer";
 import dayjs from "dayjs";
 import viVN from "antd/lib/locale/vi_VN";
+import ModalHistoryProject from "./modal-history-project/ModalHistoryProject";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
@@ -378,6 +382,28 @@ const ProjectManagement = () => {
     }
   };
 
+  const dowloadLog = () => {
+    ProjectManagementAPI.dowloadLog().then(
+      (response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "danh_sach_du_an_xuong.csv";
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      (error) => {}
+    );
+  };
+  const [visibleHistory, setVisibleHistory] = useState(false);
+  const openModalShowHistory = () => {
+    setVisibleHistory(true);
+  };
+
+  const cancelModalHistory = () => {
+    setVisibleHistory(false);
+  };
+
   const changeTotalsPage = (newTotalPages) => {
     setTotalPages(newTotalPages);
   };
@@ -391,7 +417,7 @@ const ProjectManagement = () => {
           style={{ fontSize: "18px", paddingLeft: "20px" }}
         >
           <span style={{ fontSize: "20px", fontWeight: "500" }}>
-            <ProjectOutlined style={{ fontSize: "26px" }} />
+            <FontAwesomeIcon icon={faBarsProgress} />
             <span style={{ marginLeft: "10px" }}>Quản lý dự án</span>
           </span>
         </div>
@@ -535,13 +561,53 @@ const ProjectManagement = () => {
               {" "}
               <span style={{ fontSize: "18px", fontWeight: "500" }}>
                 {" "}
-                <ProjectOutlined
-                  style={{ marginRight: "7px", fontSize: "26px" }}
+                <FontAwesomeIcon
+                  icon={faTableList}
+                  style={{
+                    marginRight: "10px",
+                    fontSize: "20px",
+                  }}
                 />
                 Danh sách dự án
               </span>
             </div>
             <div>
+              <Button
+                style={{
+                  color: "white",
+                  backgroundColor: "rgb(55, 137, 220)",
+                  marginRight: 5,
+                }}
+                onClick={dowloadLog}
+              >
+                <FontAwesomeIcon
+                  icon={faFileDownload}
+                  size="1x"
+                  style={{
+                    backgroundColor: "rgb(55, 137, 220)",
+                    marginRight: "5px",
+                  }}
+                />
+                Dowload log
+              </Button>
+              <Button
+                style={{
+                  color: "white",
+                  backgroundColor: "rgb(55, 137, 220)",
+                  marginRight: 5,
+                }}
+                onClick={openModalShowHistory}
+              >
+                <FontAwesomeIcon
+                  icon={faHistory}
+                  size="1x"
+                  style={{
+                    backgroundColor: "rgb(55, 137, 220)",
+                    marginRight: "5px",
+                  }}
+                />
+                Lịch sử
+              </Button>
               <Button
                 style={{
                   color: "white",
@@ -609,6 +675,10 @@ const ProjectManagement = () => {
             visible={showUpdateModal}
             onCancel={handleCancelCreate}
             idProject={idProject}
+          />
+          <ModalHistoryProject
+            visible={visibleHistory}
+            onCancel={cancelModalHistory}
           />
         </div>
       </div>

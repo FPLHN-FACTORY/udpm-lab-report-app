@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Button, Select, Table, Pagination, Empty } from "antd";
-import { StMyClassAPI } from "../../../../../api/student/StMyClassAPI";
+import { ProjectManagementAPI } from "../../../../api/admin/project-management/projectManagement.api";
 
 const { Option } = Select;
 
-const StModalShowHistory = ({ visible, onCancel, classDetail }) => {
+const ModalHistoryProject = ({ visible, onCancel }) => {
   const columns = [
     {
       title: "Email người thực hiện",
@@ -38,8 +38,7 @@ const StModalShowHistory = ({ visible, onCancel, classDetail }) => {
 
   const loadDataHistory = async () => {
     try {
-      StMyClassAPI.showHistory({
-        idClass: classDetail.id,
+      ProjectManagementAPI.showHistory({
         page: current - 1,
         size: parseInt(size),
       }).then((response) => {
@@ -144,4 +143,4 @@ const StModalShowHistory = ({ visible, onCancel, classDetail }) => {
     </>
   );
 };
-export default StModalShowHistory;
+export default ModalHistoryProject;

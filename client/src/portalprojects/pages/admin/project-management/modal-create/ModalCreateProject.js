@@ -472,8 +472,9 @@ const ModalCreateProject = ({
               />
             </Col>
           </Row>
+
           <Row gutter={24} style={{ marginBottom: "10px" }}>
-            <Col span={24}>
+            <Col span={12}>
               <div style={{ width: "100%" }}>
                 {" "}
                 <span className="notBlank">(*) </span>
@@ -483,7 +484,7 @@ const ModalCreateProject = ({
                   placeholder="Thêm thể loại"
                   style={{
                     width: "100%",
-                    height: "auto",
+                    height: "40px",
                   }}
                   value={listCategorysChange}
                   onChange={handleChangeCategorys}
@@ -515,9 +516,7 @@ const ModalCreateProject = ({
                 </span>
               </div>
             </Col>
-          </Row>
-          <Row gutter={24} style={{ marginBottom: "10px" }}>
-            <Col span={24}>
+            <Col span={12}>
               <span>Thành viên:</span>
               {listMembersChange.length > 0 && (
                 <span style={{ color: "red" }}>
@@ -531,13 +530,13 @@ const ModalCreateProject = ({
                 placeholder="Thêm thành viên"
                 style={{
                   width: "100%",
-                  height: "auto",
+                  height: "40px",
                 }}
                 value={listMembersChange}
                 onChange={handleChangeMembers}
                 optionLabelProp="label"
                 defaultValue={[]}
-                maxTagCount={4}
+                maxTagCount={2}
                 filterOption={(text, option) =>
                   option.label.toLowerCase().indexOf(text.toLowerCase()) !== -1
                 }
