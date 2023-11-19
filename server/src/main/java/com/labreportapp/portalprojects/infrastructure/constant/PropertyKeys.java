@@ -102,4 +102,7 @@ public class PropertyKeys {
     public static final String YOU_CANNOT_ENTER_CLASS_YET = "you.cannot.enter.class.yet";
     public static final String FILE_NOT_FOUND = "file.not.found";
 
+    public static final String CONFIRM_PASSWORD_FAILED = "confirm.password.failed";
+    public static final String CONFIRM_PASSWORD_ISEMPTY = "confirm.password.isEmpty";
+
 }

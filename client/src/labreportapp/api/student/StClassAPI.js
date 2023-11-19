@@ -1,7 +1,6 @@
 import { request } from "../../helper/request.helper";
 
 export class StClassAPI {
-
   static getClassByCriteriaAndIsActive(filter) {
     return request({
       method: "GET",
@@ -22,9 +21,7 @@ export class StClassAPI {
     return request({
       method: "POST",
       url: "/student/class/join",
-      params: {
-        idClass: filter.idClass,
-      },
+      data: filter,
     });
   }
 }

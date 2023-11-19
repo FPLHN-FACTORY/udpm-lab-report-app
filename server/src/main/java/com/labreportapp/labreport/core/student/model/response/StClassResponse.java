@@ -50,4 +50,6 @@ public interface StClassResponse extends IsIdentified {
     @Value("#{target.descriptions}")
     String getDescriptions();
 
+    @Value("#{target.password}")
+    String getPassWord();
 }
