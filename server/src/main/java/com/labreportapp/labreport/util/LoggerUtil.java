@@ -27,7 +27,7 @@ public class LoggerUtil {
 
     public void sendLogScreen(String content, String tenHocKy) {
         try {
-            if (Objects.nonNull(content)) {
+            if (Objects.nonNull(content) && !content.equals("")) {
                 String pathFile = writeFileCSV.getPathFileSendLogScreen(tenHocKy);
                 LoggerObject loggerObject = writeFileCSV.createLoggerObject(content, null, pathFile);
                 logService.sendLogMessage(loggerObject);
@@ -39,7 +39,7 @@ public class LoggerUtil {
 
     public void sendLogStreamClass(String content, String codeClass, String tenHocKy) {
         try {
-            if (Objects.nonNull(content)) {
+            if (Objects.nonNull(content) && !content.equals("")) {
                 String pathFile = writeFileCSV.getPathFileSendLogStreamClass(tenHocKy);
                 LoggerObject loggerObject = writeFileCSV.createLoggerObject(content, codeClass, pathFile);
                 logService.sendLogMessage(loggerObject);

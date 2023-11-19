@@ -37,9 +37,9 @@ import com.labreportapp.labreport.repository.ActivityRepository;
 import com.labreportapp.labreport.repository.LevelRepository;
 import com.labreportapp.labreport.util.CallApiIdentity;
 import com.labreportapp.labreport.util.ClassHelper;
+import com.labreportapp.labreport.util.CompareUtil;
 import com.labreportapp.labreport.util.FormUtils;
 import com.labreportapp.labreport.util.LoggerUtil;
-import com.labreportapp.labreport.util.RandomString;
 import com.labreportapp.labreport.util.SemesterHelper;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.CustomException;
@@ -201,6 +201,29 @@ AdClassManagerServiceImpl implements AdClassService {
     @Override
     public AdClassCustomResponse updateClass(@Valid AdCreateClassRequest request, String id) {
         Class classNew = repository.findById(id).get();
+        StringBuilder stringBuilder = new StringBuilder();
+        String classPeriodOld = classNew.getClassPeriod();
+        String classPeriodNew = request.getClassPeriod();
+        if (classPeriodOld != null && classPeriodNew != null && !classPeriodOld.equals(classPeriodNew)) {
+            MeetingPeriod meetingPeriodNew = adMeetingPeriodRepository.findById(classPeriodNew).get();
+            MeetingPeriod meetingPeriodOld = adMeetingPeriodRepository.findById(classPeriodOld).get();
+            String messageClassPeriod = CompareUtil.compareAndConvertMessage("ca học của lớp " +
+                    classNew.getCode(), meetingPeriodOld.getName(), meetingPeriodNew.getName(), "");
+            stringBuilder.append(messageClassPeriod);
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        String messageStartTime = CompareUtil.compareAndConvertMessage("thời gian bắt đầu của lớp " +
+                classNew.getCode(), sdf.format(classNew.getStartTime()), sdf.format(request.getStartTime()), "");
+        stringBuilder.append(messageStartTime);
+        if (classNew.getStatusTeacherEdit().ordinal() != request.getStatusTeacherEdit()) {
+            String messageStatusTeacherEdit = ". Đã cập nhật quyền giảng viên chỉnh sửa của lớp " + classNew.getCode() + " từ " +
+                    (classNew.getStatusTeacherEdit().ordinal() == 0 ? "Cho phép" : "Không cho phép") + " thành " +
+                    (request.getStatusTeacherEdit() == 0 ? "Không cho phép" : "Cho phép");
+            stringBuilder.append(messageStatusTeacherEdit);
+        }
+        String nameSemester = loggerUtil.getNameSemesterByIdClass(id);
+        loggerUtil.sendLogScreen(stringBuilder.toString(), nameSemester);
+        loggerUtil.sendLogStreamClass(stringBuilder.toString(), classNew.getCode(), nameSemester);
         classNew.setStartTime(request.getStartTime());
         MeetingPeriod meetingPeriodFind = null;
         if (request.getClassPeriod() != null) {
@@ -216,9 +239,6 @@ AdClassManagerServiceImpl implements AdClassService {
         if (request.getTeacherId() != null && !request.getTeacherId().equals("")) {
             classNew.setTeacherId(request.getTeacherId());
         }
-        String classPeriodOld = classNew.getClassPeriod();
-        String classPeriodNew = request.getClassPeriod();
-        String message
 
         repository.save(classNew);
         AdClassCustomResponse adClassCustomResponse = new AdClassCustomResponse();
