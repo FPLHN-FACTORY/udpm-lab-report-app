@@ -218,7 +218,7 @@ AdClassManagerServiceImpl implements AdClassService {
         }
         String classPeriodOld = classNew.getClassPeriod();
         String classPeriodNew = request.getClassPeriod();
-        String message
+//        String message
 
         repository.save(classNew);
         AdClassCustomResponse adClassCustomResponse = new AdClassCustomResponse();
