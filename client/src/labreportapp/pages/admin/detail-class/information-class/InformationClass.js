@@ -605,6 +605,17 @@ const InformationClass = () => {
             >
               FEEDBACK CỦA SINH VIÊN &nbsp;
             </Link>
+            <Link
+              to={`/admin/class-management/point/${id}`}
+              className="custom-link"
+              style={{
+                fontSize: "16px",
+                paddingLeft: "10px",
+                fontWeight: "bold",
+              }}
+            >
+              ĐIỂM &nbsp;
+            </Link>
             <div
               className="box-center"
               style={{

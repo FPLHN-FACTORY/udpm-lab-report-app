@@ -189,6 +189,7 @@ public class TeMeetingServiceImpl implements TeMeetingService {
         objReturn.setMeetingDate(meetingResponse.getMeetingDate());
         objReturn.setTypeMeeting(meetingResponse.getTypeMeeting());
         objReturn.setMeetingPeriod(meetingResponse.getMeetingPeriod());
+        objReturn.setStatusClass(meetingResponse.getStatusClass());
         LocalDate dateNow = LocalDate.now();
         LocalDate dateMeeting = Instant.ofEpochMilli(meetingResponse.getMeetingDate()).atZone(ZoneId.systemDefault()).toLocalDate();
         if (dateNow.isBefore(dateMeeting)) {

@@ -38,4 +38,7 @@ public interface StMeetingResponse {
 
     @Value("#{target.class_id}")
     String getIdClass();
+
+    @Value("#{target.status_class}")
+    Integer getStatusClass();
 }

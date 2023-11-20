@@ -26,6 +26,8 @@ public class TeDetailMeetingTeamReportRespone {
 
     private String idClass;
 
+    private Integer statusClass;
+
     private String idTeacher;
 
     private List<TeDetailTeamReportRespone> listTeamReport;

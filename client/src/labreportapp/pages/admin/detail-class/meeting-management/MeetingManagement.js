@@ -1,7 +1,15 @@
 import { Link, useParams } from "react-router-dom";
 import "./style-meeting-management.css";
 import { BookOutlined, ControlOutlined } from "@ant-design/icons";
-import { Button, Checkbox, Empty, Popconfirm, Select, Tooltip, message } from "antd";
+import {
+  Button,
+  Checkbox,
+  Empty,
+  Popconfirm,
+  Select,
+  Tooltip,
+  message,
+} from "antd";
 import { MeetingManagementAPI } from "../../../../api/admin/meeting-management/MeetingManagementAPI";
 import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import { useEffect, useState } from "react";
@@ -11,11 +19,7 @@ import {
   SetMeeting,
 } from "../../../../app/admin/AdMeetingManagement.reducer";
 import { convertLongToDate } from "../../../../helper/convertDate";
-import {
-  convertHourAndMinuteToString,
-  convertMeetingPeriod,
-  convertMeetingPeriodToTime,
-} from "../../../../helper/util.helper";
+import { convertHourAndMinuteToString } from "../../../../helper/util.helper";
 import LoadingIndicator from "../../../../helper/loading";
 import ModalCreateMeeting from "./modal-create-meeting/ModalCreateMeeting";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -29,7 +33,6 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import ModalUpdateMeeting from "./modal-update-meeting/ModalUpdateMeeting";
-import { toast } from "react-toastify";
 import { SetTTrueToggle } from "../../../../app/admin/AdCollapsedSlice.reducer";
 import { ClassAPI } from "../../../../api/admin/class-manager/ClassAPI.api";
 import {
@@ -266,6 +269,17 @@ const MeetingManagment = () => {
                 }}
               >
                 FEEDBACK CỦA SINH VIÊN &nbsp;
+              </Link>
+              <Link
+                to={`/admin/class-management/point/${id}`}
+                className="custom-link"
+                style={{
+                  fontSize: "16px",
+                  paddingLeft: "10px",
+                  fontWeight: "bold",
+                }}
+              >
+                ĐIỂM &nbsp;
               </Link>
               <div
                 className="box-center"

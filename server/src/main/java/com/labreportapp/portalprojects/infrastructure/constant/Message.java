@@ -103,6 +103,8 @@ public enum Message {
     ROLE_HAS_CHANGE(PropertiesReader.getProperty(PropertyKeys.ROLE_HAS_CHANGE)),
     YOU_CANNOT_ENTER_CLASS_YET(PropertiesReader.getProperty(PropertyKeys.YOU_CANNOT_ENTER_CLASS_YET)),
     FILE_NOT_FOUND(PropertiesReader.getProperty(PropertyKeys.FILE_NOT_FOUND)),
+    CONFIRM_PASSWORD_FAILED(PropertiesReader.getProperty(PropertyKeys.CONFIRM_PASSWORD_FAILED)),
+    CONFIRM_PASSWORD_ISEMPTY(PropertiesReader.getProperty(PropertyKeys.CONFIRM_PASSWORD_ISEMPTY)),
     BAN_CHUA_TAO_CAU_HINH(PropertiesReader.getProperty(PropertyKeys.BAN_CHUA_TAO_CAU_HINH)),
     LOP_NAY_DA_QUY_DOI_MAT_ONG(PropertiesReader.getProperty(PropertyKeys.LOP_NAY_DA_QUY_DOI_MAT_ONG));
 

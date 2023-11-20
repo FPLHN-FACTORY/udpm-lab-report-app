@@ -25,12 +25,15 @@ import com.labreportapp.labreport.util.LoggerUtil;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import jakarta.validation.Valid;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -103,16 +106,16 @@ public class AdMeetingServiceImpl implements AdMeetingService {
     @Override
     public AdMeetingCustom create(@Valid AdCreateMeetingRequest request) {
         Optional<Class> classFind = adClassRepository.findById(request.getClassId());
-        if (!classFind.isPresent()) {
+        if (classFind.isEmpty()) {
             throw new RestApiException(Message.CLASS_NOT_EXISTS);
         }
         Optional<Activity> activityFind = adActivityRepository.findById(classFind.get().getActivityId());
-        if (!activityFind.isPresent()) {
+        if (activityFind.isEmpty()) {
             throw new RestApiException(Message.ACTIVITY_NOT_EXISTS);
         }
         Meeting meeting = new Meeting();
         meeting.setName("Buổi học");
-        meeting.setMeetingDate(request.getMeetingDate());
+        meeting.setMeetingDate(DateUtils.truncate(new Date(request.getMeetingDate()), Calendar.DATE).getTime());
         meeting.setTypeMeeting(TypeMeeting.values()[request.getTypeMeeting()]);
         MeetingPeriod meetingPeriodFind = null;
         if (request.getMeetingPeriod() != null) {
@@ -200,7 +203,7 @@ public class AdMeetingServiceImpl implements AdMeetingService {
         stringBuilder.append(messageAddress);
         loggerUtil.sendLogStreamClass(stringBuilder.toString(), classOptional.get().getCode(), nameSemester);
 
-        meetingFind.get().setMeetingDate(request.getMeetingDate());
+        meetingFind.get().setMeetingDate(DateUtils.truncate(new Date(request.getMeetingDate()), Calendar.DATE).getTime());
         meetingFind.get().setTypeMeeting(TypeMeeting.values()[request.getTypeMeeting()]);
 
         meetingFind.get().setMeetingPeriod(meetingPeriodNew.getId());
@@ -273,9 +276,9 @@ public class AdMeetingServiceImpl implements AdMeetingService {
         stringBuilder.append("Đã cập nhật giảng viên của những buổi học: ");
         for (Meeting meeting : listMeeting) {
             meeting.setTeacherId(request.getTeacherId());
-            stringBuilder.append(meeting.getName() + ", ");
+            stringBuilder.append(meeting.getName()).append(", ");
         }
-        stringBuilder.append(" thành: " + simpleResponse.getName() + " - " + simpleResponse.getUserName());
+        stringBuilder.append(" thành: ").append(simpleResponse.getName()).append(" - ").append(simpleResponse.getUserName());
         Optional<Class> classOptional = adClassRepository.findById(listMeeting.get(0).getClassId());
         if (!classOptional.isPresent()) {
             throw new RestApiException(Message.CLASS_NOT_EXISTS);
@@ -290,15 +293,15 @@ public class AdMeetingServiceImpl implements AdMeetingService {
     public Boolean createMeetingAuto(@Valid AdCreateMeetingAutoRequest request) {
         try {
             Optional<Class> classFind = adClassRepository.findById(request.getClassId());
-            if (!classFind.isPresent()) {
+            if (classFind.isEmpty()) {
                 throw new RestApiException(Message.CLASS_NOT_EXISTS);
             }
             Optional<Activity> activityFind = adActivityRepository.findById(classFind.get().getActivityId());
-            if (!activityFind.isPresent()) {
+            if (activityFind.isEmpty()) {
                 throw new RestApiException(Message.ACTIVITY_NOT_EXISTS);
             }
             List<Meeting> listMeeting = new ArrayList<>();
-            Long meetingDateInMillis = request.getMeetingDate();
+            Long meetingDateInMillis = DateUtils.truncate(new Date(request.getMeetingDate()), Calendar.DATE).getTime();
             MeetingPeriod meetingPeriodFind = null;
             if (request.getMeetingPeriod() != null) {
                 meetingPeriodFind = adMeetingPeriodRepository.findById(request.getMeetingPeriod()).get();
@@ -322,11 +325,11 @@ public class AdMeetingServiceImpl implements AdMeetingService {
             StringBuilder stringBuilder = new StringBuilder();
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             listMeetingNew.forEach(meeting -> {
-                stringBuilder.append("Đã tạo buổi học với thời gian buổi học là: " + sdf.format(meeting.getMeetingDate()));
-                stringBuilder.append(", với hình thức của buổi học là: " + (meeting.getTypeMeeting() == TypeMeeting.ONLINE ? "Online" : "Offline") + ". ");
+                stringBuilder.append("Đã tạo buổi học với thời gian buổi học là: ").append(sdf.format(meeting.getMeetingDate()));
+                stringBuilder.append(", với hình thức của buổi học là: ").append(meeting.getTypeMeeting() == TypeMeeting.ONLINE ? "Online" : "Offline").append(". ");
             });
             Optional<Class> classOptional = adClassRepository.findById(listMeeting.get(0).getClassId());
-            if (!classOptional.isPresent()) {
+            if (classOptional.isEmpty()) {
                 throw new RestApiException(Message.CLASS_NOT_EXISTS);
             }
             String nameSemester = loggerUtil.getNameSemesterByIdClass(classOptional.get().getId());

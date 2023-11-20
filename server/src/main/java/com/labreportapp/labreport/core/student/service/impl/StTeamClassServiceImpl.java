@@ -22,6 +22,7 @@ import com.labreportapp.labreport.entity.StudentClasses;
 import com.labreportapp.labreport.entity.Team;
 import com.labreportapp.labreport.infrastructure.apiconstant.ApiConstants;
 import com.labreportapp.labreport.infrastructure.constant.RoleTeam;
+import com.labreportapp.labreport.infrastructure.constant.StatusClass;
 import com.labreportapp.labreport.infrastructure.constant.StatusTeam;
 import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.labreport.repository.StudentClassesRepository;
@@ -262,6 +263,7 @@ public class StTeamClassServiceImpl implements StTeamClassService {
         stDetailClassCustomResponse.setStartTime(classFind.getStartTime());
         stDetailClassCustomResponse.setTeacherId(classFind.getTeacherId());
         stDetailClassCustomResponse.setUsernameTeacher(response.getUserName());
+        stDetailClassCustomResponse.setStatusClass(classFind.getStatusClass() != null ? classFind.getStatusClass() == StatusClass.OPEN ? 0 : 1 : 1);
         return stDetailClassCustomResponse;
     }
 

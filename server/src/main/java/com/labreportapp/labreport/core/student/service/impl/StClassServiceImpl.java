@@ -65,6 +65,7 @@ public class StClassServiceImpl implements StClassService {
     @Override
     public PageableObject<StClassCustomResponse> getAllClassByCriteriaAndIsActive(final StFindClassRequest req) {
         Pageable pageable = PageRequest.of(req.getPage(), req.getSize());
+        req.setStudentId(labReportAppSession.getUserId());
         Page<StClassResponse> getAllClassByCriteria = stClassRepository.getAllClassByCriteriaAndIsActive(req, pageable, Calendar.getInstance().getTimeInMillis());
         List<String> distinctTeacherIds = getAllClassByCriteria.getContent().stream()
                 .map(StClassResponse::getIdTeacher)
@@ -92,6 +93,7 @@ public class StClassServiceImpl implements StClassService {
             stClassCustomResponse.setDescriptions(stClassResponse.getDescriptions());
             stClassCustomResponse.setStartTimeStudent(stClassResponse.getStartTimeStudent());
             stClassCustomResponse.setEndTimeStudent(stClassResponse.getEndTimeStudent());
+            stClassCustomResponse.setPassWord(stClassResponse.getPassWord());
             if (stClassResponse.getIdTeacher() != null) {
                 for (SimpleResponse xx : listResponse) {
                     if (xx.getId().equals(stClassResponse.getIdTeacher())) {
@@ -128,8 +130,16 @@ public class StClassServiceImpl implements StClassService {
         }
         Integer configurationSizeMax = stClassConfigurationRepository.
                 getClassConfiguration().getClassSizeMax();
-        if (findClass.get().getClassSize() == configurationSizeMax) {
+        if (findClass.get().getClassSize().equals(configurationSizeMax)) {
             throw new RestApiException(Message.CLASS_DID_FULL_CLASS_SIZE);
+        }
+        System.err.println("aaaaa:" + req.getPassWord());
+        if (findClass.get().getPassword() != null) {
+            if (req.getPassWord().equals("") || req.getPassWord() == null) {
+                throw new RestApiException(Message.CONFIRM_PASSWORD_ISEMPTY);
+            } else if (!req.getPassWord().equals(findClass.get().getPassword())) {
+                throw new RestApiException(Message.CONFIRM_PASSWORD_FAILED);
+            }
         }
         SimpleResponse responseStudent = callApiIdentity.handleCallApiGetUserById(labReportAppSession.getUserId());
         StudentClasses studentJoinClass = new StudentClasses();

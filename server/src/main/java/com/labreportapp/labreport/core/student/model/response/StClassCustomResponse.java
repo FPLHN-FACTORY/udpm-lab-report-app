@@ -41,4 +41,5 @@ public class StClassCustomResponse {
 
     private String descriptions;
 
+    private String passWord;
 }

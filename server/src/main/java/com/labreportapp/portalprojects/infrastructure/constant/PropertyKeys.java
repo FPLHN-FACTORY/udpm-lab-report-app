@@ -104,4 +104,7 @@ public class PropertyKeys {
     public static final String BAN_CHUA_TAO_CAU_HINH = "ban.chua.tao.cau.hinh";
     public static final String LOP_NAY_DA_QUY_DOI_MAT_ONG = "lop.nay.da.duoc.quy.doi.mat.ong";
 
+    public static final String CONFIRM_PASSWORD_FAILED = "confirm.password.failed";
+    public static final String CONFIRM_PASSWORD_ISEMPTY = "confirm.password.isEmpty";
+
 }

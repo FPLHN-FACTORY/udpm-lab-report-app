@@ -66,7 +66,7 @@ const TeamsInMyClass = () => {
   const navigate = useNavigate();
   dispatch(SetTTrueToggle());
   const { idClass } = useParams();
-
+  const [lock, setLock] = useState(1);
   useEffect(() => {
     window.scrollTo(0, 0);
     fetchData(idClass);
@@ -95,6 +95,7 @@ const TeamsInMyClass = () => {
       await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
         setClassDetail(responese.data.data);
         document.title = "Quản lý nhóm | " + responese.data.data.code;
+        setLock(responese.data.data.statusClass);
       });
     } catch (error) {
       navigate("/teacher/my-class");
@@ -253,7 +254,7 @@ const TeamsInMyClass = () => {
       render: (text, record) => (
         <>
           <div>
-            {record.idProject != null ? (
+            {record.idProject != null && (
               <Tooltip title="Xem trello dự án">
                 <Link
                   to={`/detail-project/${record.idProject}`}
@@ -266,7 +267,8 @@ const TeamsInMyClass = () => {
                   />
                 </Link>
               </Tooltip>
-            ) : (
+            )}
+            {record.idProject == null && lock === 0 && (
               <Tooltip title="Thêm trello">
                 <span>
                   <FontAwesomeIcon
@@ -290,24 +292,28 @@ const TeamsInMyClass = () => {
                 }}
               />
             </Tooltip>
-            <Tooltip title="Cập nhật">
-              <FontAwesomeIcon
-                className="icon"
-                icon={faPenToSquare}
-                onClick={() => {
-                  handleUpdateTeam(record);
-                }}
-              />
-            </Tooltip>
-            <Tooltip title="Xóa nhóm">
-              <FontAwesomeIcon
-                className="icon"
-                icon={faTrashCan}
-                onClick={() => {
-                  handleShowDeleteTeam(record);
-                }}
-              />
-            </Tooltip>
+            {lock === 0 && (
+              <Tooltip title="Cập nhật">
+                <FontAwesomeIcon
+                  className="icon"
+                  icon={faPenToSquare}
+                  onClick={() => {
+                    handleUpdateTeam(record);
+                  }}
+                />
+              </Tooltip>
+            )}{" "}
+            {lock === 0 && (
+              <Tooltip title="Xóa nhóm">
+                <FontAwesomeIcon
+                  className="icon"
+                  icon={faTrashCan}
+                  onClick={() => {
+                    handleShowDeleteTeam(record);
+                  }}
+                />
+              </Tooltip>
+            )}
           </div>
         </>
       ),
@@ -441,49 +447,50 @@ const TeamsInMyClass = () => {
                 Danh sách nhóm :
               </span>
             </Row>
-
-            <Row style={{ marginTop: "10px" }}>
-              <ButtonExportExcelTeam idClass={idClass} />
-              <Button
-                className="btn_clear"
-                style={{
-                  backgroundColor: "rgb(38, 144, 214)",
-                  color: "white",
-                  marginLeft: "10px",
-                }}
-                onClick={() => setShowModalImport(true)}
-              >
-                <FontAwesomeIcon
-                  icon={faUpload}
-                  style={{ marginRight: "7px" }}
+            {lock === 0 && (
+              <Row style={{ marginTop: "10px" }}>
+                <ButtonExportExcelTeam idClass={idClass} />
+                <Button
+                  className="btn_clear"
+                  style={{
+                    backgroundColor: "rgb(38, 144, 214)",
+                    color: "white",
+                    marginLeft: "10px",
+                  }}
+                  onClick={() => setShowModalImport(true)}
+                >
+                  <FontAwesomeIcon
+                    icon={faUpload}
+                    style={{ marginRight: "7px" }}
+                  />
+                  Import nhóm
+                </Button>
+                <ModalFileImportTeam
+                  idClass={idClass}
+                  visible={showModalImport}
+                  fetchData={fetchData}
+                  onCancel={handleCancelImport}
                 />
-                Import nhóm
-              </Button>
-              <ModalFileImportTeam
-                idClass={idClass}
-                visible={showModalImport}
-                fetchData={fetchData}
-                onCancel={handleCancelImport}
-              />
-              <Button
-                className="btn_clear"
-                style={{
-                  backgroundColor: "rgb(38, 144, 214)",
-                  color: "white",
-                  marginRight: "0px",
-                  marginLeft: "auto",
-                }}
-                onClick={() => {
-                  setShowCreateModal(true);
-                }}
-              >
-                <FontAwesomeIcon
-                  icon={faCirclePlus}
-                  style={{ fontSize: "16px", paddingRight: "7px" }}
-                />
-                Thêm nhóm
-              </Button>
-            </Row>
+                <Button
+                  className="btn_clear"
+                  style={{
+                    backgroundColor: "rgb(38, 144, 214)",
+                    color: "white",
+                    marginRight: "0px",
+                    marginLeft: "auto",
+                  }}
+                  onClick={() => {
+                    setShowCreateModal(true);
+                  }}
+                >
+                  <FontAwesomeIcon
+                    icon={faCirclePlus}
+                    style={{ fontSize: "16px", paddingRight: "7px" }}
+                  />
+                  Thêm nhóm
+                </Button>
+              </Row>
+            )}
           </div>
           <div style={{ marginTop: "20px" }}>
             {data.length > 0 ? (

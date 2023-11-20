@@ -5,12 +5,10 @@ import com.labreportapp.labreport.core.student.model.request.StClassRequest;
 import com.labreportapp.labreport.core.student.model.request.StFindClassRequest;
 import com.labreportapp.labreport.core.student.model.response.StClassCustomResponse;
 
-import java.util.List;
-
 public interface StClassService {
 
-  PageableObject<StClassCustomResponse> getAllClassByCriteriaAndIsActive(final StFindClassRequest req);
+    PageableObject<StClassCustomResponse> getAllClassByCriteriaAndIsActive(final StFindClassRequest req);
 
-  StClassCustomResponse joinClass(final StClassRequest req);
+    StClassCustomResponse joinClass(final StClassRequest req);
 
 }

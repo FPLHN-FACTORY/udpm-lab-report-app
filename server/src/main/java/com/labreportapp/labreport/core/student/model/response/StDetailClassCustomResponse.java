@@ -30,4 +30,6 @@ public class StDetailClassCustomResponse {
     private String nameTeacher;
 
     private String usernameTeacher;
+
+    private Integer statusClass;
 }
