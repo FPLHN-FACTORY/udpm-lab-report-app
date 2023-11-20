@@ -58,7 +58,7 @@ const ClassConfiguration = () => {
       key: "tenCauHinh",
     },
     {
-      title: "Chỉ số",
+      title: "Giá trị",
       dataIndex: "chiSo",
       key: "chiSo",
     },
@@ -180,6 +180,13 @@ const ClassConfiguration = () => {
             key="stt"
             pagination={false}
           />
+          <div style={{ marginTop: 15 }}>
+            <span style={{ color: "red" }}>
+              (*) Lưu ý: Số lượng mật ong cấu hình là số lượng mật ong trên{" "}
+              <b>1 điểm</b> mà sinh viên đó đạt được khi kết thúc quá trình học
+              ở lớp xưởng thực hành.
+            </span>
+          </div>
         </div>
         <ModalUpdateClassConfiguration
           loadData={loadData}

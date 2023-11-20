@@ -27,7 +27,6 @@ const StMeetingMyClass = () => {
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
   const [countMeeting, setCountMeeting] = useState(0);
-  const [classDetail, setClassDetail] = useState({});
 
   useEffect(() => {
     window.scrollTo(0, 0);

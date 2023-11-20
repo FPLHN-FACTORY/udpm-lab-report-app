@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./style-poin-my-class.css";
 import {
   faFloppyDisk,
+  faHouseChimney,
   faMarker,
   faUpload,
 } from "@fortawesome/free-solid-svg-icons";
@@ -221,7 +222,7 @@ const TeacherPointMyClass = () => {
                   style={{
                     fontSize: "17px",
                     fontWeight: 500,
-                    marginRight: "10px",
+                    marginRight: "0px",
                   }}
                 >
                   <FontAwesomeIcon icon={faMarker} /> Điểm sinh viên :
@@ -234,7 +235,7 @@ const TeacherPointMyClass = () => {
                   style={{
                     backgroundColor: "rgb(38, 144, 214)",
                     color: "white",
-                    marginLeft: "10px",
+                    marginLeft: "5px",
                   }}
                   onClick={() => setShowModalImport(true)}
                 >
@@ -243,6 +244,19 @@ const TeacherPointMyClass = () => {
                     style={{ marginRight: "7px" }}
                   />
                   Import bảng điểm
+                </Button>
+                <Button
+                  style={{
+                    backgroundColor: "rgb(38, 144, 214)",
+                    color: "white",
+                    marginLeft: "5px",
+                  }}
+                >
+                  <FontAwesomeIcon
+                    icon={faHouseChimney}
+                    style={{ marginRight: "7px" }}
+                  />
+                  Đồng bộ mật ong
                 </Button>
                 <ModalFileImportPoint
                   idClass={idClass}

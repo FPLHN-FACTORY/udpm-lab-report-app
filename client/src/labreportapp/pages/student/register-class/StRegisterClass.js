@@ -10,12 +10,10 @@ import {
   faRegistered,
 } from "@fortawesome/free-solid-svg-icons";
 import {
+  convertDateLongToString,
   convertHourAndMinuteToString,
-  convertMeetingPeriod,
-  convertMeetingPeriodToTime,
 } from "../../../helper/util.helper";
 import { faFilter, faRightToBracket } from "@fortawesome/free-solid-svg-icons";
-import { toast } from "react-toastify";
 import {
   Button,
   Col,
@@ -29,17 +27,18 @@ import {
   Modal,
   Empty,
   message,
+  Tag,
 } from "antd";
 import {
-  QuestionCircleFilled,
+  ExclamationCircleOutlined,
+  EyeInvisibleOutlined,
+  EyeTwoTone,
   ProjectOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
 import { StMyClassAPI } from "../../../api/student/StMyClassAPI";
 import { StClassAPI } from "../../../api/student/StClassAPI";
 import { StLevelAPI } from "../../../api/student/StLevelAPI";
-import { convertLongToDate } from "../../../helper/convertDate";
-import { constant } from "lodash";
 import { StMeetingPeriodAPI } from "../../../api/student/StMeetingPeriodAPI";
 
 const { Option } = Select;
@@ -56,13 +55,13 @@ const StRegisterClass = () => {
   const [listSemester, setListSemester] = useState([]);
   const [listActivity, setListActivity] = useState([]);
   const [listClass, setListClass] = useState([]);
-  const [showClassDescription, setShowClassDescription] = useState(false);
-  const [idSelected, setIdSelected] = useState(null);
   const [startTimeStudent, setStartTimeStudent] = useState("");
   const [endTimeStudent, setEndTimeStudent] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [listMeetingPeriod, setListMeetingPeriod] = useState([]);
+  const [passWord, setPassWord] = useState("");
+
   const loadDataLevel = () => {
     StLevelAPI.getLevelAll().then((response) => {
       setListLevel(response.data.data);
@@ -123,15 +122,30 @@ const StRegisterClass = () => {
   const handleJoinClass = async (record) => {
     try {
       setLoading(true);
-      const filter = {
-        idClass: record.id,
-      };
-      await StClassAPI.studentJoinClass(filter).then((response) => {
+      let check = 0;
+      if (record.passWord !== null) {
+        if (passWord === "") {
+          message.error("Mật khẩu không được để trống !");
+          check++;
+        }
+      }
+      if (check === 0) {
+        const filter = {
+          idClass: record.id,
+          passWord: passWord,
+        };
+        await StClassAPI.studentJoinClass(filter).then((response) => {
+          setLoading(false);
+          setPassWord("");
+          message.success("Tham gia lớp học thành công!");
+          navigate(`/student/my-class/post/${record.id}`);
+        });
+      } else {
+        setPassWord("");
         setLoading(false);
-        message.success("Tham gia lớp học thành công!");
-        navigate(`/student/my-class/post/${record.id}`);
-      });
+      }
     } catch (error) {
+      setPassWord("");
       setLoading(false);
       getClassByCriteriaIsAcive(semester);
     }
@@ -154,10 +168,10 @@ const StRegisterClass = () => {
       setCurrentPage(response.data.data.currentPage);
       setTotalPages(response.data.data.totalPages);
       setStartTimeStudent(
-        data && data[0] && convertLongToDate(data[0].startTimeStudent)
+        data && data[0] && convertDateLongToString(data[0].startTimeStudent)
       );
       setEndTimeStudent(
-        data && data[0] && convertLongToDate(data[0].endTimeStudent)
+        data && data[0] && convertDateLongToString(data[0].endTimeStudent)
       );
       setLoading(false);
     });
@@ -170,14 +184,7 @@ const StRegisterClass = () => {
     setClassPeriod("");
     setLevel("");
   };
-  const convertLongToDate = (dateLong) => {
-    const date = new Date(dateLong);
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const year = date.getFullYear();
-    const format = `${day}/${month}/${year}`;
-    return format;
-  };
+
   const columns = [
     {
       title: "#",
@@ -231,7 +238,7 @@ const StRegisterClass = () => {
       dataIndex: "startTime",
       key: "startTime",
       sorter: (a, b) => a.startTime - b.startTime,
-      render: (text, record) => convertLongToDate(text),
+      render: (text, record) => convertDateLongToString(text),
     },
     {
       title: "Sĩ số",
@@ -302,6 +309,18 @@ const StRegisterClass = () => {
       align: "center",
     },
     {
+      title: "Trạng thái",
+      dataIndex: "passWord",
+      key: "passWord",
+      align: "center",
+      render: (text, record) =>
+        text == null ? (
+          <Tag color="#108ee9">Công khai</Tag>
+        ) : (
+          <Tag color="#f50">Riêng tư</Tag>
+        ),
+    },
+    {
       title: "Hoạt động",
       dataIndex: "activityName",
       key: "activityName",
@@ -319,21 +338,32 @@ const StRegisterClass = () => {
       align: "center",
       render: (text, record) => (
         <>
-          <Popconfirm
-            style={{}}
-            placement={"topRight"}
-            title="Tham gia lớp học"
-            description={"Bạn có chắc chắn muốn tham gia lớp học này?"}
-            okText="Có"
-            cancelText="Không"
-            onConfirm={() => {
-              handleJoinClass(record);
-            }}
-          >
-            <Tooltip title="Tham gia lớp học">
-              <FontAwesomeIcon icon={faRightToBracket} className="icon" />
-            </Tooltip>
-          </Popconfirm>
+          {record.passWord == null ? (
+            <Popconfirm
+              style={{}}
+              placement={"topRight"}
+              title="Tham gia lớp học"
+              description={"Bạn có chắc chắn muốn tham gia lớp học này?"}
+              okText="Xác nhận"
+              cancelText="Hủy"
+              onConfirm={() => {
+                handleJoinClass(record);
+              }}
+            >
+              <Tooltip title="Tham gia lớp học">
+                <FontAwesomeIcon icon={faRightToBracket} className="icon" />
+              </Tooltip>
+            </Popconfirm>
+          ) : (
+            <>
+              <Tooltip
+                title="Tham gia lớp học"
+                onClick={() => handleShowModalJoinClass(record)}
+              >
+                <FontAwesomeIcon icon={faRightToBracket} className="icon" />
+              </Tooltip>
+            </>
+          )}
           <Tooltip title="Chi tiết">
             <FontAwesomeIcon
               icon={faEye}
@@ -372,10 +402,61 @@ const StRegisterClass = () => {
   ];
 
   const [open, setOpen] = useState(false);
-
+  const [openPassWord, setOpenPassWord] = useState(false);
+  const [classJoin, setClassJoin] = useState({});
+  const handleShowModalJoinClass = (record) => {
+    setClassJoin(record);
+    setOpenPassWord(true);
+  };
+  const handleCancel = () => {
+    setOpenPassWord(false);
+    setPassWord("");
+    setClassJoin({});
+  };
+  const handleOk = () => {
+    handleJoinClass(classJoin);
+  };
   return (
     <>
       {loading && <LoadingIndicator />}
+      <Modal
+        icon={<ExclamationCircleOutlined />}
+        title={
+          <>
+            <ExclamationCircleOutlined
+              style={{ color: "orange", backgroundColor: "white" }}
+            />{" "}
+            <span>Tham gia lớp học</span>
+          </>
+        }
+        content="Vui lòng nhập mật khẩu để vào lớp học"
+        footer={[
+          <div style={{ float: "left", marginBottom: "10px" }}>
+            Bạn có chắc chắn muốn tham gia lớp học này ?
+          </div>,
+          <Input.Password
+            key="passwordInput"
+            placeholder="Nhập mật khẩu lớp học"
+            iconRender={(visible) =>
+              visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+            }
+            onChange={(e) => {
+              setPassWord(e.target.value);
+            }}
+            value={passWord}
+            style={{ marginBottom: "10px" }}
+          />,
+          <Button key="cancelButton" onClick={handleCancel}>
+            Hủy
+          </Button>,
+          <Button key="okButton" type="primary" onClick={handleOk}>
+            Xác nhận
+          </Button>,
+        ]}
+        onCancel={handleCancel}
+        open={openPassWord}
+      />
+
       <div className="box-one">
         <div
           className="heading-box"

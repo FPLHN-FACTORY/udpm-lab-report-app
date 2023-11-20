@@ -24,4 +24,10 @@ public class ApiConstants {
     public static final String API_READ_FILE_LOG = "/api/rabbit-consumer/read-log/page";
 
     public static final String API_DOWLOAD_FILE_LOG = "/api/rabbit-consumer/download-log";
+
+    // API Honey
+
+    public static final String API_GET_ALL_CATEGORY = "/api/add-point-student/list-category";
+
+    public static final String API_ADD_POINT_LAB_REPORT_APP = "/api/add-point-student/lab-report";
 }

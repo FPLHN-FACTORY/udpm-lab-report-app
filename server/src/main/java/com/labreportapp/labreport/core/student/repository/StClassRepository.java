@@ -21,13 +21,16 @@ public interface StClassRepository extends ClassRepository {
             mp.name as class_period, mp.start_hour as start_hour, mp.start_minute as start_minute ,
             mp.end_hour as end_hour, mp.end_minute as end_minute,
             g.name, ac.name as activityName, c.teacher_id AS idTeacher,
-            s.start_time_student, s.end_time_student, c.descriptions
+            s.start_time_student, s.end_time_student, c.descriptions,
+            c.password
             FROM class c
             JOIN meeting_period mp ON mp.id = c.class_period
             JOIN activity ac ON c.activity_id = ac.id
             JOIN level g ON g.id = ac.level_id
             JOIN semester s ON ac.semester_id = s.id
+            LEFT JOIN student_classes sc ON c.id = sc.class_id AND sc.student_id = :#{#req.studentId}
             WHERE :currentTime >= s.start_time_student and :currentTime <= s.end_time_student
+             AND sc.class_id IS NULL
             AND (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR c.code LIKE %:#{#req.code}%) 
             AND (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR mp.id = :#{#req.classPeriod}) 
             AND (:#{#req.level} IS NULL OR :#{#req.level} LIKE '' OR g.id = :#{#req.level}) 
@@ -41,7 +44,9 @@ public interface StClassRepository extends ClassRepository {
               JOIN activity ac ON c.activity_id = ac.id
               JOIN level g ON g.id = ac.level_id
               JOIN semester s ON ac.semester_id = s.id
+                LEFT JOIN student_classes sc ON c.id = sc.class_id AND sc.student_id = :#{#req.studentId}
               WHERE curdate() >= FROM_UNIXTIME(s.start_time_student / 1000) and curdate() <= FROM_UNIXTIME(s.end_time_student / 1000)
+               AND sc.class_id IS NULL
               AND (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR c.code LIKE %:#{#req.code}%) 
               AND (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR mp.id = :#{#req.classPeriod}) 
               AND (:#{#req.level} IS NULL OR :#{#req.level} LIKE '' OR g.id = :#{#req.level}) 

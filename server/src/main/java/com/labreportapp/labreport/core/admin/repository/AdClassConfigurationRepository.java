@@ -10,7 +10,13 @@ import java.util.List;
 @Repository
 public interface AdClassConfigurationRepository extends ClassConfigurationRepository {
     @Query(value = """
-                    select cc.id,cc.class_size_min,cc.class_size_max, cc.point_min, cc.maximum_number_of_breaks from class_configuration cc
+                    select cc.id,
+                    cc.class_size_min,
+                    cc.class_size_max, 
+                    cc.point_min, 
+                    cc.maximum_number_of_breaks,
+                    cc.number_honey
+                    from class_configuration cc
             """, nativeQuery = true)
     AdClassConfigurationResponse getAllClassConfiguration();
 }

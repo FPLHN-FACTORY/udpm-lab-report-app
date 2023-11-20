@@ -1,6 +1,7 @@
 package com.labreportapp.labreport.core.teacher.repository;
 
 import com.labreportapp.labreport.core.teacher.model.request.TeFindPointRequest;
+import com.labreportapp.labreport.core.teacher.model.response.TePointCustomResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TePointResponse;
 import com.labreportapp.labreport.entity.Point;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -57,6 +58,19 @@ public interface TePointRepository extends JpaRepository<Point, String> {
                         ORDER BY t.name ASC
              """, nativeQuery = true)
     List<TePointResponse> getAllPointByIdClass(@Param("idClass") String idClass);
+
+    @Query(value = """
+                   SELECT sc.student_id AS id_student,
+                   sc.email AS email,
+                   p.final_point AS final_point
+                   FROM student_classes sc
+                   LEFT JOIN point p ON p.student_id = sc.student_id
+                   JOIN class c ON c.id = sc.class_id
+                   WHERE sc.class_id = :#{#idClass}
+                   AND status = 0
+                   GROUP BY p.id
+            """, nativeQuery = true)
+    List<TePointCustomResponse> getAllPointCustomByIdClass(@Param("idClass") String idClass);
 
     @Query(value = """
             SELECT * FROM point p

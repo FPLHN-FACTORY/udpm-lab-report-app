@@ -34,7 +34,7 @@ const StudentsInMyClass = () => {
   const [showModalSent, setShowModalSent] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const navigate = useNavigate();
-
+  const [lock, setLock] = useState(1);
   useEffect(() => {
     window.scrollTo(0, 0);
     featchClass(idClass);
@@ -49,6 +49,7 @@ const StudentsInMyClass = () => {
       await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
         setClassDetail(responese.data.data);
         document.title = "Thông tin lớp học | " + responese.data.data.code;
+        setLock(responese.data.data.statusClass);
         featchStudentClass(idClass);
       });
     } catch (error) {
@@ -361,7 +362,8 @@ const StudentsInMyClass = () => {
     classDetail.statusTeacherEdit === 0 &&
     data != null &&
     data.length > 0 &&
-    listIdStudent.length > 0
+    listIdStudent.length > 0 &&
+    lock === 0
   ) {
     const checkAll = listIdStudent.length === checkedList.length;
     const indeterminate =
@@ -686,7 +688,8 @@ const StudentsInMyClass = () => {
               Danh sách sinh viên:
               {classDetail.statusTeacherEdit === 0 &&
                 data != null &&
-                data.length > 0 && (
+                data.length > 0 &&
+                lock === 0 && (
                   <Button
                     onClick={handleSentStudent}
                     style={{

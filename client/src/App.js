@@ -95,6 +95,7 @@ import LoadingIndicatorNoOverlay from "./labreportapp/helper/loadingNoOverlay";
 import { useAppSelector } from "./labreportapp/app/hook";
 import { GetLoading } from "./labreportapp/app/common/Loading.reducer";
 import NotAceptable from "./labreportapp/pages/not-aceptable";
+import AdPointMyClassDetail from "./labreportapp/pages/admin/detail-class/point/AdPointMyClassDetail";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -301,6 +302,16 @@ function App() {
                 <AuthGuard>
                   <DashBoardAdmin>
                     <AdFeedbackDetailClass />
+                  </DashBoardAdmin>
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/admin/class-management/point/:idClass"
+              element={
+                <AuthGuard>
+                  <DashBoardAdmin>
+                    <AdPointMyClassDetail />
                   </DashBoardAdmin>
                 </AuthGuard>
               }

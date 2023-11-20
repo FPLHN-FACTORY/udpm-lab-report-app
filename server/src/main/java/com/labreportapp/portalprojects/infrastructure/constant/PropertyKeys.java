@@ -101,5 +101,10 @@ public class PropertyKeys {
     public static final String ROLE_HAS_CHANGE = "role.has.change";
     public static final String YOU_CANNOT_ENTER_CLASS_YET = "you.cannot.enter.class.yet";
     public static final String FILE_NOT_FOUND = "file.not.found";
+    public static final String BAN_CHUA_TAO_CAU_HINH = "ban.chua.tao.cau.hinh";
+    public static final String LOP_NAY_DA_QUY_DOI_MAT_ONG = "lop.nay.da.duoc.quy.doi.mat.ong";
+
+    public static final String CONFIRM_PASSWORD_FAILED = "confirm.password.failed";
+    public static final String CONFIRM_PASSWORD_ISEMPTY = "confirm.password.isEmpty";
 
 }

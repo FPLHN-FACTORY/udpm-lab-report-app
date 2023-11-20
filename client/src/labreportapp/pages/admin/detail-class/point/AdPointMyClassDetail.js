@@ -1,65 +1,52 @@
-import "./styletablePoint.css";
-import { useAppDispatch, useAppSelector } from "../../../../../app/hook";
-import { Button, Empty, Input, Table, Tag, message } from "antd";
-import {
-  GetPoint,
-  SetPoint,
-} from "../../../../../app/teacher/point/tePointSlice.reduce";
-import { useState } from "react";
-import { SearchOutlined } from "@ant-design/icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMarker } from "@fortawesome/free-solid-svg-icons";
+import { ControlOutlined, SearchOutlined } from "@ant-design/icons";
+import { Link, useParams } from "react-router-dom";
+import { Button, Empty, Input, Row, Tag, Table } from "antd";
+import { useEffect, useState } from "react";
+import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
+import { useAppDispatch } from "../../../../app/hook";
+import LoadingIndicator from "../../../../helper/loading";
+import { SetTTrueToggle } from "../../../../app/teacher/TeCollapsedSlice.reducer";
+import { ClassAPI } from "../../../../api/admin/class-manager/ClassAPI.api";
 
-const TablePoint = () => {
-  const [phase1, setPhase1] = useState(0);
-  const [phase2, setPhase2] = useState(0);
-  const [final, setFinal] = useState(0);
+const AdPointMyClassDetail = () => {
+  const { idClass } = useParams();
   const dispatch = useAppDispatch();
-  const dataSource = useAppSelector(GetPoint);
-  const handlePoint = (phase1, phase2, record) => {
-    const dataNew = dataSource.map((item1) => {
-      if (
-        item1.idClass === record.idClass &&
-        item1.idStudent === record.idStudent
-      ) {
-        if (phase1 === "") {
-          return {
-            ...item1,
-            checkPointPhase1: 0.0,
-            checkPointPhase2: parseFloat(phase2),
-          };
-        }
-        if (phase2 === "") {
-          return {
-            ...item1,
-            checkPointPhase1: parseFloat(phase1),
-            checkPointPhase2: 0.0,
-          };
-        }
-        if (phase1 === parseFloat(phase1)) {
-          return {
-            ...item1,
-            checkPointPhase1: parseFloat(phase1),
-            checkPointPhase2: parseFloat(phase2),
-          };
-        }
+  const [classDetail, setClassDetail] = useState({});
+  const [listPointAdmin, setListPointAdmin] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-        if (phase2 === parseFloat(phase2)) {
-          return {
-            ...item1,
-            checkPointPhase1: parseFloat(phase1),
-            checkPointPhase2: parseFloat(phase2),
-          };
-        }
-        return {
-          ...item1,
-          checkPointPhase1: parseFloat(phase1),
-          checkPointPhase2: parseFloat(phase2),
-        };
-      }
-      return item1;
-    });
-    dispatch(SetPoint(dataNew));
+  dispatch(SetTTrueToggle());
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    fetchData(idClass);
+  }, []);
+
+  const fetchData = async (idClass) => {
+    await Promise.all([await featchClass(idClass), await featchPoint(idClass)]);
   };
-  const columns = [
+
+  const featchClass = async (idClass) => {
+    try {
+      await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
+        setClassDetail(responese.data.data);
+        document.title = "Quản lý điểm | " + responese.data.data.code;
+      });
+    } catch (error) {}
+  };
+
+  const featchPoint = async (idClass) => {
+    try {
+      setLoading(false);
+      await ClassAPI.getPointByIdClass(idClass).then((response) => {
+        setListPointAdmin(response.data.data);
+        setLoading(true);
+      });
+    } catch (error) {}
+  };
+
+  const columnsPoint = [
     {
       title: "#",
       dataIndex: "stt",
@@ -204,37 +191,9 @@ const TablePoint = () => {
         if (text == null || text === "") {
           text = 0;
         }
-        return (
-          <Input
-            placeholder="Nhập điểm"
-            value={text}
-            min={0.0}
-            max={10.0}
-            step={0.1}
-            defaultValue={0.0}
-            onChange={(e) => {
-              const newValue = parseFloat(e.target.value);
-              if ((newValue >= 0 && newValue <= 10) || e.target.value === "") {
-                setPhase1(e.target.value);
-                handlePoint(e.target.value, record.checkPointPhase2, record);
-              } else {
-                message.warning(
-                  "Điểm phải là một số dương lớn hơn 0 và nhỏ hơn 10 !"
-                );
-              }
-            }}
-            readOnly
-            onDoubleClick={(e) => {
-              e.target.readOnly = false;
-              e.target.select();
-            }}
-            onBlur={(e) => {
-              e.target.readOnly = true;
-            }}
-            type="number"
-          />
-        );
+        return <span>{text}</span>;
       },
+      align: "center",
       sorter: (a, b) => a.checkPointPhase1 - b.checkPointPhase1,
     },
     {
@@ -245,43 +204,16 @@ const TablePoint = () => {
         if (text == null || text === "") {
           text = 0;
         }
-        return (
-          <Input
-            placeholder="Nhập điểm"
-            value={text}
-            min={0.0}
-            max={10.0}
-            step={0.1}
-            defaultValue={0.0}
-            onChange={(e) => {
-              const newValue = parseFloat(e.target.value);
-              if ((newValue >= 0 && newValue <= 10) || e.target.value === "") {
-                setPhase2(e.target.value);
-                handlePoint(record.checkPointPhase1, e.target.value, record);
-              } else {
-                message.warning(
-                  "Điểm phải là một số dương lớn hơn 0 và nhỏ hơn 10 !"
-                );
-              }
-            }}
-            readOnly
-            onDoubleClick={(e) => {
-              e.target.readOnly = false;
-              e.target.select();
-            }}
-            onBlur={(e) => {
-              e.target.readOnly = true;
-            }}
-            type="number"
-          />
-        );
+        return <span>{text}</span>;
       },
+      align: "center",
       sorter: (a, b) => a.checkPointPhase2 - b.checkPointPhase2,
     },
     {
       title: "Điểm final",
       dataIndex: "finalPoint",
       key: "finalPoint",
+      align: "center",
       render: (text, record) => {
         if (
           (record.checkPointPhase1 !== "" && record.checkPointPhase2 !== "") ||
@@ -393,23 +325,144 @@ const TablePoint = () => {
     },
   ];
   return (
-    <>
-      {dataSource.length > 0 ? (
-        <div className="table-teacher">
-          <Table
-            columns={columns}
-            dataSource={dataSource}
-            rowKey="idStudent"
-            pagination={false}
-          />
+    <div style={{ paddingTop: "35px" }}>
+      {!loading && <LoadingIndicator />}
+      <div className="title-meeting-managemnt-my-class">
+        <span style={{ paddingLeft: "20px" }}>
+          <ControlOutlined style={{ fontSize: "22px" }} />
+          <span
+            style={{
+              fontSize: "18px",
+              marginLeft: "10px",
+              fontWeight: "500",
+            }}
+          >
+            Bảng điều khiển
+          </span>
+          <span style={{ color: "gray" }}> - Điểm sinh viên</span>
+        </span>
+      </div>
+      <div className="box-filter-meeting-management">
+        <div
+          className="box-filter-meeting-management-son"
+          style={{ minHeight: "600px" }}
+        >
+          <div className="button-menu-teacher">
+            <div>
+              <Link
+                to={`/admin/class-management/information-class/${idClass}`}
+                className="custom-link"
+                style={{
+                  fontSize: "16px",
+                  paddingLeft: "10px",
+                  fontWeight: "bold",
+                }}
+              >
+                THÔNG TIN LỚP HỌC &nbsp;
+              </Link>
+              <Link
+                to={`/admin/class-management/meeting-management/${idClass}`}
+                className="custom-link"
+                style={{
+                  fontSize: "16px",
+                  paddingLeft: "10px",
+                  fontWeight: "bold",
+                }}
+              >
+                QUẢN LÝ LỊCH HỌC &nbsp;
+              </Link>
+              <Link
+                className="custom-link"
+                to={`/admin/class-management/feedback/${idClass}`}
+                style={{
+                  fontSize: "16px",
+                  paddingLeft: "10px",
+                  fontWeight: "bold",
+                }}
+              >
+                FEEDBACK CỦA SINH VIÊN &nbsp;
+              </Link>
+              <Link
+                to={`/admin/class-management/point/${idClass}`}
+                id="menu-checked"
+                style={{
+                  fontSize: "16px",
+                  paddingLeft: "10px",
+                  fontWeight: "bold",
+                }}
+              >
+                ĐIỂM &nbsp;
+              </Link>
+              <div
+                className="box-center"
+                style={{
+                  height: "28.5px",
+                  width: "auto",
+                  backgroundColor: "rgb(38, 144, 214)",
+                  color: "white",
+                  borderRadius: "5px",
+                  float: "right",
+                }}
+              >
+                <div
+                  className="box-center"
+                  style={{
+                    height: "28.5px",
+                    width: "auto",
+                    backgroundColor: "rgb(38, 144, 214)",
+                    color: "white",
+                    borderRadius: "5px",
+                    float: "right",
+                  }}
+                ></div>
+                <span
+                  style={{
+                    fontSize: "14px",
+                    padding: "15px",
+                    fontWeight: 500,
+                  }}
+                >
+                  {classDetail != null ? classDetail.code : ""}
+                </span>
+              </div>
+              <hr />
+            </div>
+          </div>
+          <div style={{ marginTop: "15px" }}>
+            <Row style={{ margin: "15px 0px 15px 15px" }}>
+              <span
+                style={{
+                  fontSize: "17px",
+                  fontWeight: 500,
+                  marginRight: "10px",
+                }}
+              >
+                <FontAwesomeIcon icon={faMarker} /> Điểm sinh viên :
+              </span>
+            </Row>
+
+            <div style={{ margin: "20px 0px 10px 0px" }}>
+              {listPointAdmin.length > 0 ? (
+                <div className="table-teacher">
+                  <Table
+                    columns={columnsPoint}
+                    dataSource={listPointAdmin}
+                    rowKey="idStudent"
+                    pagination={false}
+                  />
+                </div>
+              ) : (
+                <Empty
+                  imageStyle={{ height: 60 }}
+                  description={<span>Không có dữ liệu</span>}
+                />
+              )}
+            </div>
+          </div>
         </div>
-      ) : (
-        <Empty
-          imageStyle={{ height: 60 }}
-          description={<span>Không có dữ liệu</span>}
-        />
-      )}
-    </>
+      </div>
+    </div>
   );
 };
-export default TablePoint;
+
+export default AdPointMyClassDetail;

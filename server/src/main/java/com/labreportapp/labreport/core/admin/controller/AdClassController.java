@@ -13,7 +13,9 @@ import com.labreportapp.labreport.core.common.base.ResponseObject;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindClassSentStudentRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeSentStudentClassRequest;
 import com.labreportapp.labreport.core.teacher.model.response.TeClassSentStudentRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TePointStudentInforRespone;
 import com.labreportapp.labreport.core.teacher.service.TeClassService;
+import com.labreportapp.labreport.core.teacher.service.TePointSevice;
 import com.labreportapp.labreport.core.teacher.service.TeStudentClassesService;
 import com.labreportapp.labreport.infrastructure.logger.LoggerObject;
 import com.labreportapp.labreport.repository.SemesterRepository;
@@ -28,7 +30,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -71,6 +72,9 @@ public class AdClassController {
 
     @Autowired
     private SemesterHelper semesterHelper;
+
+    @Autowired
+    private TePointSevice tePointSevice;
 
     @GetMapping("")
     public ResponseObject getAll() {
@@ -219,6 +223,12 @@ public class AdClassController {
         LoggerObject loggerObject = new LoggerObject();
         loggerObject.setPathFile(pathFile);
         return new ResponseEntity<>(callApiConsumer.handleCallApiReadFileLog(loggerObject, page, size), HttpStatus.OK);
+    }
+
+    @GetMapping("/class/get-point/{idClass}")
+    public ResponseObject getPointByIdClass(@PathVariable("idClass") String idClass) {
+        List<TePointStudentInforRespone> list = tePointSevice.getPointStudentByIdClass(idClass);
+        return new ResponseObject(list);
     }
 
 }

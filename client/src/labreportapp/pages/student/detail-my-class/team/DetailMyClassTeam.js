@@ -47,6 +47,7 @@ const DetailMyClassTeam = () => {
   const [detailTeam, setDetailTeam] = useState(null);
   const [showHistory, setShowHistory] = useState(false);
   const navigate = useNavigate();
+  const [lock, setLock] = useState(1);
 
   useEffect(() => {
     setIsLoading(true);
@@ -58,6 +59,7 @@ const DetailMyClassTeam = () => {
   const loadDataDetailClass = () => {
     StMyTeamClassAPI.detailClass(id).then((response) => {
       setDetailClass(response.data.data);
+      setLock(response.data.data.statusClass);
     });
   };
 
@@ -479,30 +481,31 @@ const DetailMyClassTeam = () => {
                       description={<span>Không có dữ liệu</span>}
                     />
                   )}
-
-                  <div style={{ marginTop: "8px", paddingBottom: "40px" }}>
-                    <Popconfirm
-                      title="Rời nhóm"
-                      description="Bạn có chắc chắn muốn rời nhóm này?"
-                      onConfirm={() => {
-                        outTeam();
-                      }}
-                      okText="Có"
-                      cancelText="Không"
-                      placement="topLeft"
-                    >
-                      <Button
-                        style={{ backgroundColor: "#E2B357" }}
-                        className="btnRoiNhom"
+                  {lock === 0 && (
+                    <div style={{ marginTop: "8px", paddingBottom: "40px" }}>
+                      <Popconfirm
+                        title="Rời nhóm"
+                        description="Bạn có chắc chắn muốn rời nhóm này?"
+                        onConfirm={() => {
+                          outTeam();
+                        }}
+                        okText="Có"
+                        cancelText="Không"
+                        placement="topLeft"
                       >
-                        <FontAwesomeIcon
-                          icon={faRightFromBracket}
-                          style={{ paddingRight: "8px" }}
-                        />
-                        Rời nhóm
-                      </Button>
-                    </Popconfirm>
-                  </div>
+                        <Button
+                          style={{ backgroundColor: "#E2B357" }}
+                          className="btnRoiNhom"
+                        >
+                          <FontAwesomeIcon
+                            icon={faRightFromBracket}
+                            style={{ paddingRight: "8px" }}
+                          />
+                          Rời nhóm
+                        </Button>
+                      </Popconfirm>
+                    </div>
+                  )}
                 </>
               </div>
             )}
@@ -537,32 +540,33 @@ const DetailMyClassTeam = () => {
                       description={<span>Không có dữ liệu</span>}
                     />
                   )}
-
-                  <div
-                    className="button-leave"
-                    style={{ marginTop: "11px", textAlign: "right" }}
-                  >
-                    <Popconfirm
-                      placement="topRight"
-                      description="Bạn có chắc chắn muốn rời lớp học này chứ?"
-                      okText="Có"
-                      cancelText="Không"
-                      onConfirm={() => handleLeaveClass()}
+                  {lock === 0 && (
+                    <div
+                      className="button-leave"
+                      style={{ marginTop: "11px", textAlign: "right" }}
                     >
-                      <Button
-                        style={{
-                          backgroundColor: "rgb(231, 68, 68)",
-                          color: "white",
-                        }}
+                      <Popconfirm
+                        placement="topRight"
+                        description="Bạn có chắc chắn muốn rời lớp học này chứ?"
+                        okText="Có"
+                        cancelText="Không"
+                        onConfirm={() => handleLeaveClass()}
                       >
-                        <FontAwesomeIcon
-                          icon={faSignOut}
-                          style={{ marginRight: "7px" }}
-                        />{" "}
-                        Rời khỏi lớp học
-                      </Button>
-                    </Popconfirm>
-                  </div>
+                        <Button
+                          style={{
+                            backgroundColor: "rgb(231, 68, 68)",
+                            color: "white",
+                          }}
+                        >
+                          <FontAwesomeIcon
+                            icon={faSignOut}
+                            style={{ marginRight: "7px" }}
+                          />{" "}
+                          Rời khỏi lớp học
+                        </Button>
+                      </Popconfirm>
+                    </div>
+                  )}
                 </>
               </div>
             )}

@@ -15,6 +15,8 @@ import com.labreportapp.labreport.util.LoggerUtil;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import jakarta.validation.Valid;
+import lombok.Synchronized;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +24,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,6 +48,7 @@ public class AdSemesterServiceImpl implements AdSemesterService {
     }
 
     @Override
+    @Synchronized
     public Semester createSermester(@Valid AdCreateSemesterRequest obj) {
         Semester semester = formUtils.convertToObject(Semester.class, obj);
         List<Semester> semesterList = adSemesterRepository.findAllSemester();
@@ -56,6 +61,10 @@ public class AdSemesterServiceImpl implements AdSemesterService {
                     obj.getStartTimeStudent() > obj.getEndTimeStudent()) {
                 throw new RestApiException(Message.TIME_STUDENT_SEMESTER_OVERLOAD);
             }
+            semester1.setStartTime(DateUtils.truncate(new Date(semester1.getStartTime()), Calendar.DATE).getTime());
+            semester1.setEndTime(DateUtils.truncate(new Date(semester1.getEndTime()), Calendar.DATE).getTime());
+            semester1.setStartTimeStudent(DateUtils.truncate(new Date(semester1.getStartTimeStudent()), Calendar.DATE).getTime());
+            semester1.setEndTimeStudent(DateUtils.truncate(new Date(semester1.getEndTimeStudent()), Calendar.DATE).getTime());
         }
         semester.setStatusFeedBack(StatusFeedBack.CHUA_FEEDBACK);
         loggerUtil.sendLogScreen("Đã thêm mới học kỳ " + obj.getName(), "");
@@ -119,10 +128,10 @@ public class AdSemesterServiceImpl implements AdSemesterService {
         loggerUtil.sendLogScreen(stringBuilder.toString(), "");
 
         semester.setName(obj.getName());
-        semester.setStartTime(obj.getStartTime());
-        semester.setEndTime(obj.getEndTime());
-        semester.setStartTimeStudent(obj.getStartTimeStudent());
-        semester.setEndTimeStudent(obj.getEndTimeStudent());
+        semester.setStartTime(DateUtils.truncate(new Date(obj.getStartTime()), Calendar.DATE).getTime());
+        semester.setEndTime(DateUtils.truncate(new Date(obj.getEndTime()), Calendar.DATE).getTime());
+        semester.setStartTimeStudent(DateUtils.truncate(new Date(obj.getStartTimeStudent()), Calendar.DATE).getTime());
+        semester.setEndTimeStudent(DateUtils.truncate(new Date(obj.getEndTimeStudent()), Calendar.DATE).getTime());
         return adSemesterRepository.save(semester);
     }
 
