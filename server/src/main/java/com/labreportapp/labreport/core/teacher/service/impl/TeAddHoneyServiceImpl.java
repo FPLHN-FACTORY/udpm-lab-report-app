@@ -13,6 +13,7 @@ import com.labreportapp.labreport.repository.ClassConfigurationRepository;
 import com.labreportapp.labreport.repository.ClassRepository;
 import com.labreportapp.labreport.util.CallApiHoney;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
+import com.labreportapp.portalprojects.infrastructure.exception.rest.CustomException;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -52,10 +53,10 @@ public class TeAddHoneyServiceImpl implements TeAddHoneyService {
     @Override
     public Boolean addHoney(String idClass, String categoryId) {
         Optional<Class> classFind = classRepository.findById(idClass);
-        if(!classFind.isPresent()) {
-            throw new RestApiException(Message.CLASS_NOT_EXISTS);
+        if (!classFind.isPresent()) {
+            throw new CustomException(Message.CLASS_NOT_EXISTS);
         }
-        if(classFind.get().getStatusHoneyPlus() == StatusHoneyPlus.DA_CONG) {
+        if (classFind.get().getStatusHoneyPlus() == StatusHoneyPlus.DA_CONG) {
             throw new RestApiException(Message.LOP_NAY_DA_QUY_DOI_MAT_ONG);
         }
         List<TePointCustomResponse> listResponse = tePointRepository.getAllPointCustomByIdClass(idClass);
@@ -75,8 +76,10 @@ public class TeAddHoneyServiceImpl implements TeAddHoneyService {
         request.setCode("MODULE_LAB_REPORT_APP");
         request.setListStudent(listStudent);
         request.setCategoryId(categoryId);
+        System.out.println(request.toString() + " aaaaaaaaaaaaaaa");
+        Boolean check = callApiHoney.addPointStudentLabReportApp(request);
         classFind.get().setStatusHoneyPlus(StatusHoneyPlus.DA_CONG);
         classRepository.save(classFind.get());
-        return callApiHoney.addPointStudentLabReportApp(request);
+        return check;
     }
 }

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 @RestController
-@RequestMapping("/add-honey")
+@RequestMapping("/teacher/add-honey")
 public class TeAddHoneyController {
 
     @Autowired
