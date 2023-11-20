@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.labreportapp.labreport.core.common.base.CategoryHoneyResponse;
 import com.labreportapp.labreport.core.common.base.HoneyConversionRequest;
+import com.labreportapp.labreport.core.common.base.ResponseObject;
 import com.labreportapp.labreport.infrastructure.apiconstant.ApiConstants;
 import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,17 +40,18 @@ public class CallApiHoney {
             String apiUrl = domainHoney + ApiConstants.API_GET_ALL_CATEGORY;
 
             HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+
             String authorizationToken = "Bearer " + labReportAppSession.getToken();
             headers.set("Authorization", authorizationToken);
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
 
             ResponseEntity<List<CategoryHoneyResponse>> responseEntity =
-                    restTemplate.exchange(apiUrl, HttpMethod.GET, httpEntity,
+                    restTemplate.exchange(apiUrl, HttpMethod.GET, null,
                             new ParameterizedTypeReference<List<CategoryHoneyResponse>>() {
                             });
 
             List<CategoryHoneyResponse> response = responseEntity.getBody();
+
             return response;
         } catch (Exception e) {
             e.printStackTrace();

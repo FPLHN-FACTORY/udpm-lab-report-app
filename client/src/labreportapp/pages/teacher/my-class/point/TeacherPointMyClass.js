@@ -27,6 +27,7 @@ import {
   SetLoadingFalse,
   SetLoadingTrue,
 } from "../../../../app/common/Loading.reducer";
+import ModalAddHoney from "./modal-add-honey/ModalAddHoney";
 
 const TeacherPointMyClass = () => {
   const { idClass } = useParams();
@@ -42,6 +43,7 @@ const TeacherPointMyClass = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     fetchData(idClass);
+    getAllCategory();
     return () => {
       dispatch(SetPoint([]));
     };
@@ -49,6 +51,14 @@ const TeacherPointMyClass = () => {
 
   const fetchData = async (idClass) => {
     await Promise.all([await featchClass(idClass), await featchPoint(idClass)]);
+  };
+
+  const [listCategory, setListCategory] = useState([]);
+
+  const getAllCategory = () => {
+    TeacherPointAPI.getAllCategory().then((response) => {
+      setListCategory(response.data.data);
+    });
   };
 
   const featchPoint = async (idClass) => {
@@ -95,6 +105,16 @@ const TeacherPointMyClass = () => {
 
   const handleCancelImport = () => {
     setShowModalImport(false);
+  };
+
+  const [visibleAddHoney, setVisibleAddHoney] = useState(false);
+
+  const openModalAddHoney = () => {
+    setVisibleAddHoney(true);
+  };
+
+  const cancelAddHoney = () => {
+    setVisibleAddHoney(false);
   };
 
   const data = useAppSelector(GetPoint);
@@ -251,12 +271,13 @@ const TeacherPointMyClass = () => {
                     color: "white",
                     marginLeft: "5px",
                   }}
+                  onClick={openModalAddHoney}
                 >
                   <FontAwesomeIcon
                     icon={faHouseChimney}
                     style={{ marginRight: "7px" }}
                   />
-                  Đồng bộ mật ong
+                  Quy đổi mật ong
                 </Button>
                 <ModalFileImportPoint
                   idClass={idClass}
@@ -287,6 +308,11 @@ const TeacherPointMyClass = () => {
           </div>
         </div>
       </div>
+      <ModalAddHoney
+        visible={visibleAddHoney}
+        onCancel={cancelAddHoney}
+        listCategory={listCategory}
+      />
     </>
   );
 };

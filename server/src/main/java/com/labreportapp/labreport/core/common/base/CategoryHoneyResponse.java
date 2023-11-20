@@ -16,5 +16,4 @@ public class CategoryHoneyResponse {
 
     private String name;
 
-    private Integer status;
 }
