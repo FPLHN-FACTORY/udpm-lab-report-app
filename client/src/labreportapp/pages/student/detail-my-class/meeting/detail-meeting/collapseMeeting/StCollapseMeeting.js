@@ -8,7 +8,7 @@ import { StudentTempalteReportAPI } from "../../../../../../api/student/StTempla
 import LoadingIndicator from "../../../../../../helper/loading";
 import LoadingIndicatorNoOverlay from "../../../../../../helper/loadingNoOverlay";
 
-const CollapseMeeting = ({ items }) => {
+const CollapseMeeting = ({ items, statusClass }) => {
   const [activePanel, setActivePanel] = useState(null);
   const [edit, setEdit] = useState(false);
   const { idMeeting } = useParams();
@@ -54,7 +54,6 @@ const CollapseMeeting = ({ items }) => {
       });
     } catch (error) {
       setLoading(true);
-      console.log(error);
     }
   };
 
@@ -91,9 +90,7 @@ const CollapseMeeting = ({ items }) => {
         }
         setLoading(true);
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const update = async () => {
@@ -120,9 +117,7 @@ const CollapseMeeting = ({ items }) => {
         setLoadingOverlay(false);
         clear();
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleCancel = () => {
@@ -205,7 +200,7 @@ const CollapseMeeting = ({ items }) => {
                     />
                   </Col>
                 </Row>
-                {edit && role === 0 && (
+                {edit && role === 0 && statusClass === 0 && (
                   <>
                     <div style={{ marginTop: 15, textAlign: "right" }}>
                       {" "}

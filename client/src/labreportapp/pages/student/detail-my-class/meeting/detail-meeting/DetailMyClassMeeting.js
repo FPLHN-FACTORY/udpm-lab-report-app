@@ -2,7 +2,6 @@ import { Row, Col, Empty } from "antd";
 import { useParams } from "react-router";
 import "./style-detail-my-class-meeting.css";
 import { BookOutlined, UnorderedListOutlined } from "@ant-design/icons";
-import LoadingIndicator from "../../../../../helper/loading";
 import { useEffect, useState } from "react";
 import { StudentMeetingAPI } from "../../../../../api/student/StMeetingAPI";
 import CollapseMeeting from "../detail-meeting/collapseMeeting/StCollapseMeeting";
@@ -14,7 +13,7 @@ const StTeamMeeting = () => {
   const { idMeeting } = useParams();
   const [meeting, setMeeting] = useState({});
   const [team, setTeam] = useState(["a", "b"]);
-
+  const [lock, setLock] = useState(1);
   useEffect(() => {
     window.scrollTo(0, 0);
     featchMeeting(idMeeting);
@@ -25,6 +24,7 @@ const StTeamMeeting = () => {
       await StudentMeetingAPI.getDetailByIdMeeting(id).then((response) => {
         setMeeting(response.data.data);
         document.title = "Bảng điều khiển - " + response.data.data.name;
+        setLock(response.data.data.statusClass);
         featchTeams(response.data.data.idClass);
       });
     } catch (error) {}
@@ -143,9 +143,7 @@ const StTeamMeeting = () => {
               </>
             )}
             {team.length > 0 && (
-              <>
-                <CollapseMeeting items={team}></CollapseMeeting>
-              </>
+              <CollapseMeeting items={team} statusClass={lock} />
             )}
           </div>
         </div>

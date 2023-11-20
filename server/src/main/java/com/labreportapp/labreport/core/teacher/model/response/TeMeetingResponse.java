@@ -52,4 +52,7 @@ public interface TeMeetingResponse {
     @Value("#{target.status_meeting}")
     Integer getStatusMeeting();
 
+    @Value("#{target.status_class}")
+    Integer getStatusClass();
+
 }

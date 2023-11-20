@@ -271,6 +271,17 @@ const AdFeedbackDetailClass = () => {
               >
                 FEEDBACK CỦA SINH VIÊN &nbsp;
               </Link>
+              <Link
+                className="custom-link"
+                to={`/admin/class-management/point/${id}`}
+                style={{
+                  fontSize: "16px",
+                  paddingLeft: "10px",
+                  fontWeight: "bold",
+                }}
+              >
+                ĐIỂM &nbsp;
+              </Link>
               <div
                 className="box-center"
                 style={{
@@ -282,6 +293,17 @@ const AdFeedbackDetailClass = () => {
                   float: "right",
                 }}
               >
+                <div
+                  className="box-center"
+                  style={{
+                    height: "28.5px",
+                    width: "auto",
+                    backgroundColor: "rgb(38, 144, 214)",
+                    color: "white",
+                    borderRadius: "5px",
+                    float: "right",
+                  }}
+                ></div>
                 <span
                   style={{
                     fontSize: "14px",

@@ -315,9 +315,9 @@ const StRegisterClass = () => {
       align: "center",
       render: (text, record) =>
         text == null ? (
-          <Tag color="#108ee9">Công khai {text}</Tag>
+          <Tag color="#108ee9">Công khai</Tag>
         ) : (
-          <Tag color="#f50">Riêng tư {text}</Tag>
+          <Tag color="#f50">Riêng tư</Tag>
         ),
     },
     {

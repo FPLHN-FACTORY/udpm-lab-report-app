@@ -50,28 +50,28 @@ public interface TeTeamsRepositoty extends JpaRepository<Team, String> {
                """, nativeQuery = true)
     List<TeTeamsRespone> findTeamsByIdClass(@Param("req") TeFindStudentClasses req);
 
-    @Query(value = """
-            SELECT  DISTINCT 
-                t.id AS idTeam,
-                t.name AS nameTeam,
-                m.id AS idMeeting,
-                m.name AS nameMeeting,
-                m.descriptions AS descriptionsMeeting,
-                t.name  AS nameTeam,
-                t.subject_name AS subjectName,
-                m.created_date AS createdDate,
-                h.id AS idHomeWork,
-                h.descriptions AS descriptionsHomeWork,
-                n.id AS idNote,
-                n.descriptions AS descriptionsNote,
-                m.class_id AS class_id
-            FROM team t 
-            JOIN meeting m ON m.class_id = t.class_id
-            LEFT JOIN home_work h ON h.team_id = t.id
-            LEFT JOIN note n ON n.team_id = t.id
-            WHERE m.class_id = :#{#req.idClass} and m.id = :#{#req.idMeeting}
-                     """, nativeQuery = true)
-    List<TeHomeWorkAndNoteMeetingResponse> findTeamAndHomeWorkAndNoteByIdClassAndIdMeeting(@Param("req") TeFindMeetingRequest req);
+//    @Query(value = """
+//            SELECT  DISTINCT
+//                t.id AS idTeam,
+//                t.name AS nameTeam,
+//                m.id AS idMeeting,
+//                m.name AS nameMeeting,
+//                m.descriptions AS descriptionsMeeting,
+//                t.name  AS nameTeam,
+//                t.subject_name AS subjectName,
+//                m.created_date AS createdDate,
+//                h.id AS idHomeWork,
+//                h.descriptions AS descriptionsHomeWork,
+//                n.id AS idNote,
+//                n.descriptions AS descriptionsNote,
+//                m.class_id AS class_id
+//            FROM team t
+//            JOIN meeting m ON m.class_id = t.class_id
+//            LEFT JOIN home_work h ON h.team_id = t.id
+//            LEFT JOIN note n ON n.team_id = t.id
+//            WHERE m.class_id = :#{#req.idClass} and m.id = :#{#req.idMeeting}
+//                     """, nativeQuery = true)
+//    List<TeHomeWorkAndNoteMeetingResponse> findTeamAndHomeWorkAndNoteByIdClassAndIdMeeting(@Param("req") TeFindMeetingRequest req);
 
     @Query(value = """
              SELECT  * FROM team t WHERE t.class_id = :#{#idClass} 

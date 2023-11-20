@@ -38,7 +38,8 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                 mp.end_hour AS end_hour, mp.end_minute AS end_minute,
                 m.class_id AS class_id,
                 m.teacher_id AS teacher_id,
-                m.status_meeting AS status_meeting
+                m.status_meeting AS status_meeting,
+                 c.status_class AS status_class
             FROM meeting m
             JOIN meeting_period mp ON mp.id = m.meeting_period
             JOIN class c ON c.id = m.class_id
@@ -60,8 +61,10 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                 m.notes AS notes,
                 m.class_id AS class_id,
                 m.teacher_id AS teacher_id,
-                 m.status_meeting AS status_meeting
+                 m.status_meeting AS status_meeting,
+                 c.status_class AS status_class
             FROM meeting m
+            JOIN class c ON c.id = m.class_id
             JOIN meeting_period mp ON mp.id = m.meeting_period
             WHERE m.id = :#{#req.idMeeting}
                      """, nativeQuery = true)

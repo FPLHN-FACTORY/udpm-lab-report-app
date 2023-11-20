@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTableList } from "@fortawesome/free-solid-svg-icons";
 import LoadingIndicatorNoOverlay from "../../../../../helper/loadingNoOverlay";
+import { convertDateLongToString } from "../../../../../helper/util.helper";
 
 const TeamInMeeting = () => {
   const { idMeeting } = useParams();
@@ -19,6 +20,7 @@ const TeamInMeeting = () => {
   const [loading, setLoading] = useState(false);
   const [isLoadingWait, setIsLoadingWait] = useState(false);
   const navigate = useNavigate();
+  const [lock, setLock] = useState(1);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -34,6 +36,7 @@ const TeamInMeeting = () => {
           setMeeting(response.data.data);
           featchTeams(response.data.data.idClass);
           document.title = "Bảng điều khiển - " + response.data.data.name;
+          setLock(response.data.data.statusClass);
         }
       );
     } catch (error) {
@@ -46,8 +49,8 @@ const TeamInMeeting = () => {
   const featchTeams = async (idClass) => {
     try {
       await TeacherTeamsAPI.getTeamsByIdClass(idClass, idMeeting).then(
-        (responese) => {
-          setTeam(responese.data.data);
+        (response) => {
+          setTeam(response.data.data);
           setLoading(true);
           setIsLoadingWait(true);
         }
@@ -55,14 +58,6 @@ const TeamInMeeting = () => {
     } catch (error) {}
   };
 
-  const convertLongToDate = (dateLong) => {
-    const date = new Date(dateLong);
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const year = date.getFullYear();
-    const format = `${day}/${month}/${year}`;
-    return format;
-  };
   return (
     <>
       {!loading && <LoadingIndicator />}
@@ -129,7 +124,7 @@ const TeamInMeeting = () => {
                   style={{ lineHeight: "42px", color: "grey", float: "right" }}
                 >
                   <span>
-                    Thời gian: {convertLongToDate(meeting.meetingDate)} -{" "}
+                    Thời gian: {convertDateLongToString(meeting.meetingDate)} -{" "}
                     {meeting.meetingPeriod}
                   </span>
                 </div>
@@ -154,7 +149,11 @@ const TeamInMeeting = () => {
               </span>
             </div>
             <div style={{ width: "auto", padding: "10px" }}>
-              <CollapseTeam team={team} featchMeeting={featchMeeting} />
+              <CollapseTeam
+                team={team}
+                featchMeeting={featchMeeting}
+                statusClass={lock}
+              />
             </div>
           </div>
         </div>

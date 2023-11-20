@@ -19,6 +19,7 @@ import { SetTTrueToggle } from "../../../../app/student/StCollapsedSlice.reducer
 import { GetUserCurrent } from "../../../../app/common/UserCurrent.reducer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAnglesRight } from "@fortawesome/free-solid-svg-icons";
+import { convertDateLongToString } from "../../../../helper/util.helper";
 
 const StPostDetailClass = () => {
   const dispatch = useAppDispatch();
@@ -94,17 +95,6 @@ const StPostDetailClass = () => {
       }, [1000]);
     }
   };
-  const convertLongToDate = (dateLong) => {
-    const date = new Date(dateLong);
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const year = date.getFullYear();
-    const hour = String(date.getHours() + 1).padStart(2, "0");
-    const minute = String(date.getMinutes() + 1).padStart(2, "0");
-    const format = `${day}/${month}/${year}` + ` ${hour}:${minute}`;
-    return format;
-  };
-
   const handleSeeMore = () => {
     if (currentPage < totalPage) {
       setCurrentPage((pre) => pre + 1);
@@ -248,7 +238,7 @@ const StPostDetailClass = () => {
                                               marginLeft: "7px",
                                             }}
                                           >
-                                            {convertLongToDate(
+                                            {convertDateLongToString(
                                               item.createdDate
                                             )}
                                           </span>

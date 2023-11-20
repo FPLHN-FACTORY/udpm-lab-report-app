@@ -261,4 +261,11 @@ export class ClassAPI {
       params: filter,
     });
   };
+
+  static getPointByIdClass = (idClass) => {
+    return request({
+      method: "GET",
+      url: `/admin/class-managerment/class/get-point/` + idClass,
+    });
+  };
 }

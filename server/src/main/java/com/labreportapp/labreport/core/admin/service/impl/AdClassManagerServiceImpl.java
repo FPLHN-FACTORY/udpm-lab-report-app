@@ -38,7 +38,6 @@ import com.labreportapp.labreport.repository.LevelRepository;
 import com.labreportapp.labreport.util.CallApiIdentity;
 import com.labreportapp.labreport.util.ClassHelper;
 import com.labreportapp.labreport.util.CompareUtil;
-import com.labreportapp.labreport.util.FormUtils;
 import com.labreportapp.labreport.util.LoggerUtil;
 import com.labreportapp.labreport.util.SemesterHelper;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
@@ -47,6 +46,7 @@ import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiExce
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.Synchronized;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -60,6 +60,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -73,8 +75,6 @@ import java.util.stream.Collectors;
 @Validated
 public class
 AdClassManagerServiceImpl implements AdClassService {
-
-    private FormUtils formUtils = new FormUtils();
 
     @Autowired
     private AdClassRepository repository;
@@ -153,11 +153,11 @@ AdClassManagerServiceImpl implements AdClassService {
         classNew.setPassword(null);
         classNew.setStatusTeacherEdit(StatusTeacherEdit.values()[request.getStatusTeacherEdit()]);
         Optional<Activity> activityFind = adActivityRepository.findById(request.getActivityId());
-        if (!activityFind.isPresent()) {
+        if (activityFind.isEmpty()) {
             throw new RestApiException(Message.ACTIVITY_NOT_EXISTS);
         }
         classNew.setActivityId(request.getActivityId());
-        classNew.setStartTime(request.getStartTime());
+        classNew.setStartTime(DateUtils.truncate(new Date(request.getStartTime()), Calendar.DATE).getTime());
         if (!request.getTeacherId().equals("")) {
             classNew.setTeacherId(request.getTeacherId());
         }
@@ -186,12 +186,12 @@ AdClassManagerServiceImpl implements AdClassService {
         }
         StringBuilder stringBuilder = new StringBuilder();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        stringBuilder.append("Đã tạo lớp học " + adClassCustomResponse.getCode());
-        stringBuilder.append(", sĩ số là: " + adClassCustomResponse.getClassSize());
-        stringBuilder.append("ca học của lớp là: " + adClassCustomResponse.getClassPeriod());
-        stringBuilder.append(", thuộc hoạt động: " + adClassCustomResponse.getActivityName());
-        stringBuilder.append(", thời gian bắt đầu học là: " + sdf.format(adClassCustomResponse.getStartTime()));
-        stringBuilder.append(", quyền giảng viên chỉnh sửa là: " + (adClassCustomResponse.getStatusTeacherEdit() == 0 ? "Cho phép" : "Không cho phép"));
+        stringBuilder.append("Đã tạo lớp học ").append(adClassCustomResponse.getCode());
+        stringBuilder.append(", sĩ số là: ").append(adClassCustomResponse.getClassSize());
+        stringBuilder.append("ca học của lớp là: ").append(adClassCustomResponse.getClassPeriod());
+        stringBuilder.append(", thuộc hoạt động: ").append(adClassCustomResponse.getActivityName());
+        stringBuilder.append(", thời gian bắt đầu học là: ").append(sdf.format(adClassCustomResponse.getStartTime()));
+        stringBuilder.append(", quyền giảng viên chỉnh sửa là: ").append(adClassCustomResponse.getStatusTeacherEdit() == 0 ? "Cho phép" : "Không cho phép");
         String nameSemester = loggerUtil.getNameSemesterByIdClass(adClassCustomResponse.getId());
         loggerUtil.sendLogScreen(stringBuilder.toString(), nameSemester);
         loggerUtil.sendLogStreamClass(stringBuilder.toString(), adClassCustomResponse.getCode(), nameSemester);
@@ -224,7 +224,7 @@ AdClassManagerServiceImpl implements AdClassService {
         String nameSemester = loggerUtil.getNameSemesterByIdClass(id);
         loggerUtil.sendLogScreen(stringBuilder.toString(), nameSemester);
         loggerUtil.sendLogStreamClass(stringBuilder.toString(), classNew.getCode(), nameSemester);
-        classNew.setStartTime(request.getStartTime());
+        classNew.setStartTime(DateUtils.truncate(new Date(request.getStartTime()), Calendar.DATE).getTime());
         MeetingPeriod meetingPeriodFind = null;
         if (request.getClassPeriod() != null) {
             meetingPeriodFind = adMeetingPeriodRepository.findById(request.getClassPeriod()).get();
@@ -232,7 +232,7 @@ AdClassManagerServiceImpl implements AdClassService {
         }
         classNew.setStatusTeacherEdit(StatusTeacherEdit.values()[request.getStatusTeacherEdit()]);
         Optional<Activity> activityFind = adActivityRepository.findById(request.getActivityId());
-        if (!activityFind.isPresent()) {
+        if (activityFind.isEmpty()) {
             throw new RestApiException(Message.ACTIVITY_NOT_EXISTS);
         }
         classNew.setActivityId(request.getActivityId());
@@ -258,7 +258,6 @@ AdClassManagerServiceImpl implements AdClassService {
         adClassCustomResponse.setStatusTeacherEdit(classNew.getStatusTeacherEdit() == StatusTeacherEdit.CHO_PHEP ? 0 : 1);
         if (request.getTeacherId() != null && !request.getTeacherId().equals("")) {
             adClassCustomResponse.setTeacherId(request.getTeacherId());
-
             SimpleResponse response = callApiIdentity.handleCallApiGetUserById(request.getTeacherId());
             adClassCustomResponse.setUserNameTeacher(response.getUserName());
         }
@@ -368,7 +367,6 @@ AdClassManagerServiceImpl implements AdClassService {
                 .collect(Collectors.toList());
         List<SimpleResponse> listSimpleResponse = callApiIdentity.handleCallApiGetListUserByListId(distinctTeacherIds);
         List<AdExportExcelClassCustom> listCustom = new ArrayList<>();
-        List<AdExportExcelClassCustom> tempListCustom = new ArrayList<>();
         listClassResponse.forEach(res -> {
             if (res.getTeacherId() != null) {
                 listSimpleResponse.forEach(simple -> {
@@ -464,7 +462,7 @@ AdClassManagerServiceImpl implements AdClassService {
                 Class classNew = new Class();
                 classNew.setClassSize(0);
                 classNew.setStatusClass(StatusClass.OPEN);
-                classNew.setStartTime(request.getStartTime());
+                classNew.setStartTime(DateUtils.truncate(new Date(request.getStartTime()), Calendar.DATE).getTime());
                 classNew.setActivityId(request.getActivityId());
                 classNew.setCode(codeActivity + "_" + (count++));
                 classNew.setPassword(null);

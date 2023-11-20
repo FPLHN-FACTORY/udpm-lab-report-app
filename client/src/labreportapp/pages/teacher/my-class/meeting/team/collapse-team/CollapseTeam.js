@@ -11,7 +11,7 @@ import { faUsersRectangle } from "@fortawesome/free-solid-svg-icons";
 import { convertStatusByHourMinute } from "../../../../../../helper/util.helper";
 const { Panel } = Collapse;
 
-const CollapseTeam = ({ team, featchMeeting }) => {
+const CollapseTeam = ({ team, featchMeeting, statusClass }) => {
   const [activePanel, setActivePanel] = useState(null);
   const [edit, setEdit] = useState(false);
   const { idMeeting } = useParams();
@@ -267,28 +267,26 @@ const CollapseTeam = ({ team, featchMeeting }) => {
                     <TextArea rows={4} value={template.descriptions} />
                   </Col>
                 </Row>
-                {edit && (
-                  <>
-                    <div style={{ paddingTop: "15px", textAlign: "center" }}>
-                      <Button
-                        className="btn_filter"
-                        style={{
-                          marginRight: "15px",
-                          width: "100px",
-                        }}
-                        onClick={handleCancel}
-                      >
-                        Hủy
-                      </Button>{" "}
-                      <Button
-                        className="btn_clean"
-                        style={{ width: "100px" }}
-                        onClick={update}
-                      >
-                        Cập nhật
-                      </Button>
-                    </div>
-                  </>
+                {edit && statusClass === 0 && (
+                  <div style={{ paddingTop: "15px", textAlign: "center" }}>
+                    <Button
+                      className="btn_filter"
+                      style={{
+                        marginRight: "15px",
+                        width: "100px",
+                      }}
+                      onClick={handleCancel}
+                    >
+                      Hủy
+                    </Button>{" "}
+                    <Button
+                      className="btn_clean"
+                      style={{ width: "100px" }}
+                      onClick={update}
+                    >
+                      Cập nhật
+                    </Button>
+                  </div>
                 )}
               </div>
             </Spin>

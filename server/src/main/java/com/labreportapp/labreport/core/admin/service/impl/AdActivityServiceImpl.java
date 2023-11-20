@@ -103,7 +103,7 @@ public class AdActivityServiceImpl implements AdActivityService {
     @Override
     public Activity updateActivity(@Valid AdUpdateActivityRequest command) {
         Optional<Activity> optional = adActivityRepository.findById(command.getId());
-        if (!optional.isPresent()) {
+        if (optional.isEmpty()) {
             throw new RestApiException(Message.ACTIVITY_NOT_EXISTS);
         }
         String name = adActivityRepository.getMaActivityUpdate(command.getName(), command.getId(), command.getSemesterId());
@@ -165,7 +165,6 @@ public class AdActivityServiceImpl implements AdActivityService {
         activity.setSemesterId(command.getSemesterId());
         activity.setDescriptions(command.getDescriptions());
         activity.setAllowUseTrello(AllowUseTrello.values()[command.getAllowUseTrello()]);
-
         return adActivityRepository.save(activity);
     }
 
@@ -187,7 +186,7 @@ public class AdActivityServiceImpl implements AdActivityService {
     @Override
     public Activity getOneByIdActivity(String id) {
         Optional<Activity> optional = adActivityRepository.findById(id);
-        if (!optional.isPresent()) {
+        if (optional.isEmpty()) {
             throw new RestApiException(Message.ACTIVITY_NOT_EXISTS);
         }
         return optional.get();

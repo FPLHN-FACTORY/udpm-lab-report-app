@@ -46,7 +46,6 @@ import {
   UpdateClass,
 } from "../../../../app/teacher/my-class/teClassSlice.reduce";
 import ModalFullScreen from "./modal-full-screen/ModalFullScreen";
-import { GetUserCurrent } from "../../../../app/common/UserCurrent.reducer";
 import { useNavigate } from "react-router-dom";
 
 const TeacherPostMyClass = () => {
@@ -63,6 +62,7 @@ const TeacherPostMyClass = () => {
   const [totalPage, setTotalPage] = useState(0);
   const [seeMore, setSeeMore] = useState(true);
   const [dowloading, setDownloading] = useState(false);
+  const [lock, setLock] = useState(1);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -147,6 +147,7 @@ const TeacherPostMyClass = () => {
       await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
         dispatch(SetClass(responese.data.data));
         document.title = "Bài đăng | " + responese.data.data.code;
+        setLock(responese.data.data.statusClass);
       });
     } catch (error) {
       navigate("/teacher/my-class");
@@ -177,6 +178,7 @@ const TeacherPostMyClass = () => {
         idClass: idClass,
         status: classDetail.statusClass === 0 ? 1 : 0,
       };
+      setLock(objApi.status);
       await TeacherMyClassAPI.updateStatusClass(objApi).then((respone) => {
         if (objApi.status === 0) {
           message.success("Mở lớp thành công !");
@@ -222,10 +224,6 @@ const TeacherPostMyClass = () => {
   const classDetail = useAppSelector(GetClass);
   const data = useAppSelector(GetPost);
 
-  const imageUrl =
-    "https://png.pngtree.com/background/20220714/original/pngtree-hand-drawn-blackboard-background-at-the-beginning-of-school-picture-image_1620722.jpg";
-  const isOnlineImage =
-    imageUrl.startsWith("http") || imageUrl.startsWith("https");
   return (
     <div className="teacher-post">
       {!loading && <LoadingIndicator />}
@@ -353,19 +351,21 @@ const TeacherPostMyClass = () => {
                         <span>
                           <Dropdown
                             overlay={
-                              <Menu>
-                                <Menu.Item
-                                  key="1"
-                                  onClick={() => handleRandomPass()}
-                                >
-                                  <FontAwesomeIcon
-                                    icon={faArrowsRotate}
-                                    style={{ paddingRight: 10 }}
-                                    className="icon"
-                                  />
-                                  <span>Đặt lại mật khẩu</span>
-                                </Menu.Item>
-                                {/* <Popconfirm
+                              <Menu style={{ width: "180px" }}>
+                                {lock === 0 && (
+                                  <Menu.Item
+                                    key="1"
+                                    onClick={() => handleRandomPass()}
+                                  >
+                                    <FontAwesomeIcon
+                                      icon={faArrowsRotate}
+                                      style={{ paddingRight: 10 }}
+                                      className="icon"
+                                    />
+                                    <span>Đặt lại mật khẩu</span>
+                                  </Menu.Item>
+                                )}
+                                <Popconfirm
                                   title="Thông báo"
                                   description={
                                     classDetail.statusClass === 0
@@ -399,7 +399,7 @@ const TeacherPostMyClass = () => {
                                       </>
                                     )}
                                   </Menu.Item>
-                                </Popconfirm> */}
+                                </Popconfirm>
                                 <Menu.Item key="3">
                                   <div onClick={copyToClipboard}>
                                     <FontAwesomeIcon
@@ -424,7 +424,9 @@ const TeacherPostMyClass = () => {
                       </div>
                     </div>
                     <p className="infor-main" style={{ paddingTop: "20px" }}>
-                      {classDetail.passWord != null?classDetail.passWord:"Không có mật khẩu"}
+                      {classDetail.passWord != null
+                        ? classDetail.passWord
+                        : "Không mật khẩu"}
                       <FontAwesomeIcon
                         style={{ paddingLeft: "12px" }}
                         icon={faExpand}
