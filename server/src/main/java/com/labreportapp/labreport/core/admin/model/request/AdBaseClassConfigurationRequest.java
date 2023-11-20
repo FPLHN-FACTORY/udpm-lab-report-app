@@ -24,5 +24,8 @@ public class AdBaseClassConfigurationRequest {
     @NotNull
     private Double maximumNumberOfBreaks;
 
+    @NotNull
+    private Integer numberHoney;
+
 
 }

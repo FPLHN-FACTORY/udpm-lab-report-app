@@ -27,6 +27,7 @@ import com.labreportapp.labreport.infrastructure.constant.RoleTeam;
 import com.labreportapp.labreport.infrastructure.constant.StatusAttendance;
 import com.labreportapp.labreport.infrastructure.constant.StatusClass;
 import com.labreportapp.labreport.infrastructure.constant.StatusFeedBack;
+import com.labreportapp.labreport.infrastructure.constant.StatusHoneyPlus;
 import com.labreportapp.labreport.infrastructure.constant.StatusMeeting;
 import com.labreportapp.labreport.infrastructure.constant.StatusMemberFactory;
 import com.labreportapp.labreport.infrastructure.constant.StatusShowFeedback;
@@ -344,6 +345,7 @@ public class DBGenerator implements CommandLineRunner {
         class1.setClassPeriod(meetingPeriod3.getId());
         class1.setStartTime(new Date().getTime() + 50000);
         class1.setClassSize(19);
+        class1.setStatusHoneyPlus(StatusHoneyPlus.CHUA_CONG);
         class1.setPassword("123456");
         class1.setActivityId(activity1.getId());
         //class1.setTeacherId("FA2BAD81-93A5-4F02-B1B7-08DBB743DD7D".toLowerCase());
@@ -359,6 +361,7 @@ public class DBGenerator implements CommandLineRunner {
         class2.setStartTime(new Date().getTime() + 50000);
         class2.setClassSize(1);
         class2.setPassword("000000");
+        class2.setStatusHoneyPlus(StatusHoneyPlus.CHUA_CONG);
         class2.setStatusClass(StatusClass.OPEN);
         class2.setActivityId(activity2.getId());
         class2.setTeacherId("FA2BAD81-93A5-4F02-B1B7-08DBB743DD7D".toLowerCase());
@@ -372,6 +375,7 @@ public class DBGenerator implements CommandLineRunner {
         class3.setStartTime(new Date().getTime() + 50000);
         class3.setClassSize(1);
         class3.setStatusClass(StatusClass.OPEN);
+        class3.setStatusHoneyPlus(StatusHoneyPlus.CHUA_CONG);
         class3.setPassword("123456");
         class3.setStatusTeacherEdit(StatusTeacherEdit.CHO_PHEP);
         class3.setActivityId(activity1.getId());
@@ -385,6 +389,7 @@ public class DBGenerator implements CommandLineRunner {
         class4.setClassPeriod(meetingPeriod3.getId());
         class4.setStartTime(new Date().getTime() + 50000);
         class4.setClassSize(0);
+        class4.setStatusHoneyPlus(StatusHoneyPlus.CHUA_CONG);
         class4.setPassword("123456");
         class4.setActivityId(activity1.getId());
         class4.setTeacherId("98B1ECC4-5A71-4E61-1F8E-08DBE29418E7".toLowerCase());
@@ -398,6 +403,7 @@ public class DBGenerator implements CommandLineRunner {
         class5.setClassPeriod(meetingPeriod3.getId());
         class5.setStartTime(new Date().getTime() + 50000);
         class5.setClassSize(0);
+        class5.setStatusHoneyPlus(StatusHoneyPlus.CHUA_CONG);
         class5.setPassword("123456");
         class5.setActivityId(activity2.getId());
         class5.setTeacherId("98B1ECC4-5A71-4E61-1F8E-08DBE29418E7".toLowerCase());
@@ -412,6 +418,7 @@ public class DBGenerator implements CommandLineRunner {
         class6.setStartTime(new Date().getTime() + 50000);
         class6.setClassSize(0);
         class6.setPassword("123456");
+        class6.setStatusHoneyPlus(StatusHoneyPlus.CHUA_CONG);
         class6.setActivityId(activity1.getId());
         class6.setTeacherId("5F5A9FBD-6426-4FD9-1F8C-08DBE29418E7".toLowerCase());
         class6.setDescriptions("Lớp làm trước đồ án tốt nghiệp bán hàng");
@@ -425,6 +432,7 @@ public class DBGenerator implements CommandLineRunner {
         class7.setStartTime(new Date().getTime() + 50000);
         class7.setClassSize(0);
         class7.setPassword("123456");
+        class7.setStatusHoneyPlus(StatusHoneyPlus.CHUA_CONG);
         class7.setActivityId(activity1.getId());
         class7.setTeacherId("5F5A9FBD-6426-4FD9-1F8C-08DBE29418E7".toLowerCase());
         class7.setDescriptions("Lớp làm trước đồ án tốt nghiệp bán hàng");
@@ -1846,6 +1854,7 @@ public class DBGenerator implements CommandLineRunner {
         classConfiguration.setClassSizeMin(15);
         classConfiguration.setPointMin(5D);
         classConfiguration.setMaximumNumberOfBreaks(20D);
+        classConfiguration.setNumberHoney(100);
         classConfigurationRepository.save(classConfiguration);
 
         ////////////////////////////////////////

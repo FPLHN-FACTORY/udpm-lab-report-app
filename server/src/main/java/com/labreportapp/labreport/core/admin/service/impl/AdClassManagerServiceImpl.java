@@ -32,6 +32,7 @@ import com.labreportapp.labreport.entity.ClassConfiguration;
 import com.labreportapp.labreport.entity.MeetingPeriod;
 import com.labreportapp.labreport.infrastructure.apiconstant.ActorConstants;
 import com.labreportapp.labreport.infrastructure.constant.StatusClass;
+import com.labreportapp.labreport.infrastructure.constant.StatusHoneyPlus;
 import com.labreportapp.labreport.infrastructure.constant.StatusTeacherEdit;
 import com.labreportapp.labreport.repository.ActivityRepository;
 import com.labreportapp.labreport.repository.LevelRepository;
@@ -151,6 +152,7 @@ AdClassManagerServiceImpl implements AdClassService {
         classNew.setClassSize(0);
         classNew.setClassPeriod(request.getClassPeriod());
         classNew.setPassword(null);
+        classNew.setStatusHoneyPlus(StatusHoneyPlus.CHUA_CONG);
         classNew.setStatusTeacherEdit(StatusTeacherEdit.values()[request.getStatusTeacherEdit()]);
         Optional<Activity> activityFind = adActivityRepository.findById(request.getActivityId());
         if (!activityFind.isPresent()) {
@@ -468,6 +470,7 @@ AdClassManagerServiceImpl implements AdClassService {
                 classNew.setActivityId(request.getActivityId());
                 classNew.setCode(codeActivity + "_" + (count++));
                 classNew.setPassword(null);
+                classNew.setStatusHoneyPlus(StatusHoneyPlus.CHUA_CONG);
                 classNew.setStatusTeacherEdit(StatusTeacherEdit.KHONG_CHO_PHEP);
                 listClass.add(classNew);
             }

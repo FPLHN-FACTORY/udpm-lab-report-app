@@ -102,7 +102,9 @@ public enum Message {
     SESSION_EXPIRED(PropertiesReader.getProperty(PropertyKeys.SESSION_EXPIRED)),
     ROLE_HAS_CHANGE(PropertiesReader.getProperty(PropertyKeys.ROLE_HAS_CHANGE)),
     YOU_CANNOT_ENTER_CLASS_YET(PropertiesReader.getProperty(PropertyKeys.YOU_CANNOT_ENTER_CLASS_YET)),
-    FILE_NOT_FOUND(PropertiesReader.getProperty(PropertyKeys.FILE_NOT_FOUND));
+    FILE_NOT_FOUND(PropertiesReader.getProperty(PropertyKeys.FILE_NOT_FOUND)),
+    BAN_CHUA_TAO_CAU_HINH(PropertiesReader.getProperty(PropertyKeys.BAN_CHUA_TAO_CAU_HINH)),
+    LOP_NAY_DA_QUY_DOI_MAT_ONG(PropertiesReader.getProperty(PropertyKeys.LOP_NAY_DA_QUY_DOI_MAT_ONG));
 
     private String message;
 

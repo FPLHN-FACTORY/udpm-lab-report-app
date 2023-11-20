@@ -36,6 +36,7 @@ public class AdClassConfigurationServiceImpl implements AdCLassConfigurationServ
             classConfigurationCustomList.add(new AdClassConfigurationCustomResponse(classConfigurationResponses.getId(), 2, "Số lượng tối đa", Double.valueOf(classConfigurationResponses.getClassSizeMax())));
             classConfigurationCustomList.add(new AdClassConfigurationCustomResponse(classConfigurationResponses.getId(), 3, "Điểm tối thiểu", classConfigurationResponses.getPointMin()));
             classConfigurationCustomList.add(new AdClassConfigurationCustomResponse(classConfigurationResponses.getId(), 4, "Tỉ lệ nghỉ", classConfigurationResponses.getMaximumNumberOfBreaks()));
+            classConfigurationCustomList.add(new AdClassConfigurationCustomResponse(classConfigurationResponses.getId(), 5, "Số lượng mật ong", Double.valueOf(classConfigurationResponses.getNumberHoney())));
         }
         return classConfigurationCustomList;
     }
@@ -49,6 +50,7 @@ public class AdClassConfigurationServiceImpl implements AdCLassConfigurationServ
             classConfigurationNew.setClassSizeMin(adUpdateClassConfigurationRequest.getClassSizeMin());
             classConfigurationNew.setPointMin(adUpdateClassConfigurationRequest.getPointMin());
             classConfigurationNew.setMaximumNumberOfBreaks(adUpdateClassConfigurationRequest.getMaximumNumberOfBreaks());
+            classConfigurationNew.setNumberHoney(adUpdateClassConfigurationRequest.getNumberHoney());
             return adClassConfigurationRepository.save(classConfigurationNew);
         }
         ClassConfiguration optionalClassConfiguration = classConfigurationList.get(0);
@@ -73,6 +75,10 @@ public class AdClassConfigurationServiceImpl implements AdCLassConfigurationServ
             stringBuilder.append(" tỉ lệ nghỉ từ ").append(optionalClassConfiguration.getMaximumNumberOfBreaks()).append("% thành ").append(adUpdateClassConfigurationRequest.getMaximumNumberOfBreaks()).append("%")
                     .append(",");
         }
+        if (!optionalClassConfiguration.getMaximumNumberOfBreaks().equals(adUpdateClassConfigurationRequest.getMaximumNumberOfBreaks())) {
+            stringBuilder.append(" số lượng mật ong từ ").append(optionalClassConfiguration.getNumberHoney()).append(" thành ").append(adUpdateClassConfigurationRequest.getNumberHoney())
+                    .append(".");
+        }
         if (stringBuilder.length() > 0 && stringBuilder.charAt(stringBuilder.length() - 1) == ',') {
             stringBuilder.setCharAt(stringBuilder.length() - 1, '.');}
         loggerUtil.sendLogScreen(stringBuilder.toString(), "");
@@ -80,6 +86,7 @@ public class AdClassConfigurationServiceImpl implements AdCLassConfigurationServ
         optionalClassConfiguration.setClassSizeMin(adUpdateClassConfigurationRequest.getClassSizeMin());
         optionalClassConfiguration.setPointMin(adUpdateClassConfigurationRequest.getPointMin());
         optionalClassConfiguration.setMaximumNumberOfBreaks(adUpdateClassConfigurationRequest.getMaximumNumberOfBreaks());
+        optionalClassConfiguration.setNumberHoney(adUpdateClassConfigurationRequest.getNumberHoney());
         return adClassConfigurationRepository.save(optionalClassConfiguration);
     }
 

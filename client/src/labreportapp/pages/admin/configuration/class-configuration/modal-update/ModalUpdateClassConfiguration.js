@@ -3,7 +3,10 @@ import { AdClassCongigurationAPI } from "../../../../../api/admin/AdClassConfigu
 import { toast } from "react-toastify";
 import { Button, Col, Input, Modal, Row, message } from "antd";
 import { useAppDispatch } from "../../../../../app/hook";
-import { SetLoadingFalse, SetLoadingTrue } from "../../../../../app/common/Loading.reducer";
+import {
+  SetLoadingFalse,
+  SetLoadingTrue,
+} from "../../../../../app/common/Loading.reducer";
 
 const ModalUpdateClassConfiguration = ({
   loadData,
@@ -16,6 +19,8 @@ const ModalUpdateClassConfiguration = ({
   const [classSizeMin, setClassSizeMin] = useState("");
   const [errorClassSizeMin, setErrorClassSizeMin] = useState("");
   const [pointMin, setPointMin] = useState("");
+  const [numberHoney, setNumberHoney] = useState("");
+  const [errorNumberHoney, setErrorNumberHoney] = useState("");
   const [errorPointMin, setErrorPointMin] = useState("");
   const [maximumNumberOfBreaks, setMaximumNumberOfBreaks] = useState("");
   const [errorMaximumNumberOfBreaks, setErrorMaximumNumberOfBreaks] =
@@ -27,14 +32,18 @@ const ModalUpdateClassConfiguration = ({
       setClassSizeMin(classConfiguration[0].chiSo);
       setPointMin(classConfiguration[2].chiSo);
       setMaximumNumberOfBreaks(classConfiguration[3].chiSo);
+      setNumberHoney(classConfiguration[4].chiSo);
       setErrorClassSizeMax("");
       setErrorClassSizeMin("");
       setErrorPointMin("");
+      setErrorNumberHoney("");
       setErrorMaximumNumberOfBreaks("");
     } else {
       setClassSizeMax("");
       setClassSizeMin("");
       setPointMin("");
+      setErrorNumberHoney("");
+      setNumberHoney("");
       setMaximumNumberOfBreaks("");
       setErrorClassSizeMax("");
       setErrorClassSizeMin("");
@@ -95,6 +104,15 @@ const ModalUpdateClassConfiguration = ({
     } else {
       setErrorMaximumNumberOfBreaks("");
     }
+    if (numberHoney === null || numberHoney === "") {
+      setErrorNumberHoney("Tỉ lệ nghỉ không được để trống");
+      check++;
+    } else if (!Number.isInteger(+numberHoney) || +numberHoney < 1) {
+      setErrorNumberHoney("Số lượng mật ong phải là số nguyên dương >= 1");
+      check++;
+    } else {
+      setErrorNumberHoney("");
+    }
 
     if (check === 0) {
       dispatch(SetLoadingTrue());
@@ -103,6 +121,7 @@ const ModalUpdateClassConfiguration = ({
         classSizeMax: +classSizeMax,
         pointMin: +pointMin,
         maximumNumberOfBreaks: +maximumNumberOfBreaks,
+        numberHoney: +numberHoney,
       };
       AdClassCongigurationAPI.update(obj).then(
         () => {
@@ -156,7 +175,7 @@ const ModalUpdateClassConfiguration = ({
           </Col>
         </Row>
       </div>
-      <div style={{ marginTop: "15px", borderBottom: "1px solid black" }}>
+      <div style={{ marginTop: "15px" }}>
         <Row gutter={16} style={{ marginBottom: "15px" }}>
           <Col span={12}>
             <span>Điểm tối thiểu:</span> <br />
@@ -179,6 +198,21 @@ const ModalUpdateClassConfiguration = ({
               type="number"
             />
             <span className="error">{errorMaximumNumberOfBreaks}</span>
+          </Col>
+        </Row>
+      </div>
+      <div style={{ marginTop: "15px", borderBottom: "1px solid black" }}>
+        <Row style={{ marginBottom: "15px" }}>
+          <Col span={24}>
+            <span>Số lượng mật ong:</span> <br />
+            <Input
+              value={numberHoney}
+              onChange={(e) => {
+                setNumberHoney(e.target.value);
+              }}
+              type="number"
+            />
+            <span className="error">{errorNumberHoney}</span>
           </Col>
         </Row>
       </div>

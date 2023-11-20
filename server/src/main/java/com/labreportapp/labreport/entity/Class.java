@@ -3,6 +3,7 @@ package com.labreportapp.labreport.entity;
 import com.labreportapp.labreport.entity.base.PrimaryEntity;
 import com.labreportapp.labreport.infrastructure.constant.EntityProperties;
 import com.labreportapp.labreport.infrastructure.constant.StatusClass;
+import com.labreportapp.labreport.infrastructure.constant.StatusHoneyPlus;
 import com.labreportapp.labreport.infrastructure.constant.StatusTeacherEdit;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -56,5 +57,8 @@ public class Class extends PrimaryEntity {
 
     @Column
     private StatusTeacherEdit statusTeacherEdit;
+
+    @Column
+    private StatusHoneyPlus statusHoneyPlus;
 
 }

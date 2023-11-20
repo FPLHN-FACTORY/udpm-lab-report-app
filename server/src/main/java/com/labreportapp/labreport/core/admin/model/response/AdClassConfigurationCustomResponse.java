@@ -12,7 +12,10 @@ import lombok.Setter;
 public class AdClassConfigurationCustomResponse {
 
     private String id;
+
     private Integer stt;
+
     private String tenCauHinh;
+
     private  Double chiSo;
 }
