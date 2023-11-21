@@ -231,4 +231,19 @@ public class AdClassController {
         return new ResponseObject(list);
     }
 
+    @GetMapping("/download-log")
+    public ResponseEntity<Resource> downloadCsv() {
+        String pathFile = loggerUtil.getPathFileSendLogScreen(semesterHelper.getNameSemesterCurrent());
+        return callApiConsumer.handleCallApiDowloadFileLog(pathFile);
+    }
+
+    @GetMapping("/history")
+    public ResponseEntity<?> showHistory(@RequestParam(name = "page", defaultValue = "0") Integer page,
+                                         @RequestParam(name = "size", defaultValue = "50") Integer size
+    ) {
+        String pathFile = loggerUtil.getPathFileSendLogScreen(semesterHelper.getNameSemesterCurrent());
+        LoggerObject loggerObject = new LoggerObject();
+        loggerObject.setPathFile(pathFile);
+        return new ResponseEntity<>(callApiConsumer.handleCallApiReadFileLog(loggerObject, page, size), HttpStatus.OK);
+    }
 }

@@ -12,6 +12,7 @@ import {
   faFilterCircleDollar,
   faHistory,
   faGraduationCap,
+  faFileDownload,
 } from "@fortawesome/free-solid-svg-icons";
 import { useAppDispatch, useAppSelector } from "../../../app/hook";
 import {
@@ -53,6 +54,7 @@ import {
 import ModalShowHistory from "../detail-class/information-class/ModalShowHistory";
 import ModalShowHistoryDetail from "./modal-show-history-detail/ModalShowHistoryDetail";
 import ModalShowHistoryLogLuong from "./modal-show-history-log-luong/ModalShowHistoryLogLuong";
+import ModalShowHistoryClassManager from "./modal-show-history-class-managerment/ModalShowHistoryClassManager";
 
 const ClassManagement = () => {
   const { Option } = Select;
@@ -528,6 +530,29 @@ const ClassManagement = () => {
       }
     );
   };
+  const dowloadLog = () => {
+    ClassAPI.dowloadLog().then(
+      (response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "lop_hoc.csv";
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  };
+
+  const [visibleHistory, setVisibleHistory] = useState(false);
+  const openModalShowHistory = () => {
+    setVisibleHistory(true);
+  };
+  const cancelModalHistory = () => {
+    setVisibleHistory(false);
+  };
 
   const [selectedIdSemester, setSelectedIdSemester] = useState(null);
   const [showHistoryLogLuong, setShowHistoryLogLuong] = useState(false);
@@ -596,40 +621,6 @@ const ClassManagement = () => {
               }}
             />{" "}
             Lịch sử luồng
-          </Button>
-          <Button
-            style={{
-              color: "white",
-              backgroundColor: "rgb(55, 137, 220)",
-              marginRight: "5px",
-            }}
-          >
-            <FontAwesomeIcon
-              icon={faDownload}
-              size="1x"
-              style={{
-                backgroundColor: "rgb(55, 137, 220)",
-                marginRight: "7px",
-              }}
-            />{" "}
-            Dowload log
-          </Button>
-          <Button
-            style={{
-              color: "white",
-              backgroundColor: "rgb(55, 137, 220)",
-              marginRight: "5px",
-            }}
-          >
-            <FontAwesomeIcon
-              icon={faHistory}
-              size="1x"
-              style={{
-                backgroundColor: "rgb(55, 137, 220)",
-                marginRight: "7px",
-              }}
-            />{" "}
-            Lịch sử
           </Button>
         </div>
       </div>
@@ -882,6 +873,43 @@ const ClassManagement = () => {
               </span>{" "}
             </div>
             <div className="createButton">
+              {" "}
+              <Button
+                style={{
+                  color: "white",
+                  backgroundColor: "rgb(55, 137, 220)",
+                  marginRight: 5,
+                }}
+                onClick={dowloadLog}
+              >
+                <FontAwesomeIcon
+                  icon={faFileDownload}
+                  size="1x"
+                  style={{
+                    backgroundColor: "rgb(55, 137, 220)",
+                    marginRight: "5px",
+                  }}
+                />
+                Dowload log
+              </Button>
+              <Button
+                style={{
+                  color: "white",
+                  backgroundColor: "rgb(55, 137, 220)",
+                  marginRight: 5,
+                }}
+                onClick={openModalShowHistory}
+              >
+                <FontAwesomeIcon
+                  icon={faHistory}
+                  size="1x"
+                  style={{
+                    backgroundColor: "rgb(55, 137, 220)",
+                    marginRight: "5px",
+                  }}
+                />
+                Lịch sử
+              </Button>
               <Button
                 style={{
                   color: "white",
@@ -1056,6 +1084,10 @@ const ClassManagement = () => {
           idSemester={selectedIdSemester}
           visible={showHistoryLogLuong}
           onCancel={cancelModalHistoryLogLuong}
+        />
+        <ModalShowHistoryClassManager
+          visible={visibleHistory}
+          onCancel={cancelModalHistory}
         />
       </div>
     </>

@@ -268,4 +268,20 @@ export class ClassAPI {
       url: `/admin/class-managerment/class/get-point/` + idClass,
     });
   };
+
+  static dowloadLog = () => {
+    return request({
+      method: "GET",
+      url: `/admin/class-managerment/download-log`,
+      responseType: "blob",
+    });
+  };
+
+  static showHistory = (params) => {
+    return request({
+      method: "GET",
+      url: url + `/history`,
+      params: params,
+    });
+  };
 }

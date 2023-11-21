@@ -26,7 +26,6 @@ public class ConfigurationsConstant {
     public static final String NAME_FILE_QUAN_LY_NHOM_TRONG_XUONG = "nhom_trong_xuong_csv";
     public static final String NAME_FILE_QUAN_LY_DU_AN_TRONG_XUONG = "du_an_trong_xuong_csv";
 
-
     public static final String FOLDER_ACTOR_TEACHER = "actor_teacher";
 
     public static final String FOLDER_ACTOR_STUDENT = "actor_student";
