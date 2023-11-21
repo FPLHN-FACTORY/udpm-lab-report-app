@@ -2,7 +2,6 @@ import { Modal, Row, Col, Input, Button, message } from "antd";
 import { useEffect, useState } from "react";
 import { AdMeetingPeriodConfigurationAPI } from "../../../../../api/admin/AdMeetingPeriodConfigurationAPI";
 import { AddMeetingPeriodConfiguration } from "../../../../../app/admin/AdMeetingPeriodConfiguration.reducer";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAppDispatch } from "../../../../../app/hook";
 import {
@@ -45,7 +44,6 @@ const ModalCreateMeetingPeriod = ({ visible, onCancel }) => {
       setErrorName("Tên Ca không được để trống");
       check++;
     } else {
-      setErrorName("");
       if (name.trim().length > 500) {
         setErrorName("Tên Ca không quá 500 ký tự");
         check++;
@@ -53,7 +51,8 @@ const ModalCreateMeetingPeriod = ({ visible, onCancel }) => {
         setErrorName("");
       }
     }
-    if (startHour === "" || startMinute === "") {
+
+    if (startHour === null || startMinute === null) {
       setErrorStartHour("Giờ bắt đầu không được để trống");
       setErrorStartMinute("Phút bắt đầu không được để trống");
       check++;
@@ -62,7 +61,7 @@ const ModalCreateMeetingPeriod = ({ visible, onCancel }) => {
       setErrorStartMinute("");
     }
 
-    if (endHour === "" || endMinute === "") {
+    if (endHour === null || endMinute === null) {
       setErrorEndHour("Giờ kết thúc không được để trống");
       setErrorEndMinute("Phút kết thúc không được để trống");
       check++;
@@ -75,67 +74,15 @@ const ModalCreateMeetingPeriod = ({ visible, onCancel }) => {
       setErrorStartHour("Giờ bắt đầu phải nhỏ hơn giờ kết thúc");
       setErrorEndHour("Giờ kết thúc phải lớn hơn giờ bắt đầu");
       check++;
-    } else if (
+    }
+    if (
       parseInt(startHour) === parseInt(endHour) &&
       parseInt(startMinute) >= parseInt(endMinute)
     ) {
       setErrorStartMinute("Phút bắt đầu phải nhỏ hơn phút kết thúc");
       setErrorEndMinute("Phút kết thúc phải lớn hơn phút bắt đầu");
       check++;
-    } else {
-      setErrorStartHour("");
-      setErrorEndHour("");
-      setErrorStartMinute("");
-      setErrorEndMinute("");
     }
-
-    if (parseInt(startHour) >= 24) {
-      setErrorStartHour("Giờ bắt đầu phải nhỏ hơn 23 giờ");
-      check++;
-    } else if (parseInt(startMinute) >= 60) {
-      setErrorStartMinute("Phút bắt đầu phải nhỏ hơn 60 phút");
-      check++;
-    } else {
-      setErrorStartHour("");
-      setErrorStartMinute("");
-    }
-
-    if (parseInt(endHour) >= 24) {
-      setErrorEndHour("Giờ kết thúc phải nhỏ hơn 24 giờ");
-      check++;
-    } else if (parseInt(endMinute) >= 60) {
-      setErrorEndMinute("Phút kết thúc phải nhỏ hơn 60 phút");
-      check++;
-    } else {
-      setErrorEndHour("");
-      setErrorEndMinute("");
-    }
-
-    if (!Number.isInteger(Number(startHour)) || Number(startHour) < 0) {
-      setErrorStartHour("Giờ bắt đầu phải là số nguyên dương");
-      check++;
-    } else if (
-      !Number.isInteger(Number(startMinute)) ||
-      Number(startMinute) < 0
-    ) {
-      setErrorStartMinute("Phút bắt đầu phải là số nguyên dương");
-      check++;
-    } else {
-      setErrorStartHour("");
-      setErrorStartMinute("");
-    }
-
-    if (!Number.isInteger(Number(endHour)) || Number(endHour) < 0) {
-      setErrorEndHour("Giờ kết thúc phải là số nguyên dương");
-      check++;
-    } else if (!Number.isInteger(Number(endMinute)) || Number(endMinute) < 0) {
-      setErrorEndMinute("Phút kết thúc phải là số nguyên dương");
-      check++;
-    } else {
-      setErrorEndHour("");
-      setErrorEndMinute("");
-    }
-
     if (check === 0) {
       dispatch(SetLoadingTrue());
       let obj = {
@@ -174,8 +121,8 @@ const ModalCreateMeetingPeriod = ({ visible, onCancel }) => {
         <div style={{ marginTop: "15px", borderBottom: "1px solid black" }}>
           <Row style={{ marginBottom: "15px" }}>
             <Col span={24} style={{ padding: 5 }}>
-              <span style={{ color: "red" }}>(*) </span> <span>Tên Ca:</span>{" "}
-              <br />
+              <span style={{ color: "red" }}>(*) </span>
+              <span>Tên Ca:</span> <br />
               <Input
                 value={name}
                 placeholder="Nhập tên ca"
@@ -186,14 +133,17 @@ const ModalCreateMeetingPeriod = ({ visible, onCancel }) => {
               />
               <span style={{ color: "red" }}>{errorName}</span>
             </Col>
-
             <Col span={12} style={{ padding: 5 }}>
               <span style={{ color: "red" }}>(*) </span>{" "}
               <span>Giờ bắt đầu:</span> <br />
               <Input
                 value={startHour}
                 onChange={(e) => {
-                  setStartHour(e.target.value);
+                  const newValue = Math.min(
+                    Math.max(0, parseInt(e.target.value) || 0),
+                    23
+                  );
+                  setStartHour(newValue);
                 }}
                 type="number"
                 min={0}
@@ -207,11 +157,15 @@ const ModalCreateMeetingPeriod = ({ visible, onCancel }) => {
               <Input
                 value={endHour}
                 onChange={(e) => {
-                  setEndHour(e.target.value);
+                  const newValue = Math.min(
+                    Math.max(0, parseInt(e.target.value) || 0),
+                    24
+                  );
+                  setEndHour(newValue);
                 }}
                 type="number"
                 min={0}
-                max={23}
+                max={24}
               />
               <span style={{ color: "red" }}>{errorEndHour}</span>
             </Col>
@@ -221,7 +175,11 @@ const ModalCreateMeetingPeriod = ({ visible, onCancel }) => {
               <Input
                 value={startMinute}
                 onChange={(e) => {
-                  setStartMinute(e.target.value);
+                  const newValue = Math.min(
+                    Math.max(0, parseInt(e.target.value) || 0),
+                    59
+                  );
+                  setStartMinute(newValue);
                 }}
                 type="number"
                 min={0}
@@ -230,12 +188,16 @@ const ModalCreateMeetingPeriod = ({ visible, onCancel }) => {
               <span style={{ color: "red" }}>{errorStartMinute}</span>
             </Col>
             <Col span={12} style={{ padding: 5 }}>
-              <span style={{ color: "red" }}>(*) </span>
+              <span style={{ color: "red" }}>(*) </span>{" "}
               <span>Phút kết thúc:</span> <br />
               <Input
                 value={endMinute}
                 onChange={(e) => {
-                  setEndMinute(e.target.value);
+                  const newValue = Math.min(
+                    Math.max(0, parseInt(e.target.value) || 0),
+                    59
+                  );
+                  setEndMinute(newValue);
                 }}
                 type="number"
                 min={0}
@@ -248,23 +210,14 @@ const ModalCreateMeetingPeriod = ({ visible, onCancel }) => {
         <div style={{ textAlign: "right" }}>
           <div style={{ paddingTop: "15px" }}>
             <Button
-              style={{
-                marginRight: "5px",
-                backgroundColor: "rgb(61, 139, 227)",
-                color: "white",
-              }}
+              className="btn_filter"
               onClick={create}
+              style={{ marginRight: "15px", backgroundColor: "#E2B357" }}
             >
-              Thêm
+              <span> Thêm</span>
             </Button>
-            <Button
-              style={{
-                backgroundColor: "red",
-                color: "white",
-              }}
-              onClick={onCancel}
-            >
-              Hủy
+            <Button className="btn_clean" onClick={onCancel}>
+              <span>Hủy</span>
             </Button>
           </div>
         </div>

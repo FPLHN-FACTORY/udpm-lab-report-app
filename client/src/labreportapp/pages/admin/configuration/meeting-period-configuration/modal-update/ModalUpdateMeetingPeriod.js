@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { AdMeetingPeriodConfigurationAPI } from "../../../../../api/admin/AdMeetingPeriodConfigurationAPI";
 import { useAppDispatch } from "../../../../../app/hook";
 import { UpdateMeetingPeriodConfiguration } from "../../../../../app/admin/AdMeetingPeriodConfiguration.reducer";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
   SetLoadingFalse,
@@ -60,7 +59,7 @@ const ModalUpdateMeetingPeriod = ({ visible, onCancel, meetingPeriod }) => {
       }
     }
 
-    if (startHour === "" || startMinute === "") {
+    if (startHour === null || startMinute === null) {
       setErrorStartHour("Giờ bắt đầu không được để trống");
       setErrorStartMinute("Phút bắt đầu không được để trống");
       check++;
@@ -69,7 +68,7 @@ const ModalUpdateMeetingPeriod = ({ visible, onCancel, meetingPeriod }) => {
       setErrorStartMinute("");
     }
 
-    if (endHour === "" || endMinute === "") {
+    if (endHour === null || endMinute === null) {
       setErrorEndHour("Giờ kết thúc không được để trống");
       setErrorEndMinute("Phút kết thúc không được để trống");
       check++;
@@ -82,65 +81,14 @@ const ModalUpdateMeetingPeriod = ({ visible, onCancel, meetingPeriod }) => {
       setErrorStartHour("Giờ bắt đầu phải nhỏ hơn giờ kết thúc");
       setErrorEndHour("Giờ kết thúc phải lớn hơn giờ bắt đầu");
       check++;
-    } else if (
+    }
+    if (
       parseInt(startHour) === parseInt(endHour) &&
       parseInt(startMinute) >= parseInt(endMinute)
     ) {
       setErrorStartMinute("Phút bắt đầu phải nhỏ hơn phút kết thúc");
       setErrorEndMinute("Phút kết thúc phải lớn hơn phút bắt đầu");
       check++;
-    } else {
-      setErrorStartHour("");
-      setErrorEndHour("");
-      setErrorStartMinute("");
-      setErrorEndMinute("");
-    }
-
-    if (parseInt(startHour) >= 24) {
-      setErrorStartHour("Giờ bắt đầu phải nhỏ hơn 24 giờ");
-      check++;
-    } else if (parseInt(startMinute) >= 60) {
-      setErrorStartMinute("Phút bắt đầu phải nhỏ hơn 60 phút");
-      check++;
-    } else {
-      setErrorStartHour("");
-      setErrorStartMinute("");
-    }
-
-    if (parseInt(endHour) >= 24) {
-      setErrorEndHour("Giờ kết thúc phải nhỏ hơn 24 giờ");
-      check++;
-    } else if (parseInt(endMinute) >= 60) {
-      setErrorEndMinute("Phút kết thúc phải nhỏ hơn 60 phút");
-      check++;
-    } else {
-      setErrorEndHour("");
-      setErrorEndMinute("");
-    }
-
-    if (!Number.isInteger(Number(startHour)) || Number(startHour) < 0) {
-      setErrorStartHour("Giờ bắt đầu phải là số nguyên dương");
-      check++;
-    } else if (
-      !Number.isInteger(Number(startMinute)) ||
-      Number(startMinute) < 0
-    ) {
-      setErrorStartMinute("Phút bắt đầu phải là số nguyên dương");
-      check++;
-    } else {
-      setErrorStartHour("");
-      setErrorStartMinute("");
-    }
-
-    if (!Number.isInteger(Number(endHour)) || Number(endHour) < 0) {
-      setErrorEndHour("Giờ kết thúc phải là số nguyên dương");
-      check++;
-    } else if (!Number.isInteger(Number(endMinute)) || Number(endMinute) < 0) {
-      setErrorEndMinute("Phút kết thúc phải là số nguyên dương");
-      check++;
-    } else {
-      setErrorEndHour("");
-      setErrorEndMinute("");
     }
 
     if (check === 0) {
@@ -202,9 +150,15 @@ const ModalUpdateMeetingPeriod = ({ visible, onCancel, meetingPeriod }) => {
               <Input
                 value={startHour}
                 onChange={(e) => {
-                  setStartHour(e.target.value);
+                  const newValue = Math.min(
+                    Math.max(0, parseInt(e.target.value) || 0),
+                    23
+                  );
+                  setStartHour(newValue);
                 }}
                 type="number"
+                min={0}
+                max={23}
               />
               <span style={{ color: "red" }}>{errorStartHour}</span>
             </Col>
@@ -214,9 +168,15 @@ const ModalUpdateMeetingPeriod = ({ visible, onCancel, meetingPeriod }) => {
               <Input
                 value={endHour}
                 onChange={(e) => {
-                  setEndHour(e.target.value);
+                  const newValue = Math.min(
+                    Math.max(0, parseInt(e.target.value) || 0),
+                    24
+                  );
+                  setEndHour(newValue);
                 }}
                 type="number"
+                min={0}
+                max={24}
               />
               <span style={{ color: "red" }}>{errorEndHour}</span>
             </Col>
@@ -226,9 +186,15 @@ const ModalUpdateMeetingPeriod = ({ visible, onCancel, meetingPeriod }) => {
               <Input
                 value={startMinute}
                 onChange={(e) => {
-                  setStartMinute(e.target.value);
+                  const newValue = Math.min(
+                    Math.max(0, parseInt(e.target.value) || 0),
+                    59
+                  );
+                  setStartMinute(newValue);
                 }}
                 type="number"
+                min={0}
+                max={59}
               />
               <span style={{ color: "red" }}>{errorStartMinute}</span>
             </Col>
@@ -238,9 +204,15 @@ const ModalUpdateMeetingPeriod = ({ visible, onCancel, meetingPeriod }) => {
               <Input
                 value={endMinute}
                 onChange={(e) => {
-                  setEndMinute(e.target.value);
+                  const newValue = Math.min(
+                    Math.max(0, parseInt(e.target.value) || 0),
+                    59
+                  );
+                  setEndMinute(newValue);
                 }}
                 type="number"
+                min={0}
+                max={59}
               />
               <span style={{ color: "red" }}>{errorEndMinute}</span>
             </Col>
@@ -249,23 +221,14 @@ const ModalUpdateMeetingPeriod = ({ visible, onCancel, meetingPeriod }) => {
         <div style={{ textAlign: "right" }}>
           <div style={{ paddingTop: "15px" }}>
             <Button
-              style={{
-                marginRight: "5px",
-                backgroundColor: "rgb(61, 139, 227)",
-                color: "white",
-              }}
+              className="btn_filter"
               onClick={update}
+              style={{ marginRight: "15px", backgroundColor: "#E2B357" }}
             >
-              Cập nhật
+              <span> Cập nhật</span>
             </Button>
-            <Button
-              style={{
-                backgroundColor: "red",
-                color: "white",
-              }}
-              onClick={onCancel}
-            >
-              Hủy
+            <Button className="btn_clean" onClick={onCancel}>
+              <span>Hủy</span>
             </Button>
           </div>
         </div>

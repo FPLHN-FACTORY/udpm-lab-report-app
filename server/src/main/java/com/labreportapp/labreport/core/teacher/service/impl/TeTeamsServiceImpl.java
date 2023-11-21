@@ -439,6 +439,7 @@ public class TeTeamsServiceImpl implements TeTeamsService {
     public String deleteTeamById(String idTeam) {
         Team team = teTeamsRepositoty.findById(idTeam).get();
         if (team != null) {
+            String idClass = team.getClassId();
             List<StudentClasses> listStudentClass = teStudentClassesRepository.findAllStudentClassesByIdTeam(idTeam);
             listStudentClass.forEach(item -> {
                 item.setTeamId(null);
@@ -450,6 +451,13 @@ public class TeTeamsServiceImpl implements TeTeamsService {
             message.append("Đã xóa \"").append(team.getName()).append("\" và xóa tất cả thành viên ra khỏi nhóm. ");
             loggerUtil.sendLogStreamClass(message.toString(), codeClass, nameSemester);
             teTeamsRepositoty.delete(team);
+            List<Team> listTeam = teTeamsRepositoty.getTeamByClassId(idClass);
+            if (listTeam.size() > 0) {
+                for (int i = 0; i < listTeam.size(); i++) {
+                    listTeam.get(i).setName("Nhóm " + (i + 1));
+                }
+                teTeamsRepositoty.saveAll(listTeam);
+            }
             return "Xóa nhóm thành công !";
         } else {
             return "Không tìm thấy nhóm, xóa thất bại !";
@@ -827,8 +835,8 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         List<Team> lisTeam = teTeamsRepositoty.getTeamByClassId(idClass);
         if (listInput == null) {
             return lisTeam;
-        }
-        AtomicReference<Integer> nameCount = new AtomicReference<>(teTeamsRepositoty.getNameNhomAuto(idClass));
+        }//teTeamsRepositoty.getNameNhomAuto(idClass)
+        AtomicReference<Integer> nameCount = new AtomicReference<>(1);
         List<TeExcelImportTeam> filteredList = listInput.stream()
                 .filter(student -> "X".equalsIgnoreCase(student.getRole()) &&
                         student.getNameTeam() != null && !student.getNameTeam().isEmpty())
@@ -837,7 +845,6 @@ public class TeTeamsServiceImpl implements TeTeamsService {
             Team teamExists = lisTeam.stream()
                     .filter(db -> item.getNameTeam().equalsIgnoreCase(db.getName()))
                     .findAny().orElse(null);
-            String nameTeam = item.getNameTeam();
             if (teamExists == null) {
                 String nameTeamUpdate = "Nhóm " + nameCount.getAndSet(nameCount.get() + 1);
                 listInput.forEach(input -> {
@@ -853,13 +860,14 @@ public class TeTeamsServiceImpl implements TeTeamsService {
                 });
                 item.setNameTeam(nameTeamUpdate);
             } else {
+                String nameTeamUpdate = "Nhóm " + nameCount.getAndSet(nameCount.get() + 1);
                 listInput.forEach(input -> {
                     if (input.getNameTeam().equals(item.getNameTeam())) {
                         TeExcelImportTeam ex = new TeExcelImportTeam();
                         ex.setName(input.getName());
                         ex.setEmail(input.getEmail());
                         ex.setRole(input.getRole());
-                        ex.setNameTeam(item.getNameTeam());
+                        ex.setNameTeam(nameTeamUpdate);
                         ex.setSubjectTeam(input.getSubjectTeam());
                         listTeamImportNew.add(ex);
                     }

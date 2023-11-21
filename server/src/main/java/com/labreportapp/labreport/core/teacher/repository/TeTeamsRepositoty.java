@@ -75,7 +75,7 @@ public interface TeTeamsRepositoty extends JpaRepository<Team, String> {
 
     @Query(value = """
              SELECT  * FROM team t WHERE t.class_id = :#{#idClass} 
-             ORDER BY t.name ASC, t.created_date ASC
+             ORDER BY t.name ASC
             """, nativeQuery = true)
     List<Team> getTeamByClassId(@Param("idClass") String idClass);
 

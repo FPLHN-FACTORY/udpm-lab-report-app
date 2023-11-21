@@ -71,15 +71,16 @@ const ModalUpdateClassConfiguration = ({
       setErrorClassSizeMin("Số lượng tối thiểu phải là số tự nhiên lớn hơn 0");
       check++;
     } else {
-      setErrorClassSizeMin("");
+      if (+classSizeMin >= +classSizeMax) {
+        setErrorClassSizeMin(
+          "Số lượng tối thiểu không được lớn hơn hoặc bằng số lượng tối đa"
+        );
+        check++;
+      } else {
+        setErrorClassSizeMin("");
+      }
     }
 
-    if (+classSizeMin >= +classSizeMax) {
-      setErrorClassSizeMin(
-        "Số lượng tối thiểu không được lớn hơn hoặc bằng số lượng tối đa"
-      );
-      check++;
-    }
     if (pointMin === null || pointMin === "") {
       setErrorPointMin("Điểm tối thiểu không được để trống");
       check++;
@@ -105,7 +106,7 @@ const ModalUpdateClassConfiguration = ({
       setErrorMaximumNumberOfBreaks("");
     }
     if (numberHoney === null || numberHoney === "") {
-      setErrorNumberHoney("Tỉ lệ nghỉ không được để trống");
+      setErrorNumberHoney("Số lượng mật ong không được để trống");
       check++;
     } else if (!Number.isInteger(+numberHoney) || +numberHoney < 1) {
       setErrorNumberHoney("Số lượng mật ong phải là số nguyên dương >= 1");
@@ -155,9 +156,15 @@ const ModalUpdateClassConfiguration = ({
             <Input
               value={classSizeMin}
               onChange={(e) => {
-                setClassSizeMin(e.target.value);
+                const newValue = Math.min(
+                  Math.max(0, parseInt(e.target.value) || 0),
+                  1000
+                );
+                setClassSizeMin(newValue);
               }}
               type="number"
+              min={0}
+              max={1000}
             />
             <span className="error">{errorClassSizeMin}</span>
           </Col>
@@ -166,10 +173,15 @@ const ModalUpdateClassConfiguration = ({
             <Input
               value={classSizeMax}
               onChange={(e) => {
-                setClassSizeMax(e.target.value);
+                const newValue = Math.min(
+                  Math.max(0, parseInt(e.target.value) || 0),
+                  1000
+                );
+                setClassSizeMax(newValue);
               }}
-              x
               type="number"
+              min={0}
+              max={1000}
             />
             <span className="error">{errorClassSizeMax}</span>
           </Col>
@@ -182,9 +194,15 @@ const ModalUpdateClassConfiguration = ({
             <Input
               value={pointMin}
               onChange={(e) => {
-                setPointMin(e.target.value);
+                const newValue = Math.min(
+                  Math.max(0, parseInt(e.target.value) || 0),
+                  10
+                );
+                setPointMin(newValue);
               }}
               type="number"
+              min={0}
+              max={10}
             />
             <span className="error">{errorPointMin}</span>
           </Col>
@@ -193,9 +211,15 @@ const ModalUpdateClassConfiguration = ({
             <Input
               value={maximumNumberOfBreaks}
               onChange={(e) => {
-                setMaximumNumberOfBreaks(e.target.value);
+                const newValue = Math.min(
+                  Math.max(0, parseInt(e.target.value) || 0),
+                  100
+                );
+                setMaximumNumberOfBreaks(newValue);
               }}
               type="number"
+              min={0}
+              max={100}
             />
             <span className="error">{errorMaximumNumberOfBreaks}</span>
           </Col>
@@ -208,9 +232,11 @@ const ModalUpdateClassConfiguration = ({
             <Input
               value={numberHoney}
               onChange={(e) => {
-                setNumberHoney(e.target.value);
+                const newValue = Math.max(1, parseInt(e.target.value) || 1);
+                setNumberHoney(newValue);
               }}
               type="number"
+              min={1}
             />
             <span className="error">{errorNumberHoney}</span>
           </Col>
@@ -219,23 +245,14 @@ const ModalUpdateClassConfiguration = ({
       <div style={{ textAlign: "right" }}>
         <div style={{ paddingTop: "15px" }}>
           <Button
-            style={{
-              marginRight: "5px",
-              backgroundColor: "rgb(61, 139, 227)",
-              color: "white",
-            }}
+            className="btn_filter"
             onClick={update}
+            style={{ marginRight: "15px", backgroundColor: "#E2B357" }}
           >
-            Cập nhật
+            <span> Cập nhật</span>
           </Button>
-          <Button
-            style={{
-              backgroundColor: "red",
-              color: "white",
-            }}
-            onClick={onCancel}
-          >
-            Hủy
+          <Button className="btn_clean" onClick={onCancel}>
+            <span>Hủy</span>
           </Button>
         </div>
       </div>
