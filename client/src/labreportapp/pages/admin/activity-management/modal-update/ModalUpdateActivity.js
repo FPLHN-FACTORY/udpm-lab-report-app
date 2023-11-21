@@ -77,7 +77,6 @@ const ModalUpdateActivity = ({
 
   const update = () => {
     let check = 0;
-    let checkDate = 0;
     if (name.trim() === "") {
       setErrorName("Tên không được để trống");
       check++;

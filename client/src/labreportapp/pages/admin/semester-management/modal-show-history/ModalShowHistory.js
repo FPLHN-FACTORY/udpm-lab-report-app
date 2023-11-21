@@ -1,16 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Modal,
-  Row,
-  Col,
-  Input,
-  Button,
-  Select,
-  message,
-  Table,
-  Pagination,
-  Empty,
-} from "antd";
+import { Modal, Button, Select, Table, Pagination, Empty } from "antd";
 import { AdSemesterAPI } from "../../../../api/admin/AdSemesterAPI";
 
 const { Option } = Select;
@@ -118,7 +107,7 @@ const ModalShowHistory = ({ visible, onCancel }) => {
               </>
             )}
           </div>
-          {dataHistory.length === 0 && (
+          {dataHistory == null && (
             <>
               <p
                 style={{

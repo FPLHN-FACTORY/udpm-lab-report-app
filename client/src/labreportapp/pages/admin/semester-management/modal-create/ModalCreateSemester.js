@@ -1,10 +1,7 @@
 import { Modal, Row, Col, Input, Button, message, DatePicker } from "antd";
 import { useEffect, useState } from "react";
 import { AdSemesterAPI } from "../../../../api/admin/AdSemesterAPI";
-import moment from "moment";
-import { useAppSelector } from "../../../../app/hook";
 import { AddSemester } from "../../../../app/admin/AdSemester.reducer";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAppDispatch } from "../../../../app/hook";
 import {
@@ -53,15 +50,15 @@ const ModalCreateSemester = ({ visible, onCancel }) => {
       }
     }
 
-    if (startTime === "") {
-      setErrorTimeSemester("Thời gian bắt đầu không được để trống");
+    if (startTime === "" || startTime === null) {
+      setErrorTimeSemester("Thời gian không được để trống");
       check++;
     } else {
       setErrorTimeSemester("");
     }
 
-    if (startTimeStudent === "") {
-      setErrorTimeStudent("Thời gian sinh viên bắt đầu không được để trống");
+    if (startTimeStudent === "" || startTimeStudent === null) {
+      setErrorTimeStudent("Thời gian sinh viên không được để trống");
       check++;
     } else if (startTimeStudent !== "") {
       setErrorTimeStudent("");
