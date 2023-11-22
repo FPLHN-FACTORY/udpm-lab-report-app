@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author thangncph26123
  */
 @RestController
-@RequestMapping("/member/todo-list")
+@RequestMapping("/api/member/todo-list")
 public class MeTodoListController {
 
     @Autowired

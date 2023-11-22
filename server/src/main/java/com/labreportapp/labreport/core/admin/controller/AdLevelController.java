@@ -35,7 +35,7 @@ import java.util.List;
  * @author quynhncph26201
  */
 @RestController
-@RequestMapping("/admin/level")
+@RequestMapping("/api/admin/level")
 public class AdLevelController {
 
     @Autowired

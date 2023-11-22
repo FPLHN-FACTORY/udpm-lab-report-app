@@ -17,7 +17,7 @@ import java.util.List;
  * @author quynhncph26201
  */
 @RestController
-@RequestMapping("/student/meeting")
+@RequestMapping("/api/student/meeting")
 public class StMeetingController {
 
     @Autowired

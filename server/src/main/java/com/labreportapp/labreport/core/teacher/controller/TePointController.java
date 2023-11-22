@@ -30,7 +30,7 @@ import java.util.List;
  * @author hieundph25894
  */
 @RestController
-@RequestMapping("/teacher/point")
+@RequestMapping("/api/teacher/point")
 public class TePointController {
 
     @Autowired

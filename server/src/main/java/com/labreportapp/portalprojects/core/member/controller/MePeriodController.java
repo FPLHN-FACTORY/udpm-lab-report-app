@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author thangncph26123
  */
 @RestController
-@RequestMapping("/member/period")
+@RequestMapping("/api/member/period")
 public class MePeriodController {
 
     @Autowired

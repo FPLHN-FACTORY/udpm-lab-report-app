@@ -16,7 +16,7 @@ import java.util.List;
  * @author hieundph25894
  */
 @RestController
-@RequestMapping("/teacher/activity")
+@RequestMapping("/api/teacher/activity")
 public class TeActivityController {
 
     @Autowired

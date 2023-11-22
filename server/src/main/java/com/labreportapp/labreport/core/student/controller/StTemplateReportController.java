@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author quynhncph26201
  */
 @RestController
-@RequestMapping("/student-template-report")
+@RequestMapping("/api/student-template-report")
 public class StTemplateReportController {
     @Autowired
     private StTemplateReportService stTemplateReportService;

@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author hieundph25894
  */
 @RestController
-@RequestMapping("/teacher/post")
+@RequestMapping("/api/teacher/post")
 public class TePostController {
 
     @Autowired

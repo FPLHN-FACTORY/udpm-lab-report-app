@@ -15,7 +15,7 @@ import java.util.List;
  * @author hieundph25894
  */
 @RestController
-@RequestMapping("/teacher/level")
+@RequestMapping("/api/teacher/level")
 public class TeLevelController {
 
     @Autowired

@@ -35,7 +35,7 @@ import java.util.List;
  * @author quynhncph26201
  */
 @RestController
-@RequestMapping("/admin/meeting-period-configiration")
+@RequestMapping("/api/admin/meeting-period-configiration")
 public class AdMeetingPeriodConfugurationController {
 
     @Autowired

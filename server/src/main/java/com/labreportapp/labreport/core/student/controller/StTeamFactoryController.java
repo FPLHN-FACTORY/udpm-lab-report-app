@@ -16,7 +16,7 @@ import java.util.List;
  * @author quynhncph26201
  */
 @RestController
-@RequestMapping("/student/team-factory")
+@RequestMapping("/api/student/team-factory")
 public class StTeamFactoryController {
 
     @Autowired

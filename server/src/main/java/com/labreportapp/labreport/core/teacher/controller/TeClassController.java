@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author hieundph25894
  */
 @RestController
-@RequestMapping("/teacher/class")
+@RequestMapping("/api/teacher/class")
 public class TeClassController {
 
     @Autowired

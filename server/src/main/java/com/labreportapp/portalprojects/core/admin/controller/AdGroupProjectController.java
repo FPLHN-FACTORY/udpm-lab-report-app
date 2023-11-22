@@ -24,7 +24,7 @@ import java.io.IOException;
  * @author thangncph26123
  */
 @RestController
-@RequestMapping("/admin/group-project")
+@RequestMapping("/api/admin/group-project")
 public class AdGroupProjectController {
 
     @Autowired

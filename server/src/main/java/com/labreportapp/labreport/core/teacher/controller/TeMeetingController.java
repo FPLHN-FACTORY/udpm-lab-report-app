@@ -29,7 +29,7 @@ import java.util.List;
  * @author hieundph25894
  */
 @RestController
-@RequestMapping("/teacher/meeting")
+@RequestMapping("/api/teacher/meeting")
 public class TeMeetingController {
 
     @Autowired

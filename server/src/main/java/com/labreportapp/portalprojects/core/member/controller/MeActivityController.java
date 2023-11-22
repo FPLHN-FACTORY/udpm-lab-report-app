@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author thangncph26123
  */
 @RestController
-@RequestMapping("/member/activity")
+@RequestMapping("/api/member/activity")
 public class MeActivityController {
 
     @Autowired

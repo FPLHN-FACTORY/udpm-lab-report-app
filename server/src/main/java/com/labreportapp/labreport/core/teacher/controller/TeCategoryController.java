@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author hieundph25894 - duchieu212
  */
 @RestController
-@RequestMapping("/teacher/category")
+@RequestMapping("/api/teacher/category")
 public class TeCategoryController {
 
     @Autowired

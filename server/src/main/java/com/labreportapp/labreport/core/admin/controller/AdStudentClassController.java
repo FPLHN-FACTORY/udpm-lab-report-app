@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/admin/student-classes")
+@RequestMapping("/api/admin/student-classes")
 public class AdStudentClassController {
 
     @Autowired

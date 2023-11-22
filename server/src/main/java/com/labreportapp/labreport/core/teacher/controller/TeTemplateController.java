@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author hieundph25894
  */
 @RestController
-@RequestMapping("/teacher-template-report")
+@RequestMapping("/api/teacher-template-report")
 public class TeTemplateController {
 
     @Autowired

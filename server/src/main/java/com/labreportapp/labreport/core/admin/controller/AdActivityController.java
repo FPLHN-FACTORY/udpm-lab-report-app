@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/admin/activity")
+@RequestMapping("/api/admin/activity")
 public class AdActivityController {
 
     @Autowired

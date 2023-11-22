@@ -34,7 +34,7 @@ import java.util.List;
  * @author hieundph25894
  */
 @RestController
-@RequestMapping("/teacher/teams")
+@RequestMapping("/api/teacher/teams")
 public class TeTeamsController {
 
     @Autowired

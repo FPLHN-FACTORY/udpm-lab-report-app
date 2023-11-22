@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author thangncph26123
  */
 @RestController
-@RequestMapping("/member/project")
+@RequestMapping("/api/member/project")
 public class MeProjectController {
 
     @Autowired

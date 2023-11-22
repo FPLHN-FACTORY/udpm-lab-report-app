@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author thangncph26123
  */
 @RestController
-@RequestMapping("/member/comment")
+@RequestMapping("/api/member/comment")
 public class MeCommentController {
 
     @Autowired
