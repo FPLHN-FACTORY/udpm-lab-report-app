@@ -5,12 +5,10 @@ import {
   Table,
   Button,
   Tooltip,
-  Modal,
   Empty,
   Tag,
   message,
-  Tour,
-  Divider,
+  Popconfirm,
 } from "antd";
 import { Link } from "react-router-dom";
 import { ControlOutlined } from "@ant-design/icons";
@@ -19,7 +17,7 @@ import {
   SetStudentClasses,
   GetStudentClasses,
 } from "../../../../app/teacher/student-class/studentClassesSlice.reduce";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { TeacherTeamsAPI } from "../../../../api/teacher/teams-class/TeacherTeams.api";
 import {
   SetTeams,
@@ -51,12 +49,12 @@ import {
   SetLoadingFalse,
   SetLoadingTrue,
 } from "../../../../app/common/Loading.reducer";
+import { convertDateLongToString } from "../../../../helper/util.helper";
 
 const TeamsInMyClass = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [objeactTeam, setObjeactTeam] = useState({});
   const [classDetail, setClassDetail] = useState({});
@@ -117,7 +115,6 @@ const TeamsInMyClass = () => {
   };
 
   const handleShowDeleteTeam = (team) => {
-    setShowDeleteModal(true);
     setTeamDelete(team);
   };
 
@@ -138,7 +135,7 @@ const TeamsInMyClass = () => {
         }
         setTeamDelete({});
         dispatch(SetLoadingFalse());
-        handleCancelModalCreateSusscess();
+        fetchData(idClass);
       });
     } catch (error) {
       dispatch(SetLoadingFalse());
@@ -164,7 +161,6 @@ const TeamsInMyClass = () => {
   const handleCancelModalCreateSusscess = () => {
     document.querySelector("body").style.overflowX = "hidden";
     setShowCreateModal(false);
-    setShowDeleteModal(false);
     setShowUpdateModal(false);
     setLoading(true);
   };
@@ -172,7 +168,6 @@ const TeamsInMyClass = () => {
     document.querySelector("body").style.overflowX = "hidden";
     setShowCreateModal(false);
     setShowUpdateModal(false);
-    setShowDeleteModal(false);
     setLoading(true);
   };
   const handleCancelCreate = {
@@ -194,14 +189,7 @@ const TeamsInMyClass = () => {
     setObjeactTeam({});
     setShowDetailModal(false);
   };
-  const convertLongToDate = (dateLong) => {
-    const date = new Date(dateLong);
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const year = date.getFullYear();
-    const format = `${day}/${month}/${year}`;
-    return format;
-  };
+
   const dataStudentClasses = useAppSelector(GetStudentClasses);
   const data = useAppSelector(GetTeams);
   const columns = [
@@ -242,7 +230,7 @@ const TeamsInMyClass = () => {
       key: "createdDate",
       sorter: (a, b) => a.createdDate - b.createdDate,
       render: (text, record) => {
-        return <span>{convertLongToDate(text)}</span>;
+        return <span>{convertDateLongToString(text)}</span>;
       },
       align: "center",
     },
@@ -304,15 +292,32 @@ const TeamsInMyClass = () => {
               </Tooltip>
             )}{" "}
             {lock === 0 && (
-              <Tooltip title="Xóa nhóm">
-                <FontAwesomeIcon
-                  className="icon"
-                  icon={faTrashCan}
-                  onClick={() => {
-                    handleShowDeleteTeam(record);
-                  }}
-                />
-              </Tooltip>
+              <Popconfirm
+                placement={"topRight"}
+                title="Xóa nhóm"
+                description={"Bạn có chắc chắn muốn xóa nhóm này?"}
+                okText="Xác nhận"
+                cancelText="Hủy"
+                onClick={() => {
+                  handleShowDeleteTeam(record);
+                }}
+                onConfirm={() => {
+                  handleDeleteTeam();
+                }}
+                onCancel={() => {
+                  setTeamDelete({});
+                }}
+              >
+                <Tooltip title="Xóa nhóm">
+                  <FontAwesomeIcon
+                    className="icon"
+                    icon={faTrashCan}
+                    onClick={() => {
+                      handleShowDeleteTeam(record);
+                    }}
+                  />
+                </Tooltip>
+              </Popconfirm>
             )}
           </div>
         </>
@@ -526,46 +531,6 @@ const TeamsInMyClass = () => {
             idClass={idClass}
             team={objeactTeam}
           />
-          <Modal
-            onCancel={handleCancelModalCreateFaild}
-            open={showDeleteModal}
-            width={750}
-            footer={null}
-          >
-            <>
-              <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
-                <span style={{ fontSize: "18px" }}>
-                  Bạn có chắc chắn muốn xóa nhóm {teamDelete.name} không ?
-                </span>
-              </div>
-              <div
-                style={{
-                  textAlign: "right",
-                  marginTop: "20px",
-                }}
-              >
-                <Button
-                  className="btn_filter"
-                  style={{
-                    width: "100px",
-                    marginRight: "10px",
-                  }}
-                  onClick={handleCancelModalCreateFaild}
-                >
-                  Hủy
-                </Button>{" "}
-                <Button
-                  className="btn_clean"
-                  style={{
-                    width: "100px",
-                  }}
-                  onClick={handleDeleteTeam}
-                >
-                  Đồng ý
-                </Button>
-              </div>
-            </>
-          </Modal>
         </div>
       </div>
     </div>

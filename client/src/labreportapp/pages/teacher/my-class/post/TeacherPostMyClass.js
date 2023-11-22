@@ -365,7 +365,7 @@ const TeacherPostMyClass = () => {
                                     <span>Đặt lại mật khẩu</span>
                                   </Menu.Item>
                                 )}
-                                <Popconfirm
+                                {/* <Popconfirm
                                   title="Thông báo"
                                   description={
                                     classDetail.statusClass === 0
@@ -399,7 +399,7 @@ const TeacherPostMyClass = () => {
                                       </>
                                     )}
                                   </Menu.Item>
-                                </Popconfirm>
+                                </Popconfirm> */}
                                 <Menu.Item key="3">
                                   <div onClick={copyToClipboard}>
                                     <FontAwesomeIcon

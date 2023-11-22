@@ -35,6 +35,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -87,6 +88,7 @@ public class TeClassServiceImpl implements TeClassService {
         List<String> idUsers = listResponse.stream()
                 .map(TeClassResponse::getTeacherId)
                 .distinct()
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
         List<SimpleResponse> listTeacher = callApiIdentity.handleCallApiGetListUserByListId(idUsers);
         Page<TeClassSentStudentRespone> pageNew = pageList.map(item -> {
@@ -95,7 +97,7 @@ public class TeClassServiceImpl implements TeClassService {
             objNew.setId(item.getId());
             objNew.setCode(item.getCode());
             objNew.setIdTeacher(item.getTeacherId());
-            if (item.getTeacherId() != null) {
+            if (item.getTeacherId() != null && listTeacher.size() > 0) {
                 listTeacher.forEach(teacher -> {
                     if (teacher.getId().equals(item.getTeacherId())) {
                         objNew.setUsernameTeacher(teacher.getUserName());

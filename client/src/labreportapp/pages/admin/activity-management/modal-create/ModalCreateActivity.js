@@ -71,6 +71,7 @@ const ModalCreateActivity = ({
       };
     }
   }, [visible]);
+
   const create = () => {
     let check = 0;
     if (name.trim() === "") {

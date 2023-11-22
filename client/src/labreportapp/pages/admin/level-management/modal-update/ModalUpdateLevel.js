@@ -1,9 +1,7 @@
 import { Modal, Row, Col, Input, Button, message } from "antd";
 import { useEffect, useState } from "react";
 import { AdLevelAPI } from "../../../../api/admin/AdLevelManagerAPI";
-import { useAppSelector } from "../../../../app/hook";
 import { UpdateLevel } from "../../../../app/admin/AdLevelManager.reducer";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAppDispatch } from "../../../../app/hook";
 import {
@@ -17,31 +15,33 @@ const ModalUpdateLevel = ({ visible, onCancel, level }) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (level !== null) {
-      setName(level.name);
-
-      return () => {
-        setName("");
-        setErrorName();
-      };
+    if (visible) {
+      if (level !== null) {
+        setName(level.name);
+        return () => {
+          setName("");
+          setErrorName();
+        };
+      }
+    } else {
+      setName("");
+      setErrorName();
     }
-  }, [level]);
+  }, [level, visible]);
 
   const update = () => {
     let check = 0;
-    if (name.trim() === "") {
+    if (name.trim() === "" || name === null) {
       setErrorName("Tên Level không được để trống");
       check++;
     } else {
-      setErrorName("");
+      if (name.trim().length > 500) {
+        setErrorName("Tên Level không quá 500 ký tự");
+        check++;
+      } else {
+        setErrorName("");
+      }
     }
-    if (name.trim().length > 500) {
-      setErrorName("Tên Level không quá 500 ký tự");
-      check++;
-    } else {
-      setErrorName("");
-    }
-
     if (check === 0) {
       dispatch(SetLoadingTrue());
       let obj = {

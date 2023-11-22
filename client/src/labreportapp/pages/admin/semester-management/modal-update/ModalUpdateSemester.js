@@ -1,10 +1,7 @@
 import { Modal, Row, Col, Input, Button, message, DatePicker } from "antd";
 import { useEffect, useState } from "react";
 import { AdSemesterAPI } from "../../../../api/admin/AdSemesterAPI";
-import moment from "moment";
-import { useAppSelector } from "../../../../app/hook";
 import { UpdateSemester } from "../../../../app/admin/AdSemester.reducer";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAppDispatch } from "../../../../app/hook";
 import {
@@ -60,27 +57,27 @@ const ModalUpdateSemester = ({ visible, onCancel, semester }) => {
       }
     }
 
-    if (startTime === "") {
-      setErrorTimeSemester("Thời gian bắt đầu không được để trống");
+    if (startTime === "" || startTime === null) {
+      setErrorTimeSemester("Thời gian không được để trống");
       check++;
     } else {
       setErrorTimeSemester("");
     }
 
-    if (startTimeStudent === "") {
-      setErrorTimeStudent("Thời gian sinh viên bắt đầu không được để trống");
+    if (startTimeStudent === "" || startTimeStudent === null) {
+      setErrorTimeStudent("Thời gian sinh viên không được để trống");
       check++;
     } else if (startTimeStudent !== "") {
       setErrorTimeStudent("");
       if (startTimeStudent < startTime) {
         setErrorTimeStudent(
-          "Thời gian sinh viên bắt đầu không được nhỏ hơn thời gian học kỳ bắt đầu"
+          "Thời gian sinh viên bắt đầu không được bắt đầu trước thời gian học kỳ bắt đầu"
         );
         check++;
       }
       if (endTimeStudent > endTime) {
         setErrorTimeStudent(
-          "Thời gian sinh viên kết thúc không được lớn hơn thời gian học kỳ kết thúc"
+          "Thời gian sinh viên kết thúc không được bắt đầu sau thời gian học kỳ kết thúc"
         );
         check++;
       }

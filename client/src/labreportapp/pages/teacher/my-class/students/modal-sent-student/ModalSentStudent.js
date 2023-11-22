@@ -129,6 +129,9 @@ const ModalSentStudent = ({
       key: "classPeriod",
       sorter: (a, b) => a.classPeriod.localeCompare(b.classPeriod),
       align: "center",
+      render: (text, record) => {
+        return text == null ? <span>Chưa có</span> : <span>{text}</span>;
+      },
     },
     {
       title: <div style={{ textAlign: "center" }}>Thời gian</div>,
@@ -137,11 +140,17 @@ const ModalSentStudent = ({
       render: (text, record) => {
         return (
           <span>
-            {convertHourAndMinuteToString(
-              record.startHour,
-              record.startMinute,
-              record.endHour,
-              record.endMinute
+            {record.classPeriod == null ? (
+              <span>Chưa có</span>
+            ) : (
+              <span>
+                {convertHourAndMinuteToString(
+                  record.startHour,
+                  record.startMinute,
+                  record.endHour,
+                  record.endMinute
+                )}
+              </span>
             )}
           </span>
         );
@@ -193,6 +202,10 @@ const ModalSentStudent = ({
           .toLowerCase()
           .includes(value.toLowerCase());
       },
+      render: (text, record) => {
+        return text === "" ? <span>Chưa có</span> : <span>{text}</span>;
+      },
+      align: "center",
     },
     {
       title: <div style={{ textAlign: "center" }}>Hành động</div>,

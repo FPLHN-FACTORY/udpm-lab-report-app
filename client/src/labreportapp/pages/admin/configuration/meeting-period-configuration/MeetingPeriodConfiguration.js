@@ -33,9 +33,9 @@ import {
 import { AdMeetingPeriodConfigurationAPI } from "../../../../api/admin/AdMeetingPeriodConfigurationAPI";
 import ModalCreateMeetingPeriod from "./modal-create/ModalCreateMeetingPeriod";
 import ModalUpdateMeetingPeriod from "./modal-update/ModalUpdateMeetingPeriod";
-import { toast } from "react-toastify";
 import LoadingIndicator from "../../../../helper/loading";
 import ModalHistoryMeetingPeriod from "./modal-history-configuration-meeting-period/ModalHistoryMeetingPeriod";
+import { convertHourAndMinuteToString } from "../../../../helper/util.helper";
 
 const MeetingPeriodConfiguration = () => {
   const [meetingPeriod, setMeetingPeriod] = useState(null);
@@ -82,41 +82,30 @@ const MeetingPeriodConfiguration = () => {
       dataIndex: "name",
       key: "name",
       sorter: (a, b) => a.name.localeCompare(b.name),
-      width: "20%",
     },
     {
       title: "Thời gian bắt đầu",
       dataIndex: "startTime",
       key: "startTime",
       render: (text, record) => {
-        const startHour = record.startHour;
-        const startMinute = record.startMinute;
-        return <span>{`${startHour}:${startMinute}`}</span>;
+        return (
+          <span>
+            {convertHourAndMinuteToString(
+              record.startHour,
+              record.startMinute,
+              record.endHour,
+              record.endMinute
+            )}
+          </span>
+        );
       },
+      align: "center",
       sorter: (a, b) => {
         return (
           a.startHour.localeCompare(b.startHour) ||
           a.startMinute.localeCompare(b.startMinute)
         );
       },
-      width: "25%",
-    },
-    {
-      title: "Thời gian kết thúc",
-      dataIndex: "endTime",
-      key: "endTime",
-      render: (text, record) => {
-        const endHour = record.endHour;
-        const endMinute = record.endMinute;
-        return <span>{`${endHour}:${endMinute}`}</span>;
-      },
-      sorter: (a, b) => {
-        return (
-          a.endHour.localeCompare(b.endHour) ||
-          a.endMinute.localeCompare(b.endMinute)
-        );
-      },
-      width: "25%",
     },
     {
       title: "Hành động",

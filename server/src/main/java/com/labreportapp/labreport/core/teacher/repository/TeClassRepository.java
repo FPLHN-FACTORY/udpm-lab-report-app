@@ -88,7 +88,7 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
             FROM activity a
             JOIN level l ON l.id = a.level_id
             JOIN class c ON c.activity_id = a.id
-            JOIN meeting_period mp ON c.class_period = mp.id 
+            LEFT JOIN meeting_period mp ON c.class_period = mp.id 
             JOIN semester s ON s.id = a.semester_id
             WHERE DATE(FROM_UNIXTIME(c.start_time / 1000)) <= CURDATE() 
                 AND c.class_size + :#{#req.countStudent} <= :#{#size}
@@ -102,7 +102,7 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
               FROM activity a
             JOIN level l ON l.id = a.level_id
             JOIN class c ON c.activity_id = a.id
-            JOIN meeting_period mp ON c.class_period = mp.id 
+            LEFT JOIN meeting_period mp ON c.class_period = mp.id 
             JOIN semester s ON s.id = a.semester_id
             WHERE DATE(FROM_UNIXTIME(c.start_time / 1000)) <= CURDATE() 
                 AND c.class_size + :#{#req.countStudent} <= :#{#size}
@@ -133,7 +133,7 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
               s.id AS semester_id
               FROM activity a
               JOIN class c ON c.activity_id = a.id
-               JOIN meeting_period mp ON c.class_period = mp.id 
+             LEFT   JOIN meeting_period mp ON c.class_period = mp.id 
               JOIN semester s ON s.id = a.semester_id
               JOIN level d ON d.id = a.level_id
               WHERE c.id = :#{#id}
@@ -157,7 +157,7 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
             mp.name AS class_period,
             a.level AS level
             FROM class c
-            JOIN meeting_period mp ON mp.id = c.class_period
+           LEFT  JOIN meeting_period mp ON mp.id = c.class_period
             JOIN activity a ON a.id = c.activity_id
             JOIN LatestSemester l ON l.id = a.semester_id
             WHERE c.teacher_id = :#{#id}
@@ -237,7 +237,7 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
                 FROM activity a
                 JOIN level l ON l.id = a.level_id
                 JOIN class c ON c.activity_id = a.id
-                JOIN meeting_period mp ON mp.id = c.class_period
+               LEFT  JOIN meeting_period mp ON mp.id = c.class_period
                 JOIN semester s ON s.id = a.semester_id
                 JOIN check_team ct ON ct.class_id = c.id
                 JOIN check_lesson cls ON cls.class_id = c.id
