@@ -93,10 +93,10 @@ public class JwtTokenProvider {
             }
             Object roleClaim = claims.getBody().get("role");
             String id = claims.getBody().get("id", String.class);
-//            Object response = callApiIdentity.handleCallApiGetRoleUserByIdUserAndModuleCode(id);
-//            if (!AreRolesEqual.compareObjects(roleClaim, response)) {
-//                return Message.ROLE_HAS_CHANGE.getMessage();
-//            }
+            Object response = callApiIdentity.handleCallApiGetRoleUserByIdUserAndModuleCode(id);
+            if (!AreRolesEqual.compareObjects(roleClaim, response)) {
+                return Message.ROLE_HAS_CHANGE.getMessage();
+            }
             return "";
         } catch (JwtException | IllegalArgumentException e) {
             return null;
