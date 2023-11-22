@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author quynhncph26201
  */
 @RestController
-@RequestMapping("/student/post")
+@RequestMapping("/api/student/post")
 public class StPostController {
 
     @Autowired

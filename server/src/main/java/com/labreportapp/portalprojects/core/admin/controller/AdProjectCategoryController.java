@@ -20,7 +20,7 @@ import java.util.List;
  * @author NguyenVinh
  */
 @RestController
-@RequestMapping("/admin/project-category")
+@RequestMapping("/api/admin/project-category")
 public class AdProjectCategoryController {
 
     @Autowired

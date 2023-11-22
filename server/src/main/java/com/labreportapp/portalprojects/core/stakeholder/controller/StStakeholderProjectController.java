@@ -3,7 +3,7 @@ package com.labreportapp.portalprojects.core.stakeholder.controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/stakeholder")
+@RequestMapping("/api/stakeholder")
 public class StStakeholderProjectController {
 
 

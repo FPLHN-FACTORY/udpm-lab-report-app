@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author NguyenVinh
  */
 @RestController
-@RequestMapping("/email")
+@RequestMapping("/api/email")
 
 public class EmailSenderController {
 

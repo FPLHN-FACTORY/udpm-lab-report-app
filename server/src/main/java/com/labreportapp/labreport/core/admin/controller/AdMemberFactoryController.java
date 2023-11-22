@@ -28,7 +28,7 @@ import java.io.IOException;
  * @author hieundph25894
  */
 @RestController
-@RequestMapping("/admin/member-factory")
+@RequestMapping("/api/admin/member-factory")
 public class AdMemberFactoryController {
 
     @Autowired

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author hieundph25894 - duchieu212
  */
 @RestController
-@RequestMapping("/teacher/feedback")
+@RequestMapping("/api/teacher/feedback")
 public class TeFeedBackController {
 
     @Autowired

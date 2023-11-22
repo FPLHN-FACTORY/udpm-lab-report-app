@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author quynhncph26201
  */
 @RestController
-@RequestMapping("/student/my-class/team")
+@RequestMapping("/api/student/my-class/team")
 public class StTeamClassController {
 
     @Autowired

@@ -35,7 +35,7 @@ import java.util.List;
  * @author quynhncph26201
  */
 @RestController
-@RequestMapping("/admin/team")
+@RequestMapping("/api/admin/team")
 public class AdTeamController {
 
     @Autowired

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author thangncph26123
  */
 @RestController
-@RequestMapping("/member/label-todo")
+@RequestMapping("/api/member/label-todo")
 public class MeLabelTodoController {
 
     @Autowired

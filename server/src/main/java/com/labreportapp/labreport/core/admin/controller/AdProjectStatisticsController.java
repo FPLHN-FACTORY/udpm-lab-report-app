@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author hieundph25894-duchieu212
  */
 @RestController
-@RequestMapping("/admin/project-statistics")
+@RequestMapping("/api/admin/project-statistics")
 public class AdProjectStatisticsController {
 
     @Autowired

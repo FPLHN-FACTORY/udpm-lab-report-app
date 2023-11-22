@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author thangncph26123
  */
 @RestController
-@RequestMapping("/admin/meeting-period")
+@RequestMapping("/api/admin/meeting-period")
 public class AdMeetingPeriodController {
 
     @Autowired

@@ -23,7 +23,7 @@ import java.util.List;
  * @author quynhncph26201
  */
 @RestController
-@RequestMapping("/admin/role-factory")
+@RequestMapping("/api/admin/role-factory")
 public class AdRoleFactoryController {
 
     @Autowired

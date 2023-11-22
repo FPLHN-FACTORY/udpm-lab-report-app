@@ -27,7 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @author thangncph26123
  */
 @RestController
-@RequestMapping("/member/image")
+@RequestMapping("/api/member/image")
 public class MeImageController {
 
     @Autowired

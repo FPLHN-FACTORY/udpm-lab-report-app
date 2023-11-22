@@ -13,7 +13,7 @@ import java.util.List;
  * @author quynhncph26201
  */
 @RestController
-@RequestMapping("/admin/feed-back")
+@RequestMapping("/api/admin/feed-back")
 public class AdFeedBackController {
     @Autowired
     private AdFeedBackService adFeedBackSevice;

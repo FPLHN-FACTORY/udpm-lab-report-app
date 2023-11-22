@@ -35,7 +35,7 @@ import java.util.List;
  * @author quynhncph26201
  */
 @RestController
-@RequestMapping("/admin/role-config")
+@RequestMapping("/api/admin/role-config")
 public class AdRoleProjectController {
 
     @Autowired

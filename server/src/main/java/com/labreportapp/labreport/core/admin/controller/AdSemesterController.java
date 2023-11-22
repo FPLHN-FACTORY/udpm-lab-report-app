@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/admin/semester")
+@RequestMapping("/api/admin/semester")
 public class AdSemesterController {
 
     @Autowired

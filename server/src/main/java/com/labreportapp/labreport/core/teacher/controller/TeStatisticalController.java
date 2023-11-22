@@ -25,7 +25,7 @@ import java.io.ByteArrayOutputStream;
  * @author hieundph25894
  */
 @RestController
-@RequestMapping("/teacher/statistical")
+@RequestMapping("/api/teacher/statistical")
 public class TeStatisticalController {
 
     @Autowired

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author quynhncph26201
  */
 @RestController
-@RequestMapping("/teacher/member-factory")
+@RequestMapping("/api/teacher/member-factory")
 public class TeMemberFactoryController {
 
     @Autowired

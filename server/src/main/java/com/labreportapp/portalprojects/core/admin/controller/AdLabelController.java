@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author NguyenVinh
  */
 @RestController
-@RequestMapping("/admin/label")
+@RequestMapping("/api/admin/label")
 public class AdLabelController {
 
     @Autowired

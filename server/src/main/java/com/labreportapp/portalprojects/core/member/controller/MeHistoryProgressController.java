@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author thangncph26123
  */
 @RestController
-@RequestMapping("/member/history-progress")
+@RequestMapping("/api/member/history-progress")
 public class MeHistoryProgressController {
 
     @Autowired

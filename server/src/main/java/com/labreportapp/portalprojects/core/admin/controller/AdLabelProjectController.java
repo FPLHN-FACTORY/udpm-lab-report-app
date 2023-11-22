@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author NguyenVinh
  */
 @RestController
-@RequestMapping("/admin/label-project")
+@RequestMapping("/api/admin/label-project")
 public class AdLabelProjectController {
 
 }

@@ -20,7 +20,7 @@ import java.util.List;
  * @author hieundph25894
  */
 @RestController
-@RequestMapping("/teacher/student-classes")
+@RequestMapping("/api/teacher/student-classes")
 public class TeStudentClassesController {
 
     @Autowired

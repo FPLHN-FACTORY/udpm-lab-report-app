@@ -22,7 +22,7 @@ import java.util.List;
  * @author thangncph26123
  */
 @RestController
-@RequestMapping("/student/feedback")
+@RequestMapping("/api/student/feedback")
 public class StFeedBackController {
 
     @Autowired

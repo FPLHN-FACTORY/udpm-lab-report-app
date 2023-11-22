@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author thangncph26123
  */
 @RestController
-@RequestMapping("/member/notification-member")
+@RequestMapping("/api/member/notification-member")
 public class MeNotificationMemberController {
 
     @Autowired

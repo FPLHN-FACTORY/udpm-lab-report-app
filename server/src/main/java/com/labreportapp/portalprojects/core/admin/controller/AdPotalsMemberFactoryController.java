@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author hieundph25894
  */
 @RestController
-@RequestMapping("/admin/potals/member-factory")
+@RequestMapping("/api/admin/potals/member-factory")
 public class AdPotalsMemberFactoryController {
 
     @Autowired

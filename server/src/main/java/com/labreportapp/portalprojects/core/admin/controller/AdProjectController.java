@@ -36,7 +36,7 @@ import java.util.List;
  * @author hieundph25894
  */
 @RestController
-@RequestMapping("/admin/project")
+@RequestMapping("/api/admin/project")
 public class AdProjectController {
 
     @Autowired

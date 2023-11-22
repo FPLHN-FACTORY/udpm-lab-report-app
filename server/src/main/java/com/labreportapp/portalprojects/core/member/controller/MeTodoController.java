@@ -40,7 +40,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author thangncph26123
  */
 @RestController
-@RequestMapping("/member/todo")
+@RequestMapping("/api/member/todo")
 public class MeTodoController {
 
     @Autowired

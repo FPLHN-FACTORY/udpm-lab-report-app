@@ -15,7 +15,7 @@ import java.util.List;
  * @author hieundph25894
  */
 @RestController
-@RequestMapping("/teacher/semester")
+@RequestMapping("/api/teacher/semester")
 public class TeSemesterController {
 
     @Autowired

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 @RestController
-@RequestMapping("/admin/dashboard-lab-report-app")
+@RequestMapping("/api/admin/dashboard-lab-report-app")
 public class AdDashboardLabReportAppController {
 
     @Autowired

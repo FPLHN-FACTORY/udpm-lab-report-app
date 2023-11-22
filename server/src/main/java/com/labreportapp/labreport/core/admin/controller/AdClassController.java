@@ -48,7 +48,7 @@ import java.util.List;
  * @author quynhncph26201
  */
 @RestController
-@RequestMapping("/admin/class-managerment")
+@RequestMapping("/api/admin/class-managerment")
 public class AdClassController {
 
     @Autowired

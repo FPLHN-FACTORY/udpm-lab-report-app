@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
  * @author quynhncph26201
  */
 @RestController
-@RequestMapping("/stakeholder")
+@RequestMapping("/api/stakeholder")
 public class AdStakeHolderController {
 
     @Autowired

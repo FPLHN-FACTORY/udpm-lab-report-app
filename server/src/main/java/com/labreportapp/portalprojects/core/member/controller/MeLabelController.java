@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author thangncph26123
  */
 @RestController
-@RequestMapping("/member/label")
+@RequestMapping("/api/member/label")
 public class MeLabelController {
 
     @Autowired

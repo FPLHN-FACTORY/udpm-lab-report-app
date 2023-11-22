@@ -1,6 +1,5 @@
 package com.labreportapp.labreport.core.admin.service.impl;
 
-import com.labreportapp.labreport.core.admin.controller.AdUpdateTemplateReportRequest;
 import com.labreportapp.labreport.core.admin.repository.AdTemplateReportRepository;
 import com.labreportapp.labreport.core.admin.service.AdTemplateReportService;
 import com.labreportapp.labreport.entity.TemplateReport;
