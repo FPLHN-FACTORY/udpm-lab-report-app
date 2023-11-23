@@ -1,5 +1,6 @@
 package com.labreportapp.labreport.core.admin.controller;
 
+import com.labreportapp.labreport.core.admin.model.request.AdUpdateTemplateReportRequest;
 import com.labreportapp.labreport.core.admin.service.AdTemplateReportService;
 import com.labreportapp.labreport.core.common.base.ResponseObject;
 import com.labreportapp.labreport.infrastructure.logger.LoggerObject;
@@ -9,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
