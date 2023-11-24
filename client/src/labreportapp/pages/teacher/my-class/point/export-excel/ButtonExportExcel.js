@@ -19,25 +19,27 @@ const ButtonExportExcel = ({ idClass }) => {
     return format;
   };
 
-  const handleExport = async () => {
-    try {
-      dispatch(SetLoadingTrue());
-      const response = await TeacherExcelPointAPI.export(idClass);
-      const blob = new Blob([response.data], {
-        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      });
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download =
-        "BangDiem_" + convertLongToDateTime(new Date().getTime()) + ".xlsx";
-      link.click();
-      window.URL.revokeObjectURL(url);
-      dispatch(SetLoadingFalse());
-      message.success("Export thành công !");
-    } catch (error) {
-      dispatch(SetLoadingFalse());
-    }
+  const handleExport = () => {
+    dispatch(SetLoadingTrue());
+    TeacherExcelPointAPI.export(idClass).then(
+      (response) => {
+        const blob = new Blob([response.data], {
+          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download =
+          "BangDiem_" + convertLongToDateTime(new Date().getTime()) + ".xlsx";
+        link.click();
+        window.URL.revokeObjectURL(url);
+        dispatch(SetLoadingFalse());
+        message.success("Export thành công !");
+      },
+      (error) => {
+        dispatch(SetLoadingFalse());
+      }
+    );
   };
 
   return (

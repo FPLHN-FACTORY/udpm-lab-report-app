@@ -41,6 +41,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -96,6 +97,7 @@ public class TeStatisticalServiceImpl implements TeStatisticalService {
         List<TeMeetingResponse> listMeetingSort = listMeeting.stream()
                 .sorted(Comparator.comparing(TeMeetingResponse::getMeetingDate)
                         .thenComparing(TeMeetingResponse::getName))
+                        .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
         AtomicInteger collTitle = new AtomicInteger(6);
@@ -360,6 +362,7 @@ public class TeStatisticalServiceImpl implements TeStatisticalService {
                 List<TeHwNoteReportListRespone> listMeetingSort = listHomeWorkNoteReportAddList.stream()
                         .sorted(Comparator.comparing(TeHwNoteReportListRespone::getMeetingDate)
                                 .thenComparing(TeHwNoteReportListRespone::getNameMeeting))
+                                .filter(Objects::nonNull)
                         .collect(Collectors.toList());
 
                 AtomicInteger collFill = new AtomicInteger(6);

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,6 +46,7 @@ public class StAttendanceServiceImpl implements StAttendanceService {
         List<String> idTeacherList = stAttendanceResponeList.getContent().stream()
                 .map(StAttendanceRespone::getTeacherId)
                 .distinct()
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
         List<SimpleResponse> listRespone = callApiIdentity.handleCallApiGetListUserByListId(idTeacherList);
         List<StAttendanceCallApiRespone> listReturn = new ArrayList<>();

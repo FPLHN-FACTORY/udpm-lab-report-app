@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -36,6 +37,7 @@ public class StPostServiceImpl implements StPostService {
         List<String> idUsers = listPage.getContent().stream()
                 .map(StPostResponse::getIdTeacher)
                 .distinct()
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
         List<SimpleResponse> listTeacher = callApiIdentity.handleCallApiGetListUserByListId(idUsers);
         Page<StPostTeacherResponse> pageNew = listPage.map(item -> {

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -58,6 +59,7 @@ public class TeFeedBackServiceImpl implements TeFeedBackService {
         List<String> idStudentList = listFeedback.stream()
                 .map(FeedBack::getStudentId)
                 .distinct()
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
         List<SimpleResponse> listResponse = callApiIdentity.handleCallApiGetListUserByListId(idStudentList);
         AtomicInteger stt = new AtomicInteger();

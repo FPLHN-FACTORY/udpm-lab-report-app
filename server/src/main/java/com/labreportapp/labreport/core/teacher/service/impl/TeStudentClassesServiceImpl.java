@@ -31,6 +31,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -65,8 +66,12 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
         List<String> idStudentList = listRepository.stream()
                 .map(TeStudentClassesResponse::getIdStudent)
                 .distinct()
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
+        System.out.println(idStudentList.size() + " wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww");
+
         List<SimpleResponse> listRespone = callApiIdentity.handleCallApiGetListUserByListId(idStudentList);
+        System.out.println(listRespone.size() + " wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww");
         List<TeStudentCallApiResponse> listReturn = new ArrayList<>();
         if (listRepository.size() == 0 && listRespone.size() == 0) {
             return null;
@@ -102,6 +107,7 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
         List<String> idStudentList = listStudentClass.stream()
                 .map(StudentClasses::getStudentId)
                 .distinct()
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
         List<SimpleResponse> listRespone = callApiIdentity.handleCallApiGetListUserByListId(idStudentList);
         List<TeStudentStatusApiResponse> listReturn = new ArrayList<>();
@@ -135,6 +141,7 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
         List<String> idStudentList = listRepository.stream()
                 .map(TePointImportResponse::getIdStudent)
                 .distinct()
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
         List<SimpleResponse> listRespone = callApiIdentity.handleCallApiGetListUserByListId(idStudentList);
         return listRespone;
@@ -150,6 +157,7 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
         List<String> idStudentList = listRepository.stream()
                 .map(TeStudentClassesResponse::getIdStudent)
                 .distinct()
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
         List<SimpleResponse> listRespone = callApiIdentity.handleCallApiGetListUserByListId(idStudentList);
         List<TeStudentCallApiResponse> listReturn = new ArrayList<>();

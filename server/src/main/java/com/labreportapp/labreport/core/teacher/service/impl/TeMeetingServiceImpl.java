@@ -52,6 +52,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -141,6 +142,7 @@ public class TeMeetingServiceImpl implements TeMeetingService {
         List<String> idTeacherList = list.stream()
                 .map(TeMeetingResponse::getIdTeacher)
                 .distinct()
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
         List<SimpleResponse> listRespone = callApiIdentity.handleCallApiGetListUserByListId(idTeacherList);
         List<TeMeetingCustomResponse> listReturn = new ArrayList<>();
@@ -415,6 +417,7 @@ public class TeMeetingServiceImpl implements TeMeetingService {
                 .sorted(Comparator.comparing(TeMeetingCustomToAttendanceResponse::getMeetingDate,
                         Comparator.nullsLast(Comparator.naturalOrder()))
                         .thenComparing(TeMeetingCustomToAttendanceResponse::getMeetingPeriod))
+                        .filter(Objects::nonNull)
                 .collect(Collectors.toList());
         list.clear();
         return sortedList;

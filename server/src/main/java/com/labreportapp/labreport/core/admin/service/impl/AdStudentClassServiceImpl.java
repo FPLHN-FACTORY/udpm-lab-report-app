@@ -81,6 +81,7 @@ public class AdStudentClassServiceImpl implements AdStudentClassService {
 
         List<String> idStudentList = listRepository.stream()
                 .map(AdStudentClassesRespone::getIdStudent)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
         List<SimpleResponse> listRespone = callApiIdentity.handleCallApiGetListUserByListId(idStudentList);
@@ -110,28 +111,35 @@ public class AdStudentClassServiceImpl implements AdStudentClassService {
 
     @Override
     public ByteArrayOutputStream exportStudentsInClassExcel(HttpServletResponse response, String idClass, Boolean isSample) {
-        List<AdStudentClassesRespone> studentsInClass = adStudentClassRepository
-                .findStudentClassByIdClass(idClass);
-
-        List<String> idStudentList = studentsInClass.stream()
-                .map(AdStudentClassesRespone::getIdStudent)
-                .collect(Collectors.toList());
-
-        List<SimpleResponse> simpleResponse = callApiIdentity.handleCallApiGetListUserByListId(idStudentList);
         List<AdExportExcelStudentsClassCustomResponse> studentsInClassResponse = new ArrayList<>();
+        try {
+            List<AdStudentClassesRespone> studentsInClass = adStudentClassRepository
+                    .findStudentClassByIdClass(idClass);
 
-        for (AdStudentClassesRespone st : studentsInClass) {
-            simpleResponse.forEach((s -> {
-                if (st.getIdStudent().equals(s.getId())) {
-                    AdExportExcelStudentsClassCustomResponse export = new AdExportExcelStudentsClassCustomResponse();
-                    export.setStatusStudent(st.getStatusStudent());
-                    export.setNameTeam(st.getNameTeam());
-                    export.setEmail(st.getEmailStudentClass());
-                    export.setName(st.getIdStudent().equals(s.getId()) ? s.getName() : "");
-                    export.setUsername(st.getIdStudent().equals(s.getId()) ? s.getUserName() : "");
-                    studentsInClassResponse.add(export);
-                }
-            }));
+            List<String> idStudentList = studentsInClass.stream()
+                    .map(AdStudentClassesRespone::getIdStudent)
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
+
+            if (isSample) {
+                return adExportExcelStudentClasses.export(response, studentsInClassResponse, isSample);
+            }
+            List<SimpleResponse> simpleResponse = callApiIdentity.handleCallApiGetListUserByListId(idStudentList);
+            for (AdStudentClassesRespone st : studentsInClass) {
+                simpleResponse.forEach((s -> {
+                    if (st.getIdStudent().equals(s.getId())) {
+                        AdExportExcelStudentsClassCustomResponse export = new AdExportExcelStudentsClassCustomResponse();
+                        export.setStatusStudent(st.getStatusStudent());
+                        export.setNameTeam(st.getNameTeam());
+                        export.setEmail(st.getEmailStudentClass());
+                        export.setName(st.getIdStudent().equals(s.getId()) ? s.getName() : "");
+                        export.setUsername(st.getIdStudent().equals(s.getId()) ? s.getUserName() : "");
+                        studentsInClassResponse.add(export);
+                    }
+                }));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return adExportExcelStudentClasses.export(response, studentsInClassResponse, isSample);

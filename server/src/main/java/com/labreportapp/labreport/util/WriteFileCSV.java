@@ -114,7 +114,7 @@ public class WriteFileCSV {
         String folderAdmin = pathTemplate + getPathFileByHocKy(tenHocKy) + getPropertiesRead(ConfigurationsConstant.FOLDER_ACTOR_ADMIN);
         String pathFile = "";
         System.out.println(api);
-        if (api.startsWith("/admin")) {
+        if (api.startsWith("/api/admin")) {
             if (api.contains("/semester")) {
                 pathFile = pathTemplate + getPropertiesRead(ConfigurationsConstant.NAME_FILE_QUAN_LY_HOC_KY);
             }
