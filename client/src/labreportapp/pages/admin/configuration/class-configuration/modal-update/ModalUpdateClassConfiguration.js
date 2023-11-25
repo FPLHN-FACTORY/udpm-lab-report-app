@@ -147,7 +147,7 @@ const ModalUpdateClassConfiguration = ({
       className="modal_show_detail_config"
     >
       <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
-        <span style={{ fontSize: "18px" }}>Sửa hoạt động</span>
+        <span style={{ fontSize: "18px" }}>Sửa cấu hình lớp học</span>
       </div>
       <div style={{ marginTop: "15px" }}>
         <Row gutter={16} style={{ marginBottom: "15px" }}>

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -33,6 +34,7 @@ public class AdTeacherServiceImpl implements AdTeacherService {
         }
         List<SimpleResponse> results = response.stream()
                 .filter(item -> item.getName().toLowerCase().contains(name.toLowerCase()))
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
         return results;
     }

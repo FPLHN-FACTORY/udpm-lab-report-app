@@ -35,11 +35,11 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws IOException, ServletException {
         try {
             String jwtToken = extractJwtToken(request);
-            HttpSession session = request.getSession();
-            session.setAttribute(SessionConstant.TOKEN, jwtToken);
             response.setContentType("text/plain;charset=UTF-8");
             response.setCharacterEncoding("UTF-8");
             if (jwtToken != null) {
+                HttpSession session = request.getSession();
+                session.setAttribute(SessionConstant.TOKEN, jwtToken);
                 String message = jwtTokenProvider.validateToken(jwtToken);
                 if (message == null) {
                     throw new AccessDeniedException("UNAUTHORIZED");
@@ -55,10 +55,13 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 //                throw new AccessDeniedException("UNAUTHORIZED");
             }
             filterChain.doFilter(request, response);
-        } catch (AccessDeniedException e) {
+        }  catch (AccessDeniedException e) {
+            e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write(e.getMessage());
-        } catch (RuntimeException e) {
+        }
+        catch (RuntimeException e) {
+            e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
             response.getWriter().write(e.getMessage());
         }

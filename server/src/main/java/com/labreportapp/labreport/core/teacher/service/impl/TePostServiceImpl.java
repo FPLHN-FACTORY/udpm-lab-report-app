@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -47,6 +48,7 @@ public class TePostServiceImpl implements TePostService {
         List<String> idUsers = listPage.getContent().stream()
                 .map(TePostResponse::getIdTeacher)
                 .distinct()
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
         List<SimpleResponse> listTeacher = callApiIdentity.handleCallApiGetListUserByListId(idUsers);
         Page<TePostTeacherResponse> pageNew = listPage.map(item -> {

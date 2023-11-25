@@ -61,7 +61,7 @@ public interface AdMeetingRepository extends JpaRepository<Meeting, String> {
     @Query(value = """
               UPDATE meeting a
               JOIN (
-                  SELECT m.id, ROW_NUMBER() OVER (ORDER BY m.meeting_date ASC, mp.name ASC) AS row_num
+                  SELECT m.id, ROW_NUMBER() OVER (ORDER BY m.meeting_date ASC, mp.start_hour ASC) AS row_num
                   FROM meeting m
                    JOIN meeting_period mp ON mp.id = m.meeting_period
                   WHERE class_id = :idClass

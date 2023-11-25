@@ -86,6 +86,7 @@ public class AdFeedBackServiceImpl implements AdFeedBackService {
         List<String> idStudentList = listFeedback.stream()
                 .map(FeedBack::getStudentId)
                 .distinct()
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
         List<SimpleResponse> listResponse = callApiIdentity.handleCallApiGetListUserByListId(idStudentList);
         AtomicInteger stt = new AtomicInteger();

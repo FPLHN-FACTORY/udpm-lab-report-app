@@ -34,6 +34,7 @@ import org.springframework.validation.annotation.Validated;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -66,6 +67,7 @@ public class MeMemberProjectServiceImpl implements MeMemberProjectService {
         List<MeMemberProjectResponse> listMemberProject = meMemberProjectRepository.getAllMemberProject(idProject);
         List<String> memberIds = listMemberProject.stream()
                 .map(MeMemberProjectResponse::getMemberId)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
         List<SimpleResponse> listResponse = callApiIdentity.handleCallApiGetListUserByListId(memberIds);
         List<MeMemberProjectCustom> listCustom = new ArrayList<>();

@@ -64,7 +64,7 @@ const TablePoint = () => {
       title: "#",
       dataIndex: "stt",
       key: "stt",
-      sorter: (a, b) => a.stt - b.stt,
+      render: (text, record, index) => index + 1,
     },
     {
       title: "Nhóm",

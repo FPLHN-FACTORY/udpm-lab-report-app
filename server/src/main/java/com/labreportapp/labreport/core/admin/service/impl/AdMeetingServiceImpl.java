@@ -115,7 +115,7 @@ public class AdMeetingServiceImpl implements AdMeetingService {
         }
         Meeting meeting = new Meeting();
         meeting.setName("Buổi học");
-        meeting.setMeetingDate(DateUtils.truncate(new Date(request.getMeetingDate()), Calendar.DATE).getTime());
+        meeting.setMeetingDate(request.getMeetingDate());
         meeting.setTypeMeeting(TypeMeeting.values()[request.getTypeMeeting()]);
         MeetingPeriod meetingPeriodFind = null;
         if (request.getMeetingPeriod() != null) {
@@ -203,7 +203,7 @@ public class AdMeetingServiceImpl implements AdMeetingService {
         stringBuilder.append(messageAddress);
         loggerUtil.sendLogStreamClass(stringBuilder.toString(), classOptional.get().getCode(), nameSemester);
 
-        meetingFind.get().setMeetingDate(DateUtils.truncate(new Date(request.getMeetingDate()), Calendar.DATE).getTime());
+        meetingFind.get().setMeetingDate(request.getMeetingDate());
         meetingFind.get().setTypeMeeting(TypeMeeting.values()[request.getTypeMeeting()]);
 
         meetingFind.get().setMeetingPeriod(meetingPeriodNew.getId());
@@ -371,8 +371,10 @@ public class AdMeetingServiceImpl implements AdMeetingService {
         adDetailMeetingResponse.setCodeClass(classFind.getCode());
         if (meeting.getTeacherId() != null) {
             SimpleResponse simpleResponse = callApiIdentity.handleCallApiGetUserById(meeting.getTeacherId());
-            adDetailMeetingResponse.setTeacherId(simpleResponse.getId());
-            adDetailMeetingResponse.setUserNameTeacher(simpleResponse.getUserName() + " - " + simpleResponse.getName());
+            if (Objects.nonNull(simpleResponse)) {
+                adDetailMeetingResponse.setTeacherId(simpleResponse.getId());
+                adDetailMeetingResponse.setUserNameTeacher(simpleResponse.getUserName() + " - " + simpleResponse.getName());
+            }
         }
         return adDetailMeetingResponse;
     }

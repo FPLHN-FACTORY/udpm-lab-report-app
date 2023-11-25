@@ -46,7 +46,7 @@ public class CallApiIdentity {
 
             String authorizationToken = "Bearer " + labReportAppSession.getToken();
             headers.set("Authorization", authorizationToken);
-
+            System.out.println(authorizationToken);
             ObjectMapper objectMapper = new ObjectMapper();
             String jsonList = null;
             try {
@@ -64,6 +64,7 @@ public class CallApiIdentity {
                             });
 
             List<SimpleResponse> response = responseEntity.getBody();
+            System.out.println(response.size() + " aaaaaaaaaaa");
             return response;
         } catch (Exception e) {
             e.printStackTrace();
@@ -189,6 +190,9 @@ public class CallApiIdentity {
                     .filter(Objects::nonNull)
                     .distinct()
                     .collect(Collectors.toList());
+            System.out.println(roles.get(0));
+            System.out.println(roles.get(1));
+            System.out.println(roles.get(2));
             if (roles.size() > 1) {
                 return roles;
             }

@@ -45,6 +45,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
@@ -276,6 +277,7 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
             List<TeAttendanceStudentResponse> members = listStudent.stream()
                     .filter(student -> student.getIdTeam() != null && student.getIdTeam().equals(idTeam)
                             && student.getStatusAttendance().equals(StatusAttendance.YES) && student.getRole().equals(RoleTeam.MEMBER))
+                            .filter(Objects::nonNull)
                     .collect(Collectors.toList());
             if (members.size() >= 2) {
                 Random random = new Random();
@@ -341,6 +343,7 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
                 .sorted(Comparator.comparing(TeAttendanceStudentMeetingRespone::getMeetingDate,
                         Comparator.nullsLast(Comparator.naturalOrder()))
                         .thenComparing(TeAttendanceStudentMeetingRespone::getMeetingPeriod))
+                        .filter(Objects::nonNull)
                 .collect(Collectors.toList());
         return sortedList;
     }
@@ -398,6 +401,7 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
         List<String> idUsers = listRespone.stream()
                 .map(TeStudentAttendanceRespone::getTeacherId)
                 .distinct()
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
         List<SimpleResponse> listTeacher = callApiIdentity.handleCallApiGetListUserByListId(idUsers);
         Page<TeStudentAttendedDetailRespone> pageNew = pageList.map(item -> {

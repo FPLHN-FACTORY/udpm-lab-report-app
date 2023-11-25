@@ -8,6 +8,7 @@ import com.labreportapp.labreport.entity.FeedBack;
 import com.labreportapp.labreport.entity.HomeWork;
 import com.labreportapp.labreport.entity.Meeting;
 import com.labreportapp.labreport.entity.MeetingPeriod;
+import com.labreportapp.labreport.entity.MeetingRequest;
 import com.labreportapp.labreport.entity.MemberFactory;
 import com.labreportapp.labreport.entity.MemberRoleFactory;
 import com.labreportapp.labreport.entity.MemberTeamFactory;
@@ -29,6 +30,7 @@ import com.labreportapp.labreport.infrastructure.constant.StatusClass;
 import com.labreportapp.labreport.infrastructure.constant.StatusFeedBack;
 import com.labreportapp.labreport.infrastructure.constant.StatusHoneyPlus;
 import com.labreportapp.labreport.infrastructure.constant.StatusMeeting;
+import com.labreportapp.labreport.infrastructure.constant.StatusMeetingRequest;
 import com.labreportapp.labreport.infrastructure.constant.StatusMemberFactory;
 import com.labreportapp.labreport.infrastructure.constant.StatusShowFeedback;
 import com.labreportapp.labreport.infrastructure.constant.StatusStudentFeedBack;
@@ -44,6 +46,7 @@ import com.labreportapp.labreport.repository.HomeWorkRepository;
 import com.labreportapp.labreport.repository.LevelRepository;
 import com.labreportapp.labreport.repository.MeetingPeriodRepository;
 import com.labreportapp.labreport.repository.MeetingRepository;
+import com.labreportapp.labreport.repository.MeetingRequestRepository;
 import com.labreportapp.labreport.repository.MemberFactoryRepository;
 import com.labreportapp.labreport.repository.MemberRoleFactoryRepository;
 import com.labreportapp.labreport.repository.MemberTeamFactoryRepository;
@@ -117,6 +120,9 @@ public class DBGenerator implements CommandLineRunner {
 
     @Autowired
     private ActivityRepository activityRepository;
+
+    @Autowired
+    private MeetingRequestRepository meetingRequestRepository;
 
     @Autowired
     private LevelRepository levelRepository;
@@ -1022,6 +1028,56 @@ public class DBGenerator implements CommandLineRunner {
         feedBack19.setClassId(class1.getId());
         feedBack19.setStudentId(studentClasses19.getStudentId());
         feedBack19.setId(feedBackRepository.save(feedBack19).getId());
+
+        MeetingRequest meetingRequest1 = new MeetingRequest();
+        meetingRequest1.setName("Buổi 1");
+        meetingRequest1.setMeetingDate(new Date().getTime() + 86400000);
+        meetingRequest1.setMeetingPeriod(meetingPeriod1.getId());
+        meetingRequest1.setClassId(class1.getId());
+        meetingRequest1.setTypeMeeting(TypeMeeting.ONLINE);
+        meetingRequest1.setTeacherId(class1.getTeacherId());
+        meetingRequest1.setStatusMeetingRequest(StatusMeetingRequest.CHO_PHE_DUYET);
+        meetingRequest1.setId(meetingRequestRepository.save(meetingRequest1).getId());
+
+        MeetingRequest meetingRequest2 = new MeetingRequest();
+        meetingRequest2.setName("Buổi 2");
+        meetingRequest2.setMeetingDate(new Date().getTime() + 2 * 86400000);
+        meetingRequest2.setMeetingPeriod(meetingPeriod2.getId());
+        meetingRequest2.setClassId(class1.getId());
+        meetingRequest2.setTypeMeeting(TypeMeeting.OFFLINE);
+        meetingRequest2.setTeacherId(class1.getTeacherId());
+        meetingRequest2.setStatusMeetingRequest(StatusMeetingRequest.CHO_PHE_DUYET);
+        meetingRequest2.setId(meetingRequestRepository.save(meetingRequest2).getId());
+
+        MeetingRequest meetingRequest3 = new MeetingRequest();
+        meetingRequest3.setName("Buổi 3");
+        meetingRequest3.setMeetingDate(new Date().getTime() + 3 * 86400000);
+        meetingRequest3.setMeetingPeriod(meetingPeriod1.getId());
+        meetingRequest3.setClassId(class1.getId());
+        meetingRequest3.setTypeMeeting(TypeMeeting.ONLINE);
+        meetingRequest3.setTeacherId(class1.getTeacherId());
+        meetingRequest3.setStatusMeetingRequest(StatusMeetingRequest.CHO_PHE_DUYET);
+        meetingRequest3.setId(meetingRequestRepository.save(meetingRequest3).getId());
+
+        MeetingRequest meetingRequest4 = new MeetingRequest();
+        meetingRequest4.setName("Buổi 4");
+        meetingRequest4.setMeetingDate(new Date().getTime() + 4 * 86400000);
+        meetingRequest4.setMeetingPeriod(meetingPeriod1.getId());
+        meetingRequest4.setClassId(class1.getId());
+        meetingRequest4.setTypeMeeting(TypeMeeting.ONLINE);
+        meetingRequest4.setTeacherId(class1.getTeacherId());
+        meetingRequest4.setStatusMeetingRequest(StatusMeetingRequest.CHO_PHE_DUYET);
+        meetingRequest4.setId(meetingRequestRepository.save(meetingRequest4).getId());
+
+        MeetingRequest meetingRequest5 = new MeetingRequest();
+        meetingRequest5.setName("Buổi 5");
+        meetingRequest5.setMeetingDate(new Date().getTime() + 5 * 86400000);
+        meetingRequest5.setMeetingPeriod(meetingPeriod1.getId());
+        meetingRequest5.setClassId(class1.getId());
+        meetingRequest5.setTypeMeeting(TypeMeeting.ONLINE);
+        meetingRequest5.setTeacherId(class1.getTeacherId());
+        meetingRequest5.setStatusMeetingRequest(StatusMeetingRequest.CHO_PHE_DUYET);
+        meetingRequest5.setId(meetingRequestRepository.save(meetingRequest5).getId());
 
 // Meeting
         Meeting meeting1 = new Meeting();

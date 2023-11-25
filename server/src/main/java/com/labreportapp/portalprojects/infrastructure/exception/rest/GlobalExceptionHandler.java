@@ -44,6 +44,7 @@ public class GlobalExceptionHandler {
         } else if (ex instanceof NoSuchElementException) {
             return ResponseEntity.notFound().build();
         } else {
+            System.out.println(ex.getMessage());
             return new ResponseEntity<>("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

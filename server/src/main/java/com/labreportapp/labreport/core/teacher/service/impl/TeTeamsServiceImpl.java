@@ -81,6 +81,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
@@ -840,6 +841,7 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         List<TeExcelImportTeam> filteredList = listInput.stream()
                 .filter(student -> "X".equalsIgnoreCase(student.getRole()) &&
                         student.getNameTeam() != null && !student.getNameTeam().isEmpty())
+                        .filter(Objects::nonNull)
                 .collect(Collectors.toList());
         filteredList.forEach(item -> {
             Team teamExists = lisTeam.stream()
@@ -905,6 +907,7 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         List<Team> updatedTeamsNE = teTeamsRepositoty.saveAll(updatedTeams);
         List<Team> missingTeams = updatedTeams.stream()
                 .filter(team -> !filteredList.stream().anyMatch(student -> student.getNameTeam().equalsIgnoreCase(team.getName())))
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
         teTeamsRepositoty.deleteAll(missingTeams);
         listInput.clear();

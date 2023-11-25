@@ -85,6 +85,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -833,6 +834,7 @@ public class MeTodoServiceImpl implements MeTodoService {
                     customItem.setY((long) todoList.getList());
                     return customItem;
                 })
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
         meDashboardAllCustom.setListDashboardTodoList(meDashboardItemTodoLists);
 
@@ -868,6 +870,7 @@ public class MeTodoServiceImpl implements MeTodoService {
                     customItem.setY((long) todoList.getMember());
                     return customItem;
                 })
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
         MeDashboardItemCustom meDashboardItemCustomKoCoThanhVien = new MeDashboardItemCustom();
         meDashboardItemCustomKoCoThanhVien.setLabel("Thẻ không có thành viên");
@@ -884,6 +887,7 @@ public class MeTodoServiceImpl implements MeTodoService {
                     customItem.setY((long) todoList.getLabel());
                     return customItem;
                 })
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
         MeDashboardItemCustom meDashboardItemCustomKoCoNhan = new MeDashboardItemCustom();
         meDashboardItemCustomKoCoNhan.setLabel("Thẻ không có nhãn");

@@ -59,6 +59,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -308,6 +309,7 @@ public class AdProjectServiceImpl implements AdProjectService {
         List<String> idStudentList = listMemberProject.stream()
                 .map(MemberProject::getMemberId)
                 .distinct()
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
         List<SimpleResponse> listRespone = callApiIdentity.handleCallApiGetListUserByListId(idStudentList);
 
@@ -485,6 +487,7 @@ public class AdProjectServiceImpl implements AdProjectService {
         if (listMemberProject.size() > listMember.size()) {
             List<MemberProject> listMemberProjectDeleteAll = listMemberProject.stream()
                     .filter(member1 -> listMember.stream().noneMatch(member2 -> member1.getMemberId().equals(member2.getMemberId())))
+                    .filter(Objects::nonNull)
                     .collect(Collectors.toList());
             listMemberProjectDeleteAll.forEach(member -> {
                 SimpleResponse studentFind = mapInforStudent.get(member.getMemberId());
@@ -508,6 +511,7 @@ public class AdProjectServiceImpl implements AdProjectService {
         List<String> idStudentList = listMemberProject.stream()
                 .map(MemberProject::getMemberId)
                 .distinct()
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
         List<SimpleResponse> listRespone = callApiIdentity.handleCallApiGetListUserByListId(idStudentList);
         getAllPutMapInfor(mapAll, listRespone);
