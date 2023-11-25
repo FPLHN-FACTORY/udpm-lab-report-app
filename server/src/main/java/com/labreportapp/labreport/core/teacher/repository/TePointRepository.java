@@ -47,13 +47,13 @@ public interface TePointRepository extends JpaRepository<Point, String> {
                          cm.soBuoiPhaiHoc AS so_buoi_hoc
             			FROM student_classes sc
                         LEFT JOIN point p ON p.student_id = sc.student_id
-                        JOIN class c ON c.id = sc.class_id
+                        LEFT JOIN class c ON c.id = sc.class_id
                         LEFT JOIN team t ON t.id = sc.team_id
                         LEFT JOIN meeting m ON m.class_id = sc.class_id
                         LEFT JOIN count_attendance ca ON ca.idStudent = sc.student_id
                         LEFT JOIN count_all_meeting cm ON cm.idClass = sc.class_id
-                       WHERE m.status_meeting = 0 AND sc.class_id=  :#{#idClass}
-                       GROUP BY p.id, sc.id, sc.student_id,p.check_point_phase1, p.check_point_phase2, p.final_point,
+                        WHERE m.status_meeting = 0 AND sc.class_id=  :#{#idClass}
+                        GROUP BY p.id, sc.id, sc.student_id,p.check_point_phase1, p.check_point_phase2, p.final_point,
                         sc.class_id, sc.email, t.name, ca.soBuoiDiHoc, cm.soBuoiPhaiHoc
                         ORDER BY t.name ASC
              """, nativeQuery = true)

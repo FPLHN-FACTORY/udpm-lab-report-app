@@ -371,8 +371,10 @@ public class AdMeetingServiceImpl implements AdMeetingService {
         adDetailMeetingResponse.setCodeClass(classFind.getCode());
         if (meeting.getTeacherId() != null) {
             SimpleResponse simpleResponse = callApiIdentity.handleCallApiGetUserById(meeting.getTeacherId());
-            adDetailMeetingResponse.setTeacherId(simpleResponse.getId());
-            adDetailMeetingResponse.setUserNameTeacher(simpleResponse.getUserName() + " - " + simpleResponse.getName());
+            if (Objects.nonNull(simpleResponse)) {
+                adDetailMeetingResponse.setTeacherId(simpleResponse.getId());
+                adDetailMeetingResponse.setUserNameTeacher(simpleResponse.getUserName() + " - " + simpleResponse.getName());
+            }
         }
         return adDetailMeetingResponse;
     }
