@@ -1,0 +1,42 @@
+version: "3.8"
+services:
+
+  my-app:
+    container_name: springboot
+    image: nguyencongthang2509/lab-report-app-api
+    ports:
+      - "2509:2509"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://103.56.161.210:3306/lab_report_app
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: my-secret-pw
+      SPRING_JPA_HIBERNATE.DDL-AUTO: none
+      DOMAIN_IDENTITY: https://103.56.161.210:5001
+      DOMAIN_SOCKET: http://103.56.161.210:3456/
+      DOMAIN_RABBIT_LISTEN: http://103.56.161.210:6792
+      SERVER_SSL_KEY-STORE: classpath:aspnetapp.pfx
+      SERVER_SSL_KEY-STORE-PASSWORD: password
+
+    volumes:
+      - /path/on/host:/temp
+
+  web:
+    image: nguyencongthang2509/lab-report-app
+    container_name: client
+    ports:
+      - "6262:80"
+    environment:
+      - REACT_APP_API_URL=https://103.56.161.210:2509
+      - REACT_APP_CONNECT_IDENTITY=https://103.56.161.210:5000
+      - SSL_PFX_FILE=./aspnetapp.pfx
+      - SSL_PFX_PASSWORD=password
+  # consumber:
+  #   container_name: rabbit-listen
+  #   image: huynqph26782/udpm-portal-articles:consumer
+  #   ports:
+  #     - "6792:6792"
+
+networks:
+  default:
+    external: true
+    name: ptpm-networks
