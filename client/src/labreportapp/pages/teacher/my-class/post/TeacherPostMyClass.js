@@ -465,7 +465,7 @@ const TeacherPostMyClass = () => {
                   ) : (
                     <div
                       className="box-create-post"
-                      onClick={(e) => {
+                      onClick={() => {
                         setShowCreate(true);
                       }}
                     >

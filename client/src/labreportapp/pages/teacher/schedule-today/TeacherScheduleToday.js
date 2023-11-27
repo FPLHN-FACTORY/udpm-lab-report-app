@@ -157,7 +157,7 @@ const TeacherScheduleToday = () => {
       width: "12px",
     },
     {
-      title: "Mã lớp",
+      title: "Lớp",
       dataIndex: "codeClass",
       key: "codeClass",
       filterDropdown: ({
@@ -219,6 +219,7 @@ const TeacherScheduleToday = () => {
       render: (text, record) => {
         return <span>{text === 0 ? "Online" : "Offline"}</span>;
       },
+      align: "center",
     },
     {
       title: "Địa điểm",
@@ -362,7 +363,7 @@ const TeacherScheduleToday = () => {
       key: "stt",
     },
     {
-      title: "Mã lớp",
+      title: "Lớp",
       dataIndex: "codeClass",
       key: "codeClass",
       filterDropdown: ({
@@ -424,6 +425,7 @@ const TeacherScheduleToday = () => {
       render: (text, record) => {
         return <span>{text === 0 ? "Online" : "Offline"}</span>;
       },
+      align: "center",
     },
     {
       title: "Địa điểm",

@@ -7,6 +7,7 @@ import com.labreportapp.labreport.core.teacher.model.request.TeFindScheduleNowTo
 import com.labreportapp.labreport.core.teacher.model.request.TeScheduleUpdateMeetingRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeUpdateHomeWorkAndNoteInMeetingRequest;
 import com.labreportapp.labreport.core.teacher.model.response.TeDetailMeetingTeamReportRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TeExcelResponseMessage;
 import com.labreportapp.labreport.core.teacher.model.response.TeHomeWorkAndNoteMeetingResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeMeetingCustomResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeMeetingCustomToAttendanceResponse;
@@ -14,15 +15,24 @@ import com.labreportapp.labreport.core.teacher.model.response.TeMeetingResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeScheduleMeetingClassResponse;
 import com.labreportapp.labreport.core.teacher.service.TeMeetingService;
 import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -93,4 +103,25 @@ public class TeMeetingController {
         return new ResponseObject(list);
     }
 
+    @GetMapping("/export-excel-meeting")
+    public ResponseEntity<byte[]> exportExcelMau(HttpServletResponse response, @RequestParam("idClass") String idClass) {
+        try {
+            ByteArrayOutputStream file = teMeetingService.exportExcelMeeting(response, idClass);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            headers.setContentDispositionFormData("attachment", "sample.xlsx");
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(file.toByteArray());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/import-excel-meeting/{idClass}")
+    public ResponseObject importListExcel(@RequestParam("multipartFile") MultipartFile multipartFile, @PathVariable("idClass") String idClass) throws IOException {
+        TeExcelResponseMessage teExcelResponseMessage = teMeetingService.importExcelMeeting(multipartFile, idClass);
+        return new ResponseObject(teExcelResponseMessage);
+    }
 }

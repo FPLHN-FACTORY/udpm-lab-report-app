@@ -54,7 +54,7 @@ const LevelManagement = () => {
     let filter = {
       name: name,
       page: current,
-      size: 10,
+      size: 3,
     };
     AdLevelAPI.fetchAllLevel(filter).then((response) => {
       dispatch(SetLevel(response.data.data.data));

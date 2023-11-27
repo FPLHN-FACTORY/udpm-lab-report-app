@@ -54,9 +54,7 @@ const StudentsInMyClass = () => {
       });
     } catch (error) {
       setLoading(true);
-      setTimeout(() => {
-        navigate(`/teacher/my-class`);
-      }, [1000]);
+      navigate(`/teacher/my-class`);
     }
   };
   const featchStudentClass = async (id) => {
@@ -366,8 +364,10 @@ const StudentsInMyClass = () => {
     lock === 0
   ) {
     const checkAll = listIdStudent.length === checkedList.length;
+
     const indeterminate =
       checkedList.length > 0 && checkedList.length < listIdStudent.length;
+
     const onChangeCheckBox = (idStudent, checked) => {
       setCheckedList(
         checked
@@ -375,6 +375,7 @@ const StudentsInMyClass = () => {
           : checkedList.filter((item) => item !== idStudent)
       );
     };
+
     const onCheckAllChange = (e) => {
       setCheckedList(e.target.checked ? listIdStudent : []);
     };
@@ -599,7 +600,7 @@ const StudentsInMyClass = () => {
                 className="group-info-item"
                 style={{ marginTop: "13px", marginBottom: "15px" }}
               >
-                Tên lớp: &nbsp; {classDetail != null ? classDetail.code : ""}
+                Lớp: &nbsp; {classDetail != null ? classDetail.code : ""}
               </span>
               <span
                 className="group-info-item"

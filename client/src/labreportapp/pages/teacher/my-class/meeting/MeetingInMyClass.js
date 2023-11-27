@@ -14,13 +14,24 @@ import React from "react";
 import { TeacherMyClassAPI } from "../../../../api/teacher/my-class/TeacherMyClass.api";
 import { SetTTrueToggle } from "../../../../app/teacher/TeCollapsedSlice.reducer";
 import {
+  convertDateLongToString,
   convertHourAndMinuteToString,
   convertStatusByHourMinute,
 } from "../../../../helper/util.helper";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTableList } from "@fortawesome/free-solid-svg-icons";
-import { Badge, Col, Empty, Row, Tag } from "antd";
+import {
+  faCalendarWeek,
+  faDownload,
+  faPaperPlane,
+  faTableList,
+} from "@fortawesome/free-solid-svg-icons";
+import { Badge, Button, Col, Empty, Row, Tag, message } from "antd";
+import {
+  SetLoadingFalse,
+  SetLoadingTrue,
+} from "../../../../app/common/Loading.reducer";
 
+import ModalFileImportMeeting from "./import-excel/ModalFileImportMeeting";
 const MeetingInMyClass = () => {
   const dispatch = useAppDispatch();
   dispatch(SetTTrueToggle());
@@ -28,7 +39,8 @@ const MeetingInMyClass = () => {
   const { idClass } = useParams();
   const [classDetail, setClassDetail] = useState({});
   const navigate = useNavigate();
-
+  const [showModalImport, setShowModalImport] = useState(false);
+  const [lock, setLock] = useState(1);
   useEffect(() => {
     window.scrollTo(0, 0);
     featchMeeting(idClass);
@@ -42,6 +54,7 @@ const MeetingInMyClass = () => {
       await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
         setClassDetail(responese.data.data);
         document.title = "Buổi học | " + responese.data.data.code;
+        setLock(responese.data.data.statusClass);
       });
     } catch (error) {
       setTimeout(() => {
@@ -60,13 +73,44 @@ const MeetingInMyClass = () => {
       );
     } catch (error) {}
   };
-  const convertLongToDate = (dateLong) => {
+
+  const convertLongToDateTime = (dateLong) => {
     const date = new Date(dateLong);
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const year = date.getFullYear();
-    const format = `${day}/${month}/${year}`;
+    const format = `${date.getFullYear()}-${
+      date.getMonth() + 1
+    }-${date.getDay()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
     return format;
+  };
+
+  const handleExport = async () => {
+    try {
+      dispatch(SetLoadingTrue());
+      const response = await TeacherMeetingAPI.export(idClass);
+      const blob = new Blob([response.data], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download =
+        "DanhSachBuoiHocYeuCau_" +
+        convertLongToDateTime(new Date().getTime()) +
+        ".xlsx";
+      link.click();
+      window.URL.revokeObjectURL(url);
+      dispatch(SetLoadingFalse());
+      message.success("Tải mẫu thành công !");
+    } catch (error) {
+      dispatch(SetLoadingFalse());
+    }
+  };
+
+  const handleRedirectMeetingRequest = () => {
+    navigate(`/teacher/my-class/meeting-request/` + idClass);
+  };
+
+  const handleCancelImport = () => {
+    setShowModalImport(false);
   };
   const dataMeeting = useAppSelector(GetMeeting);
   return (
@@ -145,7 +189,6 @@ const MeetingInMyClass = () => {
               >
                 ĐIỂM DANH &nbsp;
               </Link>
-
               <Link
                 to={`/teacher/my-class/point/${idClass}`}
                 className="custom-link"
@@ -204,7 +247,63 @@ const MeetingInMyClass = () => {
                 >
                   {dataMeeting != null ? dataMeeting.length : 0} buổi học
                 </span>
-              </span>
+              </span>{" "}
+              <Button
+                className="btn_clear"
+                style={{
+                  backgroundColor: "rgb(38, 144, 214)",
+                  color: "white",
+                  float: "right",
+                  margin: "0px 10px",
+                }}
+                onClick={handleRedirectMeetingRequest}
+              >
+                <FontAwesomeIcon
+                  icon={faCalendarWeek}
+                  style={{ marginRight: "7px" }}
+                />
+                <span>Danh sách yêu cầu</span>
+              </Button>
+              {lock === 0 && (
+                <Button
+                  className="btn_clear"
+                  style={{
+                    backgroundColor: "rgb(38, 144, 214)",
+                    color: "white",
+                    margin: "0px 0px 0 10px",
+                    float: "right",
+                  }}
+                  onClick={() => setShowModalImport(true)}
+                >
+                  <FontAwesomeIcon
+                    icon={faPaperPlane}
+                    style={{ marginRight: "7px" }}
+                  />
+                  Gửi yêu cầu tạo buổi học
+                </Button>
+              )}
+              {lock === 0 && (
+                <Button
+                  className="btn_clear"
+                  style={{
+                    backgroundColor: "rgb(38, 144, 214)",
+                    color: "white",
+                    float: "right",
+                  }}
+                  onClick={handleExport}
+                >
+                  <FontAwesomeIcon
+                    icon={faDownload}
+                    style={{ marginRight: "7px" }}
+                  />
+                  <span>Tải mẫu</span>
+                </Button>
+              )}
+              <ModalFileImportMeeting
+                idClass={idClass}
+                visible={showModalImport}
+                onCancel={handleCancelImport}
+              />
             </div>
             <div
               className="data-table-te"
@@ -302,7 +401,7 @@ const MeetingInMyClass = () => {
                                 }}
                               >
                                 <span>
-                                  {convertLongToDate(record.meetingDate)}
+                                  {convertDateLongToString(record.meetingDate)}
                                 </span>
                                 {record.meetingPeriod !== null && (
                                   <span>

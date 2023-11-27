@@ -38,7 +38,7 @@ const TeacherPointMyClass = () => {
   const [loading, setLoading] = useState(false);
   const [showModalImport, setShowModalImport] = useState(false);
   const navigate = useNavigate();
-
+  const [lock, setLock] = useState(1);
   dispatch(SetTTrueToggle());
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -77,11 +77,10 @@ const TeacherPointMyClass = () => {
       await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
         setClassDetail(responese.data.data);
         document.title = "Quản lý điểm | " + responese.data.data.code;
+        setLock(responese.data.data.statusClass);
       });
     } catch (error) {
-      setTimeout(() => {
-        navigate("/teacher/my-class");
-      }, [1000]);
+      navigate("/teacher/my-class");
     }
   };
 
@@ -248,59 +247,62 @@ const TeacherPointMyClass = () => {
                   <FontAwesomeIcon icon={faMarker} /> Điểm sinh viên :
                 </span>
               </Row>
-              <Row style={{ marginTop: "10px" }}>
-                <ButtonExportExcel idClass={idClass} />
-                <Button
-                  className="btn_clear"
-                  style={{
-                    backgroundColor: "rgb(38, 144, 214)",
-                    color: "white",
-                    marginLeft: "5px",
-                  }}
-                  onClick={() => setShowModalImport(true)}
-                >
-                  <FontAwesomeIcon
-                    icon={faUpload}
-                    style={{ marginRight: "7px" }}
+              {lock === 0 && (
+                <Row style={{ marginTop: "10px" }}>
+                  <ButtonExportExcel idClass={idClass} />
+                  <Button
+                    className="btn_clear"
+                    style={{
+                      backgroundColor: "rgb(38, 144, 214)",
+                      color: "white",
+                      marginLeft: "5px",
+                    }}
+                    onClick={() => setShowModalImport(true)}
+                  >
+                    <FontAwesomeIcon
+                      icon={faUpload}
+                      style={{ marginRight: "7px" }}
+                    />
+                    Import bảng điểm
+                  </Button>
+                  <Button
+                    style={{
+                      backgroundColor: "rgb(38, 144, 214)",
+                      color: "white",
+                      marginLeft: "5px",
+                    }}
+                    onClick={openModalAddHoney}
+                  >
+                    <FontAwesomeIcon
+                      icon={faHouseChimney}
+                      style={{ marginRight: "7px" }}
+                    />
+                    Quy đổi mật ong
+                  </Button>
+                  <ModalFileImportPoint
+                    idClass={idClass}
+                    visible={showModalImport}
+                    fetchData={fetchData}
+                    onCancel={handleCancelImport}
                   />
-                  Import bảng điểm
-                </Button>
-                <Button
-                  style={{
-                    backgroundColor: "rgb(38, 144, 214)",
-                    color: "white",
-                    marginLeft: "5px",
-                  }}
-                  onClick={openModalAddHoney}
-                >
-                  <FontAwesomeIcon
-                    icon={faHouseChimney}
-                    style={{ marginRight: "7px" }}
-                  />
-                  Quy đổi mật ong
-                </Button>
-                <ModalFileImportPoint
-                  idClass={idClass}
-                  visible={showModalImport}
-                  fetchData={fetchData}
-                  onCancel={handleCancelImport}
-                />
-                <Button
-                  style={{
-                    backgroundColor: "rgb(38, 144, 214)",
-                    color: "white",
-                    marginRight: "0px",
-                    marginLeft: "auto",
-                  }}
-                  onClick={handleSave}
-                >
-                  <FontAwesomeIcon
-                    icon={faFloppyDisk}
-                    style={{ marginRight: "7px" }}
-                  />
-                  Lưu bảng điểm
-                </Button>
-              </Row>
+                  <Button
+                    style={{
+                      backgroundColor: "rgb(38, 144, 214)",
+                      color: "white",
+                      marginRight: "0px",
+                      marginLeft: "auto",
+                    }}
+                    onClick={handleSave}
+                  >
+                    <FontAwesomeIcon
+                      icon={faFloppyDisk}
+                      style={{ marginRight: "7px" }}
+                    />
+                    Lưu bảng điểm
+                  </Button>
+                </Row>
+              )}
+
               <div style={{ margin: "20px 0px 10px 0px" }}>
                 <TablePoint />
               </div>

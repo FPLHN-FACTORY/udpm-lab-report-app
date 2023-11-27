@@ -236,7 +236,7 @@ const TeacherAttendanceClass = () => {
                     <span style={{ fontWeight: "bold" }}>Có mặt(P)</span>,{" "}
                     <span style={{ fontWeight: "bold" }}>Vắng mặt(A)</span> và{" "}
                     <span style={{ fontWeight: "bold" }}>
-                      Chưa điểm danh (-)
+                      Chưa điểm danh (--)
                     </span>
                   </span>
                   <br />

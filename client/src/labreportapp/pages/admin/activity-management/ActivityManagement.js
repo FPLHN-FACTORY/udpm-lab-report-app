@@ -216,7 +216,6 @@ const ActivityManagement = () => {
       title: "Mô tả",
       dataIndex: "descriptions",
       key: "descriptions",
-      sorter: (a, b) => a.descriptions.localeCompare(b.descriptions),
     },
     {
       title: "Tạo trello",
