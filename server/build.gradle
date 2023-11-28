@@ -7,6 +7,7 @@ plugins {
 group = 'fpoly'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
+compileJava.options.encoding = 'UTF-8'
 
 configurations {
     compileOnly {

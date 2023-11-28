@@ -10,8 +10,6 @@ COPY src src
 # Show the directory contents before running the build
 RUN ls -al
 
-# RUN apk --no-cache add fontconfig ttf-dejavu
-
 # Run the build command with more detailed output
 RUN gradle build --no-daemon --stacktrace
 
@@ -22,4 +20,7 @@ WORKDIR /app
 COPY --from=builder /app/build/libs/*.jar /app/app.jar
 
 CMD ["java", "-jar", "app.jar"]
+
+# RUN apk --no-cache add fontconfig ttf-dejavu
+
 
