@@ -27,4 +27,5 @@ public class StSemesterServiceImpl implements StSemesterService {
         return semesterRepository.findAll();
     }
 
+
 }
