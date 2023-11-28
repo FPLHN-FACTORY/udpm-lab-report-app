@@ -13,8 +13,9 @@ RUN ls -al
 # Run the build command with more detailed output
 RUN gradle build --no-daemon --stacktrace
 
-# Stage 2: Create the final image with JRE
-FROM adoptopenjdk:17-jre-hotspot
+RUN apk --no-cache add fontconfig ttf-dejavu
+
+FROM eclipse-temurin:17
 
 WORKDIR /app
 
