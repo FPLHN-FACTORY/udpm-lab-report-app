@@ -19,6 +19,7 @@ import {
   Tooltip,
   Popconfirm,
   message,
+  Empty,
 } from "antd";
 import "./style-meeting-period-management.css";
 import React from "react";
@@ -67,7 +68,9 @@ const MeetingPeriodConfiguration = () => {
       setLoading(false);
     });
   };
-
+  const changeTotalsPage = (newTotalPages) => {
+    setTotal(newTotalPages);
+  };
   const data = useAppSelector(GetMeetingPeriodConfiguration);
 
   const columns = [
@@ -84,7 +87,7 @@ const MeetingPeriodConfiguration = () => {
       sorter: (a, b) => a.name.localeCompare(b.name),
     },
     {
-      title: "Thời gian bắt đầu",
+      title: "Thời gian",
       dataIndex: "startTime",
       key: "startTime",
       render: (text, record) => {
@@ -100,12 +103,6 @@ const MeetingPeriodConfiguration = () => {
         );
       },
       align: "center",
-      sorter: (a, b) => {
-        return (
-          a.startHour.localeCompare(b.startHour) ||
-          a.startMinute.localeCompare(b.startMinute)
-        );
-      },
     },
     {
       title: "Hành động",
@@ -192,6 +189,7 @@ const MeetingPeriodConfiguration = () => {
       (response) => {
         message.success("Xóa thành công !");
         dispatch(DeleteMeetingPeriodConfiguration(response.data.data));
+        setCurrent(1);
         fetchData();
       },
       (error) => {}
@@ -347,30 +345,40 @@ const MeetingPeriodConfiguration = () => {
               </Button>
             </div>
           </div>
-          <div>
-            <Table
-              dataSource={data}
-              rowKey="id"
-              columns={columns}
-              pagination={false}
-            />
-            <div className="pagination_box">
-              <Pagination
-                simple
-                current={current}
-                onChange={(page) => {
-                  setCurrent(page);
-                }}
-                total={total * 10}
+          {data.length > 0 ? (
+            <div>
+              <Table
+                dataSource={data}
+                rowKey="id"
+                columns={columns}
+                pagination={false}
               />
+              <div className="pagination_box">
+                <Pagination
+                  simple
+                  current={current}
+                  onChange={(page) => {
+                    setCurrent(page);
+                  }}
+                  total={total * 10}
+                />
+              </div>
             </div>
-          </div>
+          ) : (
+            <Empty
+              style={{ paddingTop: "80px" }}
+              imageStyle={{ height: "60px" }}
+              description={<span>Không có dữ liệu</span>}
+            />
+          )}
         </div>
         <ModalCreateMeetingPeriod
           visible={modalCreate}
           onCancel={buttonCreateCancel}
+          changeTotalsPage={changeTotalsPage}
+          totalPages={total}
+          size={10}
         />
-
         <ModalUpdateMeetingPeriod
           visible={modalUpdate}
           onCancel={buttonUpdateCancel}

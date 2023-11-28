@@ -63,7 +63,9 @@ const CategoryManagement = () => {
       setLoading(true);
       await AdCategoryAPI.deleteCategoryId(id).then((response) => {
         dispatch(DeleteCategory(response.data.data));
-        message.success("Xóa thể loại thành công");
+        message.success("Xóa thể loại thành công !");
+        setCurrent(1);
+        fetchData();
         setLoading(false);
       });
     } catch (error) {
@@ -142,7 +144,7 @@ const CategoryManagement = () => {
             <Popconfirm
               title="Bạn có chắc chắn xóa thể loại ?"
               description={<div>{record.name}</div>}
-              onConfirm={(e) => handleDelete(record.id)}
+              onConfirm={() => handleDelete(record.id)}
               okText="Yes"
               cancelText="No"
             >

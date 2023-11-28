@@ -21,6 +21,11 @@ const adCategorySlice = createSlice({
       state.unshift(newCategory);
       return state;
     },
+    RemoveLastCategory: (state) => {
+      if (state.length > 0) {
+        state.pop();
+      }
+    },
     UpdateCategory: (state, action) => {
       const updateCategory = action.payload;
       const index = state.findIndex(
@@ -40,8 +45,13 @@ const adCategorySlice = createSlice({
   },
 });
 
-export const { SetCategory, UpdateCategory, CreateCategory, DeleteCategory } =
-  adCategorySlice.actions;
+export const {
+  SetCategory,
+  UpdateCategory,
+  CreateCategory,
+  DeleteCategory,
+  RemoveLastCategory,
+} = adCategorySlice.actions;
 
 export const GetCategory = (state) => state.adCategory;
 

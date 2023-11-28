@@ -4,7 +4,7 @@ import Forbidden from "./labreportapp/pages/403";
 import ErrorComponent from "./labreportapp/pages/500";
 import AuthGuard from "./labreportapp/guard/AuthGuard";
 import "./App.css";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AppConfig } from "./AppConfig";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
@@ -96,6 +96,7 @@ import { useAppSelector } from "./labreportapp/app/hook";
 import { GetLoading } from "./labreportapp/app/common/Loading.reducer";
 import NotAceptable from "./labreportapp/pages/not-aceptable";
 import AdPointMyClassDetail from "./labreportapp/pages/admin/detail-class/point/AdPointMyClassDetail";
+import TeMeetingRequestManagement from "./labreportapp/pages/teacher/my-class/meeting/meeting-request-management/TeMeetingRequestManagement";
 import AdApproveMeeting from "./labreportapp/pages/admin/approve-meeting/AdApproveMeeting";
 
 function App() {
@@ -548,6 +549,16 @@ function App() {
               }
             />
             <Route
+              path="/teacher/my-class/meeting-request/:idClass"
+              element={
+                <AuthGuard>
+                  <DashBoardTeacher>
+                    <TeMeetingRequestManagement />
+                  </DashBoardTeacher>
+                </AuthGuard>
+              }
+            />
+            <Route
               path="/student/register-class"
               element={
                 <AuthGuard>
@@ -847,6 +858,7 @@ function App() {
                 </AuthGuard>
               }
             />
+
             <Route
               path="/student/my-project"
               element={

@@ -34,7 +34,6 @@ import {
 import LoadingIndicator from "../../../../helper/loading";
 import { Link } from "react-router-dom";
 import DeFault from "../../../../assets/img/FPT_Polytechnic_Hanoi-2.jpg";
-import { EllipsisOutlined } from "@ant-design/icons";
 import ModalUpdateGroupProject from "../modal-update-group-project/ModalUpdateGroupProject";
 import ModalCreateGroupProject from "../modal-add-group-project/ModalAddGroupProject";
 

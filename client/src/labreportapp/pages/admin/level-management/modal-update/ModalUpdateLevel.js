@@ -51,7 +51,7 @@ const ModalUpdateLevel = ({ visible, onCancel, level }) => {
 
       AdLevelAPI.updateLevel(obj, level.id).then(
         (response) => {
-          message.success("Cập nhật thành công!");
+          message.success("Cập nhật thành công !");
           dispatch(UpdateLevel(response.data.data));
           dispatch(SetLoadingFalse());
           onCancel();

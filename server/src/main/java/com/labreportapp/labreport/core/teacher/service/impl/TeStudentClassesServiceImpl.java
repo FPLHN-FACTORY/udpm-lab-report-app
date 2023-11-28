@@ -68,10 +68,7 @@ public class TeStudentClassesServiceImpl implements TeStudentClassesService {
                 .distinct()
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
-        System.out.println(idStudentList.size() + " wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww");
-
         List<SimpleResponse> listRespone = callApiIdentity.handleCallApiGetListUserByListId(idStudentList);
-        System.out.println(listRespone.size() + " wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww");
         List<TeStudentCallApiResponse> listReturn = new ArrayList<>();
         if (listRepository.size() == 0 && listRespone.size() == 0) {
             return null;

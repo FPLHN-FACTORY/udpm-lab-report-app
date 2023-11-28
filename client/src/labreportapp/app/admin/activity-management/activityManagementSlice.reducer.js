@@ -28,6 +28,11 @@ const ActivityManagementSlice = createSlice({
       state.unshift(newActivity);
       return state;
     },
+    RemoveLastActivity: (state) => {
+      if (state.length > 0) {
+        state.pop();
+      }
+    },
     UpdateActivityManagement: (state, action) => {
       const updateActivity = action.payload;
       const index = state.findIndex(
@@ -55,6 +60,7 @@ const ActivityManagementSlice = createSlice({
 export const {
   SetActivityManagement,
   CreateActivityManagement,
+  RemoveLastActivity,
   UpdateActivityManagement,
   DeleteActivityManagement,
 } = ActivityManagementSlice.actions;

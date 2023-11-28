@@ -26,7 +26,6 @@ public class ConvertListIdToString {
 
     public static void main(String[] args) {
         List<String> listId = new ArrayList<>();
-        System.out.println(convert(listId));
     }
 
 }

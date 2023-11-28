@@ -35,8 +35,6 @@ public class AdMeetingPeriodConfigurationServiceImpl implements AdMeetingPeriodC
 
     private FormUtils formUtils = new FormUtils();
 
-    private List<AdMeetingPeriodConfigurationResponse> adMeetingPeriodResponsesList;
-
     @Autowired
     private LoggerUtil loggerUtil;
 
@@ -55,7 +53,7 @@ public class AdMeetingPeriodConfigurationServiceImpl implements AdMeetingPeriodC
     @Override
     public MeetingPeriod updateMeetingPeriod(AdUpdateMeetingPeriodRequest obj) {
         Optional<MeetingPeriod> findById = adMeetingPeriodRepository.findById(obj.getId());
-        if (!findById.isPresent()) {
+        if (findById.isEmpty()) {
             throw new RestApiException(Message.PERIOD_NOT_EXISTS);
         }
         StringBuilder stringBuilder = new StringBuilder();
@@ -93,7 +91,6 @@ public class AdMeetingPeriodConfigurationServiceImpl implements AdMeetingPeriodC
     public PageableObject<AdMeetingPeriodConfigurationResponse> searchMeetingPeriod(AdFindMeetingConfigurationRequest rep) {
         Pageable pageable = PageRequest.of(rep.getPage() - 1, rep.getSize());
         Page<AdMeetingPeriodConfigurationResponse> adMeetingPeriodResponses = adMeetingPeriodRepository.searchMeetingPeriod(rep, pageable);
-        adMeetingPeriodResponsesList = adMeetingPeriodResponses.stream().toList();
         return new PageableObject<>(adMeetingPeriodResponses);
     }
 
@@ -101,11 +98,11 @@ public class AdMeetingPeriodConfigurationServiceImpl implements AdMeetingPeriodC
     public Boolean deleteMeetingPeriod(String id) {
         Optional<MeetingPeriod> findMeetingPeriodById = adMeetingPeriodRepository.findById(id);
         Integer countMeetings = adMeetingPeriodRepository.countMeetingByMeetingPeriodId(id);
-        if (!findMeetingPeriodById.isPresent()) {
+        if (findMeetingPeriodById.isEmpty()) {
             throw new RestApiException(Message.PERIOD_NOT_EXISTS);
         }
         if (countMeetings != null && countMeetings > 0) {
-            throw new RestApiException(Message.PERIOD_OVERLAP);
+            throw new RestApiException("Ca học đang được sử dụng, không thể xóa !");
         }
         loggerUtil.sendLogScreen("Đã xóa ca học: " + findMeetingPeriodById.get().getName() + ".", "");
         adMeetingPeriodRepository.delete(findMeetingPeriodById.get());

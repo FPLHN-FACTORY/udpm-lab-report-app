@@ -96,7 +96,7 @@ const ModalUpdateSemester = ({ visible, onCancel, semester }) => {
 
       AdSemesterAPI.updateSemester(obj, semester.id).then(
         (response) => {
-          message.success("Cập nhật thành công!");
+          message.success("Cập nhật thành công !");
           dispatch(UpdateSemester(response.data.data));
           dispatch(SetLoadingFalse());
           onCancel();

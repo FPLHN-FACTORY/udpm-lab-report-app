@@ -14,6 +14,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import {
   Button,
+  Empty,
   Input,
   Pagination,
   Popconfirm,
@@ -210,13 +211,11 @@ const ActivityManagement = () => {
       title: "Cấp độ",
       dataIndex: "level",
       key: "level",
-      sorter: (a, b) => a.level - b.level,
     },
     {
       title: "Mô tả",
       dataIndex: "descriptions",
       key: "descriptions",
-      sorter: (a, b) => a.descriptions.localeCompare(b.descriptions),
     },
     {
       title: "Tạo trello",
@@ -469,25 +468,33 @@ const ActivityManagement = () => {
               </Button>
             </div>
           </div>
-          <div style={{ marginTop: "15px" }}>
-            <Table
-              className="table_content"
-              pagination={false}
-              columns={columns}
-              rowKey="id"
-              dataSource={data}
-            />
-            <div className="pagination_box">
-              <Pagination
-                simple
-                current={current}
-                onChange={(value) => {
-                  setCurrent(value);
-                }}
-                total={total * 10}
+          {data.length > 0 ? (
+            <div style={{ marginTop: "15px" }}>
+              <Table
+                className="table_content"
+                pagination={false}
+                columns={columns}
+                rowKey="id"
+                dataSource={data}
               />
+              <div className="pagination_box">
+                <Pagination
+                  simple
+                  current={current}
+                  onChange={(value) => {
+                    setCurrent(value);
+                  }}
+                  total={total * 10}
+                />
+              </div>
             </div>
-          </div>
+          ) : (
+            <Empty
+              style={{ paddingTop: "80px" }}
+              imageStyle={{ height: "60px" }}
+              description={<span>Không có dữ liệu</span>}
+            />
+          )}
         </div>
         <ModalCreateActivity
           visible={showCreateModal}

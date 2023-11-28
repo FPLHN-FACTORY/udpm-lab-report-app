@@ -6,14 +6,18 @@ import com.labreportapp.labreport.core.teacher.model.request.TeFindScheduleNowTo
 import com.labreportapp.labreport.core.teacher.model.request.TeScheduleUpdateMeetingRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeUpdateHomeWorkAndNoteInMeetingRequest;
 import com.labreportapp.labreport.core.teacher.model.response.TeDetailMeetingTeamReportRespone;
+import com.labreportapp.labreport.core.teacher.model.response.TeExcelResponseMessage;
 import com.labreportapp.labreport.core.teacher.model.response.TeHomeWorkAndNoteMeetingResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeMeetingCustomResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeMeetingCustomToAttendanceResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeMeetingResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeScheduleMeetingClassResponse;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 /**
@@ -38,5 +42,9 @@ public interface TeMeetingService {
     List<TeScheduleMeetingClassResponse> updateAddressMeeting(@RequestBody TeScheduleUpdateMeetingRequest request);
 
     List<TeMeetingCustomToAttendanceResponse> listMeetingAttendanceAllByIdClass(String idClass);
+
+    ByteArrayOutputStream exportExcelMeeting(HttpServletResponse response, String idClass);
+
+    TeExcelResponseMessage importExcelMeeting(MultipartFile file, String idClass);
 
 }

@@ -20,11 +20,16 @@ const adLevelSlice = createSlice({
       state.unshift(newLevel);
       return state;
     },
+    RemoveLastLevel: (state) => {
+      if (state.length > 0) {
+        state.pop();
+        return state;
+      }
+      return state;
+    },
     UpdateLevel: (state, action) => {
       const updateLevel = action.payload;
-      const index = state.findIndex(
-        (level) => level.id === updateLevel.id
-      );
+      const index = state.findIndex((level) => level.id === updateLevel.id);
       if (index !== -1) {
         state[index].name = updateLevel.name;
       }
@@ -37,8 +42,8 @@ const adLevelSlice = createSlice({
   },
 });
 
-export const { SetLevel, AddLevel, UpdateLevel, DeleteLevel } =
-adLevelSlice.actions;
+export const { SetLevel, AddLevel, RemoveLastLevel, UpdateLevel, DeleteLevel } =
+  adLevelSlice.actions;
 
 export const GetLevel = (state) => state.adLevel;
 

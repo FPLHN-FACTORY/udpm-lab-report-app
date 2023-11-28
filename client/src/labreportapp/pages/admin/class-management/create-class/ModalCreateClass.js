@@ -3,10 +3,8 @@ import { Modal, Row, Col, Input, Button, Select, message } from "antd";
 import "./styleCreateClass.css";
 import { useEffect, useState } from "react";
 import moment from "moment";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAppDispatch, useAppSelector } from "../../../../app/hook";
-import LoadingIndicator from "../../../../helper/loading";
 import { ClassAPI } from "../../../../api/admin/class-manager/ClassAPI.api";
 import { CreateClass } from "../../../../app/admin/ClassManager.reducer";
 import { GetAdTeacher } from "../../../../app/admin/AdTeacherSlice.reducer";
@@ -103,10 +101,8 @@ const ModalCreateProject = ({ visible, onCancel }) => {
       setActivityDataAll([]);
     } else {
       const featchDataActivity = async (idSemesterSeach) => {
-        
         await ClassAPI.getAllActivityByIdSemester(idSemesterSeach).then(
           (respone) => {
-            
             if (respone.data.data.length === 0) {
               setIdActivitiSearch("none");
               setActivityDataAll([]);

@@ -151,7 +151,6 @@ const StudentSchedule = () => {
       title: "Hình thức học",
       dataIndex: "typeMeeting",
       key: "typeMeeting",
-      sorter: (a, b) => a.typeMeeting.localeCompare(b.typeMeeting),
       render: (text, record) => (
         <span>{record.typeMeeting === 0 ? "Online" : "Offline"}</span>
       ),

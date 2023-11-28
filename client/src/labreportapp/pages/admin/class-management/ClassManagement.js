@@ -225,7 +225,6 @@ const ClassManagement = () => {
       title: "Ca",
       dataIndex: "nameClassPeriod",
       key: "nameClassPeriod",
-      sorter: (a, b) => a.nameClassPeriod.localeCompare(b.nameClassPeriod),
       render: (text, record) => {
         if (record.nameClassPeriod == null) {
           return <span>Chưa có</span>;

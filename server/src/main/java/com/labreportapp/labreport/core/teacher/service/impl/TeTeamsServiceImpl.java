@@ -786,7 +786,6 @@ public class TeTeamsServiceImpl implements TeTeamsService {
                         int endIndex = value.length() - "-Gồm".length();
                         value.replace(endIndex, value.length(), ".");
                     }
-//                    message.append(value.append("<br />"));
                     message.append(value.append(". "));
                     hashMap.put(key, new StringBuilder().append(","));
                 });

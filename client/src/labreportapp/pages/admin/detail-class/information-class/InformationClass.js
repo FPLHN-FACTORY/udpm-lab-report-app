@@ -11,7 +11,7 @@ import {
   faUpload,
 } from "@fortawesome/free-solid-svg-icons";
 import { ControlOutlined, SearchOutlined } from "@ant-design/icons";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch } from "../../../../app/hook";
 import { SetTTrueToggle } from "../../../../app/admin/AdCollapsedSlice.reducer";
 import { useEffect, useState } from "react";
@@ -49,7 +49,7 @@ const InformationClass = () => {
   const [isMoveStudent, setIsMoveStudent] = useState(false);
   const [isKickStudent, setIsKickStudent] = useState(false);
   dispatch(SetTTrueToggle());
-
+  const navigate = useNavigate();
   useEffect(() => {
     setIsLoading(true);
     featchClass(id);
@@ -217,23 +217,20 @@ const InformationClass = () => {
                   }
                 );
               }
-            }, 200);
+            }, 120);
             setDownloading(true);
+            featchClass(id);
+            navigate(`/admin/class-management/information-class/` + id);
             setTimeout(() => {
-              window.open(
-                `http://localhost:3000/admin/class-management/information-class/` +
-                  id,
-                "_self"
-              );
               setDownloading(false);
-            }, 2000);
+            }, 120);
           })
           .catch((error) => {
-            console.log(error);
+            setDownloading(false);
           });
       }
     } catch (error) {
-      console.log(error);
+      setDownloading(false);
     }
   };
 

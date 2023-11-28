@@ -19,6 +19,7 @@ import {
   Tooltip,
   Popconfirm,
   message,
+  Empty,
 } from "antd";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
@@ -163,8 +164,9 @@ const LevelManagement = () => {
   const buttonDelete = (id) => {
     AdLevelAPI.deleteLevel(id).then(
       (response) => {
-        message.success("Xóa thành công!");
+        message.success("Xóa thành công !");
         dispatch(DeleteLevel(response.data.data));
+        setCurrent(1);
         fetchData();
       },
       (error) => {}
@@ -328,24 +330,32 @@ const LevelManagement = () => {
               </Button>
             </div>
           </div>
-          <div>
-            <Table
-              dataSource={data}
-              rowKey="id"
-              columns={columns}
-              pagination={false}
-            />
-            <div className="pagination_box">
-              <Pagination
-                simple
-                current={current}
-                onChange={(page) => {
-                  setCurrent(page);
-                }}
-                total={total * 10}
+          {data.length > 0 ? (
+            <div>
+              <Table
+                dataSource={data}
+                rowKey="id"
+                columns={columns}
+                pagination={false}
               />
+              <div className="pagination_box">
+                <Pagination
+                  simple
+                  current={current}
+                  onChange={(page) => {
+                    setCurrent(page);
+                  }}
+                  total={total * 10}
+                />
+              </div>
             </div>
-          </div>
+          ) : (
+            <Empty
+              style={{ paddingTop: "80px" }}
+              imageStyle={{ height: "60px" }}
+              description={<span>Không có dữ liệu</span>}
+            />
+          )}
         </div>
         <ModalCreateLevel
           visible={modalCreate}

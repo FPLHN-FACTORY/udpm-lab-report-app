@@ -74,7 +74,7 @@ public class AdSemesterServiceImpl implements AdSemesterService {
     @Override
     public Semester updateSermester(@Valid AdUpdateSemesterRequest obj) {
         Optional<Semester> findSemesterById = adSemesterRepository.findById(obj.getId());
-        if (!findSemesterById.isPresent()) {
+        if (findSemesterById.isEmpty()) {
             throw new RestApiException(Message.SEMESTER_NOT_EXISTS);
         }
         List<Semester> semesterList = adSemesterRepository.findAllSemester();
@@ -102,29 +102,32 @@ public class AdSemesterServiceImpl implements AdSemesterService {
 
         StringBuilder stringBuilder = new StringBuilder();
 
-        String messageNameSemester = CompareUtil.compareAndConvertMessage("tên học kỳ", semester.getName(), obj.getName(), "");
-        stringBuilder.append(messageNameSemester).append(!messageNameSemester.equals("") ? ", " : "");
+        String messageNameSemester = CompareUtil.compareAndConvertMessage(" tên học kỳ", semester.getName(), obj.getName(), "");
+        stringBuilder.append(messageNameSemester).append(!messageNameSemester.equals("") ? "," : "");
 
         String startTimeOld = sdf.format(semester.getStartTime());
         String startTimeNew = sdf.format(obj.getStartTime());
-        String messageStartTimeSemester = CompareUtil.compareAndConvertMessage("ngày bắt đầu của học kỳ", startTimeOld, startTimeNew, "");
-        stringBuilder.append(messageStartTimeSemester).append(!messageStartTimeSemester.equals("") ? ", " : "");
+        String messageStartTimeSemester = CompareUtil.compareAndConvertMessage(" ngày bắt đầu của học kỳ", startTimeOld, startTimeNew, "");
+        stringBuilder.append(messageStartTimeSemester).append(!messageStartTimeSemester.equals("") ? "," : "");
 
         String endTimeOld = sdf.format(semester.getEndTime());
         String endTimeNew = sdf.format(obj.getEndTime());
-        String messageEndTimeSemester = CompareUtil.compareAndConvertMessage("ngày kết thúc của học kỳ", endTimeOld, endTimeNew, "");
-        stringBuilder.append(messageEndTimeSemester).append(!messageEndTimeSemester.equals("") ? ", " : "");
+        String messageEndTimeSemester = CompareUtil.compareAndConvertMessage(" ngày kết thúc của học kỳ", endTimeOld, endTimeNew, "");
+        stringBuilder.append(messageEndTimeSemester).append(!messageEndTimeSemester.equals("") ? "," : "");
 
         String startTimeStudentOld = sdf.format(semester.getStartTimeStudent());
         String startTimeStudentNew = sdf.format(obj.getStartTimeStudent());
-        String messageStartTimeStudent = CompareUtil.compareAndConvertMessage("ngày bắt đầu sinh viên của học kỳ", startTimeStudentOld, startTimeStudentNew, "");
-        stringBuilder.append(messageStartTimeStudent).append(!messageStartTimeStudent.equals("") ? ", " : "");
+        String messageStartTimeStudent = CompareUtil.compareAndConvertMessage(" ngày bắt đầu sinh viên của học kỳ", startTimeStudentOld, startTimeStudentNew, "");
+        stringBuilder.append(messageStartTimeStudent).append(!messageStartTimeStudent.equals("") ? "," : "");
 
         String endTimeStudentOld = sdf.format(semester.getEndTimeStudent());
         String endTimeStudentNew = sdf.format(obj.getEndTimeStudent());
-        String messageEndTimeStudent = CompareUtil.compareAndConvertMessage("ngày kết thúc sinh viên của học kỳ", endTimeStudentOld, endTimeStudentNew, "");
-        stringBuilder.append(messageEndTimeStudent).append(!messageEndTimeStudent.equals("") ? ", " : "");
+        String messageEndTimeStudent = CompareUtil.compareAndConvertMessage(" ngày kết thúc sinh viên của học kỳ", endTimeStudentOld, endTimeStudentNew, "");
+        stringBuilder.append(messageEndTimeStudent).append(!messageEndTimeStudent.equals("") ? "," : "");
 
+        if (stringBuilder.length() > 0 && stringBuilder.charAt(stringBuilder.length() - 1) == ',') {
+            stringBuilder.setCharAt(stringBuilder.length() - 1, '.');
+        }
         loggerUtil.sendLogScreen(stringBuilder.toString(), "");
 
         semester.setName(obj.getName());
@@ -146,7 +149,7 @@ public class AdSemesterServiceImpl implements AdSemesterService {
     @Override
     public Semester findSemesterById(String id) {
         Optional<Semester> findSemester = adSemesterRepository.findById(id);
-        if (!findSemester.isPresent()) {
+        if (findSemester.isEmpty()) {
             throw new RestApiException(Message.SEMESTER_NOT_EXISTS);
         }
         return findSemester.get();
@@ -155,14 +158,14 @@ public class AdSemesterServiceImpl implements AdSemesterService {
     @Override
     public Boolean deleteSemester(String id) {
         Optional<Semester> findSemesterById = adSemesterRepository.findById(id);
-        if (!findSemesterById.isPresent()) {
+        if (findSemesterById.isEmpty()) {
             throw new RestApiException(Message.SEMESTER_NOT_EXISTS);
         }
         Integer countActivities = adSemesterRepository.countActivitiesBySemesterId(id);
         if (countActivities > 0) {
             throw new RestApiException(Message.SEMESTER_ACTIVITY_ALREADY_EXISTS);
         }
-        loggerUtil.sendLogScreen("Đã xóa học kỳ " + findSemesterById.get().getName(), "");
+        loggerUtil.sendLogScreen("Đã xóa học kỳ " + findSemesterById.get().getName()+".", "");
         adSemesterRepository.delete(findSemesterById.get());
         return true;
     }
@@ -175,7 +178,7 @@ public class AdSemesterServiceImpl implements AdSemesterService {
         }
         findSemesterById.get().setStatusFeedBack(StatusFeedBack.DA_FEEDBACK);
         adSemesterRepository.save(findSemesterById.get());
-        loggerUtil.sendLogScreen("Đã bật feedback của học kỳ " + findSemesterById.get().getName(), "");
+        loggerUtil.sendLogScreen("Đã bật feedback của học kỳ " + findSemesterById.get().getName()+".", "");
         return true;
     }
 

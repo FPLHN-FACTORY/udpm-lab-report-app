@@ -1,6 +1,8 @@
 package com.labreportapp.labreport.util;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -14,6 +16,23 @@ public class DateConverter {
         sdf.setTimeZone(TimeZone.getTimeZone("GMT+7"));
         String formattedDate = sdf.format(new Date(dateInMillis));
         return formattedDate;
+    }
+
+    public static Long convertDateToLongOneHourOneMinutes(String dateString) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            Date date = sdf.parse(dateString);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+            return calendar.getTimeInMillis();
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public static String convertDateToStringMail(long dateInMillis) {
@@ -52,6 +71,5 @@ public class DateConverter {
     public static void main(String[] args) {
         long dateInMillis = new Date().getTime();
         String formattedDate = DateConverter.convertDateToString(dateInMillis);
-        System.out.println(formattedDate);
     }
 }

@@ -1,9 +1,13 @@
 import { Modal, Row, Col, Input, Button, message, DatePicker } from "antd";
 import { useEffect, useState } from "react";
 import { AdSemesterAPI } from "../../../../api/admin/AdSemesterAPI";
-import { AddSemester } from "../../../../app/admin/AdSemester.reducer";
+import {
+  AddSemester,
+  GetSemester,
+  RemoveLastSemester,
+} from "../../../../app/admin/AdSemester.reducer";
 import "react-toastify/dist/ReactToastify.css";
-import { useAppDispatch } from "../../../../app/hook";
+import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import {
   SetLoadingFalse,
   SetLoadingTrue,
@@ -11,7 +15,13 @@ import {
 import dayjs from "dayjs";
 const { RangePicker } = DatePicker;
 
-const ModalCreateSemester = ({ visible, onCancel }) => {
+const ModalCreateSemester = ({
+  visible,
+  onCancel,
+  changeTotalsPage,
+  totalPages,
+  size,
+}) => {
   const [name, setName] = useState("");
   const [errorName, setErrorName] = useState("");
   const [startTime, setStartTime] = useState("");
@@ -21,7 +31,7 @@ const ModalCreateSemester = ({ visible, onCancel }) => {
   const [errorTimeStudent, setErrorTimeStudent] = useState("");
   const [endTimeStudent, setEndTimeStudent] = useState("");
   const dispatch = useAppDispatch();
-
+  const data = useAppSelector(GetSemester);
   useEffect(() => {
     return () => {
       setName("");
@@ -88,9 +98,17 @@ const ModalCreateSemester = ({ visible, onCancel }) => {
 
       AdSemesterAPI.addSemester(obj).then(
         (response) => {
-          message.success("Thêm thành công!");
+          message.success("Thêm thành công !");
           dispatch(AddSemester(response.data.data));
           dispatch(SetLoadingFalse());
+          if (data != null) {
+            if (data.length + 1 > size) {
+              dispatch(RemoveLastSemester());
+              changeTotalsPage(totalPages + 1);
+            } else if (data.length + 1 === 1) {
+              changeTotalsPage(1);
+            }
+          }
           onCancel();
         },
         (error) => {}
@@ -127,7 +145,7 @@ const ModalCreateSemester = ({ visible, onCancel }) => {
   return (
     <>
       <Modal
-        visible={visible}
+        open={visible}
         onCancel={onCancel}
         width={750}
         footer={null}

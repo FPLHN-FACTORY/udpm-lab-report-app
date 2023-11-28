@@ -33,4 +33,21 @@ export class TeacherMeetingAPI {
       url: url + `/column-attendance/` + idClass,
     });
   }
+  static export = (idClass) => {
+    return request({
+      method: "GET",
+      url: url + `/export-excel-meeting?idClass=` + idClass,
+      responseType: "blob",
+    });
+  };
+  static import = (formData, idClass) => {
+    return request({
+      method: "POST",
+      url: url + `/import-excel-meeting/` + idClass,
+      data: formData,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  };
 }
