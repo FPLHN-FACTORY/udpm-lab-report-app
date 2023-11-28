@@ -64,7 +64,6 @@ const AdminFeedback = () => {
       const teacherData = responseTeacherData.data.data;
       dispatch(SetAdTeacher(teacherData));
       setTeacherDataAll(teacherData);
-      
     };
     fetchTeacherData();
   }, []);
@@ -131,7 +130,7 @@ const AdminFeedback = () => {
       message.error("Vui lòng chọn lớp học để tìm kiếm !");
     }
   };
-  
+
   const handleClear = () => {
     setNameClass("");
     setIdSemester("");
@@ -218,7 +217,7 @@ const AdminFeedback = () => {
     const selectedClass = teacherDataAll.find(
       (classItem) => classItem.id === classId
     );
-   
+
     if (selectedClass) {
       const { userName, name } = selectedClass;
       setTeacherInfo({ userName, name });
@@ -242,7 +241,7 @@ const AdminFeedback = () => {
           </span>
         </div>
       </div>
-      <div className="box-three-dashboad">
+      <div className="box-three-dashboad" style={{ marginTop: 30 }}>
         <div className="box-three-son-dashboad">
           <Row>
             <FontAwesomeIcon
@@ -391,7 +390,7 @@ const AdminFeedback = () => {
           </div>
         </div>
       </div>
-      <div className="box-four-dashboad">
+      <div className="box-four-dashboad" style={{ marginTop: 30 }}>
         <div
           className="box-four-son-dashboad"
           style={{ minHeight: "355px", height: "auto" }}

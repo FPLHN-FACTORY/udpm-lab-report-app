@@ -96,6 +96,7 @@ import { useAppSelector } from "./labreportapp/app/hook";
 import { GetLoading } from "./labreportapp/app/common/Loading.reducer";
 import NotAceptable from "./labreportapp/pages/not-aceptable";
 import AdPointMyClassDetail from "./labreportapp/pages/admin/detail-class/point/AdPointMyClassDetail";
+import AdApproveMeeting from "./labreportapp/pages/admin/approve-meeting/AdApproveMeeting";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -232,6 +233,16 @@ function App() {
                 <AuthGuard>
                   <DashBoardAdmin>
                     <ClassManagement />
+                  </DashBoardAdmin>
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/admin/approve-meeting"
+              element={
+                <AuthGuard>
+                  <DashBoardAdmin>
+                    <AdApproveMeeting />
                   </DashBoardAdmin>
                 </AuthGuard>
               }

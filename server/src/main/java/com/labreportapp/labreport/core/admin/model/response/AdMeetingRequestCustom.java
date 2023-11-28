@@ -1,24 +1,29 @@
 package com.labreportapp.labreport.core.admin.model.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * @author thangncph26123
  */
 @Getter
 @Setter
-public class AdListClassCustomResponse {
+@AllArgsConstructor
+@NoArgsConstructor
+public class AdMeetingRequestCustom {
 
     private String id;
 
-    private Integer stt;
+    private String name;
 
-    private String code;
+    private Long meetingDate;
 
-    private Long startTime;
+    private String meetingPeriodId;
 
-    private String nameClassPeriod;
+    private String nameMeetingPeriod;
 
     private Integer startHour;
 
@@ -28,19 +33,10 @@ public class AdListClassCustomResponse {
 
     private Integer endMinute;
 
-    private Integer classSize;
+    private Integer typeMeeting;
 
     private String teacherId;
 
     private String userNameTeacher;
 
-    private String activityName;
-
-    private String nameLevel;
-
-    private String statusClass;
-
-    private Integer statusTeacherEdit;
-
-    private Integer numberMeetingRequest;
 }

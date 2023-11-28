@@ -32,7 +32,7 @@ public interface AdMeetingRepository extends JpaRepository<Meeting, String> {
             LEFT JOIN meeting_period mp ON mp.id = a.meeting_period
             LEFT JOIN class b ON a.class_id = b.id
             LEFT JOIN MeetingAttendance meetingAtten ON meetingAtten.id = a.id
-            WHERE b.id = :idClass ORDER BY a.meeting_date DESC, mp.name DESC
+            WHERE b.id = :idClass ORDER BY a.meeting_date DESC, mp.start_hour DESC
             """, nativeQuery = true)
     List<AdMeetingResponse> getAllMeetingByIdClass(@Param("idClass") String idClass);
 

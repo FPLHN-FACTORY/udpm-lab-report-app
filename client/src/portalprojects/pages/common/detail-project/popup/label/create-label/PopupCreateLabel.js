@@ -2,12 +2,13 @@ import "./stylePopupCreateLabel.css";
 import React, { useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTags, faUsers } from "@fortawesome/free-solid-svg-icons";
-import { Button, Col, Input, Row, message } from "antd";
+import { Button, Col, ColorPicker, Input, Row, message } from "antd";
 import { useState } from "react";
 import { GetProject } from "../../../../../../app/reducer/detail-project/DPProjectSlice.reducer";
 import { useAppDispatch, useAppSelector } from "../../../../../../app/hook";
 import { getStompClient } from "../../../stomp-client-config/StompClientManager";
 import Cookies from "js-cookie";
+import { DownOutlined } from "@ant-design/icons";
 
 const PopupCreateLabel = ({ position, onClose }) => {
   const popupRef = useRef(null);
@@ -51,43 +52,12 @@ const PopupCreateLabel = ({ position, onClose }) => {
   const detailProject = useAppSelector(GetProject);
   const stompClient = getStompClient();
 
-  const colors = [
-    "#F87060",
-    "#FFC07F",
-    "#FF9C9C",
-    "#FF7F7F",
-    "#FF9F3D",
-    "#FF1A1A",
-    "#9B59B6",
-    "#F1C40F",
-    "#FFBF00",
-    "#70A6FF",
-    "#C39CFF",
-    "#8165FC",
-    "#7EF9AF",
-    "#FF6363",
-    "#FF0000",
-    "#2ECC71",
-    "#3498DB",
-    "#FF5733",
-    "#F39C12",
-    "#E74C3C",
-    "#8E44AD",
-    "#27AE60",
-    "#2980B9",
-    "#E67E22",
-    "#E91E63",
-    "#27AE60",
-    "#FFA500",
-    "#FF1493",
-    "#FFD700",
-    "#1E90FF",
-    "#00FF7F",
-    "#4682B4",
-  ];
-
   const handleSelectColor = (color) => {
-    setColor(color);
+    const { r, g, b, a } = color;
+    const rgbColor = `rgb(${Math.round(r)}, ${Math.round(g)}, ${Math.round(
+      b
+    )})`;
+    setColor(rgbColor);
   };
 
   const handleAddLabel = () => {
@@ -112,6 +82,9 @@ const PopupCreateLabel = ({ position, onClose }) => {
 
     onClose();
   };
+
+  const [colorLabel, setColorLabel] = useState("rgb(0, 123, 255)");
+  const [open, setOpen] = useState(false);
 
   return (
     <div ref={popupRef} style={popupStyle} className="popup-period">
@@ -144,19 +117,23 @@ const PopupCreateLabel = ({ position, onClose }) => {
         <div style={{ marginTop: "10px" }}>
           <span style={{ fontSize: "14px" }}>Chọn màu: </span> <br />
           <div className="color-options-container">
-            <Row gutter={[10, 10]}>
-              {colors.map((color, index) => (
-                <Col key={index} span={6}>
-                  <div
-                    className="color-option"
-                    style={{ backgroundColor: color }}
-                    onClick={() => {
-                      handleSelectColor(color);
-                    }}
-                  />
-                </Col>
-              ))}
-            </Row>
+            <ColorPicker
+              open={open}
+              getPopupContainer={(triggerNode) => triggerNode.parentNode}
+              value={colorLabel}
+              onChange={(e) => {
+                handleSelectColor(e.metaColor);
+              }}
+              onOpenChange={setOpen}
+              showText={() => (
+                <DownOutlined
+                  rotate={open ? 180 : 0}
+                  style={{
+                    color: "rgba(0, 0, 0, 0.25)",
+                  }}
+                />
+              )}
+            />
           </div>
         </div>
         <div style={{ marginTop: "10px" }}>

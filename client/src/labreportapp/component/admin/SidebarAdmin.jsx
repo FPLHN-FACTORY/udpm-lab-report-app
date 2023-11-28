@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Layout, Menu } from "antd";
+import { Badge, Layout, Menu } from "antd";
 import { Link, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -30,18 +30,37 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import logoBit from "../../assets/img/logo_bit_1.png";
 import "./style-sidebar.css";
+import { AdMeetingRequestAPI } from "../../api/admin/AdMeetingRequestAPI";
+import { useAppDispatch, useAppSelector } from "../../app/hook";
+import {
+  GetAdCountApproveMeetingRequest,
+  SetAdCountApproveMeetingRequest,
+} from "../../app/admin/AdCountApproveMeetingRequest.reducer";
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
 
 const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
   const location = useLocation();
+  const dispatch = useAppDispatch();
 
   const [selectedKey, setSelectedKey] = useState("");
 
   useEffect(() => {
     setSelectedKey(location.pathname);
   }, [location]);
+
+  const countClassApprove = () => {
+    AdMeetingRequestAPI.countClassHaveMeetingRequest().then((res) => {
+      dispatch(SetAdCountApproveMeetingRequest(res.data.data));
+    });
+  };
+
+  const numberClassApproved = useAppSelector(GetAdCountApproveMeetingRequest);
+
+  useEffect(() => {
+    countClassApprove();
+  }, []);
 
   return (
     <Sider
@@ -184,6 +203,25 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           }
         >
           <Link to="/admin/class-management">Quản lý lớp học</Link>
+        </Menu.Item>{" "}
+        <Menu.Item
+          key="/admin/approve-meeting"
+          className="menu_custom"
+          icon={
+            <FontAwesomeIcon
+              icon={faWindowRestore}
+              style={{ color: "rgb(226, 179, 87)" }}
+            />
+          }
+        >
+          <Link to="/admin/approve-meeting">
+            Phê duyệt lịch học
+            <Badge
+              count={numberClassApproved}
+              offset={[10, 0]}
+              style={{ marginTop: 0, right: -1, bottom: 6 }}
+            ></Badge>
+          </Link>{" "}
         </Menu.Item>{" "}
         <Menu.SubMenu
           key="911"

@@ -118,6 +118,7 @@ public interface AdClassRepository extends ClassRepository {
             and (:#{#req.statusClass} IS NULL OR :#{#req.statusClass} LIKE '' 
             OR IF(:#{#req.statusClass} = 'yes', c.class_size >= :#{#req.valueClassSize}, c.class_size < :#{#req.valueClassSize}))
             and (:#{#req.statusTeacherEdit} IS NULL OR :#{#req.statusTeacherEdit} LIKE '' OR c.status_teacher_edit = :#{#req.statusTeacherEdit})
+            ORDER BY c.last_modified_date DESC
             """, nativeQuery = true)
     Page<AdClassResponse> findClassBySemesterAndActivity(@Param("req") AdFindClassRequest req, Pageable pageable);
 

@@ -106,5 +106,7 @@ public class PropertyKeys {
 
     public static final String CONFIRM_PASSWORD_FAILED = "confirm.password.failed";
     public static final String CONFIRM_PASSWORD_ISEMPTY = "confirm.password.isEmpty";
+    public static final String MEETING_REQUEST_NOT_EXISTS = "meeting.request.not.exists";
+    public static final String STATUS_NOT_VALID = "status.not.valid";
 
 }

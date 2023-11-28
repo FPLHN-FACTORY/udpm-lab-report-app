@@ -3,9 +3,8 @@ import {
   BulbOutlined,
   PoweroffOutlined,
 } from "@ant-design/icons";
-import { Badge, Dropdown, Menu, Switch } from "antd";
+import { Badge, Dropdown, Menu, Modal, Switch } from "antd";
 import { Link } from "react-router-dom";
-import AvtDefault from "../../assets/img/328693761_727939795557043_1972102579202651860_n.jpg";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hook";
 import { GetUserCurrent } from "../../app/common/UserCurrent.reducer";
@@ -13,7 +12,7 @@ import Cookies from "js-cookie";
 import { portIdentity } from "../../helper/constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faPerson,
+  faExchange,
   faPersonSwimming,
   faSignOut,
   faUser,
@@ -27,17 +26,30 @@ import {
   SetToTalPages,
 } from "../../../portalprojects/app/reducer/notification/NotificationSlice.reducer";
 import PopupNotification from "../../../portalprojects/component/notification/Notification";
-
+const { confirm } = Modal;
 const CommonInforUser = () => {
   const handleMenuClick = (e) => {
     if (e.key === "2") {
-      Cookies.remove("token");
-      window.location.href = portIdentity;
+      confirm({
+        title: "Xác nhận đăng xuất",
+        content: "Bạn có chắc chắn muốn đăng xuất?",
+        onOk() {
+          Cookies.remove("token");
+          window.location.href = portIdentity;
+        },
+        onCancel() {},
+      });
     }
   };
 
   const userMenu = (
     <Menu onClick={handleMenuClick}>
+      <Menu.Item
+        key="3"
+        icon={<FontAwesomeIcon icon={faUser} style={{ marginRight: 5 }} />}
+      >
+        <Link to="/profile"> Thông tin tài khoản</Link>
+      </Menu.Item>
       <Menu.Item
         key="1"
         icon={
@@ -45,6 +57,12 @@ const CommonInforUser = () => {
         }
       >
         <Link to="/role-selection">Đổi quyền</Link>
+      </Menu.Item>
+      <Menu.Item
+        key="4"
+        icon={<FontAwesomeIcon icon={faExchange} style={{ marginRight: 5 }} />}
+      >
+        <Link to="/change-password">Đổi mật khẩu</Link>
       </Menu.Item>
       <Menu.Item
         key="2"
@@ -59,18 +77,18 @@ const CommonInforUser = () => {
 
   const toggleDarkMode = (checked) => {
     setDarkMode(checked);
-    // const elements = document.querySelectorAll("*");
-    // if (checked) {
-    //   elements.forEach((element) => {
-    //     element.classList.add("dark-mode");
-    //     element.classList.remove("light-mode");
-    //   });
-    // } else {
-    //   elements.forEach((element) => {
-    //     element.classList.remove("dark-mode");
-    //     element.classList.add("light-mode");
-    //   });
-    // }
+    const elements = document.querySelectorAll("*");
+    if (checked) {
+      elements.forEach((element) => {
+        element.classList.add("dark-mode");
+        element.classList.remove("light-mode");
+      });
+    } else {
+      elements.forEach((element) => {
+        element.classList.remove("dark-mode");
+        element.classList.add("light-mode");
+      });
+    }
   };
 
   const userCurrent = useAppSelector(GetUserCurrent);

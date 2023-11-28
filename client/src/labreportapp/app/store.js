@@ -59,6 +59,8 @@ import TeDetailTeamFactorySliceReducer from "./teacher/team-factory/TeDetailTeam
 import StDetailTeamFactorySliceReducer from "./student/StDetailTeamFactorySlice.reducer";
 import DPDetailProjectCustomReduce from "../../portalprojects/app/reducer/detail-project/DPDetailProjectCustom.reduce";
 import LoadingReducer from "./common/Loading.reducer";
+import AdMeetingRequestSliceReducer from "./admin/AdMeetingRequestSlice.reducer";
+import AdCountApproveMeetingRequestReducer from "./admin/AdCountApproveMeetingRequest.reducer";
 
 export const store = configureStore({
   reducer: {
@@ -123,6 +125,8 @@ export const store = configureStore({
     stDetailTeamFactory: StDetailTeamFactorySliceReducer,
     detailProjectCustom: DPDetailProjectCustomReduce,
     loading: LoadingReducer,
+    adMeetingRequest: AdMeetingRequestSliceReducer,
+    adCountApproveMeetingRequest: AdCountApproveMeetingRequestReducer,
   },
 });
 

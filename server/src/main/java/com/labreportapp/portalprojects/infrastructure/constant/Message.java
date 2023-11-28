@@ -106,7 +106,9 @@ public enum Message {
     CONFIRM_PASSWORD_FAILED(PropertiesReader.getProperty(PropertyKeys.CONFIRM_PASSWORD_FAILED)),
     CONFIRM_PASSWORD_ISEMPTY(PropertiesReader.getProperty(PropertyKeys.CONFIRM_PASSWORD_ISEMPTY)),
     BAN_CHUA_TAO_CAU_HINH(PropertiesReader.getProperty(PropertyKeys.BAN_CHUA_TAO_CAU_HINH)),
-    LOP_NAY_DA_QUY_DOI_MAT_ONG(PropertiesReader.getProperty(PropertyKeys.LOP_NAY_DA_QUY_DOI_MAT_ONG));
+    LOP_NAY_DA_QUY_DOI_MAT_ONG(PropertiesReader.getProperty(PropertyKeys.LOP_NAY_DA_QUY_DOI_MAT_ONG)),
+    MEETING_REQUEST_NOT_EXISTS(PropertiesReader.getProperty(PropertyKeys.MEETING_REQUEST_NOT_EXISTS)),
+    STATUS_NOT_VALID(PropertiesReader.getProperty(PropertyKeys.STATUS_NOT_VALID));
 
     private String message;
 
