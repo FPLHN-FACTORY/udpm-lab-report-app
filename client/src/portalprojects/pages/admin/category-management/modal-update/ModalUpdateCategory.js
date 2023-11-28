@@ -47,7 +47,7 @@ const ModalUpdateCategory = ({ visible, onCancel, category }) => {
 
       AdCategoryAPI.update(category.id, cate).then(
         (response) => {
-          message.success("Cập nhật thành công!");
+          message.success("Cập nhật thành công !");
           dispatch(UpdateCategory(response.data.data));
           onCancel();
         },

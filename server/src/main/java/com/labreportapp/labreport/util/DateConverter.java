@@ -71,6 +71,5 @@ public class DateConverter {
     public static void main(String[] args) {
         long dateInMillis = new Date().getTime();
         String formattedDate = DateConverter.convertDateToString(dateInMillis);
-        System.out.println(formattedDate);
     }
 }

@@ -5,6 +5,7 @@ import { useAppSelector } from "../../../../app/hook";
 import {
   AddLevel,
   GetLevel,
+  RemoveLastLevel,
 } from "../../../../app/admin/AdLevelManager.reducer";
 import "react-toastify/dist/ReactToastify.css";
 import { useAppDispatch } from "../../../../app/hook";
@@ -51,14 +52,14 @@ const ModalCreateLevel = ({
       let obj = {
         name: name,
       };
-
       AdLevelAPI.addLevel(obj).then(
         (response) => {
-          message.success("Thêm thành công!");
+          message.success("Thêm thành công !");
           dispatch(AddLevel(response.data.data));
           dispatch(SetLoadingFalse());
           if (data != null) {
             if (data.length + 1 > size) {
+              dispatch(RemoveLastLevel());
               changeTotalsPage(totalPages + 1);
             } else if (data.length + 1 === 1) {
               changeTotalsPage(1);

@@ -1,15 +1,25 @@
 import { Modal, Row, Col, Input, Button, message } from "antd";
 import { useEffect, useState } from "react";
 import { AdMeetingPeriodConfigurationAPI } from "../../../../../api/admin/AdMeetingPeriodConfigurationAPI";
-import { AddMeetingPeriodConfiguration } from "../../../../../app/admin/AdMeetingPeriodConfiguration.reducer";
+import {
+  AddMeetingPeriodConfiguration,
+  GetMeetingPeriodConfiguration,
+  RemoveLastMeetingPeriodConfiguration,
+} from "../../../../../app/admin/AdMeetingPeriodConfiguration.reducer";
 import "react-toastify/dist/ReactToastify.css";
-import { useAppDispatch } from "../../../../../app/hook";
+import { useAppDispatch, useAppSelector } from "../../../../../app/hook";
 import {
   SetLoadingFalse,
   SetLoadingTrue,
 } from "../../../../../app/common/Loading.reducer";
 
-const ModalCreateMeetingPeriod = ({ visible, onCancel }) => {
+const ModalCreateMeetingPeriod = ({
+  visible,
+  onCancel,
+  changeTotalsPage,
+  totalPages,
+  size,
+}) => {
   const [name, setName] = useState("");
   const [startHour, setStartHour] = useState(0);
   const [startMinute, setStartMinute] = useState(0);
@@ -22,7 +32,7 @@ const ModalCreateMeetingPeriod = ({ visible, onCancel }) => {
   const [errorEndMinute, setErrorEndMinute] = useState("");
 
   const dispatch = useAppDispatch();
-
+  const data = useAppSelector(GetMeetingPeriodConfiguration);
   useEffect(() => {
     return () => {
       setName("");
@@ -98,6 +108,14 @@ const ModalCreateMeetingPeriod = ({ visible, onCancel }) => {
           message.success("Thêm ca thành công !");
           dispatch(AddMeetingPeriodConfiguration(response.data.data));
           dispatch(SetLoadingFalse());
+          if (data != null) {
+            if (data.length + 1 > size) {
+              dispatch(RemoveLastMeetingPeriodConfiguration());
+              changeTotalsPage(totalPages + 1);
+            } else if (data.length + 1 === 1) {
+              changeTotalsPage(1);
+            }
+          }
           onCancel();
         },
         (error) => {}

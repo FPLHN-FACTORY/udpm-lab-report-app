@@ -25,6 +25,13 @@ const adSemesterSlice = createSlice({
       state.unshift(newSemester);
       return state;
     },
+    RemoveLastSemester: (state) => {
+      if (state.length > 0) {
+        state.pop();
+        return state;
+      }
+      return state;
+    },
     UpdateSemester: (state, action) => {
       const updateSemester = action.payload;
       const index = state.findIndex(
@@ -58,6 +65,7 @@ const adSemesterSlice = createSlice({
 export const {
   SetSemester,
   AddSemester,
+  RemoveLastSemester,
   UpdateSemester,
   DeleteSemester,
   UpdateStatusFeedback,

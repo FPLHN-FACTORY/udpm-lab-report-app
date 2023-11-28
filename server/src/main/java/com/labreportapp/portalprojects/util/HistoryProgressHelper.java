@@ -37,9 +37,7 @@ public class HistoryProgressHelper {
         Long datePrevious = DateTimeUtil.getPreviousDayInMillis();
 
         HistoryProgress historyProgressFind = meHistoryProgressRepository.findByProjectIdAndProgressDate(idProject, dateNow);
-        System.out.println(historyProgressFind == null);
         HistoryProgress historyProgressFindPrevious = meHistoryProgressRepository.findByProjectIdAndProgressDate(idProject, datePrevious);
-        System.out.println(historyProgressFindPrevious == null);
         Float sumProgress = todoHelper.sumProgressAllTodoByProject(projectFind.get().getId());
 
         if (historyProgressFind == null) {

@@ -160,7 +160,9 @@ const DetailTeamFactory = () => {
         message.success("Xóa thành công");
         setLoadingNoOverlay(false);
       },
-      (error) => {}
+      (error) => {
+        setLoadingNoOverlay(false);
+      }
     );
   };
 
@@ -175,7 +177,10 @@ const DetailTeamFactory = () => {
         setLoadingNoOverlay(false);
         setIsCheckedAll(false);
       },
-      (error) => {}
+      (error) => {
+        setLoadingNoOverlay(false);
+        setIsCheckedAll(false);
+      }
     );
   };
 

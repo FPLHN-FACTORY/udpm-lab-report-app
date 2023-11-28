@@ -61,9 +61,7 @@ public class MeTodoController {
                                  @RequestParam("idTodoList") String idTodoList,
                                  @RequestParam("filter") String filter) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
-        System.out.println(filter);
         MeFilterTodoRequest request = objectMapper.readValue(filter, MeFilterTodoRequest.class);
-        System.out.println(request);
         return new ResponseObject(meTodoService.filter(request, idPeriod, idTodoList));
     }
 

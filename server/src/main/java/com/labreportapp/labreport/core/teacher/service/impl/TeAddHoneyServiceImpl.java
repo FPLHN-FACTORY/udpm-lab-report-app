@@ -76,7 +76,6 @@ public class TeAddHoneyServiceImpl implements TeAddHoneyService {
         request.setCode("MODULE_LAB_REPORT_APP");
         request.setListStudent(listStudent);
         request.setCategoryId(categoryId);
-        System.out.println(request.toString() + " aaaaaaaaaaaaaaa");
         Boolean check = callApiHoney.addPointStudentLabReportApp(request);
         classFind.get().setStatusHoneyPlus(StatusHoneyPlus.DA_CONG);
         classRepository.save(classFind.get());

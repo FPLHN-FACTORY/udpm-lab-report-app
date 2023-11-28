@@ -16,6 +16,7 @@ import { ActivityManagementAPI } from "../../../../api/admin/activity-management
 import {
   CreateActivityManagement,
   GetActivityManagement,
+  RemoveLastActivity,
 } from "../../../../app/admin/activity-management/activityManagementSlice.reducer";
 import { Option } from "antd/es/mentions";
 import {
@@ -113,7 +114,6 @@ const ModalCreateActivity = ({
     }
     if (check === 0) {
       dispatch(SetLoadingTrue());
-
       let obj = {
         name: name,
         code: code,
@@ -136,6 +136,7 @@ const ModalCreateActivity = ({
           dispatch(SetLoadingFalse());
           if (data != null) {
             if (data.length + 1 > size) {
+              dispatch(RemoveLastActivity());
               changeTotalsPage(totalPages + 1);
             } else if (data.length + 1 === 1) {
               changeTotalsPage(1);

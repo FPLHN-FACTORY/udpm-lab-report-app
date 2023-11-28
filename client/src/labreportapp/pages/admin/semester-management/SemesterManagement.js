@@ -33,13 +33,12 @@ import {
   UpdateStatusFeedback,
 } from "../../../app/admin/AdSemester.reducer";
 import { AdSemesterAPI } from "../../../api/admin/AdSemesterAPI";
-import React, { useCallback } from "react";
+import React from "react";
 import ModalCreateSemester from "./modal-create/ModalCreateSemester";
 import ModalUpdateSemester from "./modal-update/ModalUpdateSemester";
 import LoadingIndicator from "../../../helper/loading";
 import { convertDateLongToString } from "../../../helper/util.helper";
 import ModalShowHistory from "./modal-show-history/ModalShowHistory";
-import { SetLoadingTrue } from "../../../app/common/Loading.reducer";
 
 const SemesterManagement = () => {
   const [semester, setSemester] = useState(null);
@@ -68,15 +67,18 @@ const SemesterManagement = () => {
       setLoading(false);
     });
   };
-  const data = useAppSelector(GetSemester);
 
   const updateStatusFeedback = (id) => {
     AdSemesterAPI.updateStatusFeedback(id).then((response) => {
       dispatch(UpdateStatusFeedback(id));
-      message.success("Bật feedback thành công");
+      message.success("Bật feedback thành công !");
     });
   };
+  const changeTotalsPage = (newTotalPages) => {
+    setTotal(newTotalPages);
+  };
 
+  const data = useAppSelector(GetSemester);
   const columns = [
     {
       title: "#",
@@ -229,8 +231,9 @@ const SemesterManagement = () => {
   const buttonDelete = (id) => {
     AdSemesterAPI.deleteSemester(id).then(
       (response) => {
-        message.success("Xóa thành công!");
+        message.success("Xóa thành công !");
         dispatch(DeleteSemester(response.data.data));
+        setCurrent(1);
         fetchData();
       },
       (error) => {}
@@ -431,6 +434,7 @@ const SemesterManagement = () => {
                 }}
               >
                 <Empty
+                  style={{ paddingTop: "100px" }}
                   imageStyle={{ height: 60 }}
                   description={<span>Không có dữ liệu</span>}
                 />{" "}
@@ -441,6 +445,9 @@ const SemesterManagement = () => {
         <ModalCreateSemester
           visible={modalCreate}
           onCancel={buttonCreateCancel}
+          changeTotalsPage={changeTotalsPage}
+          totalPages={total}
+          size={10}
         />
         <ModalUpdateSemester
           visible={modalUpdate}

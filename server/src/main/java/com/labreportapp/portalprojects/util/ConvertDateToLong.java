@@ -12,6 +12,5 @@ public class ConvertDateToLong {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
         Date date = simpleDateFormat.parse("20-04-2023");
         long longDate = (long) date.getTime();
-        System.out.println(longDate);
     }
 }

@@ -24,6 +24,11 @@ const adMeetingPeriodConfigurationSlice = createSlice({
       state.unshift(newMeetingPeriod);
       return state;
     },
+    RemoveLastMeetingPeriodConfiguration: (state) => {
+      if (state.length > 0) {
+        state.pop();
+      }
+    },
     UpdateMeetingPeriodConfiguration: (state, action) => {
       const updateMeetingPeriod = action.payload;
       const index = state.findIndex(
@@ -35,22 +40,27 @@ const adMeetingPeriodConfigurationSlice = createSlice({
         state[index].startMinute = updateMeetingPeriod.startMinute;
         state[index].endHour = updateMeetingPeriod.endHour;
         state[index].endMinute = updateMeetingPeriod.endMinute;
-
       }
     },
     DeleteMeetingPeriodConfiguration: (state, action) => {
       const idMeetingPeriod = action.payload;
-      const index = state.findIndex((meetingPeriod) => meetingPeriod.id === idMeetingPeriod);
+      const index = state.findIndex(
+        (meetingPeriod) => meetingPeriod.id === idMeetingPeriod
+      );
       state.splice(index, 1);
     },
   },
 });
 
-export const { SetMeetingPeriodConfiguration,
-   AddMeetingPeriodConfiguration,
-    UpdateMeetingPeriodConfiguration,
-     DeleteMeetingPeriodConfiguration, } = adMeetingPeriodConfigurationSlice.actions;
+export const {
+  SetMeetingPeriodConfiguration,
+  RemoveLastMeetingPeriodConfiguration,
+  AddMeetingPeriodConfiguration,
+  UpdateMeetingPeriodConfiguration,
+  DeleteMeetingPeriodConfiguration,
+} = adMeetingPeriodConfigurationSlice.actions;
 
-export const GetMeetingPeriodConfiguration = (state) => state.adMeetingPeriodConfiguration;
+export const GetMeetingPeriodConfiguration = (state) =>
+  state.adMeetingPeriodConfiguration;
 
 export default adMeetingPeriodConfigurationSlice.reducer;

@@ -214,9 +214,7 @@ public class AdActivityServiceImpl implements AdActivityService {
     }
 
     public Long convertDateToString(String dateStringToLong) {
-
         String pattern = "yyyy-MM-dd";
-
         SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
         try {
             Date date = dateFormat.parse(dateStringToLong);

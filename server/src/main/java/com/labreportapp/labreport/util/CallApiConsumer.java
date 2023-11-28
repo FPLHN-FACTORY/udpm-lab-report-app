@@ -46,7 +46,6 @@ public class CallApiConsumer {
                     restTemplate.exchange(apiUrl + "?page=" + page + "&size=" + size, HttpMethod.POST, requestEntity,
                             new ParameterizedTypeReference<String>() {
                             });
-            System.out.println(responseEntity.getBody());
             return new Gson().fromJson(responseEntity.getBody(), PageableObject.class);
         } catch (Exception e) {
             e.printStackTrace();

@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import {
   CreateCategory,
   GetCategory,
+  RemoveLastCategory,
 } from "../../../../app/reducer/admin/category-management/adCategorySlice.reducer";
 
 const ModalCreateCategory = ({
@@ -46,10 +47,11 @@ const ModalCreateCategory = ({
 
       AdCategoryAPI.create(obj).then(
         (response) => {
-          message.success("Thêm thành công!");
+          message.success("Thêm thành công !");
           dispatch(CreateCategory(response.data.data));
           if (data != null) {
             if (data.length + 1 > size) {
+              dispatch(RemoveLastCategory());
               changeTotalsPage(totalPages + 1);
             } else if (data.length + 1 === 1) {
               changeTotalsPage(1);
