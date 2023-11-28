@@ -1,13 +1,13 @@
 # Stage 1: Build the Spring Boot application with Gradle
 FROM gradle:7.4.1-jdk17 AS builder
 
+RUN apk --no-cache add fontconfig ttf-dejavu
+
 WORKDIR /app
 
 COPY build.gradle .
 COPY settings.gradle .
 COPY src src
-
-RUN apk --no-cache add fontconfig ttf-dejavu
 
 # Show the directory contents before running the build
 RUN ls -al
