@@ -1,0 +1,72 @@
+name: job deploy server
+ 
+on:
+  push:
+    branches:
+      - 'develop'
+
+jobs:
+  build_marketplace:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v3
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      -
+        name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: ./server
+          file: ./server/Dockerfile
+          push: true
+          tags: nguyencongthang2509/lab-report-app-api
+  
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: ./client
+          file: ./client/Dockerfile
+          push: true
+          tags: nguyencongthang2509/lab-report-app
+
+      - 
+       name: executing remote ssh commands using password
+       uses: appleboy/ssh-action@v1.0.0
+       with:
+         host: ${{ secrets.HOST }}
+         username: ${{ secrets.USERNAME }}
+         password: ${{ secrets.PASSWORD }}
+         port: ${{ secrets.PORT }}
+         script: |
+            cd deploy-compose
+            docker pull nguyencongthang2509/lab-report-app-api
+            docker pull nguyencongthang2509/lab-report-app
+            docker-compose up -d --build lab-report-app-web
+            docker-compose up -d --build lab-report-app-api
+            docker restart nginx-proxy
+            docker image prune
+        
+  notifi_slack_bot:
+    runs-on: ubuntu-latest
+    needs: ['build_marketplace']
+    steps:
+      - name: Slack Notification Ci/Cd started
+        uses: 8398a7/action-slack@v3.15.1
+        with:
+          status: ${{ job.status }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+          text: "Dự án quản lý hoạt động xưởng bộ môn UDPM hiện đã được cập nhật, mọi người có thể truy cập vào đường dẫn https://factory.udpm-hn.com để kiếm tra. Hân hạnh được phục vụ mọi người và mang đến cho mọi người những giây phút sử dụng trang web tuyệt vời nhất!!! 😎😎"
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
