@@ -665,7 +665,7 @@ public class TeMeetingServiceImpl implements TeMeetingService {
                     checkValidate.set(false);
                     return;
                 } else {
-                    MeetingPeriod meetingPeriodCheck = mapMeetingPeriod.get(meeting.getNameMeetingPeriod());
+                    MeetingPeriod meetingPeriodCheck = mapMeetingPeriod.get(meeting.getNameMeetingPeriod().toLowerCase());
                     if (meetingPeriodCheck == null) {
                         teExcelResponseMessage.setStatus(false);
                         teExcelResponseMessage.setMessage(" Ca học không tồn tại !");
@@ -686,7 +686,7 @@ public class TeMeetingServiceImpl implements TeMeetingService {
                         return;
                     }
                 }
-                MeetingPeriod meetingPeriod = mapMeetingPeriod.get(meeting.getNameMeetingPeriod());
+                MeetingPeriod meetingPeriod = mapMeetingPeriod.get(meeting.getNameMeetingPeriod().toLowerCase());
                 SimpleResponse teacher = mapGiangVien.get(meeting.getUserNameTeacher().toLowerCase());
                 if (teacher == null) {
                     teExcelResponseMessage.setStatus(false);
@@ -694,7 +694,7 @@ public class TeMeetingServiceImpl implements TeMeetingService {
                     checkValidate.set(false);
                     return;
                 }
-                message.append(" Ngày: ").append(meeting.getMeetingDate()).append(", ").append(meeting.getNameMeetingPeriod())
+                message.append(" Ngày: ").append(meeting.getMeetingDate()).append(", ").append(meetingPeriod.getName())
                         .append(", ").append(" giảng viên: ").append(teacher.getName()).append(" - ").append(teacher.getUserName())
                         .append(", hình thức: ").append(meeting.getTypeMeeting()).append(",");
                 MeetingRequest meetingRequest = new MeetingRequest();
@@ -757,7 +757,7 @@ public class TeMeetingServiceImpl implements TeMeetingService {
 
     private void getAllPutMeetingPeriod(ConcurrentHashMap<String, MeetingPeriod> mapMeetingPeriod, List<MeetingPeriod> listMeetingPeriod) {
         for (MeetingPeriod meeting : listMeetingPeriod) {
-            mapMeetingPeriod.put(meeting.getName(), meeting);
+            mapMeetingPeriod.put(meeting.getName().toLowerCase(), meeting);
         }
         listMeetingPeriod.clear();
     }

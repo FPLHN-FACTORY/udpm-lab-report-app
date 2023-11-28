@@ -6,11 +6,13 @@ import com.labreportapp.labreport.core.teacher.model.request.TeMeetingRequestAga
 import com.labreportapp.labreport.core.teacher.model.response.TeMeetingRequestCustomResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeMeetingRequestResponse;
 import com.labreportapp.labreport.core.teacher.repository.TeClassRepository;
+import com.labreportapp.labreport.core.teacher.repository.TeMeetingPeriodRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeMeetingRequestRepository;
 import com.labreportapp.labreport.core.teacher.service.TeMeetingRequestService;
 import com.labreportapp.labreport.entity.Class;
 import com.labreportapp.labreport.entity.MeetingPeriod;
 import com.labreportapp.labreport.entity.MeetingRequest;
+import com.labreportapp.labreport.infrastructure.apiconstant.ActorConstants;
 import com.labreportapp.labreport.infrastructure.constant.StatusClass;
 import com.labreportapp.labreport.infrastructure.constant.StatusMeetingRequest;
 import com.labreportapp.labreport.util.CallApiIdentity;
@@ -47,6 +49,9 @@ public class TeMeetingRequestServiceImpl implements TeMeetingRequestService {
     private TeClassRepository teClassRepository;
 
     @Autowired
+    private TeMeetingPeriodRepository teMeetingPeriodRepository;
+
+    @Autowired
     private LoggerUtil loggerUtil;
 
     @Override
@@ -60,7 +65,7 @@ public class TeMeetingRequestServiceImpl implements TeMeetingRequestService {
                 .collect(Collectors.toList());
         List<SimpleResponse> listGiangVien = callApiIdentity.handleCallApiGetListUserByListId(idStudentList);
         ConcurrentHashMap<String, SimpleResponse> mapTeacher = new ConcurrentHashMap<>();
-        addDataInMapGiangVien(mapTeacher, listGiangVien);
+        addDataInMapGiangVienClass(mapTeacher, listGiangVien);
         Page<TeMeetingRequestCustomResponse> pageNew = listPage.map(item -> {
             TeMeetingRequestCustomResponse obj = new TeMeetingRequestCustomResponse();
             obj.setId(item.getId());
@@ -74,7 +79,7 @@ public class TeMeetingRequestServiceImpl implements TeMeetingRequestService {
             obj.setEndMinute(item.getEndMinute());
             obj.setTeacher(null);
             if (item.getIdTeacher() != null) {
-                SimpleResponse teacher = mapTeacher.get(item.getIdTeacher());
+                SimpleResponse teacher = mapTeacher.get(item.getIdTeacher().toLowerCase());
                 if (teacher != null) {
                     obj.setTeacher(teacher.getName() + " - " + teacher.getUserName());
                 } else {
@@ -103,18 +108,26 @@ public class TeMeetingRequestServiceImpl implements TeMeetingRequestService {
             throw new RestApiException("Vui lòng chọn buổi học để gửi yêu cầu !");
         }
         ConcurrentHashMap<String, SimpleResponse> mapTeacher = new ConcurrentHashMap<>();
+        ConcurrentHashMap<String, MeetingPeriod> mapMeetingPeriod = new ConcurrentHashMap<>();
+        List<MeetingPeriod> listMeetingPeriod = teMeetingPeriodRepository.findAll();
+        addDataInMapGiangVienSend(mapTeacher);
+        addDataMeetingPeriodSend(mapMeetingPeriod, listMeetingPeriod);
         StringBuilder message = new StringBuilder();
         message.append("Đã gửi lại yêu cầu tạo buổi học: ");
         listMeetingRequest.forEach(i -> {
             listRequest.forEach(req -> {
                 if (i.getId().equals(req)) {
                     message.append(" Ngày: ").append(DateConverter.convertDateToStringNotTime(i.getMeetingDate())).append(", ")
-                            .append(i.getName())
-                            .append(", ").append(" giảng viên: ");
+                            .append(i.getName());
+                    MeetingPeriod meetingPeriodFind = mapMeetingPeriod.get(i.getMeetingPeriod().toLowerCase());
+                    if (meetingPeriodFind != null) {
+                        message.append(", ").append(meetingPeriodFind.getName());
+                    }
+                    message.append(", ").append(" giảng viên: ");
                     if (i.getTeacherId() != null) {
-                        SimpleResponse teacher = mapTeacher.get(i.getTeacherId());
+                        SimpleResponse teacher = mapTeacher.get(i.getTeacherId().toLowerCase());
                         if (teacher != null) {
-                            message.append(teacher.getName() + " - " + teacher.getUserName());
+                            message.append(teacher.getName()).append(" - ").append(teacher.getUserName());
                         }
                     }
                     message.append(", hình thức: ").append(i.getTypeMeeting()).append(", ");
@@ -139,26 +152,38 @@ public class TeMeetingRequestServiceImpl implements TeMeetingRequestService {
 
     }
 
-    public void addDataInMapGiangVien(ConcurrentHashMap<String, SimpleResponse> mapAll, List<SimpleResponse> listGiangVien) {
-        getALlPutMapGiangVien(mapAll, listGiangVien);
+    public void addDataInMapGiangVienSend(ConcurrentHashMap<String, SimpleResponse> mapAll) {
+        List<SimpleResponse> giangVienHuongDanList = callApiIdentity.handleCallApiGetUserByRoleAndModule(ActorConstants.ACTOR_TEACHER);
+        getALlPutMapGiangVienSend(mapAll, giangVienHuongDanList);
     }
 
-    public void getALlPutMapGiangVien(ConcurrentHashMap<String, SimpleResponse> mapSimple, List<SimpleResponse> listGiangVien) {
+    public void getALlPutMapGiangVienSend(ConcurrentHashMap<String, SimpleResponse> mapSimple, List<SimpleResponse> listGiangVien) {
         for (SimpleResponse simple : listGiangVien) {
-            mapSimple.put(simple.getId(), simple);
+            mapSimple.put(simple.getId().toLowerCase(), simple);
         }
+        listGiangVien.clear();
     }
 
-    private void addDataMeetingPeriod(ConcurrentHashMap<String, MeetingPeriod> mapMeetingPeriod, List<MeetingPeriod> listMeetingPeriod) {
-        getAllPutMeetingPeriod(mapMeetingPeriod, listMeetingPeriod);
+    public void addDataInMapGiangVienClass(ConcurrentHashMap<String, SimpleResponse> mapAll, List<SimpleResponse> listGiangVien) {
+        getALlPutMapGiangVienClass(mapAll, listGiangVien);
     }
 
-    private void getAllPutMeetingPeriod(ConcurrentHashMap<String, MeetingPeriod> mapMeetingPeriod, List<MeetingPeriod> listMeetingPeriod) {
+    public void getALlPutMapGiangVienClass(ConcurrentHashMap<String, SimpleResponse> mapSimple, List<SimpleResponse> listGiangVien) {
+        for (SimpleResponse simple : listGiangVien) {
+            mapSimple.put(simple.getId().toLowerCase(), simple);
+        }
+        listGiangVien.clear();
+    }
+
+    private void addDataMeetingPeriodSend(ConcurrentHashMap<String, MeetingPeriod> mapMeetingPeriod, List<MeetingPeriod> listMeetingPeriod) {
+        getAllPutMeetingPeriodSend(mapMeetingPeriod, listMeetingPeriod);
+    }
+
+    private void getAllPutMeetingPeriodSend(ConcurrentHashMap<String, MeetingPeriod> mapMeetingPeriod, List<MeetingPeriod> listMeetingPeriod) {
         for (MeetingPeriod meeting : listMeetingPeriod) {
-            mapMeetingPeriod.put(meeting.getName(), meeting);
+            mapMeetingPeriod.put(meeting.getId().toLowerCase(), meeting);
         }
         listMeetingPeriod.clear();
     }
-
 
 }
