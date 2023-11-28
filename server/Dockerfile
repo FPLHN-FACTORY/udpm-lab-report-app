@@ -1,12 +1,24 @@
-# Sử dụng base image Nginx
-FROM openjdk:17-jdk-alpine
-ARG JAR_FILE=target/*.jar
+# Stage 1: Build the Spring Boot application with Gradle
+FROM gradle:7.4.1-jdk17 AS builder
 
-# Cài đặt font từ hệ thống
+WORKDIR /app
+
+COPY build.gradle .
+COPY settings.gradle .
+COPY src src
+
 RUN apk --no-cache add fontconfig ttf-dejavu
 
-# Copy tệp JAR vào container
-COPY ./build/libs/server-0.0.1-SNAPSHOT.jar app.jar
+# Show the directory contents before running the build
+RUN ls -al
 
-# Khai báo lệnh chạy ứng dụng khi container khởi động
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+# Run the build command with more detailed output
+RUN gradle build --no-daemon --stacktrace
+
+FROM eclipse-temurin:17
+
+WORKDIR /app
+
+COPY --from=builder /app/build/libs/*.jar /app/app.jar
+
+CMD ["java", "-jar", "app.jar"]
