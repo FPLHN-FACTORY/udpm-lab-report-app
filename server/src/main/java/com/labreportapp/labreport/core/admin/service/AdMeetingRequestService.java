@@ -19,4 +19,10 @@ public interface AdMeetingRequestService {
     List<AdMeetingRequestCustom> getAllMeetingRequestByIdClass(String idClass);
 
     Boolean approveMeetingRequest(List<String> listIdMeetingRequest);
+
+    Boolean approveClass(List<String> listIdClass);
+
+    Boolean noApproveMeetingRequest(List<String> listIdMeetingRequest);
+
+    Boolean noApproveClass(List<String> listIdClass);
 }

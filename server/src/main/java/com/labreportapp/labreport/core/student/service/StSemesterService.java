@@ -1,6 +1,7 @@
 package com.labreportapp.labreport.core.student.service;
 
 import com.labreportapp.labreport.core.common.base.SimpleEntityProjection;
+import com.labreportapp.labreport.entity.Semester;
 
 import java.util.List;
 
@@ -9,5 +10,5 @@ import java.util.List;
  */
 public interface StSemesterService {
 
-    List<SimpleEntityProjection> getAllSemester();
+    List<Semester> getAllSemester();
 }

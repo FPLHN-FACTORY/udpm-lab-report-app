@@ -47,4 +47,28 @@ export class AdMeetingRequestAPI {
       data: listIdMeetingRequest,
     });
   }
+
+  static noApproveMeetingRequest(listIdMeetingRequest) {
+    return request({
+      method: "POST",
+      url: url + `/no-approve-meeting-request`,
+      data: listIdMeetingRequest,
+    });
+  }
+
+  static approveClass(listIdClass) {
+    return request({
+      method: "POST",
+      url: url + `/approve-class`,
+      data: listIdClass,
+    });
+  }
+
+  static noApproveClass(listIdClass) {
+    return request({
+      method: "POST",
+      url: url + `/no-approve-class`,
+      data: listIdClass,
+    });
+  }
 }

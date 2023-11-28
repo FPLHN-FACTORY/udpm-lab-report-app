@@ -5,13 +5,13 @@ import com.labreportapp.labreport.core.admin.model.response.AdClassHaveMeetingRe
 import com.labreportapp.labreport.core.admin.model.response.AdListClassCustomResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdMeetingRequestCustom;
 import com.labreportapp.labreport.core.admin.model.response.AdMeetingRequestResponse;
-import com.labreportapp.labreport.core.admin.repository.AdClassConfigurationRepository;
+import com.labreportapp.labreport.core.admin.repository.AdClassRepository;
 import com.labreportapp.labreport.core.admin.repository.AdMeetingRepository;
 import com.labreportapp.labreport.core.admin.repository.AdMeetingRequestRepository;
 import com.labreportapp.labreport.core.admin.service.AdMeetingRequestService;
 import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.core.common.response.SimpleResponse;
-import com.labreportapp.labreport.entity.ClassConfiguration;
+import com.labreportapp.labreport.entity.Class;
 import com.labreportapp.labreport.entity.Meeting;
 import com.labreportapp.labreport.entity.MeetingRequest;
 import com.labreportapp.labreport.infrastructure.constant.StatusMeeting;
@@ -27,9 +27,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 /**
@@ -50,6 +52,9 @@ public class AdMeetingRequestServiceImpl implements AdMeetingRequestService {
 
     @Autowired
     private AdMeetingRepository adMeetingRepository;
+
+    @Autowired
+    private AdClassRepository adClassRepository;
 
     @Override
     public PageableObject<AdListClassCustomResponse> searchClassHaveMeetingRequest(AdFindClassRequest adFindClass) {
@@ -178,6 +183,52 @@ public class AdMeetingRequestServiceImpl implements AdMeetingRequestService {
         return handleApproveMeetingRequest(listIdMeetingRequest);
     }
 
+    @Override
+    public Boolean approveClass(List<String> listIdClass) {
+        List<Class> listClass = adClassRepository.findAllById(listIdClass);
+        if (listClass.isEmpty()) {
+            throw new RestApiException(Message.CLASS_NOT_EXISTS);
+        }
+        listIdClass.forEach(xx -> {
+            List<String> listId = adMeetingRequestRepository.getListIdMeetingRequestByIdClass(xx);
+            approveMeetingRequest(listId);
+        });
+        return true;
+    }
+
+    @Override
+    public Boolean noApproveMeetingRequest(List<String> listIdMeetingRequest) {
+        return handleNoApproveMeetingRequest(listIdMeetingRequest);
+    }
+
+    @Override
+    public Boolean noApproveClass(List<String> listIdClass) {
+        List<Class> listClass = adClassRepository.findAllById(listIdClass);
+        if (listClass.isEmpty()) {
+            throw new RestApiException(Message.CLASS_NOT_EXISTS);
+        }
+        listIdClass.forEach(xx -> {
+            List<String> listId = adMeetingRequestRepository.getListIdMeetingRequestByIdClass(xx);
+            noApproveMeetingRequest(listId);
+        });
+        return true;
+    }
+
+    private Boolean handleNoApproveMeetingRequest(List<String> listIdMeetingRequest) {
+        List<MeetingRequest> listMeetingRequestFind = adMeetingRequestRepository.findAllById(listIdMeetingRequest);
+        if (listMeetingRequestFind.isEmpty()) {
+            throw new RestApiException(Message.MEETING_REQUEST_NOT_EXISTS);
+        }
+        listMeetingRequestFind.forEach(meetingRequest -> {
+            if (meetingRequest.getStatusMeetingRequest() != StatusMeetingRequest.CHO_PHE_DUYET) {
+                throw new RestApiException(Message.STATUS_NOT_VALID);
+            }
+            meetingRequest.setStatusMeetingRequest(StatusMeetingRequest.TU_CHOI);
+        });
+        adMeetingRequestRepository.saveAll(listMeetingRequestFind);
+        return true;
+    }
+
     private Boolean handleApproveMeetingRequest(List<String> listIdMeetingRequest) {
         List<MeetingRequest> listMeetingRequestFind = adMeetingRequestRepository.findAllById(listIdMeetingRequest);
         if (listMeetingRequestFind.isEmpty()) {
@@ -185,16 +236,27 @@ public class AdMeetingRequestServiceImpl implements AdMeetingRequestService {
         }
         String idClass = listMeetingRequestFind.get(0).getClassId();
         List<Meeting> listMeetingNew = new ArrayList<>();
+        List<Meeting> listCurrent = adMeetingRepository.getAllByClassId(idClass);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         listMeetingRequestFind.forEach(meetingRequest -> {
-            Meeting meeting = new Meeting();
-            meeting.setName(meetingRequest.getName());
-            meeting.setMeetingPeriod(meetingRequest.getMeetingPeriod());
-            meeting.setTypeMeeting(meetingRequest.getTypeMeeting());
-            meeting.setMeetingDate(meetingRequest.getMeetingDate());
-            meeting.setClassId(idClass);
-            meeting.setTeacherId(meetingRequest.getTeacherId());
-            meeting.setStatusMeeting(StatusMeeting.BUOI_HOC);
-            listMeetingNew.add(meeting);
+            AtomicBoolean shouldAddMeeting = new AtomicBoolean(true);
+            listCurrent.forEach(meetingCurrent -> {
+                if (sdf.format(meetingCurrent.getMeetingDate()).equals(sdf.format(meetingRequest.getMeetingDate()))
+                        && meetingRequest.getMeetingPeriod().equals(meetingCurrent.getMeetingPeriod())) {
+                    shouldAddMeeting.set(false);
+                }
+            });
+            if (shouldAddMeeting.get()) {
+                Meeting meeting = new Meeting();
+                meeting.setName(meetingRequest.getName());
+                meeting.setMeetingPeriod(meetingRequest.getMeetingPeriod());
+                meeting.setTypeMeeting(meetingRequest.getTypeMeeting());
+                meeting.setMeetingDate(meetingRequest.getMeetingDate());
+                meeting.setClassId(idClass);
+                meeting.setTeacherId(meetingRequest.getTeacherId());
+                meeting.setStatusMeeting(StatusMeeting.BUOI_HOC);
+                listMeetingNew.add(meeting);
+            }
         });
         adMeetingRepository.saveAll(listMeetingNew);
         adMeetingRepository.updateNameMeeting(idClass);

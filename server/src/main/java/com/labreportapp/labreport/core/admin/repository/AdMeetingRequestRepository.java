@@ -124,4 +124,12 @@ public interface AdMeetingRequestRepository extends MeetingRequestRepository {
             ORDER BY a.meeting_date DESC, mp.start_hour DESC
             """, nativeQuery = true)
     List<AdMeetingRequestResponse> getAllMeetingRequestByIdClass(@Param("idClass") String idClass);
+
+    @Query(value = """
+            SELECT a.id
+            FROM meeting_request a
+            WHERE a.class_id = :idClass 
+            AND a.status_meeting_request = 0
+            """, nativeQuery = true)
+    List<String> getListIdMeetingRequestByIdClass(@Param("idClass") String idClass);
 }

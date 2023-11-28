@@ -70,4 +70,6 @@ public interface AdMeetingRepository extends JpaRepository<Meeting, String> {
               SET a.name = CONCAT('Buổi ', subquery.row_num);
             """, nativeQuery = true)
     void updateNameMeeting(@Param("idClass") String idClass);
+
+    List<Meeting> getAllByClassId(@Param("classId") String classId);
 }

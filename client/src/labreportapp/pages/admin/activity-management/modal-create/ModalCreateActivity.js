@@ -55,7 +55,15 @@ const ModalCreateActivity = ({
   useEffect(() => {
     if (visible === true) {
       if (listSemester.length > 0) {
-        setSemesterId(listSemester[0].id);
+        setSemesterId("");
+        listSemester.forEach((item) => {
+          if (
+            item.startTime <= new Date().getTime() &&
+            new Date().getTime() <= item.endTime
+          ) {
+            setSemesterId(item.id);
+          }
+        });
       }
       return () => {
         setName("");
@@ -242,7 +250,7 @@ const ModalCreateActivity = ({
           </Col>
 
           <Col span={12} style={{ padding: "5px" }}>
-            <span style={{ color: "red" }}>(*) </span> Tên học kỳ:
+            <span style={{ color: "red" }}>(*) </span> Học kỳ:
             <Select
               value={semesterId}
               onChange={(value) => {
@@ -250,6 +258,10 @@ const ModalCreateActivity = ({
               }}
               style={{ width: "100%" }}
             >
+              {" "}
+              <Option value="" key="none">
+                Chọn 1 học kỳ
+              </Option>
               {listSemester.map((value) => {
                 return (
                   <Option value={value.id} key={value.id}>

@@ -42,4 +42,19 @@ public class AdMeetingRequestController {
     public ResponseObject approveMeetingRequest(@RequestBody List<String> listIdMeetingRequest) {
         return new ResponseObject(adMeetingRequestService.approveMeetingRequest(listIdMeetingRequest));
     }
+
+    @PostMapping("/no-approve-meeting-request")
+    public ResponseObject noApproveMeetingRequest(@RequestBody List<String> listIdMeetingRequest) {
+        return new ResponseObject(adMeetingRequestService.noApproveMeetingRequest(listIdMeetingRequest));
+    }
+
+    @PostMapping("/approve-class")
+    public ResponseObject approveClass(@RequestBody List<String> listIdClass) {
+        return new ResponseObject(adMeetingRequestService.approveClass(listIdClass));
+    }
+
+    @PostMapping("/no-approve-class")
+    public ResponseObject noApproveClass(@RequestBody List<String> listIdClass) {
+        return new ResponseObject(adMeetingRequestService.noApproveClass(listIdClass));
+    }
 }

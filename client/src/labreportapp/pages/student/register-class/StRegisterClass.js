@@ -71,8 +71,16 @@ const StRegisterClass = () => {
   const loadDataSemester = () => {
     StMyClassAPI.getAllSemesters().then((response) => {
       setListSemester(response.data.data);
-      const getSemester = response.data.data && response.data.data[0].id;
-      setSemester(getSemester);
+      let getSemester = "";
+      response.data.data.forEach((item) => {
+        if (
+          item.startTime <= new Date().getTime() &&
+          new Date().getTime() <= item.endTime
+        ) {
+          getSemester = item.id;
+          setSemester(getSemester);
+        }
+      });
       getClassByCriteriaIsAcive(getSemester);
     });
   };

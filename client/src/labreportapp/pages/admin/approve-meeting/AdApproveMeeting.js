@@ -17,6 +17,7 @@ import {
   Col,
   Empty,
   Input,
+  Modal,
   Pagination,
   Row,
   Select,
@@ -42,7 +43,8 @@ import { AdMeetingRequestAPI } from "../../../api/admin/AdMeetingRequestAPI";
 import { Link } from "react-router-dom";
 import LoadingIndicator from "../../../helper/loading";
 import ModalAllMeetingRequest from "./modal-all-meeting-request/ModalAllMeetingRequest";
-
+import { SetAdCountApproveMeetingRequest } from "../../../app/admin/AdCountApproveMeetingRequest.reducer";
+const { confirm } = Modal;
 const { Option } = Select;
 
 const AdApproveMeeting = () => {
@@ -228,10 +230,6 @@ const AdApproveMeeting = () => {
     setSelectedRowKeys(keys);
   };
 
-  const approveAllClass = () => {
-    console.log(selectedRowKeys);
-  };
-
   const columns = [
     {
       title: (
@@ -399,6 +397,48 @@ const AdApproveMeeting = () => {
   const cancelModalAllMeetingRequest = () => {
     setVisibleModalAllMeetingRequest(false);
     setSelectedClass(null);
+  };
+
+  const approveAllClass = () => {
+    confirm({
+      title: "Xác nhận phê duyệt lịch học",
+      content: "Bạn có chắc chắn muốn phê duyệt lịch học không?",
+      onOk() {
+        setLoading(true);
+        AdMeetingRequestAPI.approveClass(selectedRowKeys).then(
+          (response) => {
+            message.success("Phê duyệt thành công");
+            featchAllClassHaveMeetingRequest();
+            AdMeetingRequestAPI.countClassHaveMeetingRequest().then((res) => {
+              dispatch(SetAdCountApproveMeetingRequest(res.data.data));
+            });
+          },
+          (error) => {}
+        );
+      },
+      onCancel() {},
+    });
+  };
+
+  const noApproveAllClass = () => {
+    confirm({
+      title: "Xác nhận từ chối phê duyệt lịch học",
+      content: "Bạn có chắc chắn muốn từ chối phê duyệt lịch học không?",
+      onOk() {
+        setLoading(true);
+        AdMeetingRequestAPI.noApproveClass(selectedRowKeys).then(
+          (response) => {
+            message.success("Từ chối phê duyệt thành công");
+            featchAllClassHaveMeetingRequest();
+            AdMeetingRequestAPI.countClassHaveMeetingRequest().then((res) => {
+              dispatch(SetAdCountApproveMeetingRequest(res.data.data));
+            });
+          },
+          (error) => {}
+        );
+      },
+      onCancel() {},
+    });
   };
 
   return (
@@ -675,6 +715,7 @@ const AdApproveMeeting = () => {
                   color: "white",
                   backgroundColor: "rgb(55, 137, 220)",
                 }}
+                onClick={noApproveAllClass}
               >
                 <FontAwesomeIcon
                   icon={faClose}

@@ -10,6 +10,7 @@ import {
   message,
 } from "antd";
 import "react-toastify/dist/ReactToastify.css";
+
 import TabPane from "antd/es/tabs/TabPane";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faClose } from "@fortawesome/free-solid-svg-icons";
@@ -18,7 +19,9 @@ import LoadingIndicator from "../../../../helper/loading";
 import { convertLongToDate } from "../../../../helper/convertDate";
 import { convertHourAndMinuteToString } from "../../../../helper/util.helper";
 import { MeetingManagementAPI } from "../../../../api/admin/meeting-management/MeetingManagementAPI";
-
+import { useAppDispatch } from "../../../../app/hook";
+import { SetAdCountApproveMeetingRequest } from "../../../../app/admin/AdCountApproveMeetingRequest.reducer";
+const { confirm } = Modal;
 const { Option } = Select;
 
 const ModalAllMeetingRequest = ({ visible, onCancel, item, fetchData }) => {
@@ -124,7 +127,7 @@ const ModalAllMeetingRequest = ({ visible, onCancel, item, fetchData }) => {
       title: "Tên buổi",
       dataIndex: "name",
       key: "name",
-      sorter: (a, b) => a.code.localeCompare(b.code),
+      sorter: (a, b) => a.name.localeCompare(b.name),
     },
     {
       title: "Ngày dạy",
@@ -187,7 +190,7 @@ const ModalAllMeetingRequest = ({ visible, onCancel, item, fetchData }) => {
       title: "Tên buổi",
       dataIndex: "name",
       key: "name",
-      sorter: (a, b) => a.code.localeCompare(b.code),
+      sorter: (a, b) => a.name.localeCompare(b.name),
     },
     {
       title: "Ngày dạy",
@@ -237,18 +240,51 @@ const ModalAllMeetingRequest = ({ visible, onCancel, item, fetchData }) => {
       sorter: (a, b) => a.userNameTeacher.localeCompare(b.userNameTeacher),
     },
   ];
-
+  const dispatch = useAppDispatch();
   const approveMeetingRequest = () => {
-    setLoading(true);
-    AdMeetingRequestAPI.approveMeetingRequest(selectedRowKeys).then(
-      (response) => {
-        message.success("Phê duyệt lịch học thành công !");
-        setLoading(false);
-        onCancel();
-        fetchData();
+    confirm({
+      title: "Xác nhận phê duyệt lịch học",
+      content: "Bạn có chắc chắn muốn phê duyệt lịch học không?",
+      onOk() {
+        setLoading(true);
+        AdMeetingRequestAPI.approveMeetingRequest(selectedRowKeys).then(
+          (response) => {
+            message.success("Phê duyệt lịch học thành công !");
+            setLoading(false);
+            onCancel();
+            fetchData();
+            AdMeetingRequestAPI.countClassHaveMeetingRequest().then((res) => {
+              dispatch(SetAdCountApproveMeetingRequest(res.data.data));
+            });
+          },
+          (error) => {}
+        );
       },
-      (error) => {}
-    );
+      onCancel() {},
+    });
+  };
+
+  const noApproveMeetingRequest = () => {
+    confirm({
+      title: "Xác nhận từ chối phê duyệt lịch học",
+      content: "Bạn có chắc chắn muốn từ chối phê duyệt lịch học không?",
+      onOk() {
+        setLoading(true);
+        AdMeetingRequestAPI.noApproveMeetingRequest(selectedRowKeys).then(
+          (response) => {
+            message.success("Từ chối phê duyệt thành công !");
+            setLoading(false);
+            onCancel();
+            fetchData();
+            AdMeetingRequestAPI.countClassHaveMeetingRequest().then((res) => {
+              dispatch(SetAdCountApproveMeetingRequest(res.data.data));
+            });
+          },
+          (error) => {}
+        );
+      },
+      onCancel() {},
+    });
   };
 
   return (
@@ -300,6 +336,7 @@ const ModalAllMeetingRequest = ({ visible, onCancel, item, fetchData }) => {
                     color: "white",
                     backgroundColor: "rgb(55, 137, 220)",
                   }}
+                  onClick={noApproveMeetingRequest}
                 >
                   <FontAwesomeIcon
                     icon={faClose}
