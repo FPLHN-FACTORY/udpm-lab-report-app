@@ -67,7 +67,12 @@ public class CallApiConsumer {
                             new ParameterizedTypeReference<Resource>() {
                             });
 
-            return responseEntity;
+            HttpHeaders headersNew = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + "Test.csv");
+            return ResponseEntity.ok()
+                    .headers(headersNew)
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .body(responseEntity.getBody());
         } catch (Exception e) {
             return null;
         }
