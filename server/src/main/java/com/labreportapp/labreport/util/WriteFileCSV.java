@@ -41,13 +41,13 @@ public class WriteFileCSV {
     }
 
     public String switchAuthor(String api) {
-        if (api.startsWith("/admin")) {
+        if (api.startsWith("/api/admin")) {
             return "Quản trị viên";
         }
-        if (api.startsWith("/teacher")) {
+        if (api.startsWith("/api/teacher")) {
             return "Giảng viên";
         }
-        if (api.startsWith("/student")) {
+        if (api.startsWith("/api/student")) {
             return "Sinh viên";
         }
         return "";
