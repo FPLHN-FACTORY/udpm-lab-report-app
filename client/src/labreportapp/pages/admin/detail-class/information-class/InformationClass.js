@@ -204,17 +204,12 @@ const InformationClass = () => {
             setTimeout(() => {
               if (response.data.data.status === true) {
                 setInputFile("");
-                message.success("Đang import, vui lòng chờ giây lát !", {
-                  position: toast.POSITION.TOP_CENTER,
-                });
+                message.success("Đang import, vui lòng chờ giây lát !");
               } else {
                 message.error(
                   "Import thất bại, " +
                     response.data.data.message +
-                    ", vui lòng chờ !",
-                  {
-                    position: toast.POSITION.TOP_CENTER,
-                  }
+                    ", vui lòng chờ !"
                 );
               }
             }, 120);
@@ -953,10 +948,6 @@ const InformationClass = () => {
                         : "Xác nhận xóa"}
                     </Button>
                   </Popconfirm>
-                  {/* )}  */}
-                  {/* : (
-                    ""
-                  )} */}
                   <Button
                     onClick={() => {
                       if (!isKickStudent && !isMoveStudent) {
