@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import {
   CreateLabelManagement,
   GetLabelManagement,
+  RemoveLastLabel,
 } from "../../../../app/reducer/admin/label-management/labelManagementSlice.reducer";
 import { DownOutlined } from "@ant-design/icons";
 
@@ -64,6 +65,7 @@ const ModalCreateLabel = ({
           dispatch(CreateLabelManagement(response.data.data));
           if (data != null) {
             if (data.length + 1 > size) {
+              dispatch(RemoveLastLabel());
               changeTotalsPage(totalPages + 1);
             } else if (data.length + 1 === 1) {
               changeTotalsPage(1);

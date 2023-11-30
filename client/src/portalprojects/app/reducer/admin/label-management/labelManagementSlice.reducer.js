@@ -10,6 +10,11 @@ const LabelManagementSlice = createSlice({
       state = action.payload;
       return state;
     },
+    RemoveLastLabel: (state) => {
+      if (state.length > 0) {
+        state.pop();
+      }
+    },
     CreateLabelManagement: (state, action) => {
       const data = action.payload;
       let newLabel = {
@@ -42,6 +47,7 @@ const LabelManagementSlice = createSlice({
 export const {
   SetLabelManagement,
   CreateLabelManagement,
+  RemoveLastLabel,
   UpdateLabelManagement,
   DeleteLabel,
 } = LabelManagementSlice.actions;

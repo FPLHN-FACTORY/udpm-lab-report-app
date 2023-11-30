@@ -74,6 +74,8 @@ const LabelManagement = () => {
       await LabelManagementAPI.deleteLabelById(id).then((response) => {
         dispatch(DeleteLabel(response.data.data));
         message.success("Xóa nhãn thành công");
+        setCurrent(1);
+        fetchData();
         setIsLoading(false);
       });
     } catch (error) {
@@ -269,10 +271,8 @@ const LabelManagement = () => {
         <div className="table_label" style={{ minHeight: "250px" }}>
           <div className="title_label_management_table">
             <div>
-              {" "}
               {<FontAwesomeIcon icon={faList} style={{ fontSize: 20 }} />}
               <span style={{ fontSize: "18px", fontWeight: "500" }}>
-                {" "}
                 Danh sách nhãn
               </span>
             </div>

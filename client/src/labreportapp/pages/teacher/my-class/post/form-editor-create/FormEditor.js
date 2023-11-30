@@ -93,11 +93,7 @@ function Editor({ idClass, showCreate }) {
     try {
       let data = {
         titleEmail:
-          "Giảng viên " +
-          userRedux.name +
-          " - " +
-          userRedux.userName +
-          " đã thêm một thông báo mới.",
+          "Giảng viên " + userRedux.name + " đã thêm một thông báo mới.",
         subject: "Thông báo bài viết mới",
         toEmail: listMail,
         body: body,
