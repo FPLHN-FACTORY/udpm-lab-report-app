@@ -201,24 +201,16 @@ const InformationClass = () => {
         formData.append("multipartFile", selectedFile);
         await ClassAPI.importExcelStudentsInClass(formData, id)
           .then((response) => {
-            setTimeout(() => {
-              if (response.data.data.status === true) {
-                setInputFile("");
-                message.success("Đang import, vui lòng chờ giây lát !");
-              } else {
-                message.error(
-                  "Import thất bại, " +
-                    response.data.data.message +
-                    ", vui lòng chờ !"
-                );
-              }
-            }, 120);
+            if (response.data.data.status === true) {
+              setInputFile("");
+              message.success("Đang import, vui lòng chờ giây lát !");
+            } else {
+              message.error("Import thất bại, " + response.data.data.message);
+            }
             setDownloading(true);
             featchClass(id);
             navigate(`/admin/class-management/information-class/` + id);
-            setTimeout(() => {
-              setDownloading(false);
-            }, 120);
+            setDownloading(false);
           })
           .catch((error) => {
             setDownloading(false);
