@@ -193,14 +193,15 @@ const InformationClass = () => {
     });
   };
 
-  const importExcel = async (e) => {
+  const importExcel = (e) => {
+    setIsLoading(true);
     try {
       const selectedFile = e.target.files[0];
       if (selectedFile) {
         const formData = new FormData();
         formData.append("multipartFile", selectedFile);
-        await ClassAPI.importExcelStudentsInClass(formData, id)
-          .then((response) => {
+        ClassAPI.importExcelStudentsInClass(formData, id).then(
+          (response) => {
             if (response.data.data.status === true) {
               setInputFile("");
               message.success("Đang import, vui lòng chờ giây lát !");
@@ -208,13 +209,12 @@ const InformationClass = () => {
               message.error("Import thất bại, " + response.data.data.message);
             }
             setDownloading(true);
-            featchClass(id);
-            navigate(`/admin/class-management/information-class/` + id);
+            fetchStudent(id);
             setDownloading(false);
-          })
-          .catch((error) => {
-            setDownloading(false);
-          });
+            setIsLoading(false);
+          },
+          (error) => {}
+        );
       }
     } catch (error) {
       setDownloading(false);

@@ -22,11 +22,11 @@ public interface AdStudentClassRepository extends StudentClassesRepository {
             t.id as idTeam,
             t.name as nameTeam,
             f.id as idFeedBack,
-            at.id as idAttendance
+            att.id as idAttendance
             FROM student_classes sc
             LEFT JOIN team t on t.id = sc.team_id
             LEFT JOIN feed_back f on sc.student_id = f.student_id
-            LEFT JOIN attendance at on sc.student_id = at.student_id
+            LEFT JOIN attendance att on sc.student_id = att.student_id
             WHERE sc.class_id = :#{#idClass}
             ORDER BY t.name ASC
              """, nativeQuery = true)
