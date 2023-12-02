@@ -125,9 +125,9 @@ const InformationClass = () => {
         selectedRowKeys,
         columnTitle: null,
         onChange: onSelectChange,
-        getCheckboxProps: (record) => ({
-          disabled: record.idFeedBack != null || record.idAttendance != null,
-        }),
+        // getCheckboxProps: (record) => ({
+        //   disabled: record.idFeedBack != null || record.idAttendance != null,
+        // }),
       };
     } else {
       rowSelection = null;
