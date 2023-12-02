@@ -99,7 +99,29 @@ const InformationClass = () => {
 
   let rowSelection = null;
   if (students.length > 0) {
-    if (isMoveStudent) {
+    if (isKickStudent) {
+      rowSelection = {
+        renderCell: (checked, record, index, originNode) => {
+          if (
+            record.nameTeam ||
+            record.idFeedBack != null ||
+            record.idAttendance != null
+          ) {
+            return null;
+          }
+          return originNode;
+        },
+        selectedRowKeys,
+        columnTitle: null,
+        onChange: onSelectChange,
+        getCheckboxProps: (record) => ({
+          disabled:
+            record.nameTeam !== null ||
+            record.idFeedBack !== null ||
+            record.idAttendance !== null,
+        }),
+      };
+    } else if (isMoveStudent) {
       rowSelection = {
         renderCell: (checked, record, index, originNode) => {
           if (record.nameTeam != null) {
@@ -114,22 +136,6 @@ const InformationClass = () => {
           disabled: record.nameTeam !== null,
         }),
       };
-    } else if (isKickStudent) {
-      rowSelection = {
-        renderCell: (checked, record, index, originNode) => {
-          if (record.nameTeam || record.idFeedBack != null || record.idAttendance != null) {
-            return null;
-          }
-          return originNode;
-        },
-        selectedRowKeys,
-        columnTitle: null,
-        onChange: onSelectChange,
-        getCheckboxProps: (record) => ({
-          disabled: record.nameTeam !== null || record.idFeedBack !== null || record.idAttendance !== null,
-        }),
-      };
-      
     } else {
       rowSelection = null;
     }
