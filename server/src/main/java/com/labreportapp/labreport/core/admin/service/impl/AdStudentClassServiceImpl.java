@@ -184,11 +184,11 @@ public class AdStudentClassServiceImpl implements AdStudentClassService {
                 return response;
             }
 
-            if (conditionClass.isPresent()) {
-                response.setStatus(false);
-                response.setMessage("Không thể import vì thời hạn của sinh viên đã bắt đầu!");
-                return response;
-            }
+//            if (conditionClass.isPresent()) {
+//                response.setStatus(false);
+//                response.setMessage("Không thể import vì thời hạn của sinh viên đã bắt đầu!");
+//                return response;
+//            }
 
             listImport.parallelStream().forEach(imp -> {
                 String regexName = "^[^!@#$%^&*()_+|~=`{}\\[\\]:\";'<>?,.\\/\\\\]*$";
