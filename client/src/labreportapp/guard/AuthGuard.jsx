@@ -14,7 +14,7 @@ const AuthGuard = ({ children }) => {
     window.scrollTo(0, 0);
 
     if (token == null || token === undefined) {
-      // window.location.href = portIdentity;
+      window.location.href = portIdentity;
       return null;
     } else {
       const decodedToken = jwt_decode(token);
