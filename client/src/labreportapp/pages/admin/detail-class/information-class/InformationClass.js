@@ -117,7 +117,7 @@ const InformationClass = () => {
     } else if (isKickStudent) {
       rowSelection = {
         renderCell: (checked, record, index, originNode) => {
-          if (record.idFeedBack != null || record.idAttendance != null) {
+          if (record.nameTeam || record.idFeedBack != null || record.idAttendance != null) {
             return null;
           }
           return originNode;
@@ -125,10 +125,11 @@ const InformationClass = () => {
         selectedRowKeys,
         columnTitle: null,
         onChange: onSelectChange,
-        // getCheckboxProps: (record) => ({
-        //   disabled: record.idFeedBack != null || record.idAttendance != null,
-        // }),
+        getCheckboxProps: (record) => ({
+          disabled: record.nameTeam !== null || record.idFeedBack !== null || record.idAttendance !== null,
+        }),
       };
+      
     } else {
       rowSelection = null;
     }
