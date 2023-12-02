@@ -21,8 +21,10 @@ import com.labreportapp.labreport.core.admin.repository.AdActivityRepository;
 import com.labreportapp.labreport.core.admin.repository.AdClassConfigurationRepository;
 import com.labreportapp.labreport.core.admin.repository.AdClassRepository;
 import com.labreportapp.labreport.core.admin.repository.AdMeetingPeriodRepository;
+import com.labreportapp.labreport.core.admin.repository.AdSemesterRepository;
 import com.labreportapp.labreport.core.admin.service.AdClassService;
 import com.labreportapp.labreport.core.common.base.ImportExcelResponse;
+import com.labreportapp.labreport.core.common.base.LoggerResponse;
 import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.core.common.base.SimpleEntityProjection;
 import com.labreportapp.labreport.core.common.response.SimpleResponse;
@@ -30,6 +32,7 @@ import com.labreportapp.labreport.entity.Activity;
 import com.labreportapp.labreport.entity.Class;
 import com.labreportapp.labreport.entity.ClassConfiguration;
 import com.labreportapp.labreport.entity.MeetingPeriod;
+import com.labreportapp.labreport.entity.Semester;
 import com.labreportapp.labreport.infrastructure.apiconstant.ActorConstants;
 import com.labreportapp.labreport.infrastructure.constant.StatusClass;
 import com.labreportapp.labreport.infrastructure.constant.StatusHoneyPlus;
@@ -64,6 +67,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -82,6 +86,9 @@ AdClassManagerServiceImpl implements AdClassService {
 
     @Autowired
     private AdActivityRepository adActivityRepository;
+
+    @Autowired
+    private AdSemesterRepository adSemesterRepository;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -457,21 +464,46 @@ AdClassManagerServiceImpl implements AdClassService {
             if (maLopMax == null) {
                 throw new RestApiException(Message.CREATE_CLASS_FAIL);
             }
+            Optional<Activity> activityFind = activityRepository.findById(request.getActivityId());
+            if (!activityFind.isPresent()) {
+                throw new RestApiException(Message.ACTIVITY_NOT_EXISTS);
+            }
+            Optional<Semester> semesterFind = adSemesterRepository.findById(activityFind.get().getSemesterId());
+            if (!semesterFind.isPresent()) {
+                throw new RestApiException(Message.SEMESTER_NOT_EXISTS);
+            }
             String[] array = maLopMax.split("_");
             Integer count = Integer.parseInt(array[array.length - 1]);
+            StringBuilder stringBuilder = new StringBuilder();
             List<Class> listClass = new ArrayList<>();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            stringBuilder.append("Đã tạo những lớp học: ");
+            List<LoggerResponse> loggerResponseList = new ArrayList<>();
             for (int i = 0; i < request.getNumberRandon(); i++) {
                 Class classNew = new Class();
                 classNew.setClassSize(0);
                 classNew.setStatusClass(StatusClass.OPEN);
                 classNew.setStartTime(DateUtils.truncate(new Date(request.getStartTime()), Calendar.DATE).getTime());
                 classNew.setActivityId(request.getActivityId());
-                classNew.setCode(codeActivity + "_" + (count++));
+                String codeClass = codeActivity + "_" + (count++);
+                classNew.setCode(codeClass);
                 classNew.setPassword(null);
                 classNew.setStatusHoneyPlus(StatusHoneyPlus.CHUA_CONG);
                 classNew.setStatusTeacherEdit(StatusTeacherEdit.KHONG_CHO_PHEP);
                 listClass.add(classNew);
+                stringBuilder.append(codeClass).append(", ");
+                LoggerResponse loggerResponse = new LoggerResponse();
+                loggerResponse.setCodeClass(codeClass);
+                loggerResponse.setContent("Đã tạo lớp học: " + codeClass + ", với thời gian bắt đầu là: " + sdf.format(request.getStartTime()));
+                loggerResponseList.add(loggerResponse);
             }
+            stringBuilder.append(" với thời gian bắt đầu là: ");
+            stringBuilder.append(sdf.format(request.getStartTime()));
+
+            loggerUtil.sendLogScreen(stringBuilder.toString(), semesterFind.get().getName());
+            loggerResponseList.forEach(res -> {
+                loggerUtil.sendLogStreamClass(res.getContent(), res.getCodeClass(), semesterFind.get().getName());
+            });
             repository.saveAll(listClass);
         } catch (Exception e) {
             e.printStackTrace();
@@ -488,9 +520,10 @@ AdClassManagerServiceImpl implements AdClassService {
             AdImportExcelClass adImportExcelClass = new AdImportExcelClass();
             List<AdImportExcelClassResponse> listClassImport = adImportExcelClass.importData(multipartFile);
             ConcurrentHashMap<String, SimpleResponse> mapGiangVien = new ConcurrentHashMap<>();
+            ConcurrentHashMap<String, SimpleResponse> mapGiangVienKeyId = new ConcurrentHashMap<>();
             ConcurrentHashMap<String, Class> mapClass = new ConcurrentHashMap<>();
             ConcurrentHashMap<String, MeetingPeriod> mapMeetingPeriod = new ConcurrentHashMap<>();
-            addDataInMapGiangVien(mapGiangVien);
+            addDataInMapGiangVien(mapGiangVien, mapGiangVienKeyId);
             addDataInMapClass(mapClass, idSemester);
             addDataInMapMeetingPeriod(mapMeetingPeriod);
             ConcurrentHashMap<String, Class> listClassUpdate = new ConcurrentHashMap<>();
@@ -531,6 +564,11 @@ AdClassManagerServiceImpl implements AdClassService {
                 }
                 listClassUpdate.put(classFind.getCode(), classFind);
             });
+            List<LoggerResponse> loggerResponseList = new ArrayList<>();
+            for (Map.Entry<String, Class> entry : listClassUpdate.entrySet()) {
+                Class value = entry.getValue();
+
+            }
             if (response.getStatus()) {
                 repository.saveAll(listClassUpdate.values());
             }
@@ -571,14 +609,15 @@ AdClassManagerServiceImpl implements AdClassService {
         return listCustom;
     }
 
-    public void addDataInMapGiangVien(ConcurrentHashMap<String, SimpleResponse> mapAll) {
+    public void addDataInMapGiangVien(ConcurrentHashMap<String, SimpleResponse> mapAll, ConcurrentHashMap<String, SimpleResponse> mapAllKeyId) {
         List<SimpleResponse> giangVienHuongDanList = callApiIdentity.handleCallApiGetUserByRoleAndModule(ActorConstants.ACTOR_TEACHER);
-        getALlPutMapGiangVien(mapAll, giangVienHuongDanList);
+        getALlPutMapGiangVien(mapAll, mapAllKeyId, giangVienHuongDanList);
     }
 
-    public void getALlPutMapGiangVien(ConcurrentHashMap<String, SimpleResponse> mapSimple, List<SimpleResponse> listGiangVien) {
+    public void getALlPutMapGiangVien(ConcurrentHashMap<String, SimpleResponse> mapSimple, ConcurrentHashMap<String, SimpleResponse> mapSimpleKeyId, List<SimpleResponse> listGiangVien) {
         for (SimpleResponse xx : listGiangVien) {
             mapSimple.put(xx.getUserName().toLowerCase(), xx);
+            mapSimpleKeyId.put(xx.getId(), xx);
         }
     }
 

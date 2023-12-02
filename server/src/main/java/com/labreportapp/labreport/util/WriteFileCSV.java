@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * @author todo thangncph26123
@@ -55,8 +56,8 @@ public class WriteFileCSV {
 
     public LoggerObject createLoggerObject(String content, String codeClass, String pathFile) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        Date currentDate = new Date();
-        String formattedDate = simpleDateFormat.format(currentDate);
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT+7"));
+        String formattedDate = simpleDateFormat.format(new Date());
 
         LoggerObject loggerObject = new LoggerObject();
         loggerObject.setPathFile(pathFile);

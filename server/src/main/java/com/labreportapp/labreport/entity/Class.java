@@ -52,6 +52,10 @@ public class Class extends PrimaryEntity {
     @Column(length = EntityProperties.LENGTH_ID)
     private String activityId;
 
+    @Column(length = Integer.MAX_VALUE)
+    @Nationalized
+    private String reasons;
+
     @Column
     private StatusClass statusClass;
 
