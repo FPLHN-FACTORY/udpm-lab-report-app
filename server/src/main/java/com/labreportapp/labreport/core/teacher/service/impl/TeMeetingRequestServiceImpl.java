@@ -152,6 +152,15 @@ public class TeMeetingRequestServiceImpl implements TeMeetingRequestService {
 
     }
 
+    @Override
+    public String showReasons(String idClass) {
+        Optional<Class> classOptional = teClassRepository.findById(idClass);
+        if (!classOptional.isPresent()) {
+            return null;
+        }
+        return classOptional.get().getReasons();
+    }
+
     public void addDataInMapGiangVienSend(ConcurrentHashMap<String, SimpleResponse> mapAll) {
         List<SimpleResponse> giangVienHuongDanList = callApiIdentity.handleCallApiGetUserByRoleAndModule(ActorConstants.ACTOR_TEACHER);
         getALlPutMapGiangVienSend(mapAll, giangVienHuongDanList);

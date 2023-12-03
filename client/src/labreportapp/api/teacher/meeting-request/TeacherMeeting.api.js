@@ -24,4 +24,10 @@ export class TeacherMeetingRequestAPI {
       data: data,
     });
   }
+  static showReasons(idClass) {
+    return request({
+      method: "GET",
+      url: url + `/show-reasons?idClass=${idClass}`,
+    });
+  }
 }

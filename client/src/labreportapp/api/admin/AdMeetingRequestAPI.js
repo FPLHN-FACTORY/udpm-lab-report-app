@@ -71,4 +71,19 @@ export class AdMeetingRequestAPI {
       data: listIdClass,
     });
   }
+
+  static addReasons(idClass, reasons) {
+    return request({
+      method: "PUT",
+      url: url + `/add-reasons?idClass=` + idClass + `&reasons=` + reasons,
+    });
+  }
+
+  static addReasonsClass(data) {
+    return request({
+      method: "PUT",
+      url: url + `/add-reasons-class`,
+      data: data,
+    });
+  }
 }

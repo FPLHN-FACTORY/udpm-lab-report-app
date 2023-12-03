@@ -232,16 +232,19 @@ public class AdClassController {
     }
 
     @GetMapping("/download-log")
-    public ResponseEntity<Resource> downloadCsv() {
-        String pathFile = loggerUtil.getPathFileSendLogScreen(semesterHelper.getNameSemesterCurrent());
+    public ResponseEntity<Resource> downloadCsv(@RequestParam(name = "idSemester", defaultValue = "") String idSemester) {
+        String nameSemester = semesterRepository.findById(idSemester).get().getName();
+        String pathFile = loggerUtil.getPathFileSendLogScreen(nameSemester);
         return callApiConsumer.handleCallApiDowloadFileLog(pathFile);
     }
 
     @GetMapping("/history")
     public ResponseEntity<?> showHistory(@RequestParam(name = "page", defaultValue = "0") Integer page,
-                                         @RequestParam(name = "size", defaultValue = "50") Integer size
+                                         @RequestParam(name = "size", defaultValue = "50") Integer size,
+                                         @RequestParam(name = "idSemester", defaultValue = "") String idSemester
     ) {
-        String pathFile = loggerUtil.getPathFileSendLogScreen(semesterHelper.getNameSemesterCurrent());
+        String nameSemester = semesterRepository.findById(idSemester).get().getName();
+        String pathFile = loggerUtil.getPathFileSendLogScreen(nameSemester);
         LoggerObject loggerObject = new LoggerObject();
         loggerObject.setPathFile(pathFile);
         return new ResponseEntity<>(callApiConsumer.handleCallApiReadFileLog(loggerObject, page, size), HttpStatus.OK);

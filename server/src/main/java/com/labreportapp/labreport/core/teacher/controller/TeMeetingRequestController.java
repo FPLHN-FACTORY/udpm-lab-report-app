@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -29,8 +30,13 @@ public class TeMeetingRequestController {
         return new ResponseObject(list);
     }
 
-    @PutMapping("sent-again")
+    @PutMapping("/sent-again")
     public ResponseObject sentMeetingRequestAgain(@RequestBody TeMeetingRequestAgainRequest request) {
         return new ResponseObject(teMeetingRequestService.sendMeetingRequestAgain(request));
+    }
+
+    @GetMapping("/show-reasons")
+    public ResponseObject showReasons(@RequestParam("idClass") String idClass) {
+        return new ResponseObject(teMeetingRequestService.showReasons(idClass));
     }
 }

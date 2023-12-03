@@ -14,4 +14,6 @@ public interface TeMeetingRequestService {
 
     boolean sendMeetingRequestAgain(TeMeetingRequestAgainRequest request);
 
+    String showReasons(String idClass);
+
 }

@@ -269,10 +269,10 @@ export class ClassAPI {
     });
   };
 
-  static dowloadLog = () => {
+  static dowloadLog = (idSemester) => {
     return request({
       method: "GET",
-      url: `/admin/class-managerment/download-log`,
+      url: `/admin/class-managerment/download-log?idSemester=${idSemester}`,
       responseType: "blob",
     });
   };

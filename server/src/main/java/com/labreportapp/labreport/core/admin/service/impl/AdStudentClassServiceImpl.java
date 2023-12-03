@@ -85,6 +85,7 @@ public class AdStudentClassServiceImpl implements AdStudentClassService {
                 .collect(Collectors.toList());
 
         List<SimpleResponse> listRespone = callApiIdentity.handleCallApiGetListUserByListId(idStudentList);
+
         List<AdStudentCallApiRespone> listReturn = new ArrayList<>();
         listRepository.forEach(reposi -> {
             listRespone.forEach(respone -> {

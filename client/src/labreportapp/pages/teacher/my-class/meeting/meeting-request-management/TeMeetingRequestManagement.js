@@ -4,6 +4,7 @@ import {
   Checkbox,
   Empty,
   Input,
+  Modal,
   Pagination,
   Select,
   Table,
@@ -45,6 +46,8 @@ import {
   SetLoadingFalse,
   SetLoadingTrue,
 } from "../../../../../app/common/Loading.reducer";
+
+const { confirm } = Modal;
 
 const TeMeetingRequestManagement = () => {
   const { idClass } = useParams();
@@ -127,30 +130,33 @@ const TeMeetingRequestManagement = () => {
     setCheckedList(e.target.checked ? checkBoxAll : []);
   };
 
-  const handleSend = async () => {
+  const handleSend = () => {
     if (checkedList.length === 0) {
       message.info("Vui lòng chọn buổi học để gửi yêu cầu !");
       return;
     }
-    try {
-      dispatch(SetLoadingTrue());
-      await TeacherMeetingRequestAPI.sendMeetingRequestAgain({
-        listMeetingRequestAgain: checkedList,
-        idClass: idClass,
-      }).then((response) => {
-        if (response.data.data === true) {
-          message.success("Gửi yêu cầu thành công !");
-        } else {
-          message.error("Gửi yêu cầu thất bại !");
-        }
-        setCheckedList([]);
-        dispatch(SetLoadingFalse());
-        featchMeeting();
-      });
-    } catch (error) {
-      setCheckedList([]);
-      dispatch(SetLoadingFalse());
-    }
+    confirm({
+      title: "Xác nhận gửi yêu cầu phê duyệt lại",
+      content:
+        "Bạn có chắc chắn muốn gửi yêu cầu phê duyệt lại lịch học không?",
+      onOk() {
+        dispatch(SetLoadingTrue());
+        TeacherMeetingRequestAPI.sendMeetingRequestAgain({
+          listMeetingRequestAgain: checkedList,
+          idClass: idClass,
+        }).then((response) => {
+          if (response.data.data === true) {
+            message.success("Gửi yêu cầu thành công !");
+          } else {
+            message.error("Gửi yêu cầu thất bại !");
+          }
+          setCheckedList([]);
+          dispatch(SetLoadingFalse());
+          featchMeeting();
+        });
+      },
+      onCancel() {},
+    });
   };
 
   const filterOption = (input, option) =>
@@ -309,6 +315,17 @@ const TeMeetingRequestManagement = () => {
       },
     },
   ];
+
+  const [reasons, setReasons] = useState(null);
+  const showReasons = () => {
+    TeacherMeetingRequestAPI.showReasons(idClass).then((response) => {
+      setReasons(response.data.data);
+    });
+  };
+
+  useEffect(() => {
+    showReasons();
+  }, []);
 
   return (
     <>
@@ -525,6 +542,13 @@ const TeMeetingRequestManagement = () => {
                   <span>Gửi lại yêu cầu</span>
                 </Button>
               )}
+            </div>
+            <div style={{ marginTop: 15 }}>
+              Lí do từ chối gần nhất:
+              <span style={{ color: "red" }}>
+                {" "}
+                {reasons != null ? reasons : "Không có"}
+              </span>
             </div>
             <div style={{ width: "auto" }}>
               <div>

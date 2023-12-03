@@ -5,7 +5,7 @@ import { ClassAPI } from "../../../../api/admin/class-manager/ClassAPI.api";
 
 const { Option } = Select;
 
-const ModalShowHistoryClassManager = ({ visible, onCancel }) => {
+const ModalShowHistoryClassManager = ({ idSemester, visible, onCancel }) => {
   const columns = [
     {
       title: "Email người thực hiện",
@@ -42,6 +42,7 @@ const ModalShowHistoryClassManager = ({ visible, onCancel }) => {
       ClassAPI.showHistory({
         page: current - 1,
         size: parseInt(size),
+        idSemester: idSemester,
       }).then((response) => {
         setDataHistory(response.data.data);
         setTotalPages(response.data.totalPages);

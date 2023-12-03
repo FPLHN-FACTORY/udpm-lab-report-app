@@ -530,7 +530,13 @@ const ClassManagement = () => {
     );
   };
   const dowloadLog = () => {
-    ClassAPI.dowloadLog().then(
+    if (idSemesterCurrent === "" && idSemesterSeach === "") {
+      message.error("Hãy chọn học kỳ để dowload file log");
+      return;
+    }
+    let idSemester =
+      idSemesterSeach !== "" ? idSemesterSeach : idSemesterCurrent;
+    ClassAPI.dowloadLog(idSemester).then(
       (response) => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const a = document.createElement("a");
@@ -1085,6 +1091,7 @@ const ClassManagement = () => {
           onCancel={cancelModalHistoryLogLuong}
         />
         <ModalShowHistoryClassManager
+          idSemester={selectedIdSemester}
           visible={visibleHistory}
           onCancel={cancelModalHistory}
         />

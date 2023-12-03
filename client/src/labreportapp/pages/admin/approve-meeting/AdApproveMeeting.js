@@ -44,6 +44,7 @@ import { Link } from "react-router-dom";
 import LoadingIndicator from "../../../helper/loading";
 import ModalAllMeetingRequest from "./modal-all-meeting-request/ModalAllMeetingRequest";
 import { SetAdCountApproveMeetingRequest } from "../../../app/admin/AdCountApproveMeetingRequest.reducer";
+import ModalReasonsClass from "./modal-reasons-class/ModalReasonsClass";
 const { confirm } = Modal;
 const { Option } = Select;
 
@@ -441,6 +442,17 @@ const AdApproveMeeting = () => {
     });
   };
 
+  const [visibleModalReasonsClass, setVisibleModalReasonsClass] =
+    useState(false);
+
+  const openModalReasonsClass = () => {
+    setVisibleModalReasonsClass(true);
+  };
+
+  const onCancelModalReasonsClass = () => {
+    setVisibleModalReasonsClass(false);
+  };
+
   return (
     <>
       {" "}
@@ -715,7 +727,7 @@ const AdApproveMeeting = () => {
                   color: "white",
                   backgroundColor: "rgb(55, 137, 220)",
                 }}
-                onClick={noApproveAllClass}
+                onClick={openModalReasonsClass}
               >
                 <FontAwesomeIcon
                   icon={faClose}
@@ -800,6 +812,12 @@ const AdApproveMeeting = () => {
         onCancel={cancelModalAllMeetingRequest}
         item={selectedClass}
         fetchData={featchAllClassHaveMeetingRequest}
+      />
+      <ModalReasonsClass
+        visible={visibleModalReasonsClass}
+        listIdClass={selectedRowKeys}
+        onCancel={onCancelModalReasonsClass}
+        noApproveClass={noApproveAllClass}
       />
     </>
   );

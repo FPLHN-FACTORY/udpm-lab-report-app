@@ -42,6 +42,7 @@ import com.labreportapp.labreport.repository.LevelRepository;
 import com.labreportapp.labreport.util.CallApiIdentity;
 import com.labreportapp.labreport.util.ClassHelper;
 import com.labreportapp.labreport.util.CompareUtil;
+import com.labreportapp.labreport.util.FormUtils;
 import com.labreportapp.labreport.util.LoggerUtil;
 import com.labreportapp.labreport.util.SemesterHelper;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
@@ -121,6 +122,8 @@ AdClassManagerServiceImpl implements AdClassService {
 
     @Autowired
     private AdClassConfigurationRepository adClassConfigurationRepository;
+
+    private FormUtils formUtils = new FormUtils();
 
     @Override
     public List<AdClassResponse> getAllClass() {
@@ -522,10 +525,12 @@ AdClassManagerServiceImpl implements AdClassService {
             ConcurrentHashMap<String, SimpleResponse> mapGiangVien = new ConcurrentHashMap<>();
             ConcurrentHashMap<String, SimpleResponse> mapGiangVienKeyId = new ConcurrentHashMap<>();
             ConcurrentHashMap<String, Class> mapClass = new ConcurrentHashMap<>();
+            ConcurrentHashMap<String, Class> mapClassOld = new ConcurrentHashMap<>();
             ConcurrentHashMap<String, MeetingPeriod> mapMeetingPeriod = new ConcurrentHashMap<>();
+            ConcurrentHashMap<String, MeetingPeriod> mapMeetingPeriodKeyId = new ConcurrentHashMap<>();
             addDataInMapGiangVien(mapGiangVien, mapGiangVienKeyId);
-            addDataInMapClass(mapClass, idSemester);
-            addDataInMapMeetingPeriod(mapMeetingPeriod);
+            addDataInMapClass(mapClass, mapClassOld, idSemester);
+            addDataInMapMeetingPeriod(mapMeetingPeriod, mapMeetingPeriodKeyId);
             ConcurrentHashMap<String, Class> listClassUpdate = new ConcurrentHashMap<>();
             listClassImport.parallelStream().forEach(classExcel -> {
                 if (classExcel.getCode().isEmpty()) {
@@ -566,11 +571,70 @@ AdClassManagerServiceImpl implements AdClassService {
             });
             List<LoggerResponse> loggerResponseList = new ArrayList<>();
             for (Map.Entry<String, Class> entry : listClassUpdate.entrySet()) {
-                Class value = entry.getValue();
-
+                Class classNew = entry.getValue();
+                Class classOld = mapClassOld.get(classNew.getCode());
+                String teacherNew = classNew.getTeacherId();
+                String teacherOld = classOld.getTeacherId();
+                if (teacherOld == null && teacherNew != null) {
+                    SimpleResponse teacherObj = mapGiangVien.get(teacherNew);
+                    LoggerResponse loggerResponse = new LoggerResponse();
+                    loggerResponse.setContent("Đã phân giảng viên cho lớp là: " + teacherObj.getUserName() + " - " + teacherObj.getName());
+                    loggerResponseList.add(loggerResponse);
+                }
+                if (teacherOld != null && teacherNew != null && !teacherNew.equals(teacherNew)) {
+                    SimpleResponse teacherObjNew = mapGiangVien.get(teacherNew);
+                    SimpleResponse teacherObjOld = mapGiangVien.get(teacherOld);
+                    LoggerResponse loggerResponse = new LoggerResponse();
+                    loggerResponse.setContent("Đã cập nhật giảng viên của lớp từ " + teacherObjOld.getName()
+                            + " - " + teacherObjOld.getUserName() + " thành "
+                            + teacherObjNew.getName() + " - " + teacherObjNew.getUserName());
+                    loggerResponseList.add(loggerResponse);
+                }
+                if (teacherOld != null && teacherNew == null) {
+                    SimpleResponse teacherObjOld = mapGiangVien.get(teacherOld);
+                    LoggerResponse loggerResponse = new LoggerResponse();
+                    loggerResponse.setContent("Đã cập nhật giảng viên của lớp từ " + teacherObjOld.getName()
+                            + " - " + teacherObjOld.getUserName() + " thành "
+                            + "không có");
+                    loggerResponseList.add(loggerResponse);
+                }
+                String classPeriodNew = classNew.getClassPeriod();
+                String classPeriodOld = classOld.getClassPeriod();
+                if (classPeriodOld == null && classPeriodNew != null) {
+                    MeetingPeriod classPeriodObjNew = mapMeetingPeriodKeyId.get(classPeriodNew);
+                    LoggerResponse loggerResponse = new LoggerResponse();
+                    loggerResponse.setContent("Đã cập nhật ca học của lớp là: " + classPeriodObjNew.getName());
+                    loggerResponseList.add(loggerResponse);
+                }
+                if (classPeriodOld != null && classPeriodNew != null && !classPeriodOld.equals(classPeriodNew)) {
+                    MeetingPeriod classPeriodObjOld = mapMeetingPeriodKeyId.get(classPeriodOld);
+                    MeetingPeriod classPeriodObjNew = mapMeetingPeriodKeyId.get(classPeriodNew);
+                    LoggerResponse loggerResponse = new LoggerResponse();
+                    loggerResponse.setContent("Đã cập nhật ca học của lớp từ " + classPeriodObjOld.getName()
+                            + " thành " + classPeriodObjNew.getName());
+                    loggerResponseList.add(loggerResponse);
+                }
+                if (classPeriodOld != null && classPeriodNew == null) {
+                    MeetingPeriod classPeriodObjOld = mapMeetingPeriodKeyId.get(classPeriodOld);
+                    LoggerResponse loggerResponse = new LoggerResponse();
+                    loggerResponse.setContent("Đã cập nhật ca học của lớp từ " + classPeriodObjOld.getName()
+                            + " thành 'không có'");
+                    loggerResponseList.add(loggerResponse);
+                }
             }
             if (response.getStatus()) {
-                repository.saveAll(listClassUpdate.values());
+                List<Class> listClass = repository.saveAll(listClassUpdate.values());
+                String nameSemester = loggerUtil.getNameSemesterByIdClass(listClass.get(0).getId());
+                for (Class xx : listClass) {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    for (LoggerResponse logger : loggerResponseList) {
+                        if (xx.getCode().equals(logger.getCodeClass())) {
+                            stringBuilder.append(logger.getContent());
+                        }
+                    }
+                    loggerUtil.sendLogScreen(stringBuilder.toString(), nameSemester);
+                    loggerUtil.sendLogStreamClass(stringBuilder.toString(), xx.getCode(), nameSemester);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -621,25 +685,28 @@ AdClassManagerServiceImpl implements AdClassService {
         }
     }
 
-    public void addDataInMapClass(ConcurrentHashMap<String, Class> mapAll, String idSemester) {
+    public void addDataInMapClass(ConcurrentHashMap<String, Class> mapAll, ConcurrentHashMap<String, Class> mapAllOld, String idSemester) {
         List<Class> classList = repository.getAllClassEntity(idSemester);
-        getALlPutMapClass(mapAll, classList);
+        getALlPutMapClass(mapAll, mapAllOld, classList);
     }
 
-    public void getALlPutMapClass(ConcurrentHashMap<String, Class> mapSimple, List<Class> listClass) {
+    public void getALlPutMapClass(ConcurrentHashMap<String, Class> mapSimple, ConcurrentHashMap<String, Class> mapSimpleOld, List<Class> listClass) {
         for (Class xx : listClass) {
             mapSimple.put(xx.getCode(), xx);
+            Class classNew = formUtils.convertToObject(Class.class, xx);
+            mapSimpleOld.put(classNew.getCode(), classNew);
         }
     }
 
-    public void addDataInMapMeetingPeriod(ConcurrentHashMap<String, MeetingPeriod> mapAll) {
+    public void addDataInMapMeetingPeriod(ConcurrentHashMap<String, MeetingPeriod> mapAll, ConcurrentHashMap<String, MeetingPeriod> mapAllKeyId) {
         List<MeetingPeriod> classList = adMeetingPeriodRepository.findAll();
-        getALlPutMapMeetingPeriod(mapAll, classList);
+        getALlPutMapMeetingPeriod(mapAll, mapAllKeyId, classList);
     }
 
-    public void getALlPutMapMeetingPeriod(ConcurrentHashMap<String, MeetingPeriod> mapSimple, List<MeetingPeriod> meetingPeriodList) {
+    public void getALlPutMapMeetingPeriod(ConcurrentHashMap<String, MeetingPeriod> mapSimple, ConcurrentHashMap<String, MeetingPeriod> mapSimpleKeyId, List<MeetingPeriod> meetingPeriodList) {
         for (MeetingPeriod xx : meetingPeriodList) {
             mapSimple.put(xx.getName(), xx);
+            mapSimpleKeyId.put(xx.getId(), xx);
         }
     }
 }

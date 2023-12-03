@@ -1,6 +1,7 @@
 package com.labreportapp.labreport.core.admin.service.impl;
 
 import com.labreportapp.labreport.core.admin.model.request.AdFindClassRequest;
+import com.labreportapp.labreport.core.admin.model.request.AdReasonsNoApproveRequest;
 import com.labreportapp.labreport.core.admin.model.response.AdClassHaveMeetingRequestResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdListClassCustomResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdMeetingRequestCustom;
@@ -9,6 +10,7 @@ import com.labreportapp.labreport.core.admin.repository.AdClassRepository;
 import com.labreportapp.labreport.core.admin.repository.AdMeetingRepository;
 import com.labreportapp.labreport.core.admin.repository.AdMeetingRequestRepository;
 import com.labreportapp.labreport.core.admin.service.AdMeetingRequestService;
+import com.labreportapp.labreport.core.common.base.LoggerResponse;
 import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.core.common.response.SimpleResponse;
 import com.labreportapp.labreport.entity.Class;
@@ -17,9 +19,12 @@ import com.labreportapp.labreport.entity.MeetingRequest;
 import com.labreportapp.labreport.infrastructure.constant.StatusMeeting;
 import com.labreportapp.labreport.infrastructure.constant.StatusMeetingRequest;
 import com.labreportapp.labreport.util.CallApiIdentity;
+import com.labreportapp.labreport.util.LoggerUtil;
 import com.labreportapp.labreport.util.SemesterHelper;
+import com.labreportapp.labreport.util.WriteFileCSV;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,6 +36,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
@@ -55,6 +61,9 @@ public class AdMeetingRequestServiceImpl implements AdMeetingRequestService {
 
     @Autowired
     private AdClassRepository adClassRepository;
+
+    @Autowired
+    private LoggerUtil loggerUtil;
 
     @Override
     public PageableObject<AdListClassCustomResponse> searchClassHaveMeetingRequest(AdFindClassRequest adFindClass) {
@@ -193,6 +202,10 @@ public class AdMeetingRequestServiceImpl implements AdMeetingRequestService {
             List<String> listId = adMeetingRequestRepository.getListIdMeetingRequestByIdClass(xx);
             approveMeetingRequest(listId);
         });
+        listClass.forEach(xx -> {
+            xx.setReasons(null);
+        });
+        adClassRepository.saveAll(listClass);
         return true;
     }
 
@@ -214,18 +227,71 @@ public class AdMeetingRequestServiceImpl implements AdMeetingRequestService {
         return true;
     }
 
+    @Override
+    public Boolean addReason(String idClass, String reasons) {
+        Optional<Class> classFind = adClassRepository.findById(idClass);
+        if (!classFind.isPresent()) {
+            throw new RestApiException(Message.CLASS_NOT_EXISTS);
+        }
+        classFind.get().setReasons(reasons);
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Đã cập nhật lí do từ chối là: " + reasons);
+        adClassRepository.save(classFind.get());
+        String nameSemester = loggerUtil.getNameSemesterByIdClass(idClass);
+        loggerUtil.sendLogStreamClass(stringBuilder.toString(), classFind.get().getCode(), nameSemester);
+        loggerUtil.sendLogScreen(stringBuilder.toString(), nameSemester);
+        return true;
+    }
+
+    @Override
+    public Boolean addReasonClass(@Valid AdReasonsNoApproveRequest request) {
+        List<Class> listClass = adClassRepository.findAllById(request.getListIdClass());
+        if (listClass.isEmpty()) {
+            throw new RestApiException(Message.CLASS_NOT_EXISTS);
+        }
+        List<LoggerResponse> loggerResponseList = new ArrayList<>();
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Đã cập nhật lí do từ chối là: " + request.getReasons() + " của các lớp học là: ");
+        listClass.forEach(xx -> {
+            xx.setReasons(request.getReasons());
+            LoggerResponse loggerResponse = new LoggerResponse();
+            loggerResponse.setContent("Đã cập nhật lí do từ chối là: " + request.getReasons());
+            loggerResponseList.add(loggerResponse);
+            stringBuilder.append(xx.getCode() + ", ");
+        });
+        String nameSemester = loggerUtil.getNameSemesterByIdClass(listClass.get(0).getId());
+        adClassRepository.saveAll(listClass);
+        for (LoggerResponse loggerResponse : loggerResponseList) {
+            loggerUtil.sendLogStreamClass(loggerResponse.getContent(), loggerResponse.getCodeClass(), nameSemester);
+        }
+        loggerUtil.sendLogScreen(stringBuilder.toString(), nameSemester);
+        return true;
+    }
+
     private Boolean handleNoApproveMeetingRequest(List<String> listIdMeetingRequest) {
         List<MeetingRequest> listMeetingRequestFind = adMeetingRequestRepository.findAllById(listIdMeetingRequest);
         if (listMeetingRequestFind.isEmpty()) {
             throw new RestApiException(Message.MEETING_REQUEST_NOT_EXISTS);
         }
+        String idClass = listMeetingRequestFind.get(0).getClassId();
+        Optional<Class> classOptional = adClassRepository.findById(idClass);
+        if (!classOptional.isPresent()) {
+            throw new RestApiException(Message.CLASS_NOT_EXISTS);
+        }
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Đã từ chối phê duyệt các buổi học: ");
         listMeetingRequestFind.forEach(meetingRequest -> {
             if (meetingRequest.getStatusMeetingRequest() != StatusMeetingRequest.CHO_PHE_DUYET) {
                 throw new RestApiException(Message.STATUS_NOT_VALID);
             }
+            stringBuilder.append(meetingRequest.getName() + ", ");
             meetingRequest.setStatusMeetingRequest(StatusMeetingRequest.TU_CHOI);
         });
+        stringBuilder.append(" thuộc lớp học " + classOptional.get().getCode());
         adMeetingRequestRepository.saveAll(listMeetingRequestFind);
+        String nameSemester = loggerUtil.getNameSemesterByIdClass(idClass);
+        loggerUtil.sendLogStreamClass(stringBuilder.toString(), classOptional.get().getCode(), nameSemester);
+        loggerUtil.sendLogScreen(stringBuilder.toString(), nameSemester);
         return true;
     }
 
@@ -235,6 +301,10 @@ public class AdMeetingRequestServiceImpl implements AdMeetingRequestService {
             throw new RestApiException(Message.MEETING_REQUEST_NOT_EXISTS);
         }
         String idClass = listMeetingRequestFind.get(0).getClassId();
+        Optional<Class> classOptional = adClassRepository.findById(idClass);
+        if (!classOptional.isPresent()) {
+            throw new RestApiException(Message.CLASS_NOT_EXISTS);
+        }
         List<Meeting> listMeetingNew = new ArrayList<>();
         List<Meeting> listCurrent = adMeetingRepository.getAllByClassId(idClass);
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -260,13 +330,20 @@ public class AdMeetingRequestServiceImpl implements AdMeetingRequestService {
         });
         adMeetingRepository.saveAll(listMeetingNew);
         adMeetingRepository.updateNameMeeting(idClass);
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Đã phê duyệt các buổi học sau: ");
         listMeetingRequestFind.forEach(meetingRequest -> {
             if (meetingRequest.getStatusMeetingRequest() != StatusMeetingRequest.CHO_PHE_DUYET) {
                 throw new RestApiException(Message.STATUS_NOT_VALID);
             }
+            stringBuilder.append(meetingRequest.getName() + ", ");
             meetingRequest.setStatusMeetingRequest(StatusMeetingRequest.DA_PHE_DUYET);
         });
+        stringBuilder.append(" thuộc lớp học: " + classOptional.get().getCode());
         adMeetingRequestRepository.saveAll(listMeetingRequestFind);
+        String nameSemester = loggerUtil.getNameSemesterByIdClass(idClass);
+        loggerUtil.sendLogStreamClass(stringBuilder.toString(), classOptional.get().getCode(), nameSemester);
+        loggerUtil.sendLogScreen(stringBuilder.toString(), nameSemester);
         return true;
     }
 }

@@ -21,6 +21,7 @@ import { convertHourAndMinuteToString } from "../../../../helper/util.helper";
 import { MeetingManagementAPI } from "../../../../api/admin/meeting-management/MeetingManagementAPI";
 import { useAppDispatch } from "../../../../app/hook";
 import { SetAdCountApproveMeetingRequest } from "../../../../app/admin/AdCountApproveMeetingRequest.reducer";
+import ModalReasons from "../modal-reasons/ModalReasons";
 const { confirm } = Modal;
 const { Option } = Select;
 
@@ -287,6 +288,19 @@ const ModalAllMeetingRequest = ({ visible, onCancel, item, fetchData }) => {
     });
   };
 
+  const [visibleReasons, setVisibleReasons] = useState(false);
+  const openModalReasons = () => {
+    if (selectedRowKeys.length === 0) {
+      message.error("Mời chọn buổi học cần từ chối phê duyệt");
+      return;
+    }
+    setVisibleReasons(true);
+  };
+
+  const onCancelVisibleReasons = () => {
+    setVisibleReasons(false);
+  };
+
   return (
     <>
       {loading && <LoadingIndicator />}
@@ -336,7 +350,7 @@ const ModalAllMeetingRequest = ({ visible, onCancel, item, fetchData }) => {
                     color: "white",
                     backgroundColor: "rgb(55, 137, 220)",
                   }}
-                  onClick={noApproveMeetingRequest}
+                  onClick={openModalReasons}
                 >
                   <FontAwesomeIcon
                     icon={faClose}
@@ -410,6 +424,12 @@ const ModalAllMeetingRequest = ({ visible, onCancel, item, fetchData }) => {
             </TabPane>
           </Tabs>
         </div>
+        <ModalReasons
+          visible={visibleReasons}
+          onCancel={onCancelVisibleReasons}
+          noApproveMeetingRequest={noApproveMeetingRequest}
+          idClass={item != null && item.id}
+        />
       </Modal>
     </>
   );
