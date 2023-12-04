@@ -277,11 +277,10 @@ export class ClassAPI {
     });
   };
 
-  static showHistory = (params) => {
+  static showHistory = (filter) => {
     return request({
       method: "GET",
-      url: url + `/history`,
-      params: params,
+      url: url + `/history?page=${filter.page}&size=${filter.size}&idSemester=${filter.idSemester}`,
     });
   };
 }
