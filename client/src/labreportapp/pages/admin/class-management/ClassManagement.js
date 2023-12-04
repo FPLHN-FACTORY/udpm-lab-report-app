@@ -553,6 +553,13 @@ const ClassManagement = () => {
 
   const [visibleHistory, setVisibleHistory] = useState(false);
   const openModalShowHistory = () => {
+    if (idSemesterCurrent === "" && idSemesterSeach === "") {
+      message.error("Hãy chọn học kỳ để xem lịch sử luồng log lớp học");
+      return;
+    }
+    let idSemester =
+      idSemesterSeach !== "" ? idSemesterSeach : idSemesterCurrent;
+    setSelectedIdSemester(idSemester);
     setVisibleHistory(true);
   };
   const cancelModalHistory = () => {
