@@ -37,6 +37,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.TimeZone;
 import java.util.stream.Collectors;
 
 /**
@@ -139,6 +140,7 @@ public class AdMeetingServiceImpl implements AdMeetingService {
         StringBuilder stringBuilder = new StringBuilder();
         String nameSemester = loggerUtil.getNameSemesterByIdClass(classOptional.get().getId());
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT+7"));
         stringBuilder.append("Đã tạo buổi học với thời gian buổi học là: " + sdf.format(request.getMeetingDate()));
         stringBuilder.append(", với ca học là: " + meetingPeriodFind.getName());
         stringBuilder.append(", với hình thức của buổi học là: " + (TypeMeeting.values()[request.getTypeMeeting()] == TypeMeeting.ONLINE ? "Online" : "Offline"));
@@ -180,6 +182,7 @@ public class AdMeetingServiceImpl implements AdMeetingService {
         StringBuilder stringBuilder = new StringBuilder();
         String nameSemester = loggerUtil.getNameSemesterByIdClass(classOptional.get().getId());
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT+7"));
         String meetingDateOld = sdf.format(meetingFind.get().getMeetingDate());
         String meetingDateNew = sdf.format(request.getMeetingDate());
         String messageMeetingDate = CompareUtil.compareAndConvertMessage("ngày học của buổi học " + meetingFind.get().getName(), meetingDateOld, meetingDateNew, "");
@@ -325,6 +328,7 @@ public class AdMeetingServiceImpl implements AdMeetingService {
             List<Meeting> listMeetingNew = adMeetingRepository.saveAll(listMeeting);
             StringBuilder stringBuilder = new StringBuilder();
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            sdf.setTimeZone(TimeZone.getTimeZone("GMT+7"));
             listMeetingNew.forEach(meeting -> {
                 stringBuilder.append("Đã tạo buổi học với thời gian buổi học là: ").append(sdf.format(meeting.getMeetingDate()));
                 stringBuilder.append(", với hình thức của buổi học là: ").append(meeting.getTypeMeeting() == TypeMeeting.ONLINE ? "Online" : "Offline").append(". ");

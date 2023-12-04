@@ -308,6 +308,7 @@ public class AdMeetingRequestServiceImpl implements AdMeetingRequestService {
         List<Meeting> listMeetingNew = new ArrayList<>();
         List<Meeting> listCurrent = adMeetingRepository.getAllByClassId(idClass);
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT+7"));
         listMeetingRequestFind.forEach(meetingRequest -> {
             AtomicBoolean shouldAddMeeting = new AtomicBoolean(true);
             listCurrent.forEach(meetingCurrent -> {

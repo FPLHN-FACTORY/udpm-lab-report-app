@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * @author hieundph25894
@@ -93,7 +94,9 @@ public class TeExcelImportService {
             switch (cell.getCellType()) {
                 case NUMERIC -> {
                     if (DateUtil.isCellDateFormatted(cell)) {
-                        return new SimpleDateFormat("dd/MM/yyyy").format(cell.getDateCellValue());
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy")
+                        sdf.setTimeZone(TimeZone.getTimeZone("GMT+7"));
+                        return sdf.format(cell.getDateCellValue());
                     } else {
                         return String.valueOf(cell.getNumericCellValue());
                     }

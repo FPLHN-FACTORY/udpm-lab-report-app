@@ -83,6 +83,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -344,6 +345,7 @@ public class TeTeamsServiceImpl implements TeTeamsService {
     public String convertLongToStringDate(long timestamp) {
         Date date = new Date(timestamp);
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT+7"));
         return sdf.format(date);
     }
 

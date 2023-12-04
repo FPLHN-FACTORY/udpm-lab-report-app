@@ -21,6 +21,7 @@ public class DateConverter {
     public static Long convertDateToLongOneHourOneMinutes(String dateString) {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            sdf.setTimeZone(TimeZone.getTimeZone("GMT+7"));
             Date date = sdf.parse(dateString);
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
@@ -52,6 +53,7 @@ public class DateConverter {
     public static String convertDateToStringTodo(Long timestamp) {
         Date date = new Date(timestamp);
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd");
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT+7"));
         String formattedTime = dateFormat.format(date);
         return formattedTime;
     }

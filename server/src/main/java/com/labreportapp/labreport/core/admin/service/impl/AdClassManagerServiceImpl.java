@@ -198,6 +198,7 @@ AdClassManagerServiceImpl implements AdClassService {
         }
         StringBuilder stringBuilder = new StringBuilder();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT+7"));
         stringBuilder.append("Đã tạo lớp học ").append(adClassCustomResponse.getCode());
         stringBuilder.append(", sĩ số là: ").append(adClassCustomResponse.getClassSize());
         stringBuilder.append("ca học của lớp là: ").append(adClassCustomResponse.getClassPeriod());
@@ -224,8 +225,7 @@ AdClassManagerServiceImpl implements AdClassService {
             stringBuilder.append(messageClassPeriod);
         }
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        System.out.println(sdf.format(classNew.getStartTime()) + " aaaaaaaaaaaa");
-        System.out.println(sdf.format(request.getStartTime()) + " aaaaaaaaaaaa");
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT+7"));
         String messageStartTime = CompareUtil.compareAndConvertMessage("thời gian bắt đầu của lớp " +
                 classNew.getCode(), sdf.format(classNew.getStartTime()), sdf.format(request.getStartTime()), "");
         stringBuilder.append(messageStartTime);
@@ -482,6 +482,7 @@ AdClassManagerServiceImpl implements AdClassService {
             StringBuilder stringBuilder = new StringBuilder();
             List<Class> listClass = new ArrayList<>();
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            sdf.setTimeZone(TimeZone.getTimeZone("GMT+7"));
             stringBuilder.append("Đã tạo những lớp học: ");
             List<LoggerResponse> loggerResponseList = new ArrayList<>();
             for (int i = 0; i < request.getNumberRandon(); i++) {

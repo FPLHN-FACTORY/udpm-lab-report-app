@@ -28,6 +28,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.TimeZone;
 
 @Service
 public class AdSemesterServiceImpl implements AdSemesterService {
@@ -98,6 +99,7 @@ public class AdSemesterServiceImpl implements AdSemesterService {
             }
         }
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT+7"));
         Semester semester = findSemesterById.get();
 
         StringBuilder stringBuilder = new StringBuilder();
