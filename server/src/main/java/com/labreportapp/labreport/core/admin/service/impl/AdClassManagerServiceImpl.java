@@ -236,7 +236,7 @@ AdClassManagerServiceImpl implements AdClassService {
         String nameSemester = loggerUtil.getNameSemesterByIdClass(id);
         loggerUtil.sendLogScreen(stringBuilder.toString(), nameSemester);
         loggerUtil.sendLogStreamClass(stringBuilder.toString(), classNew.getCode(), nameSemester);
-        classNew.setStartTime(DateUtils.truncate(new Date(request.getStartTime()), Calendar.DATE).getTime());
+        classNew.setStartTime(request.getStartTime());
         MeetingPeriod meetingPeriodFind = null;
         if (request.getClassPeriod() != null) {
             meetingPeriodFind = adMeetingPeriodRepository.findById(request.getClassPeriod()).get();
