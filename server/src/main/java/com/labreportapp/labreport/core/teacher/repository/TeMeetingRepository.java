@@ -192,10 +192,10 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
             JOIN activity ac ON ac.id = c.activity_id
             JOIN level l ON l.id = ac.level_id
             WHERE 
-                m.teacher_id = :#{#req.idTeacher} AND
-                m.meeting_date >= UNIX_TIMESTAMP(CURDATE()) * 1000 AND
-                m.meeting_date < UNIX_TIMESTAMP(DATE_ADD(CURDATE(), INTERVAL 1 DAY)) * 1000 AND
-                m.status_meeting = 0
+                  m.teacher_id = :#{#req.idTeacher} AND
+                       m.meeting_date >= UNIX_TIMESTAMP(CONVERT_TZ(CURDATE(), 'UTC', 'Asia/Ho_Chi_Minh')) * 1000 AND
+                       m.meeting_date < UNIX_TIMESTAMP(DATE_ADD(CONVERT_TZ(CURDATE(), 'UTC', 'Asia/Ho_Chi_Minh'), INTERVAL 1 DAY)) * 1000 AND
+                       m.status_meeting = 0
             ORDER BY m.meeting_date DESC
             """, countQuery = """
             SELECT DISTINCT(m.id)
@@ -205,10 +205,10 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                          JOIN activity ac ON ac.id = c.activity_id
                          JOIN level l ON l.id = ac.level_id
                          WHERE 
-                             m.teacher_id = :#{#req.idTeacher} AND 
-                             m.meeting_date >= UNIX_TIMESTAMP(CURDATE()) * 1000 AND
-                             m.meeting_date < UNIX_TIMESTAMP(DATE_ADD(CURDATE(), INTERVAL 1 DAY)) * 1000 AND
-                             m.status_meeting = 0
+                               m.teacher_id = :#{#req.idTeacher} AND
+                                m.meeting_date >= UNIX_TIMESTAMP(CONVERT_TZ(CURDATE(), 'UTC', 'Asia/Ho_Chi_Minh')) * 1000 AND
+                                m.meeting_date < UNIX_TIMESTAMP(DATE_ADD(CONVERT_TZ(CURDATE(), 'UTC', 'Asia/Ho_Chi_Minh'), INTERVAL 1 DAY)) * 1000 AND
+                                m.status_meeting = 0
                          ORDER BY m.meeting_date DESC
             """
             , nativeQuery = true)

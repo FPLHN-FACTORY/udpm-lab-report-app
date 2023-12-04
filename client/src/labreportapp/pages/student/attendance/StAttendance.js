@@ -185,7 +185,7 @@ const StAttendance = () => {
               </Select>
             </div>
             <span style={{ marginLeft: "3px", fontSize: "13.5px" }}>
-              Lựa chọn học kỳ để hiện thị chi tiết điểm danh
+              Lựa chọn học kỳ để hiển thị chi tiết điểm danh
             </span>
           </div>
         </div>
