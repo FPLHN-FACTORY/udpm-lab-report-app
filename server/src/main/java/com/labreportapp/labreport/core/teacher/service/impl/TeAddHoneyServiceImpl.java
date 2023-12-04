@@ -60,6 +60,9 @@ public class TeAddHoneyServiceImpl implements TeAddHoneyService {
             throw new RestApiException(Message.LOP_NAY_DA_QUY_DOI_MAT_ONG);
         }
         List<TePointCustomResponse> listResponse = tePointRepository.getAllPointCustomByIdClass(idClass);
+        if(listResponse.isEmpty()) {
+            throw new RestApiException(Message.KHONG_CO_SINH_VIEN_NAO_DU_DIEU_KIEN_CONG_MAT_ONG);
+        }
         List<ClassConfiguration> classConfigurationList = classConfigurationRepository.findAll();
         if (classConfigurationList.isEmpty()) {
             throw new RestApiException(Message.BAN_CHUA_TAO_CAU_HINH);

@@ -108,5 +108,6 @@ public class PropertyKeys {
     public static final String CONFIRM_PASSWORD_ISEMPTY = "confirm.password.isEmpty";
     public static final String MEETING_REQUEST_NOT_EXISTS = "meeting.request.not.exists";
     public static final String STATUS_NOT_VALID = "status.not.valid";
+    public static final String KHONG_CO_SINH_VIEN_NAO_DU_DIEU_KIEN_CONG_MAT_ONG = "khong.co.sinh.vien.nao.du.dieu.kien.cong.mat.ong";
 
 }

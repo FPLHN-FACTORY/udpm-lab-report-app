@@ -563,7 +563,7 @@
 //         studentClasses1.setTeamId(team2.getId());
 //         studentClasses1.setEmail("hieundph25894@fpt.edu.vn");
 //         studentClasses1.setRole(RoleTeam.MEMBER);
-//         studentClasses1.setStatus(StatusTeam.ACTIVE);
+//         studentClasses1.setStatus(StatusTeam.INACTIVE);
 //         studentClasses1.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
 //         studentClasses1.setId(studentClassesRepository.save(studentClasses1).getId());
 //
@@ -573,7 +573,7 @@
 //         studentClasses2.setTeamId(team2.getId());
 //         studentClasses2.setEmail("thangncph26123@fpt.edu.vn");
 //         studentClasses2.setRole(RoleTeam.LEADER);
-//         studentClasses2.setStatus(StatusTeam.ACTIVE);
+//         studentClasses2.setStatus(StatusTeam.INACTIVE);
 //         studentClasses2.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
 //         studentClasses2.setId(studentClassesRepository.save(studentClasses2).getId());
 //
@@ -583,7 +583,7 @@
 //         studentClasses3.setTeamId(team1.getId());
 //         studentClasses3.setEmail("vanntph19604@fpt.edu.vn");
 //         studentClasses3.setRole(RoleTeam.MEMBER);
-//         studentClasses3.setStatus(StatusTeam.ACTIVE);
+//         studentClasses3.setStatus(StatusTeam.INACTIVE);
 //         studentClasses3.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
 //         studentClasses3.setId(studentClassesRepository.save(studentClasses3).getId());
 //
@@ -593,7 +593,7 @@
 //         studentClasses4.setTeamId(team1.getId());
 //         studentClasses4.setEmail("quynhncph26201@fpt.edu.vn");
 //         studentClasses4.setRole(RoleTeam.MEMBER);
-//         studentClasses4.setStatus(StatusTeam.ACTIVE);
+//         studentClasses4.setStatus(StatusTeam.INACTIVE);
 //         studentClasses4.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
 //         studentClasses4.setId(studentClassesRepository.save(studentClasses4).getId());
 //
@@ -603,7 +603,7 @@
 //         studentClasses5.setTeamId(team1.getId());
 //         studentClasses5.setEmail("hieundph26058@fpt.edu.vn");
 //         studentClasses5.setRole(RoleTeam.MEMBER);
-//         studentClasses5.setStatus(StatusTeam.ACTIVE);
+//         studentClasses5.setStatus(StatusTeam.INACTIVE);
 //         studentClasses5.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
 //         studentClasses5.setId(studentClassesRepository.save(studentClasses5).getId());
 //
@@ -614,7 +614,7 @@
 //         studentClasses6.setTeamId(team1.getId());
 //         studentClasses6.setEmail("vinhnvph23845@fpt.edu.vn");
 //         studentClasses6.setRole(RoleTeam.LEADER);
-//         studentClasses6.setStatus(StatusTeam.ACTIVE);
+//         studentClasses6.setStatus(StatusTeam.INACTIVE);
 //         studentClasses6.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
 //         studentClasses6.setId(studentClassesRepository.save(studentClasses6).getId());
 //
@@ -625,7 +625,7 @@
 //         studentClasses7.setEmail("huynqph26782@fpt.edu.vn");
 //         studentClasses7.setRole(RoleTeam.MEMBER);
 //         studentClasses7.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
-//         studentClasses7.setStatus(StatusTeam.ACTIVE);
+//         studentClasses7.setStatus(StatusTeam.INACTIVE);
 //         studentClasses7.setId(studentClassesRepository.save(studentClasses7).getId());
 //
 //         StudentClasses studentClasses8 = new StudentClasses();
@@ -635,7 +635,7 @@
 //         studentClasses8.setEmail("hatqph21186@fpt.edu.vn");
 //         studentClasses8.setRole(RoleTeam.MEMBER);
 //         studentClasses8.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
-//         studentClasses8.setStatus(StatusTeam.ACTIVE);
+//         studentClasses8.setStatus(StatusTeam.INACTIVE);
 //         studentClasses8.setId(studentClassesRepository.save(studentClasses8).getId());
 //
 //         StudentClasses studentClasses9 = new StudentClasses();
@@ -644,7 +644,7 @@
 //         studentClasses9.setTeamId(team2.getId());
 //         studentClasses9.setEmail("nhatnvph26159@fpt.edu.vn");
 //         studentClasses9.setRole(RoleTeam.MEMBER);
-//         studentClasses9.setStatus(StatusTeam.ACTIVE);
+//         studentClasses9.setStatus(StatusTeam.INACTIVE);
 //         studentClasses9.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
 //         studentClasses9.setId(studentClassesRepository.save(studentClasses9).getId());
 //
@@ -654,7 +654,7 @@
 //         studentClasses10.setTeamId(team2.getId());
 //         studentClasses10.setEmail("tuannvph25577@fpt.edu.vn");
 //         studentClasses10.setRole(RoleTeam.MEMBER);
-//         studentClasses10.setStatus(StatusTeam.ACTIVE);
+//         studentClasses10.setStatus(StatusTeam.INACTIVE);
 //         studentClasses10.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
 //         studentClasses10.setId(studentClassesRepository.save(studentClasses10).getId());
 //         // class 1- team 3 (11-15)
@@ -665,7 +665,7 @@
 //         studentClasses11.setEmail("anhdtnph25326@fpt.edu.vn");
 //         studentClasses11.setRole(RoleTeam.LEADER);
 //         studentClasses11.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
-//         studentClasses11.setStatus(StatusTeam.ACTIVE);
+//         studentClasses11.setStatus(StatusTeam.INACTIVE);
 //         studentClasses11.setId(studentClassesRepository.save(studentClasses11).getId());
 //
 //         StudentClasses studentClasses12 = new StudentClasses();
@@ -675,7 +675,7 @@
 //         studentClasses12.setEmail("trangntph19494@fpt.edu.vn");
 //         studentClasses12.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
 //         studentClasses12.setRole(RoleTeam.MEMBER);
-//         studentClasses12.setStatus(StatusTeam.ACTIVE);
+//         studentClasses12.setStatus(StatusTeam.INACTIVE);
 //         studentClasses12.setId(studentClassesRepository.save(studentClasses12).getId());
 //
 //         StudentClasses studentClasses13 = new StudentClasses();
@@ -685,7 +685,7 @@
 //         studentClasses13.setEmail("huyvqph25924@fpt.edu.vn");
 //         studentClasses13.setRole(RoleTeam.MEMBER);
 //         studentClasses13.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
-//         studentClasses13.setStatus(StatusTeam.ACTIVE);
+//         studentClasses13.setStatus(StatusTeam.INACTIVE);
 //         studentClasses13.setId(studentClassesRepository.save(studentClasses13).getId());
 //
 //         StudentClasses studentClasses14 = new StudentClasses();
@@ -695,7 +695,7 @@
 //         studentClasses14.setEmail("hungpvph25929@fpt.edu.vn");
 //         studentClasses14.setRole(RoleTeam.MEMBER);
 //         studentClasses14.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
-//         studentClasses14.setStatus(StatusTeam.ACTIVE);
+//         studentClasses14.setStatus(StatusTeam.INACTIVE);
 //         studentClasses14.setId(studentClassesRepository.save(studentClasses14).getId());
 //
 //         StudentClasses studentClasses15 = new StudentClasses();
@@ -704,7 +704,7 @@
 //         studentClasses15.setTeamId(team3.getId());
 //         studentClasses15.setEmail("hoangdvph25902@fpt.edu.vn");
 //         studentClasses15.setRole(RoleTeam.MEMBER);
-//         studentClasses15.setStatus(StatusTeam.ACTIVE);
+//         studentClasses15.setStatus(StatusTeam.INACTIVE);
 //         studentClasses15.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
 //         studentClasses15.setId(studentClassesRepository.save(studentClasses15).getId());
 //
@@ -715,7 +715,7 @@
 //         studentClasses16.setEmail("sonhnph19532@fpt.edu.vn");
 //         studentClasses16.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
 //         studentClasses16.setRole(RoleTeam.MEMBER);
-//         studentClasses16.setStatus(StatusTeam.ACTIVE);
+//         studentClasses16.setStatus(StatusTeam.INACTIVE);
 //         studentClasses16.setId(studentClassesRepository.save(studentClasses16).getId());
 //
 //         StudentClasses studentClasses17 = new StudentClasses();
@@ -725,7 +725,7 @@
 //         studentClasses17.setEmail("trangdttph27721@fpt.edu.vn");
 //         studentClasses17.setRole(RoleTeam.MEMBER);
 //         studentClasses17.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
-//         studentClasses17.setStatus(StatusTeam.ACTIVE);
+//         studentClasses17.setStatus(StatusTeam.INACTIVE);
 //         studentClasses17.setId(studentClassesRepository.save(studentClasses17).getId());
 //
 //         StudentClasses studentClasses18 = new StudentClasses();
@@ -735,7 +735,7 @@
 //         studentClasses18.setEmail("cuongnqph26071@fpt.edu.vn");
 //         studentClasses18.setRole(RoleTeam.MEMBER);
 //         studentClasses18.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
-//         studentClasses18.setStatus(StatusTeam.ACTIVE);
+//         studentClasses18.setStatus(StatusTeam.INACTIVE);
 //         studentClasses18.setId(studentClassesRepository.save(studentClasses18).getId());
 //
 //         StudentClasses studentClasses19 = new StudentClasses();
@@ -745,7 +745,7 @@
 //         studentClasses19.setEmail("dungnpph25823@fpt.edu.vn");
 //         studentClasses19.setStatusStudentFeedBack(StatusStudentFeedBack.DA_FEEDBACK);
 //         studentClasses19.setRole(RoleTeam.MEMBER);
-//         studentClasses19.setStatus(StatusTeam.ACTIVE);
+//         studentClasses19.setStatus(StatusTeam.INACTIVE);
 //         studentClasses19.setId(studentClassesRepository.save(studentClasses19).getId());
 //
 //         // class 2 - team 5
@@ -755,7 +755,7 @@
 //         studentClasses20.setTeamId(team5.getId());
 //         studentClasses20.setEmail("huongvnph27229@fpt.edu.vn");
 //         studentClasses20.setRole(RoleTeam.MEMBER);
-//         studentClasses20.setStatus(StatusTeam.ACTIVE);
+//         studentClasses20.setStatus(StatusTeam.INACTIVE);
 //         studentClasses20.setId(studentClassesRepository.save(studentClasses20).getId());
 //
 //         // class 3 - team 6
@@ -765,7 +765,7 @@
 //         studentClasses21.setTeamId(team6.getId());
 //         studentClasses21.setEmail("anhltvph25818@fpt.edu.vn");
 //         studentClasses21.setRole(RoleTeam.LEADER);
-//         studentClasses21.setStatus(StatusTeam.ACTIVE);
+//         studentClasses21.setStatus(StatusTeam.INACTIVE);
 //         studentClasses21.setId(studentClassesRepository.save(studentClasses21).getId());
 //
 //         FeedBack feedBack1 = new FeedBack();
