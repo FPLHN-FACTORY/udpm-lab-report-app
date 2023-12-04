@@ -401,6 +401,10 @@ const AdApproveMeeting = () => {
   };
 
   const approveAllClass = () => {
+    if (selectedRowKeys.length === 0) {
+      message.error("Mời chọn lớp cần phê duyệt");
+      return;
+    }
     confirm({
       title: "Xác nhận phê duyệt lịch học",
       content: "Bạn có chắc chắn muốn phê duyệt lịch học không?",
@@ -422,6 +426,10 @@ const AdApproveMeeting = () => {
   };
 
   const noApproveAllClass = () => {
+    if (selectedRowKeys.length === 0) {
+      message.error("Mời chọn lớp cần phê duyệt");
+      return;
+    }
     confirm({
       title: "Xác nhận từ chối phê duyệt lịch học",
       content: "Bạn có chắc chắn muốn từ chối phê duyệt lịch học không?",

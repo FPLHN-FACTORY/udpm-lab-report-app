@@ -243,6 +243,10 @@ const ModalAllMeetingRequest = ({ visible, onCancel, item, fetchData }) => {
   ];
   const dispatch = useAppDispatch();
   const approveMeetingRequest = () => {
+    if (selectedRowKeys.length === 0) {
+      message.error("Mời chọn buổi học cần phê duyệt");
+      return;
+    }
     confirm({
       title: "Xác nhận phê duyệt lịch học",
       content: "Bạn có chắc chắn muốn phê duyệt lịch học không?",
@@ -266,6 +270,10 @@ const ModalAllMeetingRequest = ({ visible, onCancel, item, fetchData }) => {
   };
 
   const noApproveMeetingRequest = () => {
+    if (selectedRowKeys.length === 0) {
+      message.error("Mời chọn buổi học cần phê duyệt");
+      return;
+    }
     confirm({
       title: "Xác nhận từ chối phê duyệt lịch học",
       content: "Bạn có chắc chắn muốn từ chối phê duyệt lịch học không?",
