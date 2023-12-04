@@ -193,8 +193,7 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
             JOIN  level l ON l.id = ac.level_id
             WHERE 
                 m.teacher_id = :#{#req.idTeacher} AND
-                 DATE_FORMAT(FROM_UNIXTIME(m.meeting_date / 1000 + 7 * 3600), '%Y-%m-%d') = DATE_FORMAT(CONVERT_TZ(CURRENT_DATE(), 'UTC', 'Asia/Ho_Chi_Minh'), '%Y-%m-%d')
-              AND
+                 DATE_FORMAT(FROM_UNIXTIME(m.meeting_date / 1000 + 7 * 3600), '%Y-%m-%d') = DATE_FORMAT(CURDATE(), '%Y-%m-%d') AND
                 m.status_meeting = 0
             ORDER BY   m.meeting_date DESC
             """, countQuery = """
@@ -204,8 +203,7 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
             JOIN activity ac ON ac.id = c.activity_id
             JOIN level l ON l.id = ac.level_id
             WHERE m.teacher_id = :#{#req.idTeacher} AND 
-              DATE_FORMAT(FROM_UNIXTIME(m.meeting_date / 1000 + 7 * 3600), '%Y-%m-%d') = DATE_FORMAT(CONVERT_TZ(CURRENT_DATE(), 'UTC', 'Asia/Ho_Chi_Minh'), '%Y-%m-%d')
-              AND
+                DATE_FORMAT(FROM_UNIXTIME(m.meeting_date / 1000 + 7 * 3600), '%Y-%m-%d') = DATE_FORMAT(CURDATE(), '%Y-%m-%d') AND
                  m.status_meeting = 0
             ORDER BY  m.meeting_date DESC
             """, nativeQuery = true)
