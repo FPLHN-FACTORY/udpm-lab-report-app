@@ -68,7 +68,7 @@ public interface TePointRepository extends JpaRepository<Point, String> {
                    JOIN class c ON c.id = sc.class_id
                    WHERE sc.class_id = :#{#idClass}
                    AND status = 0
-                   GROUP BY p.id
+                   GROUP BY sc.student_id, sc.email, p.final_point, p.id
             """, nativeQuery = true)
     List<TePointCustomResponse> getAllPointCustomByIdClass(@Param("idClass") String idClass);
 
