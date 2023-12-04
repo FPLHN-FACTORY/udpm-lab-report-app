@@ -34,6 +34,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.TimeZone;
 
 @Service
 @Validated
@@ -217,7 +218,7 @@ public class AdActivityServiceImpl implements AdActivityService {
     public Long convertDateToString(String dateStringToLong) {
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT+7"));
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+7"));
         try {
             Date date = dateFormat.parse(dateStringToLong);
             long timeInMillis = date.getTime();
