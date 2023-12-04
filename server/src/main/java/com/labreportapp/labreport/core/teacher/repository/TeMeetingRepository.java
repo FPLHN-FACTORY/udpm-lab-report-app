@@ -300,6 +300,21 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
 
     Optional<Meeting> findMeetingById(String id);
 
+//    @Query(value = """
+//            WITH get_meeting_not_attend AS (
+//                SELECT m.id AS id_meeting
+//                FROM meeting m
+//                LEFT JOIN attendance a ON m.id = a.meeting_id
+//                WHERE m.status_meeting = 0  AND m.meeting_date <= :currentDate
+//                AND a.meeting_id IS NULL
+//            )
+//            SELECT *  FROM meeting m
+//            WHERE m.status_meeting = 0 AND  m.meeting_date <= :currentDate
+//                AND m.id IN (SELECT id_meeting FROM get_meeting_not_attend)
+//            ORDER BY m.name ASC;
+//            """, nativeQuery = true)
+//    List<Meeting> findMeetingToDayUpdate(@Param("currentDate") Long currentDate);
+
     @Query(value = """
             WITH get_meeting_not_attend AS (
                 SELECT m.id AS id_meeting
@@ -309,7 +324,9 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                 AND a.meeting_id IS NULL
             )
             SELECT *  FROM meeting m
-            WHERE m.status_meeting = 0 AND  m.meeting_date <= :currentDate
+            WHERE m.status_meeting = 0 AND  m.meeting_date <= 
+                                m.meeting_date >= UNIX_TIMESTAMP(CONVERT_TZ(:currentDate, 'UTC', 'Asia/Ho_Chi_Minh')) * 1000 AND
+                                m.meeting_date < UNIX_TIMESTAMP(DATE_ADD(CONVERT_TZ(:currentDate, 'UTC', 'Asia/Ho_Chi_Minh'), INTERVAL 1 DAY)) * 1000 AND
                 AND m.id IN (SELECT id_meeting FROM get_meeting_not_attend)
             ORDER BY m.name ASC;
             """, nativeQuery = true)
