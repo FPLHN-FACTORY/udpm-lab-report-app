@@ -150,7 +150,7 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
              JOIN activity ac ON ac.id = c.activity_id
              JOIN level l ON l.id = ac.level_id
              WHERE m.teacher_id = :#{#req.idTeacher} AND
-               AND TIMESTAMPDIFF(DAY, FROM_UNIXTIME(m.meeting_date / 1000), CONVERT_TZ(NOW(), 'UTC', 'Asia/Ho_Chi_Minh')) = 0
+              TIMESTAMPDIFF(DAY, FROM_UNIXTIME(m.meeting_date / 1000), CONVERT_TZ(NOW(), 'UTC', 'Asia/Ho_Chi_Minh')) = 0
                 AND m.status_meeting = 0
              ORDER BY m.meeting_date DESC
             """, countQuery = """
