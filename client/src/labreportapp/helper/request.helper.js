@@ -21,6 +21,7 @@ request.interceptors.response.use(
   (response) => response,
   (error) => {
     console.log(error);
+    
     dispatch(SetLoadingFalse());
     if (error.response && error.response.status === 401) {
       window.location.href = "/not-authorization";
