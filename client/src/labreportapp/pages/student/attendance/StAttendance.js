@@ -35,7 +35,14 @@ const StAttendance = () => {
   const loadDataSemester = () => {
     StMyClassAPI.getAllSemesters().then((response) => {
       setListSemester(response.data.data);
-      setSemester(response.data.data[0].id);
+      response.data.data.forEach((item) => {
+        if (
+          item.startTime <= new Date().getTime() &&
+          new Date().getTime() <= item.endTime
+        ) {
+          setSemester(item.id);
+        }
+      });
     });
   };
 
