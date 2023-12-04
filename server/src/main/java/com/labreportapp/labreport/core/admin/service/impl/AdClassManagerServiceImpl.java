@@ -224,13 +224,15 @@ AdClassManagerServiceImpl implements AdClassService {
             stringBuilder.append(messageClassPeriod);
         }
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        System.out.println(sdf.format(classNew.getStartTime()) + " aaaaaaaaaaaa");
+        System.out.println(sdf.format(request.getStartTime()) + " aaaaaaaaaaaa");
         String messageStartTime = CompareUtil.compareAndConvertMessage("thời gian bắt đầu của lớp " +
                 classNew.getCode(), sdf.format(classNew.getStartTime()), sdf.format(request.getStartTime()), "");
         stringBuilder.append(messageStartTime);
         if (classNew.getStatusTeacherEdit().ordinal() != request.getStatusTeacherEdit()) {
             String messageStatusTeacherEdit = ". Đã cập nhật quyền giảng viên chỉnh sửa của lớp " + classNew.getCode() + " từ " +
                     (classNew.getStatusTeacherEdit().ordinal() == 0 ? "Cho phép" : "Không cho phép") + " thành " +
-                    (request.getStatusTeacherEdit() == 0 ? "Không cho phép" : "Cho phép");
+                    (request.getStatusTeacherEdit() == 0 ? "Cho phép" : "Không cho phép");
             stringBuilder.append(messageStatusTeacherEdit);
         }
         String nameSemester = loggerUtil.getNameSemesterByIdClass(id);
