@@ -27,7 +27,7 @@ public class ApiConstants {
 
     // API Honey
 
-    public static final String API_GET_ALL_CATEGORY = "/api/censor/add-point-student/list-category";
+    public static final String API_GET_ALL_CATEGORY = "/api/add-point-student/list-category";
 
-    public static final String API_ADD_POINT_LAB_REPORT_APP = "/api/censor/add-point-student/lab-report";
+    public static final String API_ADD_POINT_LAB_REPORT_APP = "/api/add-point-student/lab-report";
 }
