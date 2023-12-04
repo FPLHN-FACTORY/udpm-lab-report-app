@@ -149,7 +149,7 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
              LEFT JOIN meeting_period mp ON mp.id = m.meeting_period
              JOIN activity ac ON ac.id = c.activity_id
              JOIN level l ON l.id = ac.level_id
-             WHERE m.teacher_id = :#{#req.idTeacher} AND DATE(FROM_UNIXTIME(m.meeting_date / 1000)) = CURDATE()
+             WHERE m.teacher_id = :#{#req.idTeacher} AND TIMESTAMPDIFF(DAY, FROM_UNIXTIME(m.meeting_date / 1000), NOW()) = 0
                 AND m.status_meeting = 0
              ORDER BY m.meeting_date DESC
             """, countQuery = """
@@ -159,7 +159,7 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                        LEFT  JOIN meeting_period mp ON mp.id = m.meeting_period
                          JOIN activity ac ON ac.id = c.activity_id
                          JOIN level l ON l.id = ac.level_id
-                         WHERE m.teacher_id = :#{#req.idTeacher} AND DATE(FROM_UNIXTIME(m.meeting_date / 1000)) = CURDATE()
+                         WHERE m.teacher_id = :#{#req.idTeacher} AND TIMESTAMPDIFF(DAY, FROM_UNIXTIME(m.meeting_date / 1000), NOW()) = 0
                        AND m.status_meeting = 0
                         ORDER BY m.meeting_date DESC
             """
