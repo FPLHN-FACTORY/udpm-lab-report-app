@@ -14,31 +14,23 @@ public interface AdStudentClassRepository extends StudentClassesRepository {
 
     @Query(value = """
             SELECT DISTINCT
-            sc.id as idStudentClass,
-            sc.student_id as idStudent,
-            sc.email as emailStudent,
-            sc.role as role,
-            sc.status as statusStudent,
-            t.id as idTeam,
-            t.name as nameTeam,
-            f.id as idFeedBack,
-            att.id as idAttendance
+                sc.id as idStudentClass,
+                sc.student_id as idStudent,
+                sc.email as emailStudent,
+                sc.role as role,
+                sc.status as statusStudent,
+                t.id as idTeam,
+                t.name as nameTeam,
+                f.id as idFeedBack,
+                att.id as idAttendance
             FROM student_classes sc
             JOIN class c ON c.id = sc.class_id
             LEFT JOIN team t on t.id = sc.team_id
-            LEFT JOIN feed_back f on c.id = f.class_id
+            LEFT JOIN feed_back f on sc.student_id = f.student_id AND c.id = f.class_id
             LEFT JOIN attendance att on sc.student_id = att.student_id
-            WHERE sc.class_id = :#{#idClass}
+            WHERE c.id = :idClass
             GROUP BY
-              sc.id,
-              sc.student_id,
-              sc.email,
-              sc.role,
-              sc.status,
-              t.id,
-              t.name,
-              f.id,
-              att.id
+                sc.id, sc.student_id, sc.email, sc.role, sc.status, t.name, f.id, att.id
             ORDER BY t.name ASC
              """, nativeQuery = true)
     List<AdStudentClassesRespone> findStudentClassByIdClass(@Param("idClass") String idClass);
