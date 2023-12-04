@@ -52,36 +52,41 @@ public class TeAddHoneyServiceImpl implements TeAddHoneyService {
 
     @Override
     public Boolean addHoney(String idClass, String categoryId) {
-        Optional<Class> classFind = classRepository.findById(idClass);
-        if (!classFind.isPresent()) {
-            throw new CustomException(Message.CLASS_NOT_EXISTS);
+        try {
+            Optional<Class> classFind = classRepository.findById(idClass);
+            if (!classFind.isPresent()) {
+                throw new CustomException(Message.CLASS_NOT_EXISTS);
+            }
+            if (classFind.get().getStatusHoneyPlus() == StatusHoneyPlus.DA_CONG) {
+                throw new RestApiException(Message.LOP_NAY_DA_QUY_DOI_MAT_ONG);
+            }
+            List<TePointCustomResponse> listResponse = tePointRepository.getAllPointCustomByIdClass(idClass);
+            if (listResponse.isEmpty()) {
+                throw new RestApiException(Message.KHONG_CO_SINH_VIEN_NAO_DU_DIEU_KIEN_CONG_MAT_ONG);
+            }
+            List<ClassConfiguration> classConfigurationList = classConfigurationRepository.findAll();
+            if (classConfigurationList.isEmpty()) {
+                throw new RestApiException(Message.BAN_CHUA_TAO_CAU_HINH);
+            }
+            List<ItemStudentHoneyRequest> listStudent = new ArrayList<>();
+            for (TePointCustomResponse tePointCustomResponse : listResponse) {
+                ItemStudentHoneyRequest itemStudentHoneyRequest = new ItemStudentHoneyRequest();
+                itemStudentHoneyRequest.setId(tePointCustomResponse.getIdStudent());
+                itemStudentHoneyRequest.setEmail(tePointCustomResponse.getEmail());
+                itemStudentHoneyRequest.setNumberHoney((int) (tePointCustomResponse.getFinalPoint() * classConfigurationList.get(0).getNumberHoney()));
+                listStudent.add(itemStudentHoneyRequest);
+            }
+            HoneyConversionRequest request = new HoneyConversionRequest();
+            request.setCode("MODULE_LAB_REPORT_APP");
+            request.setListStudent(listStudent);
+            request.setCategoryId(categoryId);
+            Boolean check = callApiHoney.addPointStudentLabReportApp(request);
+            classFind.get().setStatusHoneyPlus(StatusHoneyPlus.DA_CONG);
+            classRepository.save(classFind.get());
+            return check;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
-        if (classFind.get().getStatusHoneyPlus() == StatusHoneyPlus.DA_CONG) {
-            throw new RestApiException(Message.LOP_NAY_DA_QUY_DOI_MAT_ONG);
-        }
-        List<TePointCustomResponse> listResponse = tePointRepository.getAllPointCustomByIdClass(idClass);
-        if(listResponse.isEmpty()) {
-            throw new RestApiException(Message.KHONG_CO_SINH_VIEN_NAO_DU_DIEU_KIEN_CONG_MAT_ONG);
-        }
-        List<ClassConfiguration> classConfigurationList = classConfigurationRepository.findAll();
-        if (classConfigurationList.isEmpty()) {
-            throw new RestApiException(Message.BAN_CHUA_TAO_CAU_HINH);
-        }
-        List<ItemStudentHoneyRequest> listStudent = new ArrayList<>();
-        for (TePointCustomResponse tePointCustomResponse : listResponse) {
-            ItemStudentHoneyRequest itemStudentHoneyRequest = new ItemStudentHoneyRequest();
-            itemStudentHoneyRequest.setId(tePointCustomResponse.getIdStudent());
-            itemStudentHoneyRequest.setEmail(tePointCustomResponse.getEmail());
-            itemStudentHoneyRequest.setNumberHoney((int) (tePointCustomResponse.getFinalPoint() * classConfigurationList.get(0).getNumberHoney()));
-            listStudent.add(itemStudentHoneyRequest);
-        }
-        HoneyConversionRequest request = new HoneyConversionRequest();
-        request.setCode("MODULE_LAB_REPORT_APP");
-        request.setListStudent(listStudent);
-        request.setCategoryId(categoryId);
-        Boolean check = callApiHoney.addPointStudentLabReportApp(request);
-        classFind.get().setStatusHoneyPlus(StatusHoneyPlus.DA_CONG);
-        classRepository.save(classFind.get());
-        return check;
     }
 }
