@@ -53,7 +53,7 @@ public class DateConverter {
     public static String convertDateToStringTodo(Long timestamp) {
         Date date = new Date(timestamp);
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd");
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT+7"));
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+7"));
         String formattedTime = dateFormat.format(date);
         return formattedTime;
     }

@@ -94,7 +94,7 @@ public class TeExcelImportService {
             switch (cell.getCellType()) {
                 case NUMERIC -> {
                     if (DateUtil.isCellDateFormatted(cell)) {
-                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy")
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                         sdf.setTimeZone(TimeZone.getTimeZone("GMT+7"));
                         return sdf.format(cell.getDateCellValue());
                     } else {
