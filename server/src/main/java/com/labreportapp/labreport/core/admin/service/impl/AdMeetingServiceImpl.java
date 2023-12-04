@@ -170,11 +170,11 @@ public class AdMeetingServiceImpl implements AdMeetingService {
     @Override
     public AdMeetingCustom update(@Valid AdUpdateMeetingRequest request) {
         Optional<Meeting> meetingFind = adMeetingRepository.findById(request.getId());
-        if (!meetingFind.isPresent()) {
+        if (meetingFind.isEmpty()) {
             throw new RestApiException(Message.MEETING_NOT_EXISTS);
         }
         Optional<Class> classOptional = adClassRepository.findById(meetingFind.get().getClassId());
-        if (!classOptional.isPresent()) {
+        if (classOptional.isEmpty()) {
             throw new RestApiException(Message.CLASS_NOT_EXISTS);
         }
         StringBuilder stringBuilder = new StringBuilder();
@@ -209,6 +209,7 @@ public class AdMeetingServiceImpl implements AdMeetingService {
         meetingFind.get().setMeetingPeriod(meetingPeriodNew.getId());
         meetingFind.get().setAddress(request.getAddress());
         meetingFind.get().setDescriptions(request.getDescriptions());
+        meetingFind.get().setStatusMeeting(meetingFind.get().getStatusMeeting());
         SimpleResponse simple = null;
         if (!request.getTeacherId().equals("") && request.getTeacherId() != null) {
             meetingFind.get().setTeacherId(request.getTeacherId());

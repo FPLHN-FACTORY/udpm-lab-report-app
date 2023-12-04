@@ -155,6 +155,7 @@ const TeacherScheduleToday = () => {
       dataIndex: "stt",
       key: "stt",
       width: "12px",
+      render: (text, record, index) => index + 1,
     },
     {
       title: "Lớp",
@@ -361,6 +362,7 @@ const TeacherScheduleToday = () => {
       title: "#",
       dataIndex: "stt",
       key: "stt",
+      render: (text, record, index) => index + 1,
     },
     {
       title: "Lớp",
