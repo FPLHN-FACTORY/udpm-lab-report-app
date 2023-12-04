@@ -29,7 +29,16 @@ public interface AdStudentClassRepository extends StudentClassesRepository {
             LEFT JOIN feed_back f on c.id = f.class_id
             LEFT JOIN attendance att on sc.student_id = att.student_id
             WHERE sc.class_id = :#{#idClass}
-            GROUP BY sc.student_id
+            GROUP BY
+              sc.id,
+              sc.student_id,
+              sc.email,
+              sc.role,
+              sc.status,
+              t.id,
+              t.name,
+              f.id,
+              att.id
             ORDER BY t.name ASC
              """, nativeQuery = true)
     List<AdStudentClassesRespone> findStudentClassByIdClass(@Param("idClass") String idClass);
