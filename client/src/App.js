@@ -107,6 +107,7 @@ function App() {
   let stompClientAll = Stomp.over(socket, {
     heartbeatIncoming: 10000,
     heartbeatOutgoing: 10000,
+    debug: (str) => {},
   });
 
   stompClientAll.onWebSocketClose(() => {
