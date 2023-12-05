@@ -45,14 +45,14 @@ public interface StClassRepository extends ClassRepository {
               JOIN level g ON g.id = ac.level_id
               JOIN semester s ON ac.semester_id = s.id
                 LEFT JOIN student_classes sc ON c.id = sc.class_id AND sc.student_id = :#{#req.studentId}
-              WHERE curdate() >= FROM_UNIXTIME(s.start_time_student / 1000) and curdate() <= FROM_UNIXTIME(s.end_time_student / 1000)
-               AND sc.class_id IS NULL
-              AND (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR c.code LIKE %:#{#req.code}%) 
-              AND (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR mp.id = :#{#req.classPeriod}) 
-              AND (:#{#req.level} IS NULL OR :#{#req.level} LIKE '' OR g.id = :#{#req.level}) 
-              AND (:#{#req.activityId} IS NULL OR :#{#req.activityId} LIKE '' OR ac.id = :#{#req.activityId}) 
-              AND s.id = :#{#req.semesterId}
-              ORDER BY c.created_date DESC
+              WHERE :currentTime >= s.start_time_student and :currentTime <= s.end_time_student
+             AND sc.class_id IS NULL
+            AND (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR c.code LIKE %:#{#req.code}%) 
+            AND (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR mp.id = :#{#req.classPeriod}) 
+            AND (:#{#req.level} IS NULL OR :#{#req.level} LIKE '' OR g.id = :#{#req.level}) 
+            AND (:#{#req.activityId} IS NULL OR :#{#req.activityId} LIKE '' OR ac.id = :#{#req.activityId}) 
+            AND s.id = :#{#req.semesterId}
+            ORDER BY c.created_date DESC
             """, nativeQuery = true)
     Page<StClassResponse> getAllClassByCriteriaAndIsActive(@Param("req") StFindClassRequest req, Pageable pageable, @Param("currentTime") Long currentTime);
 
