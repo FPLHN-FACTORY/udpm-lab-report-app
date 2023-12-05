@@ -30,7 +30,7 @@ public interface StClassRepository extends ClassRepository {
             JOIN semester s ON ac.semester_id = s.id
             LEFT JOIN student_classes sc ON c.id = sc.class_id AND sc.student_id = :#{#req.studentId}
             WHERE :currentTime >= s.start_time_student and :currentTime <= s.end_time_student
-             AND sc.class_id IS NULL
+            AND sc.class_id IS NULL
             AND (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR c.code LIKE %:#{#req.code}%) 
             AND (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR mp.id = :#{#req.classPeriod}) 
             AND (:#{#req.level} IS NULL OR :#{#req.level} LIKE '' OR g.id = :#{#req.level}) 
@@ -38,15 +38,15 @@ public interface StClassRepository extends ClassRepository {
             AND s.id = :#{#req.semesterId}
             ORDER BY c.created_date DESC
             """, countQuery = """
-              SELECT COUNT(1)
-              FROM class c
-              LEFT JOIN meeting_period mp ON mp.id = c.class_period
-              JOIN activity ac ON c.activity_id = ac.id
-              JOIN level g ON g.id = ac.level_id
-              JOIN semester s ON ac.semester_id = s.id
-                LEFT JOIN student_classes sc ON c.id = sc.class_id AND sc.student_id = :#{#req.studentId}
-              WHERE :currentTime >= s.start_time_student and :currentTime <= s.end_time_student
-             AND sc.class_id IS NULL
+            SELECT COUNT(1)
+            FROM class c
+            LEFT JOIN meeting_period mp ON mp.id = c.class_period
+            JOIN activity ac ON c.activity_id = ac.id
+            JOIN level g ON g.id = ac.level_id
+            JOIN semester s ON ac.semester_id = s.id
+            LEFT JOIN student_classes sc ON c.id = sc.class_id AND sc.student_id = :#{#req.studentId}
+            WHERE :currentTime >= s.start_time_student and :currentTime <= s.end_time_student
+            AND sc.class_id IS NULL
             AND (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR c.code LIKE %:#{#req.code}%) 
             AND (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR mp.id = :#{#req.classPeriod}) 
             AND (:#{#req.level} IS NULL OR :#{#req.level} LIKE '' OR g.id = :#{#req.level}) 
