@@ -585,8 +585,8 @@ const MeetingManagment = () => {
                               onConfirm={() => {
                                 deleteMeeting(item.id);
                               }}
-                              okText="Yes"
-                              cancelText="No"
+                              okText="Xác nhận"
+                              cancelText="Hủy"
                             >
                               <FontAwesomeIcon
                                 icon={faTrash}

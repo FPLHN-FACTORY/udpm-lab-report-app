@@ -99,7 +99,6 @@ const AdPointMyClassDetail = () => {
       ),
       onFilter: (value, record) =>
         record.nameTeam.toLowerCase().includes(value.toLowerCase()),
-      sorter: (a, b) => a.nameTeam.localeCompare(b.nameTeam),
     },
     {
       title: "Tên sinh viên",
@@ -181,7 +180,6 @@ const AdPointMyClassDetail = () => {
       ),
       onFilter: (value, record) =>
         record.emailStudent.toLowerCase().includes(value.toLowerCase()),
-      sorter: (a, b) => a.emailStudent.localeCompare(b.emailStudent),
     },
     {
       title: "Điểm giai đoạn 1",

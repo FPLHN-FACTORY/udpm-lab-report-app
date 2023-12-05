@@ -167,6 +167,7 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
             """
             , nativeQuery = true)
     List<TeScheduleMeetingClassResponse> searchScheduleToDayByIdTeacherAndMeetingDate(@Param("req") TeFindScheduleMeetingClassRequest req);
+
     // AND DATE(FROM_UNIXTIME(m.meeting_date / 1000)) = CURDATE()
 //    @Query(value = """
 //            SELECT ROW_NUMBER() OVER(ORDER BY m.meeting_date DESC) AS stt,
