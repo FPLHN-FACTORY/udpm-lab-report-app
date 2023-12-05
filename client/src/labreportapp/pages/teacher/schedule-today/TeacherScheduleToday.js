@@ -487,7 +487,7 @@ const TeacherScheduleToday = () => {
         ),
     },
     {
-      title: "Ghi chú",
+      title: "Trạng thái",
       dataIndex: "statusMeeting",
       key: "statusMeeting",
       render: (text, record) =>
