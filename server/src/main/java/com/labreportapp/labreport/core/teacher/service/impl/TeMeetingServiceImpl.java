@@ -387,9 +387,6 @@ public class TeMeetingServiceImpl implements TeMeetingService {
     public List<TeScheduleMeetingClassResponse> searchScheduleToDayByIdTeacherAndMeetingDate() {
         TeFindScheduleMeetingClassRequest request = new TeFindScheduleMeetingClassRequest();
         request.setIdTeacher(labReportAppSession.getUserId());
-        Date date = new Date();
-        System.err.println("aaaaaaaaaaaaa");
-        System.err.println(date.getTime());
         List<TeScheduleMeetingClassResponse> list = teMeetingRepository.searchScheduleToDayByIdTeacherAndMeetingDate(request);
         if (list.size() == 0) {
             return null;

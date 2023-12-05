@@ -128,45 +128,6 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                      """, nativeQuery = true)
     List<TeMeetingCustomToAttendanceResponse> findMeetingCustomToAttendanceByIdClass(@Param("idClass") String idClass);
 
-    //        @Query(value = """
-//            SELECT ROW_NUMBER() OVER(ORDER BY m.meeting_date DESC) AS stt,
-//                 c.id AS id_class,
-//                 c.code AS code_class,
-//                 m.id AS id_meeting,
-//                 m.meeting_date AS meeting_date,
-//                 m.meeting_period AS id_meeting_period,
-//                 mp.name AS meeting_period, mp.start_hour AS start_hour, mp.start_minute AS start_minute ,
-//                 mp.end_hour AS end_hour, mp.end_minute AS end_minute,
-//                 m.name AS name_meeting,
-//                 m.type_meeting AS type_meeting,
-//                 m.address AS address_meeting,
-//                 m.descriptions AS descriptions_meeting,
-//                 l.name AS level,
-//                 m.notes AS notes,
-//                 m.status_meeting AS status_meeting
-//             FROM class c
-//             JOIN meeting m ON m.class_id = c.id
-//             LEFT JOIN meeting_period mp ON mp.id = m.meeting_period
-//             JOIN activity ac ON ac.id = c.activity_id
-//             JOIN level l ON l.id = ac.level_id
-//             WHERE m.teacher_id = :#{#req.idTeacher} AND
-//              DATE(FROM_UNIXTIME(m.meeting_date / 1000)) = CURDATE()
-//                AND m.status_meeting = 0
-//             ORDER BY m.meeting_date DESC
-//            """, countQuery = """
-//            SELECT DISTINCT(m.id)
-//                         FROM class c
-//                         JOIN meeting m ON m.class_id = c.id
-//                       LEFT  JOIN meeting_period mp ON mp.id = m.meeting_period
-//                         JOIN activity ac ON ac.id = c.activity_id
-//                         JOIN level l ON l.id = ac.level_id
-//                         WHERE m.teacher_id = :#{#req.idTeacher} AND DATE(FROM_UNIXTIME(m.meeting_date / 1000)) = CURDATE()
-//                       AND m.status_meeting = 0
-//                        ORDER BY m.meeting_date DESC
-//            """
-//            , nativeQuery = true)
-//    List<TeScheduleMeetingClassResponse> searchScheduleToDayByIdTeacherAndMeetingDate(@Param("req") TeFindScheduleMeetingClassRequest req);
-//   m.meeting_date BETWEEN UNIX_TIMESTAMP(CURRENT_DATE()) * 1000 AND UNIX_TIMESTAMP(DATE_ADD(CURRENT_DATE(), INTERVAL 1 DAY)) * 1000
     @Query(value = """
             SELECT ROW_NUMBER() OVER(ORDER BY m.meeting_date DESC) AS stt,
                  c.id AS id_class,
@@ -174,11 +135,8 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                  m.id AS id_meeting,
                  m.meeting_date AS meeting_date,
                  m.meeting_period AS id_meeting_period,
-                 mp.name AS meeting_period, 
-                 mp.start_hour AS start_hour, 
-                 mp.start_minute AS start_minute,
-                 mp.end_hour AS end_hour, 
-                 mp.end_minute AS end_minute,
+                 mp.name AS meeting_period, mp.start_hour AS start_hour, mp.start_minute AS start_minute ,
+                 mp.end_hour AS end_hour, mp.end_minute AS end_minute,
                  m.name AS name_meeting,
                  m.type_meeting AS type_meeting,
                  m.address AS address_meeting,
@@ -186,33 +144,75 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                  l.name AS level,
                  m.notes AS notes,
                  m.status_meeting AS status_meeting
-            FROM class c
-            JOIN meeting m ON m.class_id = c.id
-            LEFT JOIN meeting_period mp ON mp.id = m.meeting_period
-            JOIN activity ac ON ac.id = c.activity_id
-            JOIN level l ON l.id = ac.level_id
-            WHERE 
-                  m.teacher_id = :#{#req.idTeacher} AND
-                       m.meeting_date >= UNIX_TIMESTAMP(CONVERT_TZ(CURDATE(), 'UTC', 'Asia/Ho_Chi_Minh')) * 1000 AND
-                       m.meeting_date < UNIX_TIMESTAMP(DATE_ADD(CONVERT_TZ(CURDATE(), 'UTC', 'Asia/Ho_Chi_Minh'), INTERVAL 1 DAY)) * 1000 AND
-                       m.status_meeting = 0
-            ORDER BY m.meeting_date DESC
+             FROM class c
+             JOIN meeting m ON m.class_id = c.id
+             LEFT JOIN meeting_period mp ON mp.id = m.meeting_period
+             JOIN activity ac ON ac.id = c.activity_id
+             JOIN level l ON l.id = ac.level_id
+             WHERE m.teacher_id = :#{#req.idTeacher} AND
+              DATE(FROM_UNIXTIME(m.meeting_date / 1000)) = CURDATE()
+                AND m.status_meeting = 0
+             ORDER BY m.meeting_date DESC
             """, countQuery = """
             SELECT DISTINCT(m.id)
                          FROM class c
                          JOIN meeting m ON m.class_id = c.id
-                         LEFT JOIN meeting_period mp ON mp.id = m.meeting_period
+                       LEFT  JOIN meeting_period mp ON mp.id = m.meeting_period
                          JOIN activity ac ON ac.id = c.activity_id
                          JOIN level l ON l.id = ac.level_id
-                         WHERE 
-                               m.teacher_id = :#{#req.idTeacher} AND
-                                m.meeting_date >= UNIX_TIMESTAMP(CONVERT_TZ(CURDATE(), 'UTC', 'Asia/Ho_Chi_Minh')) * 1000 AND
-                                m.meeting_date < UNIX_TIMESTAMP(DATE_ADD(CONVERT_TZ(CURDATE(), 'UTC', 'Asia/Ho_Chi_Minh'), INTERVAL 1 DAY)) * 1000 AND
-                                m.status_meeting = 0
-                         ORDER BY m.meeting_date DESC
+                         WHERE m.teacher_id = :#{#req.idTeacher} AND DATE(FROM_UNIXTIME(m.meeting_date / 1000)) = CURDATE()
+                       AND m.status_meeting = 0
+                        ORDER BY m.meeting_date DESC
             """
             , nativeQuery = true)
     List<TeScheduleMeetingClassResponse> searchScheduleToDayByIdTeacherAndMeetingDate(@Param("req") TeFindScheduleMeetingClassRequest req);
+//   m.meeting_date BETWEEN UNIX_TIMESTAMP(CURRENT_DATE()) * 1000 AND UNIX_TIMESTAMP(DATE_ADD(CURRENT_DATE(), INTERVAL 1 DAY)) * 1000
+//    @Query(value = """
+//            SELECT ROW_NUMBER() OVER(ORDER BY m.meeting_date DESC) AS stt,
+//                 c.id AS id_class,
+//                 c.code AS code_class,
+//                 m.id AS id_meeting,
+//                 m.meeting_date AS meeting_date,
+//                 m.meeting_period AS id_meeting_period,
+//                 mp.name AS meeting_period,
+//                 mp.start_hour AS start_hour,
+//                 mp.start_minute AS start_minute,
+//                 mp.end_hour AS end_hour,
+//                 mp.end_minute AS end_minute,
+//                 m.name AS name_meeting,
+//                 m.type_meeting AS type_meeting,
+//                 m.address AS address_meeting,
+//                 m.descriptions AS descriptions_meeting,
+//                 l.name AS level,
+//                 m.notes AS notes,
+//                 m.status_meeting AS status_meeting
+//            FROM class c
+//            JOIN meeting m ON m.class_id = c.id
+//            LEFT JOIN meeting_period mp ON mp.id = m.meeting_period
+//            JOIN activity ac ON ac.id = c.activity_id
+//            JOIN level l ON l.id = ac.level_id
+//            WHERE
+//                  m.teacher_id = :#{#req.idTeacher} AND
+//                       m.meeting_date >= UNIX_TIMESTAMP(CONVERT_TZ(CURDATE(), 'UTC', 'Asia/Ho_Chi_Minh')) * 1000 AND
+//                       m.meeting_date < UNIX_TIMESTAMP(DATE_ADD(CONVERT_TZ(CURDATE(), 'UTC', 'Asia/Ho_Chi_Minh'), INTERVAL 1 DAY)) * 1000 AND
+//                       m.status_meeting = 0
+//            ORDER BY m.meeting_date DESC
+//            """, countQuery = """
+//            SELECT DISTINCT(m.id)
+//                         FROM class c
+//                         JOIN meeting m ON m.class_id = c.id
+//                         LEFT JOIN meeting_period mp ON mp.id = m.meeting_period
+//                         JOIN activity ac ON ac.id = c.activity_id
+//                         JOIN level l ON l.id = ac.level_id
+//                         WHERE
+//                               m.teacher_id = :#{#req.idTeacher} AND
+//                                m.meeting_date >= UNIX_TIMESTAMP(CONVERT_TZ(CURDATE(), 'UTC', 'Asia/Ho_Chi_Minh')) * 1000 AND
+//                                m.meeting_date < UNIX_TIMESTAMP(DATE_ADD(CONVERT_TZ(CURDATE(), 'UTC', 'Asia/Ho_Chi_Minh'), INTERVAL 1 DAY)) * 1000 AND
+//                                m.status_meeting = 0
+//                         ORDER BY m.meeting_date DESC
+//            """
+//            , nativeQuery = true)
+//    List<TeScheduleMeetingClassResponse> searchScheduleToDayByIdTeacherAndMeetingDate(@Param("req") TeFindScheduleMeetingClassRequest req);
 
     @Query(value = """
             SELECT ROW_NUMBER() OVER(ORDER BY m.meeting_date ASC) AS stt,
