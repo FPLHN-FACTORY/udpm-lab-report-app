@@ -24,7 +24,7 @@ public interface StClassRepository extends ClassRepository {
             s.start_time_student, s.end_time_student, c.descriptions,
             c.password
             FROM class c
-            JOIN meeting_period mp ON mp.id = c.class_period
+            LEFT JOIN meeting_period mp ON mp.id = c.class_period
             JOIN activity ac ON c.activity_id = ac.id
             JOIN level g ON g.id = ac.level_id
             JOIN semester s ON ac.semester_id = s.id
@@ -40,7 +40,7 @@ public interface StClassRepository extends ClassRepository {
             """, countQuery = """
               SELECT COUNT(1)
               FROM class c
-              JOIN meeting_period mp ON mp.id = c.class_period
+              LEFT JOIN meeting_period mp ON mp.id = c.class_period
               JOIN activity ac ON c.activity_id = ac.id
               JOIN level g ON g.id = ac.level_id
               JOIN semester s ON ac.semester_id = s.id
