@@ -25,6 +25,7 @@ import com.labreportapp.labreport.util.LoggerUtil;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import lombok.Synchronized;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -148,6 +149,7 @@ public class AdStudentClassServiceImpl implements AdStudentClassService {
 
     @Override
     @Synchronized
+    @Transactional
     public AdImportExcelStudentClasses importExcelStudentsInClass(MultipartFile multipartFile, String idClass) {
         AdImportExcelStudentClasses response = new AdImportExcelStudentClasses();
         ConcurrentHashMap<String, StudentClasses> mapStudentsSheet = new ConcurrentHashMap<>();
@@ -155,7 +157,7 @@ public class AdStudentClassServiceImpl implements AdStudentClassService {
         StClassRequest stClassRequest = new StClassRequest();
         stClassRequest.setIdClass(idClass);
         Optional<Class> classFind = classRepository.findById(idClass);
-        if (!classFind.isPresent()) {
+        if (classFind.isEmpty()) {
             throw new RestApiException(Message.CLASS_NOT_EXISTS);
         }
         Optional<StClassResponse> conditionClass = stClassRepository.checkConditionCouldJoinOrLeaveClass(stClassRequest, Calendar.getInstance().getTimeInMillis());
