@@ -477,7 +477,6 @@ public class MeTodoServiceImpl implements MeTodoService {
     @Transactional
     public TodoObject updateDeadlineTodo(@Valid MeUpdateDeadlineTodoRequest request, StompHeaderAccessor headerAccessor) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT+7"));
         Date deadline = null;
         try {
             deadline = sdf.parse(request.getDeadline());

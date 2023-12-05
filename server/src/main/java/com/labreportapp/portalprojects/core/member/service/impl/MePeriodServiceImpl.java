@@ -161,7 +161,6 @@ public class MePeriodServiceImpl implements MePeriodService {
     @Override
     public Period checkDatePeriod(MeBasePeriodRequest request, String id) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT+7"));
         Date startTime = null;
         Date endTime = null;
         try {

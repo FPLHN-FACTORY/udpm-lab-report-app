@@ -56,7 +56,6 @@ public class WriteFileCSV {
 
     public LoggerObject createLoggerObject(String content, String codeClass, String pathFile) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT+7"));
         String formattedDate = simpleDateFormat.format(new Date());
 
         LoggerObject loggerObject = new LoggerObject();

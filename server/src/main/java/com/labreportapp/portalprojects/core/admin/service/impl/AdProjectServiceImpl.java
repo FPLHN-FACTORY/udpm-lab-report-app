@@ -340,7 +340,6 @@ public class AdProjectServiceImpl implements AdProjectService {
     public String convertLongToStringDate(long timestamp) {
         Date date = new Date(timestamp);
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT+7"));
         return sdf.format(date);
     }
 

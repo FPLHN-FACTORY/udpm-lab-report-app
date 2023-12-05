@@ -71,7 +71,6 @@ public class AdExportExcelClass {
             cell8.setCellValue("Hoạt động");
             cell8.setCellStyle(cellStyle);
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            sdf.setTimeZone(TimeZone.getTimeZone("GMT+7"));
             //Set data
             int rowNum = 1;
             for (AdExportExcelClassCustom classResponse : listClass) {

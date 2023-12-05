@@ -128,7 +128,6 @@ public class AdActivityServiceImpl implements AdActivityService {
         Long startTime = DateUtils.truncate(new Date(command.getStartTime()), Calendar.DATE).getTime();
         Long endTime = DateUtils.truncate(new Date(command.getEndTime()), Calendar.DATE).getTime();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT+7"));
         String startTimeOld = sdf.format(activity.getStartTime());
         String startTimeNew = sdf.format(startTime);
         String messageStartTime = CompareUtil.compareAndConvertMessage("ngày bắt đầu của hoạt động", startTimeOld, startTimeNew, "");
@@ -218,7 +217,6 @@ public class AdActivityServiceImpl implements AdActivityService {
     public Long convertDateToString(String dateStringToLong) {
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
-        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+7"));
         try {
             Date date = dateFormat.parse(dateStringToLong);
             long timeInMillis = date.getTime();

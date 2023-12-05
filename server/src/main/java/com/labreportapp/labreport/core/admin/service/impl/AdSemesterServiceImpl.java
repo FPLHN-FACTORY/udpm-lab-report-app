@@ -99,7 +99,6 @@ public class AdSemesterServiceImpl implements AdSemesterService {
             }
         }
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT+7"));
         Semester semester = findSemesterById.get();
 
         StringBuilder stringBuilder = new StringBuilder();
