@@ -184,6 +184,7 @@ const ModalCreateSemester = ({
                 onChange={(e) => {
                   handleDateChange(e);
                 }}
+                placeholder={["Ngày bắt đầu", "Ngày kết thúc"]}
               />{" "}
               <span className="error">{errorTimeSemester}</span>
             </Col>
@@ -202,6 +203,7 @@ const ModalCreateSemester = ({
                 onChange={(e) => {
                   handleDateChangeTimeStudent(e);
                 }}
+                placeholder={["Ngày bắt đầu", "Ngày kết thúc"]}
               />{" "}
               <span className="error">{errorTimeStudent}</span>
             </Col>

@@ -193,7 +193,6 @@ const ModalUpdateActivity = ({
             />
             <span className="error">{errorName}</span>
           </Col>
-
           <Col span={24} style={{ padding: "5px" }}>
             <span className="notBlank">(*) </span>
             <span>Thời gian:</span> <br />
@@ -207,10 +206,10 @@ const ModalUpdateActivity = ({
               onChange={(e) => {
                 handleDateChange(e);
               }}
+              placeholder={["Ngày bắt đầu", "Ngày kết thúc"]}
             />{" "}
             <span className="error">{errorTime}</span>
           </Col>
-
           <Col span={12} style={{ padding: "5px" }}>
             <span style={{ color: "red" }}>(*) </span> <span>Cấp độ:</span>
             <Select
@@ -230,7 +229,6 @@ const ModalUpdateActivity = ({
             </Select>
             <span className="error">{errorLevel}</span>
           </Col>
-
           <Col span={12} style={{ padding: "5px" }}>
             <span style={{ color: "red" }}>(*) </span> <span>Học kỳ:</span>
             <Select

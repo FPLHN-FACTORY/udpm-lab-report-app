@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * @author hieundph25894 - duchieu212
@@ -24,6 +25,8 @@ public class TeMeetingRequestCustomResponse {
 
     private Integer typeMeeting;
 
+    private String idMeetingPeriod;
+
     private String meetingPeriod;
 
     private Integer startHour;
@@ -35,6 +38,8 @@ public class TeMeetingRequestCustomResponse {
     private Integer endMinute;
 
     private String teacher;
+
+    private String teacherId;
 
     private Integer statusMeetingRequest;
 }

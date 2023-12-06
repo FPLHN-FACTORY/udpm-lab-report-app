@@ -264,10 +264,7 @@ public class TeMeetingServiceImpl implements TeMeetingService {
     @Override
     public TeHomeWorkAndNoteMeetingResponse searchDetailMeetingTeamByIdMeIdTeam(TeFindMeetingRequest request) {
         Optional<TeHomeWorkAndNoteMeetingResponse> object = teMeetingRepository.searchDetailMeetingTeamByIdMeIdTeam(request);
-        if (!object.isPresent()) {
-            return null;
-        }
-        return object.get();
+        return object.orElse(null);
     }
 
     @Override

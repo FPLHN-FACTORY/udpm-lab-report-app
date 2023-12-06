@@ -3,6 +3,7 @@ package com.labreportapp.labreport.core.teacher.service.impl;
 import com.labreportapp.labreport.core.common.response.SimpleResponse;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindMeetingRequestRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeMeetingRequestAgainRequest;
+import com.labreportapp.labreport.core.teacher.model.request.TeUpdateMeetingRequestRequest;
 import com.labreportapp.labreport.core.teacher.model.response.TeMeetingRequestCustomResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeMeetingRequestResponse;
 import com.labreportapp.labreport.core.teacher.repository.TeClassRepository;
@@ -15,7 +16,9 @@ import com.labreportapp.labreport.entity.MeetingRequest;
 import com.labreportapp.labreport.infrastructure.apiconstant.ActorConstants;
 import com.labreportapp.labreport.infrastructure.constant.StatusClass;
 import com.labreportapp.labreport.infrastructure.constant.StatusMeetingRequest;
+import com.labreportapp.labreport.infrastructure.constant.TypeMeeting;
 import com.labreportapp.labreport.util.CallApiIdentity;
+import com.labreportapp.labreport.util.CompareUtil;
 import com.labreportapp.labreport.util.DateConverter;
 import com.labreportapp.labreport.util.LoggerUtil;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
@@ -27,6 +30,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -72,16 +76,19 @@ public class TeMeetingRequestServiceImpl implements TeMeetingRequestService {
             obj.setName(item.getName());
             obj.setMeetingDate(item.getMeetingDate());
             obj.setTypeMeeting(item.getTypeMeeting());
+            obj.setIdMeetingPeriod(item.getIdMeetingPeriod());
             obj.setMeetingPeriod(item.getMeetingPeriod());
             obj.setStartHour(item.getStartHour());
             obj.setStartMinute(item.getStartMinute());
             obj.setEndHour(item.getEndHour());
             obj.setEndMinute(item.getEndMinute());
             obj.setTeacher(null);
+            obj.setTeacherId(null);
             if (item.getIdTeacher() != null) {
                 SimpleResponse teacher = mapTeacher.get(item.getIdTeacher().toLowerCase());
                 if (teacher != null) {
                     obj.setTeacher(teacher.getName() + " - " + teacher.getUserName());
+                    obj.setTeacherId(teacher.getId());
                 } else {
                     obj.setTeacher("Không tồn tại");
                 }
@@ -90,6 +97,87 @@ public class TeMeetingRequestServiceImpl implements TeMeetingRequestService {
             return obj;
         });
         return pageNew;
+    }
+
+    @Override
+    @Transactional
+    public TeMeetingRequestCustomResponse update(TeUpdateMeetingRequestRequest request) {
+        Optional<MeetingRequest> meetingFind = teMeetingRequestRepository.findById(request.getId());
+        if (meetingFind.isEmpty()) {
+            throw new RestApiException(Message.MEETING_NOT_EXISTS);
+        }
+        Optional<Class> classOptional = teClassRepository.findById(meetingFind.get().getClassId());
+        if (classOptional.isEmpty()) {
+            throw new RestApiException(Message.CLASS_NOT_EXISTS);
+        }
+
+        MeetingPeriod meetingPeriodNew = teMeetingPeriodRepository.findById(request.getMeetingPeriod()).get();
+        MeetingPeriod meetingPeriodOld = teMeetingPeriodRepository.findById(meetingFind.get().getMeetingPeriod()).get();
+
+        meetingFind.get().setMeetingDate(request.getMeetingDate());
+        meetingFind.get().setTypeMeeting(TypeMeeting.values()[request.getTypeMeeting()]);
+        meetingFind.get().setMeetingPeriod(meetingPeriodNew.getId());
+
+        MeetingRequest meetingNew = teMeetingRequestRepository.save(meetingFind.get());
+        teMeetingRequestRepository.updateNameMeetingRequest(meetingFind.get().getClassId());
+        Optional<MeetingRequest> meetingLaster = teMeetingRequestRepository.findById(meetingNew.getId());
+        SimpleResponse simple = null;
+        if (meetingLaster.isPresent()) {
+            StringBuilder stringBuilder = new StringBuilder();
+            String nameSemester = loggerUtil.getNameSemesterByIdClass(classOptional.get().getId());
+
+            stringBuilder.append("Đã cập nhật buổi học yêu cầu: ").append(meetingFind.get().getName());
+            if (!meetingFind.get().getName().equals(meetingLaster.get().getName())) {
+                stringBuilder.append(" tên buổi học từ ").append(meetingFind.get().getName()).append(" thành ").append(meetingLaster.get().getName());
+            }
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            String meetingDateOld = sdf.format(meetingFind.get().getMeetingDate());
+            String meetingDateNew = sdf.format(request.getMeetingDate());
+            String messageMeetingDate = CompareUtil.compareAndConvertMessage("ngày học của buổi học " + meetingFind.get().getName(), meetingDateOld, meetingDateNew, "");
+            stringBuilder.append(messageMeetingDate);
+
+            if (TypeMeeting.values()[request.getTypeMeeting()] != meetingFind.get().getTypeMeeting()) {
+                if (request.getTypeMeeting() == 0) {
+                    stringBuilder.append(". Đã cập nhật hình thức học của buổi học ").append(meetingFind.get().getName()).append(" từ Offline thành Online");
+                } else {
+                    stringBuilder.append(". Đã cập nhật hình thức học của buổi học ").append(meetingFind.get().getName()).append(" từ Online thành Offline");
+                }
+            }
+            String messageMeetingPeriod = CompareUtil.compareAndConvertMessage("ca học của buổi học " + meetingFind.get().getName(), meetingPeriodOld.getName(), meetingPeriodNew.getName(), "");
+            stringBuilder.append(messageMeetingPeriod);
+
+            if (!request.getTeacherId().equals("") && request.getTeacherId() != null) {
+                meetingFind.get().setTeacherId(request.getTeacherId());
+                simple = callApiIdentity.handleCallApiGetUserById(request.getTeacherId());
+                stringBuilder.append(" giảng viên: ").append(simple.getName()).append("-").append(simple.getUserName()).append(",");
+            }
+            stringBuilder.append(" trạng thái: ").append(meetingNew.getStatusMeetingRequest()).append(".");
+            loggerUtil.sendLogStreamClass(stringBuilder.toString(), classOptional.get().getCode(), nameSemester);
+        }
+
+        TeMeetingRequestCustomResponse obj = new TeMeetingRequestCustomResponse();
+        obj.setId(meetingNew.getId());
+        obj.setName(meetingNew.getName());
+        obj.setTypeMeeting(meetingNew.getTypeMeeting().ordinal());
+        obj.setMeetingDate(meetingNew.getMeetingDate());
+        obj.setIdMeetingPeriod(meetingPeriodNew.getId());
+        obj.setMeetingPeriod(meetingPeriodNew.getName());
+        obj.setStartHour(meetingPeriodNew.getStartHour());
+        obj.setStartMinute(meetingPeriodNew.getStartMinute());
+        obj.setEndHour(meetingPeriodNew.getEndHour());
+        obj.setEndMinute(meetingPeriodNew.getEndMinute());
+        obj.setTeacher(null);
+        obj.setTeacherId(null);
+        if (meetingNew.getTeacherId() != null) {
+            if (simple != null) {
+                obj.setTeacher(simple.getName() + " - " + simple.getUserName());
+                obj.setTeacherId(simple.getId());
+            } else {
+                obj.setTeacher("Không tồn tại");
+            }
+        }
+        obj.setStatusMeetingRequest(meetingNew.getStatusMeetingRequest().ordinal());
+        return obj;
     }
 
     @Override

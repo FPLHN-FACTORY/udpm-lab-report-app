@@ -24,6 +24,7 @@ import com.labreportapp.labreport.util.CompareUtil;
 import com.labreportapp.labreport.util.LoggerUtil;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -169,6 +170,7 @@ public class AdMeetingServiceImpl implements AdMeetingService {
     }
 
     @Override
+    @Transactional
     public AdMeetingCustom update(@Valid AdUpdateMeetingRequest request) {
         Optional<Meeting> meetingFind = adMeetingRepository.findById(request.getId());
         if (meetingFind.isEmpty()) {
@@ -241,6 +243,7 @@ public class AdMeetingServiceImpl implements AdMeetingService {
     }
 
     @Override
+    @Transactional
     public String delete(String id) {
         List<String> listAttendance = adMeetingRepository.findAttendanceByIdMeeting(id);
         List<String> listNote = adMeetingRepository.findNoteByIdMeeting(id);

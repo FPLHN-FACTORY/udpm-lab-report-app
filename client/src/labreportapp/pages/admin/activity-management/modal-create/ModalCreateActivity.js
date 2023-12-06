@@ -11,7 +11,6 @@ import {
 } from "antd";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../app/hook";
-import { toast } from "react-toastify";
 import { ActivityManagementAPI } from "../../../../api/admin/activity-management/activityManagement.api";
 import {
   CreateActivityManagement,
@@ -223,6 +222,7 @@ const ModalCreateActivity = ({
               onChange={(e) => {
                 handleDateChange(e);
               }}
+              placeholder={["Ngày bắt đầu", "Ngày kết thúc"]}
             />{" "}
             <span className="error">{errorTime}</span>
           </Col>

@@ -3,6 +3,7 @@ package com.labreportapp.labreport.core.teacher.controller;
 import com.labreportapp.labreport.core.common.base.ResponseObject;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindMeetingRequestRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeMeetingRequestAgainRequest;
+import com.labreportapp.labreport.core.teacher.model.request.TeUpdateMeetingRequestRequest;
 import com.labreportapp.labreport.core.teacher.model.response.TeMeetingRequestCustomResponse;
 import com.labreportapp.labreport.core.teacher.service.TeMeetingRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,5 +39,10 @@ public class TeMeetingRequestController {
     @GetMapping("/show-reasons")
     public ResponseObject showReasons(@RequestParam("idClass") String idClass) {
         return new ResponseObject(teMeetingRequestService.showReasons(idClass));
+    }
+
+    @PutMapping("/update")
+    public ResponseObject updateMeetingRequest(@RequestBody TeUpdateMeetingRequestRequest request) {
+        return new ResponseObject(teMeetingRequestService.update(request));
     }
 }

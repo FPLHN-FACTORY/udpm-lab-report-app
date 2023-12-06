@@ -467,6 +467,7 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
                   onChange={(e) => {
                     handleDateChange(e);
                   }}
+                  placeholder={["Ngày bắt đầu", "Ngày kết thúc"]}
                 />
                 <span className="error">{errorTime}</span>
               </Col>

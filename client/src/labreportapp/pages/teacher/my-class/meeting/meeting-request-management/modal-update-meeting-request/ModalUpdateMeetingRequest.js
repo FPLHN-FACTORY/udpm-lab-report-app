@@ -1,29 +1,43 @@
-import { Button, Col, Input, Modal, Row, Select, message } from "antd";
-import "./style-modal-update-meeting.css";
+import {
+  Button,
+  Col,
+  DatePicker,
+  Input,
+  Modal,
+  Row,
+  Select,
+  message,
+} from "antd";
 import { useState } from "react";
 import moment from "moment";
 import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../../../../app/hook";
-import { MeetingManagementAPI } from "../../../../../api/admin/meeting-management/MeetingManagementAPI";
-import { UpdateMeeting } from "../../../../../app/admin/AdMeetingManagement.reducer";
-import { convertHourAndMinuteToString } from "../../../../../helper/util.helper";
-import { GetAdTeacher } from "../../../../../app/admin/AdTeacherSlice.reducer";
-import { GetAdMeetingPeriod } from "../../../../../app/admin/AdMeetingPeriodSlice.reducer";
+import { useAppDispatch, useAppSelector } from "../../../../../../app/hook";
+import { MeetingManagementAPI } from "../../../../../../api/admin/meeting-management/MeetingManagementAPI";
+import { UpdateMeeting } from "../../../../../../app/admin/AdMeetingManagement.reducer";
+import { convertHourAndMinuteToString } from "../../../../../../helper/util.helper";
+import { GetAdTeacher } from "../../../../../../app/admin/AdTeacherSlice.reducer";
+import { GetAdMeetingPeriod } from "../../../../../../app/admin/AdMeetingPeriodSlice.reducer";
 import {
   SetLoadingFalse,
   SetLoadingTrue,
-} from "../../../../../app/common/Loading.reducer";
+} from "../../../../../../app/common/Loading.reducer";
+import dayjs from "dayjs";
+import { TeacherMeetingRequestAPI } from "../../../../../../api/teacher/meeting-request/TeacherMeeting.api";
+import { UpdateMeetingRequest } from "../../../../../../app/teacher/meeting-request/teMeetingRequestSlice.reduce";
 
 const { Option } = Select;
 
-const ModalUpdateMeeting = ({ item, visible, onCancel }) => {
+const ModalUpdateMeetingRequest = ({
+  item,
+  visible,
+  onCancel,
+  featchMeeting,
+}) => {
   const [meetingPeriod, setMeetingPeriod] = useState("0");
   const [typeMeeting, setTypeMeeting] = useState("0");
   const [name, setName] = useState("");
-  const [meetingDate, setMeetingDate] = useState("");
-  const [address, setAddress] = useState("");
-  const [descriptions, setDescriptions] = useState("");
-  const [errorName, setErrorName] = useState("");
+  const [meetingDate, setMeetingDate] = useState(null);
+
   const dispatch = useAppDispatch();
   const [errorMeetingDate, setErrorMeetingDate] = useState("");
 
@@ -31,11 +45,8 @@ const ModalUpdateMeeting = ({ item, visible, onCancel }) => {
     if (item != null) {
       setName(item.name);
       setTypeMeeting(item.typeMeeting + "");
-      setMeetingPeriod(item.meetingPeriodId + "");
-      setMeetingDate(moment(item.meetingDate).format("YYYY-MM-DD"));
-      setAddress(item.address);
-      setDescriptions(item.descriptions);
-      setErrorName("");
+      setMeetingPeriod(item.idMeetingPeriod);
+      setMeetingDate(item.meetingDate);
       setErrorMeetingDate("");
       setSelectedItemsPerson(item.teacherId);
       setErrorTeacher("");
@@ -44,29 +55,39 @@ const ModalUpdateMeeting = ({ item, visible, onCancel }) => {
 
   const update = () => {
     let check = 0;
-    if (meetingDate === "") {
+    if (meetingDate === null) {
       setErrorMeetingDate("Ngày diễn ra không được để trống");
       ++check;
     } else {
       setErrorMeetingDate("");
     }
+    if (selectedItemsPerson === "") {
+      setErrorTeacher("Giảng viên không được để trống");
+      ++check;
+    } else {
+      setErrorTeacher("");
+    }
     if (check === 0) {
-      let obj = {
-        id: item.id,
-        meetingDate: moment(meetingDate, "YYYY-MM-DD").valueOf(),
-        meetingPeriod: meetingPeriod,
-        typeMeeting: parseInt(typeMeeting),
-        address: address,
-        descriptions: descriptions,
-        teacherId: selectedItemsPerson,
-      };
-      dispatch(SetLoadingTrue());
-      MeetingManagementAPI.updateMeeting(obj).then((response) => {
-        dispatch(UpdateMeeting(response.data.data));
-        message.success("Cập nhật thành công");
+      try {
+        let obj = {
+          id: item.id,
+          meetingDate: meetingDate,
+          meetingPeriod: meetingPeriod,
+          typeMeeting: parseInt(typeMeeting),
+          teacherId: selectedItemsPerson,
+        };
+        dispatch(SetLoadingTrue());
+        TeacherMeetingRequestAPI.updateMeetingRequest(obj).then((response) => {
+          dispatch(UpdateMeetingRequest(response.data.data));
+          message.success("Cập nhật yêu cầu thành công");
+          featchMeeting();
+          dispatch(SetLoadingFalse());
+          onCancel();
+        });
+      } catch (error) {
         dispatch(SetLoadingFalse());
         onCancel();
-      });
+      }
     }
   };
 
@@ -83,10 +104,19 @@ const ModalUpdateMeeting = ({ item, visible, onCancel }) => {
   };
 
   const dataMeetingPeriod = useAppSelector(GetAdMeetingPeriod);
+
+  const onChangeDate = (date) => {
+    if (date != null) {
+      setMeetingDate(dayjs(date).valueOf());
+    } else {
+      setMeetingDate(null);
+    }
+  };
+
   return (
     <>
       <Modal
-        visible={visible}
+        open={visible}
         onCancel={onCancel}
         width={650}
         footer={null}
@@ -94,7 +124,7 @@ const ModalUpdateMeeting = ({ item, visible, onCancel }) => {
       >
         <div>
           <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
-            <span style={{ fontSize: "18px" }}>Cập nhật buổi học</span>
+            <span style={{ fontSize: "18px" }}>Cập nhật buổi học yêu cầu</span>
           </div>
           <div style={{ marginTop: "5px" }}>
             <Row>
@@ -107,17 +137,16 @@ const ModalUpdateMeeting = ({ item, visible, onCancel }) => {
                   type="text"
                   placeholder="Nhập tên buổi học"
                 />
-                <span style={{ color: "red" }}>{errorName}</span>
               </Col>
               <Col span={12} style={{ padding: "5px" }}>
                 <span style={{ color: "red" }}>(*) </span>Ngày diễn ra:
                 <br />
-                <Input
-                  value={meetingDate}
-                  onChange={(e) => {
-                    setMeetingDate(e.target.value);
-                  }}
-                  type="date"
+                <DatePicker
+                  value={meetingDate ? dayjs(meetingDate) : null}
+                  format="DD/MM/YYYY"
+                  onChange={onChangeDate}
+                  style={{ width: "100%" }}
+                  placeholder="Chọn ngày"
                 />
                 <span style={{ color: "red" }}>{errorMeetingDate}</span>
               </Col>
@@ -161,19 +190,9 @@ const ModalUpdateMeeting = ({ item, visible, onCancel }) => {
                 </Select>
               </Col>
               <Col span={12} style={{ padding: "5px" }}>
-                Địa điểm:
-                <br />
-                <Input
-                  value={address}
-                  onChange={(e) => {
-                    setAddress(e.target.value);
-                  }}
-                  type="text"
-                  placeholder="Nhập địa điểm của buổi học"
-                />
-              </Col>
-              <Col span={24} style={{ padding: "5px" }}>
-                Giảng viên dạy: <br />
+                {" "}
+                <span style={{ color: "red" }}>(*) </span>
+                <span>Giảng viên dạy:</span> <br />
                 <Select
                   showSearch
                   value={selectedItemsPerson}
@@ -182,7 +201,6 @@ const ModalUpdateMeeting = ({ item, visible, onCancel }) => {
                   filterOption={filterTeacherOptions}
                 >
                   <Option value="">Chọn 1 giảng viên</Option>
-
                   {teacherDataAll.map((teacher) => (
                     <Option key={teacher.id} value={teacher.id}>
                       {teacher.userName + " - " + teacher.name}
@@ -190,17 +208,6 @@ const ModalUpdateMeeting = ({ item, visible, onCancel }) => {
                   ))}
                 </Select>{" "}
                 <span style={{ color: "red" }}>{errorTeacher}</span>
-              </Col>
-              <Col span={24} style={{ padding: "5px" }}>
-                Mô tả:
-                <br />
-                <Input.TextArea
-                  placeholder="Nhập mô tả"
-                  value={descriptions}
-                  onChange={(e) => {
-                    setDescriptions(e.target.value);
-                  }}
-                />
               </Col>
             </Row>
           </div>
@@ -235,4 +242,4 @@ const ModalUpdateMeeting = ({ item, visible, onCancel }) => {
   );
 };
 
-export default ModalUpdateMeeting;
+export default ModalUpdateMeetingRequest;

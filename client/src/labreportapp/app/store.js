@@ -61,6 +61,7 @@ import DPDetailProjectCustomReduce from "../../portalprojects/app/reducer/detail
 import LoadingReducer from "./common/Loading.reducer";
 import AdMeetingRequestSliceReducer from "./admin/AdMeetingRequestSlice.reducer";
 import AdCountApproveMeetingRequestReducer from "./admin/AdCountApproveMeetingRequest.reducer";
+import teMeetingRequestSliceReduce from "./teacher/meeting-request/teMeetingRequestSlice.reduce";
 
 export const store = configureStore({
   reducer: {
@@ -127,6 +128,7 @@ export const store = configureStore({
     loading: LoadingReducer,
     adMeetingRequest: AdMeetingRequestSliceReducer,
     adCountApproveMeetingRequest: AdCountApproveMeetingRequestReducer,
+    teMeetingRequestClass: teMeetingRequestSliceReduce,
   },
 });
 

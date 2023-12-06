@@ -30,4 +30,12 @@ export class TeacherMeetingRequestAPI {
       url: url + `/show-reasons?idClass=${idClass}`,
     });
   }
+
+  static updateMeetingRequest(data) {
+    return request({
+      method: "PUT",
+      url: url + `/update`,
+      data: data,
+    });
+  }
 }

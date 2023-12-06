@@ -9,6 +9,7 @@ import {
   Select,
   Table,
   Tag,
+  Tooltip,
   message,
 } from "antd";
 import {
@@ -34,18 +35,28 @@ import {
   faHandDots,
   faMagnifyingGlass,
   faPaperPlane,
+  faPenToSquare,
   faPeopleRoof,
   faTableList,
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { TeacherMeetingRequestAPI } from "../../../../../api/teacher/meeting-request/TeacherMeeting.api";
-import { useAppDispatch } from "../../../../../app/hook";
+import { useAppDispatch, useAppSelector } from "../../../../../app/hook";
 import LoadingIndicator from "../../../../../helper/loading";
 import { TeacherMyClassAPI } from "../../../../../api/teacher/my-class/TeacherMyClass.api";
 import {
   SetLoadingFalse,
   SetLoadingTrue,
 } from "../../../../../app/common/Loading.reducer";
+import ModalUpdateMeetingRequest from "./modal-update-meeting-request/ModalUpdateMeetingRequest";
+import { AdMeetingPeriodAPI } from "../../../../../api/admin/AdMeetingPeriodAPI";
+import { SetAdMeetingPeriod } from "../../../../../app/admin/AdMeetingPeriodSlice.reducer";
+import { ClassAPI } from "../../../../../api/admin/class-manager/ClassAPI.api";
+import { SetAdTeacher } from "../../../../../app/admin/AdTeacherSlice.reducer";
+import {
+  GetMeetingRequest,
+  SetMeetingRequest,
+} from "../../../../../app/teacher/meeting-request/teMeetingRequestSlice.reduce";
 
 const { confirm } = Modal;
 
@@ -62,9 +73,11 @@ const TeMeetingRequestManagement = () => {
   const navigate = useNavigate();
   const [checkedList, setCheckedList] = useState([]);
   const [checkBoxAll, setCheckBoxAll] = useState([]);
-  const [listMeetingRequest, setListMeetingRequest] = useState([]);
+  // const [listMeetingRequest, setListMeetingRequest] = useState([]);
   useEffect(() => {
     window.scrollTo(0, 0);
+    loadDataMeetingPeriod();
+    fetchTeacherData();
     featchClass(idClass);
   }, []);
 
@@ -90,7 +103,7 @@ const TeMeetingRequestManagement = () => {
             .map((meetingRequest) => meetingRequest.id);
           setCheckBoxAll(filteredIds);
           setTotals(response.data.data.totalPages);
-          setListMeetingRequest(response.data.data.content);
+          dispatch(SetMeetingRequest(response.data.data.content));
           setLoading(true);
         }
       );
@@ -115,7 +128,16 @@ const TeMeetingRequestManagement = () => {
       navigate("/teacher/my-class");
     }
   };
-
+  const loadDataMeetingPeriod = () => {
+    AdMeetingPeriodAPI.getAll().then((response) => {
+      dispatch(SetAdMeetingPeriod(response.data.data));
+    });
+  };
+  const fetchTeacherData = async () => {
+    const responseTeacherData = await ClassAPI.fetchAllTeacher();
+    const teacherData = responseTeacherData.data.data;
+    dispatch(SetAdTeacher(teacherData));
+  };
   const onChangeType = (value) => {
     setType(value);
   };
@@ -162,6 +184,7 @@ const TeMeetingRequestManagement = () => {
   const filterOption = (input, option) =>
     (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
 
+  const data = useAppSelector(GetMeetingRequest);
   const columns = [
     {
       title: (
@@ -314,7 +337,43 @@ const TeMeetingRequestManagement = () => {
         }
       },
     },
+    {
+      title: "Hành động",
+      dataIndex: "actions",
+      key: "actions",
+      aligh: "center",
+      render: (text, record) => (
+        <>
+          <div>
+            {lock === 0 && record.statusMeetingRequest !== 1 && (
+              <Tooltip title="Cập nhật">
+                <FontAwesomeIcon
+                  className="icon"
+                  icon={faPenToSquare}
+                  onClick={() => {
+                    openModalUpdateMeeting(record);
+                  }}
+                />
+              </Tooltip>
+            )}{" "}
+          </div>
+        </>
+      ),
+    },
   ];
+
+  const [showModalUpdateMeeting, setShowModalUpdateMeeting] = useState(false);
+  const [meetingSelected, setMeetingSelected] = useState(null);
+
+  const handleCancelModalUpdateMeeting = () => {
+    setShowModalUpdateMeeting(false);
+    setMeetingSelected(null);
+  };
+
+  const openModalUpdateMeeting = (item) => {
+    setMeetingSelected(item);
+    setShowModalUpdateMeeting(true);
+  };
 
   const [reasons, setReasons] = useState(null);
   const showReasons = () => {
@@ -552,14 +611,14 @@ const TeMeetingRequestManagement = () => {
             </div>
             <div style={{ width: "auto" }}>
               <div>
-                {listMeetingRequest.length > 0 ? (
+                {data.length > 0 ? (
                   <>
                     <div
                       style={{ paddingTop: "15px" }}
                       className="table-teacher"
                     >
                       <Table
-                        dataSource={listMeetingRequest}
+                        dataSource={data}
                         rowKey="id"
                         columns={columns}
                         pagination={false}
@@ -610,6 +669,12 @@ const TeMeetingRequestManagement = () => {
           </div>
         </div>
       </div>
+      <ModalUpdateMeetingRequest
+        item={meetingSelected}
+        visible={showModalUpdateMeeting}
+        onCancel={handleCancelModalUpdateMeeting}
+        featchMeeting={featchMeeting}
+      />
     </>
   );
 };

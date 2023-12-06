@@ -153,7 +153,6 @@ const MeetingManagment = () => {
   const [selectedIds, setSelectedIds] = useState([]);
 
   const handleCheckboxChange = (id) => {
-    console.log(selectedIds.includes(id));
     if (selectedIds.includes(id)) {
       setSelectedIds(selectedIds.filter((selectedId) => selectedId !== id));
     } else {
