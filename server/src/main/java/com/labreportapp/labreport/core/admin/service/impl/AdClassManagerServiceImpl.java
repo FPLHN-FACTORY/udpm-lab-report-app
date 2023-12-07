@@ -252,6 +252,9 @@ AdClassManagerServiceImpl implements AdClassService {
         if (request.getTeacherId() != null && !request.getTeacherId().equals("")) {
             classNew.setTeacherId(request.getTeacherId());
         }
+        if(request.getTeacherId() == null || request.getTeacherId().equals("")) {
+            classNew.setTeacherId(null);
+        }
 
         repository.save(classNew);
         AdClassCustomResponse adClassCustomResponse = new AdClassCustomResponse();
