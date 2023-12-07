@@ -32,10 +32,10 @@ public class AdClassConfigurationServiceImpl implements AdCLassConfigurationServ
         AdClassConfigurationResponse classConfigurationResponses = adClassConfigurationRepository.getAllClassConfiguration();
         List<AdClassConfigurationCustomResponse> classConfigurationCustomList = new ArrayList<>();
         if (classConfigurationResponses != null) {
-            classConfigurationCustomList.add(new AdClassConfigurationCustomResponse(classConfigurationResponses.getId(), 1, "Số lượng tối thiểu", Double.valueOf(classConfigurationResponses.getClassSizeMin())));
-            classConfigurationCustomList.add(new AdClassConfigurationCustomResponse(classConfigurationResponses.getId(), 2, "Số lượng tối đa", Double.valueOf(classConfigurationResponses.getClassSizeMax())));
-            classConfigurationCustomList.add(new AdClassConfigurationCustomResponse(classConfigurationResponses.getId(), 3, "Điểm tối thiểu", classConfigurationResponses.getPointMin()));
-            classConfigurationCustomList.add(new AdClassConfigurationCustomResponse(classConfigurationResponses.getId(), 4, "Tỉ lệ nghỉ", classConfigurationResponses.getMaximumNumberOfBreaks()));
+            classConfigurationCustomList.add(new AdClassConfigurationCustomResponse(classConfigurationResponses.getId(), 1, "Số lượng sinh viên trong lớp tối thiểu", Double.valueOf(classConfigurationResponses.getClassSizeMin())));
+            classConfigurationCustomList.add(new AdClassConfigurationCustomResponse(classConfigurationResponses.getId(), 2, "Số lượng sinh viên trong lớp tối đa", Double.valueOf(classConfigurationResponses.getClassSizeMax())));
+            classConfigurationCustomList.add(new AdClassConfigurationCustomResponse(classConfigurationResponses.getId(), 3, "Điểm tối thiểu (1 -> 10)", classConfigurationResponses.getPointMin()));
+            classConfigurationCustomList.add(new AdClassConfigurationCustomResponse(classConfigurationResponses.getId(), 4, "Tỉ lệ nghỉ (%)", classConfigurationResponses.getMaximumNumberOfBreaks()));
             classConfigurationCustomList.add(new AdClassConfigurationCustomResponse(classConfigurationResponses.getId(), 5, "Số lượng mật ong", Double.valueOf(classConfigurationResponses.getNumberHoney())));
         }
         return classConfigurationCustomList;
