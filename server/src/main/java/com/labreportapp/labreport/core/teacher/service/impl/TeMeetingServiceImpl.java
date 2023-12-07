@@ -55,6 +55,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
@@ -508,7 +509,8 @@ public class TeMeetingServiceImpl implements TeMeetingService {
 
         Cell cell2 = headerRow.createCell(0);
         cell2.setCellValue("Ngày học");
-        cell2.setCellStyle(chooseCellStyle("titleTable", workbook));
+        cell2.setCellStyle(chooseCellStyle("titleTableDate", workbook));
+
         Cell cell3 = headerRow.createCell(1);
         cell3.setCellValue("Ca học");
         cell3.setCellStyle(chooseCellStyle("titleTable", workbook));
@@ -565,6 +567,22 @@ public class TeMeetingServiceImpl implements TeMeetingService {
             cellStyle.setBorderBottom(BorderStyle.THIN);
             cellStyle.setBorderLeft(BorderStyle.THIN);
             cellStyle.setBorderRight(BorderStyle.THIN);
+        }
+        if(type.equals("titleTableDate")){
+            fontStyle.setBold(true);
+            fontStyle.setColor(IndexedColors.WHITE.getIndex());
+            fontStyle.setFontHeightInPoints((short) 13);
+            cellStyle.setAlignment(HorizontalAlignment.CENTER);
+            cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+            cellStyle.setFont(fontStyle);
+            cellStyle.setFillForegroundColor(IndexedColors.LIGHT_BLUE.getIndex());
+            cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            cellStyle.setBorderTop(BorderStyle.THIN);
+            cellStyle.setBorderBottom(BorderStyle.THIN);
+            cellStyle.setBorderLeft(BorderStyle.THIN);
+            cellStyle.setBorderRight(BorderStyle.THIN);
+            DataFormat dataFormat = workbook.createDataFormat();
+            cellStyle.setDataFormat(dataFormat.getFormat("dd-MM-yyyy"));
         }
         if (type.equals("dataTable")) {
             cellStyle.setBorderTop(BorderStyle.THIN);
