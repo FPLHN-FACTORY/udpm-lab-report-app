@@ -304,7 +304,7 @@ const TeacherMyClass = () => {
               <Col span={8}>
                 <span>Học kỳ</span>
                 <br />
-                {listSemester.length > 0 ? (
+                {listSemester != null && listSemester.length > 0 ? (
                   <Select
                     value={idSemesterSearch}
                     onChange={(value) => {
@@ -337,7 +337,7 @@ const TeacherMyClass = () => {
               <Col span={16}>
                 <span>Hoạt động</span>
                 <br />
-                {listActivity.length > 0 ? (
+                {listActivity != null && listActivity.length > 0 ? (
                   <Select
                     showSearch
                     filterOption={filterOptions}
@@ -413,7 +413,7 @@ const TeacherMyClass = () => {
               <Col span={8}>
                 <span>Cấp độ</span>
                 <br />
-                {listLevel.length > 0 ? (
+                {listLevel != null && listLevel.length > 0 ? (
                   <Select
                     showSearch
                     filterOption={filterOptions}
@@ -477,7 +477,7 @@ const TeacherMyClass = () => {
             </div>
           </div>
           <div>
-            {listMyClass.length > 0 ? (
+            {listMyClass != null && listMyClass.length > 0 ? (
               <>
                 <div style={{ paddingTop: "15px" }} className="table-teacher">
                   <Table
