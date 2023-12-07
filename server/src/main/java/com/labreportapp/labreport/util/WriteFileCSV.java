@@ -126,7 +126,7 @@ public class WriteFileCSV {
             if (api.contains("/class-managerment")) {
                 pathFile = folderAdmin + getPropertiesRead(ConfigurationsConstant.NAME_FILE_QUAN_LY_LOP_HOC);
             }
-            if (api.contains("/template-report")) {
+            if (api.contains("/meeting-request")) {
                 pathFile = folderAdmin + getPropertiesRead(ConfigurationsConstant.NAME_FILE_PHE_DUYET_BUOI_HOC);
             }
             if (api.contains("/meeting-period-configiration")) {

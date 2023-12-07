@@ -31,6 +31,7 @@ import {
   GetSemester,
   DeleteSemester,
   UpdateStatusFeedback,
+  UpdateCloseStatusFeedback,
 } from "../../../app/admin/AdSemester.reducer";
 import { AdSemesterAPI } from "../../../api/admin/AdSemesterAPI";
 import React from "react";
@@ -74,6 +75,14 @@ const SemesterManagement = () => {
       message.success("Bật feedback thành công !");
     });
   };
+
+  const updateCloseStatusFeedback = (id) => {
+    AdSemesterAPI.updateCloseStatusFeedback(id).then((response) => {
+      dispatch(UpdateCloseStatusFeedback(id));
+      message.success("Tắt feedback thành công !");
+    });
+  };
+
   const changeTotalsPage = (newTotalPages) => {
     setTotal(newTotalPages);
   };
@@ -125,9 +134,9 @@ const SemesterManagement = () => {
       key: "statusFeedback",
       render: (text, record) => {
         if (record.statusFeedback === 0) {
-          return <Tag color="processing">Chưa bật feedback</Tag>;
+          return <Tag color="processing">Đang tắt feedback</Tag>;
         } else {
-          return <Tag color="success">Đã bật feedback</Tag>;
+          return <Tag color="success">Đang bật feedback</Tag>;
         }
       },
     },
@@ -149,6 +158,28 @@ const SemesterManagement = () => {
               cancelText="Không"
             >
               <Tooltip title="Bật feedback">
+                <FontAwesomeIcon
+                  className="icon"
+                  onClick={() => {}}
+                  style={{ marginRight: "19px", cursor: "pointer" }}
+                  icon={faFileEdit}
+                  size="1x"
+                />
+              </Tooltip>
+            </Popconfirm>
+          )}
+          {record.statusFeedback === 1 && (
+            <Popconfirm
+              placement="topLeft"
+              title="Bật feedback"
+              description="Bạn có chắc chắn muốn tắt feedback không?"
+              onConfirm={() => {
+                updateCloseStatusFeedback(record.id);
+              }}
+              okText="Có"
+              cancelText="Không"
+            >
+              <Tooltip title="Tắt feedback">
                 <FontAwesomeIcon
                   className="icon"
                   onClick={() => {}}

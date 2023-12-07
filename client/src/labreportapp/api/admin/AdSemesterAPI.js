@@ -46,6 +46,13 @@ export class AdSemesterAPI {
     });
   };
 
+  static updateCloseStatusFeedback = (id) => {
+    return request({
+      method: "PUT",
+      url: url + `/update-close-status-feedback/` + id,
+    });
+  };
+
   static getAllSemesters() {
     return request({
       method: "GET",
