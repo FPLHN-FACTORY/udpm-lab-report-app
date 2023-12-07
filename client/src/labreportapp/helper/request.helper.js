@@ -22,13 +22,12 @@ request.interceptors.response.use(
   (response) => response,
   (error) => {
     console.log(error);
-    const navigate = useNavigate();
     dispatch(SetLoadingFalse());
     if (error.response && error.response.status === 401) {
       window.location.href = "/not-authorization";
     }
     if (error.response && error.response.status === 404) {
-      navigate("/not-found");
+      window.location.href = "/not-found";
     }
     if (error.response && error.response.status === 403) {
       window.location.href = "/forbidden";
