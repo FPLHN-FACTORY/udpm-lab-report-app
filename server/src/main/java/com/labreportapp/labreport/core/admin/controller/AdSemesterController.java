@@ -84,6 +84,11 @@ public class AdSemesterController {
         return new ResponseObject(adSemesterService.updateStatusFeedback(id));
     }
 
+    @PutMapping("/update-close-status-feedback/{id}")
+    public ResponseObject updateCloseStatusFeedback(@PathVariable("id") String id) {
+        return new ResponseObject(adSemesterService.updateCloseStatusFeedback(id));
+    }
+
     @GetMapping("/get-all-semesters")
     public ResponseObject getAllSemester() {
         List<AdSemesterResponse> listSemester = adSemesterService.getAllSemesters();

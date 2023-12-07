@@ -54,6 +54,15 @@ const adSemesterSlice = createSlice({
         state[index].statusFeedback = 1;
       }
     },
+    UpdateCloseStatusFeedback: (state, action) => {
+      const idUpdateSemester = action.payload;
+      const index = state.findIndex(
+        (semester) => semester.id === idUpdateSemester
+      );
+      if (index !== -1) {
+        state[index].statusFeedback = 0;
+      }
+    },
     DeleteSemester: (state, action) => {
       const idSemester = action.payload;
       const index = state.findIndex((semester) => semester.id === idSemester);
@@ -69,6 +78,7 @@ export const {
   UpdateSemester,
   DeleteSemester,
   UpdateStatusFeedback,
+  UpdateCloseStatusFeedback
 } = adSemesterSlice.actions;
 
 export const GetSemester = (state) => state.adSemester;

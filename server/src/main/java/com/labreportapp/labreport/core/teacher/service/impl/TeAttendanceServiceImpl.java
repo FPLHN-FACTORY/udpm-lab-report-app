@@ -352,15 +352,15 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
     public List<TeAttendanceStudentAllResponse> getListAttendanceStudentAllMeeting(String idClass) {
         List<TeAttendanceStudentAllResponse> listMeger = new ArrayList<>();
         List<TeMeetingCustomToAttendanceResponse> listMeeting = teMeetingRepository.findMeetingCustomToAttendanceByIdClass(idClass);
-        if (listMeeting.size() == 0) {
+        if (listMeeting != null && listMeeting.size() == 0) {
             return null;
         }
         List<SimpleResponse> listStudent = teStudentClassesService.searchAllStudentByIdClass(idClass);
-        if (listStudent.size() == 0) {
+        if (listStudent != null && listStudent.size() == 0) {
             return null;
         }
         List<TeAttendanceResponse> listAttendance = teAttendanceRepository.findAttendanceByIdClass(idClass);
-        if (listAttendance.size() == 0) {
+        if (listAttendance != null && listAttendance.size() == 0) {
             return null;
         }
         listStudent.forEach(student -> {

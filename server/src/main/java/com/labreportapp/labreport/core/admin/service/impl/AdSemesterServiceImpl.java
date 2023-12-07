@@ -184,6 +184,18 @@ public class AdSemesterServiceImpl implements AdSemesterService {
     }
 
     @Override
+    public Boolean updateCloseStatusFeedback(String id) {
+        Optional<Semester> findSemesterById = adSemesterRepository.findById(id);
+        if (!findSemesterById.isPresent()) {
+            throw new RestApiException(Message.SEMESTER_NOT_EXISTS);
+        }
+        findSemesterById.get().setStatusFeedBack(StatusFeedBack.CHUA_FEEDBACK);
+        adSemesterRepository.save(findSemesterById.get());
+        loggerUtil.sendLogScreen("Đã tắt feedback của học kỳ " + findSemesterById.get().getName()+".", "");
+        return true;
+    }
+
+    @Override
     public List<AdSemesterResponse> getAllSemesters() {
         return adSemesterRepository.getAllSemesters();
     }
