@@ -19,6 +19,7 @@ import com.labreportapp.labreport.core.teacher.service.TeClassService;
 import com.labreportapp.labreport.entity.Class;
 import com.labreportapp.labreport.entity.ClassConfiguration;
 import com.labreportapp.labreport.infrastructure.constant.StatusClass;
+import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.labreport.util.CallApiIdentity;
 import com.labreportapp.labreport.util.CompareUtil;
 import com.labreportapp.labreport.util.LoggerUtil;
@@ -59,6 +60,9 @@ public class TeClassServiceImpl implements TeClassService {
 
     @Autowired
     private TeActivityRepository teActivityRepository;
+
+    @Autowired
+    private LabReportAppSession labReportAppSession;
 
     @Autowired
     private LoggerUtil loggerUtil;
@@ -121,6 +125,14 @@ public class TeClassServiceImpl implements TeClassService {
     public TeDetailClassResponse findClassById(final String id) {
         Optional<TeDetailClassResponse> classCheck = teClassRepository.findClassById(id);
         if (!classCheck.isPresent()) {
+            throw new CustomException(Message.CLASS_NOT_EXISTS);
+        }
+        Optional<Class> classFind = teClassRepository.findById(id);
+        if (!classFind.isPresent()) {
+            throw new CustomException(Message.CLASS_NOT_EXISTS);
+        }
+        String idUserCurrent = labReportAppSession.getUserId();
+        if (!idUserCurrent.equals(classFind.get().getTeacherId())) {
             throw new CustomException(Message.CLASS_NOT_EXISTS);
         }
         return classCheck.get();
