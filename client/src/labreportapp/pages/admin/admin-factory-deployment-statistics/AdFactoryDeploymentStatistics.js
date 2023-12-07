@@ -82,6 +82,20 @@ const AdFactoryDeploymentStatistics = () => {
     });
   };
 
+  const [nameSemesterCurrent, setNameSemesterCurrent] = useState("");
+
+  const loadDataSemesterCurrent = () => {
+    ClassAPI.getSemesterCurrent().then((res) => {
+      if (res.data.data != null) {
+        setNameSemesterCurrent(res.data.data.name);
+      }
+    });
+  };
+
+  useEffect(() => {
+    loadDataSemesterCurrent();
+  }, []);
+
   return (
     <>
       {isLoading && <LoadingIndicator />}
@@ -125,6 +139,14 @@ const AdFactoryDeploymentStatistics = () => {
                 value={semester}
                 onChange={(value) => {
                   setSemester(value);
+                  const selectedSemester = listSemester.find(
+                    (sem) => sem.id === value
+                  );
+                  if (selectedSemester) {
+                    setNameSemesterCurrent(selectedSemester.name);
+                  } else {
+                    setNameSemesterCurrent("");
+                  }
                 }}
               >
                 <Select.Option value="">Chọn 1 học kỳ</Select.Option>
@@ -167,7 +189,7 @@ const AdFactoryDeploymentStatistics = () => {
             }}
           >
             <FontAwesomeIcon icon={faLineChart} style={{ marginRight: 5 }} />{" "}
-            Thống kê triển khai xưởng kỳ FALL 2023
+            Thống kê triển khai xưởng kỳ {nameSemesterCurrent}
           </div>
           <div style={{ marginTop: 20, marginLeft: 10, marginRight: 10 }}>
             <div

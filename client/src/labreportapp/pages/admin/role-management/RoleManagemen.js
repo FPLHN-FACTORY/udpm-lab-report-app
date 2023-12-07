@@ -252,6 +252,7 @@ const RoleManagement = () => {
             Tên vai trò:{" "}
             <Input
               type="text"
+              placeholder="Nhập tên vai trò"
               value={name}
               onChange={(e) => {
                 setName(e.target.value);

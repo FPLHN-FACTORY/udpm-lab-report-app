@@ -245,6 +245,7 @@ const LabelManagement = () => {
                 Tên nhãn:{" "}
                 <Input
                   type="text"
+                  placeholder="Nhập tên nhãn"
                   value={searchName}
                   onChange={handleChangeSearch}
                   style={{ width: "50%", marginLeft: "10px" }}

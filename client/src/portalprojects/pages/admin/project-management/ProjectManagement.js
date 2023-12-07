@@ -435,6 +435,7 @@ const ProjectManagement = () => {
               <span>Mã:</span>{" "}
               <Input
                 type="text"
+                placeholder="Nhập mã dự án"
                 value={codeSearch}
                 onChange={(e) => {
                   setCodeSearch(e.target.value);
@@ -445,6 +446,7 @@ const ProjectManagement = () => {
               <span>Tên:</span>
               <Input
                 type="text"
+                placeholder="Nhập tên dự án"
                 value={nameSearch}
                 onChange={(e) => {
                   setNameSearch(e.target.value);
