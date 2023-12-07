@@ -509,12 +509,7 @@ public class TeMeetingServiceImpl implements TeMeetingService {
 
         Cell cell2 = headerRow.createCell(0);
         cell2.setCellValue("Ngày học");
-       // cell2.setCellStyle(chooseCellStyle("titleTableDate", workbook));
-
-        CellStyle dateCellStyle = workbook.createCellStyle();
-        short dateFormat = workbook.createDataFormat().getFormat("dd/mm/yyyy");
-        dateCellStyle.setDataFormat(dateFormat);
-        cell2.setCellStyle(dateCellStyle);
+        cell2.setCellStyle(chooseCellStyle("titleTableDate", workbook));
 
         Cell cell3 = headerRow.createCell(1);
         cell3.setCellValue("Ca học");
