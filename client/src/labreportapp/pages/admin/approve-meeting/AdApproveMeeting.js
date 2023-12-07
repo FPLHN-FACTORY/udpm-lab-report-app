@@ -45,6 +45,7 @@ import LoadingIndicator from "../../../helper/loading";
 import ModalAllMeetingRequest from "./modal-all-meeting-request/ModalAllMeetingRequest";
 import { SetAdCountApproveMeetingRequest } from "../../../app/admin/AdCountApproveMeetingRequest.reducer";
 import ModalReasonsClass from "./modal-reasons-class/ModalReasonsClass";
+import ModalShowHistory from "./modal-show-history/ModalShowHistory";
 const { confirm } = Modal;
 const { Option } = Select;
 
@@ -426,10 +427,6 @@ const AdApproveMeeting = () => {
   };
 
   const noApproveAllClass = () => {
-    if (selectedRowKeys.length === 0) {
-      message.error("Mời chọn lớp cần phê duyệt");
-      return;
-    }
     confirm({
       title: "Xác nhận từ chối phê duyệt lịch học",
       content: "Bạn có chắc chắn muốn từ chối phê duyệt lịch học không?",
@@ -454,11 +451,52 @@ const AdApproveMeeting = () => {
     useState(false);
 
   const openModalReasonsClass = () => {
+    if (selectedRowKeys.length === 0) {
+      message.error("Mời chọn lớp cần phê duyệt");
+      return;
+    }
     setVisibleModalReasonsClass(true);
   };
 
   const onCancelModalReasonsClass = () => {
     setVisibleModalReasonsClass(false);
+  };
+  const [selectedIdSemester, setSelectedIdSemester] = useState(null);
+  const [visibleHistory, setVisibleHistory] = useState(false);
+  const openModalShowHistory = () => {
+    if (idSemesterCurrent === "" && idSemesterSeach === "") {
+      message.error("Hãy chọn học kỳ để xem lịch sử luồng log lớp học");
+      return;
+    }
+    let idSemester =
+      idSemesterSeach !== "" ? idSemesterSeach : idSemesterCurrent;
+    setSelectedIdSemester(idSemester);
+    setVisibleHistory(true);
+  };
+  const cancelModalHistory = () => {
+    setVisibleHistory(false);
+  };
+
+  const dowloadLog = () => {
+    if (idSemesterCurrent === "" && idSemesterSeach === "") {
+      message.error("Hãy chọn học kỳ để dowload file log");
+      return;
+    }
+    let idSemester =
+      idSemesterSeach !== "" ? idSemesterSeach : idSemesterCurrent;
+    AdMeetingRequestAPI.dowloadLog(idSemester).then(
+      (response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "phe_duyet_lich_hoc.csv";
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   };
 
   return (
@@ -684,6 +722,7 @@ const AdApproveMeeting = () => {
                   backgroundColor: "rgb(55, 137, 220)",
                   marginRight: 5,
                 }}
+                onClick={dowloadLog}
               >
                 <FontAwesomeIcon
                   icon={faDownload}
@@ -701,6 +740,7 @@ const AdApproveMeeting = () => {
                   backgroundColor: "rgb(55, 137, 220)",
                   marginRight: 5,
                 }}
+                onClick={openModalShowHistory}
               >
                 <FontAwesomeIcon
                   icon={faHistory}
@@ -826,6 +866,11 @@ const AdApproveMeeting = () => {
         listIdClass={selectedRowKeys}
         onCancel={onCancelModalReasonsClass}
         noApproveClass={noApproveAllClass}
+      />
+      <ModalShowHistory
+        idSemester={selectedIdSemester}
+        visible={visibleHistory}
+        onCancel={cancelModalHistory}
       />
     </>
   );

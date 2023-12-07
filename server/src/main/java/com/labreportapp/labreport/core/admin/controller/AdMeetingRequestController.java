@@ -2,6 +2,7 @@ package com.labreportapp.labreport.core.admin.controller;
 
 import com.labreportapp.labreport.core.admin.model.request.AdFindClassRequest;
 import com.labreportapp.labreport.core.admin.model.request.AdReasonsNoApproveRequest;
+import com.labreportapp.labreport.core.admin.repository.AdSemesterRepository;
 import com.labreportapp.labreport.core.admin.service.AdMeetingRequestService;
 import com.labreportapp.labreport.core.common.base.ResponseObject;
 import com.labreportapp.labreport.infrastructure.logger.LoggerObject;
@@ -40,6 +41,9 @@ public class AdMeetingRequestController {
 
     @Autowired
     private CallApiConsumer callApiConsumer;
+
+    @Autowired
+    private AdSemesterRepository semesterRepository;
 
     @GetMapping("/get-all-class-have-meeting-request")
     public ResponseObject getAllClassHaveMeetingRequest(final AdFindClassRequest adFindClass) {
@@ -87,16 +91,19 @@ public class AdMeetingRequestController {
     }
 
     @GetMapping("/download-log")
-    public ResponseEntity<Resource> downloadCsv() {
-        String pathFile = loggerUtil.getPathFileSendLogScreen(semesterHelper.getNameSemesterCurrent());
+    public ResponseEntity<Resource> downloadCsv(@RequestParam(name = "idSemester", defaultValue = "") String idSemester) {
+        String nameSemester = semesterRepository.findById(idSemester).get().getName();
+        String pathFile = loggerUtil.getPathFileSendLogScreen(nameSemester);
         return callApiConsumer.handleCallApiDowloadFileLog(pathFile);
     }
 
     @GetMapping("/history")
     public ResponseEntity<?> showHistory(@RequestParam(name = "page", defaultValue = "0") Integer page,
-                                         @RequestParam(name = "size", defaultValue = "50") Integer size
+                                         @RequestParam(name = "size", defaultValue = "50") Integer size,
+                                         @RequestParam(name = "idSemester", defaultValue = "") String idSemester
     ) {
-        String pathFile = loggerUtil.getPathFileSendLogScreen(semesterHelper.getNameSemesterCurrent());
+        String nameSemester = semesterRepository.findById(idSemester).get().getName();
+        String pathFile = loggerUtil.getPathFileSendLogScreen(nameSemester);
         LoggerObject loggerObject = new LoggerObject();
         loggerObject.setPathFile(pathFile);
         return new ResponseEntity<>(callApiConsumer.handleCallApiReadFileLog(loggerObject, page, size), HttpStatus.OK);

@@ -86,4 +86,19 @@ export class AdMeetingRequestAPI {
       data: data,
     });
   }
+
+  static dowloadLog = (idSemester) => {
+    return request({
+      method: "GET",
+      url: url + `/download-log?idSemester=${idSemester}`,
+      responseType: "blob",
+    });
+  };
+
+  static showHistory = (filter) => {
+    return request({
+      method: "GET",
+      url: url + `/history?page=${filter.page}&size=${filter.size}&idSemester=${filter.idSemester}`,
+    });
+  };
 }

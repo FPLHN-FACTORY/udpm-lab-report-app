@@ -16,6 +16,7 @@ public class ConfigurationsConstant {
     public static final String NAME_FILE_QUAN_LY_HOAT_DONG = "hoat_dong_csv";
     public static final String NAME_FILE_QUAN_LY_CA_HOC = "ca_hoc_csv";
     public static final String NAME_FILE_QUAN_LY_LOP_HOC = "lop_hoc_csv";
+    public static final String NAME_FILE_PHE_DUYET_BUOI_HOC = "phe_duyet_buoi_hoc_csv";
 
     public static final String NAME_FILE_CAU_HINH_LOP_HOC = "cau_hinh_lop_hoc_csv";
     public static final String NAME_FILE_CAU_HINH_TEMPLATE_BAO_CAO = "cau_hinh_template_bao_cao_csv";
