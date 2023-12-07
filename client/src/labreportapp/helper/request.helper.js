@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 import { dispatch } from "../app/store";
 import { message } from "antd";
 import { SetLoadingFalse } from "../app/common/Loading.reducer";
+import { useNavigate } from "react-router";
 
 export const request = axios.create({
   baseURL: AppConfig.apiUrl,
@@ -21,10 +22,13 @@ request.interceptors.response.use(
   (response) => response,
   (error) => {
     console.log(error);
-    
+    const navigate = useNavigate();
     dispatch(SetLoadingFalse());
     if (error.response && error.response.status === 401) {
       window.location.href = "/not-authorization";
+    }
+    if (error.response && error.response.status === 404) {
+      navigate("/not-found");
     }
     if (error.response && error.response.status === 403) {
       window.location.href = "/forbidden";
