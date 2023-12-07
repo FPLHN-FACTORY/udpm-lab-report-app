@@ -60,6 +60,12 @@ const ModalUpdateMeetingRequest = ({
       ++check;
     } else {
       setErrorMeetingDate("");
+      if (new Date(meetingDate).getTime() < new Date().getTime()) {
+        setErrorMeetingDate("Ngày học không được nằm trong quá khứ");
+        ++check;
+      } else {
+        setErrorMeetingDate("");
+      }
     }
     if (selectedItemsPerson === "") {
       setErrorTeacher("Giảng viên không được để trống");
