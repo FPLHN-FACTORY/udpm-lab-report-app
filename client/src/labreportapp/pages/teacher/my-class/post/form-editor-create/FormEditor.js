@@ -15,8 +15,19 @@ function Editor({ idClass, showCreate }) {
   const [descriptionss, setDescriptionss] = useState("<p><br></p>");
   const dispatch = useAppDispatch();
   const [listMail, setListMail] = useState([]);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
   useEffect(() => {
     featchStudentClass(idClass);
+    const handleFullscreenChange = () => {
+      setIsFullscreen(document.fullscreenElement !== null);
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+    };
   }, []);
 
   const config = {
@@ -25,7 +36,7 @@ function Editor({ idClass, showCreate }) {
     showWordsCounter: false,
     showXPathInStatusbar: false,
     placeholder: "Nhập bài viết mới...",
-    showFullscreen: false,
+    showFullscreen: !isFullscreen,
     showAbout: false,
   };
 
