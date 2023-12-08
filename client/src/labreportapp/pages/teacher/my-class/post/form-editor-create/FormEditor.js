@@ -121,7 +121,7 @@ function Editor({ idClass, showCreate }) {
         value={descriptionss || "<p><br></p>"}
         config={config}
         onBlur={(value) => {
-          setDescriptionss(value);
+          setDescriptionss(value || "<p><br></p>");
         }}
       />
       <div style={{ paddingTop: "15px", float: "right", right: 0 }}>

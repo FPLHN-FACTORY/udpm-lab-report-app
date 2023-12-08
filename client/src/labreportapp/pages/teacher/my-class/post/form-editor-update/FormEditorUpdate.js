@@ -76,7 +76,7 @@ function EditorUpdate({ obj, showUpdate }) {
         value={descriptions || "<p><br></p>"}
         config={config}
         onBlur={(value) => {
-          setDescriptions(value);
+          setDescriptions(value || "<p><br></p>");
         }}
       />
       <div style={{ paddingTop: "15px", float: "right", right: 0 }}>
