@@ -140,17 +140,15 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
         Optional<Meeting> meeting = teMeetingRepository.findMeetingById(request.getIdMeeting());
         stringBuffer.append("Đã cập nhật điểm danh (" + meeting.get().getName() + " - " + request.getCodeClass() + ") ");
         String note = "";
-        if (request.getNotes() == null) {
-            note = "";
-        } else {
-            note = request.getNotes();
+        if (meeting.get().getNotes() != null) {
+            note = meeting.get().getNotes();
         }
-        if (!note.equals(meeting.get().getNotes()) && !note.equals("")) {
-            stringBuffer.append(" và cập nhật ghi chú là \"").append(request.getNotes().trim()).append("\". ");
-        } else if (note.equals("") && meeting.get().getNotes() != null || note.equals("") && !meeting.get().getNotes().equals("")) {
-            stringBuffer.append(" và xóa ghi chú buổi học.");
-        } else if (!note.equals("") && meeting.get().getNotes() == null || !note.equals("") && meeting.get().getNotes().equals("")) {
+        if (!request.getNotes().equals("") && note.equals("")) {
             stringBuffer.append(" và thêm ghi chú buổi học là \"").append(request.getNotes().trim()).append(". ");
+        } else if (!request.getNotes().equals(note) && !note.equals("")) {
+            stringBuffer.append(" và cập nhật ghi chú là \"").append(request.getNotes().trim()).append("\". ");
+        } else if (!note.equals("") && request.getNotes().equals("")) {
+            stringBuffer.append(" và xóa ghi chú buổi học.");
         }
         Meeting meetingUp = meeting.get();
         meetingUp.setNotes(request.getNotes() == null ? "" : request.getNotes().trim());
