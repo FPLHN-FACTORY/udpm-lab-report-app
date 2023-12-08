@@ -25,8 +25,6 @@ import {
   faCopy,
   faEllipsisVertical,
   faExpand,
-  faLock,
-  faLockOpen,
 } from "@fortawesome/free-solid-svg-icons";
 import Editor from "./form-editor-create/FormEditor";
 import EditorUpdate from "./form-editor-update/FormEditorUpdate";
@@ -36,7 +34,6 @@ import {
   NextPagePost,
   SetPost,
 } from "../../../../app/teacher/post/tePostSlice.reduce";
-import { toast } from "react-toastify";
 import ViewEditorJodit from "../../../../helper/editor/ViewEditorJodit";
 import { ControlOutlined } from "@ant-design/icons";
 import { SetTTrueToggle } from "../../../../app/teacher/TeCollapsedSlice.reducer";
@@ -172,23 +169,23 @@ const TeacherPostMyClass = () => {
     } catch (error) {}
   };
 
-  const handleUpdateStatusClass = async () => {
-    try {
-      let objApi = {
-        idClass: idClass,
-        status: classDetail.statusClass === 0 ? 1 : 0,
-      };
-      setLock(objApi.status);
-      await TeacherMyClassAPI.updateStatusClass(objApi).then((respone) => {
-        if (objApi.status === 0) {
-          message.success("Mở lớp thành công !");
-        } else {
-          message.success("Khóa lớp thành công !");
-        }
-        dispatch(UpdateClass(respone.data.data));
-      });
-    } catch (error) {}
-  };
+  // const handleUpdateStatusClass = async () => {
+  //   try {
+  //     let objApi = {
+  //       idClass: idClass,
+  //       status: classDetail.statusClass === 0 ? 1 : 0,
+  //     };
+  //     setLock(objApi.status);
+  //     await TeacherMyClassAPI.updateStatusClass(objApi).then((respone) => {
+  //       if (objApi.status === 0) {
+  //         message.success("Mở lớp thành công !");
+  //       } else {
+  //         message.success("Khóa lớp thành công !");
+  //       }
+  //       dispatch(UpdateClass(respone.data.data));
+  //     });
+  //   } catch (error) {}
+  // };
 
   const copyToClipboard = () => {
     const tempInput = document.createElement("input");
@@ -450,6 +447,7 @@ const TeacherPostMyClass = () => {
                         >
                           <Editor
                             idClass={idClass}
+                            show={showCreate}
                             showCreate={showHandleCreate}
                             style={{
                               color: "black !important",

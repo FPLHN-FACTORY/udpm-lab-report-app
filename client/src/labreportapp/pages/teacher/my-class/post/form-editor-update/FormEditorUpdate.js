@@ -5,17 +5,17 @@ import { UpdatePost } from "../../../../../app/teacher/post/tePostSlice.reduce";
 import { Button, message } from "antd";
 import { useAppDispatch } from "../../../../../app/hook";
 import { useEffect } from "react";
-import {
-  SetLoadingFalse,
-  SetLoadingTrue,
-} from "../../../../../app/common/Loading.reducer";
+import LoadingIndicatorNoOverlayFixScroll from "../../../../../helper/loadingFixScroll";
 
 function EditorUpdate({ obj, showUpdate }) {
   const [descriptions, setDescriptions] = useState("");
   const dispatch = useAppDispatch();
+  const [load, setLoad] = useState(false);
+
   useEffect(() => {
     setDescriptions(obj.descriptions);
   }, []);
+
   const config = {
     readonly: false,
     showCharsCounter: false,
@@ -26,52 +26,56 @@ function EditorUpdate({ obj, showUpdate }) {
     showAbout: false,
   };
   const update = () => {
-    let empty = 0;
-    if (descriptions.trim() === "<p><br></p>") {
-      message.error("Nội dung bài viết không được trống !");
-      empty++;
-    }
-    if (descriptions.trim() === "<p><br></p><br>") {
-      message.error("Nội dung bài viết không được trống !");
-      empty++;
-    }
-    if (descriptions.trim() === "<ul><li><br></li><br></ul>") {
-      message.error("Nội dung bài viết không được trống !");
-      empty++;
-    }
-    if (descriptions.trim() === "<ul><li><br></li><br></ul><br>") {
-      message.error("Nội dung bài viết không được trống !");
-      empty++;
-    }
-    if (descriptions.trim() === "<ol><li><br></li><br></ol>") {
-      message.error("Nội dung bài viết không được trống !");
-      empty++;
-    }
-    if (descriptions.trim() === "<ol><li><br></li><br></ol><br>") {
-      message.error("Nội dung bài viết không được trống !");
-      empty++;
-    }
-    if (empty === 0) {
-      let objUpdate = {
-        id: obj.id,
-        descriptions: descriptions,
-      };
-      TeacherPostAPI.update(objUpdate).then(
-        (respone) => {
+    try {
+      let empty = 0;
+      setLoad(true);
+      if (descriptions.trim() === "<p><br></p>") {
+        message.error("Nội dung bài viết không được trống !");
+        empty++;
+      }
+      if (descriptions.trim() === "<p><br></p><br>") {
+        message.error("Nội dung bài viết không được trống !");
+        empty++;
+      }
+      if (descriptions.trim() === "<ul><li><br></li><br></ul>") {
+        message.error("Nội dung bài viết không được trống !");
+        empty++;
+      }
+      if (descriptions.trim() === "<ul><li><br></li><br></ul><br>") {
+        message.error("Nội dung bài viết không được trống !");
+        empty++;
+      }
+      if (descriptions.trim() === "<ol><li><br></li><br></ol>") {
+        message.error("Nội dung bài viết không được trống !");
+        empty++;
+      }
+      if (descriptions.trim() === "<ol><li><br></li><br></ol><br>") {
+        message.error("Nội dung bài viết không được trống !");
+        empty++;
+      }
+      if (empty === 0) {
+        let objUpdate = {
+          id: obj.id,
+          descriptions: descriptions,
+        };
+        TeacherPostAPI.update(objUpdate).then((respone) => {
           setDescriptions("");
           showUpdate(false);
           dispatch(UpdatePost(respone.data.data));
           message.success("Sửa bài viết thành công !");
-        },
-        (error) => {
-          dispatch(SetLoadingFalse());
-          message.error(error.response.data.message);
-        }
-      );
+          setLoad(false);
+        });
+      } else {
+        setLoad(false);
+      }
+    } catch (error) {
+      setLoad(false);
+      message.error(error.response.data.message);
     }
   };
   return (
-    <div>
+    <div className="jodit_teacher">
+      {load && <LoadingIndicatorNoOverlayFixScroll />}
       <JoditEditor
         value={descriptions || "<p><br></p>"}
         config={config}

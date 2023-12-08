@@ -7,28 +7,17 @@ import { useAppDispatch, useAppSelector } from "../../../../../app/hook";
 import { TeacherStudentClassesAPI } from "../../../../../api/teacher/student-class/TeacherStudentClasses.api";
 import { TeacherMailAPI } from "../../../../../api/teacher/sent-mail/TeacherMailAPI.api";
 import { GetUserCurrent } from "../../../../../app/common/UserCurrent.reducer";
-import {
-  SetLoadingFalse,
-  SetLoadingTrue,
-} from "../../../../../app/common/Loading.reducer";
-function Editor({ idClass, showCreate }) {
+import LoadingIndicatorNoOverlayFixScroll from "../../../../../helper/loadingFixScroll";
+function Editor({ idClass, showCreate, show }) {
   const [descriptionss, setDescriptionss] = useState("<p><br></p>");
   const dispatch = useAppDispatch();
   const [listMail, setListMail] = useState([]);
-  const [isFullscreen, setIsFullscreen] = useState(false);
-
+  const [load, setLoad] = useState(false);
   useEffect(() => {
-    featchStudentClass(idClass);
-    const handleFullscreenChange = () => {
-      setIsFullscreen(document.fullscreenElement !== null);
-    };
-
-    document.addEventListener("fullscreenchange", handleFullscreenChange);
-
-    return () => {
-      document.removeEventListener("fullscreenchange", handleFullscreenChange);
-    };
-  }, []);
+    if (show) {
+      featchStudentClass(idClass);
+    }
+  }, [show]);
 
   const config = {
     readonly: false,
@@ -36,57 +25,58 @@ function Editor({ idClass, showCreate }) {
     showWordsCounter: false,
     showXPathInStatusbar: false,
     placeholder: "Nhập bài viết mới...",
-    showFullscreen: !isFullscreen,
+    showFullscreen: false,
     showAbout: false,
   };
 
   const create = () => {
-    let empty = 0;
-    dispatch(SetLoadingTrue());
-    if (descriptionss.trim() === "<p><br></p>") {
-      message.error("Nội dung bài viết không được trống !");
-      empty++;
-    }
-    if (descriptionss.trim() === "<p><br></p><br>") {
-      message.error("Nội dung bài viết không được trống !");
-      empty++;
-    }
-    if (descriptionss.trim() === "<ul><li><br></li><br></ul>") {
-      message.error("Nội dung bài viết không được trống !");
-      empty++;
-    }
-    if (descriptionss.trim() === "<ul><li><br></li><br></ul><br>") {
-      message.error("Nội dung bài viết không được trống !");
-      empty++;
-    }
-    if (descriptionss.trim() === "<ol><li><br></li><br></ol>") {
-      message.error("Nội dung bài viết không được trống !");
-      empty++;
-    }
-    if (descriptionss.trim() === "<ol><li><br></li><br></ol><br>") {
-      message.error("Nội dung bài viết không được trống !");
-      empty++;
-    }
-    if (empty === 0) {
-      let obj = {
-        descriptions: descriptionss,
-        idClass: idClass,
-      };
-      TeacherPostAPI.create(obj).then(
-        (respone) => {
+    try {
+      setLoad(true);
+      let empty = 0;
+      if (descriptionss.trim() === "<p><br></p>") {
+        message.error("Nội dung bài viết không được trống !");
+        empty++;
+      }
+      if (descriptionss.trim() === "<p><br></p><br>") {
+        message.error("Nội dung bài viết không được trống !");
+        empty++;
+      }
+      if (descriptionss.trim() === "<ul><li><br></li><br></ul>") {
+        message.error("Nội dung bài viết không được trống !");
+        empty++;
+      }
+      if (descriptionss.trim() === "<ul><li><br></li><br></ul><br>") {
+        message.error("Nội dung bài viết không được trống !");
+        empty++;
+      }
+      if (descriptionss.trim() === "<ol><li><br></li><br></ol>") {
+        message.error("Nội dung bài viết không được trống !");
+        empty++;
+      }
+      if (descriptionss.trim() === "<ol><li><br></li><br></ol><br>") {
+        message.error("Nội dung bài viết không được trống !");
+        empty++;
+      }
+      if (empty === 0) {
+        let obj = {
+          descriptions: descriptionss,
+          idClass: idClass,
+        };
+        TeacherPostAPI.create(obj).then((respone) => {
           setDescriptionss("");
           showCreate(false);
+          setLoad(false);
           dispatch(CreatePost(respone.data.data));
           featchStudentClass(idClass);
           message.success("Thêm bài viết thành công !");
           featchSentMaillToStudent(obj.descriptions);
-          dispatch(SetLoadingFalse());
-        },
-        (error) => {
-          dispatch(SetLoadingFalse());
-          message.error(error.response.data.message);
-        }
-      );
+        });
+      } else {
+        setLoad(false);
+      }
+    } catch (error) {
+      setLoad(false);
+      message.error(error.response.data.message);
     }
   };
 
@@ -116,12 +106,13 @@ function Editor({ idClass, showCreate }) {
     } catch (error) {}
   };
   return (
-    <div>
+    <div className="jodit_teacher">
+      {load && <LoadingIndicatorNoOverlayFixScroll />}
       <JoditEditor
-        value={descriptionss || "<p><br></p>"}
+        value={descriptionss}
         config={config}
         onBlur={(value) => {
-          setDescriptionss(value || "<p><br></p>");
+          setDescriptionss(value);
         }}
       />
       <div style={{ paddingTop: "15px", float: "right", right: 0 }}>
