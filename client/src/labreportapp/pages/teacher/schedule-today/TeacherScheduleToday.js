@@ -107,6 +107,8 @@ const TeacherScheduleToday = () => {
       let dataUp = {
         listMeeting: dataToday,
       };
+      console.log("aaaaaaaaaa");
+      console.log(dataToday);
       await TeacherScheduleTodayAPI.updateDescriptionMeeting(dataUp).then(
         (response) => {
           setDataToday(response.data.data);
