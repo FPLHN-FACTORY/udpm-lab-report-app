@@ -157,6 +157,7 @@ const TeacherScheduleToday = () => {
       dataIndex: "stt",
       key: "stt",
       render: (text, record, index) => index + 1,
+      align: "center",
     },
     {
       title: "Lớp",
@@ -197,6 +198,7 @@ const TeacherScheduleToday = () => {
       ),
       onFilter: (value, record) =>
         record.codeClass.toLowerCase().includes(value.toLowerCase()),
+      align: "center",
     },
     {
       title: "Ngày",
@@ -266,7 +268,6 @@ const TeacherScheduleToday = () => {
       title: "Cấp độ",
       dataIndex: "level",
       key: "level",
-      sorter: (a, b) => a.level.localeCompare(b.level),
     },
     {
       title: "Link học trực tuyến",
@@ -364,6 +365,7 @@ const TeacherScheduleToday = () => {
       dataIndex: "stt",
       key: "stt",
       render: (text, record, index) => index + 1,
+      align: "center",
     },
     {
       title: "Lớp",
@@ -404,6 +406,7 @@ const TeacherScheduleToday = () => {
       ),
       onFilter: (value, record) =>
         record.codeClass.toLowerCase().includes(value.toLowerCase()),
+      align: "center",
     },
     {
       title: "Ngày",
@@ -415,6 +418,7 @@ const TeacherScheduleToday = () => {
         );
       },
       sorter: (a, b) => a.meetingDate - b.meetingDate,
+      align: "center",
     },
     {
       title: "Buổi học",
@@ -473,7 +477,6 @@ const TeacherScheduleToday = () => {
       title: "Cấp độ",
       dataIndex: "level",
       key: "level",
-      sorter: (a, b) => a.level - b.level,
     },
     {
       title: "Link học trực tuyến",
