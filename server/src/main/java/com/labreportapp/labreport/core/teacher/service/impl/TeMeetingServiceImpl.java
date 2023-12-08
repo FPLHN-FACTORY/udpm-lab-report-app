@@ -426,15 +426,15 @@ public class TeMeetingServiceImpl implements TeMeetingService {
                     if (!adres.equals(db.getMeetingAddress()) &&
                             !adres.equals("") &&
                             !db.getMeetingAddress().equals("")) {
-                        stringBuffer.append("Đã cập nhật link học trực truyến " + db.getMeetingName() + " từ \"" + db.getMeetingAddress() + "\" thành \"" + item.getMeetingAddress().trim() + "\". ");
+                        stringBuffer.append("Đã cập nhật link học trực truyến ").append(db.getMeetingName()).append(" từ \"").append(db.getMeetingAddress()).append("\" thành \"").append(item.getMeetingAddress().trim()).append("\". ");
                         loggerUtil.sendLogStreamClass(stringBuffer.toString(),
                                 item.getCodeClass(), nameSemester);
                     } else if (db.getMeetingAddress().equals("") && !adres.equals("")) {
-                        stringBuffer.append("Đã thêm link học trực truyến " + db.getMeetingName() + " là \"" + item.getMeetingAddress().trim() + "\". ");
+                        stringBuffer.append("Đã thêm link học trực truyến ").append(db.getMeetingName()).append(" là \"").append(item.getMeetingAddress().trim()).append("\". ");
                         loggerUtil.sendLogStreamClass(stringBuffer.toString(),
                                 item.getCodeClass(), nameSemester);
                     } else if (adres.equals("")) {
-                        stringBuffer.append("Đã xóa link học trực truyến " + db.getMeetingName() + ". ");
+                        stringBuffer.append("Đã xóa link học trực truyến ").append(db.getMeetingName()).append(". ");
                         loggerUtil.sendLogStreamClass(stringBuffer.toString(),
                                 item.getCodeClass(), nameSemester);
                     }
@@ -449,7 +449,7 @@ public class TeMeetingServiceImpl implements TeMeetingService {
                     meeting.setStatusMeeting(db.getStatusMeeting().equals("0") ? StatusMeeting.BUOI_HOC : StatusMeeting.BUOI_NGHI);
                     meeting.setTypeMeeting(db.getTypeMeeting() == 0 ? TypeMeeting.ONLINE : TypeMeeting.OFFLINE);
                     meeting.setNotes(db.getNotes());
-                    meeting.setAddress(item.getMeetingAddress() == null ? "" : item.getMeetingAddress().trim());
+                    meeting.setAddress(adres);
                     listNew.add(meeting);
                 }
             });
