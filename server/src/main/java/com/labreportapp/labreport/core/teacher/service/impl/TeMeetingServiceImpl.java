@@ -419,15 +419,21 @@ public class TeMeetingServiceImpl implements TeMeetingService {
         list.forEach(item -> {
             listMeetingToday.forEach(db -> {
                 if (db.getIdMeeting().equals(item.getIdMeeting())) {
-                    if (!item.getMeetingAddress().equals(db.getMeetingAddress()) && item.getMeetingAddress() != null && !item.getMeetingAddress().equals("") && !db.getMeetingAddress().equals("")) {
+                    String adres = "";
+                    if (item.getMeetingAddress() != null) {
+                        adres = item.getMeetingAddress().trim();
+                    }
+                    if (!adres.equals(db.getMeetingAddress()) &&
+                            !adres.equals("") &&
+                            !db.getMeetingAddress().equals("")) {
                         stringBuffer.append("Đã cập nhật link học trực truyến " + db.getMeetingName() + " từ \"" + db.getMeetingAddress() + "\" thành \"" + item.getMeetingAddress().trim() + "\". ");
                         loggerUtil.sendLogStreamClass(stringBuffer.toString(),
                                 item.getCodeClass(), nameSemester);
-                    } else if (db.getMeetingAddress().equals("") && !item.getMeetingAddress().equals("")) {
+                    } else if (db.getMeetingAddress().equals("") && !adres.equals("")) {
                         stringBuffer.append("Đã thêm link học trực truyến " + db.getMeetingName() + " là \"" + item.getMeetingAddress().trim() + "\". ");
                         loggerUtil.sendLogStreamClass(stringBuffer.toString(),
                                 item.getCodeClass(), nameSemester);
-                    } else if (item.getMeetingAddress().equals("")) {
+                    } else if (adres.equals("")) {
                         stringBuffer.append("Đã xóa link học trực truyến " + db.getMeetingName() + ". ");
                         loggerUtil.sendLogStreamClass(stringBuffer.toString(),
                                 item.getCodeClass(), nameSemester);
@@ -568,7 +574,7 @@ public class TeMeetingServiceImpl implements TeMeetingService {
             cellStyle.setBorderLeft(BorderStyle.THIN);
             cellStyle.setBorderRight(BorderStyle.THIN);
         }
-        if(type.equals("titleTableDate")){
+        if (type.equals("titleTableDate")) {
             fontStyle.setBold(true);
             fontStyle.setColor(IndexedColors.WHITE.getIndex());
             fontStyle.setFontHeightInPoints((short) 13);

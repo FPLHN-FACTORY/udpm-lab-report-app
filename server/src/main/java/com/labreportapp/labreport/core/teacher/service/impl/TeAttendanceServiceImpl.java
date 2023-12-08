@@ -139,23 +139,23 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
         List<Attendance> listReturn = teAttendanceRepository.saveAll(listNew);
         Optional<Meeting> meeting = teMeetingRepository.findMeetingById(request.getIdMeeting());
         stringBuffer.append("Đã cập nhật điểm danh (" + meeting.get().getName() + " - " + request.getCodeClass() + ") ");
-        if (meeting.isPresent()) {
-            if (request.getNotes() != null) {
-                if (!request.getNotes().equals(meeting.get().getNotes()) && !request.getNotes().equals("")) {
-                    stringBuffer.append(" và cập nhật ghi chú là \"" + request.getNotes().trim() + "\". ");
-                } else if (request.getNotes().equals("")) {
-                    stringBuffer.append(" và xóa ghi chú buổi học.");
-                }
-            } else {
-                if (!request.getNotes().equals("")) {
-                    stringBuffer.append(" và thêm ghi chú buổi học là \"" + request.getNotes().trim() + ". ");
-                }
-            }
-            Meeting meetingUp = meeting.get();
-            meetingUp.setNotes(request.getNotes() == null ? "" : request.getNotes().trim());
-            meetingUp.setStatusMeeting(StatusMeeting.BUOI_HOC);
-            teMeetingRepository.save(meetingUp);
+        String note = "";
+        if (request.getNotes() == null) {
+            note = "";
+        } else {
+            note = request.getNotes();
         }
+        if (!note.equals(meeting.get().getNotes()) && !note.equals("")) {
+            stringBuffer.append(" và cập nhật ghi chú là \"").append(request.getNotes().trim()).append("\". ");
+        } else if (note.equals("") && meeting.get().getNotes() != null || note.equals("") && !meeting.get().getNotes().equals("")) {
+            stringBuffer.append(" và xóa ghi chú buổi học.");
+        } else if (!note.equals("") && meeting.get().getNotes() == null || !note.equals("") && meeting.get().getNotes().equals("")) {
+            stringBuffer.append(" và thêm ghi chú buổi học là \"").append(request.getNotes().trim()).append(". ");
+        }
+        Meeting meetingUp = meeting.get();
+        meetingUp.setNotes(request.getNotes() == null ? "" : request.getNotes().trim());
+        meetingUp.setStatusMeeting(StatusMeeting.BUOI_HOC);
+        teMeetingRepository.save(meetingUp);
         AtomicInteger countAbsent = new AtomicInteger();
         countAbsent.set(0);
         StringBuffer stringBufferCheckAbsent = new StringBuffer();
@@ -183,7 +183,8 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
         return teAttendanceMessageResponse;
     }
 
-    private TeAttendanceResponse findAttendanceByStudentId(List<TeAttendanceResponse> listAttendance, String idStudent) {
+    private TeAttendanceResponse findAttendanceByStudentId(List<TeAttendanceResponse> listAttendance, String
+            idStudent) {
         for (TeAttendanceResponse attendance : listAttendance) {
             if (attendance.getIdStudent().equals(idStudent)) {
                 return attendance;
@@ -192,7 +193,8 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
         return null;
     }
 
-    private TeAttendanceMessageResponse randomSetLeadToMember(List<Attendance> listAttendance, String idMeeting, StringBuffer message) {
+    private TeAttendanceMessageResponse randomSetLeadToMember(List<Attendance> listAttendance, String
+            idMeeting, StringBuffer message) {
         TeAttendanceMessageResponse objReturn = new TeAttendanceMessageResponse();
         Optional<Meeting> meetingDetail = teMeetingRepository.findMeetingById(idMeeting);
         Optional<Class> classDetail = teClassRepository.findById(meetingDetail.get().getClassId());
@@ -260,7 +262,8 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
         return objReturn;
     }
 
-    public boolean checkAtLeastStudentOnTeam(List<TeAttendanceStudentResponse> listStudentAttendance, String idTeam) {
+    public boolean checkAtLeastStudentOnTeam(List<TeAttendanceStudentResponse> listStudentAttendance, String
+            idTeam) {
         long count = listStudentAttendance.stream()
                 .filter(a -> {
                     String teamId = a.getIdTeam();
@@ -270,14 +273,15 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
         return count >= 1;
     }
 
-    private List<String> randomLead(List<TeAttendanceStudentResponse> listStudent, List<TeTeamsRespone> listTeam,
-                                    List<StudentClasses> listStudentClasses, String idTeam, StringBuffer message) {
+    private List<String> randomLead
+            (List<TeAttendanceStudentResponse> listStudent, List<TeTeamsRespone> listTeam,
+             List<StudentClasses> listStudentClasses, String idTeam, StringBuffer message) {
         List<String> listSentMail = new ArrayList<>();
         if (listTeam != null && listStudent != null && listStudentClasses != null) {
             List<TeAttendanceStudentResponse> members = listStudent.stream()
                     .filter(student -> student.getIdTeam() != null && student.getIdTeam().equals(idTeam)
                             && student.getStatusAttendance().equals(StatusAttendance.YES) && student.getRole().equals(RoleTeam.MEMBER))
-                            .filter(Objects::nonNull)
+                    .filter(Objects::nonNull)
                     .collect(Collectors.toList());
             if (members.size() >= 2) {
                 Random random = new Random();
@@ -338,12 +342,13 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
         });
     }
 
-    private List<TeAttendanceStudentMeetingRespone> sortASCListAttendanceObj(List<TeAttendanceStudentMeetingRespone> list) {
+    private List<TeAttendanceStudentMeetingRespone> sortASCListAttendanceObj
+            (List<TeAttendanceStudentMeetingRespone> list) {
         List<TeAttendanceStudentMeetingRespone> sortedList = list.stream()
                 .sorted(Comparator.comparing(TeAttendanceStudentMeetingRespone::getMeetingDate,
                         Comparator.nullsLast(Comparator.naturalOrder()))
                         .thenComparing(TeAttendanceStudentMeetingRespone::getMeetingPeriod))
-                        .filter(Objects::nonNull)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
         return sortedList;
     }
@@ -394,7 +399,8 @@ public class TeAttendanceServiceImpl implements TeAttendanceSevice {
     }
 
     @Override
-    public PageableObject<TeStudentAttendedDetailRespone> getAllAttendanceStudentById(TeFindStudentAttendanceRequest req) {
+    public PageableObject<TeStudentAttendedDetailRespone> getAllAttendanceStudentById
+            (TeFindStudentAttendanceRequest req) {
         Pageable pageable = PageRequest.of(req.getPage() - 1, req.getSize());
         Page<TeStudentAttendanceRespone> pageList = teAttendanceRepository.getAllStudentAttendanceById(req, pageable);
         List<TeStudentAttendanceRespone> listRespone = pageList.getContent();
