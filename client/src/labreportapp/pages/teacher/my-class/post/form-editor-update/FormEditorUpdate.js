@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import JoditEditor from "jodit-react";
 import { TeacherPostAPI } from "../../../../../api/teacher/post/TeacherPost.api";
 import { UpdatePost } from "../../../../../app/teacher/post/tePostSlice.reduce";
-import { toast } from "react-toastify";
 import { Button, message } from "antd";
 import { useAppDispatch } from "../../../../../app/hook";
 import { useEffect } from "react";
@@ -74,7 +73,7 @@ function EditorUpdate({ obj, showUpdate }) {
   return (
     <div>
       <JoditEditor
-        value={descriptions}
+        value={descriptions || "<p><br></p>"}
         config={config}
         onBlur={(value) => {
           setDescriptions(value);

@@ -42,6 +42,7 @@ function Editor({ idClass, showCreate }) {
 
   const create = () => {
     let empty = 0;
+    dispatch(SetLoadingTrue());
     if (descriptionss.trim() === "<p><br></p>") {
       message.error("Nội dung bài viết không được trống !");
       empty++;
@@ -79,8 +80,10 @@ function Editor({ idClass, showCreate }) {
           featchStudentClass(idClass);
           message.success("Thêm bài viết thành công !");
           featchSentMaillToStudent(obj.descriptions);
+          dispatch(SetLoadingFalse());
         },
         (error) => {
+          dispatch(SetLoadingFalse());
           message.error(error.response.data.message);
         }
       );
@@ -115,7 +118,7 @@ function Editor({ idClass, showCreate }) {
   return (
     <div>
       <JoditEditor
-        value={descriptionss}
+        value={descriptionss || "<p><br></p>"}
         config={config}
         onBlur={(value) => {
           setDescriptionss(value);
