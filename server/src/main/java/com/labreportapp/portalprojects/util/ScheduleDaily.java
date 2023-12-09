@@ -159,22 +159,22 @@ public class ScheduleDaily {
         }
     }
 
-    @Scheduled(cron = "0 5 * * * *")
-    public void dailyCheckingHistoryProgress() {
-        Long dateNow = DateTimeUtil.getCurrentDateInMillis();
-        List<Project> listProject = projectRepository.findAll();
-        List<HistoryProgress> listHistoryProgress = new ArrayList<>();
-        listProject.forEach(project -> {
-            HistoryProgress historyProgressFind = meHistoryProgressRepository.findByProjectIdAndProgressDate(project.getId(), dateNow);
-            if (historyProgressFind == null) {
-                HistoryProgress historyProgress = new HistoryProgress();
-                historyProgress.setProgressTotal(todoHelper.sumProgressAllTodoByProject(project.getId()));
-                historyProgress.setProjectId(project.getId());
-                historyProgress.setProgressDate(dateNow);
-                historyProgress.setProgressChange(0F);
-                listHistoryProgress.add(historyProgress);
-            }
-        });
-        meHistoryProgressRepository.saveAll(listHistoryProgress);
-    }
+//    @Scheduled(cron = "0 5 * * * *")
+//    public void dailyCheckingHistoryProgress() {
+//        Long dateNow = DateTimeUtil.getCurrentDateInMillis();
+//        List<Project> listProject = projectRepository.findAll();
+//        List<HistoryProgress> listHistoryProgress = new ArrayList<>();
+//        listProject.forEach(project -> {
+//            HistoryProgress historyProgressFind = meHistoryProgressRepository.findByProjectIdAndProgressDate(project.getId(), dateNow);
+//            if (historyProgressFind == null) {
+//                HistoryProgress historyProgress = new HistoryProgress();
+//                historyProgress.setProgressTotal(todoHelper.sumProgressAllTodoByProject(project.getId()));
+//                historyProgress.setProjectId(project.getId());
+//                historyProgress.setProgressDate(dateNow);
+//                historyProgress.setProgressChange(0F);
+//                listHistoryProgress.add(historyProgress);
+//            }
+//        });
+//        meHistoryProgressRepository.saveAll(listHistoryProgress);
+//    }
 }
