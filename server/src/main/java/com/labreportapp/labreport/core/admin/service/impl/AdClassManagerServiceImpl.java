@@ -169,6 +169,10 @@ AdClassManagerServiceImpl implements AdClassService {
         if (activityFind.isEmpty()) {
             throw new RestApiException(Message.ACTIVITY_NOT_EXISTS);
         }
+        if(DateUtils.truncate(new Date(request.getStartTime()), Calendar.DATE).getTime() <
+                activityFind.get().getStartTime() || DateUtils.truncate(new Date(request.getStartTime()), Calendar.DATE).getTime() > activityFind.get().getEndTime()) {
+            throw new RestApiException(Message.THOI_GIAN_BAT_DAU_CUA_LOP_HOC_PHAI_NAM_TRONG_KHOANG_THOI_GIAN_CUA_HOAT_DONG);
+        }
         classNew.setActivityId(request.getActivityId());
         classNew.setStartTime(DateUtils.truncate(new Date(request.getStartTime()), Calendar.DATE).getTime());
         if (!request.getTeacherId().equals("")) {
@@ -214,6 +218,14 @@ AdClassManagerServiceImpl implements AdClassService {
     @Override
     public AdClassCustomResponse updateClass(@Valid AdCreateClassRequest request, String id) {
         Class classNew = repository.findById(id).get();
+        Optional<Activity> activityFind = adActivityRepository.findById(request.getActivityId());
+        if (activityFind.isEmpty()) {
+            throw new RestApiException(Message.ACTIVITY_NOT_EXISTS);
+        }
+        if(DateUtils.truncate(new Date(request.getStartTime()), Calendar.DATE).getTime() <
+                activityFind.get().getStartTime() || DateUtils.truncate(new Date(request.getStartTime()), Calendar.DATE).getTime() > activityFind.get().getEndTime()) {
+            throw new RestApiException(Message.THOI_GIAN_BAT_DAU_CUA_LOP_HOC_PHAI_NAM_TRONG_KHOANG_THOI_GIAN_CUA_HOAT_DONG);
+        }
         StringBuilder stringBuilder = new StringBuilder();
         String classPeriodOld = classNew.getClassPeriod();
         String classPeriodNew = request.getClassPeriod();
@@ -244,10 +256,7 @@ AdClassManagerServiceImpl implements AdClassService {
             classNew.setClassPeriod(meetingPeriodFind.getId());
         }
         classNew.setStatusTeacherEdit(StatusTeacherEdit.values()[request.getStatusTeacherEdit()]);
-        Optional<Activity> activityFind = adActivityRepository.findById(request.getActivityId());
-        if (activityFind.isEmpty()) {
-            throw new RestApiException(Message.ACTIVITY_NOT_EXISTS);
-        }
+
         classNew.setActivityId(request.getActivityId());
         if (request.getTeacherId() != null && !request.getTeacherId().equals("")) {
             classNew.setTeacherId(request.getTeacherId());

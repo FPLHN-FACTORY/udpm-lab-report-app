@@ -73,6 +73,7 @@ public class CallApiHoney {
             String jsonList = null;
             try {
                 jsonList = objectMapper.writeValueAsString(request);
+                System.out.println(jsonList);
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
                 return null;
