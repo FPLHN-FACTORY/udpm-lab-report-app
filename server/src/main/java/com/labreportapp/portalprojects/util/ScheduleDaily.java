@@ -1,12 +1,9 @@
 package com.labreportapp.portalprojects.util;
 
 import com.labreportapp.portalprojects.core.common.base.ResponseObject;
-import com.labreportapp.portalprojects.core.member.repository.MeHistoryProgressRepository;
 import com.labreportapp.portalprojects.entity.Assign;
-import com.labreportapp.portalprojects.entity.HistoryProgress;
 import com.labreportapp.portalprojects.entity.Notification;
 import com.labreportapp.portalprojects.entity.NotificationMember;
-import com.labreportapp.portalprojects.entity.Project;
 import com.labreportapp.portalprojects.entity.Todo;
 import com.labreportapp.portalprojects.infrastructure.configemail.EmailSender;
 import com.labreportapp.portalprojects.infrastructure.constant.StatusReminder;
@@ -59,9 +56,6 @@ public class ScheduleDaily {
     @Autowired
     @Qualifier(NotificationMemberRepository.NAME)
     private NotificationMemberRepository notificationMemberRepository;
-
-    @Autowired
-    private MeHistoryProgressRepository meHistoryProgressRepository;
 
     @Autowired
     private EmailSender emailSender;

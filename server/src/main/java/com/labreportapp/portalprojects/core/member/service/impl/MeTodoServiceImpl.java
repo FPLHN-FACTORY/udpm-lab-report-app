@@ -65,7 +65,6 @@ import com.labreportapp.portalprojects.infrastructure.wsconfigure.WebSocketSessi
 import com.labreportapp.portalprojects.repository.PeriodTodoRepository;
 import com.labreportapp.portalprojects.util.DateConverter;
 import com.labreportapp.portalprojects.util.DateTimeUtil;
-import com.labreportapp.portalprojects.util.HistoryProgressHelper;
 import com.labreportapp.portalprojects.util.TodoHelper;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -120,9 +119,6 @@ public class MeTodoServiceImpl implements MeTodoService {
 
     @Autowired
     private MeLabelRepository meLabelRepository;
-
-    @Autowired
-    private HistoryProgressHelper historyProgressHelper;
 
     @Autowired
     private MeTodoListRepository meTodoListRepository;
@@ -979,7 +975,6 @@ public class MeTodoServiceImpl implements MeTodoService {
             projectFind.get().setProgress(Float.parseFloat(roundedAveragePro));
             meProjectRepository.save(projectFind.get());
 
-            historyProgressHelper.updateHistoryProgress(periodFind.get().getProjectId());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
