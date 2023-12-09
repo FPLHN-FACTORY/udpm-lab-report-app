@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import "./style-point-detail-class.css";
 import { Link } from "react-router-dom";
 import { ControlOutlined } from "@ant-design/icons";
@@ -8,6 +8,7 @@ import { StPointDetailAPI } from "../../../../api/student/StPointDetailAPI";
 import { Empty, Table } from "antd";
 import LoadingIndicator from "../../../../helper/loading";
 import { SetTTrueToggle } from "../../../../app/student/StCollapsedSlice.reducer";
+import { StClassAPI } from "../../../../api/student/StClassAPI";
 
 const StPointDetailClass = () => {
   const dispatch = useAppDispatch();
@@ -17,10 +18,21 @@ const StPointDetailClass = () => {
   const [noPointMessage, setNoPointMessage] = useState(""); // Thêm state để lưu thông báo khi không có điểm
   const [isLoading, setIsLoading] = useState(false);
 
+  const navigate = useNavigate();
+  const featchClass = async (idClass) => {
+    try {
+      await StClassAPI.detailMyClass(idClass).then((responese) => {});
+    } catch (error) {
+      setTimeout(() => {
+        navigate(`/student/my-class`);
+      }, [1000]);
+    }
+  };
   useEffect(() => {
     setIsLoading(true);
     document.title = "Bảng điều khiển - Điểm";
     LoadPointData();
+    featchClass(id);
   }, []);
 
   const LoadPointData = () => {

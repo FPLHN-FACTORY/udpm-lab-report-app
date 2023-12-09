@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "./style-attendance-detail-class.css";
 import { Link } from "react-router-dom";
 import { ControlOutlined, SearchOutlined } from "@ant-design/icons";
@@ -12,6 +12,7 @@ import {
 } from "../../../../helper/util.helper";
 import LoadingIndicator from "../../../../helper/loading";
 import { SetTTrueToggle } from "../../../../app/student/StCollapsedSlice.reducer";
+import { StClassAPI } from "../../../../api/student/StClassAPI";
 
 const StAttendanceDetailClass = () => {
   const dispatch = useAppDispatch();
@@ -22,9 +23,20 @@ const StAttendanceDetailClass = () => {
   const [currentDetail, setCurrentDetail] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+  const featchClass = async (idClass) => {
+    try {
+      await StClassAPI.detailMyClass(idClass).then((responese) => {});
+    } catch (error) {
+      setTimeout(() => {
+        navigate(`/student/my-class`);
+      }, [1000]);
+    }
+  };
   useEffect(() => {
     document.title = "Bảng điều khiển - Điểm danh";
     setIsLoading(true);
+    featchClass(id);
   }, [id]);
 
   useEffect(() => {

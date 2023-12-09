@@ -11,6 +11,8 @@ import com.labreportapp.labreport.core.student.repository.StClassConfigurationRe
 import com.labreportapp.labreport.core.student.repository.StClassRepository;
 import com.labreportapp.labreport.core.student.repository.StStudentClassesRepository;
 import com.labreportapp.labreport.core.student.service.StClassService;
+import com.labreportapp.labreport.core.teacher.model.response.TeDetailClassResponse;
+import com.labreportapp.labreport.core.teacher.repository.TeClassRepository;
 import com.labreportapp.labreport.entity.Class;
 import com.labreportapp.labreport.entity.StudentClasses;
 import com.labreportapp.labreport.infrastructure.constant.StatusStudentFeedBack;
@@ -61,6 +63,9 @@ public class StClassServiceImpl implements StClassService {
 
     @Autowired
     private LoggerUtil loggerUtil;
+
+    @Autowired
+    private TeClassRepository teClassRepository;
 
     @Override
     public PageableObject<StClassCustomResponse> getAllClassByCriteriaAndIsActive(final StFindClassRequest req) {
@@ -176,6 +181,19 @@ public class StClassServiceImpl implements StClassService {
             }
         }
         return customResponse;
+    }
+
+    @Override
+    public TeDetailClassResponse findClassById(final String id) {
+        Optional<TeDetailClassResponse> classCheck = teClassRepository.findClassById(id);
+        if (!classCheck.isPresent()) {
+            throw new CustomException(Message.CLASS_NOT_EXISTS);
+        }
+        String check = stClassRepository.checkStudentInClass(labReportAppSession.getUserId(), id);
+        if (check == null) {
+            throw new CustomException(Message.STUDENT_CLASSES_NOT_EXISTS);
+        }
+        return classCheck.get();
     }
 
 }

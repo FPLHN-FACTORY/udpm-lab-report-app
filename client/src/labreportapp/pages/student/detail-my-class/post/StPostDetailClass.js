@@ -20,6 +20,7 @@ import { GetUserCurrent } from "../../../../app/common/UserCurrent.reducer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAnglesRight } from "@fortawesome/free-solid-svg-icons";
 import { convertDateLongToString } from "../../../../helper/util.helper";
+import { StClassAPI } from "../../../../api/student/StClassAPI";
 
 const StPostDetailClass = () => {
   const dispatch = useAppDispatch();
@@ -86,7 +87,7 @@ const StPostDetailClass = () => {
   };
   const featchClass = async (idClass) => {
     try {
-      await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
+      await StClassAPI.detailMyClass(idClass).then((responese) => {
         setClassDetail(responese.data.data);
       });
     } catch (error) {

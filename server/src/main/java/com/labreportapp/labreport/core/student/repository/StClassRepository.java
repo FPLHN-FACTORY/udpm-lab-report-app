@@ -67,4 +67,9 @@ public interface StClassRepository extends ClassRepository {
             AND (:#{#req.idClass} IS NULL OR :#{#req.idClass} LIKE '' OR c.id = :#{#req.idClass}) 
             """, nativeQuery = true)
     Optional<StClassResponse> checkConditionCouldJoinOrLeaveClass(@Param("req") StClassRequest req, @Param("currentTime") Long currentTime);
+
+    @Query(value = """
+            SELECT a.id FROM student_classes a WHERE a.student_id = :idStudent AND a.class_id = :idClass
+            """, nativeQuery = true)
+    String checkStudentInClass(@Param("idStudent") String idStudent, @Param("idClass") String idClass);
 }

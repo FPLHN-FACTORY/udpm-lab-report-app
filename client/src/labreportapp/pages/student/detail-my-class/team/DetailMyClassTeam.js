@@ -33,6 +33,7 @@ import { SetTTrueToggle } from "../../../../app/student/StCollapsedSlice.reducer
 import { StMyClassAPI } from "../../../../api/student/StMyClassAPI";
 import { SetStStudentClasses } from "../../../../app/student/StStudentClasses.reducer";
 import StModalShowHistory from "./modal-show-history/StModalShowHistory";
+import { StClassAPI } from "../../../../api/student/StClassAPI";
 
 const DetailMyClassTeam = () => {
   const dispatch = useAppDispatch();
@@ -139,8 +140,20 @@ const DetailMyClassTeam = () => {
     });
   };
 
+  const featchClass = async (idClass) => {
+    try {
+      await StClassAPI.detailMyClass(idClass).then((responese) => {
+      });
+    } catch (error) {
+      setTimeout(() => {
+        navigate(`/student/my-class`);
+      }, [1000]);
+    }
+  };
+
   useEffect(() => {
     loadDataStudentClasses();
+    featchClass(id);
   }, []);
   const columns = [
     {

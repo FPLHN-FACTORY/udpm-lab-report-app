@@ -8,6 +8,7 @@ import com.labreportapp.labreport.core.student.model.response.StClassCustomRespo
 import com.labreportapp.labreport.core.student.service.StClassService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,4 +33,8 @@ public class StClassController {
         return new ResponseObject(response);
     }
 
+    @GetMapping("/{id}")
+    public ResponseObject detailClass(@PathVariable("id") String id) {
+        return new ResponseObject(stClassService.findClassById(id));
+    }
 }

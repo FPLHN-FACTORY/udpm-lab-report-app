@@ -24,4 +24,11 @@ export class StClassAPI {
       data: filter,
     });
   }
+
+  static detailMyClass(idClass) {
+    return request({
+      method: "GET",
+      url: `/student/class/` + idClass,
+    });
+  }
 }

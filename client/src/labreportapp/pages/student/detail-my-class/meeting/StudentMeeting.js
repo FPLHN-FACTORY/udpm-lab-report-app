@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "./style-student-meeting.css";
 import { Link } from "react-router-dom";
 import {
@@ -21,18 +21,29 @@ import {
   convertDateLongToString,
   convertHourAndMinuteToString,
 } from "../../../../helper/util.helper";
+import { StClassAPI } from "../../../../api/student/StClassAPI";
 const StMeetingMyClass = () => {
   const dispatch = useAppDispatch();
   dispatch(SetTTrueToggle());
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
   const [countMeeting, setCountMeeting] = useState(0);
-
+  const navigate = useNavigate();
+  const featchClass = async (idClass) => {
+    try {
+      await StClassAPI.detailMyClass(idClass).then((responese) => {});
+    } catch (error) {
+      setTimeout(() => {
+        navigate(`/student/my-class`);
+      }, [1000]);
+    }
+  };
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Bảng điều khiển - Buổi học";
     featchCountMeeting(id);
     featchMeeting(id);
+    featchClass(id);
   }, []);
 
   const featchMeeting = async (idClass) => {
