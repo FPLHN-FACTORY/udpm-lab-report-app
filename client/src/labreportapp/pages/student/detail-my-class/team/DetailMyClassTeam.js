@@ -142,13 +142,8 @@ const DetailMyClassTeam = () => {
 
   const featchClass = async (idClass) => {
     try {
-      await StClassAPI.detailMyClass(idClass).then((responese) => {
-      });
-    } catch (error) {
-      setTimeout(() => {
-        navigate(`/student/my-class`);
-      }, [1000]);
-    }
+      await StClassAPI.detailMyClass(idClass).then((responese) => {});
+    } catch (error) {}
   };
 
   useEffect(() => {

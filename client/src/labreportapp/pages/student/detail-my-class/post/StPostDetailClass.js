@@ -91,9 +91,6 @@ const StPostDetailClass = () => {
         setClassDetail(responese.data.data);
       });
     } catch (error) {
-      setTimeout(() => {
-        navigate(`/student/my-class`);
-      }, [1000]);
     }
   };
   const handleSeeMore = () => {

@@ -13,25 +13,31 @@ import java.util.Optional;
 public interface AdStudentClassRepository extends StudentClassesRepository {
 
     @Query(value = """
-            SELECT DISTINCT
-                sc.id as idStudentClass,
-                sc.student_id as idStudent,
-                sc.email as emailStudent,
-                sc.role as role,
-                sc.status as statusStudent,
-                t.id as idTeam,
-                t.name as nameTeam,
-                f.id as idFeedBack,
-                att.id as idAttendance
-            FROM student_classes sc
-            JOIN class c ON c.id = sc.class_id
-            LEFT JOIN team t on t.id = sc.team_id
-            LEFT JOIN feed_back f on sc.student_id = f.student_id AND c.id = f.class_id
-            LEFT JOIN attendance att on sc.student_id = att.student_id AND c.id = att.class_id
-            WHERE c.id = :idClass
-            GROUP BY
-                sc.id, sc.student_id, sc.email, sc.role, sc.status, t.name, f.id, att.id
-            ORDER BY t.name ASC
+                WITH CountAttendance AS (
+                    SELECT a.id, sc.student_id FROM attendance a JOIN student_classes sc
+                    ON a.student_id = sc.student_id
+                    WHERE sc.class_id = :idClass
+                    LIMIT 1
+                )
+                SELECT DISTINCT
+                    sc.id as idStudentClass,
+                    sc.student_id as idStudent,
+                    sc.email as emailStudent,
+                    sc.role as role,
+                    sc.status as statusStudent,
+                    t.id as idTeam,
+                    t.name as nameTeam,
+                    f.id as idFeedBack,
+                    countAttendance.id as idAttendance
+                FROM student_classes sc
+                JOIN class c ON c.id = sc.class_id
+                LEFT JOIN team t on t.id = sc.team_id
+                LEFT JOIN feed_back f on sc.student_id = f.student_id AND c.id = f.class_id
+                LEFT JOIN CountAttendance countAttendance ON countAttendance.student_id = sc.student_id
+                WHERE c.id = :idClass
+                GROUP BY
+                    sc.id, sc.student_id, sc.email, sc.role, sc.status, t.name, f.id, countAttendance.id
+                ORDER BY t.name ASC
              """, nativeQuery = true)
     List<AdStudentClassesRespone> findStudentClassByIdClass(@Param("idClass") String idClass);
 

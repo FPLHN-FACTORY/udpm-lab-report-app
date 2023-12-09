@@ -28,9 +28,6 @@ const StAttendanceDetailClass = () => {
     try {
       await StClassAPI.detailMyClass(idClass).then((responese) => {});
     } catch (error) {
-      setTimeout(() => {
-        navigate(`/student/my-class`);
-      }, [1000]);
     }
   };
   useEffect(() => {
