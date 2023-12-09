@@ -108,7 +108,6 @@ const ModalCreatePeriod = ({ visible, onCancel }) => {
           onCancel();
         },
         (error) => {
-          message.error(error.response.data.message);
         }
       );
     }

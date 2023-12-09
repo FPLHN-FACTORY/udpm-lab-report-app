@@ -76,7 +76,6 @@ function Editor({ idClass, showCreate, show }) {
       }
     } catch (error) {
       setLoad(false);
-      message.error(error.response.data.message);
     }
   };
 

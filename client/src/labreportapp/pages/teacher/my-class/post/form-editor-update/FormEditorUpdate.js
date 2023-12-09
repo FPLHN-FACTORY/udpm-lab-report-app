@@ -70,7 +70,6 @@ function EditorUpdate({ obj, showUpdate }) {
       }
     } catch (error) {
       setLoad(false);
-      message.error(error.response.data.message);
     }
   };
   return (

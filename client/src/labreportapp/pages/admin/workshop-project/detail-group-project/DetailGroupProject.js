@@ -103,7 +103,6 @@ const DetailGroupProject = () => {
           })
           .catch((error) => {
             setLoadingWait(false);
-            message.error(error.response.data.message);
           });
       }
     }

@@ -122,7 +122,6 @@ const ModalUpdatePeriod = ({ visible, onCancel, idPeriod }) => {
           onCancel();
         },
         (error) => {
-          message.error(error.response.data.message);
         }
       );
     }

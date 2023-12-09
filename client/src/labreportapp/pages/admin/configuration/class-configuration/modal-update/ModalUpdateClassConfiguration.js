@@ -132,7 +132,6 @@ const ModalUpdateClassConfiguration = ({
           loadData();
         },
         (error) => {
-          message.error(error.response.data.message);
         }
       );
     }

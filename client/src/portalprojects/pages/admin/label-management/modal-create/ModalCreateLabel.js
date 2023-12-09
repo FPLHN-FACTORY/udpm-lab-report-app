@@ -74,7 +74,6 @@ const ModalCreateLabel = ({
           onCancel();
         },
         (error) => {
-          message.error(error.response.data.message);
         }
       );
     }

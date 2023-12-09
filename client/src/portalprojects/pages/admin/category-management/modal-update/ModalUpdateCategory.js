@@ -52,7 +52,6 @@ const ModalUpdateCategory = ({ visible, onCancel, category }) => {
           onCancel();
         },
         (error) => {
-          message.error(error.response.data.message);
         }
       );
     }

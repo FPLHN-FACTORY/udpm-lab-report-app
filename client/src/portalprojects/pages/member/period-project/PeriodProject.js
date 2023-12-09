@@ -298,7 +298,6 @@ const PeriodProject = () => {
         dispatch(DeletePeriodProject(response.data.data));
       },
       (error) => {
-        message.error(error.response.data.message);
       }
     );
   };
