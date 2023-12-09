@@ -188,7 +188,6 @@ const AdApproveMeeting = () => {
     AdMeetingRequestAPI.getAllClassHaveMeetingRequest(filter).then(
       (respone) => {
         if (respone.data.data != null) {
-          console.log(respone.data.data);
           setTotalPages(parseInt(respone.data.data.totalPages));
           setListClassAll(respone.data.data.data);
           dispatch(SetAdMeetingRequest(respone.data.data.data));

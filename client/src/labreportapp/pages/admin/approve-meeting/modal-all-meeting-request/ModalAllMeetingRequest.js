@@ -47,7 +47,6 @@ const ModalAllMeetingRequest = ({ visible, onCancel, item, fetchData }) => {
     AdMeetingRequestAPI.getAllMeetingRequestByIdClass(item.id).then(
       (response) => {
         setLoading(false);
-        console.log(response.data.data);
         setListMeetingRequest(response.data.data);
       }
     );

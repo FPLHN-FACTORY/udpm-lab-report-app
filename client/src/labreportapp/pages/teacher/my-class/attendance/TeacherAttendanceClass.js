@@ -61,7 +61,6 @@ const TeacherAttendanceClass = () => {
       await TeacherAttendanceAPI.getAllAttendanceByIdClass(idClass)
         .then((responese) => {
           setData(responese.data.data);
-          console.log(responese.data.data);
           setLoading(true);
         })
         .catch((err) => {});

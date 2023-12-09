@@ -12,8 +12,6 @@ const teMeetingRequestSlice = createSlice({
     },
     UpdateMeetingRequest: (state, action) => {
       let data = action.payload;
-      console.log("aaaaaaaaavas");
-      console.log(data);
       state.forEach((item) => {
         if (item.id === data.id) {
           item.name = data.name;

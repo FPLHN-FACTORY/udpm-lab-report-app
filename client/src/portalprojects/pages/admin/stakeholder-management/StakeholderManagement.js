@@ -30,9 +30,7 @@ const StakeholderManagement = () => {
       await CommonStakeHolderAPI.fetchAll().then((re) => {
         dispatch(SetAdStakeholderManagement(re.data));
       });
-    } catch (error) {
-      console.log("Lỗi hệ thống, vui lòng ấn F5 để tải lại trang");
-    }
+    } catch (error) {}
   };
   useEffect(() => {
     fetchData();

@@ -25,7 +25,6 @@ const ModalReasonsClass = ({
       listIdClass: listIdClass,
       reasons: reasons,
     };
-    console.log(obj);
     AdMeetingRequestAPI.addReasonsClass(obj).then(
       (response) => {},
       (error) => {}

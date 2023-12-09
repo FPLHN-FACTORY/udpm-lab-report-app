@@ -41,7 +41,6 @@ const ModalShowHistory = ({ visible, onCancel }) => {
       page: current - 1,
       size: parseInt(size),
     }).then((response) => {
-      console.log(response.data);
       setDataHistory(response.data.data);
       setTotalPages(response.data.totalPages);
     });
