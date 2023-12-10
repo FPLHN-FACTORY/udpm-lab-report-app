@@ -14,12 +14,13 @@ import { useAppDispatch } from "../../../../app/hook";
 import { ActivityManagementAPI } from "../../../../api/admin/activity-management/activityManagement.api";
 import { UpdateActivityManagement } from "../../../../app/admin/activity-management/activityManagementSlice.reducer";
 import { Option } from "antd/es/mentions";
-import dayjs from "dayjs";
-import "dayjs/locale/zh-cn";
 import {
   SetLoadingFalse,
   SetLoadingTrue,
 } from "../../../../app/common/Loading.reducer";
+import locale from "antd/es/date-picker/locale/vi_VN";
+import dayjs from "dayjs";
+import "dayjs/locale/vi";
 const { RangePicker } = DatePicker;
 
 const ModalUpdateActivity = ({
@@ -197,6 +198,7 @@ const ModalUpdateActivity = ({
             <span className="notBlank">(*) </span>
             <span>Thời gian:</span> <br />
             <RangePicker
+              locale={locale}
               style={{ width: "100%" }}
               format="DD-MM-YYYY"
               value={[

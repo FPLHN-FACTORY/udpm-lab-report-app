@@ -22,7 +22,9 @@ import {
   SetLoadingFalse,
   SetLoadingTrue,
 } from "../../../../app/common/Loading.reducer";
+import locale from "antd/es/date-picker/locale/vi_VN";
 import dayjs from "dayjs";
+import "dayjs/locale/vi";
 const { RangePicker } = DatePicker;
 
 const ModalCreateActivity = ({
@@ -213,6 +215,7 @@ const ModalCreateActivity = ({
             <span className="notBlank">(*) </span>
             <span>Thời gian:</span> <br />
             <RangePicker
+              locale={locale}
               style={{ width: "100%" }}
               format="DD-MM-YYYY"
               value={[

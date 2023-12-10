@@ -20,7 +20,6 @@ import { useAppDispatch } from "../../../../../app/hook";
 import { ProjectManagementAPI } from "../../../../../../portalprojects/api/admin/project-management/projectManagement.api";
 import LoadingIndicator from "../../../../../helper/loading";
 import { SearchOutlined } from "@ant-design/icons";
-import dayjs from "dayjs";
 import { AdPotalsRoleConfigAPI } from "../../../../../../portalprojects/api/admin/role-config/AdPotalsRoleConfig.api";
 import { AdPotalsMemberFactoryAPI } from "../../../../../../portalprojects/api/admin/member-factory/AdPotalsMemberFactory.api";
 import Image from "../../../../../helper/img/Image";
@@ -30,6 +29,9 @@ import {
   SetLoadingFalse,
   SetLoadingTrue,
 } from "../../../../../app/common/Loading.reducer";
+import locale from "antd/es/date-picker/locale/vi_VN";
+import dayjs from "dayjs";
+import "dayjs/locale/vi";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 const { TextArea } = Input;
@@ -419,6 +421,7 @@ const ModalCreateProjectGroup = ({ visible, onCancel, nameGroup }) => {
               <span className="notBlank">(*) </span>
               <span>Thời gian:</span> <br />
               <RangePicker
+                locale={locale}
                 style={{ width: "100%" }}
                 format="YYYY-MM-DD"
                 value={[

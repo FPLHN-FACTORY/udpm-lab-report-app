@@ -389,9 +389,7 @@ public class TeMeetingServiceImpl implements TeMeetingService {
         LocalDate currentDate = LocalDate.now();
         ZoneId vietnamZone = ZoneId.of("Asia/Ho_Chi_Minh");
         ZonedDateTime zonedDateTime = currentDate.atStartOfDay(vietnamZone);
-        System.err.println("=================" + zonedDateTime + "===============");
         request.setDateNow(zonedDateTime.toLocalDate());
-        System.err.println("=================DATE:===== " + zonedDateTime.toLocalDate());
         List<TeScheduleMeetingClassResponse> list = teMeetingRepository.searchScheduleToDayByIdTeacherAndMeetingDate(request);
         if (list.size() == 0) {
             return null;

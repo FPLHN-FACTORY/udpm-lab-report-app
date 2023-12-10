@@ -9,11 +9,9 @@ import {
   message,
 } from "antd";
 import { useState } from "react";
-import moment from "moment";
+import "moment/locale/vi";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../../../app/hook";
-import { MeetingManagementAPI } from "../../../../../../api/admin/meeting-management/MeetingManagementAPI";
-import { UpdateMeeting } from "../../../../../../app/admin/AdMeetingManagement.reducer";
 import { convertHourAndMinuteToString } from "../../../../../../helper/util.helper";
 import { GetAdTeacher } from "../../../../../../app/admin/AdTeacherSlice.reducer";
 import { GetAdMeetingPeriod } from "../../../../../../app/admin/AdMeetingPeriodSlice.reducer";
@@ -21,12 +19,14 @@ import {
   SetLoadingFalse,
   SetLoadingTrue,
 } from "../../../../../../app/common/Loading.reducer";
-import dayjs from "dayjs";
 import { TeacherMeetingRequestAPI } from "../../../../../../api/teacher/meeting-request/TeacherMeeting.api";
 import { UpdateMeetingRequest } from "../../../../../../app/teacher/meeting-request/teMeetingRequestSlice.reduce";
+import locale from "antd/es/date-picker/locale/vi_VN";
+import dayjs from "dayjs";
+import "dayjs/locale/vi";
 
 const { Option } = Select;
-
+dayjs.locale("vi");
 const ModalUpdateMeetingRequest = ({
   item,
   visible,
@@ -148,6 +148,7 @@ const ModalUpdateMeetingRequest = ({
                 <span style={{ color: "red" }}>(*) </span>Ngày diễn ra:
                 <br />
                 <DatePicker
+                  locale={locale}
                   value={meetingDate ? dayjs(meetingDate) : null}
                   format="DD/MM/YYYY"
                   onChange={onChangeDate}

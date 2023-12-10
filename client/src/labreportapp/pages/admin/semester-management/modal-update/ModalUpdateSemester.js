@@ -8,7 +8,9 @@ import {
   SetLoadingFalse,
   SetLoadingTrue,
 } from "../../../../app/common/Loading.reducer";
+import locale from "antd/es/date-picker/locale/vi_VN";
 import dayjs from "dayjs";
+import "dayjs/locale/vi";
 const { RangePicker } = DatePicker;
 
 const ModalUpdateSemester = ({ visible, onCancel, semester }) => {
@@ -165,6 +167,7 @@ const ModalUpdateSemester = ({ visible, onCancel, semester }) => {
               <span className="notBlank">(*) </span>
               <span>Thời gian:</span> <br />
               <RangePicker
+                locale={locale}
                 style={{ width: "100%" }}
                 format="DD-MM-YYYY"
                 value={[
@@ -184,6 +187,7 @@ const ModalUpdateSemester = ({ visible, onCancel, semester }) => {
               <span className="notBlank">(*) </span>
               <span>Thời gian sinh viên:</span> <br />
               <RangePicker
+                locale={locale}
                 style={{ width: "100%" }}
                 format="DD-MM-YYYY"
                 value={[

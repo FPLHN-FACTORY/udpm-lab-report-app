@@ -16,12 +16,14 @@ import "./styleModalUpdateProject.css";
 import { useAppDispatch } from "../../../../app/hook";
 import "react-toastify/dist/ReactToastify.css";
 import { ProjectManagementAPI } from "../../../../api/admin/project-management/projectManagement.api";
-import dayjs from "dayjs";
 import { AdGroupProjectAPI } from "../../../../../labreportapp/api/admin/AdGroupProjectAPI";
 import { CategoryProjectManagementAPI } from "../../../../api/admin/project-management/categoryProjectManagement.api";
 import { SetProject } from "../../../../app/reducer/detail-project/DPProjectSlice.reducer";
 import { SetProjectCustom } from "../../../../app/reducer/detail-project/DPDetailProjectCustom.reduce";
 import { DetailProjectAPI } from "../../../../api/detail-project/detailProject.api";
+import locale from "antd/es/date-picker/locale/vi_VN";
+import dayjs from "dayjs";
+import "dayjs/locale/vi";
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 const { Option } = Select;
@@ -250,6 +252,7 @@ const ModalUpdateFiledProject = ({ visible, onCancel, idProject }) => {
                 <span className="notBlank">(*) </span>
                 <span>Thời gian:</span> <br />
                 <RangePicker
+                  locale={locale}
                   style={{ width: "100%" }}
                   format="YYYY-MM-DD"
                   value={[

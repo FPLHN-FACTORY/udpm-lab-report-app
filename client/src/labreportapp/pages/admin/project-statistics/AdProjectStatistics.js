@@ -25,8 +25,9 @@ import {
 } from "@ant-design/icons";
 import CanvasJSReact from "@canvasjs/react-charts";
 import { AdProjectStatisticsAPI } from "../../../api/admin/AdProjectStatisticsAPI";
+import locale from "antd/es/date-picker/locale/vi_VN";
 import dayjs from "dayjs";
-import viVN from "antd/lib/locale/vi_VN";
+import "dayjs/locale/vi";
 import { convertDateLongToString } from "../../../helper/util.helper";
 import LoadingIndicator from "../../../helper/loading";
 import { Link } from "react-router-dom";
@@ -368,7 +369,7 @@ const AdProjectStatistics = () => {
                 onChange={(e) => {
                   handleDateChange(e);
                 }}
-                locale={viVN}
+                locale={locale}
               />
             </Col>
           </Row>{" "}

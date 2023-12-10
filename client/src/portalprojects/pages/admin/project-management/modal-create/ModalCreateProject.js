@@ -23,12 +23,15 @@ import {
 } from "../../../../app/reducer/admin/project-management/projectManagementSlide.reducer";
 import LoadingIndicator from "../../../../helper/loading";
 import { SearchOutlined } from "@ant-design/icons";
-import dayjs from "dayjs";
 import { AdPotalsRoleConfigAPI } from "../../../../api/admin/role-config/AdPotalsRoleConfig.api";
 import { AdPotalsMemberFactoryAPI } from "../../../../api/admin/member-factory/AdPotalsMemberFactory.api";
 import { GetCategory } from "../../../../app/reducer/admin/category-management/adCategorySlice.reducer";
 import { AdGroupProjectAPI } from "../../../../../labreportapp/api/admin/AdGroupProjectAPI";
 import Image from "../../../../helper/img/Image";
+import locale from "antd/es/date-picker/locale/vi_VN";
+import dayjs from "dayjs";
+import "dayjs/locale/vi";
+
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 const { TextArea } = Input;
@@ -433,6 +436,7 @@ const ModalCreateProject = ({
               <span className="notBlank">(*) </span>
               <span>Thời gian:</span> <br />
               <RangePicker
+                locale={locale}
                 style={{ width: "100%" }}
                 format="DD-MM-YYYY"
                 value={[

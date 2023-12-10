@@ -46,9 +46,11 @@ import { convertDateLongToString } from "../../../../labreportapp/helper/util.he
 import { Link } from "react-router-dom";
 import { AdGroupProjectAPI } from "../../../../../src/labreportapp/api/admin/AdGroupProjectAPI";
 import { SetCategory } from "../../../app/reducer/admin/category-management/adCategorySlice.reducer";
+import locale from "antd/es/date-picker/locale/vi_VN";
 import dayjs from "dayjs";
-import viVN from "antd/lib/locale/vi_VN";
+import "dayjs/locale/vi";
 import ModalHistoryProject from "./modal-history-project/ModalHistoryProject";
+import { localeData } from "moment";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
@@ -478,6 +480,7 @@ const ProjectManagement = () => {
             <Col span={8}>
               <span>Thời gian:</span> <br />
               <RangePicker
+                locale={locale}
                 style={{ width: "100%" }}
                 format="YYYY-MM-DD"
                 value={[
@@ -487,7 +490,6 @@ const ProjectManagement = () => {
                 onChange={(e) => {
                   handleDateChange(e);
                 }}
-                locale={viVN}
               />
             </Col>
             <Col span={8}>
