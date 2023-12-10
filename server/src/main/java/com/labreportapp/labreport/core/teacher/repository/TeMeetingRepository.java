@@ -151,7 +151,7 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
              JOIN level l ON l.id = ac.level_id
              WHERE m.teacher_id = :#{#req.idTeacher} 
                 AND
-                    DATE(CONVERT_TZ(FROM_UNIXTIME(m.meeting_date / 1000), 'UTC', 'Asia/Ho_Chi_Minh')) = DATE(CONVERT_TZ(CURRENT_DATE(), 'UTC', 'Asia/Ho_Chi_Minh'))
+                    DATE(CONVERT_TZ(FROM_UNIXTIME(m.meeting_date / 1000), 'UTC', 'Asia/Ho_Chi_Minh')) = :#{#req.dateNow}
                 AND m.status_meeting = 0
              ORDER BY m.meeting_date DESC
             """, countQuery = """
@@ -163,13 +163,14 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                          JOIN level l ON l.id = ac.level_id
                          WHERE m.teacher_id = :#{#req.idTeacher} 
                             AND
-                                DATE(CONVERT_TZ(FROM_UNIXTIME(m.meeting_date / 1000), 'UTC', 'Asia/Ho_Chi_Minh')) = DATE(CONVERT_TZ(CURRENT_DATE(), 'UTC', 'Asia/Ho_Chi_Minh'))
+                                DATE(CONVERT_TZ(FROM_UNIXTIME(m.meeting_date / 1000), 'UTC', 'Asia/Ho_Chi_Minh')) = :#{#req.dateNow}
                             AND m.status_meeting = 0
                         ORDER BY m.meeting_date DESC
             """
             , nativeQuery = true)
     List<TeScheduleMeetingClassResponse> searchScheduleToDayByIdTeacherAndMeetingDate(@Param("req") TeFindScheduleMeetingClassRequest req);
 
+    // DATE(CONVERT_TZ(CURRENT_DATE(), 'UTC', 'Asia/Ho_Chi_Minh'))
     @Query(value = """
             SELECT ROW_NUMBER() OVER(ORDER BY m.meeting_date ASC) AS stt,
                  c.id AS id_class,
