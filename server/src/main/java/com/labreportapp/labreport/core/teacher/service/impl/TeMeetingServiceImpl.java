@@ -77,7 +77,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayOutputStream;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -390,11 +389,19 @@ public class TeMeetingServiceImpl implements TeMeetingService {
 //        LocalDateTime currentTime = LocalDateTime.now();
 //        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 //        String formattedTime = currentTime.format(formatter);
-        LocalDateTime currentTime = LocalDateTime.now();
+//        System.err.println("=================" + formattedTime+"===============");
+
+//        LocalDateTime currentTime = LocalDateTime.now();
+//        ZoneId vietnamZone = ZoneId.of("Asia/Ho_Chi_Minh");
+//        ZonedDateTime zonedDateTime = currentTime.atZone(vietnamZone);
+//        System.err.println("=================" + zonedDateTime + "===============");
+
+        LocalDate currentDate = LocalDate.now();
         ZoneId vietnamZone = ZoneId.of("Asia/Ho_Chi_Minh");
-        ZonedDateTime zonedDateTime = currentTime.atZone(vietnamZone);
-        System.err.println("++++=================" + zonedDateTime + "===============");
-        request.setDateNow(zonedDateTime);
+        ZonedDateTime zonedDateTime = currentDate.atStartOfDay(vietnamZone);
+        System.err.println("=================" + zonedDateTime + "===============");
+        request.setDateNow(zonedDateTime.toLocalDate());
+        System.err.println("=================DATE:===== " + zonedDateTime.toLocalDate());
         List<TeScheduleMeetingClassResponse> list = teMeetingRepository.searchScheduleToDayByIdTeacherAndMeetingDate(request);
         if (list.size() == 0) {
             return null;
