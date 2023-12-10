@@ -194,29 +194,29 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
              JOIN level l ON l.id = ac.level_id
              WHERE m.teacher_id = :#{#req.idTeacher} AND
              (
-                     (:#{#req.time} LIKE '-7' AND m.meeting_date BETWEEN
-                         UNIX_TIMESTAMP(DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY)) * 1000
-                         AND UNIX_TIMESTAMP(CURRENT_DATE()) * 1000)
+                     (:#{#req.time} LIKE '-7' AND 
+                       DATE(CONVERT_TZ(FROM_UNIXTIME(m.meeting_date / 1000), 'UTC', 'Asia/Ho_Chi_Minh')) BETWEEN
+                         DATE(DATE_SUB(:#{#req.dateNow}, INTERVAL 7 DAY)) AND DATE(:#{#req.dateNow} - INTERVAL 1 DAY))
                      OR
-                      (:#{#req.time} LIKE '-14' AND m.meeting_date BETWEEN
-                         UNIX_TIMESTAMP(DATE_SUB(CURRENT_DATE(), INTERVAL 14 DAY)) * 1000
-                         AND UNIX_TIMESTAMP(CURRENT_DATE()) * 1000)
-                          OR
-                      (:#{#req.time} LIKE '-30' AND m.meeting_date BETWEEN
-                         UNIX_TIMESTAMP(DATE_SUB(CURRENT_DATE(), INTERVAL 30 DAY)) * 1000
-                         AND UNIX_TIMESTAMP(CURRENT_DATE()) * 1000)
+                     (:#{#req.time} LIKE '-14' AND 
+                       DATE(CONVERT_TZ(FROM_UNIXTIME(m.meeting_date / 1000), 'UTC', 'Asia/Ho_Chi_Minh')) BETWEEN
+                        DATE(DATE_SUB(:#{#req.dateNow}, INTERVAL 14 DAY)) AND DATE(:#{#req.dateNow}  - INTERVAL 1 DAY)
                      OR
-                     (:#{#req.time} LIKE '7' AND m.meeting_date BETWEEN
-                         UNIX_TIMESTAMP(CURRENT_DATE()) * 1000
-                         AND UNIX_TIMESTAMP(DATE_ADD(CURRENT_DATE(), INTERVAL 7 DAY)) * 1000)
-                          OR
-                     (:#{#req.time} LIKE '14' AND m.meeting_date BETWEEN
-                         UNIX_TIMESTAMP(CURRENT_DATE()) * 1000
-                         AND UNIX_TIMESTAMP(DATE_ADD(CURRENT_DATE(), INTERVAL 14 DAY)) * 1000)
-                          OR
-                     (:#{#req.time} LIKE '30' AND m.meeting_date BETWEEN
-                         UNIX_TIMESTAMP(CURRENT_DATE()) * 1000
-                         AND UNIX_TIMESTAMP(DATE_ADD(CURRENT_DATE(), INTERVAL 30 DAY)) * 1000)
+                     (:#{#req.time} LIKE '-30' AND 
+                       DATE(CONVERT_TZ(FROM_UNIXTIME(m.meeting_date / 1000), 'UTC', 'Asia/Ho_Chi_Minh')) BETWEEN
+                        DATE(DATE_SUB(:#{#req.dateNow}, INTERVAL 30 DAY)) AND DATE(:#{#req.dateNow}  - INTERVAL 1 DAY)
+                     OR
+                     (:#{#req.time} LIKE '7' AND 
+                       DATE(CONVERT_TZ(FROM_UNIXTIME(m.meeting_date / 1000), 'UTC', 'Asia/Ho_Chi_Minh')) BETWEEN
+                         DATE(:#{#req.dateNow} + INTERVAL 1 DAY) AND DATE(:#{#req.dateNow} + INTERVAL 8 DAY))
+                     OR
+                     (:#{#req.time} LIKE '14' AND
+                       DATE(CONVERT_TZ(FROM_UNIXTIME(m.meeting_date / 1000), 'UTC', 'Asia/Ho_Chi_Minh')) BETWEEN
+                         DATE(:#{#req.dateNow} + INTERVAL 1 DAY) AND DATE(:#{#req.dateNow} + INTERVAL 15 DAY))
+                     OR
+                     (:#{#req.time} LIKE '30' AND
+                       DATE(CONVERT_TZ(FROM_UNIXTIME(m.meeting_date / 1000), 'UTC', 'Asia/Ho_Chi_Minh')) BETWEEN
+                         DATE(:#{#req.dateNow} + INTERVAL 1 DAY) AND DATE(:#{#req.dateNow} + INTERVAL 31 DAY))
                  )
              ORDER BY m.meeting_date ASC,mp.name ASC
             """, countQuery = """
@@ -227,31 +227,31 @@ public interface TeMeetingRepository extends JpaRepository<Meeting, String> {
                          JOIN activity ac ON ac.id = c.activity_id
                          JOIN level l ON l.id = ac.level_id
                          WHERE m.teacher_id = :#{#req.idTeacher} AND 
-                         (
-                                 (:#{#req.time} LIKE '-7' AND m.meeting_date BETWEEN
-                                     UNIX_TIMESTAMP(DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY)) * 1000
-                                     AND UNIX_TIMESTAMP(CURRENT_DATE()) * 1000)
-                                 OR
-                                  (:#{#req.time} LIKE '-14' AND m.meeting_date BETWEEN
-                                     UNIX_TIMESTAMP(DATE_SUB(CURRENT_DATE(), INTERVAL 14 DAY)) * 1000
-                                     AND UNIX_TIMESTAMP(CURRENT_DATE()) * 1000)
-                                      OR
-                                  (:#{#req.time} LIKE '-30' AND m.meeting_date BETWEEN
-                                     UNIX_TIMESTAMP(DATE_SUB(CURRENT_DATE(), INTERVAL 30 DAY)) * 1000
-                                     AND UNIX_TIMESTAMP(CURRENT_DATE()) * 1000)
-                                 OR
-                                 (:#{#req.time} LIKE '7' AND m.meeting_date BETWEEN
-                                     UNIX_TIMESTAMP(CURRENT_DATE()) * 1000
-                                     AND UNIX_TIMESTAMP(DATE_ADD(CURRENT_DATE(), INTERVAL 7 DAY)) * 1000)
-                                      OR
-                                 (:#{#req.time} LIKE '14' AND m.meeting_date BETWEEN
-                                     UNIX_TIMESTAMP(CURRENT_DATE()) * 1000
-                                     AND UNIX_TIMESTAMP(DATE_ADD(CURRENT_DATE(), INTERVAL 14 DAY)) * 1000)
-                                      OR
-                                 (:#{#req.time} LIKE '30' AND m.meeting_date BETWEEN
-                                     UNIX_TIMESTAMP(CURRENT_DATE()) * 1000
-                                     AND UNIX_TIMESTAMP(DATE_ADD(CURRENT_DATE(), INTERVAL 30 DAY)) * 1000)
-                             )
+                        (
+                            (:#{#req.time} LIKE '-7' AND 
+                       DATE(CONVERT_TZ(FROM_UNIXTIME(m.meeting_date / 1000), 'UTC', 'Asia/Ho_Chi_Minh')) BETWEEN
+                         DATE(DATE_SUB(:#{#req.dateNow}, INTERVAL 7 DAY)) AND DATE(:#{#req.dateNow} - INTERVAL 1 DAY))
+                     OR
+                     (:#{#req.time} LIKE '-14' AND 
+                       DATE(CONVERT_TZ(FROM_UNIXTIME(m.meeting_date / 1000), 'UTC', 'Asia/Ho_Chi_Minh')) BETWEEN
+                        DATE(DATE_SUB(:#{#req.dateNow}, INTERVAL 14 DAY)) AND DATE(:#{#req.dateNow}  - INTERVAL 1 DAY)
+                     OR
+                     (:#{#req.time} LIKE '-30' AND 
+                       DATE(CONVERT_TZ(FROM_UNIXTIME(m.meeting_date / 1000), 'UTC', 'Asia/Ho_Chi_Minh')) BETWEEN
+                        DATE(DATE_SUB(:#{#req.dateNow}, INTERVAL 30 DAY)) AND DATE(:#{#req.dateNow}  - INTERVAL 1 DAY)
+                     OR
+                     (:#{#req.time} LIKE '7' AND 
+                       DATE(CONVERT_TZ(FROM_UNIXTIME(m.meeting_date / 1000), 'UTC', 'Asia/Ho_Chi_Minh')) BETWEEN
+                         DATE(:#{#req.dateNow} + INTERVAL 1 DAY) AND DATE(:#{#req.dateNow} + INTERVAL 8 DAY))
+                     OR
+                     (:#{#req.time} LIKE '14' AND
+                       DATE(CONVERT_TZ(FROM_UNIXTIME(m.meeting_date / 1000), 'UTC', 'Asia/Ho_Chi_Minh')) BETWEEN
+                         DATE(:#{#req.dateNow} + INTERVAL 1 DAY) AND DATE(:#{#req.dateNow} + INTERVAL 15 DAY))
+                     OR
+                     (:#{#req.time} LIKE '30' AND
+                       DATE(CONVERT_TZ(FROM_UNIXTIME(m.meeting_date / 1000), 'UTC', 'Asia/Ho_Chi_Minh')) BETWEEN
+                         DATE(:#{#req.dateNow} + INTERVAL 1 DAY) AND DATE(:#{#req.dateNow} + INTERVAL 31 DAY))
+                 )
             """, nativeQuery = true)
     Page<TeScheduleMeetingClassResponse> searchScheduleNowToTimeByIdTeacher(@Param("req") TeFindScheduleNowToTime req, Pageable pageable);
 

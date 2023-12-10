@@ -386,16 +386,6 @@ public class TeMeetingServiceImpl implements TeMeetingService {
     public List<TeScheduleMeetingClassResponse> searchScheduleToDayByIdTeacherAndMeetingDate() {
         TeFindScheduleMeetingClassRequest request = new TeFindScheduleMeetingClassRequest();
         request.setIdTeacher(labReportAppSession.getUserId());
-//        LocalDateTime currentTime = LocalDateTime.now();
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-//        String formattedTime = currentTime.format(formatter);
-//        System.err.println("=================" + formattedTime+"===============");
-
-//        LocalDateTime currentTime = LocalDateTime.now();
-//        ZoneId vietnamZone = ZoneId.of("Asia/Ho_Chi_Minh");
-//        ZonedDateTime zonedDateTime = currentTime.atZone(vietnamZone);
-//        System.err.println("=================" + zonedDateTime + "===============");
-
         LocalDate currentDate = LocalDate.now();
         ZoneId vietnamZone = ZoneId.of("Asia/Ho_Chi_Minh");
         ZonedDateTime zonedDateTime = currentDate.atStartOfDay(vietnamZone);
@@ -412,6 +402,10 @@ public class TeMeetingServiceImpl implements TeMeetingService {
     @Override
     public PageableObject<TeScheduleMeetingClassResponse> searchScheduleNowToByIdTeacher(TeFindScheduleNowToTime request) {
         Pageable pageable = PageRequest.of(request.getPage() - 1, request.getSize());
+        LocalDate currentDate = LocalDate.now();
+        ZoneId vietnamZone = ZoneId.of("Asia/Ho_Chi_Minh");
+        ZonedDateTime zonedDateTime = currentDate.atStartOfDay(vietnamZone);
+        request.setDateNow(zonedDateTime.toLocalDate());
         Page<TeScheduleMeetingClassResponse> list = teMeetingRepository.searchScheduleNowToTimeByIdTeacher(request, pageable);
         if (list == null) {
             return null;
