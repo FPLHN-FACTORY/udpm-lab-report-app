@@ -50,7 +50,7 @@ const ModalUpdateLabel = ({ visible, onCancel, idLabel, label }) => {
       };
       LabelManagementAPI.update(obj).then(
         (response) => {
-          message.success("Cập nhật thành công!");
+          message.success("Cập nhật thành công !!");
           dispatch(UpdateLabelManagement(response.data.data));
           onCancel();
         },

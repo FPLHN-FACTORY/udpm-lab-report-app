@@ -1,6 +1,6 @@
 import SockJS from "sockjs-client";
 import { Stomp } from "@stomp/stompjs";
-import { toast } from "react-toastify";
+
 import { AppConfig } from "../../../../../AppConfig";
 
 let stompClient = null;

@@ -73,7 +73,7 @@ const LabelManagement = () => {
       setIsLoading(true);
       await LabelManagementAPI.deleteLabelById(id).then((response) => {
         dispatch(DeleteLabel(response.data.data));
-        message.success("Xóa nhãn thành công");
+        message.success("Xóa nhãn thành công !");
         setCurrent(1);
         fetchData();
         setIsLoading(false);

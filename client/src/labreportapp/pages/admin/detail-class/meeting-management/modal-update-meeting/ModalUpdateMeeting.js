@@ -63,7 +63,7 @@ const ModalUpdateMeeting = ({ item, visible, onCancel }) => {
       dispatch(SetLoadingTrue());
       MeetingManagementAPI.updateMeeting(obj).then((response) => {
         dispatch(UpdateMeeting(response.data.data));
-        message.success("Cập nhật thành công");
+        message.success("Cập nhật thành công !");
         dispatch(SetLoadingFalse());
         onCancel();
       });

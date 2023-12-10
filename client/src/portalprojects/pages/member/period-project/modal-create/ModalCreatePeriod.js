@@ -5,7 +5,7 @@ import { PeriodProjectAPI } from "../../../../api/period-project/periodProject.a
 import moment from "moment";
 import { useAppSelector } from "../../../../app/hook";
 import { GetProject } from "../../../../app/reducer/detail-project/DPProjectSlice.reducer";
-import { toast } from "react-toastify";
+
 import "react-toastify/dist/ReactToastify.css";
 import { useAppDispatch } from "../../../../app/hook";
 import {
@@ -103,12 +103,11 @@ const ModalCreatePeriod = ({ visible, onCancel }) => {
 
       PeriodProjectAPI.create(obj).then(
         (response) => {
-          message.success("Thêm thành công!");
+          message.success("Thêm thành công !!");
           dispatch(CreatePeriodProject(response.data.data));
           onCancel();
         },
-        (error) => {
-        }
+        (error) => {}
       );
     }
   };

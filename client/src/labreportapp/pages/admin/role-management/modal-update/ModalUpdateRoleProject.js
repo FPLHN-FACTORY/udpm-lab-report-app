@@ -2,7 +2,7 @@ import { Modal, Row, Col, Input, Button, Select, message, Radio } from "antd";
 import { useEffect, useState } from "react";
 import { AdRoleProjectAPI } from "../../../../api/admin/AdRoleProjectAPI";
 import { UpdateRoleProject } from "../../../../app/admin/AdRoleProjectSlice.reducer";
-import { toast } from "react-toastify";
+
 import "react-toastify/dist/ReactToastify.css";
 import { useAppDispatch } from "../../../../app/hook";
 import TextArea from "antd/es/input/TextArea";
@@ -69,7 +69,7 @@ const ModalUpdateRoleProject = ({ visible, onCancel, roleProject }) => {
       dispatch(SetLoadingTrue());
       AdRoleProjectAPI.updateRoleProject(obj, roleProject.id).then(
         (response) => {
-          message.success("Cập nhật thành công!");
+          message.success("Cập nhật thành công !");
           dispatch(UpdateRoleProject(response.data.data));
           dispatch(SetLoadingFalse());
           onCancel();

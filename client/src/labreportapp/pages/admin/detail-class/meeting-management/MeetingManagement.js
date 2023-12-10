@@ -57,10 +57,10 @@ const MeetingManagment = () => {
         dispatch(SetMeeting(response.data.data));
         setIsLoading(false);
         if (check === 1) {
-          message.success("Thay đổi giảng viên thành công");
+          message.success("Thay đổi giảng viên thành công !");
         }
         if (check === 2) {
-          message.success("Tạo nhiều buổi học thành công");
+          message.success("Tạo nhiều buổi học thành công !");
         }
       },
       (error) => {
@@ -117,7 +117,7 @@ const MeetingManagment = () => {
     MeetingManagementAPI.deleteMeeting(id).then(
       (response) => {
         dispatch(DeleteMeeting(response.data.data));
-        message.success("Xóa thành công");
+        message.success("Xóa thành công !");
       },
       (error) => {}
     );

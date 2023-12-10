@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Modal, Row, Col, Input, Button, Select, message } from "antd";
 import "react-toastify/dist/ReactToastify.css";
 import { AdGroupProjectAPI } from "../../../../api/admin/AdGroupProjectAPI";
-import { toast } from "react-toastify";
+
 import { useAppDispatch } from "../../../../app/hook";
 import { CreateAdGroupProject } from "../../../../app/admin/AdGroupProjectSlice.reducer";
 import LoadingIndicatorNoOverlay from "../../../../helper/loadingNoOverlay";
@@ -55,7 +55,7 @@ const ModalCreateGroupProject = ({ visible, onCancel }) => {
       setLoading(true);
       AdGroupProjectAPI.createGroupProject(obj).then((response) => {
         dispatch(CreateAdGroupProject(response.data.data));
-        message.success("Cập nhật thành công");
+        message.success("Cập nhật thành công !");
         setLoading(false);
         onCancel();
       });

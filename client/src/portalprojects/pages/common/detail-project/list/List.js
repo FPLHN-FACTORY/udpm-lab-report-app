@@ -4,7 +4,7 @@ import { Droppable, Draggable } from "react-beautiful-dnd";
 import Task from "../task/Task";
 import "./list.css";
 import { Input, Tooltip, message } from "antd";
-import { toast } from "react-toastify";
+
 import { useAppSelector } from "../../../../app/hook";
 import { GetPeriodCurrent } from "../../../../app/reducer/detail-project/DPPeriodSlice.reducer";
 import { GetProject } from "../../../../app/reducer/detail-project/DPProjectSlice.reducer";

@@ -2,7 +2,7 @@ import { Modal, Row, Col, Input, Button, Select, message } from "antd";
 import { useEffect, useState } from "react";
 import { AdTeamAPI } from "../../../../../api/admin/AdTeamAPI";
 import { AddTeam, GetTeam } from "../../../../../app/admin/AdTeamSlice.reducer";
-import { toast } from "react-toastify";
+
 import "react-toastify/dist/ReactToastify.css";
 import { useAppDispatch, useAppSelector } from "../../../../../app/hook";
 import TextArea from "antd/es/input/TextArea";

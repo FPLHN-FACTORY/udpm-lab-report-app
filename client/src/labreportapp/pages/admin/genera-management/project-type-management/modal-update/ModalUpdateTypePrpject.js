@@ -2,19 +2,18 @@ import { Modal, Row, Col, Input, Button, message } from "antd";
 import { useEffect, useState } from "react";
 import { AdTypeProjectAPI } from "../../../../../api/admin/AdTypeProjectAPI";
 import { useAppDispatch } from "../../../../../app/hook";
-import {
-    UpdateTypeProject
-  } from "../../../../../app/admin/AdTypeProjectSlice.reducer";
-  import { toast } from "react-toastify";
+import { UpdateTypeProject } from "../../../../../app/admin/AdTypeProjectSlice.reducer";
 import "react-toastify/dist/ReactToastify.css";
 import TextArea from "antd/es/input/TextArea";
 
 const ModalUpdateTypeProject = ({ visible, onCancel, typeProject }) => {
-    const [name, setName] = useState("");
-    const [description, setDescription] = useState("");
-    const [errorName, setErrorName] = useState("Vui lòng không để trống");
-    const [errorDescription, setErrorDescription] = useState("Vui lòng không để trống");
-    const dispatch = useAppDispatch();
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [errorName, setErrorName] = useState("Vui lòng không để trống");
+  const [errorDescription, setErrorDescription] = useState(
+    "Vui lòng không để trống"
+  );
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (typeProject !== null) {
@@ -22,10 +21,10 @@ const ModalUpdateTypeProject = ({ visible, onCancel, typeProject }) => {
       setDescription(typeProject.description);
 
       return () => {
-      setName("");
-      setErrorName();
-      setDescription("");
-      setErrorDescription();
+        setName("");
+        setErrorName();
+        setDescription("");
+        setErrorDescription();
       };
     }
   }, [typeProject]);
@@ -44,7 +43,7 @@ const ModalUpdateTypeProject = ({ visible, onCancel, typeProject }) => {
         setErrorName("");
       }
     }
-     if (description.trim() === "") {
+    if (description.trim() === "") {
       setErrorDescription("Mô tả không được để trống");
       check++;
     } else {
@@ -62,12 +61,11 @@ const ModalUpdateTypeProject = ({ visible, onCancel, typeProject }) => {
         id: typeProject.id,
         name: name,
         description: description,
-
       };
 
       AdTypeProjectAPI.updateTypeProject(obj, typeProject.id).then(
         (response) => {
-          message.success("Cập nhật thành công!");
+          message.success("Cập nhật thành công !");
           dispatch(UpdateTypeProject(response.data.data));
           onCancel();
         },
@@ -89,7 +87,7 @@ const ModalUpdateTypeProject = ({ visible, onCancel, typeProject }) => {
           <span style={{ fontSize: "18px" }}>Cập nhật Level</span>
         </div>
         <div style={{ marginTop: "15px", borderBottom: "1px solid black" }}>
-        <Row gutter={16} style={{ marginBottom: "15px" }}>
+          <Row gutter={16} style={{ marginBottom: "15px" }}>
             <Col span={24}>
               <span>Tên Loại:</span> <br />
               <Input

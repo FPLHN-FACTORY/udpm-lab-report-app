@@ -127,7 +127,7 @@ const ModalRoleProjectManagement = ({ visible, onCancel }) => {
     DetailProjectAPI.deleteRoleProject(id).then(
       (response) => {
         dispatch(DeleteMeRoleProject(id));
-        message.success("Xóa thành công");
+        message.success("Xóa thành công !");
       },
       (error) => {}
     );

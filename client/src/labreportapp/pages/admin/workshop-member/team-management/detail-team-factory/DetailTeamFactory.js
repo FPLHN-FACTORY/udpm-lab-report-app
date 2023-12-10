@@ -157,7 +157,7 @@ const DetailTeamFactory = () => {
     AdTeamAPI.deleteMemberTeamFactory(id).then(
       (response) => {
         dispatch(DeleteMemberTeamFactory(response.data.data));
-        message.success("Xóa thành công");
+        message.success("Xóa thành công !");
         setLoadingNoOverlay(false);
       },
       (error) => {
@@ -173,7 +173,7 @@ const DetailTeamFactory = () => {
     }).then(
       (response) => {
         dispatch(DeleteListMemberTeamFactory(response.data.data));
-        message.success("Xóa thành công");
+        message.success("Xóa thành công !");
         setLoadingNoOverlay(false);
         setIsCheckedAll(false);
       },

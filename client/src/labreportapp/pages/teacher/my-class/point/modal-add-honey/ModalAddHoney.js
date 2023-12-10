@@ -25,7 +25,7 @@ const ModalAddHoney = ({ visible, onCancel, listCategory }) => {
     if (check === 0) {
       TeacherPointAPI.addHoney(idClass, categoryId).then(
         (response) => {
-          message.success("Gửi yêu cầu cộng mật ong thành công");
+          message.success("Gửi yêu cầu cộng mật ong thành công !");
         },
         (error) => {}
       );
@@ -57,11 +57,12 @@ const ModalAddHoney = ({ visible, onCancel, listCategory }) => {
             }}
           >
             <Select.Option value="">Chọn 1 loại mật ong</Select.Option>
-            {listCategory != null && listCategory.map((item) => (
-              <Select.Option value={item.id} key={item.id}>
-                {item.name}
-              </Select.Option>
-            ))}
+            {listCategory != null &&
+              listCategory.map((item) => (
+                <Select.Option value={item.id} key={item.id}>
+                  {item.name}
+                </Select.Option>
+              ))}
           </Select>{" "}
           <div>
             <span style={{ color: "red" }}>{errorCategory}</span>

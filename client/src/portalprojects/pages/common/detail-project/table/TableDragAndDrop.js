@@ -429,7 +429,7 @@ const TableDragAndDrop = ({ data }) => {
                 record.completionTime != null &&
                 record.completionTime < record.deadline && (
                   <Tooltip
-                    title={`Đã hoàn thành công việc trước hạn vào lúc ${formatDateTime(
+                    title={`Đã hoàn thành công ! việc trước hạn vào lúc ${formatDateTime(
                       record.completionTime
                     )}`}
                   >
@@ -459,7 +459,7 @@ const TableDragAndDrop = ({ data }) => {
                 record.completionTime != null &&
                 record.completionTime > record.deadline && (
                   <Tooltip
-                    title={`Đã hoàn thành công việc sau hạn vào lúc ${formatDateTime(
+                    title={`Đã hoàn thành công ! việc sau hạn vào lúc ${formatDateTime(
                       record.completionTime
                     )}`}
                   >

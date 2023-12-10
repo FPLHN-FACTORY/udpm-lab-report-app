@@ -145,7 +145,7 @@ const StRegisterClass = () => {
         await StClassAPI.studentJoinClass(filter).then((response) => {
           setLoading(false);
           setPassWord("");
-          message.success("Tham gia lớp học thành công!");
+          message.success("Tham gia lớp học thành công !!");
           navigate(`/student/my-class/post/${record.id}`);
         });
       } else {

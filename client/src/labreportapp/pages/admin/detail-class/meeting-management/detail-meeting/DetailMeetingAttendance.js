@@ -1,4 +1,13 @@
-import { Row, Col, Table, Empty, Button, Popconfirm, Input, message } from "antd";
+import {
+  Row,
+  Col,
+  Table,
+  Empty,
+  Button,
+  Popconfirm,
+  Input,
+  message,
+} from "antd";
 import { useParams } from "react-router";
 import "./style-detail-meeting-attendance.css";
 import {
@@ -30,7 +39,6 @@ import {
   GetMeeting,
   SetMeeting,
 } from "../../../../../app/admin/AdMeetingManagement.reducer";
-import { toast } from "react-toastify";
 
 const DetailMeetingAttendance = () => {
   const { id } = useParams();
@@ -182,7 +190,7 @@ const DetailMeetingAttendance = () => {
       listAttendance: data,
     };
     MeetingManagementAPI.updateAttendance(obj).then((response) => {
-      message.success("Cập nhật thành công");
+      message.success("Cập nhật thành công !");
     });
   };
 

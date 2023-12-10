@@ -110,7 +110,7 @@ const TeamManagement = () => {
   const buttonDelete = (id) => {
     AdTeamAPI.deleteTeam(id).then(
       (response) => {
-        message.success("Xóa thành công!");
+        message.success("Xóa thành công !!");
         dispatch(DeleteTeam(response.data.data));
       },
       (error) => {}

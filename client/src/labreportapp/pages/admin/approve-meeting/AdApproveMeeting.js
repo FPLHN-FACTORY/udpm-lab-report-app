@@ -412,7 +412,7 @@ const AdApproveMeeting = () => {
         setLoading(true);
         AdMeetingRequestAPI.approveClass(selectedRowKeys).then(
           (response) => {
-            message.success("Phê duyệt thành công");
+            message.success("Phê duyệt thành công !");
             featchAllClassHaveMeetingRequest();
             AdMeetingRequestAPI.countClassHaveMeetingRequest().then((res) => {
               dispatch(SetAdCountApproveMeetingRequest(res.data.data));
@@ -433,7 +433,7 @@ const AdApproveMeeting = () => {
         setLoading(true);
         AdMeetingRequestAPI.noApproveClass(selectedRowKeys).then(
           (response) => {
-            message.success("Từ chối phê duyệt thành công");
+            message.success("Từ chối phê duyệt thành công !");
             featchAllClassHaveMeetingRequest();
             AdMeetingRequestAPI.countClassHaveMeetingRequest().then((res) => {
               dispatch(SetAdCountApproveMeetingRequest(res.data.data));

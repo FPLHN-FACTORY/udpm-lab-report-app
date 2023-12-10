@@ -24,7 +24,7 @@ import { GetMemberProject } from "../../../../app/reducer/detail-project/DPMembe
 import { GetSessionId } from "../../../../app/reducer/detail-project/StompClient.reducer";
 import { getStompClient } from "../stomp-client-config/StompClientManager";
 import BoardStompClient from "./BoardStompClient";
-import { toast } from "react-toastify";
+
 import Cookies from "js-cookie";
 import { useParams } from "react-router";
 
@@ -130,7 +130,6 @@ const Board = () => {
   }, [board.lists]);
 
   const onDragEnd = (result) => {
-
     const { destination, source, draggableId } = result;
 
     if (!destination) {

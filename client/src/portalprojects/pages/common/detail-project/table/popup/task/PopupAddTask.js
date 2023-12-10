@@ -5,7 +5,7 @@ import { useAppSelector } from "../../../../../../app/hook";
 import { GetAllList } from "../../../../../../app/reducer/detail-project/DPBoardSlice.reducer";
 import { GetPeriodCurrent } from "../../../../../../app/reducer/detail-project/DPPeriodSlice.reducer";
 import { GetProject } from "../../../../../../app/reducer/detail-project/DPProjectSlice.reducer";
-import { toast } from "react-toastify";
+
 import { getStompClient } from "../../../stomp-client-config/StompClientManager";
 import Cookies from "js-cookie";
 const { Option } = Select;

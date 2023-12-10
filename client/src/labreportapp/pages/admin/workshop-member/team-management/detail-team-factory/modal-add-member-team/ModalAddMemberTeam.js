@@ -34,7 +34,7 @@ const ModalAddMemberTeam = ({
     setLoading(true);
     AdTeamAPI.addMembers(obj).then(
       (response) => {
-        message.success("Thêm thành công");
+        message.success("Thêm thành công !");
         fetchAll();
         fetchAllMemberFactory();
         setLoading(false);
