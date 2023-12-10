@@ -93,7 +93,6 @@
 // import com.labreportapp.portalprojects.repository.ProjectCategoryRepository;
 // import com.labreportapp.portalprojects.repository.ProjectRepository;
 // import com.labreportapp.portalprojects.repository.RoleConfigRepository;
-// import com.labreportapp.portalprojects.repository.StakeholderProjectRepository;
 // import com.labreportapp.portalprojects.repository.TodoListRepository;
 // import com.labreportapp.portalprojects.repository.TodoRepository;
 // import org.springframework.beans.factory.annotation.Autowired;
@@ -195,9 +194,6 @@
 //
 //     @Autowired
 //     private LabelProjectRepository labelProjectRepository;
-//
-//     @Autowired
-//     private StakeholderProjectRepository stakeholderProjectRepository;
 //
 //     @Autowired
 //     private TodoRepository todoRepository;
