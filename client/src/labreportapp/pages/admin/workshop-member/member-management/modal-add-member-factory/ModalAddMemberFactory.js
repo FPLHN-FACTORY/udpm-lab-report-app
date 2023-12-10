@@ -40,7 +40,7 @@ const ModalAddMemberFactory = ({
       AdMemberFactoryAPI.addMemberFactory(email).then(
         (res) => {
           dispatch(AddAdMemberFactory(res.data.data));
-          message.success("Thêm thành công");
+          message.success("Thêm thành công !");
           setLoading(false);
           setNumberMemberFactory(numberMemberFactory + 1);
           onCancel();

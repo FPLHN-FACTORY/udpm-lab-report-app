@@ -85,7 +85,7 @@ const ModalUpdateMeetingRequest = ({
         dispatch(SetLoadingTrue());
         TeacherMeetingRequestAPI.updateMeetingRequest(obj).then((response) => {
           dispatch(UpdateMeetingRequest(response.data.data));
-          message.success("Cập nhật yêu cầu thành công");
+          message.success("Cập nhật yêu cầu thành công !");
           featchMeeting();
           dispatch(SetLoadingFalse());
           onCancel();

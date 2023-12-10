@@ -3,13 +3,9 @@ import { Modal, Row, Col, Input, Button, Select, message } from "antd";
 import "./styleUpdateClass.css";
 import { useEffect, useState } from "react";
 import moment from "moment";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { useAppDispatch, useAppSelector } from "../../../../app/hook";
-import LoadingIndicator from "../../../../helper/loading";
 import { ClassAPI } from "../../../../api/admin/class-manager/ClassAPI.api";
 import { UpdateClass } from "../../../../app/admin/ClassManager.reducer";
-import { CreateClass } from "../../../../app/admin/ClassManager.reducer";
 import { GetAdTeacher } from "../../../../app/admin/AdTeacherSlice.reducer";
 import { parseInt } from "lodash";
 import LoadingIndicatorNoOverlay from "../../../../helper/loadingNoOverlay";
@@ -24,7 +20,7 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
   const [loadingOverlay, setLoadingOverlay] = useState(false);
   const dispatch = useAppDispatch();
   const [idSemesterSeach, setIdSemesterSearch] = useState("");
-  const [semesterDataAll, setSemesterDataAll] = useState([]); 
+  const [semesterDataAll, setSemesterDataAll] = useState([]);
   const [idActivitiSearch, setIdActivitiSearch] = useState("");
   const [activityDataAll, setActivityDataAll] = useState([]);
   const [selectedItemsPerson, setSelectedItemsPerson] = useState("");
@@ -93,7 +89,6 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
       const fetchDetail = (id) => {
         ClassAPI.getAdClassDetailById(id).then(
           (respone) => {
-            
             setClassDetail(respone.data.data);
             setIdSemesterSearch(respone.data.data.semesterId);
             setIdActivitiSearch(respone.data.data.activityId);
@@ -135,7 +130,6 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
   useEffect(
     (id) => {
       const featchDataActivity = async (idSemesterSeach) => {
-        
         await ClassAPI.getAllActivityByIdSemester(idSemesterSeach).then(
           (respone) => {
             setActivityDataAll(respone.data.data);
@@ -184,7 +178,7 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
       };
 
       await ClassAPI.update(id, obj).then((response) => {
-        message.success("Cập nhật thành công!");
+        message.success("Cập nhật thành công !");
         setLoadingOverlay(faHeartPulse);
         dispatch(UpdateClass(response.data.data));
         cancelSuccess();

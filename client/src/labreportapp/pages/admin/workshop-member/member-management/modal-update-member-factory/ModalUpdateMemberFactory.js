@@ -54,7 +54,7 @@ const ModalUpdateMemberFactory = ({ visible, onCancel, id, roles, teams }) => {
 
     AdMemberFactoryAPI.updateMemberFactory(obj).then((response) => {
       dispatch(UpdateAdMemberFactory(response.data.data));
-      message.success("Cập nhật thành công");
+      message.success("Cập nhật thành công !");
       setLoading(false);
       onCancel();
     });

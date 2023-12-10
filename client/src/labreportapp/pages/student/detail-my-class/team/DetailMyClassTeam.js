@@ -90,7 +90,7 @@ const DetailMyClassTeam = () => {
     };
     StMyClassAPI.leaveClass(obj)
       .then((response) => {
-        message.success("Rời lớp học thành công!");
+        message.success("Rời lớp học thành công !!");
         navigate(`/student/my-class`);
       })
       .catch((error) => {});

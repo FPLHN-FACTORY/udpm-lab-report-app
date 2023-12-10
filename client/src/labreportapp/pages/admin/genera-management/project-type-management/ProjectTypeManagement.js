@@ -7,10 +7,18 @@ import {
   faTrash,
   faPencil,
   faFilter,
-  faTeletype
+  faTeletype,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Input, Pagination, Table, Tooltip, Popconfirm, message } from "antd";
+import {
+  Button,
+  Input,
+  Pagination,
+  Table,
+  Tooltip,
+  Popconfirm,
+  message,
+} from "antd";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useAppSelector, useAppDispatch } from "../../../../app/hook";
@@ -22,7 +30,7 @@ import {
 import { AdTypeProjectAPI } from "../../../../api/admin/AdTypeProjectAPI";
 import ModalCreateTypeProject from "./modal-create/ModalCreateTypeProject";
 import ModalUpdateTypeProject from "./modal-update/ModalUpdateTypePrpject";
-import { toast } from "react-toastify";
+
 import LoadingIndicator from "../../../../helper/loading";
 import "./style-project-type.css";
 import React from "react";
@@ -161,7 +169,7 @@ const ProjectTypeManagement = () => {
   const buttonDelete = (id) => {
     AdTypeProjectAPI.deleteTypeProject(id).then(
       (response) => {
-        message.success("Xóa thành công!");
+        message.success("Xóa thành công !");
         dispatch(DeleteTypeProject(response.data.data));
         fetchData();
       },
@@ -169,17 +177,16 @@ const ProjectTypeManagement = () => {
     );
   };
 
-
   return (
     <div className="box-general" style={{ paddingTop: 50 }}>
-       {loading && <LoadingIndicator />}
+      {loading && <LoadingIndicator />}
       <div className="title_activity_management" style={{ marginTop: 0 }}>
         {" "}
         <FontAwesomeIcon icon={faTeletype} style={{ fontSize: "20px" }} />
         <span style={{ marginLeft: "10px" }}>Quản lý loại dự án</span>
       </div>
       <div className="filter-level" style={{ marginBottom: "10px" }}>
-      <FontAwesomeIcon icon={faFilter} style={{ fontSize: "20px" }} />{" "}
+        <FontAwesomeIcon icon={faFilter} style={{ fontSize: "20px" }} />{" "}
         <span style={{ fontSize: "18px", fontWeight: "500" }}>Bộ lọc</span>
         <hr />
         <div className="title__search" style={{ marginRight: "60px" }}>
@@ -272,7 +279,10 @@ const ProjectTypeManagement = () => {
           </div>
         </div>
       </div>
-      <ModalCreateTypeProject visible={modalCreate} onCancel={buttonCreateCancel} />
+      <ModalCreateTypeProject
+        visible={modalCreate}
+        onCancel={buttonCreateCancel}
+      />
       <ModalUpdateTypeProject
         visible={modalUpdate}
         onCancel={buttonUpdateCancel}

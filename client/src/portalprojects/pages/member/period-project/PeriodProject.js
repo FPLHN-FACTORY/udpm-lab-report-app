@@ -294,11 +294,10 @@ const PeriodProject = () => {
   const deletePeriod = (id) => {
     PeriodProjectAPI.delete(id, detailProject.id).then(
       (response) => {
-        message.success("Xóa thành công!");
+        message.success("Xóa thành công !!");
         dispatch(DeletePeriodProject(response.data.data));
       },
-      (error) => {
-      }
+      (error) => {}
     );
   };
 

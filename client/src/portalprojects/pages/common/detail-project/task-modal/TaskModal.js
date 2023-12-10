@@ -50,7 +50,7 @@ import { GetPeriodCurrent } from "../../../../app/reducer/detail-project/DPPerio
 import { GetProject } from "../../../../app/reducer/detail-project/DPProjectSlice.reducer";
 import PopupPriority from "../popup/priority/PopupPriority";
 import { debounce } from "lodash";
-import { toast } from "react-toastify";
+
 import CommentForm from "./comment/CommentForm";
 import ListActivity from "./activity/ListActivity";
 import ViewEditorJodit from "../form-editor/ViewEditorJodit";
@@ -337,7 +337,7 @@ const TaskModal = memo(({ open, onCancel, id }) => {
         idTodo: detailTodo.id,
         idTodoList: detailTodo.todoListId,
       };
-      
+
       if (!isJoin) {
         handleOutAssign(obj);
       } else {

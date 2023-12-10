@@ -85,7 +85,7 @@ import {
   UpdateLabelProject,
 } from "../../../../app/reducer/detail-project/DPLabelProject.reducer";
 import { DetailProjectAPI } from "../../../../api/detail-project/detailProject.api";
-import { toast } from "react-toastify";
+
 import "react-toastify/dist/ReactToastify.css";
 import { parseInt } from "lodash";
 import { CommonAPI } from "../../../../api/commonAPI";
@@ -327,7 +327,7 @@ const BoardStompClient = (dispatch, useAppSelector, id) => {
               (item) => item.id === obj.labelProjectId
             ),
           };
-     
+
           dispatch(CreateLabelBoard(data));
         }
       }
@@ -519,7 +519,7 @@ const BoardStompClient = (dispatch, useAppSelector, id) => {
             id: data.id,
             status: data.statusTodo,
             progress: progress,
-            completionTime: dataTodoProgress.completionTime
+            completionTime: dataTodoProgress.completionTime,
           };
           dispatch(UpdateStatusTodoInCheckList(obj));
         }
@@ -1026,7 +1026,7 @@ const BoardStompClient = (dispatch, useAppSelector, id) => {
 
     stompClient.subscribe("/portal-projects/error/" + sessionId, (mes) => {
       var errorObject = JSON.parse(mes.body);
-      var errorMessages = errorObject.map(error => error.message).join(', ');
+      var errorMessages = errorObject.map((error) => error.message).join(", ");
       message.error(errorMessages);
     });
 

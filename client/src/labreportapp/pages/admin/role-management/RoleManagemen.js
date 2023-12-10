@@ -192,7 +192,7 @@ const RoleManagement = () => {
   const buttonDelete = (id) => {
     AdRoleProjectAPI.deleteRoleProject(id).then(
       (response) => {
-        message.success("Xóa thành công!");
+        message.success("Xóa thành công !");
         dispatch(DeleteRoleProject(response.data.data));
         fetchData();
       },

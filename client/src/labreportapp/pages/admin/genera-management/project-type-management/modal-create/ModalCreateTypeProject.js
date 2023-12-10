@@ -1,10 +1,8 @@
 import { Modal, Row, Col, Input, Button, message } from "antd";
 import { useEffect, useState } from "react";
 import { AdTypeProjectAPI } from "../../../../../api/admin/AdTypeProjectAPI";
-import {
-    AddTypeProject
-  } from "../../../../../app/admin/AdTypeProjectSlice.reducer";
-  import { toast } from "react-toastify";
+import { AddTypeProject } from "../../../../../app/admin/AdTypeProjectSlice.reducer";
+
 import "react-toastify/dist/ReactToastify.css";
 import { useAppDispatch } from "../../../../../app/hook";
 import TextArea from "antd/es/input/TextArea";
@@ -13,7 +11,9 @@ const ModalCreateTypeProject = ({ visible, onCancel }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [errorName, setErrorName] = useState("Vui lòng không để trống");
-  const [errorDescription, setErrorDescription] = useState("Vui lòng không để trống");
+  const [errorDescription, setErrorDescription] = useState(
+    "Vui lòng không để trống"
+  );
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -39,7 +39,7 @@ const ModalCreateTypeProject = ({ visible, onCancel }) => {
         setErrorName("");
       }
     }
-     if (description.trim() === "") {
+    if (description.trim() === "") {
       setErrorDescription("Mô tả không được để trống");
       check++;
     } else {
@@ -55,12 +55,11 @@ const ModalCreateTypeProject = ({ visible, onCancel }) => {
       let obj = {
         name: name,
         description: description,
-
       };
 
       AdTypeProjectAPI.addTypeProject(obj).then(
         (response) => {
-          message.success("Thêm Loại thành công!");
+          message.success("Thêm Loại thành công !");
           dispatch(AddTypeProject(response.data.data));
           onCancel();
         },
@@ -108,7 +107,6 @@ const ModalCreateTypeProject = ({ visible, onCancel }) => {
               />
               <span style={{ color: "red" }}>{errorDescription}</span>
             </Col>
-            
           </Row>
         </div>
         <div style={{ textAlign: "right" }}>

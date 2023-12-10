@@ -29,7 +29,6 @@ import {
 } from "antd";
 import LoadingIndicator from "../../../../helper/loading";
 import LoadingIndicatorNoOverlay from "../../../../helper/loadingNoOverlay";
-import { toast } from "react-toastify";
 import ModalSentStudentAdmin from "./ModalSentStudentAdmin";
 import { convertHourAndMinuteToString } from "../../../../helper/util.helper";
 import ModalShowHistory from "./ModalShowHistory";
@@ -66,27 +65,27 @@ const InformationClass = () => {
 
   const handleShowStudentsCouldKick = () => {
     if (students.length === 0) {
-      toast.warning("Hiện tại lớp học chưa có sinh viên!");
+      message.warning("Hiện tại lớp học chưa có sinh viên !");
     } else if (!isKickStudent) {
       setIsKickStudent(true);
       setIsMoveStudent(false);
       message.success(
-        "Đã chuyển sang chế độ xóa sinh viên khỏi lớp, hãy chọn sinh viên cần xóa!"
+        "Đã chuyển sang chế độ xóa sinh viên khỏi lớp, hãy chọn sinh viên cần xóa !"
       );
     }
   };
   const handleOpenModalClass = () => {
     if (students.length === 0) {
-      toast.warning("Hiện tại lớp học chưa có sinh viên!");
+      message.warning("Hiện tại lớp học chưa có sinh viên !");
     } else if (!isMoveStudent) {
       setIsMoveStudent(true);
       setIsKickStudent(false);
       message.success(
-        "Đã chuyển sang chế độ di chuyển sinh viên, hãy chọn sinh viên cần chuyển lớp!"
+        "Đã chuyển sang chế độ di chuyển sinh viên, hãy chọn sinh viên cần chuyển lớp !"
       );
     } else if (isMoveStudent) {
       if (selectedRowKeys.length === 0) {
-        toast.warning("Vui lòng chọn sinh viên cần xóa khỏi lớp!");
+        message.warning("Vui lòng chọn sinh viên cần xóa khỏi lớp !");
       } else {
         setModalClass(true);
       }
@@ -479,7 +478,7 @@ const InformationClass = () => {
 
   const handleKickStudent = async () => {
     if (selectedRowKeys.length === 0) {
-      toast.warning("Vui lòng chọn sinh viên cần chuyển lớp!");
+      message.warning("Vui lòng chọn sinh viên cần chuyển lớp !");
     } else {
       try {
         let data = {
@@ -488,7 +487,7 @@ const InformationClass = () => {
         };
         await ClassAPI.kickStudentClassesToClass(data).then((response) => {
           if (response.data.data) {
-            message.success("Xóa sinh viên thành công!");
+            message.success("Xóa sinh viên thành công !");
             setSelected([]);
           } else {
             message.error("Xóa sinh viên thất bại !");

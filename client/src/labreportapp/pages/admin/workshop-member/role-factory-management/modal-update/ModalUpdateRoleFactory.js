@@ -2,7 +2,7 @@ import { Modal, Row, Col, Input, Button, Select, message, Radio } from "antd";
 import { useEffect, useState } from "react";
 import { AdRoleFactoryAPI } from "../../../../../api/admin/AdRoleFactoryAPI";
 import { UpdateRoleFactory } from "../../../../../app/admin/AdRoleFactorySlice.reducer";
-import { toast } from "react-toastify";
+
 import "react-toastify/dist/ReactToastify.css";
 import { useAppDispatch } from "../../../../../app/hook";
 import TextArea from "antd/es/input/TextArea";

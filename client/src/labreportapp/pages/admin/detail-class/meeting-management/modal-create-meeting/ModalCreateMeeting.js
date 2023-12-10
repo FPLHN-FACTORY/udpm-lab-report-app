@@ -6,7 +6,7 @@ import { useParams } from "react-router";
 import { useEffect } from "react";
 import { MeetingManagementAPI } from "../../../../../api/admin/meeting-management/MeetingManagementAPI";
 import { useAppDispatch, useAppSelector } from "../../../../../app/hook";
-import { toast } from "react-toastify";
+
 import { CreateMeeting } from "../../../../../app/admin/AdMeetingManagement.reducer";
 import { GetAdTeacher } from "../../../../../app/admin/AdTeacherSlice.reducer";
 import {
@@ -73,7 +73,7 @@ const ModalCreateMeeting = ({ visible, onCancel }) => {
 
       MeetingManagementAPI.createMeeting(obj).then((response) => {
         dispatch(CreateMeeting(response.data.data));
-        message.success("Thêm thành công");
+        message.success("Thêm thành công !");
         dispatch(SetLoadingFalse());
         onCancel();
       });

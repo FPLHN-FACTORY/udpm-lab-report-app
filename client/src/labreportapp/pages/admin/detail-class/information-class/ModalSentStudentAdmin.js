@@ -14,7 +14,7 @@ import { ClassAPI } from "../../../../api/admin/class-manager/ClassAPI.api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRightToBracket } from "@fortawesome/free-solid-svg-icons";
 import { SearchOutlined } from "@ant-design/icons";
-import { toast } from "react-toastify";
+
 import {
   SetStudentClasses,
   GetStudentClasses,

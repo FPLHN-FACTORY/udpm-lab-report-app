@@ -1,12 +1,15 @@
 import { Button, Input, Modal, Radio, Row, message } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faPencil, faPlus, faUserTag } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEdit,
+  faPencil,
+  faPlus,
+  faUserTag,
+} from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "../../../../../../../labreportapp/app/hook";
 import { DetailProjectAPI } from "../../../../../../api/detail-project/detailProject.api";
-import {
-  UpdateMeRoleProject,
-} from "../../../../../../app/reducer/detail-project/DPRoleProjectSlice.reducer";
+import { UpdateMeRoleProject } from "../../../../../../app/reducer/detail-project/DPRoleProjectSlice.reducer";
 
 const ModalUpdateRoleProject = ({ visible, onCancel, item }) => {
   const [name, setName] = useState("");
@@ -50,7 +53,7 @@ const ModalUpdateRoleProject = ({ visible, onCancel, item }) => {
       DetailProjectAPI.updateRoleProject(obj).then(
         (response) => {
           dispatch(UpdateMeRoleProject(response.data.data));
-          message.success("Cập nhật thành công");
+          message.success("Cập nhật thành công !");
           onCancel();
         },
         (error) => {}

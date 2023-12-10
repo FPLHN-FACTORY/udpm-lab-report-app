@@ -14,7 +14,7 @@ import {
 } from "antd";
 import "./stydeModalUpdateStakeholderManagement.css";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+
 import "react-toastify/dist/ReactToastify.css";
 import { useAppDispatch } from "../../../../app/hook";
 import { CommonStakeHolderAPI } from "../../../../api/commonAPI";
@@ -78,14 +78,14 @@ const ModalUpdateStakeholderManagement = ({
       };
       if (projectNew.listProject.toString("")) {
         PeriodProjectAPI.updateProjectByIdStake(projectNew, idStakeHolder);
-        message.success("Cập nhật thành công");
+        message.success("Cập nhật thành công !");
         onCancel();
       }
-      if (projectNew.listProject == "") {
-        message.error("Cập nhật thất bại");
+      if (projectNew.listProject === "") {
+        message.error("Cập nhật thất bại !");
       }
     } catch (error) {
-      message.error("Cập nhật thất bại");
+      message.error("Cập nhật thất bại !");
     }
   };
   const fetchData = async (idPeriodPre) => {
@@ -229,12 +229,7 @@ const ModalUpdateStakeholderManagement = ({
 
   return (
     <>
-      <Modal
-        visible={visible}
-        onCancel={onCancel}
-        width={950}
-        footer={null}
-      >
+      <Modal visible={visible} onCancel={onCancel} width={950} footer={null}>
         <div>
           <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
             <span style={{ fontSize: "18px" }}>Cập nhật giai đoạn</span>
@@ -323,7 +318,10 @@ const ModalUpdateStakeholderManagement = ({
                   ))}
                 </Select>
               ) : (
-                <span className="tip_project_full"> Đã theo dõi tất cả dự án</span>
+                <span className="tip_project_full">
+                  {" "}
+                  Đã theo dõi tất cả dự án
+                </span>
               )}
             </div>
           </Row>

@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRandom } from "@fortawesome/free-solid-svg-icons";
 import { ClassAPI } from "../../../../api/admin/class-manager/ClassAPI.api";
 import moment from "moment";
-import { toast } from "react-toastify";
+
 import LoadingIndicatorNoOverlay from "../../../../helper/loadingNoOverlay";
 import { useAppDispatch } from "../../../../app/hook";
 import {
@@ -113,7 +113,7 @@ const ModalRandomClass = ({ visible, onCancel, fetchData }) => {
       };
       dispatch(SetLoadingTrue());
       ClassAPI.randomClass(obj).then((response) => {
-        message.success("Random tạo lớp thành công");
+        message.success("Random tạo lớp thành công !");
         dispatch(SetLoadingFalse());
         fetchData();
         onCancel();

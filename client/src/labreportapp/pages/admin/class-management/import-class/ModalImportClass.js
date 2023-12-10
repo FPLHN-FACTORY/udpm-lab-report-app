@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Button, Select, Row, Col, Input, Upload, message } from "antd";
+import { Modal, Button, Select, Row, Upload, message } from "antd";
 import "./style-modal-import-class.css";
-import "react-toastify/dist/ReactToastify.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRandom, faUpload } from "@fortawesome/free-solid-svg-icons";
+import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import { UploadOutlined } from "@ant-design/icons";
 import { ClassAPI } from "../../../../api/admin/class-manager/ClassAPI.api";
-import { toast } from "react-toastify";
 import LoadingIndicatorNoOverlay from "../../../../helper/loadingNoOverlay";
 
 const { Option } = Select;
@@ -80,7 +78,7 @@ const ModalImportClass = ({ visible, onCancel, fetchData }) => {
           if (response.data.data.status === false) {
             message.success(response.data.data.message);
           } else {
-            message.success("Import thành công");
+            message.success("Import thành công !");
             onCancel();
             fetchData();
           }

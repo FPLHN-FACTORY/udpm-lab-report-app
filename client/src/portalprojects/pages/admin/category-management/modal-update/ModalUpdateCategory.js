@@ -1,7 +1,7 @@
 import { Modal, Row, Col, Input, Button, message } from "antd";
 import { useEffect, useState } from "react";
 import { AdCategoryAPI } from "../../../../api/admin-category/adCategory.api";
-import { toast } from "react-toastify";
+
 import "react-toastify/dist/ReactToastify.css";
 import { useAppDispatch } from "../../../../app/hook";
 import { UpdateCategory } from "../../../../app/reducer/admin/category-management/adCategorySlice.reducer";
@@ -51,8 +51,7 @@ const ModalUpdateCategory = ({ visible, onCancel, category }) => {
           dispatch(UpdateCategory(response.data.data));
           onCancel();
         },
-        (error) => {
-        }
+        (error) => {}
       );
     }
   };

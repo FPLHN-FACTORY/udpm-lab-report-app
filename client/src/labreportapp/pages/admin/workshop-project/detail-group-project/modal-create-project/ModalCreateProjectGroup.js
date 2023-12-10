@@ -500,32 +500,33 @@ const ModalCreateProjectGroup = ({ visible, onCancel, nameGroup }) => {
                   option.label.toLowerCase().indexOf(text.toLowerCase()) !== -1
                 }
               >
-                {listMembers != null && listMembers.map((member) => (
-                  <Option
-                    label={member.email}
-                    value={member.id}
-                    key={member.id}
-                  >
-                    <Tooltip title={member.email}>
-                      <div style={{ display: "flex", alignItems: "center" }}>
-                        <Image
-                          url={member.picture}
-                          picxel={25}
-                          marginRight={8}
-                          name={member.name}
-                        />
-                        <span>
-                          {member.name +
-                            " " +
-                            member.userName +
-                            " (" +
-                            member.email +
-                            ")"}
-                        </span>
-                      </div>
-                    </Tooltip>
-                  </Option>
-                ))}{" "}
+                {listMembers != null &&
+                  listMembers.map((member) => (
+                    <Option
+                      label={member.email}
+                      value={member.id}
+                      key={member.id}
+                    >
+                      <Tooltip title={member.email}>
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          <Image
+                            url={member.picture}
+                            picxel={25}
+                            marginRight={8}
+                            name={member.name}
+                          />
+                          <span>
+                            {member.name +
+                              " " +
+                              member.userName +
+                              " (" +
+                              member.email +
+                              ")"}
+                          </span>
+                        </div>
+                      </Tooltip>
+                    </Option>
+                  ))}{" "}
               </Select>
             </Col>
           </Row>

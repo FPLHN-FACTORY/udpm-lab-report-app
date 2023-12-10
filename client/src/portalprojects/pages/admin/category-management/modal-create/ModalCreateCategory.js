@@ -59,8 +59,7 @@ const ModalCreateCategory = ({
           }
           onCancel();
         },
-        (error) => {
-        }
+        (error) => {}
       );
     }
   };

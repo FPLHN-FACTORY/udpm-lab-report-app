@@ -5,7 +5,7 @@ import {
   AddRoleProject,
   GetRoleProject,
 } from "../../../../app/admin/AdRoleProjectSlice.reducer";
-import { toast } from "react-toastify";
+
 import "react-toastify/dist/ReactToastify.css";
 import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import TextArea from "antd/es/input/TextArea";
@@ -69,7 +69,7 @@ const ModalCreateRoleProject = ({
       dispatch(SetLoadingTrue());
       AdRoleProjectAPI.addRoleProject(obj).then(
         (response) => {
-          message.success("Thêm Loại thành công!");
+          message.success("Thêm Loại thành công !");
           dispatch(AddRoleProject(response.data.data));
           dispatch(SetLoadingFalse());
           if (data != null) {

@@ -10,7 +10,6 @@ import { TeacherMeetingAPI } from "../../../../api/teacher/meeting/TeacherMeetin
 import { Link } from "react-router-dom";
 import CustomSwitch from "./CustomSwitch";
 import { Button, Empty, Input, Row, Table, message } from "antd";
-import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import {
   SetAttendanceMeeting,
@@ -167,7 +166,7 @@ const TeacherAttendanceMeeting = () => {
         );
       }
       if (!checkTime) {
-        toast.warning(
+        message.error(
           "Không còn trong ca dạy, không thể xem hoặc sửa điểm danh !"
         );
         navigate("/teacher/schedule-today");

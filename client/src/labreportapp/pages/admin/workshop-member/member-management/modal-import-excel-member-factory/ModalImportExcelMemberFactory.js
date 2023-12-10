@@ -39,7 +39,7 @@ const ModalImportExcelMemberFactory = ({ visible, onCancel, fetchData }) => {
           if (response.data.data.status === false) {
             message.success(response.data.data.message);
           } else {
-            message.success("Import excel thành công");
+            message.success("Import excel thành công !");
             setLoading(false);
             fetchData();
           }

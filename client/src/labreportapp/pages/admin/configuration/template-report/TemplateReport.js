@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { AdTemplateReportAPI } from "../../../../api/admin/AdTemplateReportAPI";
 import { Button, message } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import { toast } from "react-toastify";
+
 import LoadingIndicator from "../../../../helper/loading";
 import {
   SetLoadingFalse,
@@ -48,7 +48,7 @@ const TemplateReport = () => {
     dispatch(SetLoadingTrue());
     AdTemplateReportAPI.updateTemplateReportById(data).then(
       (res) => {
-        message.success("Cập nhật thành công!");
+        message.success("Cập nhật thành công !");
         dispatch(SetLoadingFalse());
       },
       (error) => {}

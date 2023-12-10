@@ -43,7 +43,7 @@ const ModalCreateRoleProject = ({ visible, onCancel }) => {
       DetailProjectAPI.createRoleProject(obj).then(
         (response) => {
           dispatch(AddMeRoleProject(response.data.data));
-          message.success("Thêm vai trò thành công");
+          message.success("Thêm vai trò thành công !");
           onCancel();
         },
         (error) => {}

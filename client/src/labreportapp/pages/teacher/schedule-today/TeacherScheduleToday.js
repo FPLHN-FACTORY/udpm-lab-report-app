@@ -23,7 +23,7 @@ import {
   faUpload,
 } from "@fortawesome/free-solid-svg-icons";
 import { TeacherScheduleTodayAPI } from "../../../api/teacher/meeting/schedule-today/TeacherScheduleToday.api";
-import { toast } from "react-toastify";
+
 import {
   checkInToAttend,
   convertHourAndMinuteToString,
@@ -110,7 +110,7 @@ const TeacherScheduleToday = () => {
       await TeacherScheduleTodayAPI.updateDescriptionMeeting(dataUp).then(
         (response) => {
           setDataToday(response.data.data);
-          message.success("Lưu link học thành công");
+          message.success("Cập nhật link học thành công !");
         }
       );
     } catch (error) {}
@@ -142,7 +142,7 @@ const TeacherScheduleToday = () => {
       );
       check
         ? navigate(`/teacher/schedule-today/attendance/` + idMeeting)
-        : toast.warning(
+        : message.warning(
             "Không còn trong ca dạy, không thể xem hoặc sửa điểm danh !"
           );
     } catch (error) {}

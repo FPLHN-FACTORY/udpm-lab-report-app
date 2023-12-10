@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { AdClassCongigurationAPI } from "../../../../../api/admin/AdClassConfigurationAPI";
-import { toast } from "react-toastify";
+
 import { Button, Col, Input, Modal, Row, message } from "antd";
 import { useAppDispatch } from "../../../../../app/hook";
 import {
@@ -126,13 +126,12 @@ const ModalUpdateClassConfiguration = ({
       };
       AdClassCongigurationAPI.update(obj).then(
         () => {
-          message.success("Cập nhật thành công!");
+          message.success("Cập nhật thành công !");
           dispatch(SetLoadingFalse());
           onCancel();
           loadData();
         },
-        (error) => {
-        }
+        (error) => {}
       );
     }
   };

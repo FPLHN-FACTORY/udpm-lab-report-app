@@ -5,7 +5,7 @@ import { PeriodProjectAPI } from "../../../../api/period-project/periodProject.a
 import moment from "moment";
 import { useAppSelector } from "../../../../app/hook";
 import { GetProject } from "../../../../app/reducer/detail-project/DPProjectSlice.reducer";
-import { toast } from "react-toastify";
+
 import "react-toastify/dist/ReactToastify.css";
 import { useAppDispatch } from "../../../../app/hook";
 import { UpdatePeriodProject } from "../../../../app/reducer/member/period-project/periodProjectSlice.reducer";
@@ -117,24 +117,18 @@ const ModalUpdatePeriod = ({ visible, onCancel, idPeriod }) => {
 
       PeriodProjectAPI.update(obj).then(
         (response) => {
-          message.success("Cập nhật thành công!");
+          message.success("Cập nhật thành công !!");
           dispatch(UpdatePeriodProject(response.data.data));
           onCancel();
         },
-        (error) => {
-        }
+        (error) => {}
       );
     }
   };
 
   return (
     <>
-      <Modal
-        visible={visible}
-        onCancel={onCancel}
-        width={750}
-        footer={null}
-      >
+      <Modal visible={visible} onCancel={onCancel} width={750} footer={null}>
         {" "}
         <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
           <span style={{ fontSize: "18px" }}>Cập nhật giai đoạn</span>

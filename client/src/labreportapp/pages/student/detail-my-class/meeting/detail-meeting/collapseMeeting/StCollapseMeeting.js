@@ -113,7 +113,7 @@ const CollapseMeeting = ({ items, statusClass }) => {
         setDescriptionsNote(response.data.data.descriptionsNote);
         setDescriptionsReport(response.data.data.descriptionsReport);
         setObjDetail(response.data.data);
-        message.success("Cập nhật thành công");
+        message.success("Cập nhật thành công !");
         setLoadingOverlay(false);
         clear();
       });
