@@ -67,7 +67,12 @@ const PeriodProject = () => {
   const [detailProject, setDetailProject] = useState({});
   const [idPeriod, setIdPeriod] = useState("");
   const [loading, setLoading] = useState(false);
-
+  useEffect(() => {
+    DetailProjectAPI.checkMemberProject(id).then(
+      (response) => {},
+      (error) => {}
+    );
+  }, []);
   useEffect(() => {
     fetchDataProjectCustom();
     return () => {

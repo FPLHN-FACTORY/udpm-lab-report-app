@@ -405,4 +405,10 @@ public interface MeTodoRepository extends TodoRepository {
             """, nativeQuery = true)
     void sortByProgressDesc(@Param("idPeriod") String idPeriod);
 
+    @Query(value = """
+            SELECT a.id FROM member_project a
+            WHERE a.member_id = :idMember AND a.project_id = :idProject
+            """, nativeQuery = true)
+    String checkMemberProject(@Param("idProject") String idProject, @Param("idMember") String idMember);
+
 }

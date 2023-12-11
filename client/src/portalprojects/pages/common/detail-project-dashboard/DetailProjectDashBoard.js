@@ -22,6 +22,12 @@ const { Option } = Select;
 
 const DetailProjectDashBoard = () => {
   const { id } = useParams();
+  useEffect(() => {
+    DetailProjectAPI.checkMemberProject(id).then(
+      (response) => {},
+      (error) => {}
+    );
+  }, []);
   const dispatch = useAppDispatch();
   const [detailProject, setDetailProject] = useState(null);
   const [loading, setLoading] = useState(false);

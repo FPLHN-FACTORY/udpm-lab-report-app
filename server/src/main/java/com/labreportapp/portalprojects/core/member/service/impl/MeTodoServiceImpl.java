@@ -1,5 +1,6 @@
 package com.labreportapp.portalprojects.core.member.service.impl;
 
+import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.portalprojects.core.common.base.PageableObject;
 import com.labreportapp.portalprojects.core.common.base.TodoAndTodoListObject;
 import com.labreportapp.portalprojects.core.common.base.TodoObject;
@@ -58,6 +59,7 @@ import com.labreportapp.portalprojects.infrastructure.constant.PriorityLevel;
 import com.labreportapp.portalprojects.infrastructure.constant.StatusReminder;
 import com.labreportapp.portalprojects.infrastructure.constant.StatusTodo;
 import com.labreportapp.portalprojects.infrastructure.constant.TypeTodo;
+import com.labreportapp.portalprojects.infrastructure.exception.rest.CustomException;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.MessageHandlingException;
 import com.labreportapp.portalprojects.infrastructure.successnotification.ConstantMessageSuccess;
 import com.labreportapp.portalprojects.infrastructure.successnotification.SuccessNotificationSender;
@@ -86,7 +88,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.TimeZone;
 import java.util.stream.Collectors;
 
 /**
@@ -137,6 +138,9 @@ public class MeTodoServiceImpl implements MeTodoService {
 
     @Autowired
     private WebSocketSessionManager webSocketSessionManager;
+
+    @Autowired
+    private LabReportAppSession session;
 
     @Override
     @Cacheable(value = "todosByPeriodAndTodoList", key = "#request.name.toString() + '-' " +
@@ -902,6 +906,15 @@ public class MeTodoServiceImpl implements MeTodoService {
     @Override
     public List<Todo> getAllTodoComplete(String projectId, String periodId) {
         return meTodoRepository.getAllTodoComplete(projectId, periodId);
+    }
+
+    @Override
+    public Boolean checkMemberProject(String idProject) {
+        String check = meTodoRepository.checkMemberProject(idProject, session.getUserId());
+        if (Objects.isNull(check)) {
+            throw new CustomException(Message.BAN_KHONG_DUOC_PHEP_VAO_DU_AN_NAY);
+        }
+        return true;
     }
 
     public MeCountTodoResponse updateProgress(String idPeriod, String todoId) {

@@ -51,6 +51,11 @@ public class MeTodoController {
         return new ResponseObject(meTodoService.getBoard(request));
     }
 
+    @GetMapping
+    public ResponseObject checkMemberProject(@RequestParam("idProject") String idProject) {
+        return new ResponseObject(meTodoService.checkMemberProject(idProject));
+    }
+
     @GetMapping("/find-todo")
     public ResponseObject findTodoById(@RequestParam("idTodo") String idTodo) {
         return new ResponseObject(meTodoService.findTodoById(idTodo));

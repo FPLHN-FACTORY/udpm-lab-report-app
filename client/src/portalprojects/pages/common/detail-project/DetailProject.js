@@ -39,6 +39,13 @@ const DetailProject = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
 
+  useEffect(() => {
+    DetailProjectAPI.checkMemberProject(id).then(
+      (response) => {},
+      (error) => {}
+    );
+  }, []);
+
   const loadData = () => {
     document.querySelector(".logo_project").src = logoUdpm2;
     DetailProjectAPI.findProjectById(id)

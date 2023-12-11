@@ -99,4 +99,6 @@ public interface MeTodoService {
     Integer getAllTodoTypeWork(String projectId, String periodId);
 
     List<Todo> getAllTodoComplete(String projectId, String periodId);
+
+    Boolean checkMemberProject(String idProject);
 }

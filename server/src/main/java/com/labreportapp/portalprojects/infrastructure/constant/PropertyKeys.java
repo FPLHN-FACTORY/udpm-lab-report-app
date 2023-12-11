@@ -110,5 +110,6 @@ public class PropertyKeys {
     public static final String STATUS_NOT_VALID = "status.not.valid";
     public static final String KHONG_CO_SINH_VIEN_NAO_DU_DIEU_KIEN_CONG_MAT_ONG = "khong.co.sinh.vien.nao.du.dieu.kien.cong.mat.ong";
     public static final String THOI_GIAN_BAT_DAU_CUA_LOP_HOC_PHAI_NAM_TRONG_KHOANG_THOI_GIAN_CUA_HOAT_DONG = "thoi.gian.bat.dau.cua.lop.hoc.phai.nam.trong.khoang.thoi.gian.cua.hoat.dong";
+    public static final String BAN_KHONG_DUOC_PHEP_VAO_DU_AN_NAY = "ban.khong.duoc.phep.vao.du.an.nay";
 
 }

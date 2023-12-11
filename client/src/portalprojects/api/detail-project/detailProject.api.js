@@ -119,4 +119,11 @@ export class DetailProjectAPI {
       url: `/member/role-project?id=` + id,
     });
   };
+
+  static checkMemberProject = (idProject) => {
+    return request({
+      method: "GET",
+      url: `/member/todo?idProject=` + idProject,
+    });
+  };
 }
