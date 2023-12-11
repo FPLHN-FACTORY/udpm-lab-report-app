@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -21,7 +20,7 @@ import java.util.stream.Collectors;
 /**
  * @author thangncph26123
  */
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @Autowired
@@ -29,28 +28,29 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handlerException(Exception ex) {
-        System.out.println(ex.getClass() + " aaaaaaaaaaaaaaaaaaaaaaa");
-        System.out.println("=========================================================================================");
-        if (ex instanceof RestApiException) {
-            System.out.println("=========================================================================================");
-            System.out.println(ex.getMessage());
-            ApiError apiError = new ApiError(ex.getMessage());
-            return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
-        } else if (ex instanceof ConstraintViolationException) {
-            Set<ConstraintViolation<?>> violations = ((ConstraintViolationException) ex).getConstraintViolations();
-            List<ErrorModel> errors = violations.stream()
-                    .map(violation ->
-                            new ErrorModel(getPropertyName(violation.getPropertyPath()), violation.getMessage()))
-                    .collect(Collectors.toList());
-            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
-        } else if (ex instanceof CustomException) {
-            ApiError apiError = new ApiError(ex.getMessage());
-            return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
-        } else if (ex instanceof NoSuchElementException) {
-            return ResponseEntity.notFound().build();
-        } else {
-            return new ResponseEntity<>("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+//        System.out.println(ex.getClass() + " aaaaaaaaaaaaaaaaaaaaaaa");
+//        System.out.println("=========================================================================================");
+//        if (ex instanceof RestApiException) {
+//            System.out.println("=========================================================================================");
+//            System.out.println(ex.getMessage());
+//            ApiError apiError = new ApiError(ex.getMessage());
+//            return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+//        } else if (ex instanceof ConstraintViolationException) {
+//            Set<ConstraintViolation<?>> violations = ((ConstraintViolationException) ex).getConstraintViolations();
+//            List<ErrorModel> errors = violations.stream()
+//                    .map(violation ->
+//                            new ErrorModel(getPropertyName(violation.getPropertyPath()), violation.getMessage()))
+//                    .collect(Collectors.toList());
+//            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+//        } else if (ex instanceof CustomException) {
+//            ApiError apiError = new ApiError(ex.getMessage());
+//            return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
+//        } else if (ex instanceof NoSuchElementException) {
+//            return ResponseEntity.notFound().build();
+//        } else {
+//            return new ResponseEntity<>("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+        return null;
     }
 
     @MessageExceptionHandler(MessageHandlingException.class)
