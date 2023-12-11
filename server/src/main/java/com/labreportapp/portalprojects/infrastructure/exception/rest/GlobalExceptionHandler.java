@@ -31,6 +31,8 @@ public class GlobalExceptionHandler {
         System.out.println(ex.getClass() + " aaaaaaaaaaaaaaaaaaaaaaa");
         System.out.println("=========================================================================================");
         if (ex instanceof RestApiException) {
+            System.out.println("=========================================================================================");
+            System.out.println(ex.getMessage());
             ApiError apiError = new ApiError(ex.getMessage());
             return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
         } else if (ex instanceof ConstraintViolationException) {
