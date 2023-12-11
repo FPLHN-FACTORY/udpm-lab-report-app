@@ -72,14 +72,13 @@ const LevelManagement = () => {
       dataIndex: "stt",
       key: "stt",
       render: (text, record, index) => (current - 1) * 10 + index + 1,
-      align: "center",
+      width: "80px"
     },
     {
       title: "Tên level",
       dataIndex: "name",
       key: "name",
       sorter: (a, b) => a.name.localeCompare(b.name),
-      align: "center",
     },
     {
       title: "Hành động",
@@ -114,7 +113,7 @@ const LevelManagement = () => {
               <FontAwesomeIcon
                 style={{
                   cursor: "pointer",
-                  marginLeft: "10px",
+                  marginLeft: "15px",
                   color: "rgb(38, 144, 214)",
                 }}
                 icon={faTrash}
