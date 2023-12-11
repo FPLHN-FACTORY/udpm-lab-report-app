@@ -29,6 +29,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handlerException(Exception ex) {
         System.out.println(ex.getClass() + " aaaaaaaaaaaaaaaaaaaaaaa");
+        System.out.println("=========================================================================================");
         if (ex instanceof RestApiException) {
             ApiError apiError = new ApiError(ex.getMessage());
             return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
@@ -41,7 +42,6 @@ public class GlobalExceptionHandler {
             return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
         } else if (ex instanceof CustomException) {
             ApiError apiError = new ApiError(ex.getMessage());
-            System.out.println("=========================================================================================");
             return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
         } else if (ex instanceof NoSuchElementException) {
             return ResponseEntity.notFound().build();
