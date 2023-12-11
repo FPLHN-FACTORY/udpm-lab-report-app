@@ -385,11 +385,11 @@ public class TeMeetingServiceImpl implements TeMeetingService {
     @Override
     public List<TeScheduleMeetingClassResponse> searchScheduleToDayByIdTeacherAndMeetingDate() {
         TeFindScheduleMeetingClassRequest request = new TeFindScheduleMeetingClassRequest();
-        request.setIdTeacher(labReportAppSession.getUserId());
         LocalDate currentDate = LocalDate.now();
         ZoneId vietnamZone = ZoneId.of("Asia/Ho_Chi_Minh");
         ZonedDateTime zonedDateTime = currentDate.atStartOfDay(vietnamZone);
         request.setDateNow(zonedDateTime.toLocalDate());
+        request.setIdTeacher(labReportAppSession.getUserId());
         List<TeScheduleMeetingClassResponse> list = teMeetingRepository.searchScheduleToDayByIdTeacherAndMeetingDate(request);
         if (list.size() == 0) {
             return null;
@@ -404,6 +404,7 @@ public class TeMeetingServiceImpl implements TeMeetingService {
         ZoneId vietnamZone = ZoneId.of("Asia/Ho_Chi_Minh");
         ZonedDateTime zonedDateTime = currentDate.atStartOfDay(vietnamZone);
         request.setDateNow(zonedDateTime.toLocalDate());
+        request.setIdTeacher(labReportAppSession.getUserId());
         Page<TeScheduleMeetingClassResponse> list = teMeetingRepository.searchScheduleNowToTimeByIdTeacher(request, pageable);
         if (list == null) {
             return null;
@@ -465,6 +466,10 @@ public class TeMeetingServiceImpl implements TeMeetingService {
         });
         teMeetingRepository.saveAll(listNew);
         TeFindScheduleMeetingClassRequest find = new TeFindScheduleMeetingClassRequest();
+        LocalDate currentDate = LocalDate.now();
+        ZoneId vietnamZone = ZoneId.of("Asia/Ho_Chi_Minh");
+        ZonedDateTime zonedDateTime = currentDate.atStartOfDay(vietnamZone);
+        find.setDateNow(zonedDateTime.toLocalDate());
         find.setIdTeacher(labReportAppSession.getUserId());
         return teMeetingRepository.searchScheduleToDayByIdTeacherAndMeetingDate(find);
     }
