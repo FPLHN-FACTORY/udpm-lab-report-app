@@ -40,6 +40,7 @@ const TeacherAttendanceMeeting = () => {
     featchMeetingCheckDate(idMeeting);
     setNotes("");
   }, []);
+
   const fetchData = async (idClass) => {
     await Promise.all([
       await featchStudentClass(idClass),
@@ -47,6 +48,7 @@ const TeacherAttendanceMeeting = () => {
       await featchAttendance(idClass),
     ]);
   };
+
   const featchClass = async (idClass) => {
     try {
       await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
@@ -56,6 +58,7 @@ const TeacherAttendanceMeeting = () => {
       console.log(error);
     }
   };
+
   const featchAttendance = async (idClass) => {
     try {
       await TeacherAttendanceAPI.getAttendanceByIdMeeting(idMeeting).then(
@@ -143,6 +146,10 @@ const TeacherAttendanceMeeting = () => {
   useEffect(() => {
     if (loadingData === true) {
       fetchData(idClass);
+    }
+
+    return () => {
+      dispatch(SetAttendanceMeeting([]));
     }
   }, [loadingData]);
 
