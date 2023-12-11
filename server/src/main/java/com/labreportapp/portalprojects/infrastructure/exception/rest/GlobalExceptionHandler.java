@@ -28,29 +28,29 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handlerException(Exception ex) {
-//        System.out.println(ex.getClass() + " aaaaaaaaaaaaaaaaaaaaaaa");
-//        System.out.println("=========================================================================================");
-//        if (ex instanceof RestApiException) {
-//            System.out.println("=========================================================================================");
-//            System.out.println(ex.getMessage());
-//            ApiError apiError = new ApiError(ex.getMessage());
-//            return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
-//        } else if (ex instanceof ConstraintViolationException) {
-//            Set<ConstraintViolation<?>> violations = ((ConstraintViolationException) ex).getConstraintViolations();
-//            List<ErrorModel> errors = violations.stream()
-//                    .map(violation ->
-//                            new ErrorModel(getPropertyName(violation.getPropertyPath()), violation.getMessage()))
-//                    .collect(Collectors.toList());
-//            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
-//        } else if (ex instanceof CustomException) {
-//            ApiError apiError = new ApiError(ex.getMessage());
-//            return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
-//        } else if (ex instanceof NoSuchElementException) {
-//            return ResponseEntity.notFound().build();
-//        } else {
-//            return new ResponseEntity<>("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-        return null;
+        System.out.println(ex.getClass() + " aaaaaaaaaaaaaaaaaaaaaaa");
+        System.out.println("=========================================================================================");
+        if (ex instanceof RestApiException) {
+            System.out.println("=========================================================================================");
+            System.out.println(ex.getMessage());
+            ApiError apiError = new ApiError(ex.getMessage());
+            return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+        } else if (ex instanceof ConstraintViolationException) {
+            Set<ConstraintViolation<?>> violations = ((ConstraintViolationException) ex).getConstraintViolations();
+            List<ErrorModel> errors = violations.stream()
+                    .map(violation ->
+                            new ErrorModel(getPropertyName(violation.getPropertyPath()), violation.getMessage()))
+                    .collect(Collectors.toList());
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        } else if (ex instanceof CustomException) {
+            ApiError apiError = new ApiError(ex.getMessage());
+            System.out.println("=========================================================================================");
+            return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
+        } else if (ex instanceof NoSuchElementException) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return new ResponseEntity<>("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @MessageExceptionHandler(MessageHandlingException.class)
