@@ -13,7 +13,7 @@ import com.labreportapp.labreport.repository.ClassConfigurationRepository;
 import com.labreportapp.labreport.repository.ClassRepository;
 import com.labreportapp.labreport.util.CallApiHoney;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
-import com.labreportapp.portalprojects.infrastructure.exception.rest.CustomException;
+import com.labreportapp.portalprojects.infrastructure.exception.rest.NotFoundException;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -54,7 +54,7 @@ public class TeAddHoneyServiceImpl implements TeAddHoneyService {
     public Boolean addHoney(String idClass, String categoryId) {
         Optional<Class> classFind = classRepository.findById(idClass);
         if (!classFind.isPresent()) {
-            throw new CustomException(Message.CLASS_NOT_EXISTS);
+            throw new NotFoundException(Message.CLASS_NOT_EXISTS);
         }
         if (classFind.get().getStatusHoneyPlus() == StatusHoneyPlus.DA_CONG) {
             throw new RestApiException(Message.LOP_NAY_DA_QUY_DOI_MAT_ONG);

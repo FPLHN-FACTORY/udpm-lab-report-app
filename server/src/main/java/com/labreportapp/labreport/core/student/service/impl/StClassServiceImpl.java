@@ -21,7 +21,7 @@ import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.labreport.util.CallApiIdentity;
 import com.labreportapp.labreport.util.LoggerUtil;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
-import com.labreportapp.portalprojects.infrastructure.exception.rest.CustomException;
+import com.labreportapp.portalprojects.infrastructure.exception.rest.NotFoundException;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import jakarta.transaction.Transactional;
 import lombok.Synchronized;
@@ -122,7 +122,7 @@ public class StClassServiceImpl implements StClassService {
     public StClassCustomResponse joinClass(final StClassRequest req) {
         Optional<Class> findClass = stClassRepository.findById(req.getIdClass());
         if (!findClass.isPresent()) {
-            throw new CustomException(Message.CLASS_NOT_EXISTS);
+            throw new NotFoundException(Message.CLASS_NOT_EXISTS);
         }
         Optional<StClassResponse> conditionClass = stClassRepository.checkConditionCouldJoinOrLeaveClass(req, Calendar.getInstance().getTimeInMillis());
         if (!conditionClass.isPresent()) {
@@ -187,11 +187,11 @@ public class StClassServiceImpl implements StClassService {
     public TeDetailClassResponse findClassById(final String id) {
         Optional<TeDetailClassResponse> classCheck = teClassRepository.findClassById(id);
         if (!classCheck.isPresent()) {
-            throw new CustomException(Message.CLASS_NOT_EXISTS);
+            throw new NotFoundException(Message.CLASS_NOT_EXISTS);
         }
         String check = stClassRepository.checkStudentInClass(labReportAppSession.getUserId(), id);
         if (check == null) {
-            throw new CustomException(Message.STUDENT_CLASSES_NOT_EXISTS);
+            throw new NotFoundException(Message.STUDENT_CLASSES_NOT_EXISTS);
         }
         return classCheck.get();
     }

@@ -39,9 +39,12 @@ public class GlobalExceptionHandler {
                             new ErrorModel(getPropertyName(violation.getPropertyPath()), violation.getMessage()))
                     .collect(Collectors.toList());
             return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
-        } else if (ex instanceof CustomException) {
+        } else if (ex instanceof NotFoundException) {
             ApiError apiError = new ApiError(ex.getMessage());
             return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
+        } else if (ex instanceof NotAuthorizationException) {
+            ApiError apiError = new ApiError(ex.getMessage());
+            return new ResponseEntity<>(apiError, HttpStatus.FORBIDDEN);
         } else if (ex instanceof NoSuchElementException) {
             return ResponseEntity.notFound().build();
         } else {

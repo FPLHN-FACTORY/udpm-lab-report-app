@@ -22,7 +22,7 @@ import com.labreportapp.labreport.infrastructure.constant.RoleTeam;
 import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.labreport.util.LoggerUtil;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
-import com.labreportapp.portalprojects.infrastructure.exception.rest.CustomException;
+import com.labreportapp.portalprojects.infrastructure.exception.rest.NotFoundException;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import lombok.Synchronized;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,7 +77,7 @@ public class StMeetingServiceImpl implements StMeetingService {
     public StMeetingResponse searchMeetingByIdMeeting(StFindMeetingRequest request) {
         Optional<StMeetingResponse> meeting = stMeetingrepository.searchMeetingByIdMeeting(request);
         if (meeting.isEmpty()) {
-            throw new CustomException(Message.MEETING_NOT_EXISTS);
+            throw new NotFoundException(Message.MEETING_NOT_EXISTS);
         }
         if (meeting.get().getMeetingDate() > new Date().getTime()) {
             throw new RestApiException(Message.CHUA_DEN_THOI_GIAN_CUA_BUOI_HOC);

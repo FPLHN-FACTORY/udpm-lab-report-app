@@ -59,8 +59,8 @@ import com.labreportapp.portalprojects.infrastructure.constant.PriorityLevel;
 import com.labreportapp.portalprojects.infrastructure.constant.StatusReminder;
 import com.labreportapp.portalprojects.infrastructure.constant.StatusTodo;
 import com.labreportapp.portalprojects.infrastructure.constant.TypeTodo;
-import com.labreportapp.portalprojects.infrastructure.exception.rest.CustomException;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.MessageHandlingException;
+import com.labreportapp.portalprojects.infrastructure.exception.rest.NotAuthorizationException;
 import com.labreportapp.portalprojects.infrastructure.successnotification.ConstantMessageSuccess;
 import com.labreportapp.portalprojects.infrastructure.successnotification.SuccessNotificationSender;
 import com.labreportapp.portalprojects.infrastructure.wsconfigure.WebSocketSessionManager;
@@ -150,7 +150,7 @@ public class MeTodoServiceImpl implements MeTodoService {
     public List<MeBoardResponse> getBoard(final MeFilterTodoRequest request) {
         String check = meTodoRepository.checkMemberProject(request.getProjectId(), session.getUserId());
         if (Objects.isNull(check)) {
-            throw new CustomException(Message.BAN_KHONG_DUOC_PHEP_VAO_DU_AN_NAY);
+            throw new NotAuthorizationException(Message.BAN_KHONG_DUOC_PHEP_VAO_DU_AN_NAY);
         }
         List<TodoList> listTodoList = meTodoListRepository.findAllByProjectIdAndOrderByIndexTodoList(request.getProjectId());
         List<MeBoardResponse> listBoard = new ArrayList<>();
@@ -916,7 +916,7 @@ public class MeTodoServiceImpl implements MeTodoService {
     public Boolean checkMemberProject(String idProject) {
         String check = meTodoRepository.checkMemberProject(idProject, session.getUserId());
         if (Objects.isNull(check)) {
-            throw new CustomException(Message.BAN_KHONG_DUOC_PHEP_VAO_DU_AN_NAY);
+            throw new NotAuthorizationException(Message.BAN_KHONG_DUOC_PHEP_VAO_DU_AN_NAY);
         }
         return true;
     }

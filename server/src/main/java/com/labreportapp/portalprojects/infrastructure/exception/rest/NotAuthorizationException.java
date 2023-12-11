@@ -6,20 +6,20 @@ import com.labreportapp.portalprojects.infrastructure.constant.Message;
  * @author thangncph26123
  */
 
-public class CustomException extends RuntimeException {
+public class NotAuthorizationException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
     private String message;
 
-    public CustomException() {
+    public NotAuthorizationException() {
     }
 
-    public CustomException(Message statusCode) {
+    public NotAuthorizationException(Message statusCode) {
         this.message = statusCode.getMessage();
     }
 
-    public CustomException(String message) {
+    public NotAuthorizationException(String message) {
         this.message = message;
     }
 

@@ -46,7 +46,7 @@ import com.labreportapp.labreport.util.FormUtils;
 import com.labreportapp.labreport.util.LoggerUtil;
 import com.labreportapp.labreport.util.SemesterHelper;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
-import com.labreportapp.portalprojects.infrastructure.exception.rest.CustomException;
+import com.labreportapp.portalprojects.infrastructure.exception.rest.NotFoundException;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -71,7 +71,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -436,7 +435,7 @@ AdClassManagerServiceImpl implements AdClassService {
     public AdDetailClassCustomResponse adFindClassById(String id) {
         AdDetailClassRespone adDetailClassRespone = repository.adfindClassById(id);
         if (adDetailClassRespone == null) {
-            throw new CustomException(Message.CLASS_NOT_EXISTS);
+            throw new NotFoundException(Message.CLASS_NOT_EXISTS);
         }
         AdDetailClassCustomResponse customResponse = new AdDetailClassCustomResponse();
         AdDetailClassRespone getOptional = adDetailClassRespone;
