@@ -47,6 +47,7 @@ public class GlobalExceptionHandler {
             return ResponseEntity.notFound().build();
         } else {
             System.out.println(ex.getMessage());
+            System.out.println("=========================================================================================");
             return new ResponseEntity<>("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
