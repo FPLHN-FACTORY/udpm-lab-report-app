@@ -291,12 +291,11 @@ const TeacherScheduleToday = () => {
                 handleAddressChange(record.idMeeting, e.target.value);
               }}
             />
-            <span className="box-icon-square">
+            <span className="box-icon-square" onClick={updateAddress}>
               <Tooltip title="Upload">
                 <FontAwesomeIcon
                   icon={faUpload}
                   style={{ color: "white", fontSize: 21 }}
-                  onClick={updateAddress}
                 />
               </Tooltip>
             </span>
