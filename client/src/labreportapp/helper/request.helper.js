@@ -36,7 +36,7 @@ request.interceptors.response.use(
       window.location.href = "/not-aceptable/status=" + error.response.data;
     }
     if (error.response && error.response.status === 400) {
-      message.error(error.response.data);
+      message.error(error.response.data.message);
     }
     if (error.response && error.response.status === 500) {
       message.error(error.response.data.message);
