@@ -28,6 +28,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handlerException(Exception ex) {
+        System.out.println(ex.getClass() + " aaaaaaaaaaaaaaaaaaaaaaa");
         if (ex instanceof RestApiException) {
             ApiError apiError = new ApiError(ex.getMessage());
             return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
