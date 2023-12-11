@@ -148,6 +148,10 @@ public class MeTodoServiceImpl implements MeTodoService {
             "+ #request.dueDate.toString() + '_' + #request.idPeriod + '_' " +
             "+ #request.idTodoList + '_' + #request.projectId")
     public List<MeBoardResponse> getBoard(final MeFilterTodoRequest request) {
+        String check = meTodoRepository.checkMemberProject(request.getProjectId(), session.getUserId());
+        if (Objects.isNull(check)) {
+            throw new CustomException(Message.BAN_KHONG_DUOC_PHEP_VAO_DU_AN_NAY);
+        }
         List<TodoList> listTodoList = meTodoListRepository.findAllByProjectIdAndOrderByIndexTodoList(request.getProjectId());
         List<MeBoardResponse> listBoard = new ArrayList<>();
         for (TodoList td : listTodoList) {
