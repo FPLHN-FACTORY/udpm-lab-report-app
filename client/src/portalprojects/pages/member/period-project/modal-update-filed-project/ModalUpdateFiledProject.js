@@ -24,6 +24,10 @@ import { DetailProjectAPI } from "../../../../api/detail-project/detailProject.a
 import locale from "antd/es/date-picker/locale/vi_VN";
 import dayjs from "dayjs";
 import "dayjs/locale/vi";
+import {
+  SetLoadingFalse,
+  SetLoadingTrue,
+} from "../../../../../labreportapp/app/common/Loading.reducer";
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 const { Option } = Select;
@@ -60,12 +64,6 @@ const ModalUpdateFiledProject = ({ visible, onCancel, idProject }) => {
       featchProject();
     }
   }, [idProject, visible]);
-
-  // useEffect(() => {
-  //   if (visible) {
-  //     featMemberAndCaregoryAddProject();
-  //   }
-  // }, [listCategorysChange]);
 
   const handleChangeCategorys = (idCategory) => {
     setListCategorysChange(idCategory);
@@ -125,6 +123,7 @@ const ModalUpdateFiledProject = ({ visible, onCancel, idProject }) => {
   };
   const update = () => {
     let check = 0;
+    dispatch(SetLoadingTrue());
     if (code === "") {
       setErrorCode("Mã không được để trống");
       check++;
@@ -179,9 +178,12 @@ const ModalUpdateFiledProject = ({ visible, onCancel, idProject }) => {
           message.success("Cập nhật thành công !");
           dispatch(SetProject(response.data.data.project));
           dispatch(SetProjectCustom(response.data.data.projectCustom));
+          dispatch(SetLoadingFalse());
           onCancel();
         },
-        (error) => {}
+        (error) => {
+          dispatch(SetLoadingFalse());
+        }
       );
     }
   };

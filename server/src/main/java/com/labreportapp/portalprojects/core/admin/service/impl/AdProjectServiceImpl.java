@@ -61,7 +61,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -162,8 +161,10 @@ public class AdProjectServiceImpl implements AdProjectService {
         project.setName(request.getName().trim());
         project.setDescriptions(!request.getDescriptions().equals("") ? request.getDescriptions().trim() : "");
         project.setProgress(project.getProgress());
-        project.setStartTime(DateUtils.truncate(new Date(request.getStartTime()), Calendar.DATE).getTime());
-        project.setEndTime(DateUtils.truncate(new Date(request.getEndTime()), Calendar.DATE).getTime());
+//        project.setStartTime(DateUtils.truncate(new Date(request.getStartTime()), Calendar.DATE).getTime());
+//        project.setEndTime(DateUtils.truncate(new Date(request.getEndTime()), Calendar.DATE).getTime());
+        project.setStartTime(request.getStartTime());
+        project.setEndTime(request.getEndTime());
         project.setProgress(0F);
         project.setBackgroundColor("#59a1e3");
         project.setTypeProject(TypeProject.DU_AN_XUONG_DU_AN);
@@ -378,21 +379,25 @@ public class AdProjectServiceImpl implements AdProjectService {
         project.setDescriptions(!request.getDescriptions().equals("") ? request.getDescriptions().trim() : "");
         project.setName(request.getName().trim());
         project.setProgress(project.getProgress());
-        project.setStartTime(DateUtils.truncate(new Date(request.getStartTime()), Calendar.DATE).getTime());
-        project.setEndTime(DateUtils.truncate(new Date(request.getEndTime()), Calendar.DATE).getTime());
+        project.setStartTime(request.getStartTime());
+        project.setEndTime(request.getEndTime());
         StringBuilder messageGroupProject = new StringBuilder();
         if (request.getGroupProjectId() != null) {
-            Optional<GroupProject> groupProjectOld = adPotalsGroupProjectReposiory.findById(projectCheck.get().getGroupProjectId());
             Optional<GroupProject> groupProjectNew = adPotalsGroupProjectReposiory.findById(request.getGroupProjectId());
             groupProjectNew.ifPresent(value -> project.setGroupProjectId(value.getId()));
-            if (groupProjectOld.isPresent() && groupProjectNew.isPresent()) {
-                if (!groupProjectOld.get().getId().equals(groupProjectNew.get().getId())) {
-                    messageGroupProject.append(" Nhóm dự án từ ").append(groupProjectOld.get().getName())
-                            .append(" thành ").append(groupProjectNew.get().getName()).append(".");
+            if (projectCheck.get().getGroupProjectId() == null) {
+                messageGroupProject.append(" Thêm nhóm dự án ").append(" là ").append(groupProjectNew.get().getName()).append(".");
+            } else {
+                Optional<GroupProject> groupProjectOld = adPotalsGroupProjectReposiory.findById(projectCheck.get().getGroupProjectId());
+                if (groupProjectOld.isPresent() && groupProjectNew.isPresent()) {
+                    if (!groupProjectOld.get().getId().equals(groupProjectNew.get().getId())) {
+                        messageGroupProject.append(" Nhóm dự án từ ").append(groupProjectOld.get().getName())
+                                .append(" thành ").append(groupProjectNew.get().getName()).append(".");
+                    }
                 }
             }
         } else {
-            project.setGroupProjectId(request.getGroupProjectId());
+            project.setGroupProjectId(null);
         }
         project.setTypeProject(TypeProject.DU_AN_XUONG_DU_AN);
         Long currentTime = new Date().getTime();
@@ -440,7 +445,7 @@ public class AdProjectServiceImpl implements AdProjectService {
         listMember.forEach(item -> {
             Optional<AdMemberAndRoleProjectCustomResponse> objFind = findMemberRoleByMemberId(
                     listMemberJoinRole, item.getMemberId());
-            if (!objFind.isPresent()) {
+            if (objFind.isEmpty()) {
                 MemberProject memberProject = new MemberProject();
                 memberProject.setProjectId(newProject.getId());
                 memberProject.setMemberId(item.getMemberId());

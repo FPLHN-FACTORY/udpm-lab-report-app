@@ -31,6 +31,10 @@ import Image from "../../../../helper/img/Image";
 import locale from "antd/es/date-picker/locale/vi_VN";
 import dayjs from "dayjs";
 import "dayjs/locale/vi";
+import {
+  SetLoadingFalse,
+  SetLoadingTrue,
+} from "../../../../../labreportapp/app/common/Loading.reducer";
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -208,6 +212,7 @@ const ModalCreateProject = ({
 
   const create = () => {
     let check = 0;
+    dispatch(SetLoadingTrue());
     if (code.trim() === "") {
       setErrorCode("Mã dự án không được để trống");
       check++;
@@ -248,6 +253,7 @@ const ModalCreateProject = ({
       }
     });
     if (checkRole > 0) {
+      dispatch(SetLoadingFalse());
       message.error("Vai trò của thành viên không được trống");
     }
 
@@ -274,10 +280,15 @@ const ModalCreateProject = ({
               changeTotalsPage(1);
             }
           }
+          dispatch(SetLoadingFalse());
           cancelSuccess();
         },
-        (error) => {}
+        (error) => {
+          dispatch(SetLoadingFalse());
+        }
       );
+    } else {
+      dispatch(SetLoadingFalse());
     }
   };
 

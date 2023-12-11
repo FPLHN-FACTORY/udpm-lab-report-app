@@ -27,6 +27,10 @@ import Image from "../../../../helper/img/Image";
 import locale from "antd/es/date-picker/locale/vi_VN";
 import dayjs from "dayjs";
 import "dayjs/locale/vi";
+import {
+  SetLoadingFalse,
+  SetLoadingTrue,
+} from "../../../../../labreportapp/app/common/Loading.reducer";
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 const { Option } = Select;
@@ -224,6 +228,7 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
   };
   const update = () => {
     let check = 0;
+    dispatch(SetLoadingTrue());
     if (code === "") {
       setErrorCode("Mã không được để trống");
       check++;
@@ -270,6 +275,7 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
       }
     });
     if (checkRole > 0) {
+      dispatch(SetLoadingFalse());
       message.error("Vai trò của thành viên không được trống");
     }
     if (check === 0) {
@@ -288,10 +294,15 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
           message.success("Cập nhật thành công !");
           let data = respone.data.data;
           dispatch(UpdateProject(data));
+          dispatch(SetLoadingFalse());
           cancelUpdateSuccess();
         },
-        (error) => {}
+        (error) => {
+          dispatch(SetLoadingFalse());
+        }
       );
+    } else {
+      dispatch(SetLoadingFalse());
     }
   };
 
@@ -397,7 +408,7 @@ const ModalUpdateProject = ({ visible, onCancel, idProject }) => {
   return (
     <>
       <Modal
-        visible={visible}
+        open={visible}
         onCancel={cancelUpdateFaild}
         width={1150}
         footer={null}
