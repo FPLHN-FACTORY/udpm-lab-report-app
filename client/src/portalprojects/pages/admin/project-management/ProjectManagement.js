@@ -385,6 +385,7 @@ const ProjectManagement = () => {
   };
 
   const dowloadLog = () => {
+    setLoading(true);
     ProjectManagementAPI.dowloadLog().then(
       (response) => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -393,6 +394,7 @@ const ProjectManagement = () => {
         a.download = "danh_sach_du_an_xuong.csv";
         a.click();
         window.URL.revokeObjectURL(url);
+        setLoading(false);
       },
       (error) => {}
     );

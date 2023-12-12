@@ -128,6 +128,7 @@ const TeamManagement = () => {
 
   const handleMenuClick = (e, itemId) => {};
   const dowloadLog = () => {
+    setLoading(true);
     AdTeamAPI.dowloadLog().then(
       (response) => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -136,6 +137,7 @@ const TeamManagement = () => {
         a.download = "nhom_trong_xuong.csv";
         a.click();
         window.URL.revokeObjectURL(url);
+        setLoading(false);
       },
       (error) => {}
     );

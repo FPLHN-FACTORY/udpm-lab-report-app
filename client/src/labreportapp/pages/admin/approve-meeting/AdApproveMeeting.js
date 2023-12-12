@@ -34,7 +34,10 @@ import {
   GetAdMeetingPeriod,
   SetAdMeetingPeriod,
 } from "../../../app/admin/AdMeetingPeriodSlice.reducer";
-import { convertDateLongToString, convertHourAndMinuteToString } from "../../../helper/util.helper";
+import {
+  convertDateLongToString,
+  convertHourAndMinuteToString,
+} from "../../../helper/util.helper";
 import {
   GetAdMeetingRequest,
   SetAdMeetingRequest,
@@ -483,6 +486,7 @@ const AdApproveMeeting = () => {
     }
     let idSemester =
       idSemesterSeach !== "" ? idSemesterSeach : idSemesterCurrent;
+    setLoading(true);
     AdMeetingRequestAPI.dowloadLog(idSemester).then(
       (response) => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -491,6 +495,7 @@ const AdApproveMeeting = () => {
         a.download = "phe_duyet_lich_hoc.csv";
         a.click();
         window.URL.revokeObjectURL(url);
+        setLoading(false);
       },
       (error) => {
         console.log(error);

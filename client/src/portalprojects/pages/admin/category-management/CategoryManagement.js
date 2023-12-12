@@ -165,6 +165,7 @@ const CategoryManagement = () => {
   };
 
   const dowloadLog = () => {
+    setLoading(true);
     AdCategoryAPI.dowloadLog().then(
       (response) => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -173,6 +174,7 @@ const CategoryManagement = () => {
         a.download = "the_loai.csv";
         a.click();
         window.URL.revokeObjectURL(url);
+        setLoading(false);
       },
       (error) => {}
     );

@@ -510,6 +510,7 @@ const InformationClass = () => {
   };
 
   const dowloadLogAll = () => {
+    setIsLoading(true);
     ClassAPI.dowloadLogAll(id).then(
       (response) => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -518,6 +519,7 @@ const InformationClass = () => {
         a.download = "luong_lop_hoc.csv";
         a.click();
         window.URL.revokeObjectURL(url);
+        setIsLoading(false);
       },
       (error) => {
         console.log(error);

@@ -200,6 +200,7 @@ const RoleManagement = () => {
     );
   };
   const dowloadLog = () => {
+    setLoading(true);
     AdRoleProjectAPI.dowloadLog().then(
       (response) => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -208,6 +209,7 @@ const RoleManagement = () => {
         a.download = "vai_tro_trong_du_an.csv";
         a.click();
         window.URL.revokeObjectURL(url);
+        setLoading(false);
       },
       (error) => {}
     );

@@ -193,6 +193,7 @@ const LabelManagement = () => {
   ];
 
   const dowloadLog = () => {
+    setIsLoading(true);
     LabelManagementAPI.dowloadLog().then(
       (response) => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -201,6 +202,7 @@ const LabelManagement = () => {
         a.download = "nhan.csv";
         a.click();
         window.URL.revokeObjectURL(url);
+        setIsLoading(false);
       },
       (error) => {}
     );

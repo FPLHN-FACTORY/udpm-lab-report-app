@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Button, Select, Table, Pagination, Empty, Spin } from "antd";
 import { TeacherMyClassAPI } from "../../../../../api/teacher/my-class/TeacherMyClass.api";
+import LoadingIndicator from "../../../../../helper/loading";
 
 const { Option } = Select;
 
@@ -35,8 +36,9 @@ const TeModalShowHistory = ({ visible, onCancel, classDetail }) => {
   const [current, setCurrent] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [size, setSize] = useState("50");
-
+  const [loading, setLoading] = useState(false);
   const loadDataHistory = async () => {
+    setLoading(true);
     try {
       TeacherMyClassAPI.showHistory({
         idClass: classDetail.id,
@@ -45,6 +47,7 @@ const TeModalShowHistory = ({ visible, onCancel, classDetail }) => {
       }).then((response) => {
         setDataHistory(response.data.data);
         setTotalPages(response.data.totalPages);
+        setLoading(false);
       });
     } catch (error) {}
   };
@@ -57,6 +60,7 @@ const TeModalShowHistory = ({ visible, onCancel, classDetail }) => {
 
   return (
     <>
+      {loading && <LoadingIndicator />}
       <Modal open={visible} onCancel={onCancel} width={1300} footer={null}>
         <div>
           <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>

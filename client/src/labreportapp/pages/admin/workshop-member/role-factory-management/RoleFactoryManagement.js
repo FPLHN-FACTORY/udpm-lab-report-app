@@ -200,6 +200,7 @@ const RoleFactoryManagement = () => {
     );
   };
   const dowloadLog = () => {
+    setLoading(true);
     AdRoleFactoryAPI.dowloadLog().then(
       (response) => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -208,6 +209,7 @@ const RoleFactoryManagement = () => {
         a.download = "vai_tro_trong_xuong.csv";
         a.click();
         window.URL.revokeObjectURL(url);
+        setLoading(false);
       },
       (error) => {}
     );
