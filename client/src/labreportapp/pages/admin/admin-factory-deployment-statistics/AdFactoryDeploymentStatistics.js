@@ -143,7 +143,7 @@ const AdFactoryDeploymentStatistics = () => {
                   if (selectedSemester) {
                     setNameSemesterCurrent(selectedSemester.name);
                   } else {
-                    setNameSemesterCurrent("");
+                    loadDataSemesterCurrent();
                   }
                 }}
               >
