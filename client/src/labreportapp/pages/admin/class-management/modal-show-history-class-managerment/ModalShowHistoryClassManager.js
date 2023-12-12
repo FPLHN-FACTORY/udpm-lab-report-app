@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Modal, Button, Select, Table, Pagination, Empty } from "antd";
 import { ActivityManagementAPI } from "../../../../api/admin/activity-management/activityManagement.api";
 import { ClassAPI } from "../../../../api/admin/class-manager/ClassAPI.api";
+import LoadingIndicator from "../../../../helper/loading";
 
 const { Option } = Select;
 
@@ -36,8 +37,10 @@ const ModalShowHistoryClassManager = ({ idSemester, visible, onCancel }) => {
   const [current, setCurrent] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [size, setSize] = useState("50");
+  const [loading, setLoading] = useState(false);
 
   const loadDataHistory = async () => {
+    setLoading(true);
     try {
       ClassAPI.showHistory({
         page: current - 1,
@@ -46,6 +49,7 @@ const ModalShowHistoryClassManager = ({ idSemester, visible, onCancel }) => {
       }).then((response) => {
         setDataHistory(response.data.data);
         setTotalPages(response.data.totalPages);
+        setLoading(false);
       });
     } catch (error) {}
   };
@@ -58,6 +62,7 @@ const ModalShowHistoryClassManager = ({ idSemester, visible, onCancel }) => {
 
   return (
     <>
+      {loading && <LoadingIndicator />}
       <Modal open={visible} onCancel={onCancel} width={1300} footer={null}>
         <div>
           <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>

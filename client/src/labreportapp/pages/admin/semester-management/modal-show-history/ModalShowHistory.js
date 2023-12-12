@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Button, Select, Table, Pagination, Empty } from "antd";
 import { AdSemesterAPI } from "../../../../api/admin/AdSemesterAPI";
+import LoadingIndicator from "../../../../helper/loading";
 
 const { Option } = Select;
 
@@ -35,14 +36,17 @@ const ModalShowHistory = ({ visible, onCancel }) => {
   const [current, setCurrent] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [size, setSize] = useState("50");
+  const [loading, setLoading] = useState(false);
 
   const loadDataHistory = () => {
+    setLoading(true);
     AdSemesterAPI.showHistory({
       page: current - 1,
       size: parseInt(size),
     }).then((response) => {
       setDataHistory(response.data.data);
       setTotalPages(response.data.totalPages);
+      setLoading(false);
     });
   };
 
@@ -54,6 +58,7 @@ const ModalShowHistory = ({ visible, onCancel }) => {
 
   return (
     <>
+      {loading && <LoadingIndicator />}
       <Modal visible={visible} onCancel={onCancel} width={1300} footer={null}>
         <div>
           <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
