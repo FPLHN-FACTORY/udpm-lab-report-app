@@ -368,7 +368,11 @@ const ActivityManagement = () => {
                   <Option value={""}>Chọn học kỳ</Option>
                   {listSemester.map((semester) => (
                     <Option key={semester.id} value={semester.id}>
-                      {semester.name}
+                      {semester.name +
+                        " (" +
+                        convertDateLongToString(semester.startTime) +
+                        " - " +
+                        convertDateLongToString(semester.endTime) + ")"}
                     </Option>
                   ))}
                 </Select>
