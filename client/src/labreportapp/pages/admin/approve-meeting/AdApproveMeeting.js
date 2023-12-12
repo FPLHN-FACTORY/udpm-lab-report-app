@@ -541,7 +541,12 @@ const AdApproveMeeting = () => {
 
                   {semesterDataAll.map((semester) => (
                     <Option key={semester.id} value={semester.id}>
-                      {semester.name}
+                      {semester.name +
+                        " (" +
+                        convertDateLongToString(semester.startTime) +
+                        " - " +
+                        convertDateLongToString(semester.endTime) +
+                        ")"}
                     </Option>
                   ))}
                 </Select>

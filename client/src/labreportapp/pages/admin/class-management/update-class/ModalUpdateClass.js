@@ -216,7 +216,7 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
           <div style={{ marginTop: "15px", borderBottom: "1px solid black" }}>
             <Row style={{ marginBottom: "15px" }}>
               <Col span={12} style={{ paddingRight: "10px" }}>
-                <span style={{ color: "red" }}>(*) </span> Semester: <br />
+                <span style={{ color: "red" }}>(*) </span> Học kỳ: <br />
                 <Select
                   showSearch
                   style={{ width: "100%" }}

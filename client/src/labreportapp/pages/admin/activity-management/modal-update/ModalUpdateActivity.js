@@ -243,7 +243,12 @@ const ModalUpdateActivity = ({
               {listSemester.map((value) => {
                 return (
                   <Option value={value.id} key={value.id}>
-                    {value.name}
+                    {value.name +
+                      " (" +
+                      convertDateLongToString(value.startTime) +
+                      " - " +
+                      convertDateLongToString(value.endTime) +
+                      ")"}
                   </Option>
                 );
               })}

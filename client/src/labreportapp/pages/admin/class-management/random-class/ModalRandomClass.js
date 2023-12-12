@@ -143,7 +143,7 @@ const ModalRandomClass = ({ visible, onCancel, fetchData }) => {
         >
           <Row>
             <Col span={12} style={{ padding: "5px" }}>
-              <span style={{ color: "red" }}>(*) </span> Semester: <br />
+              <span style={{ color: "red" }}>(*) </span> Học kỳ: <br />
               <Select
                 showSearch
                 style={{ width: "100%" }}
@@ -156,7 +156,12 @@ const ModalRandomClass = ({ visible, onCancel, fetchData }) => {
 
                 {semesterDataAll.map((semester) => (
                   <Option key={semester.id} value={semester.id}>
-                    {semester.name}
+                    {semester.name +
+                      " (" +
+                      convertDateLongToString(semester.startTime) +
+                      " - " +
+                      convertDateLongToString(semester.endTime) +
+                      ")"}
                   </Option>
                 ))}
               </Select>
