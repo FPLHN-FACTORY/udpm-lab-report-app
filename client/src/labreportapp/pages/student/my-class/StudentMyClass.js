@@ -270,7 +270,12 @@ const StudentMyClass = () => {
                   {listSemester.length > 0 &&
                     listSemester.map((item) => (
                       <Option value={item.id} key={item.id}>
-                        {item.name}
+                        {item.name +
+                          " (" +
+                          convertDateLongToString(item.startTime) +
+                          " - " +
+                          convertDateLongToString(item.endTime) +
+                          ")"}
                       </Option>
                     ))}
                 </Select>

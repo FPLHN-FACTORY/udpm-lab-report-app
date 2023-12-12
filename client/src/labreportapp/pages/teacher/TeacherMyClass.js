@@ -31,7 +31,10 @@ import {
   GetTeacherMyClass,
   SetTeacherMyClass,
 } from "../../app/teacher/my-class/teacherMyClassSlice.reduce";
-import { convertHourAndMinuteToString } from "../../helper/util.helper";
+import {
+  convertDateLongToString,
+  convertHourAndMinuteToString,
+} from "../../helper/util.helper";
 import { TeacherMeetingPeriodAPI } from "../../api/teacher/meeting-period/TeacherMeetingPeriod.api";
 
 const { Option } = Select;
@@ -325,7 +328,12 @@ const TeacherMyClass = () => {
                           key={item.id}
                           style={{ width: "auto" }}
                         >
-                          {item.name}
+                          {item.name +
+                            " (" +
+                            convertDateLongToString(item.startTime) +
+                            " - " +
+                            convertDateLongToString(item.endTime) +
+                            ")"}
                         </Option>
                       );
                     })}
