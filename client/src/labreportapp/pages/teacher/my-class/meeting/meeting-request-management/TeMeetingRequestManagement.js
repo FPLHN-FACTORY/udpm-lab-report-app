@@ -121,7 +121,7 @@ const TeMeetingRequestManagement = () => {
     try {
       await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
         setClassDetail(responese.data.data);
-        document.title = "Yêu cầu | " + responese.data.data.code;
+        document.title = "Danh sách yêu cầu | " + responese.data.data.code;
         setLock(responese.data.data.statusClass);
       });
     } catch (error) {
