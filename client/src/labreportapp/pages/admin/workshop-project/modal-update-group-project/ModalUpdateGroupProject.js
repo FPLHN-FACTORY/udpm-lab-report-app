@@ -118,15 +118,17 @@ const ModalUpdateGroupProject = ({ visible, onCancel, item }) => {
                   accept="image/*"
                   onChange={(event) => handleFileInputChange(event)}
                 />
-                <div
-                  onClick={() => {
-                    document.getElementById("select-avatar").click();
-                  }}
-                  className="image-container"
-                  style={{ marginTop: 10 }}
-                >
-                  {<img src={selectedImageUrl} alt="Ảnh" width="30%" />}
-                </div>
+                {selectedImageUrl !== "" && (
+                  <div
+                    onClick={() => {
+                      document.getElementById("select-avatar").click();
+                    }}
+                    className="image-container"
+                    style={{ marginTop: 10 }}
+                  >
+                    {<img src={selectedImageUrl} alt="Ảnh" width="30%" />}
+                  </div>
+                )}
               </Col>
             </Row>
           </div>
