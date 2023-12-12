@@ -23,7 +23,6 @@ const HeaderAdminComponent = ({ collapsed, toggleCollapsed }) => {
           alignItems: "center",
           padding: "0 24px",
           color: "white",
-          background: "rgb(233, 192, 89)",
         }}
       >
         <div style={{ display: "flex", alignItems: "center" }}>

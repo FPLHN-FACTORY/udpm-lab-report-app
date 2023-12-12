@@ -258,6 +258,6 @@ public class AdClassController {
 
     @GetMapping("/get-class/{id}")
     public ResponseObject detailClass(@PathVariable("id") String id) {
-        return new ResponseObject(teClassService.findClassById(id));
+        return new ResponseObject(service.findClassById(id));
     }
 }

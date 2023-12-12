@@ -13,6 +13,7 @@ import com.labreportapp.labreport.core.admin.model.response.AdSemesterAcResponse
 import com.labreportapp.labreport.core.common.base.ImportExcelResponse;
 import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.core.common.base.SimpleEntityProjection;
+import com.labreportapp.labreport.core.teacher.model.response.TeDetailClassResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.web.multipart.MultipartFile;
@@ -52,5 +53,7 @@ public interface AdClassService {
     ImportExcelResponse importExcelClass(MultipartFile multipartFile, String idSemester);
 
     List<AdFindSelectClassCustom> listClass(final AdFindClassRequest request);
+
+    TeDetailClassResponse findClassById(final String id);
 
 }

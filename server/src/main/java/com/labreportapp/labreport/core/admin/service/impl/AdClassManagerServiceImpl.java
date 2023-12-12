@@ -28,6 +28,8 @@ import com.labreportapp.labreport.core.common.base.LoggerResponse;
 import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.core.common.base.SimpleEntityProjection;
 import com.labreportapp.labreport.core.common.response.SimpleResponse;
+import com.labreportapp.labreport.core.teacher.model.response.TeDetailClassResponse;
+import com.labreportapp.labreport.core.teacher.repository.TeClassRepository;
 import com.labreportapp.labreport.entity.Activity;
 import com.labreportapp.labreport.entity.Class;
 import com.labreportapp.labreport.entity.ClassConfiguration;
@@ -79,8 +81,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @Validated
-public class
-AdClassManagerServiceImpl implements AdClassService {
+public class AdClassManagerServiceImpl implements AdClassService {
 
     @Autowired
     private AdClassRepository repository;
@@ -122,6 +123,9 @@ AdClassManagerServiceImpl implements AdClassService {
 
     @Autowired
     private AdClassConfigurationRepository adClassConfigurationRepository;
+
+    @Autowired
+    private TeClassRepository teClassRepository;
 
     private FormUtils formUtils = new FormUtils();
 
@@ -683,6 +687,15 @@ AdClassManagerServiceImpl implements AdClassService {
             listCustom.add(adFindSelectClassCustom);
         });
         return listCustom;
+    }
+
+    @Override
+    public TeDetailClassResponse findClassById(final String id) {
+        Optional<TeDetailClassResponse> classCheck = teClassRepository.findClassById(id);
+        if (!classCheck.isPresent()) {
+            throw new NotFoundException(Message.CLASS_NOT_EXISTS);
+        }
+        return classCheck.get();
     }
 
     public void addDataInMapGiangVien(ConcurrentHashMap<String, SimpleResponse> mapAll, ConcurrentHashMap<String, SimpleResponse> mapAllKeyId) {
