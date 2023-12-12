@@ -24,6 +24,7 @@ const HeaderAdminComponent = ({ collapsed, toggleCollapsed }) => {
           padding: "0 24px",
         }}
       >
+      
         <div style={{ display: "flex", alignItems: "center" }}>
           <div className="title_logo">
             {" "}
