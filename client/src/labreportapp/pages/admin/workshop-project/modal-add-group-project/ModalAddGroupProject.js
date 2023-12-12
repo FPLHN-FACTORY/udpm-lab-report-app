@@ -39,26 +39,30 @@ const ModalCreateGroupProject = ({ visible, onCancel }) => {
   };
 
   const createGroupProject = () => {
-    let check = 0;
-    if (name.trim() === "") {
-      setErrorName("Tên nhóm dự án không được để trống");
-      check++;
-    } else {
-      setErrorName("");
-    }
-    if (check === 0) {
-      let obj = {
-        name: name,
-        descriptions: descriptions,
-        file: image,
-      };
-      setLoading(true);
-      AdGroupProjectAPI.createGroupProject(obj).then((response) => {
-        dispatch(CreateAdGroupProject(response.data.data));
-        message.success("Cập nhật thành công !");
-        setLoading(false);
-        onCancel();
-      });
+    try {
+      let check = 0;
+      if (name.trim() === "") {
+        setErrorName("Tên nhóm dự án không được để trống");
+        check++;
+      } else {
+        setErrorName("");
+      }
+      if (check === 0) {
+        let obj = {
+          name: name,
+          descriptions: descriptions,
+          file: image,
+        };
+        setLoading(true);
+        AdGroupProjectAPI.createGroupProject(obj).then((response) => {
+          dispatch(CreateAdGroupProject(response.data.data));
+          message.success("Cập nhật thành công !");
+          setLoading(false);
+          onCancel();
+        });
+      }
+    } catch (error) {
+      setLoading(false);
     }
   };
 
