@@ -150,7 +150,12 @@ const CommonInforUser = () => {
           onClick={(e) => {
             openPopupNotification(e);
           }}
-          style={{ fontSize: 20, cursor: "pointer", marginRight: 20 }}
+          style={{
+            fontSize: 20,
+            cursor: "pointer",
+            marginRight: 20,
+            color: "white",
+          }}
           className="box_notification"
         />{" "}
         {isOpenPopupNotification && (
@@ -182,7 +187,7 @@ const CommonInforUser = () => {
           />
           <span
             className="span-name-usercurrent"
-            style={{ marginLeft: 8, fontWeight: 500, color: "#4f4f4f" }}
+            style={{ marginLeft: 8, fontWeight: 500, color: "white" }}
           >
             {userCurrent != null ? userCurrent.name : ""}
           </span>{" "}
