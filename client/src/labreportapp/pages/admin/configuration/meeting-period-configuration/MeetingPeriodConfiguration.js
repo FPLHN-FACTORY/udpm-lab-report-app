@@ -205,6 +205,7 @@ const MeetingPeriodConfiguration = () => {
   };
 
   const dowloadLog = () => {
+    setLoading(true);
     AdMeetingPeriodConfigurationAPI.dowloadLog().then(
       (response) => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -213,6 +214,7 @@ const MeetingPeriodConfiguration = () => {
         a.download = "ca_hoc.csv";
         a.click();
         window.URL.revokeObjectURL(url);
+        setLoading(false);
       },
       (error) => {}
     );

@@ -72,7 +72,7 @@ const LevelManagement = () => {
       dataIndex: "stt",
       key: "stt",
       render: (text, record, index) => (current - 1) * 10 + index + 1,
-      width: "80px"
+      width: "80px",
     },
     {
       title: "Tên level",
@@ -173,6 +173,7 @@ const LevelManagement = () => {
   };
 
   const dowloadLog = () => {
+    setLoading(true);
     AdLevelAPI.dowloadLog().then(
       (response) => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -181,6 +182,7 @@ const LevelManagement = () => {
         a.download = "level.csv";
         a.click();
         window.URL.revokeObjectURL(url);
+        setLoading(false);
       },
       (error) => {}
     );

@@ -288,6 +288,7 @@ const ActivityManagement = () => {
     setTotal(newTotalPages);
   };
   const dowloadLog = () => {
+    setLoading(true);
     ActivityManagementAPI.dowloadLog().then(
       (response) => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -296,6 +297,7 @@ const ActivityManagement = () => {
         a.download = "hoat_dong.csv";
         a.click();
         window.URL.revokeObjectURL(url);
+        setLoading(false);
       },
       (error) => {
         console.log(error);
@@ -372,7 +374,8 @@ const ActivityManagement = () => {
                         " (" +
                         convertDateLongToString(semester.startTime) +
                         " - " +
-                        convertDateLongToString(semester.endTime) + ")"}
+                        convertDateLongToString(semester.endTime) +
+                        ")"}
                     </Option>
                   ))}
                 </Select>

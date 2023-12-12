@@ -272,6 +272,7 @@ const SemesterManagement = () => {
   };
 
   const dowloadLog = () => {
+    setLoading(true);
     AdSemesterAPI.dowloadLog().then(
       (response) => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -280,6 +281,7 @@ const SemesterManagement = () => {
         a.download = "hoc_ky.csv";
         a.click();
         window.URL.revokeObjectURL(url);
+        setLoading(false);
       },
       (error) => {
         console.log(error);

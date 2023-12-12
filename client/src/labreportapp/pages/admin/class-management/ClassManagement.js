@@ -38,7 +38,10 @@ import ModalCreateProject from "../../admin/class-management/create-class/ModalC
 import { Link } from "react-router-dom";
 import { SetAdTeacher } from "../../../app/admin/AdTeacherSlice.reducer";
 import ModalUpdateClass from "./update-class/ModalUpdateClass";
-import { convertDateLongToString, convertHourAndMinuteToString } from "../../../helper/util.helper";
+import {
+  convertDateLongToString,
+  convertHourAndMinuteToString,
+} from "../../../helper/util.helper";
 import {
   GetAdClassManagement,
   SetMyClass,
@@ -511,6 +514,7 @@ const ClassManagement = () => {
     }
     let idSemester =
       idSemesterSeach !== "" ? idSemesterSeach : idSemesterCurrent;
+    setLoading(true);
     ClassAPI.dowloadLogLuong(idSemester).then(
       (response) => {
         if (response.data.size === 0) {
@@ -522,6 +526,7 @@ const ClassManagement = () => {
           a.download = "luong_lop_hoc.csv";
           a.click();
           window.URL.revokeObjectURL(url);
+          setLoading(false);
         }
       },
       (error) => {
@@ -536,6 +541,7 @@ const ClassManagement = () => {
     }
     let idSemester =
       idSemesterSeach !== "" ? idSemesterSeach : idSemesterCurrent;
+    setLoading(true);
     ClassAPI.dowloadLog(idSemester).then(
       (response) => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -544,6 +550,7 @@ const ClassManagement = () => {
         a.download = "lop_hoc.csv";
         a.click();
         window.URL.revokeObjectURL(url);
+        setLoading(false);
       },
       (error) => {
         console.log(error);

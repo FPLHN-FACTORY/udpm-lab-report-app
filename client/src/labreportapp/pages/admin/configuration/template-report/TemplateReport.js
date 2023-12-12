@@ -63,6 +63,7 @@ const TemplateReport = () => {
   };
 
   const dowloadLog = () => {
+    setIsLoading(true);
     AdTemplateReportAPI.dowloadLog().then(
       (response) => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -71,6 +72,7 @@ const TemplateReport = () => {
         a.download = "cau_hinh_template_bao_cao.csv";
         a.click();
         window.URL.revokeObjectURL(url);
+        setIsLoading(false);
       },
       (error) => {}
     );

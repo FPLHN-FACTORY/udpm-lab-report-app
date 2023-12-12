@@ -73,6 +73,7 @@ const ClassConfiguration = () => {
   };
 
   const dowloadLog = () => {
+    setIsLoading(true);
     AdClassCongigurationAPI.dowloadLog().then(
       (response) => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -81,6 +82,7 @@ const ClassConfiguration = () => {
         a.download = "cau_hinh_lop_hoc.csv";
         a.click();
         window.URL.revokeObjectURL(url);
+        setIsLoading(false);
       },
       (error) => {}
     );
