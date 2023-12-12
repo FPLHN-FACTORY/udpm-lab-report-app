@@ -24,7 +24,7 @@ const RoleSelection = () => {
 
   useEffect(() => {
     if (typeof userCurrent.role === "string") {
-      navigate(userCurrent.role);
+      navigate("/" + userCurrent.role);
     }
   }, [userCurrent.role]);
 
