@@ -22,11 +22,12 @@ const HeaderAdminComponent = ({ collapsed, toggleCollapsed }) => {
           justifyContent: "space-between",
           alignItems: "center",
           padding: "0 24px",
+          color: "white",
+          background: "rgb(233, 192, 89)",
         }}
       >
-      
         <div style={{ display: "flex", alignItems: "center" }}>
-          <div className="title_logo">
+          <div className="title_logo" style={{ color: "white" }}>
             {" "}
             <img src={logoUdpm3} className="logo_project" /> LabReport
           </div>
