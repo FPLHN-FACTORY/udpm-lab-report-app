@@ -9,6 +9,7 @@ import TEACHER from "../../assets/img/t2.png";
 import STUDENT from "../../assets/img/t3.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGraduationCap } from "@fortawesome/free-solid-svg-icons";
+import { useEffect } from "react";
 
 const RoleSelection = () => {
   const [selectedRole, setSelectedRole] = useState(null);
@@ -17,7 +18,15 @@ const RoleSelection = () => {
     setSelectedRole(e.target.value);
   };
 
+  const navigate = useNavigate();
+
   const userCurrent = useAppSelector(GetUserCurrent);
+
+  useEffect(() => {
+    if (typeof userCurrent.role === "string") {
+      navigate(userCurrent.role);
+    }
+  }, [userCurrent.role]);
 
   return (
     <div className="role-selection-container">
