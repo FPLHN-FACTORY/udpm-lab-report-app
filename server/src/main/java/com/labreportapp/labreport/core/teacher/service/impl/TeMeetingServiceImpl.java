@@ -75,6 +75,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayOutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -734,7 +736,16 @@ public class TeMeetingServiceImpl implements TeMeetingService {
                         .append(", hình thức: ").append(meeting.getTypeMeeting()).append(",");
                 MeetingRequest meetingRequest = new MeetingRequest();
                 meetingRequest.setClassId(idClass);
-                meetingRequest.setMeetingDate(DateConverter.convertDateToLongOneHourOneMinutes(meeting.getMeetingDate()));
+                SimpleDateFormat excelDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                Date javaDate = null;
+                try {
+                    javaDate = excelDateFormat.parse(meeting.getMeetingDate());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                SimpleDateFormat desiredDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                String formattedDate = desiredDateFormat.format(javaDate);
+                meetingRequest.setMeetingDate(DateConverter.convertDateToLongOneHourOneMinutes(formattedDate));
                 meetingRequest.setName(RandomString.random());
                 meetingRequest.setMeetingPeriod(meetingPeriod.getId());
                 meetingRequest.setStatusMeetingRequest(StatusMeetingRequest.CHO_PHE_DUYET);
