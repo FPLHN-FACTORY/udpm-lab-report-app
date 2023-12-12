@@ -31,7 +31,7 @@ const RoleSelection = () => {
             textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
           }}
         >
-          Module quản lý xưởng bộ môn UDPM:
+          Module quản lý hoạt động xưởng bộ môn UDPM:
         </div>
         <Row
           justify="center"
