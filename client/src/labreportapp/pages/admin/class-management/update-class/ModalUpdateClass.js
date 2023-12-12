@@ -10,7 +10,10 @@ import { GetAdTeacher } from "../../../../app/admin/AdTeacherSlice.reducer";
 import { parseInt } from "lodash";
 import LoadingIndicatorNoOverlay from "../../../../helper/loadingNoOverlay";
 import { GetAdMeetingPeriod } from "../../../../app/admin/AdMeetingPeriodSlice.reducer";
-import { convertHourAndMinuteToString } from "../../../../helper/util.helper";
+import {
+  convertDateLongToString,
+  convertHourAndMinuteToString,
+} from "../../../../helper/util.helper";
 import { faHeartPulse } from "@fortawesome/free-solid-svg-icons";
 
 const { Option } = Select;
@@ -228,7 +231,12 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
                 >
                   {semesterDataAll.map((semester) => (
                     <Option key={semester.id} value={semester.id}>
-                      {semester.name}
+                      {semester.name +
+                        " (" +
+                        convertDateLongToString(semester.startTime) +
+                        " - " +
+                        convertDateLongToString(semester.endTime) +
+                        ")"}
                     </Option>
                   ))}
                 </Select>
