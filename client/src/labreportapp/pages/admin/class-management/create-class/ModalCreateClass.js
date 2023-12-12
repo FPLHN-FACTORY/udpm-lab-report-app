@@ -9,7 +9,7 @@ import { ClassAPI } from "../../../../api/admin/class-manager/ClassAPI.api";
 import { CreateClass } from "../../../../app/admin/ClassManager.reducer";
 import { GetAdTeacher } from "../../../../app/admin/AdTeacherSlice.reducer";
 import { GetAdMeetingPeriod } from "../../../../app/admin/AdMeetingPeriodSlice.reducer";
-import { convertHourAndMinuteToString } from "../../../../helper/util.helper";
+import { convertDateLongToString, convertHourAndMinuteToString } from "../../../../helper/util.helper";
 import LoadingIndicatorNoOverlay from "../../../../helper/loadingNoOverlay";
 
 const { Option } = Select;

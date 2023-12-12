@@ -34,7 +34,7 @@ import {
   GetAdMeetingPeriod,
   SetAdMeetingPeriod,
 } from "../../../app/admin/AdMeetingPeriodSlice.reducer";
-import { convertHourAndMinuteToString } from "../../../helper/util.helper";
+import { convertDateLongToString, convertHourAndMinuteToString } from "../../../helper/util.helper";
 import {
   GetAdMeetingRequest,
   SetAdMeetingRequest,

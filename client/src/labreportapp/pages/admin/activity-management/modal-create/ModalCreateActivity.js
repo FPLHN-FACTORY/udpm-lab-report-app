@@ -25,6 +25,7 @@ import {
 import locale from "antd/es/date-picker/locale/vi_VN";
 import dayjs from "dayjs";
 import "dayjs/locale/vi";
+import { convertDateLongToString } from "../../../../helper/util.helper";
 const { RangePicker } = DatePicker;
 
 const ModalCreateActivity = ({

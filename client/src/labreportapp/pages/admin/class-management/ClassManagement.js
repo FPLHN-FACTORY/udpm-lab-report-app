@@ -38,7 +38,7 @@ import ModalCreateProject from "../../admin/class-management/create-class/ModalC
 import { Link } from "react-router-dom";
 import { SetAdTeacher } from "../../../app/admin/AdTeacherSlice.reducer";
 import ModalUpdateClass from "./update-class/ModalUpdateClass";
-import { convertHourAndMinuteToString } from "../../../helper/util.helper";
+import { convertDateLongToString, convertHourAndMinuteToString } from "../../../helper/util.helper";
 import {
   GetAdClassManagement,
   SetMyClass,
