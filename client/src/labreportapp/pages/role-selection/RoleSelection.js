@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Radio, Button, Row, Card, Col } from "antd";
+import { Radio, Row, Card, Col } from "antd";
 import "./style-role-selection.css"; // Import file CSS
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAppSelector } from "../../app/hook";
 import { GetUserCurrent } from "../../app/common/UserCurrent.reducer";
 import ADMIN from "../../assets/img/t1.png";
@@ -9,24 +9,9 @@ import TEACHER from "../../assets/img/t2.png";
 import STUDENT from "../../assets/img/t3.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGraduationCap } from "@fortawesome/free-solid-svg-icons";
-import { useEffect } from "react";
 
 const RoleSelection = () => {
-  const [selectedRole, setSelectedRole] = useState(null);
-
-  const handleRoleChange = (e) => {
-    setSelectedRole(e.target.value);
-  };
-
-  const navigate = useNavigate();
-
   const userCurrent = useAppSelector(GetUserCurrent);
-
-  useEffect(() => {
-    if (typeof userCurrent.role === "string") {
-      navigate("/" + userCurrent.role);
-    }
-  }, [userCurrent.role]);
 
   return (
     <div className="role-selection-container">
