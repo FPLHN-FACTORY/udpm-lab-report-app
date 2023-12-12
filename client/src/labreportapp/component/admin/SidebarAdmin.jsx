@@ -75,12 +75,18 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
         paddingBottom: "20px",
         position: "fixed",
         left: 0,
+        color: "white",
+        background: "rgb(233, 192, 89)",
       }}
     >
       <Menu
         theme="light"
         mode="inline"
-        style={{ paddingBottom: 80 }}
+        style={{
+          color: "white",
+          paddingBottom: 80,
+          background: "rgb(233, 192, 89)",
+        }}
         selectedKeys={selectedKey}
       >
         <div style={{ marginBottom: 15, marginTop: 15 }}>
