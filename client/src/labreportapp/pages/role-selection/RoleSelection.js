@@ -42,7 +42,14 @@ const RoleSelection = () => {
           {userCurrent != null && (
             <>
               {userCurrent.role.includes("ADMIN") && (
-                <Col span={8} style={{ padding: 50 }}>
+                <Col
+                  span={8}
+                  style={{
+                    padding: 50,
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                >
                   <Link to="/admin">
                     <Card
                       hoverable
@@ -75,7 +82,14 @@ const RoleSelection = () => {
                 </Col>
               )}
               {userCurrent.role.includes("TEACHER") && (
-                <Col span={8} style={{ padding: 50 }}>
+                <Col
+                  span={8}
+                  style={{
+                    padding: 50,
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                >
                   <Link to="/teacher">
                     <Card
                       hoverable
@@ -112,7 +126,14 @@ const RoleSelection = () => {
                 </Col>
               )}
               {userCurrent.role.includes("STUDENT") && (
-                <Col span={8} style={{ padding: 50 }}>
+                <Col
+                  span={8}
+                  style={{
+                    padding: 50,
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                >
                   <Link to="/student">
                     <Card
                       hoverable
