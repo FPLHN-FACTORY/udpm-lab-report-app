@@ -24,6 +24,7 @@ const ModalCreateGroupProject = ({ visible, onCancel }) => {
       setDescriptions("");
       setSelectedImageUrl("");
       setImage([]);
+      setErrorName("");
     };
   }, [visible]);
 

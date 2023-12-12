@@ -28,6 +28,13 @@ const ModalUpdateGroupProject = ({ visible, onCancel, item }) => {
         setSelectedImageUrl(item.backgroundImage);
       }
     }
+    return () => {
+      setName("");
+      setDescriptions("");
+      setSelectedImageUrl("");
+      setImage([]);
+      setErrorName("");
+    };
   }, [item]);
 
   const handleFileInputChange = (event) => {
