@@ -280,7 +280,16 @@ export class ClassAPI {
   static showHistory = (filter) => {
     return request({
       method: "GET",
-      url: url + `/history?page=${filter.page}&size=${filter.size}&idSemester=${filter.idSemester}`,
+      url:
+        url +
+        `/history?page=${filter.page}&size=${filter.size}&idSemester=${filter.idSemester}`,
+    });
+  };
+
+  static detailClassById = (idClass) => {
+    return request({
+      method: "GET",
+      url: `/admin/class-managerment/get-class/` + idClass,
     });
   };
 }

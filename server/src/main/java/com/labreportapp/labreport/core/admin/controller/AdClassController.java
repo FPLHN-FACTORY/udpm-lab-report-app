@@ -249,4 +249,9 @@ public class AdClassController {
         loggerObject.setPathFile(pathFile);
         return new ResponseEntity<>(callApiConsumer.handleCallApiReadFileLog(loggerObject, page, size), HttpStatus.OK);
     }
+
+    @GetMapping("/get-class/{id}")
+    public ResponseObject detailClass(@PathVariable("id") String id) {
+        return new ResponseObject(teClassService.findClassById(id));
+    }
 }

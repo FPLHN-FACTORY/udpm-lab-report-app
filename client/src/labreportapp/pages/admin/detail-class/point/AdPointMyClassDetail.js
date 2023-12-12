@@ -29,7 +29,7 @@ const AdPointMyClassDetail = () => {
 
   const featchClass = async (idClass) => {
     try {
-      await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {
+      await ClassAPI.detailClassById(idClass).then((responese) => {
         setClassDetail(responese.data.data);
         document.title = "Quản lý điểm | " + responese.data.data.code;
       });

@@ -88,9 +88,6 @@ public class TePointSeviceImpl implements TePointSevice {
     @Override
     public List<TePointStudentInforRespone> getPointStudentByIdClass(String idClass) {
         List<TePointResponse> list = tePointRepository.getAllPointByIdClass(idClass);
-        list.forEach(i -> {
-            System.err.println(i.getCheckPointPhase1() + " - " + i.getCheckPointPhase2());
-        });
         List<TeStudentStatusApiResponse> listInfor = teStudentClassesService.searchApiStudentClassesStatusByIdClass(idClass);
         List<TePointStudentInforRespone> listReturn = new ArrayList<>();
         ClassConfiguration classConfiguration = teClassConfigurationRepository.findAll().get(0);
