@@ -206,6 +206,12 @@ public class AdClassController {
         return new ResponseObject(idSemesterCurrent);
     }
 
+    @GetMapping("/semester-current-name")
+    public ResponseObject getSemesterCurrentName() {
+        String nameSemesterCurrent = semesterHelper.getNameSemesterCurrent();
+        return new ResponseObject(nameSemesterCurrent);
+    }
+
     @GetMapping("/download-log-luong")
     public ResponseEntity<Resource> downloadCsvLuong(@RequestParam(name = "idSemester", defaultValue = "") String idSemester) {
         String nameSemester = semesterRepository.findById(idSemester).get().getName();

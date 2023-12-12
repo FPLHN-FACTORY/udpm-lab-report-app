@@ -85,10 +85,8 @@ const AdFactoryDeploymentStatistics = () => {
   const [nameSemesterCurrent, setNameSemesterCurrent] = useState("");
 
   const loadDataSemesterCurrent = () => {
-    ClassAPI.getSemesterCurrent().then((res) => {
-      if (res.data.data != null) {
-        setNameSemesterCurrent(res.data.data.name);
-      }
+    ClassAPI.getNameSemesterCurrent().then((res) => {
+      setNameSemesterCurrent(res.data.data);
     });
   };
 

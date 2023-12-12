@@ -245,6 +245,13 @@ export class ClassAPI {
       url: url + `/semester-current`,
     });
   };
+  
+  static getNameSemesterCurrent = () => {
+    return request({
+      method: "GET",
+      url: url + `/semester-current-name`,
+    });
+  };
 
   static dowloadLogLuong = (idSemester) => {
     return request({
