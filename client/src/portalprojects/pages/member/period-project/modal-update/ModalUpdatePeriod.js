@@ -117,7 +117,7 @@ const ModalUpdatePeriod = ({ visible, onCancel, idPeriod }) => {
 
       PeriodProjectAPI.update(obj).then(
         (response) => {
-          message.success("Cập nhật thành công !!");
+          message.success("Cập nhật thành công !");
           dispatch(UpdatePeriodProject(response.data.data));
           onCancel();
         },

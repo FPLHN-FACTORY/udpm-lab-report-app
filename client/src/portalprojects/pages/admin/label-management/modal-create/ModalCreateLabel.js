@@ -61,7 +61,7 @@ const ModalCreateLabel = ({
       };
       LabelManagementAPI.create(obj).then(
         (response) => {
-          message.success("Thêm thành công !!");
+          message.success("Thêm thành công !");
           dispatch(CreateLabelManagement(response.data.data));
           if (data != null) {
             if (data.length + 1 > size) {

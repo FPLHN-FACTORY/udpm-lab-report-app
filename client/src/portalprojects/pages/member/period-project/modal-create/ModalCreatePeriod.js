@@ -103,7 +103,7 @@ const ModalCreatePeriod = ({ visible, onCancel }) => {
 
       PeriodProjectAPI.create(obj).then(
         (response) => {
-          message.success("Thêm thành công !!");
+          message.success("Thêm thành công !");
           dispatch(CreatePeriodProject(response.data.data));
           onCancel();
         },

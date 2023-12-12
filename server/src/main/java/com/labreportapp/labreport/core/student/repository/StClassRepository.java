@@ -3,6 +3,7 @@ package com.labreportapp.labreport.core.student.repository;
 import com.labreportapp.labreport.core.student.model.request.StClassRequest;
 import com.labreportapp.labreport.core.student.model.request.StFindClassRequest;
 import com.labreportapp.labreport.core.student.model.response.StClassResponse;
+import com.labreportapp.labreport.entity.Class;
 import com.labreportapp.labreport.repository.ClassRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -72,4 +74,15 @@ public interface StClassRepository extends ClassRepository {
             SELECT a.id FROM student_classes a WHERE a.student_id = :idStudent AND a.class_id = :idClass
             """, nativeQuery = true)
     String checkStudentInClass(@Param("idStudent") String idStudent, @Param("idClass") String idClass);
+
+    @Query(value = """
+            SELECT c.*
+            FROM class c JOIN activity a ON c.activity_id = a.id
+            JOIN meeting_period mp ON mp.id = c.class_period
+            JOIN semester s ON a.semester_id = s.id
+            JOIN student_classes sc ON c.id = sc.class_id
+            JOIN level lv ON lv.id = a.level_id
+            WHERE  a.id = :idActivity AND sc.student_id = :idStudent
+            """, nativeQuery = true)
+    List<Class> findAllClassStudentActivity(@Param("idActivity") String idActivity, @Param("idStudent") String idStudent);
 }

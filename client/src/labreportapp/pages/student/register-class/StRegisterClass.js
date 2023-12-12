@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./style-register-class.css";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import LoadingIndicator from "../../../helper/loading";
 import {
   faChainSlash,
@@ -145,7 +145,7 @@ const StRegisterClass = () => {
         await StClassAPI.studentJoinClass(filter).then((response) => {
           setLoading(false);
           setPassWord("");
-          message.success("Tham gia lớp học thành công !!");
+          message.success("Tham gia lớp học thành công !");
           navigate(`/student/my-class/post/${record.id}`);
         });
       } else {
@@ -650,6 +650,18 @@ const StRegisterClass = () => {
                     )
                   </span>
                 )}
+                <div
+                  style={{
+                    color: "red",
+                    fontSize: "17px",
+                    marginTop: "5px",
+                  }}
+                >
+                  <span>
+                    Lưu ý: Mỗi hoạt động sinh viên chỉ được phép tham gia một
+                    lớp học.
+                  </span>
+                </div>
               </div>
             </div>
             <div className="" style={{ marginTop: "20px" }}>

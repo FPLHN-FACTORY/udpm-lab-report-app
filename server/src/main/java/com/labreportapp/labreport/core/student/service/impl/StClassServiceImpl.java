@@ -7,12 +7,14 @@ import com.labreportapp.labreport.core.student.model.request.StClassRequest;
 import com.labreportapp.labreport.core.student.model.request.StFindClassRequest;
 import com.labreportapp.labreport.core.student.model.response.StClassCustomResponse;
 import com.labreportapp.labreport.core.student.model.response.StClassResponse;
+import com.labreportapp.labreport.core.student.repository.StActivityRepository;
 import com.labreportapp.labreport.core.student.repository.StClassConfigurationRepository;
 import com.labreportapp.labreport.core.student.repository.StClassRepository;
 import com.labreportapp.labreport.core.student.repository.StStudentClassesRepository;
 import com.labreportapp.labreport.core.student.service.StClassService;
 import com.labreportapp.labreport.core.teacher.model.response.TeDetailClassResponse;
 import com.labreportapp.labreport.core.teacher.repository.TeClassRepository;
+import com.labreportapp.labreport.entity.Activity;
 import com.labreportapp.labreport.entity.Class;
 import com.labreportapp.labreport.entity.StudentClasses;
 import com.labreportapp.labreport.infrastructure.constant.StatusStudentFeedBack;
@@ -66,6 +68,9 @@ public class StClassServiceImpl implements StClassService {
 
     @Autowired
     private TeClassRepository teClassRepository;
+
+    @Autowired
+    private StActivityRepository stActivityRepository;
 
     @Override
     public PageableObject<StClassCustomResponse> getAllClassByCriteriaAndIsActive(final StFindClassRequest req) {
@@ -121,11 +126,25 @@ public class StClassServiceImpl implements StClassService {
     @Synchronized
     public StClassCustomResponse joinClass(final StClassRequest req) {
         Optional<Class> findClass = stClassRepository.findById(req.getIdClass());
-        if (!findClass.isPresent()) {
+        if (findClass.isEmpty()) {
             throw new NotFoundException(Message.CLASS_NOT_EXISTS);
         }
+        String idActivity = findClass.get().getActivityId();
+        Optional<Activity> findActivity = stActivityRepository.findById(idActivity);
+        List<Class> listClassJoinActivity = stClassRepository.findAllClassStudentActivity(idActivity, labReportAppSession.getUserId());
+        StringBuilder stringBuilder = new StringBuilder();
+        listClassJoinActivity.forEach(i -> {
+            stringBuilder.append(" ").append(i.getCode()).append(",");
+        });
+        if (listClassJoinActivity.size() > 0) {
+            if (stringBuilder.length() > 0 && stringBuilder.charAt(stringBuilder.length() - 1) == ',') {
+                stringBuilder.setCharAt(stringBuilder.length() - 1, ' ');
+            }
+            findActivity.ifPresent(activity -> stringBuilder.append(" hoạt động: ").append(activity.getName()).append("."));
+            throw new RestApiException("Không thể tham gia lớp học vì bạn đã tham gia lớp: " + stringBuilder.toString());
+        }
         Optional<StClassResponse> conditionClass = stClassRepository.checkConditionCouldJoinOrLeaveClass(req, Calendar.getInstance().getTimeInMillis());
-        if (!conditionClass.isPresent()) {
+        if (conditionClass.isEmpty()) {
             throw new RestApiException(Message.YOU_CANNOT_ENTER_CLASS_YET);
         }
         Optional<StudentClasses> findStudentClasses = stStudentClassesRepository.
@@ -138,7 +157,6 @@ public class StClassServiceImpl implements StClassService {
         if (findClass.get().getClassSize().equals(configurationSizeMax)) {
             throw new RestApiException(Message.CLASS_DID_FULL_CLASS_SIZE);
         }
-        System.err.println("aaaaa:" + req.getPassWord());
         if (findClass.get().getPassword() != null) {
             if (req.getPassWord().equals("") || req.getPassWord() == null) {
                 throw new RestApiException(Message.CONFIRM_PASSWORD_ISEMPTY);
@@ -149,7 +167,6 @@ public class StClassServiceImpl implements StClassService {
         SimpleResponse responseStudent = callApiIdentity.handleCallApiGetUserById(labReportAppSession.getUserId());
         StudentClasses studentJoinClass = new StudentClasses();
         StClassCustomResponse customResponse = new StClassCustomResponse();
-
         if (responseStudent != null) {
             studentJoinClass.setClassId(req.getIdClass());
             studentJoinClass.setEmail(responseStudent.getEmail());
@@ -186,7 +203,7 @@ public class StClassServiceImpl implements StClassService {
     @Override
     public TeDetailClassResponse findClassById(final String id) {
         Optional<TeDetailClassResponse> classCheck = teClassRepository.findClassById(id);
-        if (!classCheck.isPresent()) {
+        if (classCheck.isEmpty()) {
             throw new NotFoundException(Message.CLASS_NOT_EXISTS);
         }
         String check = stClassRepository.checkStudentInClass(labReportAppSession.getUserId(), id);
