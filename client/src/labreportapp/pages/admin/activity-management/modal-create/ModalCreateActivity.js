@@ -298,6 +298,7 @@ const ModalCreateActivity = ({
             <span>Mô tả:</span> <br />
             <Input.TextArea
               value={descriptions}
+              placeholder="Nhập mô tả"
               rows={8}
               onChange={(e) => {
                 setDescriptions(e.target.value);
