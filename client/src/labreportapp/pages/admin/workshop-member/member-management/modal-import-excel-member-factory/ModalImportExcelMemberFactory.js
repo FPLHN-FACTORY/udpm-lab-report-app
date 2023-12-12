@@ -55,7 +55,7 @@ const ModalImportExcelMemberFactory = ({ visible, onCancel, fetchData }) => {
     <>
       {loading && <LoadingIndicatorNoOverlay />}
       <Modal
-        visible={visible}
+        open={visible}
         onCancel={onCancel}
         width={700}
         footer={null}

@@ -97,7 +97,7 @@ const ModalDetailTeam = ({ id, visible, onCancel, idClass }) => {
 
   return (
     <>
-      <Modal visible={visible} onCancel={onCancel} width={750} footer={null}>
+      <Modal open={visible} onCancel={onCancel} width={750} footer={null}>
         <Spin spinning={loadingNo}>
           <div>
             <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>

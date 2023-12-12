@@ -59,7 +59,7 @@ const ModalUpdateLabel = ({ visible, onCancel, idLabel, label }) => {
     }
   };
   return (
-    <Modal visible={visible} onCancel={onCancel} width={750} footer={null}>
+    <Modal open={visible} onCancel={onCancel} width={750} footer={null}>
       {" "}
       <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
         <span style={{ fontSize: "18px" }}>Cập nhật nhãn</span>

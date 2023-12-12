@@ -141,7 +141,7 @@ const ModalDetailProject = ({ visible, onCancel, idProject }) => {
   return (
     <Modal
       onCancel={onCancel}
-      visible={visible}
+      open={visible}
       width={1150}
       footer={null}
       style={{ top: "53px" }}

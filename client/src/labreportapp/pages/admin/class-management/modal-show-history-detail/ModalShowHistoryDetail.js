@@ -67,7 +67,7 @@ const ModalShowHistoryDetail = ({ id, visible, onCancel }) => {
   return (
     <>
       {loading && <LoadingIndicator />}
-      <Modal visible={visible} onCancel={onCancel} width={1300} footer={null}>
+      <Modal open={visible} onCancel={onCancel} width={1300} footer={null}>
         <div>
           <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
             <span style={{ fontSize: "18px" }}>Lịch sử</span>

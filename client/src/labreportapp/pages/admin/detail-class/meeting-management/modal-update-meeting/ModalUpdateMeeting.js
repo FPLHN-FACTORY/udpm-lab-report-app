@@ -86,7 +86,7 @@ const ModalUpdateMeeting = ({ item, visible, onCancel }) => {
   return (
     <>
       <Modal
-        visible={visible}
+        open={visible}
         onCancel={onCancel}
         width={650}
         footer={null}

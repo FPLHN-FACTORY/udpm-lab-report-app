@@ -112,7 +112,7 @@ const ModalStudentFeedBack = ({ visible, setVisible }) => {
     <div className="overlay">
       {isLoading && <LoadingIndicatorNoOverlay />}
       <Modal
-        visible={visible}
+        open={visible}
         width={1250}
         onCancel={null}
         footer={null}

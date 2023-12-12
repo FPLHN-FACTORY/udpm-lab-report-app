@@ -311,7 +311,7 @@ const ModalAllMeetingRequest = ({ visible, onCancel, item, fetchData }) => {
   return (
     <>
       {loading && <LoadingIndicator />}
-      <Modal visible={visible} onCancel={onCancel} width={1000} footer={null}>
+      <Modal open={visible} onCancel={onCancel} width={1000} footer={null}>
         <div>
           <div style={{ paddingTop: "0" }}>
             <span style={{ fontSize: "18px" }}>

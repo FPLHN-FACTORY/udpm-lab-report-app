@@ -71,7 +71,7 @@ const ModalCreateGroupProject = ({ visible, onCancel }) => {
     <>
       {loading && <LoadingIndicatorNoOverlay />}
       <Modal
-        visible={visible}
+        open={visible}
         onCancel={onCancel}
         width={800}
         footer={null}

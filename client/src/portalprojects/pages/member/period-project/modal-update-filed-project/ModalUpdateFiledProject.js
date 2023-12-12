@@ -191,7 +191,7 @@ const ModalUpdateFiledProject = ({ visible, onCancel, idProject }) => {
   return (
     <>
       <Modal
-        visible={visible}
+        open={visible}
         onCancel={onCancel}
         width={1150}
         footer={null}
