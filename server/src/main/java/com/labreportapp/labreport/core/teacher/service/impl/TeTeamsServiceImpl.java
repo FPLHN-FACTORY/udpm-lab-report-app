@@ -83,7 +83,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -836,47 +835,50 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         List<Team> lisTeam = teTeamsRepositoty.getTeamByClassId(idClass);
         if (listInput == null) {
             return lisTeam;
-        }//teTeamsRepositoty.getNameNhomAuto(idClass)
-        AtomicReference<Integer> nameCount = new AtomicReference<>(1);
+        }
         List<TeExcelImportTeam> filteredList = listInput.stream()
                 .filter(student -> "X".equalsIgnoreCase(student.getRole()) &&
                         student.getNameTeam() != null && !student.getNameTeam().isEmpty())
-                        .filter(Objects::nonNull)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
+        AtomicReference<Integer> nameCount = new AtomicReference<>(1);
         filteredList.forEach(item -> {
             Team teamExists = lisTeam.stream()
-                    .filter(db -> item.getNameTeam().equalsIgnoreCase(db.getName()))
+                    .filter(db -> item.getNameTeam().equals(db.getName()))
                     .findAny().orElse(null);
             if (teamExists == null) {
-                String nameTeamUpdate = "Nhóm " + nameCount.getAndSet(nameCount.get() + 1);
+                lisTeam.forEach(i -> {
+                    if (i.getName().equals("Nhóm " + nameCount.get())) {
+                        nameCount.set(nameCount.get() + 1);
+                    }
+                });
                 listInput.forEach(input -> {
                     if (input.getNameTeam().equals(item.getNameTeam())) {
                         TeExcelImportTeam ex = new TeExcelImportTeam();
                         ex.setName(input.getName());
                         ex.setEmail(input.getEmail());
                         ex.setRole(input.getRole());
-                        ex.setNameTeam(nameTeamUpdate);
+                        ex.setNameTeam("Nhóm " + nameCount.get());
                         ex.setSubjectTeam(input.getSubjectTeam());
                         listTeamImportNew.add(ex);
                     }
                 });
-                item.setNameTeam(nameTeamUpdate);
+                item.setNameTeam("Nhóm " + nameCount.get());
             } else {
-                String nameTeamUpdate = "Nhóm " + nameCount.getAndSet(nameCount.get() + 1);
                 listInput.forEach(input -> {
                     if (input.getNameTeam().equals(item.getNameTeam())) {
                         TeExcelImportTeam ex = new TeExcelImportTeam();
                         ex.setName(input.getName());
                         ex.setEmail(input.getEmail());
                         ex.setRole(input.getRole());
-                        ex.setNameTeam(nameTeamUpdate);
+                        ex.setNameTeam(item.getNameTeam());
                         ex.setSubjectTeam(input.getSubjectTeam());
                         listTeamImportNew.add(ex);
                     }
                 });
-                item.setNameTeam(item.getNameTeam());
             }
         });
+
         listInput.forEach(input -> {
             if (input.getNameTeam().equals("")) {
                 TeExcelImportTeam ex = new TeExcelImportTeam();
@@ -924,7 +926,6 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         for (StudentClasses student : list) {
             map.put(student.getEmail(), student);
         }
-        list.clear();
     }
 
     private void addDataTeam(ConcurrentHashMap<String, Team> mapTeam, List<Team> listTeam) {
@@ -935,6 +936,5 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         for (Team team : listTeam) {
             mapTeam.put(team.getName(), team);
         }
-        listTeam.clear();
     }
 }
