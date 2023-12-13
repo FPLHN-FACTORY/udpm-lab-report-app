@@ -58,7 +58,7 @@
 }
 
 .ant-menu-light .ant-menu-item-selected {
-  color: #ffffff;
+  color: rgb(61, 61, 61);
   font-weight: 700;
   background-color: rgba(255, 235, 170, 0.53);
 }
