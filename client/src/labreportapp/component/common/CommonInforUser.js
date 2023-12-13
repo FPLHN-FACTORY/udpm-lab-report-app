@@ -186,7 +186,7 @@ const CommonInforUser = () => {
           />
           <span
             className="span-name-usercurrent"
-            style={{ marginLeft: 8, fontWeight: 500, color: "white" }}
+            style={{ marginLeft: 8, fontWeight: 500 }}
           >
             {userCurrent != null ? userCurrent.name : ""}
           </span>{" "}

@@ -25,7 +25,7 @@ const HeaderAdminComponent = ({ collapsed, toggleCollapsed }) => {
         }}
       >
         <div style={{ display: "flex", alignItems: "center" }}>
-          <div className="title_logo" style={{ color: "white" }}>
+          <div className="title_logo">
             {" "}
             <img src={logoUdpm3} className="logo_project" /> LabReport
           </div>
