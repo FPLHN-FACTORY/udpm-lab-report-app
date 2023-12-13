@@ -139,11 +139,12 @@ public class AdExportExcelClass {
             int rowNumGiangVien = 1;
             if (listGiangVien != null) {
                 for (SimpleResponse simpleResponse : listGiangVien) {
-                    Row empDataRow = sheetGiangVien.createRow(rowNumGiangVien++);
+                    int dem = rowNumGiangVien++;
+                    Row empDataRow = sheetGiangVien.createRow(dem);
 
                     Cell empSttCell = empDataRow.createCell(0);
                     empSttCell.setCellStyle(cellStyle);
-                    empSttCell.setCellValue(String.valueOf(rowNumGiangVien++));
+                    empSttCell.setCellValue(String.valueOf(dem));
 
                     Cell empHoVaTenCell = empDataRow.createCell(1);
                     empHoVaTenCell.setCellStyle(cellStyle);
@@ -176,11 +177,11 @@ public class AdExportExcelClass {
             int rowNumCaHoc = 1;
             if (listCaHoc != null) {
                 for (MeetingPeriod meetingPeriod : listCaHoc) {
-                    Row empDataRow = sheetCaHoc.createRow(rowNumCaHoc++);
-
+                    int dem = rowNumCaHoc++;
+                    Row empDataRow = sheetCaHoc.createRow(dem);
                     Cell empSttCell = empDataRow.createCell(0);
                     empSttCell.setCellStyle(cellStyle);
-                    empSttCell.setCellValue(String.valueOf(rowNumCaHoc++));
+                    empSttCell.setCellValue(String.valueOf(dem));
 
                     Cell empNameCell = empDataRow.createCell(1);
                     empNameCell.setCellStyle(cellStyle);
