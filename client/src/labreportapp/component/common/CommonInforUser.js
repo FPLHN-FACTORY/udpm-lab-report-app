@@ -174,7 +174,6 @@ const CommonInforUser = () => {
       </div>
       <Dropdown overlay={userMenu} trigger={["click"]}>
         <Link
-          to="/user"
           className="ant-dropdown-link"
           onClick={(e) => e.preventDefault()}
           style={{ display: "flex", alignItems: "center" }}
@@ -186,7 +185,7 @@ const CommonInforUser = () => {
           />
           <span
             className="span-name-usercurrent"
-            style={{ marginLeft: 8, fontWeight: 500 }}
+            style={{ marginLeft: 8, fontWeight: 500, color: "black" }}
           >
             {userCurrent != null ? userCurrent.name : ""}
           </span>{" "}
