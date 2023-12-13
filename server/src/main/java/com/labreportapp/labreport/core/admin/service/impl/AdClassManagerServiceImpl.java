@@ -557,14 +557,14 @@ public class AdClassManagerServiceImpl implements AdClassService {
                 Class classFind = mapClass.get(classExcel.getCode());
                 if (classFind == null) {
                     response.setStatus(false);
-                    response.setMessage("Không tim thấy lớp học");
+                    response.setMessage("Không tìm thấy lớp học " + classExcel.getCode());
                     return;
                 }
                 if (!classExcel.getClassPeriod().equals("")) {
                     MeetingPeriod meetingPeriodFind = mapMeetingPeriod.get(classExcel.getClassPeriod());
                     if (meetingPeriodFind == null) {
                         response.setStatus(false);
-                        response.setMessage("Không tim thấy ca học");
+                        response.setMessage("Ca học: " + classExcel.getClassPeriod() + " không tồn tại");
                         return;
                     }
                     classFind.setClassPeriod(meetingPeriodFind.getId());
