@@ -231,6 +231,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
             throw new RestApiException(Message.THOI_GIAN_BAT_DAU_CUA_LOP_HOC_PHAI_NAM_TRONG_KHOANG_THOI_GIAN_CUA_HOAT_DONG);
         }
         StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Lớp: ").append(classNew.getCode()).append(": ");
         String classPeriodOld = classNew.getClassPeriod();
         String classPeriodNew = request.getClassPeriod();
         if (classPeriodOld != null && classPeriodNew != null && !classPeriodOld.equals(classPeriodNew)) {
