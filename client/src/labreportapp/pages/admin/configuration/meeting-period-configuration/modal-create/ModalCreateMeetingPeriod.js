@@ -126,7 +126,7 @@ const ModalCreateMeetingPeriod = ({
   return (
     <>
       <Modal
-        visible={visible}
+        open={visible}
         onCancel={onCancel}
         width={750}
         footer={null}

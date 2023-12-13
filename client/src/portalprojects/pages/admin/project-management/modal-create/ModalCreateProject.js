@@ -400,7 +400,7 @@ const ModalCreateProject = ({
     <>
       {loading && <LoadingIndicator />}
       <Modal
-        visible={visible}
+        open={visible}
         onCancel={cancelFaild}
         width={1150}
         footer={null}

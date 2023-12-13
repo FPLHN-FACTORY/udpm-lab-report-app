@@ -206,7 +206,7 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
       {loading && <LoadingIndicatorNoOverlay />}
       {loadingOverlay && <LoadingIndicatorNoOverlay />}
       <Modal
-        visible={visible}
+        open={visible}
         onCancel={onCancel}
         width={800}
         footer={null}

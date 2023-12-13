@@ -24,6 +24,7 @@ const ModalCreateGroupProject = ({ visible, onCancel }) => {
       setDescriptions("");
       setSelectedImageUrl("");
       setImage([]);
+      setErrorName("");
     };
   }, [visible]);
 
@@ -39,26 +40,30 @@ const ModalCreateGroupProject = ({ visible, onCancel }) => {
   };
 
   const createGroupProject = () => {
-    let check = 0;
-    if (name.trim() === "") {
-      setErrorName("Tên nhóm dự án không được để trống");
-      check++;
-    } else {
-      setErrorName("");
-    }
-    if (check === 0) {
-      let obj = {
-        name: name,
-        descriptions: descriptions,
-        file: image,
-      };
-      setLoading(true);
-      AdGroupProjectAPI.createGroupProject(obj).then((response) => {
-        dispatch(CreateAdGroupProject(response.data.data));
-        message.success("Cập nhật thành công !");
-        setLoading(false);
-        onCancel();
-      });
+    try {
+      let check = 0;
+      if (name.trim() === "") {
+        setErrorName("Tên nhóm dự án không được để trống");
+        check++;
+      } else {
+        setErrorName("");
+      }
+      if (check === 0) {
+        let obj = {
+          name: name,
+          descriptions: descriptions,
+          file: image,
+        };
+        setLoading(true);
+        AdGroupProjectAPI.createGroupProject(obj).then((response) => {
+          dispatch(CreateAdGroupProject(response.data.data));
+          message.success("Cập nhật thành công !");
+          setLoading(false);
+          onCancel();
+        });
+      }
+    } catch (error) {
+      setLoading(false);
     }
   };
 
@@ -66,7 +71,7 @@ const ModalCreateGroupProject = ({ visible, onCancel }) => {
     <>
       {loading && <LoadingIndicatorNoOverlay />}
       <Modal
-        visible={visible}
+        open={visible}
         onCancel={onCancel}
         width={800}
         footer={null}

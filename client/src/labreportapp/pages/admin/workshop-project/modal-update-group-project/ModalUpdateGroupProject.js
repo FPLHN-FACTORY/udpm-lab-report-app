@@ -28,6 +28,13 @@ const ModalUpdateGroupProject = ({ visible, onCancel, item }) => {
         setSelectedImageUrl(item.backgroundImage);
       }
     }
+    return () => {
+      setName("");
+      setDescriptions("");
+      setSelectedImageUrl("");
+      setImage([]);
+      setErrorName("");
+    };
   }, [item]);
 
   const handleFileInputChange = (event) => {
@@ -42,33 +49,39 @@ const ModalUpdateGroupProject = ({ visible, onCancel, item }) => {
   };
 
   const updateGroupProject = () => {
-    let check = 0;
-    if (name.trim() === "") {
-      setErrorName("Tên nhóm dự án không được để trống");
-      check++;
-    } else {
-      setErrorName("");
-    }
-    let obj = {
-      id: item.id,
-      name: name,
-      descriptions: descriptions,
-      file: image,
-    };
-    setLoading(true);
-    AdGroupProjectAPI.updateGroupProject(obj).then((response) => {
-      dispatch(UpdateAdGroupProject(response.data.data));
-      message.success("Cập nhật thành công !");
+    try {
+      let check = 0;
+      if (name.trim() === "") {
+        setErrorName("Tên nhóm dự án không được để trống");
+        check++;
+      } else {
+        setErrorName("");
+      }
+      if (check === 0) {
+        let obj = {
+          id: item.id,
+          name: name,
+          descriptions: descriptions,
+          file: image,
+        };
+        setLoading(true);
+        AdGroupProjectAPI.updateGroupProject(obj).then((response) => {
+          dispatch(UpdateAdGroupProject(response.data.data));
+          message.success("Cập nhật thành công !");
+          setLoading(false);
+          onCancel();
+        });
+      }
+    } catch (error) {
       setLoading(false);
-      onCancel();
-    });
+    }
   };
 
   return (
     <>
       {loading && <LoadingIndicatorNoOverlay />}
       <Modal
-        visible={visible}
+        open={visible}
         onCancel={onCancel}
         width={800}
         footer={null}
