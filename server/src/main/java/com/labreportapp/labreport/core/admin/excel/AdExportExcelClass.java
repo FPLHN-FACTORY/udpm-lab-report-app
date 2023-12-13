@@ -17,7 +17,6 @@ import org.springframework.stereotype.Component;
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.TimeZone;
 
 /**
  * @author thangncph26123
@@ -135,6 +134,27 @@ public class AdExportExcelClass {
             cellGiangVien3.setCellValue("Email");
             cellGiangVien3.setCellStyle(cellStyle);
 
+            int rowNumGiangVien = 1;
+            for (SimpleResponse simpleResponse : listGiangVien) {
+                Row empDataRow = sheet.createRow(rowNumGiangVien++);
+
+                Cell empSttCell = empDataRow.createCell(0);
+                empSttCell.setCellStyle(cellStyle);
+                empSttCell.setCellValue(String.valueOf(rowNumGiangVien++));
+
+                Cell empHoVaTenCell = empDataRow.createCell(1);
+                empHoVaTenCell.setCellStyle(cellStyle);
+                empHoVaTenCell.setCellValue(simpleResponse.getName());
+
+                Cell empTaiKhoanCell = empDataRow.createCell(2);
+                empTaiKhoanCell.setCellStyle(cellStyle);
+                empTaiKhoanCell.setCellValue(simpleResponse.getUserName());
+
+                Cell empEmailCell = empDataRow.createCell(3);
+                empEmailCell.setCellStyle(cellStyle);
+                empEmailCell.setCellValue(simpleResponse.getEmail());
+            }
+
             Sheet sheetCaHoc = workbook.createSheet("Danh sách ca học");
             Row rowCaHoc = sheetCaHoc.createRow(0);
 
@@ -149,6 +169,26 @@ public class AdExportExcelClass {
             Cell cellCaHoc2 = rowCaHoc.createCell(2);
             cellCaHoc2.setCellValue("Thời gian");
             cellCaHoc2.setCellStyle(cellStyle);
+
+            int rowNumCaHoc = 1;
+            for (MeetingPeriod meetingPeriod : listCaHoc) {
+                Row empDataRow = sheet.createRow(rowNumCaHoc++);
+
+                Cell empSttCell = empDataRow.createCell(0);
+                empSttCell.setCellStyle(cellStyle);
+                empSttCell.setCellValue(String.valueOf(rowNumCaHoc++));
+
+                Cell empNameCell = empDataRow.createCell(1);
+                empNameCell.setCellStyle(cellStyle);
+                empNameCell.setCellValue(meetingPeriod.getName());
+
+                Cell empThoiGianCell = empDataRow.createCell(2);
+                empThoiGianCell.setCellStyle(cellStyle);
+                empThoiGianCell.setCellValue(DateConverter.convertHourAndMinuteToString(meetingPeriod.getStartHour(),
+                        meetingPeriod.getStartMinute(),
+                        meetingPeriod.getEndHour(),
+                        meetingPeriod.getEndMinute()));
+            }
 
             workbook.write(outputStream);
             return outputStream;

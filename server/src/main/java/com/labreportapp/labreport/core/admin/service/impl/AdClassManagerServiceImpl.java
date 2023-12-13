@@ -41,6 +41,7 @@ import com.labreportapp.labreport.infrastructure.constant.StatusHoneyPlus;
 import com.labreportapp.labreport.infrastructure.constant.StatusTeacherEdit;
 import com.labreportapp.labreport.repository.ActivityRepository;
 import com.labreportapp.labreport.repository.LevelRepository;
+import com.labreportapp.labreport.repository.MeetingPeriodRepository;
 import com.labreportapp.labreport.util.CallApiIdentity;
 import com.labreportapp.labreport.util.ClassHelper;
 import com.labreportapp.labreport.util.CompareUtil;
@@ -432,7 +433,9 @@ public class AdClassManagerServiceImpl implements AdClassService {
                 listCustom.add(adExportExcelClassCustom);
             }
         });
-        return adExportExcelClass.export(response, listCustom, null, null);
+        List<SimpleResponse> giangVienHuongDanList = callApiIdentity.handleCallApiGetUserByRoleAndModule(ActorConstants.ACTOR_TEACHER);
+        List<MeetingPeriod> listMeetingPeriod = adMeetingPeriodRepository.findAll();
+        return adExportExcelClass.export(response, listCustom, giangVienHuongDanList, listMeetingPeriod);
     }
 
     @Override
@@ -598,7 +601,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
                     loggerResponse.setCodeClass(classNew.getCode());
                     loggerResponseList.add(loggerResponse);
                 }
-                if (teacherOld != null && teacherNew != null && !teacherNew.equals(teacherNew)) {
+                if (teacherOld != null && teacherNew != null && !teacherOld.equals(teacherNew)) {
                     SimpleResponse teacherObjNew = mapGiangVienKeyId.get(teacherNew);
                     SimpleResponse teacherObjOld = mapGiangVienKeyId.get(teacherOld);
                     LoggerResponse loggerResponse = new LoggerResponse();
