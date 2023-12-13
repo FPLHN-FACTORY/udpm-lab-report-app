@@ -114,6 +114,40 @@ public class AdExportExcelClass {
                 empHoatDongCell.setCellValue(classResponse.getNameActivity());
             }
 
+            Sheet sheetGiangVien = workbook.createSheet("Danh sách giảng viên");
+            Row rowGiangVien = sheetGiangVien.createRow(0);
+
+            Cell cellGiangVien = rowGiangVien.createCell(0);
+            cellGiangVien.setCellValue("STT");
+            cellGiangVien.setCellStyle(cellStyle);
+
+            Cell cellGiangVien1 = rowGiangVien.createCell(1);
+            cellGiangVien1.setCellValue("Họ và tên");
+            cellGiangVien1.setCellStyle(cellStyle);
+
+            Cell cellGiangVien2 = rowGiangVien.createCell(2);
+            cellGiangVien2.setCellValue("Tài khoản");
+            cellGiangVien2.setCellStyle(cellStyle);
+
+            Cell cellGiangVien3 = rowGiangVien.createCell(2);
+            cellGiangVien3.setCellValue("Email");
+            cellGiangVien3.setCellStyle(cellStyle);
+
+            Sheet sheetCaHoc = workbook.createSheet("Danh sách ca học");
+            Row rowCaHoc = sheetCaHoc.createRow(0);
+
+            Cell cellCaHoc = rowCaHoc.createCell(0);
+            cellCaHoc.setCellValue("STT");
+            cellCaHoc.setCellStyle(cellStyle);
+
+            Cell cellCaHoc1 = rowCaHoc.createCell(1);
+            cellCaHoc1.setCellValue("Tên ca");
+            cellCaHoc1.setCellStyle(cellStyle);
+
+            Cell cellCaHoc2 = rowCaHoc.createCell(2);
+            cellCaHoc2.setCellValue("Thời gian");
+            cellCaHoc2.setCellStyle(cellStyle);
+
             workbook.write(outputStream);
             return outputStream;
         } catch (Exception e) {
