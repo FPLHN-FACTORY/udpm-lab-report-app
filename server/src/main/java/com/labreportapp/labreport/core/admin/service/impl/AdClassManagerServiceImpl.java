@@ -654,8 +654,8 @@ public class AdClassManagerServiceImpl implements AdClassService {
                     for (LoggerResponse logger : loggerResponseList) {
                         if (xx.getCode().equals(logger.getCodeClass())) {
                             stringBuilder.append(logger.getContent());
+                            check++;
                         }
-                        check++;
                     }
                     if (check > 0) {
                         loggerUtil.sendLogScreen(stringBuilder.toString(), nameSemester);
