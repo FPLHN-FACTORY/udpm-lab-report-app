@@ -74,45 +74,47 @@ public class AdExportExcelClass {
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             //Set data
             int rowNum = 1;
-            for (AdExportExcelClassCustom classResponse : listClass) {
-                Row empDataRow = sheet.createRow(rowNum++);
+            if (listClass != null) {
+                for (AdExportExcelClassCustom classResponse : listClass) {
+                    Row empDataRow = sheet.createRow(rowNum++);
 
-                Cell empSttCell = empDataRow.createCell(0);
-                empSttCell.setCellStyle(cellStyle);
-                empSttCell.setCellValue(String.valueOf(classResponse.getStt()));
+                    Cell empSttCell = empDataRow.createCell(0);
+                    empSttCell.setCellStyle(cellStyle);
+                    empSttCell.setCellValue(String.valueOf(classResponse.getStt()));
 
-                Cell empCodeCell = empDataRow.createCell(1);
-                empCodeCell.setCellStyle(cellStyle);
-                empCodeCell.setCellValue(String.valueOf(classResponse.getCode()));
+                    Cell empCodeCell = empDataRow.createCell(1);
+                    empCodeCell.setCellStyle(cellStyle);
+                    empCodeCell.setCellValue(String.valueOf(classResponse.getCode()));
 
-                Cell empThoiGianBatDauCell = empDataRow.createCell(2);
-                empThoiGianBatDauCell.setCellStyle(cellStyle);
-                empThoiGianBatDauCell.setCellValue(sdf.format(classResponse.getStartTime()));
+                    Cell empThoiGianBatDauCell = empDataRow.createCell(2);
+                    empThoiGianBatDauCell.setCellStyle(cellStyle);
+                    empThoiGianBatDauCell.setCellValue(sdf.format(classResponse.getStartTime()));
 
-                Cell empClassPeriodCell = empDataRow.createCell(3);
-                empClassPeriodCell.setCellStyle(cellStyle);
-                empClassPeriodCell.setCellValue(classResponse.getClassPeriod() != null ? classResponse.getClassPeriod() : "");
+                    Cell empClassPeriodCell = empDataRow.createCell(3);
+                    empClassPeriodCell.setCellStyle(cellStyle);
+                    empClassPeriodCell.setCellValue(classResponse.getClassPeriod() != null ? classResponse.getClassPeriod() : "");
 
-                Cell empTimeCell = empDataRow.createCell(4);
-                empTimeCell.setCellStyle(cellStyle);
-                empTimeCell.setCellValue(classResponse.getStartHour() != null ? DateConverter.convertHourAndMinuteToString(classResponse.getStartHour(),
-                        classResponse.getStartMinute(), classResponse.getEndHour(), classResponse.getEndMinute()) : "");
+                    Cell empTimeCell = empDataRow.createCell(4);
+                    empTimeCell.setCellStyle(cellStyle);
+                    empTimeCell.setCellValue(classResponse.getStartHour() != null ? DateConverter.convertHourAndMinuteToString(classResponse.getStartHour(),
+                            classResponse.getStartMinute(), classResponse.getEndHour(), classResponse.getEndMinute()) : "");
 
-                Cell empSiSoCell = empDataRow.createCell(5);
-                empSiSoCell.setCellStyle(cellStyle);
-                empSiSoCell.setCellValue(String.valueOf(classResponse.getClassSize()));
+                    Cell empSiSoCell = empDataRow.createCell(5);
+                    empSiSoCell.setCellStyle(cellStyle);
+                    empSiSoCell.setCellValue(String.valueOf(classResponse.getClassSize()));
 
-                Cell empLevelCell = empDataRow.createCell(6);
-                empLevelCell.setCellStyle(cellStyle);
-                empLevelCell.setCellValue(classResponse.getNameLevel());
+                    Cell empLevelCell = empDataRow.createCell(6);
+                    empLevelCell.setCellStyle(cellStyle);
+                    empLevelCell.setCellValue(classResponse.getNameLevel());
 
-                Cell empGiangVienCell = empDataRow.createCell(7);
-                empGiangVienCell.setCellStyle(cellStyle);
-                empGiangVienCell.setCellValue(classResponse.getUserNameTeacher() != null ? classResponse.getUserNameTeacher() : "");
+                    Cell empGiangVienCell = empDataRow.createCell(7);
+                    empGiangVienCell.setCellStyle(cellStyle);
+                    empGiangVienCell.setCellValue(classResponse.getUserNameTeacher() != null ? classResponse.getUserNameTeacher() : "");
 
-                Cell empHoatDongCell = empDataRow.createCell(8);
-                empHoatDongCell.setCellStyle(cellStyle);
-                empHoatDongCell.setCellValue(classResponse.getNameActivity());
+                    Cell empHoatDongCell = empDataRow.createCell(8);
+                    empHoatDongCell.setCellStyle(cellStyle);
+                    empHoatDongCell.setCellValue(classResponse.getNameActivity());
+                }
             }
 
             Sheet sheetGiangVien = workbook.createSheet("Danh sách giảng viên");
@@ -135,26 +137,27 @@ public class AdExportExcelClass {
             cellGiangVien3.setCellStyle(cellStyle);
 
             int rowNumGiangVien = 1;
-            for (SimpleResponse simpleResponse : listGiangVien) {
-                Row empDataRow = sheetGiangVien.createRow(rowNumGiangVien++);
+            if (listGiangVien != null) {
+                for (SimpleResponse simpleResponse : listGiangVien) {
+                    Row empDataRow = sheetGiangVien.createRow(rowNumGiangVien++);
 
-                Cell empSttCell = empDataRow.createCell(0);
-                empSttCell.setCellStyle(cellStyle);
-                empSttCell.setCellValue(String.valueOf(rowNumGiangVien++));
+                    Cell empSttCell = empDataRow.createCell(0);
+                    empSttCell.setCellStyle(cellStyle);
+                    empSttCell.setCellValue(String.valueOf(rowNumGiangVien++));
 
-                Cell empHoVaTenCell = empDataRow.createCell(1);
-                empHoVaTenCell.setCellStyle(cellStyle);
-                empHoVaTenCell.setCellValue(simpleResponse.getName());
+                    Cell empHoVaTenCell = empDataRow.createCell(1);
+                    empHoVaTenCell.setCellStyle(cellStyle);
+                    empHoVaTenCell.setCellValue(simpleResponse.getName());
 
-                Cell empTaiKhoanCell = empDataRow.createCell(2);
-                empTaiKhoanCell.setCellStyle(cellStyle);
-                empTaiKhoanCell.setCellValue(simpleResponse.getUserName());
+                    Cell empTaiKhoanCell = empDataRow.createCell(2);
+                    empTaiKhoanCell.setCellStyle(cellStyle);
+                    empTaiKhoanCell.setCellValue(simpleResponse.getUserName());
 
-                Cell empEmailCell = empDataRow.createCell(3);
-                empEmailCell.setCellStyle(cellStyle);
-                empEmailCell.setCellValue(simpleResponse.getEmail());
+                    Cell empEmailCell = empDataRow.createCell(3);
+                    empEmailCell.setCellStyle(cellStyle);
+                    empEmailCell.setCellValue(simpleResponse.getEmail());
+                }
             }
-
             Sheet sheetCaHoc = workbook.createSheet("Danh sách ca học");
             Row rowCaHoc = sheetCaHoc.createRow(0);
 
@@ -171,23 +174,25 @@ public class AdExportExcelClass {
             cellCaHoc2.setCellStyle(cellStyle);
 
             int rowNumCaHoc = 1;
-            for (MeetingPeriod meetingPeriod : listCaHoc) {
-                Row empDataRow = sheetCaHoc.createRow(rowNumCaHoc++);
+            if (listCaHoc != null) {
+                for (MeetingPeriod meetingPeriod : listCaHoc) {
+                    Row empDataRow = sheetCaHoc.createRow(rowNumCaHoc++);
 
-                Cell empSttCell = empDataRow.createCell(0);
-                empSttCell.setCellStyle(cellStyle);
-                empSttCell.setCellValue(String.valueOf(rowNumCaHoc++));
+                    Cell empSttCell = empDataRow.createCell(0);
+                    empSttCell.setCellStyle(cellStyle);
+                    empSttCell.setCellValue(String.valueOf(rowNumCaHoc++));
 
-                Cell empNameCell = empDataRow.createCell(1);
-                empNameCell.setCellStyle(cellStyle);
-                empNameCell.setCellValue(meetingPeriod.getName());
+                    Cell empNameCell = empDataRow.createCell(1);
+                    empNameCell.setCellStyle(cellStyle);
+                    empNameCell.setCellValue(meetingPeriod.getName());
 
-                Cell empThoiGianCell = empDataRow.createCell(2);
-                empThoiGianCell.setCellStyle(cellStyle);
-                empThoiGianCell.setCellValue(DateConverter.convertHourAndMinuteToString(meetingPeriod.getStartHour(),
-                        meetingPeriod.getStartMinute(),
-                        meetingPeriod.getEndHour(),
-                        meetingPeriod.getEndMinute()));
+                    Cell empThoiGianCell = empDataRow.createCell(2);
+                    empThoiGianCell.setCellStyle(cellStyle);
+                    empThoiGianCell.setCellValue(DateConverter.convertHourAndMinuteToString(meetingPeriod.getStartHour(),
+                            meetingPeriod.getStartMinute(),
+                            meetingPeriod.getEndHour(),
+                            meetingPeriod.getEndMinute()));
+                }
             }
 
             workbook.write(outputStream);
