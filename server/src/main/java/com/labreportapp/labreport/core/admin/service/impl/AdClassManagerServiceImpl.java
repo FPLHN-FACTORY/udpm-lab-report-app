@@ -432,7 +432,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
                 listCustom.add(adExportExcelClassCustom);
             }
         });
-        return adExportExcelClass.export(response, listCustom);
+        return adExportExcelClass.export(response, listCustom, null, null);
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.labreportapp.labreport.core.admin.excel;
 
 import com.labreportapp.labreport.core.admin.model.response.AdExportExcelClassCustom;
+import com.labreportapp.labreport.core.common.response.SimpleResponse;
+import com.labreportapp.labreport.entity.MeetingPeriod;
 import com.labreportapp.labreport.util.DateConverter;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.poi.ss.usermodel.Cell;
@@ -23,7 +25,7 @@ import java.util.TimeZone;
 @Component
 public class AdExportExcelClass {
 
-    public ByteArrayOutputStream export(HttpServletResponse response, List<AdExportExcelClassCustom> listClass) {
+    public ByteArrayOutputStream export(HttpServletResponse response, List<AdExportExcelClassCustom> listClass, List<SimpleResponse> listGiangVien, List<MeetingPeriod> listCaHoc) {
         try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             Sheet sheet = workbook.createSheet("Danh sách lớp học");
 
