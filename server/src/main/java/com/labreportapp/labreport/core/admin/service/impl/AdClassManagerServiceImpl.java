@@ -172,7 +172,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
         if (activityFind.isEmpty()) {
             throw new RestApiException(Message.ACTIVITY_NOT_EXISTS);
         }
-        if(DateUtils.truncate(new Date(request.getStartTime()), Calendar.DATE).getTime() <
+        if (DateUtils.truncate(new Date(request.getStartTime()), Calendar.DATE).getTime() <
                 activityFind.get().getStartTime() || DateUtils.truncate(new Date(request.getStartTime()), Calendar.DATE).getTime() > activityFind.get().getEndTime()) {
             throw new RestApiException(Message.THOI_GIAN_BAT_DAU_CUA_LOP_HOC_PHAI_NAM_TRONG_KHOANG_THOI_GIAN_CUA_HOAT_DONG);
         }
@@ -225,7 +225,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
         if (activityFind.isEmpty()) {
             throw new RestApiException(Message.ACTIVITY_NOT_EXISTS);
         }
-        if(DateUtils.truncate(new Date(request.getStartTime()), Calendar.DATE).getTime() <
+        if (DateUtils.truncate(new Date(request.getStartTime()), Calendar.DATE).getTime() <
                 activityFind.get().getStartTime() || DateUtils.truncate(new Date(request.getStartTime()), Calendar.DATE).getTime() > activityFind.get().getEndTime()) {
             throw new RestApiException(Message.THOI_GIAN_BAT_DAU_CUA_LOP_HOC_PHAI_NAM_TRONG_KHOANG_THOI_GIAN_CUA_HOAT_DONG);
         }
@@ -264,7 +264,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
         if (request.getTeacherId() != null && !request.getTeacherId().equals("")) {
             classNew.setTeacherId(request.getTeacherId());
         }
-        if(request.getTeacherId() == null || request.getTeacherId().equals("")) {
+        if (request.getTeacherId() == null || request.getTeacherId().equals("")) {
             classNew.setTeacherId(null);
         }
 
@@ -576,7 +576,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
                     giangVien = mapGiangVien.get(classExcel.getUsernameTeacher().toLowerCase());
                     if (giangVien == null) {
                         response.setStatus(false);
-                        response.setMessage("Giảng viên không tồn tại");
+                        response.setMessage("Giảng viên" + classExcel.getUsernameTeacher() + " không tồn tại");
                         return;
                     }
                     classFind.setTeacherId(giangVien.getId());
