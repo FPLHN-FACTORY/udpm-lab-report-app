@@ -39,7 +39,7 @@ public class AdImportExcelClass {
             classNew.setCode(String.valueOf(getCellValue(row.getCell(1))).trim());
             String classPeriodStr = String.valueOf(getCellValue(row.getCell(3))).trim();
             classNew.setClassPeriod(classPeriodStr);
-            classNew.setUsernameTeacher(String.valueOf(getCellValue(row.getCell(7))).trim());
+            classNew.setUsernameTeacher(String.valueOf(getCellValue(row.getCell(7))).toLowerCase().trim());
             listClass.add(classNew);
         }
         return listClass;

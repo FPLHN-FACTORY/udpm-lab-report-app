@@ -592,14 +592,14 @@ public class AdClassManagerServiceImpl implements AdClassService {
                 String teacherNew = classNew.getTeacherId();
                 String teacherOld = classOld.getTeacherId();
                 if (teacherOld == null && teacherNew != null) {
-                    SimpleResponse teacherObj = mapGiangVien.get(teacherNew);
+                    SimpleResponse teacherObj = mapGiangVienKeyId.get(teacherNew);
                     LoggerResponse loggerResponse = new LoggerResponse();
                     loggerResponse.setContent("Đã phân giảng viên cho lớp là: " + teacherObj.getUserName() + " - " + teacherObj.getName());
                     loggerResponseList.add(loggerResponse);
                 }
                 if (teacherOld != null && teacherNew != null && !teacherNew.equals(teacherNew)) {
-                    SimpleResponse teacherObjNew = mapGiangVien.get(teacherNew);
-                    SimpleResponse teacherObjOld = mapGiangVien.get(teacherOld);
+                    SimpleResponse teacherObjNew = mapGiangVienKeyId.get(teacherNew);
+                    SimpleResponse teacherObjOld = mapGiangVienKeyId.get(teacherOld);
                     LoggerResponse loggerResponse = new LoggerResponse();
                     loggerResponse.setContent("Đã cập nhật giảng viên của lớp từ " + teacherObjOld.getName()
                             + " - " + teacherObjOld.getUserName() + " thành "
@@ -607,7 +607,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
                     loggerResponseList.add(loggerResponse);
                 }
                 if (teacherOld != null && teacherNew == null) {
-                    SimpleResponse teacherObjOld = mapGiangVien.get(teacherOld);
+                    SimpleResponse teacherObjOld = mapGiangVienKeyId.get(teacherOld);
                     LoggerResponse loggerResponse = new LoggerResponse();
                     loggerResponse.setContent("Đã cập nhật giảng viên của lớp từ " + teacherObjOld.getName()
                             + " - " + teacherObjOld.getUserName() + " thành "
