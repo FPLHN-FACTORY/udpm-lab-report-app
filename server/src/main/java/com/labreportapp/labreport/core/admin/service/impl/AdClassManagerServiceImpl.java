@@ -576,7 +576,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
                     giangVien = mapGiangVien.get(classExcel.getUsernameTeacher().toLowerCase());
                     if (giangVien == null) {
                         response.setStatus(false);
-                        response.setMessage("Giảng viên" + classExcel.getUsernameTeacher() + " không tồn tại");
+                        response.setMessage("Giảng viên '" + classExcel.getUsernameTeacher() + "' không tồn tại");
                         return;
                     }
                     classFind.setTeacherId(giangVien.getId());
