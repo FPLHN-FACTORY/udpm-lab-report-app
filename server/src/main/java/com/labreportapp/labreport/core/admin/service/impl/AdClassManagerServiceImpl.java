@@ -649,13 +649,18 @@ public class AdClassManagerServiceImpl implements AdClassService {
                 String nameSemester = loggerUtil.getNameSemesterByIdClass(listClass.get(0).getId());
                 for (Class xx : listClass) {
                     StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append("Lớp: " + xx.getCode() + ": ");
+                    Integer check = 0;
                     for (LoggerResponse logger : loggerResponseList) {
                         if (xx.getCode().equals(logger.getCodeClass())) {
                             stringBuilder.append(logger.getContent());
                         }
+                        check++;
                     }
-                    loggerUtil.sendLogScreen(stringBuilder.toString(), nameSemester);
-                    loggerUtil.sendLogStreamClass(stringBuilder.toString(), xx.getCode(), nameSemester);
+                    if (check > 0) {
+                        loggerUtil.sendLogScreen(stringBuilder.toString(), nameSemester);
+                        loggerUtil.sendLogStreamClass(stringBuilder.toString(), xx.getCode(), nameSemester);
+                    }
                 }
             }
         } catch (Exception e) {
