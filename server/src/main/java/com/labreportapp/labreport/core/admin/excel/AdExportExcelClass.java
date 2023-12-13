@@ -131,7 +131,7 @@ public class AdExportExcelClass {
             cellGiangVien2.setCellValue("Tài khoản");
             cellGiangVien2.setCellStyle(cellStyle);
 
-            Cell cellGiangVien3 = rowGiangVien.createCell(2);
+            Cell cellGiangVien3 = rowGiangVien.createCell(3);
             cellGiangVien3.setCellValue("Email");
             cellGiangVien3.setCellStyle(cellStyle);
 
