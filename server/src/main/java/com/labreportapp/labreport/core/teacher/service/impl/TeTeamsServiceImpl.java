@@ -927,6 +927,7 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         for (StudentClasses student : list) {
             map.put(student.getEmail(), student);
         }
+        list.clear();
     }
 
     private void addDataTeam(ConcurrentHashMap<String, Team> mapTeam, List<Team> listTeam) {
@@ -937,5 +938,6 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         for (Team team : listTeam) {
             mapTeam.put(team.getName(), team);
         }
+        listTeam.clear();
     }
 }
