@@ -106,7 +106,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           icon={
             <FontAwesomeIcon
               icon={faCogs}
-              style={{ color: "white" }}
+              style={{ color: "rgb(233, 192, 89)" }}
             />
           }
         >
@@ -116,7 +116,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             icon={
               <FontAwesomeIcon
                 icon={faLayerGroup}
-                style={{ color: "white" }}
+                style={{ color: "rgb(233, 192, 89)" }}
               />
             }
           >
@@ -128,7 +128,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             icon={
               <FontAwesomeIcon
                 icon={faLevelUp}
-                style={{ color: "white" }}
+                style={{ color: "rgb(233, 192, 89)" }}
               />
             }
           >
@@ -140,7 +140,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             icon={
               <FontAwesomeIcon
                 icon={faChalkboard}
-                style={{ color: "white" }}
+                style={{ color: "rgb(233, 192, 89)" }}
               />
             }
           >
@@ -153,7 +153,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           icon={
             <FontAwesomeIcon
               icon={faCog}
-              style={{ color: "white" }}
+              style={{ color: "rgb(233, 192, 89)" }}
             />
           }
         >
@@ -163,7 +163,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             icon={
               <FontAwesomeIcon
                 icon={faLayerGroup}
-                style={{ color: "white" }}
+                style={{ color: "rgb(233, 192, 89)" }}
               />
             }
           >
@@ -175,7 +175,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             icon={
               <FontAwesomeIcon
                 icon={faClock}
-                style={{ color: "white" }}
+                style={{ color: "rgb(233, 192, 89)" }}
               />
             }
           >
@@ -189,7 +189,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             icon={
               <FontAwesomeIcon
                 icon={faFile}
-                style={{ color: "white" }}
+                style={{ color: "rgb(233, 192, 89)" }}
               />
             }
           >
@@ -202,7 +202,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           icon={
             <FontAwesomeIcon
               icon={faGraduationCap}
-              style={{ color: "white" }}
+              style={{ color: "rgb(233, 192, 89)" }}
             />
           }
         >
@@ -214,7 +214,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           icon={
             <FontAwesomeIcon
               icon={faWindowRestore}
-              style={{ color: "white" }}
+              style={{ color: "rgb(233, 192, 89)" }}
             />
           }
         >
@@ -233,7 +233,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           icon={
             <FontAwesomeIcon
               icon={faListAlt}
-              style={{ color: "white" }}
+              style={{ color: "rgb(233, 192, 89)" }}
             />
           }
         >
@@ -243,7 +243,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             icon={
               <FontAwesomeIcon
                 icon={faChalkboardTeacher}
-                style={{ color: "white" }}
+                style={{ color: "rgb(233, 192, 89)" }}
               />
             }
           >
@@ -255,7 +255,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             icon={
               <FontAwesomeIcon
                 icon={faCheck}
-                style={{ color: "white" }}
+                style={{ color: "rgb(233, 192, 89)" }}
               />
             }
           >
@@ -268,7 +268,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           icon={
             <FontAwesomeIcon
               icon={faChartGantt}
-              style={{ color: "white" }}
+              style={{ color: "rgb(233, 192, 89)" }}
             />
           }
         >
@@ -282,7 +282,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           icon={
             <FontAwesomeIcon
               icon={faChartPie}
-              style={{ color: "white" }}
+              style={{ color: "rgb(233, 192, 89)" }}
             />
           }
         >
@@ -306,7 +306,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           icon={
             <FontAwesomeIcon
               icon={faCogs}
-              style={{ color: "white" }}
+              style={{ color: "rgb(233, 192, 89)" }}
             />
           }
         >
@@ -315,7 +315,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             icon={
               <FontAwesomeIcon
                 icon={faFolderPlus}
-                style={{ color: "white" }}
+                style={{ color: "rgb(233, 192, 89)" }}
               />
             }
           >
@@ -326,7 +326,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             icon={
               <FontAwesomeIcon
                 icon={faTags}
-                style={{ color: "white" }}
+                style={{ color: "rgb(233, 192, 89)" }}
               />
             }
           >
@@ -339,7 +339,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           icon={
             <FontAwesomeIcon
               icon={faCog}
-              style={{ color: "white" }}
+              style={{ color: "rgb(233, 192, 89)" }}
             />
           }
         >
@@ -348,7 +348,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             icon={
               <FontAwesomeIcon
                 icon={faUserTag}
-                style={{ color: "white" }}
+                style={{ color: "rgb(233, 192, 89)" }}
               />
             }
           >
@@ -361,7 +361,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           icon={
             <FontAwesomeIcon
               icon={faProjectDiagram}
-              style={{ color: "white" }}
+              style={{ color: "rgb(233, 192, 89)" }}
             />
           }
         >
@@ -370,7 +370,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             icon={
               <FontAwesomeIcon
                 icon={faObjectGroup}
-                style={{ color: "white" }}
+                style={{ color: "rgb(233, 192, 89)" }}
               />
             }
           >
@@ -381,7 +381,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             icon={
               <FontAwesomeIcon
                 icon={faDiagramSuccessor}
-                style={{ color: "white" }}
+                style={{ color: "rgb(233, 192, 89)" }}
               />
             }
           >
@@ -393,7 +393,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           icon={
             <FontAwesomeIcon
               icon={faChartBar}
-              style={{ color: "white" }}
+              style={{ color: "rgb(233, 192, 89)" }}
             />
           }
         >
@@ -417,7 +417,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           icon={
             <FontAwesomeIcon
               icon={faPeopleLine}
-              style={{ color: "white" }}
+              style={{ color: "rgb(233, 192, 89)" }}
             />
           }
         >
@@ -428,7 +428,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           icon={
             <FontAwesomeIcon
               icon={faPeopleGroup}
-              style={{ color: "white" }}
+              style={{ color: "rgb(233, 192, 89)" }}
             />
           }
         >
@@ -439,7 +439,7 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           icon={
             <FontAwesomeIcon
               icon={faUserTag}
-              style={{ color: "white" }}
+              style={{ color: "rgb(233, 192, 89)" }}
             />
           }
         >
