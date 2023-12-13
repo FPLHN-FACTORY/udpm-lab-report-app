@@ -561,7 +561,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
                     return;
                 }
                 if (!classExcel.getClassPeriod().equals("")) {
-                    MeetingPeriod meetingPeriodFind = mapMeetingPeriod.get(classExcel.getClassPeriod());
+                    MeetingPeriod meetingPeriodFind = mapMeetingPeriod.get(classExcel.getClassPeriod().toLowerCase());
                     if (meetingPeriodFind == null) {
                         response.setStatus(false);
                         response.setMessage("Ca học: " + classExcel.getClassPeriod() + " không tồn tại");
@@ -741,7 +741,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
 
     public void getALlPutMapMeetingPeriod(ConcurrentHashMap<String, MeetingPeriod> mapSimple, ConcurrentHashMap<String, MeetingPeriod> mapSimpleKeyId, List<MeetingPeriod> meetingPeriodList) {
         for (MeetingPeriod xx : meetingPeriodList) {
-            mapSimple.put(xx.getName(), xx);
+            mapSimple.put(xx.getName().toLowerCase(), xx);
             mapSimpleKeyId.put(xx.getId(), xx);
         }
     }
