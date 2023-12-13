@@ -864,6 +864,7 @@ public class TeTeamsServiceImpl implements TeTeamsService {
                     }
                 });
                 item.setNameTeam("Nhóm " + nameCount.get());
+                nameCount.set(nameCount.get() + 1);
             } else {
                 listInput.forEach(input -> {
                     if (input.getNameTeam().equals(item.getNameTeam())) {
