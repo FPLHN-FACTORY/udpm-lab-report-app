@@ -638,6 +638,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
                     loggerResponseList.add(loggerResponse);
                 }
             }
+            System.out.println(loggerResponseList.size() + " wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww");
             if (response.getStatus()) {
                 List<Class> listClass = repository.saveAll(listClassUpdate.values());
                 String nameSemester = loggerUtil.getNameSemesterByIdClass(listClass.get(0).getId());
