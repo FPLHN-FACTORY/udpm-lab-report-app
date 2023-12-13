@@ -1,6 +1,7 @@
 package com.labreportapp.labreport.core.admin.excel;
 
 import com.labreportapp.labreport.core.admin.model.response.AdExportExcelClassCustom;
+import com.labreportapp.labreport.core.admin.model.response.AdMeetingPeriodResponse;
 import com.labreportapp.labreport.core.common.response.SimpleResponse;
 import com.labreportapp.labreport.entity.MeetingPeriod;
 import com.labreportapp.labreport.util.DateConverter;
@@ -24,7 +25,7 @@ import java.util.List;
 @Component
 public class AdExportExcelClass {
 
-    public ByteArrayOutputStream export(HttpServletResponse response, List<AdExportExcelClassCustom> listClass, List<SimpleResponse> listGiangVien, List<MeetingPeriod> listCaHoc) {
+    public ByteArrayOutputStream export(HttpServletResponse response, List<AdExportExcelClassCustom> listClass, List<SimpleResponse> listGiangVien, List<AdMeetingPeriodResponse> listCaHoc) {
         try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             Sheet sheet = workbook.createSheet("Danh sách lớp học");
 
@@ -176,7 +177,7 @@ public class AdExportExcelClass {
 
             int rowNumCaHoc = 1;
             if (listCaHoc != null) {
-                for (MeetingPeriod meetingPeriod : listCaHoc) {
+                for (AdMeetingPeriodResponse meetingPeriod : listCaHoc) {
                     int dem = rowNumCaHoc++;
                     Row empDataRow = sheetCaHoc.createRow(dem);
                     Cell empSttCell = empDataRow.createCell(0);

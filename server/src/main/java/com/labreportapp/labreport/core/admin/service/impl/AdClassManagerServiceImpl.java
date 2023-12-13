@@ -16,6 +16,7 @@ import com.labreportapp.labreport.core.admin.model.response.AdFindSelectClassCus
 import com.labreportapp.labreport.core.admin.model.response.AdFindSelectClassResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdImportExcelClassResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdListClassCustomResponse;
+import com.labreportapp.labreport.core.admin.model.response.AdMeetingPeriodResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdSemesterAcResponse;
 import com.labreportapp.labreport.core.admin.repository.AdActivityRepository;
 import com.labreportapp.labreport.core.admin.repository.AdClassConfigurationRepository;
@@ -41,7 +42,6 @@ import com.labreportapp.labreport.infrastructure.constant.StatusHoneyPlus;
 import com.labreportapp.labreport.infrastructure.constant.StatusTeacherEdit;
 import com.labreportapp.labreport.repository.ActivityRepository;
 import com.labreportapp.labreport.repository.LevelRepository;
-import com.labreportapp.labreport.repository.MeetingPeriodRepository;
 import com.labreportapp.labreport.util.CallApiIdentity;
 import com.labreportapp.labreport.util.ClassHelper;
 import com.labreportapp.labreport.util.CompareUtil;
@@ -434,7 +434,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
             }
         });
         List<SimpleResponse> giangVienHuongDanList = callApiIdentity.handleCallApiGetUserByRoleAndModule(ActorConstants.ACTOR_TEACHER);
-        List<MeetingPeriod> listMeetingPeriod = adMeetingPeriodRepository.findAll();
+        List<AdMeetingPeriodResponse> listMeetingPeriod = adMeetingPeriodRepository.getAllMeetingPeriod();
         return adExportExcelClass.export(response, listCustom, giangVienHuongDanList, listMeetingPeriod);
     }
 

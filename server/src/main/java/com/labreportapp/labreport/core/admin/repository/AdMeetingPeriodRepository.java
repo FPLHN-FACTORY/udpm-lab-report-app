@@ -17,4 +17,5 @@ public interface AdMeetingPeriodRepository extends MeetingPeriodRepository {
             SELECT * FROM meeting_period ORDER BY start_hour ASC
             """, nativeQuery = true)
     List<AdMeetingPeriodResponse> getAllMeetingPeriod();
+
 }
