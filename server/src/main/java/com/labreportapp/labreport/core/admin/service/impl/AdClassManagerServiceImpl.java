@@ -595,12 +595,14 @@ public class AdClassManagerServiceImpl implements AdClassService {
                     SimpleResponse teacherObj = mapGiangVienKeyId.get(teacherNew);
                     LoggerResponse loggerResponse = new LoggerResponse();
                     loggerResponse.setContent("Đã phân giảng viên cho lớp là: " + teacherObj.getUserName() + " - " + teacherObj.getName());
+                    loggerResponse.setCodeClass(classNew.getCode());
                     loggerResponseList.add(loggerResponse);
                 }
                 if (teacherOld != null && teacherNew != null && !teacherNew.equals(teacherNew)) {
                     SimpleResponse teacherObjNew = mapGiangVienKeyId.get(teacherNew);
                     SimpleResponse teacherObjOld = mapGiangVienKeyId.get(teacherOld);
                     LoggerResponse loggerResponse = new LoggerResponse();
+                    loggerResponse.setCodeClass(classNew.getCode());
                     loggerResponse.setContent("Đã cập nhật giảng viên của lớp từ " + teacherObjOld.getName()
                             + " - " + teacherObjOld.getUserName() + " thành "
                             + teacherObjNew.getName() + " - " + teacherObjNew.getUserName());
@@ -609,6 +611,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
                 if (teacherOld != null && teacherNew == null) {
                     SimpleResponse teacherObjOld = mapGiangVienKeyId.get(teacherOld);
                     LoggerResponse loggerResponse = new LoggerResponse();
+                    loggerResponse.setCodeClass(classNew.getCode());
                     loggerResponse.setContent("Đã cập nhật giảng viên của lớp từ " + teacherObjOld.getName()
                             + " - " + teacherObjOld.getUserName() + " thành "
                             + "không có");
@@ -619,6 +622,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
                 if (classPeriodOld == null && classPeriodNew != null) {
                     MeetingPeriod classPeriodObjNew = mapMeetingPeriodKeyId.get(classPeriodNew);
                     LoggerResponse loggerResponse = new LoggerResponse();
+                    loggerResponse.setCodeClass(classNew.getCode());
                     loggerResponse.setContent("Đã cập nhật ca học của lớp là: " + classPeriodObjNew.getName());
                     loggerResponseList.add(loggerResponse);
                 }
@@ -626,6 +630,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
                     MeetingPeriod classPeriodObjOld = mapMeetingPeriodKeyId.get(classPeriodOld);
                     MeetingPeriod classPeriodObjNew = mapMeetingPeriodKeyId.get(classPeriodNew);
                     LoggerResponse loggerResponse = new LoggerResponse();
+                    loggerResponse.setCodeClass(classNew.getCode());
                     loggerResponse.setContent("Đã cập nhật ca học của lớp từ " + classPeriodObjOld.getName()
                             + " thành " + classPeriodObjNew.getName());
                     loggerResponseList.add(loggerResponse);
@@ -633,6 +638,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
                 if (classPeriodOld != null && classPeriodNew == null) {
                     MeetingPeriod classPeriodObjOld = mapMeetingPeriodKeyId.get(classPeriodOld);
                     LoggerResponse loggerResponse = new LoggerResponse();
+                    loggerResponse.setCodeClass(classNew.getCode());
                     loggerResponse.setContent("Đã cập nhật ca học của lớp từ " + classPeriodObjOld.getName()
                             + " thành 'không có'");
                     loggerResponseList.add(loggerResponse);
