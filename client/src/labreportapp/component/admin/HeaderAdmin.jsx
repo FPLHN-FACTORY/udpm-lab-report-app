@@ -22,7 +22,6 @@ const HeaderAdminComponent = ({ collapsed, toggleCollapsed }) => {
           justifyContent: "space-between",
           alignItems: "center",
           padding: "0 24px",
-          color: "white",
         }}
       >
         <div style={{ display: "flex", alignItems: "center" }}>

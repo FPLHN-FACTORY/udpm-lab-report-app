@@ -154,7 +154,6 @@ const CommonInforUser = () => {
             fontSize: 20,
             cursor: "pointer",
             marginRight: 20,
-            color: "white",
           }}
           className="box_notification"
         />{" "}
