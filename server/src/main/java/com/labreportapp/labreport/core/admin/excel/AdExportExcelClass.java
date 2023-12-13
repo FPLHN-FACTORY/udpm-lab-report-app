@@ -136,7 +136,7 @@ public class AdExportExcelClass {
 
             int rowNumGiangVien = 1;
             for (SimpleResponse simpleResponse : listGiangVien) {
-                Row empDataRow = sheet.createRow(rowNumGiangVien++);
+                Row empDataRow = sheetGiangVien.createRow(rowNumGiangVien++);
 
                 Cell empSttCell = empDataRow.createCell(0);
                 empSttCell.setCellStyle(cellStyle);
@@ -172,7 +172,7 @@ public class AdExportExcelClass {
 
             int rowNumCaHoc = 1;
             for (MeetingPeriod meetingPeriod : listCaHoc) {
-                Row empDataRow = sheet.createRow(rowNumCaHoc++);
+                Row empDataRow = sheetCaHoc.createRow(rowNumCaHoc++);
 
                 Cell empSttCell = empDataRow.createCell(0);
                 empSttCell.setCellStyle(cellStyle);
