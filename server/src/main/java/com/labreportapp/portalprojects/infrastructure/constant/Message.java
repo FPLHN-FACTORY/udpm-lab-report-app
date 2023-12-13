@@ -111,7 +111,8 @@ public enum Message {
     STATUS_NOT_VALID(PropertiesReader.getProperty(PropertyKeys.STATUS_NOT_VALID)),
     KHONG_CO_SINH_VIEN_NAO_DU_DIEU_KIEN_CONG_MAT_ONG(PropertiesReader.getProperty(PropertyKeys.KHONG_CO_SINH_VIEN_NAO_DU_DIEU_KIEN_CONG_MAT_ONG)),
     THOI_GIAN_BAT_DAU_CUA_LOP_HOC_PHAI_NAM_TRONG_KHOANG_THOI_GIAN_CUA_HOAT_DONG(PropertiesReader.getProperty(PropertyKeys.THOI_GIAN_BAT_DAU_CUA_LOP_HOC_PHAI_NAM_TRONG_KHOANG_THOI_GIAN_CUA_HOAT_DONG)),
-    BAN_KHONG_DUOC_PHEP_VAO_DU_AN_NAY(PropertiesReader.getProperty(PropertyKeys.BAN_KHONG_DUOC_PHEP_VAO_DU_AN_NAY));
+    BAN_KHONG_DUOC_PHEP_VAO_DU_AN_NAY(PropertiesReader.getProperty(PropertyKeys.BAN_KHONG_DUOC_PHEP_VAO_DU_AN_NAY)),
+    BAN_CHUA_TAO_VAI_TRO_TRONG_XUONG(PropertiesReader.getProperty(PropertyKeys.BAN_CHUA_TAO_VAI_TRO_TRONG_XUONG));
 
     private String message;
 

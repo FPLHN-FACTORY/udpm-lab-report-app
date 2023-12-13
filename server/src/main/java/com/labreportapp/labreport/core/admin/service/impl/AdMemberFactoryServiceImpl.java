@@ -159,6 +159,9 @@ public class AdMemberFactoryServiceImpl implements AdMemberFactoryService {
         MemberFactory memberFactoryNew = adMemberFactoryRepository.save(memberFactory);
         MemberRoleFactory memberRoleFactory = new MemberRoleFactory();
         AdRoleFactoryDefaultResponse roleDefault = memberRoleFactoryRepository.findRoleDefault();
+        if(roleDefault == null) {
+            throw new RestApiException(Message.BAN_CHUA_TAO_VAI_TRO_TRONG_XUONG);
+        }
         memberRoleFactory.setRoleFactoryId(roleDefault.getId());
         memberRoleFactory.setMemberFactoryId(memberFactoryNew.getId());
         memberRoleFactoryRepository.save(memberRoleFactory);
@@ -345,6 +348,9 @@ public class AdMemberFactoryServiceImpl implements AdMemberFactoryService {
             if (response.getStatus()) {
                 List<MemberFactory> listMemberFactory = new ArrayList<>();
                 AdRoleFactoryDefaultResponse roleDefault = memberRoleFactoryRepository.findRoleDefault();
+                if(roleDefault == null) {
+                    throw new RestApiException(Message.BAN_CHUA_TAO_VAI_TRO_TRONG_XUONG);
+                }
                 listResponse.forEach(res -> {
                     MemberFactory memberFactory = new MemberFactory();
                     memberFactory.setMemberId(res.getId());
