@@ -89,7 +89,7 @@ const ModalRandomClass = ({ visible, onCancel, fetchData }) => {
   const randomClass = () => {
     let check = 0;
     if (idActivitiSearch === "" || idActivitiSearch === "none") {
-      setErrorActivity("Chọn hoạt động cần random lớp");
+      setErrorActivity("Chọn hoạt động cần tạo nhiều lớp");
       ++check;
     } else {
       setErrorActivity("");
@@ -133,7 +133,7 @@ const ModalRandomClass = ({ visible, onCancel, fetchData }) => {
         className="modal_show_detail_project"
       >
         <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
-          <span style={{ fontSize: "18px" }}>Random lớp học</span>
+          <span style={{ fontSize: "18px" }}>Tạo nhiều lớp học</span>
         </div>
         <div
           style={{
@@ -236,7 +236,7 @@ const ModalRandomClass = ({ visible, onCancel, fetchData }) => {
                   icon={faRandom}
                   style={{ marginRight: "5px" }}
                 />
-                Random
+                Hoàn thành
               </Button>
               <Button
                 style={{

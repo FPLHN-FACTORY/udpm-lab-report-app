@@ -986,7 +986,7 @@ const ClassManagement = () => {
                     marginRight: "7px",
                   }}
                 />{" "}
-                Random lớp
+                Tạo nhiều lớp học
               </Button>
               <Button
                 style={{

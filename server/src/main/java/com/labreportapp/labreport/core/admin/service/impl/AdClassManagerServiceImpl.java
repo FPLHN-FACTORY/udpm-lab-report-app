@@ -168,6 +168,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
         classNew.setClassPeriod(request.getClassPeriod());
         classNew.setPassword(null);
         classNew.setStatusHoneyPlus(StatusHoneyPlus.CHUA_CONG);
+        classNew.setStatusClass(StatusClass.OPEN);
         classNew.setStatusTeacherEdit(StatusTeacherEdit.values()[request.getStatusTeacherEdit()]);
         Optional<Activity> activityFind = adActivityRepository.findById(request.getActivityId());
         if (activityFind.isEmpty()) {
