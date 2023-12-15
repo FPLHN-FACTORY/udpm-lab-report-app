@@ -35,7 +35,7 @@ const ModalUpdateLabel = ({ visible, onCancel, idLabel, label }) => {
   const update = () => {
     let check = 0;
 
-    if (name === "") {
+    if (name.trim() === "") {
       setErrorName("Tên nhãn không được để trống");
       check++;
     } else {

@@ -3,7 +3,6 @@ import "./style-admin-dashboard.css";
 import {
   faChalkboardTeacher,
   faChartGantt,
-  faCircleInfo,
   faEdit,
   faFilter,
   faGraduationCap,

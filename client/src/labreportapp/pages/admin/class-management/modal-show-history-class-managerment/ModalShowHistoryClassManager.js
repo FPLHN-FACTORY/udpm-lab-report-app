@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Button, Select, Table, Pagination, Empty } from "antd";
-import { ActivityManagementAPI } from "../../../../api/admin/activity-management/activityManagement.api";
 import { ClassAPI } from "../../../../api/admin/class-manager/ClassAPI.api";
 import LoadingIndicator from "../../../../helper/loading";
 

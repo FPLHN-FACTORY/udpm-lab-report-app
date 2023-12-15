@@ -31,8 +31,6 @@ const RoleSelection = () => {
           justify="center"
           style={{ marginRight: "200px", marginLeft: "200px", marginTop: 20 }}
         >
-          {" "}
-          {/* Sử dụng justify để canh giữa các cột */}
           {userCurrent != null && (
             <>
               {userCurrent.role.includes("ADMIN") && (

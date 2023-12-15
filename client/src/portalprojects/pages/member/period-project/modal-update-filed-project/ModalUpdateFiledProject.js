@@ -124,13 +124,13 @@ const ModalUpdateFiledProject = ({ visible, onCancel, idProject }) => {
   const update = () => {
     let check = 0;
     dispatch(SetLoadingTrue());
-    if (code === "") {
+    if (code.trim() === "") {
       setErrorCode("Mã không được để trống");
       check++;
     } else {
       setErrorCode("");
     }
-    if (name === "") {
+    if (name.trim() === "") {
       setErrorName("Tên không được để trống");
       check++;
     } else {

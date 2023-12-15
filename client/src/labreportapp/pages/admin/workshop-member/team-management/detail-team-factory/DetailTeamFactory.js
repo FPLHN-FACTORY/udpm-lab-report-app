@@ -1,11 +1,9 @@
 import {
   faCog,
-  faDeleteLeft,
   faPeopleGroup,
   faPlus,
   faTrashCan,
   faUser,
-  faX,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -30,7 +28,6 @@ import {
   DeleteListMemberTeamFactory,
   DeleteMemberTeamFactory,
   GetAdDetailTeam,
-  SearchAdDetailTeam,
   SetAdDetailTeam,
 } from "../../../../../app/admin/AdDetailTeamSlice.reducer";
 import { Link } from "react-router-dom";

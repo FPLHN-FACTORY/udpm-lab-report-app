@@ -59,7 +59,7 @@ const ModalUpdatePeriod = ({ visible, onCancel, idPeriod }) => {
 
   const update = () => {
     let check = 0;
-    if (name === "") {
+    if (name.trim() === "") {
       setErrorName("Tên giai đoạn không được để trống");
       check++;
     } else {
