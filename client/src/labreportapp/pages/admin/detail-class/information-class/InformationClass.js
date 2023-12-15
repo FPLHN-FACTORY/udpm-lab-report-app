@@ -758,13 +758,19 @@ const InformationClass = () => {
                 className="group-info-item"
                 style={{ marginTop: "13px", marginBottom: "15px" }}
               >
-                Mô tả: &nbsp;{classDetail.descriptions}
+                Mô tả: &nbsp;
+                {classDetail.descriptions != null
+                  ? classDetail.descriptions
+                  : "Chưa có"}
               </span>
               <span
                 className="group-info-item"
                 style={{ marginTop: "13px", marginBottom: "15px" }}
               >
-                Mã tham gia: &nbsp;{classDetail.passWord}
+                Mã tham gia: &nbsp;
+                {classDetail.passWord != null
+                  ? classDetail.passWord
+                  : "Không có mật khẩu"}
               </span>
               <span
                 className="group-info-item"
