@@ -148,7 +148,7 @@ const ModalCreateMeetingAuto = ({ visible, onCancel, fetchData }) => {
         className="modal_show_detail_project"
       >
         <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
-          <span style={{ fontSize: "18px" }}>Tạo buổi học tự động</span>
+          <span style={{ fontSize: "18px" }}>Tạo nhiều buổi học</span>
         </div>
         <div
           style={{

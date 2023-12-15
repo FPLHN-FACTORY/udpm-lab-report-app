@@ -373,7 +373,7 @@ const MeetingManagment = () => {
                     icon={faPlusCircle}
                     style={{ marginRight: "5px" }}
                   />
-                  Tạo buổi học tự động
+                  Tạo nhiều buổi học
                 </Button>
                 <Button
                   style={{
