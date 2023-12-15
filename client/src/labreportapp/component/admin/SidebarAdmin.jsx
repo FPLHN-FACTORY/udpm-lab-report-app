@@ -101,53 +101,6 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           </span>
         </div>
         <Menu.SubMenu
-          key="1"
-          title="Quản lý chung"
-          icon={
-            <FontAwesomeIcon
-              icon={faCogs}
-              style={{ color: "rgb(233, 192, 89)" }}
-            />
-          }
-        >
-          <Menu.Item
-            key="/admin/semester-management"
-            className="menu_custom"
-            icon={
-              <FontAwesomeIcon
-                icon={faLayerGroup}
-                style={{ color: "rgb(233, 192, 89)" }}
-              />
-            }
-          >
-            <Link to="/admin/semester-management">Quản lý học kỳ</Link>
-          </Menu.Item>
-          <Menu.Item
-            key="/admin/level-management"
-            className="menu_custom"
-            icon={
-              <FontAwesomeIcon
-                icon={faLevelUp}
-                style={{ color: "rgb(233, 192, 89)" }}
-              />
-            }
-          >
-            <Link to="/admin/level-management">Quản lý level</Link>
-          </Menu.Item>
-          <Menu.Item
-            key="/admin/activity-management"
-            className="menu_custom"
-            icon={
-              <FontAwesomeIcon
-                icon={faChalkboard}
-                style={{ color: "rgb(233, 192, 89)" }}
-              />
-            }
-          >
-            <Link to="/admin/activity-management">Quản lý hoạt động</Link>{" "}
-          </Menu.Item>
-        </Menu.SubMenu>
-        <Menu.SubMenu
           key="5"
           title="Cấu hình"
           icon={
@@ -194,6 +147,53 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             }
           >
             <Link to="/admin/template-report">Template báo cáo</Link>
+          </Menu.Item>
+        </Menu.SubMenu>
+        <Menu.SubMenu
+          key="1"
+          title="Quản lý chung"
+          icon={
+            <FontAwesomeIcon
+              icon={faCogs}
+              style={{ color: "rgb(233, 192, 89)" }}
+            />
+          }
+        >
+          <Menu.Item
+            key="/admin/semester-management"
+            className="menu_custom"
+            icon={
+              <FontAwesomeIcon
+                icon={faLayerGroup}
+                style={{ color: "rgb(233, 192, 89)" }}
+              />
+            }
+          >
+            <Link to="/admin/semester-management">Quản lý học kỳ</Link>
+          </Menu.Item>
+          <Menu.Item
+            key="/admin/level-management"
+            className="menu_custom"
+            icon={
+              <FontAwesomeIcon
+                icon={faLevelUp}
+                style={{ color: "rgb(233, 192, 89)" }}
+              />
+            }
+          >
+            <Link to="/admin/level-management">Quản lý level</Link>
+          </Menu.Item>
+          <Menu.Item
+            key="/admin/activity-management"
+            className="menu_custom"
+            icon={
+              <FontAwesomeIcon
+                icon={faChalkboard}
+                style={{ color: "rgb(233, 192, 89)" }}
+              />
+            }
+          >
+            <Link to="/admin/activity-management">Quản lý hoạt động</Link>{" "}
           </Menu.Item>
         </Menu.SubMenu>
         <Menu.Item
@@ -301,6 +301,28 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           </span>
         </div>
         <Menu.SubMenu
+          key="17"
+          title="Cấu hình"
+          icon={
+            <FontAwesomeIcon
+              icon={faCog}
+              style={{ color: "rgb(233, 192, 89)" }}
+            />
+          }
+        >
+          <Menu.Item
+            key="/admin/role-project-management"
+            icon={
+              <FontAwesomeIcon
+                icon={faUserTag}
+                style={{ color: "rgb(233, 192, 89)" }}
+              />
+            }
+          >
+            <Link to="/admin/role-project-management">Vai trò trong dự án</Link>
+          </Menu.Item>
+        </Menu.SubMenu>
+        <Menu.SubMenu
           key="13"
           title="Quản lý chung"
           icon={
@@ -331,28 +353,6 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
             }
           >
             <Link to="/admin/label-management">Quản lý nhãn</Link>
-          </Menu.Item>
-        </Menu.SubMenu>
-        <Menu.SubMenu
-          key="17"
-          title="Cấu hình"
-          icon={
-            <FontAwesomeIcon
-              icon={faCog}
-              style={{ color: "rgb(233, 192, 89)" }}
-            />
-          }
-        >
-          <Menu.Item
-            key="/admin/role-project-management"
-            icon={
-              <FontAwesomeIcon
-                icon={faUserTag}
-                style={{ color: "rgb(233, 192, 89)" }}
-              />
-            }
-          >
-            <Link to="/admin/role-project-management">Vai trò trong dự án</Link>
           </Menu.Item>
         </Menu.SubMenu>
         <Menu.SubMenu
@@ -413,6 +413,17 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           </span>
         </div>
         <Menu.Item
+          key="/admin/role-factory-management"
+          icon={
+            <FontAwesomeIcon
+              icon={faUserTag}
+              style={{ color: "rgb(233, 192, 89)" }}
+            />
+          }
+        >
+          <Link to="/admin/role-factory-management">Vai trò trong xưởng</Link>
+        </Menu.Item>{" "}
+        <Menu.Item
           key="/admin/team-management"
           icon={
             <FontAwesomeIcon
@@ -433,17 +444,6 @@ const SidebarAdminComponent = ({ collapsed, toggleCollapsed }) => {
           }
         >
           <Link to="/admin/member-management">Quản lý thành viên</Link>
-        </Menu.Item>{" "}
-        <Menu.Item
-          key="/admin/role-factory-management"
-          icon={
-            <FontAwesomeIcon
-              icon={faUserTag}
-              style={{ color: "rgb(233, 192, 89)" }}
-            />
-          }
-        >
-          <Link to="/admin/role-factory-management">Vai trò trong xưởng</Link>
         </Menu.Item>{" "}
       </Menu>
     </Sider>
