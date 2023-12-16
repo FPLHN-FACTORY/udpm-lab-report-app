@@ -669,7 +669,7 @@ const ClassManagement = () => {
                 >
                   <Option value="">Chọn 1 học kỳ</Option>
 
-                  {semesterDataAll.map((semester) => (
+                  {semesterDataAll != null && semesterDataAll.map((semester) => (
                     <Option key={semester.id} value={semester.id}>
                       {semester.name +
                         " (" +
@@ -701,7 +701,7 @@ const ClassManagement = () => {
                   {activityDataAll.length === 0 && (
                     <Option value="none">Không có hoạt động</Option>
                   )}
-                  {activityDataAll.map((activity) => (
+                  {activityDataAll != null && activityDataAll.map((activity) => (
                     <Option key={activity.id} value={activity.id}>
                       {activity.name}
                     </Option>
@@ -723,7 +723,7 @@ const ClassManagement = () => {
                 >
                   <Option value="">Tất Cả</Option>
                   <Option value="none">Chưa có ca học</Option>
-                  {dataMeetingPeriod.map((item) => {
+                  {dataMeetingPeriod != null && dataMeetingPeriod.map((item) => {
                     return (
                       <Option value={item.id} key={item.id}>
                         {item.name} -{" "}
@@ -752,7 +752,7 @@ const ClassManagement = () => {
                 >
                   <Option value="">Tất cả</Option>
                   <Option value="none">Chưa có giảng viên</Option>
-                  {teacherDataAll.map((teacher) => (
+                  {teacherDataAll != null && teacherDataAll.map((teacher) => (
                     <Option key={teacher.id} value={teacher.id}>
                       {teacher.userName + " - " + teacher.name}
                     </Option>
@@ -788,7 +788,7 @@ const ClassManagement = () => {
                   value={level}
                 >
                   <Option value={""}>Tất cả</Option>
-                  {listLevel.length > 0 &&
+                  {listLevel != null && listLevel.length > 0 &&
                     listLevel.map((item) => (
                       <Option value={item.id} key={item.id}>
                         {item.name}

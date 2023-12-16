@@ -105,7 +105,7 @@ const AdminTeacherDashboard = () => {
               </Row>
             </div>
             <div>
-              {listTeacher.length > 0 ? (
+              {listTeacher != null && listTeacher.length > 0 ? (
                 listTeacher.map((item, index) => {
                   return (
                     <Row
