@@ -48,7 +48,7 @@ const CommonInforUser = () => {
         key="3"
         icon={<FontAwesomeIcon icon={faUser} style={{ marginRight: 5 }} />}
       >
-        <Link to="/profile"> Thông tin tài khoản</Link>
+        <Link to={`${portIdentity}/Account/UpdateProfile`}> Thông tin tài khoản</Link>
       </Menu.Item>
       <Menu.Item
         key="1"
@@ -62,7 +62,7 @@ const CommonInforUser = () => {
         key="4"
         icon={<FontAwesomeIcon icon={faExchange} style={{ marginRight: 5 }} />}
       >
-        <Link to="/change-password">Đổi mật khẩu</Link>
+        <Link to={`${portIdentity}/Account/ResetPassword`}>Đổi mật khẩu</Link>
       </Menu.Item>
       <Menu.Item
         key="2"
