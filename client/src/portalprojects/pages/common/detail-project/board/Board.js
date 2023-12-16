@@ -58,6 +58,7 @@ const Board = () => {
   useEffect(() => {
     dispatch(SetLoading(true));
     if (
+      detailProject != null &&
       listMemberProject != null &&
       listMemberProject !== undefined &&
       listMemberProject.length > 0 &&
