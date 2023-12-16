@@ -49,7 +49,7 @@ const CommonFooter = () => {
             borderRadius: "50%",
           }}
         />{" "}
-        <span>v1.0</span>
+        <span>v1.1</span>
       </div>
     </>
   );

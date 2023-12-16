@@ -24,7 +24,7 @@ request.interceptors.response.use(
     console.log(error);
     dispatch(SetLoadingFalse());
     if (error.response && error.response.status === 401) {
-      window.location.href = "/not-authorization";
+      // window.location.href = "/not-authorization";
     }
     if (error.response && error.response.status === 404) {
       if (error.response.data === "") {
