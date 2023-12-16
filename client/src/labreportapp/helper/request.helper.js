@@ -27,7 +27,8 @@ request.interceptors.response.use(
       window.location.href = "/not-authorization";
     }
     if (error.response && error.response.status === 404) {
-      window.location.href = "/not-found";
+      message.error(error.response.data.message);
+      // window.location.href = "/not-found";
     }
     if (error.response && error.response.status === 403) {
       window.location.href = "/forbidden";
