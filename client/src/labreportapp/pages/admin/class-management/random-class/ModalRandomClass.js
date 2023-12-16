@@ -114,7 +114,7 @@ const ModalRandomClass = ({ visible, onCancel, fetchData }) => {
       };
       dispatch(SetLoadingTrue());
       ClassAPI.randomClass(obj).then((response) => {
-        message.success("Random tạo lớp thành công !");
+        message.success("Tạo nhiều lớp thành công !");
         dispatch(SetLoadingFalse());
         fetchData();
         onCancel();
