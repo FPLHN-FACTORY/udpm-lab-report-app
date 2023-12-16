@@ -67,4 +67,5 @@ public class MeAssignController {
                                     StompHeaderAccessor headerAccessor) {
         return new ResponseObject(meAssignService.delete(request, headerAccessor));
     }
+
 }
