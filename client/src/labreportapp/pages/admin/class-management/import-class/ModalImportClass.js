@@ -140,7 +140,7 @@ const ModalImportClass = ({ visible, onCancel, fetchData }) => {
             >
               <Option value="">Chọn 1 học kỳ</Option>
 
-              {semesterDataAll.map((semester) => (
+              {semesterDataAll != null && semesterDataAll.map((semester) => (
                 <Option key={semester.id} value={semester.id}>
                   {semester.name}
                 </Option>

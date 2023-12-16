@@ -229,7 +229,7 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
                   }}
                   disabled
                 >
-                  {semesterDataAll.map((semester) => (
+                  {semesterDataAll != null && semesterDataAll.map((semester) => (
                     <Option key={semester.id} value={semester.id}>
                       {semester.name +
                         " (" +
@@ -265,7 +265,7 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
                 >
                   <Option value="">Chọn 1 giảng viên</Option>
 
-                  {teacherDataAll.map((teacher) => (
+                  {teacherDataAll != null && teacherDataAll.map((teacher) => (
                     <Option key={teacher.id} value={teacher.id}>
                       {teacher.userName + " - " + teacher.name}
                     </Option>
@@ -298,7 +298,7 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
                   }}
                 >
                   <Option value="">Chọn 1 hoạt động</Option>
-                  {activityDataAll.map((activity) => (
+                  {activityDataAll != null && activityDataAll.map((activity) => (
                     <Option key={activity.id} value={activity.id}>
                       {activity.name}
                     </Option>
@@ -316,7 +316,7 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
                   onChange={handleSelectChange}
                 >
                   <Option value="">Chọn ca học dự kiến</Option>
-                  {dataMeetingPeriod.map((item) => {
+                  {dataMeetingPeriod != null && dataMeetingPeriod.map((item) => {
                     return (
                       <Option value={item.id} key={item.id}>
                         {item.name} -{" "}
