@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.labreportapp.labreport.core.common.response.RolesResponse;
 import com.labreportapp.labreport.core.common.response.SimpleResponse;
 import com.labreportapp.labreport.infrastructure.apiconstant.ApiConstants;
-import com.labreportapp.labreport.infrastructure.apiconstant.LabReportAppConstants;
 import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,6 +35,9 @@ public class CallApiIdentity {
 
     @Value("${domain.identity}")
     private String domain;
+
+    @Value("${module.code}")
+    private String moduleCode;
 
     public List<SimpleResponse> handleCallApiGetListUserByListId(List<String> listIdUser) {
         try {
@@ -82,7 +84,7 @@ public class CallApiIdentity {
             HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
 
             ResponseEntity<List<SimpleResponse>> responseEntity =
-                    restTemplate.exchange(apiUrl + "?roleCode=" + roleCode + "&moduleCode=" + LabReportAppConstants.MODULE_CODE, HttpMethod.GET, httpEntity,
+                    restTemplate.exchange(apiUrl + "?roleCode=" + roleCode + "&moduleCode=" + moduleCode, HttpMethod.GET, httpEntity,
                             new ParameterizedTypeReference<List<SimpleResponse>>() {
                             });
 
@@ -179,7 +181,7 @@ public class CallApiIdentity {
             headers.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
             ResponseEntity<List<RolesResponse>> responseEntity =
-                    restTemplate.exchange(apiUrl + "/" + idUSer + "/" + LabReportAppConstants.MODULE_CODE, HttpMethod.GET, httpEntity,
+                    restTemplate.exchange(apiUrl + "/" + idUSer + "/" + moduleCode, HttpMethod.GET, httpEntity,
                             new ParameterizedTypeReference<List<RolesResponse>>() {
                             });
 
