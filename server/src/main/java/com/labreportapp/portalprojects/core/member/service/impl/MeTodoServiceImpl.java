@@ -148,9 +148,12 @@ public class MeTodoServiceImpl implements MeTodoService {
             "+ #request.dueDate.toString() + '_' + #request.idPeriod + '_' " +
             "+ #request.idTodoList + '_' + #request.projectId")
     public List<MeBoardResponse> getBoard(final MeFilterTodoRequest request) {
-        String check = meTodoRepository.checkMemberProject(request.getProjectId(), session.getUserId());
-        if (Objects.isNull(check)) {
-            throw new NotAuthorizationException(Message.BAN_KHONG_DUOC_PHEP_VAO_DU_AN_NAY);
+        if (session.getUserId() != null && request.getProjectId() != null) {
+            System.out.println(request.getProjectId() + "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww");
+            String check = meTodoRepository.checkMemberProject(request.getProjectId(), session.getUserId());
+            if (Objects.isNull(check)) {
+                throw new NotAuthorizationException(Message.BAN_KHONG_DUOC_PHEP_VAO_DU_AN_NAY);
+            }
         }
         List<TodoList> listTodoList = meTodoListRepository.findAllByProjectIdAndOrderByIndexTodoList(request.getProjectId());
         List<MeBoardResponse> listBoard = new ArrayList<>();
@@ -914,9 +917,12 @@ public class MeTodoServiceImpl implements MeTodoService {
 
     @Override
     public Boolean checkMemberProject(String idProject) {
-        String check = meTodoRepository.checkMemberProject(idProject, session.getUserId());
-        if (Objects.isNull(check)) {
-            throw new NotAuthorizationException(Message.BAN_KHONG_DUOC_PHEP_VAO_DU_AN_NAY);
+        if (session.getUserId() != null) {
+            String check = meTodoRepository.checkMemberProject(idProject, session.getUserId());
+            if (Objects.isNull(check)) {
+                throw new NotAuthorizationException(Message.BAN_KHONG_DUOC_PHEP_VAO_DU_AN_NAY);
+            }
+            return true;
         }
         return true;
     }
