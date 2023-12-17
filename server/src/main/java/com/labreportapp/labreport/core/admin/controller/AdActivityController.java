@@ -101,4 +101,5 @@ public class AdActivityController {
         loggerObject.setPathFile(pathFile);
         return new ResponseEntity<>(callApiConsumer.handleCallApiReadFileLog(loggerObject, page, size), HttpStatus.OK);
     }
+
 }
