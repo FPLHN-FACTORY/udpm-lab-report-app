@@ -200,12 +200,6 @@ public class AdClassManagerServiceImpl implements AdClassService {
         adClassCustomResponse.setStatusClass("Chưa đủ điều kiện");
         adClassCustomResponse.setStatusTeacherEdit(classNew.getStatusTeacherEdit() == StatusTeacherEdit.CHO_PHEP ? 0 : 1);
         adClassCustomResponse.setNameLevel(levelRepository.findById(activityFind.get().getLevelId()).get().getName());
-        if (!request.getTeacherId().equals("")) {
-            adClassCustomResponse.setTeacherId(request.getTeacherId());
-
-            SimpleResponse response = callApiIdentity.handleCallApiGetUserById(request.getTeacherId());
-            adClassCustomResponse.setUserNameTeacher(response.getUserName());
-        }
         StringBuilder stringBuilder = new StringBuilder();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         stringBuilder.append("Đã tạo lớp học ").append(adClassCustomResponse.getCode());
@@ -214,6 +208,13 @@ public class AdClassManagerServiceImpl implements AdClassService {
         stringBuilder.append(", thuộc hoạt động: ").append(adClassCustomResponse.getActivityName());
         stringBuilder.append(", thời gian bắt đầu học là: ").append(sdf.format(adClassCustomResponse.getStartTime()));
         stringBuilder.append(", quyền giảng viên chỉnh sửa là: ").append(adClassCustomResponse.getStatusTeacherEdit() == 0 ? "Cho phép" : "Không cho phép");
+        if (!request.getTeacherId().equals("")) {
+            adClassCustomResponse.setTeacherId(request.getTeacherId());
+
+            SimpleResponse response = callApiIdentity.handleCallApiGetUserById(request.getTeacherId());
+            adClassCustomResponse.setUserNameTeacher(response.getUserName());
+            stringBuilder.append(", giảng viên là: " + response.getUserName() + " - " + response.getName());
+        }
         String nameSemester = loggerUtil.getNameSemesterByIdClass(adClassCustomResponse.getId());
         loggerUtil.sendLogScreen(stringBuilder.toString(), nameSemester);
         loggerUtil.sendLogStreamClass(stringBuilder.toString(), adClassCustomResponse.getCode(), nameSemester);
@@ -252,9 +253,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
                     (request.getStatusTeacherEdit() == 0 ? "Cho phép" : "Không cho phép");
             stringBuilder.append(messageStatusTeacherEdit);
         }
-        String nameSemester = loggerUtil.getNameSemesterByIdClass(id);
-        loggerUtil.sendLogScreen(stringBuilder.toString(), nameSemester);
-        loggerUtil.sendLogStreamClass(stringBuilder.toString(), classNew.getCode(), nameSemester);
+
         classNew.setStartTime(request.getStartTime());
         MeetingPeriod meetingPeriodFind = null;
         if (request.getClassPeriod() != null) {
@@ -291,6 +290,12 @@ public class AdClassManagerServiceImpl implements AdClassService {
             adClassCustomResponse.setTeacherId(request.getTeacherId());
             SimpleResponse response = callApiIdentity.handleCallApiGetUserById(request.getTeacherId());
             adClassCustomResponse.setUserNameTeacher(response.getUserName());
+            stringBuilder.append(". Đã cập nhật giảng viên của lớp thành " + response.getUserName() + " - " + response.getName());
+        }
+        if (!stringBuilder.toString().endsWith(": ")) {
+            String nameSemester = loggerUtil.getNameSemesterByIdClass(id);
+            loggerUtil.sendLogScreen(stringBuilder.toString(), nameSemester);
+            loggerUtil.sendLogStreamClass(stringBuilder.toString(), classNew.getCode(), nameSemester);
         }
         return adClassCustomResponse;
     }

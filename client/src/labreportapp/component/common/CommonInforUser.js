@@ -41,14 +41,14 @@ const CommonInforUser = () => {
       });
     }
   };
-
+  const token = Cookies.get("token");
   const userMenu = (
     <Menu onClick={handleMenuClick}>
       <Menu.Item
         key="3"
         icon={<FontAwesomeIcon icon={faUser} style={{ marginRight: 5 }} />}
       >
-        <Link to={`${portIdentity}/Account/UpdateProfile`}> Thông tin tài khoản</Link>
+        <Link to={`${portIdentity}/Account/UpdateProfile?token=${token}`}> Thông tin tài khoản</Link>
       </Menu.Item>
       <Menu.Item
         key="1"
@@ -62,7 +62,7 @@ const CommonInforUser = () => {
         key="4"
         icon={<FontAwesomeIcon icon={faExchange} style={{ marginRight: 5 }} />}
       >
-        <Link to={`${portIdentity}/Account/ResetPassword`}>Đổi mật khẩu</Link>
+        <Link to={`${portIdentity}/Account/ResetPassword?token=${token}`}>Đổi mật khẩu</Link>
       </Menu.Item>
       <Menu.Item
         key="2"
