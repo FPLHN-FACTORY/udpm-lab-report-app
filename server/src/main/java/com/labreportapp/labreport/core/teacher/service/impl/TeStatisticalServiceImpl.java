@@ -97,7 +97,7 @@ public class TeStatisticalServiceImpl implements TeStatisticalService {
         List<TeMeetingResponse> listMeetingSort = listMeeting.stream()
                 .sorted(Comparator.comparing(TeMeetingResponse::getMeetingDate)
                         .thenComparing(TeMeetingResponse::getName))
-                        .filter(Objects::nonNull)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
         AtomicInteger collTitle = new AtomicInteger(6);
@@ -282,13 +282,13 @@ public class TeStatisticalServiceImpl implements TeStatisticalService {
             var ref = new Object() {
                 List<Short> listShortColor = getExcelColors();
             };
+            // tạo màu cho các team
             listTeam.forEach(team -> {
                 if (ref.listShortColor.size() == 0) {
                     ref.listShortColor = getExcelColors();
                 }
                 TeamColor color = new TeamColor();
                 color.setId(team.getId());
-
                 color.setName(team.getName());
                 color.setSubjectName(team.getSubjectName());
                 color.setClassId(team.getClassId());
@@ -297,9 +297,30 @@ public class TeStatisticalServiceImpl implements TeStatisticalService {
                 ref.listShortColor.removeIf(item -> item.equals(color.getColor()));
                 listTeamColor.add(color);
             });
+            // meger cell row các team
+//            listTeamColor.forEach(tem -> {
+//                int start = -1;
+//                int end = -1;
+//                for (int i = 0; i < listStudent.size(); i++) {
+//                    TeStudentCallApiResponse student = listStudent.get(i);
+//                    if (student.getIdTeam() != null && tem.getId().equals(student.getIdTeam())) {
+//                        if (start == -1) {
+//                            start = i;
+//                        }
+//                        end = i;
+//                    } else if (student.getIdTeam() == null || student.getIdTeam().equals("")) {
+//                        continue;
+//                    }
+//                }
+//                if (start != -1 && end != -1) {
+//                    tem.setRowStartMeger(start + 5);
+//                    tem.setRowEndMeger(end + 5);
+//                }
+//            });
             listTeamColor.forEach(tem -> {
                 int start = -1;
                 int end = -1;
+                int studentCountInTeam = 0;
                 for (int i = 0; i < listStudent.size(); i++) {
                     TeStudentCallApiResponse student = listStudent.get(i);
                     if (student.getIdTeam() != null && tem.getId().equals(student.getIdTeam())) {
@@ -307,15 +328,18 @@ public class TeStatisticalServiceImpl implements TeStatisticalService {
                             start = i;
                         }
                         end = i;
+                        studentCountInTeam++;
                     } else if (student.getIdTeam() == null || student.getIdTeam().equals("")) {
                         continue;
                     }
                 }
-                if (start != -1 && end != -1) {
+                // Nếu có ít nhất 2 sinh viên trong nhóm, thì thực hiện merge
+                if (studentCountInTeam >= 2) {
                     tem.setRowStartMeger(start + 5);
                     tem.setRowEndMeger(end + 5);
                 }
             });
+
             List<TeHwNoteReportListRespone> listMeetingHwNoRep = teMeetingRepository.searchHwNoteReport(idClass);
             Class objClass = objClassOptional.get();
             TeCountMeetingAndSheetRespone responseSheet = configTitle(workbook, objClass);
@@ -362,7 +386,7 @@ public class TeStatisticalServiceImpl implements TeStatisticalService {
                 List<TeHwNoteReportListRespone> listMeetingSort = listHomeWorkNoteReportAddList.stream()
                         .sorted(Comparator.comparing(TeHwNoteReportListRespone::getMeetingDate)
                                 .thenComparing(TeHwNoteReportListRespone::getNameMeeting))
-                                .filter(Objects::nonNull)
+                        .filter(Objects::nonNull)
                         .collect(Collectors.toList());
 
                 AtomicInteger collFill = new AtomicInteger(6);
