@@ -3,6 +3,7 @@ package com.labreportapp.labreport.core.admin.controller;
 import com.labreportapp.labreport.core.admin.model.request.AdCreateClassRequest;
 import com.labreportapp.labreport.core.admin.model.request.AdFindClassRequest;
 import com.labreportapp.labreport.core.admin.model.request.AdRandomClassRequest;
+import com.labreportapp.labreport.core.admin.model.request.AdUpdateClassRequest;
 import com.labreportapp.labreport.core.admin.model.response.AdActivityClassResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdListClassCustomResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdSemesterAcResponse;
@@ -117,7 +118,7 @@ public class AdClassController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseObject updateClass(@RequestBody AdCreateClassRequest request, @PathVariable String id) {
+    public ResponseObject updateClass(@RequestBody AdUpdateClassRequest request, @PathVariable String id) {
         return new ResponseObject(service.updateClass(request, id));
     }
 
@@ -259,5 +260,10 @@ public class AdClassController {
     @GetMapping("/get-class/{id}")
     public ResponseObject detailClass(@PathVariable("id") String id) {
         return new ResponseObject(service.findClassById(id));
+    }
+
+    @PostMapping("/send-mail-to-student")
+    public ResponseObject sendMailToStudent() {
+        return new ResponseObject(service.sendMailToStudent());
     }
 }

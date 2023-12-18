@@ -13,6 +13,7 @@ import {
   faHistory,
   faGraduationCap,
   faFileDownload,
+  faMailBulk,
 } from "@fortawesome/free-solid-svg-icons";
 import { useAppDispatch, useAppSelector } from "../../../app/hook";
 import {
@@ -592,6 +593,17 @@ const ClassManagement = () => {
     setShowHistoryLogLuong(false);
   };
 
+  const sendMail = () => {
+    setLoading(true);
+    ClassAPI.sendMailToStudent().then(
+      (response) => {
+        message.success("Gửi mail thông báo đến sinh viên thành công");
+        setLoading(false);
+      },
+      (error) => {}
+    );
+  };
+
   return (
     <>
       <div className="box-one">
@@ -669,16 +681,17 @@ const ClassManagement = () => {
                 >
                   <Option value="">Chọn 1 học kỳ</Option>
 
-                  {semesterDataAll != null && semesterDataAll.map((semester) => (
-                    <Option key={semester.id} value={semester.id}>
-                      {semester.name +
-                        " (" +
-                        convertDateLongToString(semester.startTime) +
-                        " - " +
-                        convertDateLongToString(semester.endTime) +
-                        ")"}
-                    </Option>
-                  ))}
+                  {semesterDataAll != null &&
+                    semesterDataAll.map((semester) => (
+                      <Option key={semester.id} value={semester.id}>
+                        {semester.name +
+                          " (" +
+                          convertDateLongToString(semester.startTime) +
+                          " - " +
+                          convertDateLongToString(semester.endTime) +
+                          ")"}
+                      </Option>
+                    ))}
                 </Select>
               </div>
             </Col>
@@ -701,11 +714,12 @@ const ClassManagement = () => {
                   {activityDataAll.length === 0 && (
                     <Option value="none">Không có hoạt động</Option>
                   )}
-                  {activityDataAll != null && activityDataAll.map((activity) => (
-                    <Option key={activity.id} value={activity.id}>
-                      {activity.name}
-                    </Option>
-                  ))}
+                  {activityDataAll != null &&
+                    activityDataAll.map((activity) => (
+                      <Option key={activity.id} value={activity.id}>
+                        {activity.name}
+                      </Option>
+                    ))}
                 </Select>
               </div>
             </Col>
@@ -723,19 +737,20 @@ const ClassManagement = () => {
                 >
                   <Option value="">Tất Cả</Option>
                   <Option value="none">Chưa có ca học</Option>
-                  {dataMeetingPeriod != null && dataMeetingPeriod.map((item) => {
-                    return (
-                      <Option value={item.id} key={item.id}>
-                        {item.name} -{" "}
-                        {convertHourAndMinuteToString(
-                          item.startHour,
-                          item.startMinute,
-                          item.endHour,
-                          item.endMinute
-                        )}
-                      </Option>
-                    );
-                  })}
+                  {dataMeetingPeriod != null &&
+                    dataMeetingPeriod.map((item) => {
+                      return (
+                        <Option value={item.id} key={item.id}>
+                          {item.name} -{" "}
+                          {convertHourAndMinuteToString(
+                            item.startHour,
+                            item.startMinute,
+                            item.endHour,
+                            item.endMinute
+                          )}
+                        </Option>
+                      );
+                    })}
                 </Select>
               </div>
             </Col>
@@ -752,11 +767,12 @@ const ClassManagement = () => {
                 >
                   <Option value="">Tất cả</Option>
                   <Option value="none">Chưa có giảng viên</Option>
-                  {teacherDataAll != null && teacherDataAll.map((teacher) => (
-                    <Option key={teacher.id} value={teacher.id}>
-                      {teacher.userName + " - " + teacher.name}
-                    </Option>
-                  ))}
+                  {teacherDataAll != null &&
+                    teacherDataAll.map((teacher) => (
+                      <Option key={teacher.id} value={teacher.id}>
+                        {teacher.userName + " - " + teacher.name}
+                      </Option>
+                    ))}
                 </Select>
               </div>
             </Col>
@@ -788,7 +804,8 @@ const ClassManagement = () => {
                   value={level}
                 >
                   <Option value={""}>Tất cả</Option>
-                  {listLevel != null && listLevel.length > 0 &&
+                  {listLevel != null &&
+                    listLevel.length > 0 &&
                     listLevel.map((item) => (
                       <Option value={item.id} key={item.id}>
                         {item.name}
@@ -897,7 +914,24 @@ const ClassManagement = () => {
               </span>{" "}
             </div>
             <div className="createButton">
-              {" "}
+              <Button
+                style={{
+                  color: "white",
+                  backgroundColor: "rgb(55, 137, 220)",
+                  marginRight: 5,
+                }}
+                onClick={sendMail}
+              >
+                <FontAwesomeIcon
+                  icon={faMailBulk}
+                  size="1x"
+                  style={{
+                    backgroundColor: "rgb(55, 137, 220)",
+                    marginRight: "5px",
+                  }}
+                />
+                Gửi mail thông báo
+              </Button>{" "}
               <Button
                 style={{
                   color: "white",

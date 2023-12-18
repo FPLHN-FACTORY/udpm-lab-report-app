@@ -55,5 +55,6 @@ public class AdDetailClassCustomResponse {
 
     private String levelId;
 
+    private Integer statusClass;
 
 }

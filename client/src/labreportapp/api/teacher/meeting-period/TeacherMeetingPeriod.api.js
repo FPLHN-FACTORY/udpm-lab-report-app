@@ -8,4 +8,18 @@ export class TeacherMeetingPeriodAPI {
       url: url,
     });
   }
+
+  static getMeetingPeriod() {
+    return request({
+      method: "GET",
+      url: url + "/get-all",
+    });
+  }
+
+  static getAllTeacher() {
+    return request({
+      method: "GET",
+      url: url + "/teacher",
+    });
+  }
 }

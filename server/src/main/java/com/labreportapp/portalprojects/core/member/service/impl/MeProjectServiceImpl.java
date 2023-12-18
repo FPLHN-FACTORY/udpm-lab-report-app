@@ -204,7 +204,6 @@ public class MeProjectServiceImpl implements MeProjectService {
             messageCategory.setCharAt(messageCategory.length() - 1, '.');
         }
 
-        project.setTypeProject(TypeProject.DU_AN_XUONG_DU_AN);
         Long currentTime = new Date().getTime();
         if (currentTime < request.getStartTime()) {
             project.setStatusProject(StatusProject.CHUA_DIEN_RA);

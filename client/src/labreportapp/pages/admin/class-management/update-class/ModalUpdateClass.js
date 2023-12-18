@@ -41,11 +41,13 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
   const [errorActivitySelect, setErrorActivitySelect] = useState("");
   const [classDetail, setClassDetail] = useState({});
   const [statusTeacherEdit, setStatusTeacherEdit] = useState("");
+  const [statusClass, setStatusClass] = useState("");
 
   const cancelSuccess = () => {
     onCancel();
     setName("");
     setCode("");
+    setStatusClass("");
     setClassPeriod("");
     setStartTime("");
     setSelectedItemsPerson("");
@@ -111,6 +113,7 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
             );
             setStatusTeacherEdit(respone.data.data.statusTeacherEdit + "");
             setLoading(false);
+            setStatusClass(respone.data.data.statusClass + "");
           },
           (error) => {}
         );
@@ -178,6 +181,7 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
         teacherId: selectedItemsPerson,
         activityId: idActivitiSearch,
         statusTeacherEdit: parseInt(statusTeacherEdit),
+        statusClass: parseInt(statusClass),
       };
 
       await ClassAPI.update(id, obj).then((response) => {
@@ -229,16 +233,17 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
                   }}
                   disabled
                 >
-                  {semesterDataAll != null && semesterDataAll.map((semester) => (
-                    <Option key={semester.id} value={semester.id}>
-                      {semester.name +
-                        " (" +
-                        convertDateLongToString(semester.startTime) +
-                        " - " +
-                        convertDateLongToString(semester.endTime) +
-                        ")"}
-                    </Option>
-                  ))}
+                  {semesterDataAll != null &&
+                    semesterDataAll.map((semester) => (
+                      <Option key={semester.id} value={semester.id}>
+                        {semester.name +
+                          " (" +
+                          convertDateLongToString(semester.startTime) +
+                          " - " +
+                          convertDateLongToString(semester.endTime) +
+                          ")"}
+                      </Option>
+                    ))}
                 </Select>
               </Col>
               <Col span={12} style={{ paddingRight: "10px" }}>
@@ -265,11 +270,12 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
                 >
                   <Option value="">Chọn 1 giảng viên</Option>
 
-                  {teacherDataAll != null && teacherDataAll.map((teacher) => (
-                    <Option key={teacher.id} value={teacher.id}>
-                      {teacher.userName + " - " + teacher.name}
-                    </Option>
-                  ))}
+                  {teacherDataAll != null &&
+                    teacherDataAll.map((teacher) => (
+                      <Option key={teacher.id} value={teacher.id}>
+                        {teacher.userName + " - " + teacher.name}
+                      </Option>
+                    ))}
                 </Select>
               </Col>
               <Col span={12} style={{ paddingRight: "10px" }}>
@@ -298,11 +304,12 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
                   }}
                 >
                   <Option value="">Chọn 1 hoạt động</Option>
-                  {activityDataAll != null && activityDataAll.map((activity) => (
-                    <Option key={activity.id} value={activity.id}>
-                      {activity.name}
-                    </Option>
-                  ))}
+                  {activityDataAll != null &&
+                    activityDataAll.map((activity) => (
+                      <Option key={activity.id} value={activity.id}>
+                        {activity.name}
+                      </Option>
+                    ))}
                 </Select>
                 <span className="error">{errorActivitySelect}</span>
               </Col>
@@ -316,19 +323,20 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
                   onChange={handleSelectChange}
                 >
                   <Option value="">Chọn ca học dự kiến</Option>
-                  {dataMeetingPeriod != null && dataMeetingPeriod.map((item) => {
-                    return (
-                      <Option value={item.id} key={item.id}>
-                        {item.name} -{" "}
-                        {convertHourAndMinuteToString(
-                          item.startHour,
-                          item.startMinute,
-                          item.endHour,
-                          item.endMinute
-                        )}
-                      </Option>
-                    );
-                  })}
+                  {dataMeetingPeriod != null &&
+                    dataMeetingPeriod.map((item) => {
+                      return (
+                        <Option value={item.id} key={item.id}>
+                          {item.name} -{" "}
+                          {convertHourAndMinuteToString(
+                            item.startHour,
+                            item.startMinute,
+                            item.endHour,
+                            item.endMinute
+                          )}
+                        </Option>
+                      );
+                    })}
                 </Select>
                 <span className="error">{errorClassPeriod}</span>
               </Col>
@@ -347,6 +355,23 @@ const ModalUpdateClass = ({ visible, onCancel, id }) => {
                 >
                   <Option value="0">Cho phép</Option>
                   <Option value="1">Không cho phép</Option>
+                </Select>
+              </Col>
+              <Col
+                span={12}
+                style={{ paddingRight: "10px", marginTop: "15px" }}
+              >
+                <span style={{ color: "red" }}>(*) </span>Trạng thái lớp học:{" "}
+                <br />
+                <Select
+                  style={{ width: "100%" }}
+                  value={statusClass}
+                  onChange={(e) => {
+                    setStatusClass(e);
+                  }}
+                >
+                  <Option value="0">Mở</Option>
+                  <Option value="1">Đóng</Option>
                 </Select>
               </Col>
             </Row>

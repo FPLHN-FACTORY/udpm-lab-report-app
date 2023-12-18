@@ -57,6 +57,7 @@ import {
   GetMeetingRequest,
   SetMeetingRequest,
 } from "../../../../../app/teacher/meeting-request/teMeetingRequestSlice.reduce";
+import { TeacherMeetingPeriodAPI } from "../../../../../api/teacher/meeting-period/TeacherMeetingPeriod.api";
 
 const { confirm } = Modal;
 
@@ -128,16 +129,19 @@ const TeMeetingRequestManagement = () => {
       navigate("/teacher/my-class");
     }
   };
+
   const loadDataMeetingPeriod = () => {
-    AdMeetingPeriodAPI.getAll().then((response) => {
+    TeacherMeetingPeriodAPI.getMeetingPeriod().then((response) => {
       dispatch(SetAdMeetingPeriod(response.data.data));
     });
   };
+
   const fetchTeacherData = async () => {
-    const responseTeacherData = await ClassAPI.fetchAllTeacher();
+    const responseTeacherData = await TeacherMeetingPeriodAPI.getAllTeacher();
     const teacherData = responseTeacherData.data.data;
     dispatch(SetAdTeacher(teacherData));
   };
+
   const onChangeType = (value) => {
     setType(value);
   };

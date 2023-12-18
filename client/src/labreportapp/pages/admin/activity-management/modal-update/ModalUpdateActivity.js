@@ -257,8 +257,8 @@ const ModalUpdateActivity = ({
             <span className="error">{errorSemesterId}</span>
           </Col>
           <Col span={24} style={{ padding: "5px" }}>
-            <span style={{ color: "red" }}>(*) </span>Cho phép sử dụng trello
-            kéo thả: <br />
+            <span style={{ color: "red" }}>(*) </span>Cho phép sử dụng không gian quản lý dự án
+            : <br />
             <Select
               value={allowUseTrello}
               style={{ width: "100%" }}

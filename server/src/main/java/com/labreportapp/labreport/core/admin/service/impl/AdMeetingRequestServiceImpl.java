@@ -21,7 +21,7 @@ import com.labreportapp.labreport.infrastructure.constant.StatusMeetingRequest;
 import com.labreportapp.labreport.util.CallApiIdentity;
 import com.labreportapp.labreport.util.LoggerUtil;
 import com.labreportapp.labreport.util.SemesterHelper;
-import com.labreportapp.labreport.util.WriteFileCSV;
+import com.labreportapp.portalprojects.infrastructure.configemail.EmailSender;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import jakarta.validation.Valid;
@@ -37,7 +37,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
@@ -65,6 +64,9 @@ public class AdMeetingRequestServiceImpl implements AdMeetingRequestService {
 
     @Autowired
     private LoggerUtil loggerUtil;
+
+    @Autowired
+    private EmailSender emailSender;
 
     @Override
     public PageableObject<AdListClassCustomResponse> searchClassHaveMeetingRequest(AdFindClassRequest adFindClass) {
@@ -279,6 +281,7 @@ public class AdMeetingRequestServiceImpl implements AdMeetingRequestService {
         if (!classOptional.isPresent()) {
             throw new RestApiException(Message.CLASS_NOT_EXISTS);
         }
+        SimpleResponse simpleResponse = callApiIdentity.handleCallApiGetUserById(classOptional.get().getTeacherId());
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Đã từ chối phê duyệt các buổi học: ");
         listMeetingRequestFind.forEach(meetingRequest -> {
@@ -293,6 +296,15 @@ public class AdMeetingRequestServiceImpl implements AdMeetingRequestService {
         String nameSemester = loggerUtil.getNameSemesterByIdClass(idClass);
         loggerUtil.sendLogStreamClass(stringBuilder.toString(), classOptional.get().getCode(), nameSemester);
         loggerUtil.sendLogScreen(stringBuilder.toString(), nameSemester);
+
+        if (simpleResponse != null) {
+            Runnable emailTask = () -> {
+                String htmlBody = stringBuilder.toString();
+                emailSender.sendEmail(new String[]{simpleResponse.getEmail()}, "[LAB-REPORT-APP] Thông báo từ chối phê duyệt buổi học", "Thông báo từ chối phê duyệt buổi học", htmlBody);
+            };
+            new Thread(emailTask).start();
+        }
+
         return true;
     }
 
@@ -345,6 +357,15 @@ public class AdMeetingRequestServiceImpl implements AdMeetingRequestService {
         String nameSemester = loggerUtil.getNameSemesterByIdClass(idClass);
         loggerUtil.sendLogStreamClass(stringBuilder.toString(), classOptional.get().getCode(), nameSemester);
         loggerUtil.sendLogScreen(stringBuilder.toString(), nameSemester);
+        SimpleResponse simpleResponse = callApiIdentity.handleCallApiGetUserById(classOptional.get().getTeacherId());
+
+        if (simpleResponse != null) {
+            Runnable emailTask = () -> {
+                String htmlBody = stringBuilder.toString();
+                emailSender.sendEmail(new String[]{simpleResponse.getEmail()}, "[LAB-REPORT-APP] Thông báo từ phê duyệt buổi học", "Thông báo phê duyệt buổi học", htmlBody);
+            };
+            new Thread(emailTask).start();
+        }
         return true;
     }
 }

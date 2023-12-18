@@ -28,8 +28,8 @@ public interface MeProjectRepository extends ProjectRepository {
                 GROUP_CONCAT(cate.name SEPARATOR ', ') as nameCategorys     
             FROM project a JOIN member_project b ON a.id = b.project_id 
             LEFT JOIN group_project gp on gp.id = a.group_project_id
-            JOIN project_category pa ON pa.project_id = a.id
-            JOIN category cate on pa.category_id = cate.id
+            LEFT JOIN project_category pa ON pa.project_id = a.id
+            LEFT JOIN category cate on pa.category_id = cate.id
             WHERE b.member_id = :#{#req.idUser}
             AND (:#{#req.nameProject} IS NULL OR :#{#req.nameProject} LIKE '' OR a.name LIKE %:#{#req.nameProject}%)
             AND (:#{#req.status} IS NULL OR :#{#req.status} LIKE '' OR a.status_project = :#{#req.status})
@@ -45,9 +45,9 @@ public interface MeProjectRepository extends ProjectRepository {
             """, countQuery = """
             SELECT COUNT(1) 
             FROM project a JOIN member_project b ON a.id = b.project_id 
-             LEFT JOIN group_project gp on gp.id = a.group_project_id
-              JOIN project_category pa ON pa.project_id = a.id
-            JOIN category cate on pa.category_id = cate.id
+            LEFT JOIN group_project gp on gp.id = a.group_project_id
+            LEFT JOIN project_category pa ON pa.project_id = a.id
+            LEFT JOIN category cate on pa.category_id = cate.id
             WHERE b.member_id = :#{#req.idUser}
             AND (:#{#req.nameProject} IS NULL OR :#{#req.nameProject} LIKE '' OR a.name LIKE %:#{#req.nameProject}%)
             AND (:#{#req.status} IS NULL OR :#{#req.status} LIKE '' OR a.status_project = :#{#req.status})

@@ -75,7 +75,7 @@ public interface AdClassRepository extends ClassRepository {
     List<AdActivityClassResponse> getAllByIdSemester(@Param("req") AdFindClassRequest req);
 
     @Query(value = """
-            SELECT ROW_NUMBER() OVER(ORDER BY c.last_modified_date DESC ) AS stt,
+            SELECT ROW_NUMBER() OVER(ORDER BY c.created_date DESC) AS stt,
             c.id,
             c.code, c.start_time, mp.name as name_class_period
             , mp.start_hour, mp.start_minute, mp.end_hour, mp.end_minute
@@ -98,13 +98,13 @@ public interface AdClassRepository extends ClassRepository {
             and (:#{#req.statusClass} IS NULL OR :#{#req.statusClass} LIKE '' 
             OR IF(:#{#req.statusClass} = 'yes', c.class_size >= :#{#req.valueClassSize}, c.class_size < :#{#req.valueClassSize}))
             and (:#{#req.statusTeacherEdit} IS NULL OR :#{#req.statusTeacherEdit} LIKE '' OR c.status_teacher_edit = :#{#req.statusTeacherEdit})
-            ORDER BY c.last_modified_date DESC
+            ORDER BY c.created_date DESC
             """, countQuery = """
             SELECT COUNT(c.id)
             FROM activity a
             JOIN class c ON c.activity_id = a.id
-            JOIN level d ON d.id = a.level_id
             LEFT JOIN meeting_period mp ON c.class_period = mp.id
+            JOIN level d ON d.id = a.level_id
             JOIN semester s ON s.id = a.semester_id
             where (:#{#req.idSemester} IS NULL OR :#{#req.idSemester} LIKE '' OR s.id = :#{#req.idSemester})
             and (:#{#req.idActivity} IS NULL OR :#{#req.idActivity} LIKE '' OR a.id = :#{#req.idActivity})
@@ -118,7 +118,7 @@ public interface AdClassRepository extends ClassRepository {
             and (:#{#req.statusClass} IS NULL OR :#{#req.statusClass} LIKE '' 
             OR IF(:#{#req.statusClass} = 'yes', c.class_size >= :#{#req.valueClassSize}, c.class_size < :#{#req.valueClassSize}))
             and (:#{#req.statusTeacherEdit} IS NULL OR :#{#req.statusTeacherEdit} LIKE '' OR c.status_teacher_edit = :#{#req.statusTeacherEdit})
-            ORDER BY c.last_modified_date DESC
+            ORDER BY c.created_date DESC
             """, nativeQuery = true)
     Page<AdClassResponse> findClassBySemesterAndActivity(@Param("req") AdFindClassRequest req, Pageable pageable);
 
@@ -143,7 +143,8 @@ public interface AdClassRepository extends ClassRepository {
             s.name as semesterName,
             c.status_class, 
             c.status_teacher_edit,
-            a.level_id
+            a.level_id, 
+            c.status_class
             FROM activity a
             JOIN level d ON a.level_id = d.id
             JOIN class c ON c.activity_id = a.id

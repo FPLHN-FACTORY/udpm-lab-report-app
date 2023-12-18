@@ -218,7 +218,7 @@ const ActivityManagement = () => {
       key: "descriptions",
     },
     {
-      title: "Tạo trello",
+      title: "Tạo không gian quản lý dự án",
       dataIndex: "allowUseTrello",
       key: "allowUseTrello",
       render: (text, record) => {

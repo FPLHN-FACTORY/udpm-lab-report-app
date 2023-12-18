@@ -3,6 +3,7 @@ package com.labreportapp.labreport.core.admin.service;
 import com.labreportapp.labreport.core.admin.model.request.AdCreateClassRequest;
 import com.labreportapp.labreport.core.admin.model.request.AdFindClassRequest;
 import com.labreportapp.labreport.core.admin.model.request.AdRandomClassRequest;
+import com.labreportapp.labreport.core.admin.model.request.AdUpdateClassRequest;
 import com.labreportapp.labreport.core.admin.model.response.AdActivityClassResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdClassCustomResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdClassResponse;
@@ -40,7 +41,7 @@ public interface AdClassService {
 
     AdClassCustomResponse createClass(@Valid AdCreateClassRequest request);
 
-    AdClassCustomResponse updateClass(@Valid AdCreateClassRequest request, String id);
+    AdClassCustomResponse updateClass(@Valid AdUpdateClassRequest request, String id);
 
     PageableObject<AdListClassCustomResponse> searchClass(final AdFindClassRequest teFindClass);
 
@@ -55,5 +56,7 @@ public interface AdClassService {
     List<AdFindSelectClassCustom> listClass(final AdFindClassRequest request);
 
     TeDetailClassResponse findClassById(final String id);
+
+    Boolean sendMailToStudent();
 
 }

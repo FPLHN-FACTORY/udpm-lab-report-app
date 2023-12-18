@@ -43,4 +43,18 @@ export class StMyClassAPI {
       params: params,
     });
   };
+
+  static getAllCategory() {
+    return request({
+      method: "GET",
+      url: "/student/my-class/category",
+    });
+  }
+
+  static getAllGroupToProjectManagement() {
+    return request({
+      method: "GET",
+      url: "/student/my-class/get-all",
+    });
+  }
 }

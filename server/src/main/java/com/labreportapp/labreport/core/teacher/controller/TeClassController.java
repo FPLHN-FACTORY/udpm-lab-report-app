@@ -13,6 +13,7 @@ import com.labreportapp.labreport.infrastructure.logger.LoggerObject;
 import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.labreport.util.CallApiConsumer;
 import com.labreportapp.labreport.util.LoggerUtil;
+import com.labreportapp.portalprojects.core.admin.service.AdGroupProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +44,9 @@ public class TeClassController {
 
     @Autowired
     private CallApiConsumer callApiConsumer;
+
+    @Autowired
+    private AdGroupProjectService adGroupProjectService;
 
     @GetMapping("")
     public ResponseObject searchTeClass(final TeFindClassRequest teFindClass) {
@@ -98,5 +102,10 @@ public class TeClassController {
         loggerObject.setCodeClass(loggerUtil.getCodeClassByIdClass(idClass));
         loggerObject.setPathFile(pathFile);
         return new ResponseEntity<>(callApiConsumer.handleCallApiReadFileLog(loggerObject, page, size), HttpStatus.OK);
+    }
+
+    @GetMapping("/get-all")
+    public ResponseObject getAllGroupToProjectManagement() {
+        return new ResponseObject(adGroupProjectService.getAllGroupToProjectManagement());
     }
 }

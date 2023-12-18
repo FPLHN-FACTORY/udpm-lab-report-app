@@ -653,7 +653,7 @@ const StudentsInMyClass = () => {
                   color: "red",
                 }}
               >
-                Trello: &nbsp;
+                Không gian quản lý: &nbsp;
                 {classDetail != null
                   ? classDetail.allowUseTrello === 0
                     ? "Cho phép"

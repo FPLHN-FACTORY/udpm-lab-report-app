@@ -380,7 +380,7 @@ public class TeTeamsServiceImpl implements TeTeamsService {
         StringBuilder message = new StringBuilder();
         String codeClass = loggerUtil.getCodeClassByIdClass(teamUp.getClassId());
         String nameSemester = loggerUtil.getNameSemesterByIdClass(teamUp.getClassId());
-        message.append("Đã tạo trello cho \"").append(teamUp.getName()).append("\" với Mã dự án: ").append(projectNew.getCode()).append(", ").append("Tên dự án: ").append(project.getName()).append(" , Thời gian bắt đầu-kết thúc: ").append(convertLongToStringDate(projectNew.getStartTime())).append("-").append(convertLongToStringDate(projectNew.getEndTime())).append(", Loại: Dự án xưởng thực hành");
+        message.append("Đã tạo không gian làm việc cho \"").append(teamUp.getName()).append("\" với Mã dự án: ").append(projectNew.getCode()).append(", ").append("Tên dự án: ").append(project.getName()).append(" , Thời gian bắt đầu-kết thúc: ").append(convertLongToStringDate(projectNew.getStartTime())).append("-").append(convertLongToStringDate(projectNew.getEndTime())).append(", Loại: Dự án xưởng thực hành");
         if (!project.getDescriptions().equals("")) {
             message.append(", Mô tả: ").append(projectNew.getDescriptions());
         }

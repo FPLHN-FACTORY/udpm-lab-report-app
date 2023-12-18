@@ -28,6 +28,7 @@ import {
   SetLoadingFalse,
   SetLoadingTrue,
 } from "../../../../../labreportapp/app/common/Loading.reducer";
+import { MemberProjectApi } from "../../../../api/member-project/MemberProjectApi";
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 const { Option } = Select;
@@ -72,14 +73,14 @@ const ModalUpdateFiledProject = ({ visible, onCancel, idProject }) => {
   const fetchDataCategory = async () => {
     try {
       const responeGetAllCategory =
-        await CategoryProjectManagementAPI.fetchAllCategory();
+        await MemberProjectApi.fetchAllCategory();
       setListCategory(responeGetAllCategory.data.data);
     } catch (error) {}
   };
 
   const featDataGroupProject = async () => {
     try {
-      await AdGroupProjectAPI.getAllGroupToProjectManagement().then(
+      await MemberProjectApi.getAllGroupToProjectManagement().then(
         (response) => {
           setListGroupProject(response.data.data);
         }
@@ -90,7 +91,7 @@ const ModalUpdateFiledProject = ({ visible, onCancel, idProject }) => {
   const featchProject = async () => {
     try {
       setLoading(true);
-      await ProjectManagementAPI.detailUpdate(idProject).then((response) => {
+      await MemberProjectApi.detailUpdate(idProject).then((response) => {
         let obj = response.data.data;
         setCode(obj.code);
         setName(obj.name);

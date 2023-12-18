@@ -152,7 +152,7 @@ const TeamsInMyClass = () => {
       await TeacherTeamsAPI.createProjectToTeam(dataUp).then((response) => {
         dispatch(UpdateTeam(response.data.data));
         dispatch(SetLoadingFalse());
-        message.success("Tạo trello thành công !");
+        message.success("Tạo không gian quản lý dự án thành công !");
       });
     } catch (error) {
       dispatch(SetLoadingFalse());
@@ -243,7 +243,7 @@ const TeamsInMyClass = () => {
         <>
           <div>
             {record.idProject != null && (
-              <Tooltip title="Xem trello dự án">
+              <Tooltip title="Xem không gian quản lý dự án">
                 <Link
                   to={`/detail-project/${record.idProject}`}
                   style={{ color: "black" }}
@@ -257,7 +257,7 @@ const TeamsInMyClass = () => {
               </Tooltip>
             )}
             {record.idProject == null && lock === 0 && (
-              <Tooltip title="Thêm trello">
+              <Tooltip title="Thêm không gian quản lý dự án">
                 <span>
                   <FontAwesomeIcon
                     icon={faFolderPlus}

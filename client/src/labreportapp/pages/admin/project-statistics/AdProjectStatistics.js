@@ -294,7 +294,7 @@ const AdProjectStatistics = () => {
       render: (text, record) => (
         <>
           <div style={{ textAlign: "center" }}>
-            <Tooltip title="Xem trello dự án">
+            <Tooltip title="Xem không gian quản lý dự án">
               <Link
                 to={`/detail-project/${record.id}`}
                 style={{ color: "black" }}

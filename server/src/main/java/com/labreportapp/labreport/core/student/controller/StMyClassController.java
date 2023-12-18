@@ -4,10 +4,12 @@ import com.labreportapp.labreport.core.common.base.ResponseObject;
 import com.labreportapp.labreport.core.student.model.request.StClassRequest;
 import com.labreportapp.labreport.core.student.model.request.StFindClassRequest;
 import com.labreportapp.labreport.core.student.service.StMyClassService;
+import com.labreportapp.labreport.core.teacher.service.TeCategoryService;
 import com.labreportapp.labreport.infrastructure.logger.LoggerObject;
 import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.labreport.util.CallApiConsumer;
 import com.labreportapp.labreport.util.LoggerUtil;
+import com.labreportapp.portalprojects.core.admin.service.AdGroupProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +38,12 @@ public class StMyClassController {
 
     @Autowired
     private CallApiConsumer callApiConsumer;
+
+    @Autowired
+    private TeCategoryService teCategoryService;
+
+    @Autowired
+    private AdGroupProjectService adGroupProjectService;
 
     @GetMapping
     public ResponseObject getAllClass(final StFindClassRequest request) {
@@ -70,5 +78,15 @@ public class StMyClassController {
         loggerObject.setCodeClass(loggerUtil.getCodeClassByIdClass(idClass));
         loggerObject.setPathFile(pathFile);
         return new ResponseEntity<>(callApiConsumer.handleCallApiReadFileLog(loggerObject, page, size), HttpStatus.OK);
+    }
+
+    @GetMapping("/category")
+    public ResponseObject listCategory() {
+        return new ResponseObject(teCategoryService.getAllCategory());
+    }
+
+    @GetMapping("/get-all")
+    public ResponseObject getAllGroupToProjectManagement() {
+        return new ResponseObject(adGroupProjectService.getAllGroupToProjectManagement());
     }
 }

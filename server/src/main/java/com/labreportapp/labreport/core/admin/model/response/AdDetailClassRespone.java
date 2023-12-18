@@ -62,4 +62,7 @@ public interface AdDetailClassRespone {
 
     @Value("#{target.status_teacher_edit}")
     Integer getStatusTeacherEdit();
+
+    @Value("#{target.status_class}")
+    Integer getStatusClass();
 }

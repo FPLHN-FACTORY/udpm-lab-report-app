@@ -115,7 +115,9 @@ const TeamInMeeting = () => {
                     }}
                   >
                     {meeting.name}
-                    {": " + meeting.descriptions}
+                    {": " + meeting.descriptions != null
+                      ? meeting.descriptions
+                      : ""}
                   </span>
                 </div>
               </Col>

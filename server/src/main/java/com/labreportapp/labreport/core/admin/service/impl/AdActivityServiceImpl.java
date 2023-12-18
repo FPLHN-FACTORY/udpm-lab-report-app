@@ -154,7 +154,7 @@ public class AdActivityServiceImpl implements AdActivityService {
         String messageDescriptions = CompareUtil.compareAndConvertMessage("mô tả của hoạt động", activity.getDescriptions(), command.getDescriptions(), "");
         stringBuilder.append(messageDescriptions).append(!messageDescriptions.equals("") ? ", " : "");
 
-        String messageTrello = CompareUtil.compareAndConvertMessage("cho phép sử dụng trello của hoạt động", activity.getAllowUseTrello(), AllowUseTrello.values()[command.getAllowUseTrello()], "");
+        String messageTrello = CompareUtil.compareAndConvertMessage("cho phép sử dụng không gian quản lý của hoạt động", activity.getAllowUseTrello(), AllowUseTrello.values()[command.getAllowUseTrello()], "");
         stringBuilder.append(messageTrello).append(!messageTrello.equals("") ? ", " : "");
         loggerUtil.sendLogScreen(stringBuilder.toString(), "");
 

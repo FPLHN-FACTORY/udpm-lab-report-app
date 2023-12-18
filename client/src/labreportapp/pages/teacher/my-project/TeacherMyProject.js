@@ -36,6 +36,7 @@ import "./style-teacher-my-project.css";
 import { convertDateLongToString } from "../../../helper/util.helper";
 import { AdGroupProjectAPI } from "../../../api/admin/AdGroupProjectAPI";
 import { TeacherCategoryAPI } from "../../../api/teacher/category/TeacherCategory.api";
+import { TeacherMyClassAPI } from "../../../api/teacher/my-class/TeacherMyClass.api";
 const { Option } = Select;
 
 const TeacherMyProject = () => {
@@ -73,7 +74,7 @@ const TeacherMyProject = () => {
 
   const featDataGroupProject = async () => {
     try {
-      await AdGroupProjectAPI.getAllGroupToProjectManagement().then(
+      await TeacherMyClassAPI.getAllGroupToProjectManagement().then(
         (response) => {
           setListGroupProject(response.data.data);
         }

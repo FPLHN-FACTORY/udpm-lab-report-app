@@ -299,4 +299,11 @@ export class ClassAPI {
       url: `/admin/class-managerment/get-class/` + idClass,
     });
   };
+
+  static sendMailToStudent = () => {
+    return request({
+      method: "POST",
+      url: `/admin/class-managerment/send-mail-to-student`,
+    });
+  };
 }

@@ -5,6 +5,7 @@ import com.labreportapp.labreport.core.admin.excel.AdImportExcelClass;
 import com.labreportapp.labreport.core.admin.model.request.AdCreateClassRequest;
 import com.labreportapp.labreport.core.admin.model.request.AdFindClassRequest;
 import com.labreportapp.labreport.core.admin.model.request.AdRandomClassRequest;
+import com.labreportapp.labreport.core.admin.model.request.AdUpdateClassRequest;
 import com.labreportapp.labreport.core.admin.model.response.AdActivityClassResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdClassCustomResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdClassResponse;
@@ -48,6 +49,7 @@ import com.labreportapp.labreport.util.CompareUtil;
 import com.labreportapp.labreport.util.FormUtils;
 import com.labreportapp.labreport.util.LoggerUtil;
 import com.labreportapp.labreport.util.SemesterHelper;
+import com.labreportapp.portalprojects.infrastructure.configemail.EmailSender;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.NotFoundException;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
@@ -127,6 +129,9 @@ public class AdClassManagerServiceImpl implements AdClassService {
 
     @Autowired
     private TeClassRepository teClassRepository;
+
+    @Autowired
+    private EmailSender emailSender;
 
     private FormUtils formUtils = new FormUtils();
 
@@ -222,7 +227,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
     }
 
     @Override
-    public AdClassCustomResponse updateClass(@Valid AdCreateClassRequest request, String id) {
+    public AdClassCustomResponse updateClass(@Valid AdUpdateClassRequest request, String id) {
         Class classNew = repository.findById(id).get();
         Optional<Activity> activityFind = adActivityRepository.findById(request.getActivityId());
         if (activityFind.isEmpty()) {
@@ -253,7 +258,12 @@ public class AdClassManagerServiceImpl implements AdClassService {
                     (request.getStatusTeacherEdit() == 0 ? "Cho phép" : "Không cho phép");
             stringBuilder.append(messageStatusTeacherEdit);
         }
-
+        if (classNew.getStatusClass().ordinal() != request.getStatusClass()) {
+            stringBuilder.append(". Đã cập nhật trạng thái của lớp từ " +
+                    (classNew.getStatusClass().ordinal() == 0 ? "'Mở'" : "'Đóng'") + " thành " +
+                    (request.getStatusClass() == 0 ? "'Mở'" : "'Đóng'"));
+        }
+        classNew.setStatusClass(StatusClass.values()[request.getStatusClass()]);
         classNew.setStartTime(request.getStartTime());
         MeetingPeriod meetingPeriodFind = null;
         if (request.getClassPeriod() != null) {
@@ -263,7 +273,11 @@ public class AdClassManagerServiceImpl implements AdClassService {
         classNew.setStatusTeacherEdit(StatusTeacherEdit.values()[request.getStatusTeacherEdit()]);
 
         classNew.setActivityId(request.getActivityId());
+        Boolean check = false;
         if (request.getTeacherId() != null && !request.getTeacherId().equals("")) {
+            if (!classNew.getTeacherId().equals(request.getTeacherId())) {
+                check = true;
+            }
             classNew.setTeacherId(request.getTeacherId());
         }
         if (request.getTeacherId() == null || request.getTeacherId().equals("")) {
@@ -290,7 +304,9 @@ public class AdClassManagerServiceImpl implements AdClassService {
             adClassCustomResponse.setTeacherId(request.getTeacherId());
             SimpleResponse response = callApiIdentity.handleCallApiGetUserById(request.getTeacherId());
             adClassCustomResponse.setUserNameTeacher(response.getUserName());
-            stringBuilder.append(". Đã cập nhật giảng viên của lớp thành " + response.getUserName() + " - " + response.getName());
+            if (check) {
+                stringBuilder.append(". Đã cập nhật giảng viên của lớp thành " + response.getUserName() + " - " + response.getName());
+            }
         }
         if (!stringBuilder.toString().endsWith(": ")) {
             String nameSemester = loggerUtil.getNameSemesterByIdClass(id);
@@ -477,6 +493,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
         customResponse.setSemesterName(getOptional.getSemesterName());
         customResponse.setLevelId(getOptional.getLevelId());
         customResponse.setStatusTeacherEdit(getOptional.getStatusTeacherEdit());
+        customResponse.setStatusClass(getOptional.getStatusClass());
         if (!Objects.isNull(response)) {
             customResponse.setTeacherName(response.getName());
             customResponse.setTeacherUserName(response.getUserName());
@@ -607,6 +624,12 @@ public class AdClassManagerServiceImpl implements AdClassService {
                     loggerResponse.setContent("Đã phân giảng viên cho lớp là: " + teacherObj.getUserName() + " - " + teacherObj.getName());
                     loggerResponse.setCodeClass(classNew.getCode());
                     loggerResponseList.add(loggerResponse);
+
+                    Runnable emailTask = () -> {
+                        String htmlBody = "Quản trị viên đã phân bạn dạy lớp " + classNew.getCode() + ". <br/> Vui lòng truy cập đường link sau để xác nhận thông tin: <p><a href=\"[https://factory.udpm-hn.com/teacher/my-class]\">Tại đây</a></p>";
+                        emailSender.sendEmail(new String[]{teacherObj.getEmail()}, "[LAB-REPORT-APP] Thông báo phân công dạy học", "Thông báo phân công dạy học", htmlBody);
+                    };
+                    new Thread(emailTask).start();
                 }
                 if (teacherOld != null && teacherNew != null && !teacherOld.equals(teacherNew)) {
                     SimpleResponse teacherObjNew = mapGiangVienKeyId.get(teacherNew);
@@ -617,6 +640,12 @@ public class AdClassManagerServiceImpl implements AdClassService {
                             + " - " + teacherObjOld.getUserName() + " thành "
                             + teacherObjNew.getName() + " - " + teacherObjNew.getUserName());
                     loggerResponseList.add(loggerResponse);
+
+                    Runnable emailTask = () -> {
+                        String htmlBody = "Quản trị viên đã phân bạn dạy lớp " + classNew.getCode() + ". <br/> Vui lòng truy cập đường link sau để xác nhận thông tin: <p><a href=\"[https://factory.udpm-hn.com/teacher/my-class]\">Tại đây</a></p>";
+                        emailSender.sendEmail(new String[]{teacherObjNew.getEmail()}, "[LAB-REPORT-APP] Thông báo phân công dạy học", "Thông báo phân công dạy học", htmlBody);
+                    };
+                    new Thread(emailTask).start();
                 }
                 if (teacherOld != null && teacherNew == null) {
                     SimpleResponse teacherObjOld = mapGiangVienKeyId.get(teacherOld);
@@ -717,6 +746,34 @@ public class AdClassManagerServiceImpl implements AdClassService {
             throw new NotFoundException(Message.CLASS_NOT_EXISTS);
         }
         return classCheck.get();
+    }
+
+    @Override
+    public Boolean sendMailToStudent() {
+        String idSemesterCurrent = semesterHelper.getSemesterCurrent();
+        if (idSemesterCurrent == null) {
+            throw new RestApiException(Message.CHUA_DEN_THOI_GIAN_CUA_HOC_KY);
+        }
+        List<SimpleResponse> listStudent = callApiIdentity.handleCallApiGetUserByRoleAndModule(ActorConstants.ACTOR_STUDENT);
+        List<String> listEmailStudent = listStudent.stream()
+                .map(SimpleResponse::getEmail)
+                .filter(Objects::nonNull)
+                .distinct()
+                .collect(Collectors.toList());
+
+        Runnable emailTask = () -> {
+            String htmlBody =
+                    "<p>Dear các bạn sinh viên,</p>" +
+                            "<p>Hiện tại xưởng thực hành đã mở thêm lớp dạy ở các hoạt động. Xin mời các bạn sinh viên có nhu cầu tham gia ở lớp xưởng thực hành vào đường link sau để đăng ký.</p>" +
+                            "<p><a href=\"[https://factory.udpm-hn.com/student/register-class]\">Tại đây</a></p>" +
+                            "<br/>" +
+                            "<p>Trân trọng,</p>" +
+                            "<p>[Tên của bạn hoặc tên tổ chức của bạn]</p>";
+
+            emailSender.sendEmail(listEmailStudent.toArray(new String[0]), "[LAB-REPORT-APP] Thông báo mở lớp xưởng thực hành", " Thông báo mở lớp xưởng thực hành", htmlBody);
+        };
+        new Thread(emailTask).start();
+        return true;
     }
 
     public void addDataInMapGiangVien(ConcurrentHashMap<String, SimpleResponse> mapAll, ConcurrentHashMap<String, SimpleResponse> mapAllKeyId) {

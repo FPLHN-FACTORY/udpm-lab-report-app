@@ -89,4 +89,11 @@ export class TeacherMyClassAPI {
       params: params,
     });
   };
+
+  static getAllGroupToProjectManagement() {
+    return request({
+      method: "GET",
+      url: url + "/get-all",
+    });
+  }
 }

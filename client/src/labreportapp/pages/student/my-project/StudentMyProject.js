@@ -35,6 +35,7 @@ import {
 import { AdGroupProjectAPI } from "../../../api/admin/AdGroupProjectAPI";
 import { convertDateLongToString } from "../../../helper/util.helper";
 import { TeacherCategoryAPI } from "../../../api/teacher/category/TeacherCategory.api";
+import { StMyClassAPI } from "../../../api/student/StMyClassAPI";
 
 const { Option } = Select;
 
@@ -65,7 +66,7 @@ const StudentMyProject = () => {
 
   const fetchDataCategory = async () => {
     try {
-      await TeacherCategoryAPI.getAllCategory().then((response) => {
+      await StMyClassAPI.getAllCategory().then((response) => {
         setListCategory(response.data.data);
       });
     } catch (error) {}
@@ -73,7 +74,7 @@ const StudentMyProject = () => {
 
   const featDataGroupProject = async () => {
     try {
-      await AdGroupProjectAPI.getAllGroupToProjectManagement().then(
+      await StMyClassAPI.getAllGroupToProjectManagement().then(
         (response) => {
           setListGroupProject(response.data.data);
         }
