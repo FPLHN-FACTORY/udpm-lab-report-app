@@ -213,35 +213,32 @@ const ModalCreateMeetingRequest = ({ idClass, visible, onCancel }) => {
               </Col>
             </Row>
           </div>
-          <div style={{ paddingTop: "15px", right: 0 }}>
-            <Button
-              // style={{
-              //   marginRight: "5px",
-              //   backgroundColor: "rgb(61, 139, 227)",
-              //   color: "white",
-              //   width: "150px",
-              // }}
-              className="btn_clean"
-              style={{
-                width: "100px",
-                marginLeft: "10px",
-              }}
-              onClick={create}
-            >
-              Thêm
-            </Button>
-            <Button
-              // style={{
-              //   backgroundColor: "red",
-              //   color: "white",
-              //   width: "88px",
-              // }}
-              style={{ width: "88px" }}
-              className="btn_filter"
-              onClick={onCancel}
-            >
-              Hủy
-            </Button>
+          <div
+            style={{
+              textAlign: "right",
+              paddingTop: "15px",
+            }}
+          >
+            <div>
+              <Button
+                className="btn_filter"
+                style={{
+                  backgroundColor: "red",
+                  color: "white",
+                  width: "100px",
+                }}
+                onClick={onCancel}
+              >
+                Hủy
+              </Button>{" "}
+              <Button
+                className="btn_clean"
+                style={{ width: "100px", marginLeft: "10px" }}
+                onClick={create}
+              >
+                Thêm
+              </Button>
+            </div>
           </div>
         </div>
       </Modal>
