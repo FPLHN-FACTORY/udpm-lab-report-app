@@ -38,4 +38,12 @@ export class TeacherMeetingRequestAPI {
       data: data,
     });
   }
+
+  static createMeetingRequest(data) {
+    return request({
+      method: "POST",
+      url: url + `/create`,
+      data: data,
+    });
+  }
 }

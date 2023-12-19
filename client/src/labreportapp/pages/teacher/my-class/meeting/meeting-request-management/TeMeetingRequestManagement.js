@@ -72,7 +72,6 @@ const TeMeetingRequestManagement = () => {
   const navigate = useNavigate();
   const [checkedList, setCheckedList] = useState([]);
   const [checkBoxAll, setCheckBoxAll] = useState([]);
-  // const [listMeetingRequest, setListMeetingRequest] = useState([]);
   useEffect(() => {
     window.scrollTo(0, 0);
     loadDataMeetingPeriod();

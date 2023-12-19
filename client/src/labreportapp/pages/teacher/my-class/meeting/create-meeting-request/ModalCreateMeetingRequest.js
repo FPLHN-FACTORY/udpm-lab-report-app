@@ -17,8 +17,7 @@ import {
   SetLoadingFalse,
   SetLoadingTrue,
 } from "../../../../../app/common/Loading.reducer";
-import { TeacherMeetingRequestAPI } from "../../../../../../api/teacher/meeting-request/TeacherMeeting.api";
-import { UpdateMeetingRequest } from "../../../../../../app/teacher/meeting-request/teMeetingRequestSlice.reduce";
+import { TeacherMeetingRequestAPI } from "../../../../../api/teacher/meeting-request/TeacherMeeting.api";
 import locale from "antd/es/date-picker/locale/vi_VN";
 import dayjs from "dayjs";
 import "dayjs/locale/vi";
@@ -27,31 +26,34 @@ import { GetAdMeetingPeriod } from "../../../../../app/admin/AdMeetingPeriodSlic
 
 const { Option } = Select;
 dayjs.locale("vi");
-const ModalCreateMeetingRequest = ({
-  item,
-  visible,
-  onCancel,
-  featchMeeting,
-}) => {
-  const [meetingPeriod, setMeetingPeriod] = useState("0");
+const ModalCreateMeetingRequest = ({ idClass, visible, onCancel }) => {
+  const [meetingPeriod, setMeetingPeriod] = useState("");
   const [typeMeeting, setTypeMeeting] = useState("0");
   const [name, setName] = useState("");
   const [meetingDate, setMeetingDate] = useState(null);
-
-  const dispatch = useAppDispatch();
+  const [errorMeetingPeriod, setErrorMeetingPeriod] = useState("");
   const [errorMeetingDate, setErrorMeetingDate] = useState("");
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (item != null) {
-      setName(item.name);
-      setTypeMeeting(item.typeMeeting + "");
-      setMeetingPeriod(item.idMeetingPeriod);
-      setMeetingDate(item.meetingDate);
-      setErrorMeetingDate("");
-      setSelectedItemsPerson(item.teacherId);
-      setErrorTeacher("");
+    if (visible) {
+      // setName(item.name);
+      // setTypeMeeting(item.typeMeeting + "");
+      // setMeetingPeriod(item.idMeetingPeriod);
+      // setMeetingDate(item.meetingDate);
+      // setErrorMeetingDate("");
+      // setSelectedItemsPerson(item.teacherId);
+      // setErrorTeacher("");
     }
-  }, [item]);
+    return () => {
+      setErrorMeetingPeriod("");
+      setName("");
+      setErrorMeetingDate("");
+      setMeetingDate(null);
+      setTypeMeeting("0");
+      setMeetingPeriod("");
+    };
+  }, [visible]);
 
   const update = () => {
     let check = 0;
@@ -67,6 +69,12 @@ const ModalCreateMeetingRequest = ({
         setErrorMeetingDate("");
       }
     }
+    if (meetingPeriod === "") {
+      setErrorMeetingPeriod("Ca học không được để trống");
+      ++check;
+    } else {
+      setErrorMeetingPeriod("");
+    }
     if (selectedItemsPerson === "") {
       setErrorTeacher("Giảng viên không được để trống");
       ++check;
@@ -76,17 +84,19 @@ const ModalCreateMeetingRequest = ({
     if (check === 0) {
       try {
         let obj = {
-          id: item.id,
+          idClass: idClass,
           meetingDate: meetingDate,
           meetingPeriod: meetingPeriod,
           typeMeeting: parseInt(typeMeeting),
           teacherId: selectedItemsPerson,
         };
         dispatch(SetLoadingTrue());
-        TeacherMeetingRequestAPI.updateMeetingRequest(obj).then((response) => {
-          dispatch(UpdateMeetingRequest(response.data.data));
-          message.success("Cập nhật yêu cầu thành công !");
-          featchMeeting();
+        TeacherMeetingRequestAPI.createMeetingRequest(obj).then((response) => {
+          if (response.data.data != null) {
+            message.success("Tạo buổi học yêu cầu thành công !");
+          } else {
+            message.error("Tạo buổi học yêu cầu thất bại !");
+          }
           dispatch(SetLoadingFalse());
           onCancel();
         });
@@ -180,7 +190,8 @@ const ModalCreateMeetingRequest = ({
                       </Option>
                     );
                   })}
-                </Select>
+                </Select>{" "}
+                <span style={{ color: "red" }}>{errorMeetingPeriod}</span>
               </Col>
               <Col span={12} style={{ padding: "5px" }}>
                 <span style={{ color: "red" }}>(*) </span>Hình thức:

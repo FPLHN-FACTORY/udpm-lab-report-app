@@ -36,6 +36,7 @@ import { TeacherMeetingPeriodAPI } from "../../../../api/teacher/meeting-period/
 import { SetAdMeetingPeriod } from "../../../../app/admin/AdMeetingPeriodSlice.reducer";
 import { TeacherAPI } from "../../../../api/teacher/TeacherAPI.api";
 import { SetAdTeacher } from "../../../../app/admin/AdTeacherSlice.reducer";
+import ModalCreateMeetingRequest from "./create-meeting-request/ModalCreateMeetingRequest";
 const MeetingInMyClass = () => {
   const dispatch = useAppDispatch();
   dispatch(SetTTrueToggle());
@@ -134,8 +135,18 @@ const MeetingInMyClass = () => {
     setShowModalImport(false);
   };
   const dataMeeting = useAppSelector(GetMeeting);
+  const [showModalCreate, setShowModalCreate] = useState(false);
+
+  const handleCancelModalCreate = () => {
+    setShowModalCreate(false);
+  };
   return (
     <div className="teacher-meeting">
+      <ModalCreateMeetingRequest
+        idClass={classDetail.id}
+        visible={showModalCreate}
+        onCancel={handleCancelModalCreate}
+      />
       {!loading && <LoadingIndicator />}
       <div className="box-one">
         <Link to="/teacher/my-class" style={{ color: "black" }}>
@@ -301,6 +312,24 @@ const MeetingInMyClass = () => {
                     style={{ marginRight: "7px" }}
                   />
                   Gửi yêu cầu tạo buổi học
+                </Button>
+              )}
+              {lock === 0 && (
+                <Button
+                  className="btn_clear"
+                  style={{
+                    backgroundColor: "rgb(38, 144, 214)",
+                    color: "white",
+                    margin: "0px 0px 0 10px",
+                    float: "right",
+                  }}
+                  onClick={() => setShowModalCreate(true)}
+                >
+                  <FontAwesomeIcon
+                    icon={faPaperPlane}
+                    style={{ marginRight: "7px" }}
+                  />
+                  Tạo buổi học yêu cầu
                 </Button>
               )}
               {lock === 0 && (

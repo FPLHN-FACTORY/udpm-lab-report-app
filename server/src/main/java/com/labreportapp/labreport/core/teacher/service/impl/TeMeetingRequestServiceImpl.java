@@ -1,6 +1,7 @@
 package com.labreportapp.labreport.core.teacher.service.impl;
 
 import com.labreportapp.labreport.core.common.response.SimpleResponse;
+import com.labreportapp.labreport.core.teacher.model.TeCreateMeetingRequestRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindMeetingRequestRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeMeetingRequestAgainRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeUpdateMeetingRequestRequest;
@@ -178,6 +179,52 @@ public class TeMeetingRequestServiceImpl implements TeMeetingRequestService {
         }
         obj.setStatusMeetingRequest(meetingNew.getStatusMeetingRequest().ordinal());
         return obj;
+    }
+
+    @Override
+    @Transactional
+    public MeetingRequest create(TeCreateMeetingRequestRequest request) {
+        Optional<Class> findClass = teClassRepository.findById(request.getIdClass());
+        if (findClass.isEmpty()) {
+            throw new RestApiException(Message.CLASS_NOT_EXISTS);
+        }
+        MeetingPeriod meetingPeriodFind = teMeetingPeriodRepository.findById(request.getMeetingPeriod()).get();
+        if (meetingPeriodFind == null) {
+            throw new RestApiException(Message.MEETING_PERIOD_NOT_EXITS);
+        }
+        MeetingRequest meetingRequest = new MeetingRequest();
+        meetingRequest.setClassId(request.getIdClass());
+        meetingRequest.setMeetingDate(request.getMeetingDate());
+        meetingRequest.setMeetingPeriod(request.getMeetingPeriod());
+        meetingRequest.setTeacherId(request.getTeacherId());
+        meetingRequest.setTypeMeeting(TypeMeeting.values()[request.getTypeMeeting()]);
+        meetingRequest.setStatusMeetingRequest(StatusMeetingRequest.CHO_PHE_DUYET);
+        meetingRequest.setName("Buổi 1");
+        MeetingRequest meetingRequestSave = teMeetingRequestRepository.save(meetingRequest);
+        teMeetingRequestRepository.updateNameMeetingRequest(request.getIdClass());
+        SimpleResponse simple = null;
+        StringBuilder stringBuilder = new StringBuilder();
+        Optional<MeetingRequest> meetingRequestFind = teMeetingRequestRepository.findById(meetingRequestSave.getId());
+        stringBuilder.append("Đã tạo buổi học yêu cầu: ");
+        meetingRequestFind.ifPresent(value -> stringBuilder.append(value.getName()));
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        String meetingDate = sdf.format(request.getMeetingDate());
+        stringBuilder.append(", ngày học ").append(meetingDate);
+        if (request.getTypeMeeting() == 0) {
+            stringBuilder.append(", hình thức Online");
+        } else {
+            stringBuilder.append(", hình thức Offline");
+        }
+        stringBuilder.append(meetingPeriodFind.getName());
+
+        if (!request.getTeacherId().equals("") && request.getTeacherId() != null) {
+            simple = callApiIdentity.handleCallApiGetUserById(request.getTeacherId());
+            stringBuilder.append(", giảng viên: ").append(simple.getName()).append("-").append(simple.getUserName()).append(".");
+        }
+        String nameSemester = loggerUtil.getNameSemesterByIdClass(request.getIdClass());
+        String nameClass = loggerUtil.getCodeClassByIdClass(request.getIdClass());
+        loggerUtil.sendLogStreamClass(stringBuilder.toString(), nameClass, nameSemester);
+        return meetingRequestSave;
     }
 
     @Override
