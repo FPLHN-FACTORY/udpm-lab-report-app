@@ -117,9 +117,9 @@ public class TeMeetingRequestServiceImpl implements TeMeetingRequestService {
         LocalDate meetingDateFind = Instant.ofEpochMilli(request.getMeetingDate())
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();
-        Optional<MeetingRequest> findDoubleMeeting = teMeetingRequestRepository
+        List<MeetingRequest> findDoubleMeeting = teMeetingRequestRepository
                 .getMeetingRequestByIdClassAndMeetingDateAndMeetingPeriod(classOptional.get().getId(), meetingDateFind, request.getMeetingPeriod());
-        if (findDoubleMeeting.isPresent()) {
+        if (findDoubleMeeting.size() > 0) {
             throw new RestApiException("Đã tồn tại buổi học, không thể sửa !");
         }
         MeetingPeriod meetingPeriodNew = teMeetingPeriodRepository.findById(request.getMeetingPeriod()).get();
@@ -205,9 +205,9 @@ public class TeMeetingRequestServiceImpl implements TeMeetingRequestService {
         LocalDate meetingDateFind = Instant.ofEpochMilli(request.getMeetingDate())
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();
-        Optional<MeetingRequest> findDoubleMeeting = teMeetingRequestRepository
+        List<MeetingRequest> findDoubleMeeting = teMeetingRequestRepository
                 .getMeetingRequestByIdClassAndMeetingDateAndMeetingPeriod(request.getIdClass(), meetingDateFind, request.getMeetingPeriod());
-        if (findDoubleMeeting.isPresent()) {
+        if (findDoubleMeeting.size() >0) {
             throw new RestApiException("Đã tồn tại buổi học !");
         }
         MeetingRequest meetingRequest = new MeetingRequest();

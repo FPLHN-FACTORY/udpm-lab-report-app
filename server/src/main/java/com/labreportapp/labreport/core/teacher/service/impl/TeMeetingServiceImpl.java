@@ -84,6 +84,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -761,6 +762,28 @@ public class TeMeetingServiceImpl implements TeMeetingService {
                 message.setCharAt(message.length() - 1, '.');
             }
             if (teExcelResponseMessage.getStatus()) {
+                List<MeetingRequest> listfindChoPheDuyet = teMeetingRequestRepository.getAllStatusChoPheDuyet(idClass);
+//                List<MeetingRequest> listDelete = new ArrayList<>();
+//               if (listfindChoPheDuyet.size() >0){
+//                   listMeetingSend.forEach(add ->{
+//                       listfindChoPheDuyet.forEach(i ->{
+//                           if (compareDates(i.getMeetingDate(),add.getMeetingDate())){
+//
+//                           }
+//                       });
+//                   });
+                if (!listfindChoPheDuyet.isEmpty()) {
+                    Iterator<MeetingRequest> iterator = listMeetingSend.iterator();
+                    while (iterator.hasNext()) {
+                        MeetingRequest add = iterator.next();
+                        for (MeetingRequest i : listfindChoPheDuyet) {
+                            if (compareDates(i.getMeetingDate(), add.getMeetingDate())) {
+                                iterator.remove();
+                                break;
+                            }
+                        }
+                    }
+                }
                 teMeetingRequestRepository.saveAll(listMeetingSend);
                 teMeetingRequestRepository.updateNameMeetingRequest(idClass);
                 teExcelResponseMessage.setMessage("Gửi yêu cầu thành công !");
@@ -777,12 +800,25 @@ public class TeMeetingServiceImpl implements TeMeetingService {
             mapGiangVien.clear();
             file.getInputStream().close();
             return teExcelResponseMessage;
-        } catch (Exception e) {
+        } catch (
+                Exception e) {
             e.printStackTrace();
             teExcelResponseMessage.setStatus(false);
             teExcelResponseMessage.setMessage("Lỗi hệ thống, vui lòng F5 lại trang !");
             return teExcelResponseMessage;
         }
+
+    }
+
+    public boolean compareDates(Long date1, Long date2) {
+        LocalDate localDate1 = convertLongToLocalDate(date1);
+        LocalDate localDate2 = convertLongToLocalDate(date2);
+        return localDate1.isEqual(localDate2);
+    }
+
+    private LocalDate convertLongToLocalDate(Long dateAsLong) {
+        Instant instant = Instant.ofEpochMilli(dateAsLong);
+        return instant.atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
     public Optional<MeetingRequest> getMeetingRequestByDateTimeAndCa(
