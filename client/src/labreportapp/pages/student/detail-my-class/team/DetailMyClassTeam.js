@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import "./style-detail-my-class-team.css";
 import { Link, useNavigate } from "react-router-dom";
 import { ControlOutlined, ProjectOutlined } from "@ant-design/icons";
-import { useAppDispatch } from "../../../../app/hook";
+import { useAppDispatch, useAppSelector } from "../../../../app/hook";
 import { useEffect, useState } from "react";
 import LoadingIndicator from "../../../../helper/loading";
 import { StMyTeamClassAPI } from "../../../../api/student/StTeamClass";
@@ -36,6 +36,7 @@ import { StMyClassAPI } from "../../../../api/student/StMyClassAPI";
 import { SetStStudentClasses } from "../../../../app/student/StStudentClasses.reducer";
 import StModalShowHistory from "./modal-show-history/StModalShowHistory";
 import { StClassAPI } from "../../../../api/student/StClassAPI";
+import { GetUserCurrent } from "../../../../app/common/UserCurrent.reducer";
 
 const { confirm } = Modal;
 
@@ -160,6 +161,8 @@ const DetailMyClassTeam = () => {
     featchClass(id);
   }, []);
 
+  const userCurrent = useAppSelector(GetUserCurrent);
+
   const columns = [
     {
       title: "#",
@@ -210,7 +213,7 @@ const DetailMyClassTeam = () => {
       dataIndex: "actions",
       key: "actions",
       render: (text, record) => {
-        if (record.role !== 0) {
+        if (record.role !== 0 && userCurrent.id === record.studentId) {
           return (
             <Tooltip title="Chuyển quyền trưởng nhóm">
               <FontAwesomeIcon
