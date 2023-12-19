@@ -4,7 +4,7 @@ import "./styleUpdateFiledClass.css";
 import { useEffect, useState } from "react";
 import moment from "moment";
 import { useAppDispatch } from "../../../app/hook";
-import LoadingIndicatorNoOverlay from "../../../../helper/loadingNoOverlay";
+import LoadingIndicatorNoOverlay from "../../../helper/loadingNoOverlay";
 import {
   convertDateLongToString,
   convertHourAndMinuteToString,
