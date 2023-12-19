@@ -6,6 +6,7 @@ import com.labreportapp.labreport.core.teacher.model.request.TeFindClassSelectRe
 import com.labreportapp.labreport.core.teacher.model.request.TeFindClassSentStudentRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindClassStatisticalRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindUpdateStatusClassRequest;
+import com.labreportapp.labreport.core.teacher.model.request.TeUpdateFiledClassRequest;
 import com.labreportapp.labreport.core.teacher.model.response.TeClassResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeClassSentStudentRespone;
 import com.labreportapp.labreport.core.teacher.model.response.TeClassStatisticalResponse;
@@ -21,6 +22,8 @@ import java.util.List;
 public interface TeClassService {
 
     PageableObject<TeClassResponse> searchTeacherClass(final TeFindClassRequest request);
+
+    TeClassResponse updateFiledClass(TeUpdateFiledClassRequest request);
 
     PageableObject<TeClassSentStudentRespone> findClassBySentStudent(final TeFindClassSentStudentRequest request);
 

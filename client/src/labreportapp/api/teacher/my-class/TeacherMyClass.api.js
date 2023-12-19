@@ -96,4 +96,19 @@ export class TeacherMyClassAPI {
       url: url + "/get-all",
     });
   }
+
+  static getClassDetailById(id) {
+    return request({
+      method: "GET",
+      url: `/teacher/class/information-class/${id}`,
+    });
+  }
+
+  static updateFiledClass(data) {
+    return request({
+      method: "PUT",
+      url: url + `/update-filed-class`,
+      data: data,
+    });
+  }
 }

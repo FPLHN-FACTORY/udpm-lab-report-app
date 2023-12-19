@@ -1,11 +1,13 @@
 package com.labreportapp.labreport.core.teacher.controller;
 
+import com.labreportapp.labreport.core.admin.service.AdClassService;
 import com.labreportapp.labreport.core.common.base.PageableObject;
 import com.labreportapp.labreport.core.common.base.ResponseObject;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindClassRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindClassSelectRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindClassSentStudentRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindUpdateStatusClassRequest;
+import com.labreportapp.labreport.core.teacher.model.request.TeUpdateFiledClassRequest;
 import com.labreportapp.labreport.core.teacher.model.response.TeClassResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeClassSentStudentRespone;
 import com.labreportapp.labreport.core.teacher.service.TeClassService;
@@ -17,7 +19,6 @@ import com.labreportapp.portalprojects.core.admin.service.AdGroupProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -47,6 +48,9 @@ public class TeClassController {
 
     @Autowired
     private AdGroupProjectService adGroupProjectService;
+
+    @Autowired
+    private AdClassService adClassService;
 
     @GetMapping("")
     public ResponseObject searchTeClass(final TeFindClassRequest teFindClass) {
@@ -107,5 +111,15 @@ public class TeClassController {
     @GetMapping("/get-all")
     public ResponseObject getAllGroupToProjectManagement() {
         return new ResponseObject(adGroupProjectService.getAllGroupToProjectManagement());
+    }
+
+    @GetMapping("/information-class/{id}")
+    public ResponseObject showDetailClassById(@PathVariable("id") String id) {
+        return new ResponseObject(adClassService.adFindClassById(id));
+    }
+
+    @PutMapping("/update-filed-class")
+    public ResponseObject updateClassFiled(@RequestBody TeUpdateFiledClassRequest request) {
+        return new ResponseObject(teClassService.updateFiledClass(request));
     }
 }

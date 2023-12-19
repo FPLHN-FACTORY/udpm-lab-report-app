@@ -69,6 +69,30 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
     Page<TeClassResponse> findClassBySemesterAndActivity(@Param("req") TeFindClassRequest req, Pageable pageable);
 
     @Query(value = """
+            SELECT
+            c.code AS code,
+            c.id AS id,
+            c.start_time AS start_time,
+            c.password AS password,
+            mp.name AS class_period, mp.start_hour AS start_hour, mp.start_minute AS start_minute ,
+            mp.end_hour AS end_hour, mp.end_minute AS end_minute,
+            c.class_size AS class_size,
+            c.teacher_id AS teacher_id,
+            c.activity_id AS activity_id,
+            c.created_date AS created_date,
+            c.descriptions AS descriptions,
+            l.name AS level,
+            a.name AS activity
+            FROM activity a
+            JOIN level l ON l.id = a.level_id
+            JOIN class c ON c.activity_id = a.id
+            LEFT JOIN meeting_period mp ON mp.id = c.class_period
+            JOIN semester s ON s.id = a.semester_id
+            WHERE c.id =:idClass
+                     """, nativeQuery = true)
+    TeClassResponse findClassMyTeacherByIdClass(@Param("idClass") String idClass);
+
+    @Query(value = """
             SELECT ROW_NUMBER() OVER(ORDER BY c.code ASC) AS stt,
                 c.code AS code,
                 c.id AS id,

@@ -5,6 +5,7 @@ import {
   faEye,
   faFilter,
   faHome,
+  faPencilAlt,
   faTableList,
 } from "@fortawesome/free-solid-svg-icons";
 import LoadingIndicator from "../../helper/loading";
@@ -36,6 +37,7 @@ import {
   convertHourAndMinuteToString,
 } from "../../helper/util.helper";
 import { TeacherMeetingPeriodAPI } from "../../api/teacher/meeting-period/TeacherMeetingPeriod.api";
+import ModalUpdateFiledClass from "./update-filed-class/ModalUpdateFiledClass";
 
 const { Option } = Select;
 const TeacherMyClass = () => {
@@ -257,6 +259,24 @@ const TeacherMyClass = () => {
       key: "actions",
       render: (text, record) => (
         <>
+          <Tooltip
+            title="Cập nhật"
+            onClick={() => {
+              setShowUpdateModal(true);
+              setIDClassUpdate(record.id);
+            }}
+          >
+            <FontAwesomeIcon
+              icon={faPencilAlt}
+              size="1x"
+              style={{
+                marginLeft: 7,
+                marginRight: "15px",
+                color: "rgb(38, 144, 214)",
+                cursor: "pointer",
+              }}
+            />
+          </Tooltip>
           <div className="box_icon" style={{ textAlign: "center" }}>
             <Link
               to={`/teacher/my-class/post/${record.id}`}
@@ -274,6 +294,12 @@ const TeacherMyClass = () => {
   ];
   const filterOptions = (input, option) => {
     return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+  };
+  const [idClassUpdate, setIDClassUpdate] = useState("");
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const handleModalUpdateCancel = async () => {
+    document.querySelector("body").style.overflowX = "auto";
+    setShowUpdateModal(false);
   };
   return (
     <div>
@@ -389,7 +415,6 @@ const TeacherMyClass = () => {
             <Row gutter={24} style={{ padding: "5px 2% 0" }}>
               <Col span={8}>
                 <span>Mã lớp</span>
-
                 <br />
                 <Input
                   style={{ width: "100%", marginTop: "6px" }}
@@ -527,8 +552,12 @@ const TeacherMyClass = () => {
           </div>
         </div>
       </div>
+      <ModalUpdateFiledClass
+        visible={showUpdateModal}
+        onCancel={handleModalUpdateCancel}
+        id={idClassUpdate}
+      />
     </div>
   );
 };
-
 export default TeacherMyClass;

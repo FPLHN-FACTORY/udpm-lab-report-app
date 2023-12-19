@@ -7,6 +7,7 @@ import com.labreportapp.labreport.core.teacher.model.request.TeFindClassSelectRe
 import com.labreportapp.labreport.core.teacher.model.request.TeFindClassSentStudentRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindClassStatisticalRequest;
 import com.labreportapp.labreport.core.teacher.model.request.TeFindUpdateStatusClassRequest;
+import com.labreportapp.labreport.core.teacher.model.request.TeUpdateFiledClassRequest;
 import com.labreportapp.labreport.core.teacher.model.response.TeClassResponse;
 import com.labreportapp.labreport.core.teacher.model.response.TeClassSentStudentRespone;
 import com.labreportapp.labreport.core.teacher.model.response.TeClassStatisticalResponse;
@@ -16,8 +17,10 @@ import com.labreportapp.labreport.core.teacher.repository.TeActivityRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeClassConfigurationRepository;
 import com.labreportapp.labreport.core.teacher.repository.TeClassRepository;
 import com.labreportapp.labreport.core.teacher.service.TeClassService;
+import com.labreportapp.labreport.core.teacher.service.TeMeetingPeriodService;
 import com.labreportapp.labreport.entity.Class;
 import com.labreportapp.labreport.entity.ClassConfiguration;
+import com.labreportapp.labreport.entity.MeetingPeriod;
 import com.labreportapp.labreport.infrastructure.constant.StatusClass;
 import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.labreport.util.CallApiIdentity;
@@ -70,6 +73,9 @@ public class TeClassServiceImpl implements TeClassService {
     @Autowired
     private LoggerUtil loggerUtil;
 
+    @Autowired
+    private TeMeetingPeriodService teMeetingPeriodService;
+
     @Override
     public PageableObject<TeClassResponse> searchTeacherClass(final TeFindClassRequest teFindClass) {
         String idSemesterCurrent = semesterHelper.getSemesterCurrent();
@@ -84,6 +90,61 @@ public class TeClassServiceImpl implements TeClassService {
         Pageable pageable = PageRequest.of(teFindClass.getPage() - 1, teFindClass.getSize());
         Page<TeClassResponse> pageList = teClassRepository.findClassBySemesterAndActivity(teFindClass, pageable);
         return new PageableObject<>(pageList);
+    }
+
+    @Override
+    @Transactional
+    public TeClassResponse updateFiledClass(TeUpdateFiledClassRequest request) {
+        Optional<Class> classOptional = teClassRepository.findById(request.getIdClass());
+        if (classOptional.isEmpty()) {
+            throw new RestApiException(Message.CLASS_NOT_EXISTS);
+        }
+        List<MeetingPeriod> listMeetingPeriod = teMeetingPeriodService.listMeetingPeriod();
+        if (listMeetingPeriod.size() == 0) {
+            throw new RestApiException("Không tồn tại ca học nào");
+        }
+        MeetingPeriod meetingPeriodOld = new MeetingPeriod();
+        meetingPeriodOld.setId(classOptional.get().getId());
+        meetingPeriodOld.setName("");
+        MeetingPeriod meetingPeriodNew = new MeetingPeriod();
+        meetingPeriodNew.setId(request.getClassPeriod());
+        meetingPeriodNew.setName("");
+        listMeetingPeriod.forEach(i -> {
+            if (!request.getClassPeriod().equals("")) {
+                if (i.getId().equals(request.getClassPeriod())) {
+                    meetingPeriodNew.setName(i.getName());
+                }
+            }
+            if (classOptional.get().getClassPeriod() != null) {
+                if (!classOptional.get().getClassPeriod().equals("")) {
+                    meetingPeriodOld.setName(i.getName());
+                }
+            }
+        });
+        StringBuilder message = new StringBuilder();
+        if (meetingPeriodOld.getId() != null) {
+            if (!meetingPeriodOld.getId().equals(meetingPeriodNew.getId())) {
+                message.append(" Ca học từ ").append(meetingPeriodOld.getName()).append(" thành ").append(meetingPeriodNew.getName()).append(",");
+            }
+        }
+        if (classOptional.get().getDescriptions() != null) {
+            if (!classOptional.get().getDescriptions().equals(request.getDescriptions())) {
+                message.append(" Mô tả từ \"").append(classOptional.get().getDescriptions()).append("\" thành \"").append(request.getDescriptions()).append(",");
+            }
+        }
+        if (message.length() > 0 && message.charAt(message.length() - 1) == ',') {
+            message.setCharAt(message.length() - 1, '.');
+            String nameSemester = loggerUtil.getNameSemesterByIdClass(classOptional.get().getId());
+            loggerUtil.sendLogStreamClass("Đã cập nhật" + message.toString(), classOptional.get().getCode(), nameSemester);
+        }
+        classOptional.get().setClassPeriod(request.getClassPeriod());
+        classOptional.get().setDescriptions(request.getDescriptions());
+        teClassRepository.save(classOptional.get());
+        TeClassResponse find = teClassRepository.findClassMyTeacherByIdClass(request.getIdClass());
+        if (find == null) {
+            throw new RestApiException(Message.CLASS_NOT_EXISTS);
+        }
+        return find;
     }
 
     @Override
@@ -131,11 +192,11 @@ public class TeClassServiceImpl implements TeClassService {
     @Override
     public TeDetailClassResponse findClassById(final String id) {
         Optional<TeDetailClassResponse> classCheck = teClassRepository.findClassById(id);
-        if (!classCheck.isPresent()) {
+        if (classCheck.isEmpty()) {
             throw new NotFoundException(Message.CLASS_NOT_EXISTS);
         }
         Optional<Class> classFind = teClassRepository.findById(id);
-        if (!classFind.isPresent()) {
+        if (classFind.isEmpty()) {
             throw new NotFoundException(Message.CLASS_NOT_EXISTS);
         }
         String idUserCurrent = labReportAppSession.getUserId();
@@ -162,7 +223,6 @@ public class TeClassServiceImpl implements TeClassService {
             throw new RestApiException(Message.CLASS_NOT_EXISTS);
         }
         Class classUp = classFind.get();
-        String nameSemester = loggerUtil.getNameSemesterByIdClass(classFind.get().getId());
         String message = "";
         if (request.getStatus() == 0) {
             message = CompareUtil.compareAndConvertMessage("trạng thái của lớp"
@@ -171,6 +231,7 @@ public class TeClassServiceImpl implements TeClassService {
             message = CompareUtil.compareAndConvertMessage("trạng thái của lớp"
                     , "\"Mở\" ", "\"Khóa\". ", "");
         }
+        String nameSemester = loggerUtil.getNameSemesterByIdClass(classFind.get().getId());
         loggerUtil.sendLogStreamClass(message, classFind.get().getCode(), nameSemester);
         classUp.setStatusClass(request.getStatus() == 0 ? StatusClass.OPEN : StatusClass.LOCK);
         return teClassRepository.save(classUp);
