@@ -270,7 +270,7 @@ const TeacherMyClass = () => {
       key: "actions",
       render: (text, record) => (
         <>
-          <div className="box_icon">
+          <div>
             <Tooltip
               title="Cập nhật"
               onClick={() => {
@@ -280,6 +280,7 @@ const TeacherMyClass = () => {
             >
               <FontAwesomeIcon
                 icon={faPencilAlt}
+                className="icon"
                 size="1x"
                 style={{
                   marginLeft: 7,
@@ -289,8 +290,6 @@ const TeacherMyClass = () => {
                 }}
               />
             </Tooltip>
-          </div>
-          <div className="box_icon">
             <Link
               to={`/teacher/my-class/post/${record.id}`}
               className="btn btn-success ml-4"
