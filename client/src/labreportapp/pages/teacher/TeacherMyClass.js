@@ -38,6 +38,9 @@ import {
 } from "../../helper/util.helper";
 import { TeacherMeetingPeriodAPI } from "../../api/teacher/meeting-period/TeacherMeetingPeriod.api";
 import ModalUpdateFiledClass from "./update-filed-class/ModalUpdateFiledClass";
+import { SetAdMeetingPeriod } from "../../app/admin/AdMeetingPeriodSlice.reducer";
+import { TeacherAPI } from "../../api/teacher/TeacherAPI.api";
+import { SetAdTeacher } from "../../app/admin/AdTeacherSlice.reducer";
 
 const { Option } = Select;
 const TeacherMyClass = () => {
@@ -69,6 +72,7 @@ const TeacherMyClass = () => {
     featchDataLevel();
     featchDataSemester();
     featchDataMeetingPeriod();
+    fetchDataTeacher();
   }, []);
 
   useEffect(() => {
@@ -144,8 +148,15 @@ const TeacherMyClass = () => {
     try {
       await TeacherMeetingPeriodAPI.getPeriod().then((respone) => {
         setListMeetingPeriod(respone.data.data);
+        dispatch(SetAdMeetingPeriod(respone.data.data));
       });
     } catch (error) {}
+  };
+
+  const fetchDataTeacher = async () => {
+    const responseTeacherData = await TeacherAPI.getAllTeacher();
+    const teacherData = responseTeacherData.data.data;
+    dispatch(SetAdTeacher(teacherData));
   };
 
   const handleSearch = async () => {
@@ -259,7 +270,7 @@ const TeacherMyClass = () => {
       key: "actions",
       render: (text, record) => (
         <>
-          <div className="box_icon" style={{ textAlign: "center" }}>
+          <div>
             <Tooltip
               title="Cập nhật"
               onClick={() => {
@@ -269,6 +280,7 @@ const TeacherMyClass = () => {
             >
               <FontAwesomeIcon
                 icon={faPencilAlt}
+                className="icon"
                 size="1x"
                 style={{
                   marginLeft: 7,
@@ -278,8 +290,6 @@ const TeacherMyClass = () => {
                 }}
               />
             </Tooltip>
-          </div>
-          <div className="box_icon" style={{ textAlign: "center" }}>
             <Link
               to={`/teacher/my-class/post/${record.id}`}
               className="btn btn-success ml-4"
