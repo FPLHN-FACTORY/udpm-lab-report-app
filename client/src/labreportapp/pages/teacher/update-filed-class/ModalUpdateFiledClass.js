@@ -328,14 +328,16 @@ const ModalUpdateFiledClass = ({ visible, onCancel, id }) => {
               </Col>
             </Row>
             <Row style={{ marginBottom: "15px" }}>
+              <span>Mô tả: </span>
+              <br />
               <Col span={24}>
                 <Input.TextArea
                   value={descriptions}
                   onChange={(e) => setDescriptions(e.target.value)}
-                  placeholder="Nhập đánh giá"
-                  style={{ width: "80%" }}
+                  placeholder="Nhập mô tả"
+                  style={{ width: "100%" }}
                   autoSize={{
-                    minRows: 5,
+                    minRows: 3,
                   }}
                 />
               </Col>
