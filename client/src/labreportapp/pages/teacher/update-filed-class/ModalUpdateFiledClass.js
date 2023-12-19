@@ -181,8 +181,8 @@ const ModalUpdateFiledClass = ({ visible, onCancel, id }) => {
             <span style={{ fontSize: "18px" }}>Cập nhật lớp học</span>
           </div>
           <div style={{ marginTop: "15px", borderBottom: "1px solid black" }}>
-            <Row style={{ marginBottom: "15px" }}>
-              <Col span={12} style={{ paddingRight: "10px" }}>
+            <Row gutter={16} style={{ marginBottom: "15px" }}>
+              <Col span={12}>
                 <span>Học kỳ: </span> <br />
                 <Select
                   showSearch
@@ -203,7 +203,7 @@ const ModalUpdateFiledClass = ({ visible, onCancel, id }) => {
                     ))}
                 </Select>
               </Col>
-              <Col span={12} style={{ paddingRight: "10px" }}>
+              <Col span={12}>
                 <span>Mã lớp:</span> <br />
                 <Input
                   value={code}
@@ -213,8 +213,8 @@ const ModalUpdateFiledClass = ({ visible, onCancel, id }) => {
                 />
               </Col>
             </Row>
-            <Row style={{ marginBottom: "15px" }}>
-              <Col span={12} style={{ paddingRight: "10px" }}>
+            <Row gutter={16} style={{ marginBottom: "15px" }}>
+              <Col span={12}>
                 <span>Giảng viên:</span> <br />
                 <Select
                   showSearch
@@ -233,7 +233,7 @@ const ModalUpdateFiledClass = ({ visible, onCancel, id }) => {
                     ))}
                 </Select>
               </Col>
-              <Col span={12} style={{ paddingRight: "10px" }}>
+              <Col span={12}>
                 <span>Thời gian bắt đầu:</span> <br />
                 <Input
                   value={startTime}
@@ -243,8 +243,8 @@ const ModalUpdateFiledClass = ({ visible, onCancel, id }) => {
                 />
               </Col>
             </Row>
-            <Row style={{ marginBottom: "15px" }}>
-              <Col span={12} style={{ paddingRight: "10px" }}>
+            <Row gutter={16} style={{ marginBottom: "15px" }}>
+              <Col span={12}>
                 <span>Hoạt động:</span> <br />
                 <Select
                   showSearch
@@ -260,7 +260,20 @@ const ModalUpdateFiledClass = ({ visible, onCancel, id }) => {
                     ))}
                 </Select>
               </Col>
-              <Col span={12} style={{ paddingRight: "10px" }}>
+              <Col span={12}>
+                <span>Quyền giảng viên chỉnh sửa:</span> <br />
+                <Select
+                  style={{ width: "100%" }}
+                  value={statusTeacherEdit}
+                  disabled={true}
+                >
+                  <Option value="0">Cho phép</Option>
+                  <Option value="1">Không cho phép</Option>
+                </Select>
+              </Col>
+            </Row>
+            <Row gutter={16} style={{ marginBottom: "15px" }}>
+              <Col span={12}>
                 <span style={{ color: "red" }}>(*) </span>{" "}
                 <span>Ca học dự kiến:</span> <br />
                 {listMeetingPeriod != null && (
@@ -289,24 +302,7 @@ const ModalUpdateFiledClass = ({ visible, onCancel, id }) => {
                   </Select>
                 )}
               </Col>
-              <Col
-                span={12}
-                style={{ paddingRight: "10px", marginTop: "15px" }}
-              >
-                <span>Quyền giảng viên chỉnh sửa:</span> <br />
-                <Select
-                  style={{ width: "100%" }}
-                  value={statusTeacherEdit}
-                  disabled={true}
-                >
-                  <Option value="0">Cho phép</Option>
-                  <Option value="1">Không cho phép</Option>
-                </Select>
-              </Col>
-              <Col
-                span={12}
-                style={{ paddingRight: "10px", marginTop: "15px" }}
-              >
+              <Col span={12}>
                 <span>Trạng thái lớp học: </span>
                 <br />
                 <Select
