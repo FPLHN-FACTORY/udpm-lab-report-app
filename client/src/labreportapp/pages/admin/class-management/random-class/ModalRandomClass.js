@@ -15,6 +15,7 @@ import {
 } from "../../../../app/common/Loading.reducer";
 import { convertDateLongToString } from "../../../../helper/util.helper";
 
+const { confirm } = Modal;
 const { Option } = Select;
 
 const ModalRandomClass = ({ visible, onCancel, fetchData }) => {
@@ -23,7 +24,7 @@ const ModalRandomClass = ({ visible, onCancel, fetchData }) => {
   const [idActivitiSearch, setIdActivitiSearch] = useState("");
   const [activityDataAll, setActivityDataAll] = useState([]);
   const [errorActivity, setErrorActivity] = useState("");
-  const [soLopRandom, setSoLopRandom] = useState(0);
+  const [soLopRandom, setSoLopRandom] = useState(1);
   const [errorSoLopRandom, setErrorSoLopRandom] = useState("");
   const [startTime, setStartTime] = useState("");
   const [errorStartTime, setErrorStartTime] = useState("");
@@ -105,19 +106,33 @@ const ModalRandomClass = ({ visible, onCancel, fetchData }) => {
       ++check;
     } else {
       setErrorSoLopRandom("");
+      if (soLopRandom <= 0) {
+        setErrorSoLopRandom("Số lớp cần tạo phải lớn hơn hoặc bằng 1");
+        ++check;
+      } else {
+        setErrorSoLopRandom("");
+      }
     }
+
     if (check === 0) {
-      let obj = {
-        activityId: idActivitiSearch,
-        numberRandon: soLopRandom,
-        startTime: moment(startTime, "YYYY-MM-DD").valueOf(),
-      };
-      dispatch(SetLoadingTrue());
-      ClassAPI.randomClass(obj).then((response) => {
-        message.success("Tạo nhiều lớp thành công !");
-        dispatch(SetLoadingFalse());
-        fetchData();
-        onCancel();
+      confirm({
+        title: "Xác nhận tạp nhiều lớp học",
+        content: "Bạn có chắc chắn muốn tạp nhiều lớp học?",
+        onOk() {
+          let obj = {
+            activityId: idActivitiSearch,
+            numberRandon: soLopRandom,
+            startTime: moment(startTime, "YYYY-MM-DD").valueOf(),
+          };
+          dispatch(SetLoadingTrue());
+          ClassAPI.randomClass(obj).then((response) => {
+            message.success("Tạo nhiều lớp thành công !");
+            dispatch(SetLoadingFalse());
+            fetchData();
+            onCancel();
+          });
+        },
+        onCancel() {},
       });
     }
   };
@@ -155,16 +170,17 @@ const ModalRandomClass = ({ visible, onCancel, fetchData }) => {
               >
                 <Option value="">Chọn 1 học kì</Option>
 
-                {semesterDataAll != null && semesterDataAll.map((semester) => (
-                  <Option key={semester.id} value={semester.id}>
-                    {semester.name +
-                      " (" +
-                      convertDateLongToString(semester.startTime) +
-                      " - " +
-                      convertDateLongToString(semester.endTime) +
-                      ")"}
-                  </Option>
-                ))}
+                {semesterDataAll != null &&
+                  semesterDataAll.map((semester) => (
+                    <Option key={semester.id} value={semester.id}>
+                      {semester.name +
+                        " (" +
+                        convertDateLongToString(semester.startTime) +
+                        " - " +
+                        convertDateLongToString(semester.endTime) +
+                        ")"}
+                    </Option>
+                  ))}
               </Select>
             </Col>
             <Col span={12} style={{ padding: "5px" }}>
@@ -183,17 +199,17 @@ const ModalRandomClass = ({ visible, onCancel, fetchData }) => {
                 {activityDataAll.length === 0 && (
                   <Option value="none">Không có hoạt động</Option>
                 )}
-                {activityDataAll != null && activityDataAll.map((activity) => (
-                  <Option key={activity.id} value={activity.id}>
-                    {activity.name}
-                  </Option>
-                ))}
+                {activityDataAll != null &&
+                  activityDataAll.map((activity) => (
+                    <Option key={activity.id} value={activity.id}>
+                      {activity.name}
+                    </Option>
+                  ))}
               </Select>
               <span style={{ color: "red" }}>{errorActivity}</span>
             </Col>
             <Col span={12} style={{ padding: "5px" }}>
-              <span style={{ color: "red" }}>(*) </span> Số lớp muốn tạo:{" "}
-              <br />
+              <span style={{ color: "red" }}>(*) </span> Số lớp muốn tạo: <br />
               <Input
                 type="number"
                 min={0}
