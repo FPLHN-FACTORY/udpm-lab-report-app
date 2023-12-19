@@ -100,7 +100,6 @@ const SemesterManagement = () => {
       dataIndex: "name",
       key: "name",
       sorter: (a, b) => a.name.localeCompare(b.name),
-      width: "30%",
     },
     {
       title: "Thời gian bắt đầu / kết thúc",
