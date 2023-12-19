@@ -152,6 +152,10 @@ public class StTeamClassServiceImpl implements StTeamClassService {
         if (studentClasses.getTeamId() == null) {
             throw new RestApiException(Message.STUDENT_HAD_NOT_TEAM);
         }
+        Integer countStudentClasses = stStudentClassesRepository.countStudentClasses(studentClasses.getTeamId(), request.getIdClass());
+        if (studentClasses.getRole() == RoleTeam.LEADER && countStudentClasses > 1) {
+            throw new RestApiException("Bạn đang là trưởng nhóm, hãy chuyển quyền cho thành viên khác để rời khỏi nhóm.");
+        }
         String idTeam = studentClasses.getTeamId();
         studentClasses.setTeamId(null);
         studentClasses.setRole(null);
