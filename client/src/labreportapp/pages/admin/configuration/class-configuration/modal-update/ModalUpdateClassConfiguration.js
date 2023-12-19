@@ -238,6 +238,10 @@ const ModalUpdateClassConfiguration = ({
             />
             <span className="error">{errorMaximumNumberOfBreaks}</span>
           </Col>
+        </Row>
+      </div>
+      <div style={{ marginTop: "15px" }}>
+        <Row gutter={16} style={{ marginBottom: "15px" }}>
           <Col span={12}>
             <span>Số lượng mật ong:</span> <br />
             <Input
