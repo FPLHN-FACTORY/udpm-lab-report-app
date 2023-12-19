@@ -218,7 +218,7 @@ const ModalUpdateMeetingRequest = ({
               </Col>
             </Row>
           </div>
-          <div style={{ paddingTop: "15px", float: "right", right: 0 }}>
+          <div style={{ paddingTop: "15px", right: 0 }}>
             <Button
               // style={{
               //   marginRight: "5px",
@@ -241,6 +241,7 @@ const ModalUpdateMeetingRequest = ({
               //   color: "white",
               //   width: "88px",
               // }}
+              style={{ width: "88px" }}
               className="btn_filter"
               onClick={onCancel}
             >
