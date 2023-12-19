@@ -2,6 +2,7 @@ import { Button, Input, Modal, Select, message } from "antd";
 import { useEffect, useState } from "react";
 import { TeacherPointAPI } from "../../../../../api/teacher/point/TeacherPoint.api";
 import { useParams } from "react-router";
+const { confirm } = Modal;
 
 const ModalAddHoney = ({ visible, onCancel, listCategory }) => {
   const [categoryId, setCategoryId] = useState("");
@@ -23,12 +24,19 @@ const ModalAddHoney = ({ visible, onCancel, listCategory }) => {
       setErrorCategory("");
     }
     if (check === 0) {
-      TeacherPointAPI.addHoney(idClass, categoryId).then(
-        (response) => {
-          message.success("Gửi yêu cầu cộng mật ong thành công !");
+      confirm({
+        title: "Xác nhận gửi yêu cầu cộng mật ong",
+        content: "Bạn có chắc chắn muốn gửi yêu cầu cộng mật ong?",
+        onOk() {
+          TeacherPointAPI.addHoney(idClass, categoryId).then(
+            (response) => {
+              message.success("Gửi yêu cầu cộng mật ong thành công !");
+            },
+            (error) => {}
+          );
         },
-        (error) => {}
-      );
+        onCancel() {},
+      });
     }
   };
   return (

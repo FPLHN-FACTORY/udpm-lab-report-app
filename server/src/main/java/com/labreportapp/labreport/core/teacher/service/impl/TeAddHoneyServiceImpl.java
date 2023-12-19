@@ -13,6 +13,7 @@ import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.labreport.repository.ClassConfigurationRepository;
 import com.labreportapp.labreport.repository.ClassRepository;
 import com.labreportapp.labreport.util.CallApiHoney;
+import com.labreportapp.labreport.util.LoggerUtil;
 import com.labreportapp.portalprojects.infrastructure.constant.Message;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.NotFoundException;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
@@ -49,6 +50,9 @@ public class TeAddHoneyServiceImpl implements TeAddHoneyService {
     @Autowired
     private LabReportAppSession session;
 
+    @Autowired
+    private LoggerUtil loggerUtil;
+
     @Override
     public List<CategoryHoneyResponse> getAllCategory() {
         return callApiHoney.getAllListCategory();
@@ -72,12 +76,15 @@ public class TeAddHoneyServiceImpl implements TeAddHoneyService {
             throw new RestApiException(Message.KHONG_CO_SINH_VIEN_NAO_DU_DIEU_KIEN_CONG_MAT_ONG);
         }
         List<ItemStudentHoneyRequest> listStudent = new ArrayList<>();
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Giảng viên " + session.getName() + " - " + session.getUserName() + " đã gửi yêu cầu cộng mật ong của những sinh viên sau: ");
         for (TePointCustomResponse tePointCustomResponse : listResponse) {
             ItemStudentHoneyRequest itemStudentHoneyRequest = new ItemStudentHoneyRequest();
             itemStudentHoneyRequest.setId(tePointCustomResponse.getIdStudent());
             itemStudentHoneyRequest.setEmail(tePointCustomResponse.getEmail());
             itemStudentHoneyRequest.setNumberHoney((int) (tePointCustomResponse.getFinalPoint() * classConfigurationList.get(0).getNumberHoney()));
             listStudent.add(itemStudentHoneyRequest);
+            stringBuilder.append("Sinh viên " + tePointCustomResponse.getEmail() + " - với số lượng mật ong là: " + itemStudentHoneyRequest.getNumberHoney() + ". ");
         }
         HoneyConversionRequest request = new HoneyConversionRequest();
         request.setName(session.getName());
@@ -88,6 +95,8 @@ public class TeAddHoneyServiceImpl implements TeAddHoneyService {
         Boolean check = callApiHoney.addPointStudentLabReportApp(request);
         classFind.get().setStatusHoneyPlus(StatusHoneyPlus.DA_CONG);
         classRepository.save(classFind.get());
+        String nameSemester = loggerUtil.getNameSemesterByIdClass(idClass);
+        loggerUtil.sendLogStreamClass(stringBuilder.toString(), classFind.get().getCode(), nameSemester);
         return check;
     }
 }
