@@ -85,10 +85,6 @@ public class TeClassController {
         return new ResponseObject(teClassService.updateStatusClass(request));
     }
 
-    /*
-    todo hàm làm select của màn feedback teacher
-    input : id semester, id activity
-     */
     @GetMapping("/filter-class")
     public ResponseObject listClassIdActivityIdSemester(final TeFindClassSelectRequest request) {
         request.setIdTeacher(labReportAppSession.getUserId());

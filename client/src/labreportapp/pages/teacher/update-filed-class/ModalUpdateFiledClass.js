@@ -96,6 +96,7 @@ const ModalUpdateFiledClass = ({ visible, onCancel, id }) => {
             setStatusTeacherEdit(respone.data.data.statusTeacherEdit + "");
             setLoading(false);
             setStatusClass(respone.data.data.statusClass + "");
+            setDescriptions(respone.data.data.descriptions);
           },
           (error) => {}
         );
@@ -284,7 +285,6 @@ const ModalUpdateFiledClass = ({ visible, onCancel, id }) => {
                     onChange={handleSelectChange}
                     style={{ width: "100%" }}
                   >
-                    <Option value="">Tất cả</Option>
                     {listMeetingPeriod.map((item) => {
                       return (
                         <Option value={item.id} key={item.id}>
