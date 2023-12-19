@@ -6,7 +6,7 @@ package com.labreportapp.portalprojects.infrastructure.constant;
 public class MailConstant {
 
 
-    public static final String LOGO_PATH = "/static/images/logo.png";
+    public static final String LOGO_PATH = "/static/images/logo-udpm-3.png";
 
     public static final String BODY_STARTS = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional //EN\"\n" +
             "        \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n" +

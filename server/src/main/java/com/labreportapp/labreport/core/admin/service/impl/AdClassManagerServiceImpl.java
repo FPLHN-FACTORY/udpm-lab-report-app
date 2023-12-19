@@ -17,7 +17,6 @@ import com.labreportapp.labreport.core.admin.model.response.AdFindSelectClassCus
 import com.labreportapp.labreport.core.admin.model.response.AdFindSelectClassResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdImportExcelClassResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdListClassCustomResponse;
-import com.labreportapp.labreport.core.admin.model.response.AdMeetingPeriodResponse;
 import com.labreportapp.labreport.core.admin.model.response.AdSemesterAcResponse;
 import com.labreportapp.labreport.core.admin.repository.AdActivityRepository;
 import com.labreportapp.labreport.core.admin.repository.AdClassConfigurationRepository;
@@ -94,9 +93,6 @@ public class AdClassManagerServiceImpl implements AdClassService {
 
     @Autowired
     private AdSemesterRepository adSemesterRepository;
-
-    @Autowired
-    private RestTemplate restTemplate;
 
     @Autowired
     private CallApiIdentity callApiIdentity;
@@ -217,8 +213,16 @@ public class AdClassManagerServiceImpl implements AdClassService {
             adClassCustomResponse.setTeacherId(request.getTeacherId());
 
             SimpleResponse response = callApiIdentity.handleCallApiGetUserById(request.getTeacherId());
+            if (response != null) {
+                Runnable emailTask = () -> {
+                    String htmlBody = "Quản trị viên đã phân bạn dạy lớp " + classNew.getCode() + ". <br/> Vui lòng truy cập đường link sau để xác nhận thông tin và chọn ca dạy học dự kiến: <p><a href=\"https://factory.udpm-hn.com/teacher/my-class\">Tại đây</a></p>";
+                    emailSender.sendEmail(new String[]{response.getEmail()}, "[LAB-REPORT-APP] Thông báo phân công dạy học", "Thông báo phân công dạy học", htmlBody);
+                };
+                new Thread(emailTask).start();
+            }
             adClassCustomResponse.setUserNameTeacher(response.getUserName());
             stringBuilder.append(", giảng viên là: " + response.getUserName() + " - " + response.getName());
+
         }
         String nameSemester = loggerUtil.getNameSemesterByIdClass(adClassCustomResponse.getId());
         loggerUtil.sendLogScreen(stringBuilder.toString(), nameSemester);
@@ -613,7 +617,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
                     loggerResponseList.add(loggerResponse);
 
                     Runnable emailTask = () -> {
-                        String htmlBody = "Quản trị viên đã phân bạn dạy lớp " + classNew.getCode() + ". <br/> Vui lòng truy cập đường link sau để xác nhận thông tin: <p><a href=\"https://factory.udpm-hn.com/teacher/my-class\">Tại đây</a></p>";
+                        String htmlBody = "Quản trị viên đã phân bạn dạy lớp " + classNew.getCode() + ". <br/> Vui lòng truy cập đường link sau để xác nhận thông tin và chọn ca dạy học dự kiến: <p><a href=\"https://factory.udpm-hn.com/teacher/my-class\">Tại đây</a></p>";
                         emailSender.sendEmail(new String[]{teacherObj.getEmail()}, "[LAB-REPORT-APP] Thông báo phân công dạy học", "Thông báo phân công dạy học", htmlBody);
                     };
                     new Thread(emailTask).start();
@@ -629,7 +633,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
                     loggerResponseList.add(loggerResponse);
 
                     Runnable emailTask = () -> {
-                        String htmlBody = "Quản trị viên đã phân bạn dạy lớp " + classNew.getCode() + ". <br/> Vui lòng truy cập đường link sau để xác nhận thông tin: <p><a href=\"https://factory.udpm-hn.com/teacher/my-class\">Tại đây</a></p>";
+                        String htmlBody = "Quản trị viên đã phân bạn dạy lớp " + classNew.getCode() + ". <br/> Vui lòng truy cập đường link sau để xác nhận thông tin và chọn ca dạy học dự kiến: <p><a href=\"https://factory.udpm-hn.com/teacher/my-class\">Tại đây</a></p>";
                         emailSender.sendEmail(new String[]{teacherObjNew.getEmail()}, "[LAB-REPORT-APP] Thông báo phân công dạy học", "Thông báo phân công dạy học", htmlBody);
                     };
                     new Thread(emailTask).start();
@@ -643,7 +647,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
                             + "không có");
                     loggerResponseList.add(loggerResponse);
                     Runnable emailTask = () -> {
-                        String htmlBody = "Quản trị viên đã hủy phân công bạn dạy lớp " + classNew.getCode() + ". <br/> Vui lòng truy cập đường link sau để xác nhận thông tin: <p><a href=\"https://factory.udpm-hn.com/teacher/my-class\">Tại đây</a></p>";
+                        String htmlBody = "Quản trị viên đã hủy phân công bạn dạy lớp " + classNew.getCode() + ". <br/> Vui lòng truy cập đường link sau để xác nhận thông tin và chọn ca dạy học dự kiến: <p><a href=\"https://factory.udpm-hn.com/teacher/my-class\">Tại đây</a></p>";
                         emailSender.sendEmail(new String[]{teacherObjOld.getEmail()}, "[LAB-REPORT-APP] Thông báo hủy phân công dạy học", "Thông báo hủy phân công dạy học", htmlBody);
                     };
                     new Thread(emailTask).start();
@@ -746,6 +750,10 @@ public class AdClassManagerServiceImpl implements AdClassService {
         if (idSemesterCurrent == null) {
             throw new RestApiException(Message.CHUA_DEN_THOI_GIAN_CUA_HOC_KY);
         }
+        Optional<Semester> semesterFind = adSemesterRepository.findById(idSemesterCurrent);
+        if(!semesterFind.isPresent()) {
+            throw new RestApiException(Message.SEMESTER_NOT_EXISTS);
+        }
         List<SimpleResponse> listStudent = callApiIdentity.handleCallApiGetUserByRoleAndModule(ActorConstants.ACTOR_STUDENT);
         List<String> listEmailStudent = listStudent.stream()
                 .map(SimpleResponse::getEmail)
@@ -756,7 +764,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
         Runnable emailTask = () -> {
             String htmlBody =
                     "<p>Dear các bạn sinh viên,</p>" +
-                            "<p>Hiện tại xưởng thực hành đã mở thêm lớp dạy ở các hoạt động. Xin mời các bạn sinh viên có nhu cầu tham gia ở lớp xưởng thực hành vào đường link sau để đăng ký.</p>" +
+                            "<p>Hiện tại xưởng thực hành đã mở lớp dạy ở các hoạt động ở kỳ + " + semesterFind.get().getName() +  ". Xin mời các bạn sinh viên có nhu cầu tham gia ở lớp xưởng thực hành vào đường link sau để đăng ký.</p>" +
                             "<p><a href=\"https://factory.udpm-hn.com/student/register-class\">Tại đây</a></p>" +
                             "<br/>" +
                             "<p>Trân trọng,</p>" +
