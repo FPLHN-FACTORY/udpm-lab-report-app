@@ -277,6 +277,7 @@ public class AdMeetingRequestServiceImpl implements AdMeetingRequestService {
             throw new RestApiException(Message.MEETING_REQUEST_NOT_EXISTS);
         }
         String idClass = listMeetingRequestFind.get(0).getClassId();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Optional<Class> classOptional = adClassRepository.findById(idClass);
         if (!classOptional.isPresent()) {
             throw new RestApiException(Message.CLASS_NOT_EXISTS);
@@ -288,7 +289,7 @@ public class AdMeetingRequestServiceImpl implements AdMeetingRequestService {
             if (meetingRequest.getStatusMeetingRequest() != StatusMeetingRequest.CHO_PHE_DUYET) {
                 throw new RestApiException(Message.STATUS_NOT_VALID);
             }
-            stringBuilder.append(meetingRequest.getName() + ", ");
+            stringBuilder.append(meetingRequest.getName() + " - " + sdf.format(meetingRequest.getMeetingDate()) + ", ");
             meetingRequest.setStatusMeetingRequest(StatusMeetingRequest.TU_CHOI);
         });
         stringBuilder.append(" thuộc lớp học " + classOptional.get().getCode());
@@ -349,7 +350,7 @@ public class AdMeetingRequestServiceImpl implements AdMeetingRequestService {
             if (meetingRequest.getStatusMeetingRequest() != StatusMeetingRequest.CHO_PHE_DUYET) {
                 throw new RestApiException(Message.STATUS_NOT_VALID);
             }
-            stringBuilder.append(meetingRequest.getName() + ", ");
+            stringBuilder.append(meetingRequest.getName() + " - " + sdf.format(meetingRequest.getMeetingDate()) + ", ");
             meetingRequest.setStatusMeetingRequest(StatusMeetingRequest.DA_PHE_DUYET);
         });
         stringBuilder.append(" thuộc lớp học: " + classOptional.get().getCode());
