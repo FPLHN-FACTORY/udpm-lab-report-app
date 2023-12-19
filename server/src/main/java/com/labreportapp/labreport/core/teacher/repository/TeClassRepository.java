@@ -44,26 +44,25 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
             FROM activity a
             JOIN level l ON l.id = a.level_id
             JOIN class c ON c.activity_id = a.id
-            JOIN meeting_period mp ON mp.id = c.class_period
+            LEFT JOIN meeting_period mp ON mp.id = c.class_period
             JOIN semester s ON s.id = a.semester_id
             WHERE c.teacher_id = :#{#req.idTeacher}
             AND (:#{#req.idSemester} IS NULL OR :#{#req.idSemester} LIKE '' OR :#{#req.idSemester} LIKE s.id)
             AND (:#{#req.idActivity} IS NULL OR :#{#req.idActivity} LIKE '' OR :#{#req.idActivity} LIKE a.id)
-            AND (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR :#{#req.code} = '_' AND c.code LIKE '%\\_%' ESCAPE '\\\\')
+            AND (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR c.code LIKE %:#{#req.code}%)
             AND (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR  c.class_period = :#{#req.classPeriod})
             AND (:#{#req.level} IS NULL OR :#{#req.level} LIKE '' OR l.id = :#{#req.level})
                  ORDER BY c.code ASC
                      """, countQuery = """
-            SELECT COUNT(c.id) 
-              FROM activity a
+            SELECT COUNT(c.id) FROM activity a
             JOIN level l ON l.id = a.level_id
             JOIN class c ON c.activity_id = a.id
-              JOIN meeting_period mp ON c.class_period = mp.id 
+            LEFT JOIN meeting_period mp ON c.class_period = mp.id 
             JOIN semester s ON s.id = a.semester_id
             WHERE c.teacher_id = :#{#req.idTeacher}
             AND (:#{#req.idSemester} IS NULL OR :#{#req.idSemester} LIKE '' OR :#{#req.idSemester} LIKE s.id)
             AND (:#{#req.idActivity} IS NULL OR :#{#req.idActivity} LIKE '' OR :#{#req.idActivity} LIKE a.id)
-            AND (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR :#{#req.code} = '_' AND c.code LIKE '%\\_%' ESCAPE '\\\\')
+            AND (:#{#req.code} IS NULL OR :#{#req.code} LIKE '' OR c.code LIKE %:#{#req.code}%)
             AND (:#{#req.classPeriod} IS NULL OR :#{#req.classPeriod} LIKE '' OR  c.class_period = :#{#req.classPeriod})
             AND (:#{#req.level} IS NULL OR :#{#req.level} LIKE '' OR l.id = :#{#req.level})   
             """, nativeQuery = true)
@@ -119,7 +118,7 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
               c.code AS code,
               c.start_time AS start_time,
               c.password AS password,
-            mp.name AS class_period,
+              mp.name AS class_period,
               c.class_size AS class_size,
               a.name AS activityName,
               c.descriptions AS descriptions,
@@ -133,7 +132,7 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
               s.id AS semester_id
               FROM activity a
               JOIN class c ON c.activity_id = a.id
-             LEFT   JOIN meeting_period mp ON c.class_period = mp.id 
+              LEFT JOIN meeting_period mp ON c.class_period = mp.id 
               JOIN semester s ON s.id = a.semester_id
               JOIN level d ON d.id = a.level_id
               WHERE c.id = :#{#id}
@@ -141,27 +140,27 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
     Optional<TeDetailClassResponse> findClassById(@Param("id") String id);
 
     @Query(value = """
-            WITH LatestSemester AS (
-                 SELECT id, start_time, end_time
-                 FROM semester
-                 WHERE UNIX_TIMESTAMP(NOW()) BETWEEN start_time / 1000 AND end_time / 1000
-                 ORDER BY end_time DESC
-                 LIMIT 1
-                 )
-            SELECT
-            ROW_NUMBER() OVER(ORDER BY l.start_time DESC) AS stt,
-            c.id AS id,
-            c.code AS code,
-            l.start_time AS start_time,
-            l.end_time AS end_time,
-            mp.name AS class_period,
-            a.level AS level
-            FROM class c
-           LEFT  JOIN meeting_period mp ON mp.id = c.class_period
-            JOIN activity a ON a.id = c.activity_id
-            JOIN LatestSemester l ON l.id = a.semester_id
-            WHERE c.teacher_id = :#{#id}
-             """, nativeQuery = true)
+             WITH LatestSemester AS (
+                  SELECT id, start_time, end_time
+                  FROM semester
+                  WHERE UNIX_TIMESTAMP(NOW()) BETWEEN start_time / 1000 AND end_time / 1000
+                  ORDER BY end_time DESC
+                  LIMIT 1
+                  )
+             SELECT
+             ROW_NUMBER() OVER(ORDER BY l.start_time DESC) AS stt,
+             c.id AS id,
+             c.code AS code,
+             l.start_time AS start_time,
+             l.end_time AS end_time,
+             mp.name AS class_period,
+             a.level AS level
+             FROM class c
+             LEFT JOIN meeting_period mp ON mp.id = c.class_period
+             JOIN activity a ON a.id = c.activity_id
+             JOIN LatestSemester l ON l.id = a.semester_id
+             WHERE c.teacher_id = :#{#id}
+              """, nativeQuery = true)
     List<TeClassResponse> getClassClosestToTheDateToSemester(@Param("id") String id);
 
     @Query(value = """
@@ -237,7 +236,7 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
                 FROM activity a
                 JOIN level l ON l.id = a.level_id
                 JOIN class c ON c.activity_id = a.id
-               LEFT  JOIN meeting_period mp ON mp.id = c.class_period
+                LEFT JOIN meeting_period mp ON mp.id = c.class_period
                 JOIN semester s ON s.id = a.semester_id
                 JOIN check_team ct ON ct.class_id = c.id
                 JOIN check_lesson cls ON cls.class_id = c.id
@@ -290,8 +289,6 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
             AND (:#{#req.idActivity} IS NULL OR :#{#req.idActivity} LIKE '' OR :#{#req.idActivity} LIKE a.id)
             """, nativeQuery = true)
     List<TeFindClassSelectResponse> listClassFindIdActivityAndIdSemester(@Param("req") TeFindClassSelectRequest req);
-
-    List<Class> findAllByActivityIdAndTeacherId(String idActivity, String idTeacher);
 
     @Query(value = """
             SELECT c.code AS code
