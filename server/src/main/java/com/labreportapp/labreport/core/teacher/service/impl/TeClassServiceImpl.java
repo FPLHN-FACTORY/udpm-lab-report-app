@@ -35,6 +35,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -87,6 +90,10 @@ public class TeClassServiceImpl implements TeClassService {
     public PageableObject<TeClassSentStudentRespone> findClassBySentStudent(TeFindClassSentStudentRequest request) {
         ClassConfiguration classConfiguration = teClassConfigurationRepository.findAll().get(0);
         Pageable pageable = PageRequest.of(request.getPage() - 1, request.getSize());
+        LocalDate currentDate = LocalDate.now();
+        ZoneId vietnamZone = ZoneId.of("Asia/Ho_Chi_Minh");
+        ZonedDateTime zonedDateTime = currentDate.atStartOfDay(vietnamZone);
+        request.setDateNow(zonedDateTime.toLocalDate());
         Page<TeClassResponse> pageList = teClassRepository.findClassBySentStudent(request, pageable, classConfiguration.getClassSizeMax());
         List<TeClassResponse> listResponse = pageList.getContent();
         List<String> idUsers = listResponse.stream()

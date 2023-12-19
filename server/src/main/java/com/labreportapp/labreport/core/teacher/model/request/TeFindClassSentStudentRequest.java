@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 /**
  * @author hieundph25894
  */
@@ -24,5 +26,7 @@ public class TeFindClassSentStudentRequest extends PageableRequest {
     private String idClass;
 
     private Integer countStudent;
+
+    private LocalDate dateNow;
 
 }
