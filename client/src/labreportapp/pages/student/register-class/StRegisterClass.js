@@ -89,7 +89,7 @@ const StRegisterClass = () => {
     if (semester !== "") {
       getClassByCriteriaIsAcive(semester);
     }
-  }, [semester, currentPage]);
+  }, [currentPage]);
 
   const loadDataActivity = () => {
     StMyClassAPI.getAllActivityByIdSemester(semester).then((response) => {
