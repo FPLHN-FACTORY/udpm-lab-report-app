@@ -101,4 +101,5 @@ public class AdGroupProjectServiceImpl implements AdGroupProjectService {
     public List<GroupProject> getAllGroupToProjectManagement() {
         return adGroupProjectRepository.findAll();
     }
+
 }

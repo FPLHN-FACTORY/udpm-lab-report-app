@@ -1907,6 +1907,7 @@
 //         classConfiguration.setPointMin(5D);
 //         classConfiguration.setMaximumNumberOfBreaks(20D);
 //         classConfiguration.setNumberHoney(100);
+//         classConfiguration.setNumberClassMax(3);
 //         classConfigurationRepository.save(classConfiguration);
 //
 //         ////////////////////////////////////////

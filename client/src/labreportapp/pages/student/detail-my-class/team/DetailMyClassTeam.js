@@ -213,7 +213,13 @@ const DetailMyClassTeam = () => {
       dataIndex: "actions",
       key: "actions",
       render: (text, record) => {
-        if (record.role !== 0 && userCurrent.id === record.studentId) {
+        let check = false;
+        listStudentMyTeam.forEach((item) => {
+          if (item.studentId === userCurrent.id && item.role === 0) {
+            check = true;
+          }
+        });
+        if (record.role !== 0 && check) {
           return (
             <Tooltip title="Chuyển quyền trưởng nhóm">
               <FontAwesomeIcon

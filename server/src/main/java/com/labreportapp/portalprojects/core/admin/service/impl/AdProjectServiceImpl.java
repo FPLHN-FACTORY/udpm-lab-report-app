@@ -42,6 +42,7 @@ import com.labreportapp.portalprojects.infrastructure.constant.StatusWork;
 import com.labreportapp.portalprojects.infrastructure.constant.TypeProject;
 import com.labreportapp.portalprojects.infrastructure.exception.rest.RestApiException;
 import com.labreportapp.portalprojects.repository.LabelRepository;
+import com.labreportapp.portalprojects.repository.RoleProjectRepository;
 import jakarta.validation.Valid;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,6 +117,10 @@ public class AdProjectServiceImpl implements AdProjectService {
 
     @Autowired
     private AdCategoryRepository adCategoryRepository;
+
+    @Autowired
+    @Qualifier(RoleProjectRepository.NAME)
+    private RoleProjectRepository roleProjectRepository;
 
     @Override
     public List<Project> findAllProject(Pageable pageable) {
@@ -582,6 +587,24 @@ public class AdProjectServiceImpl implements AdProjectService {
         }
         adProjectRepository.delete(projectCheck.get());
         return true;
+    }
+
+    @Override
+    public Boolean checkRole(String memberId, String projectId) {
+        MemberProject memberProjectFind = adMemberProjectRepository.findMemberProject(memberId, projectId);
+        if (memberProjectFind == null) {
+            throw new RestApiException(Message.MEMBER_PROJECT_NOT_EXISTS);
+        }
+        List<String> listIds = adProjectRepository.getAllRoleProject(memberProjectFind.getId());
+        List<RoleProject> listRoleProject = roleProjectRepository.findAllById(listIds);
+        if (listRoleProject != null) {
+            for (RoleProject xx : listRoleProject) {
+                if (xx.getRoleDefault() == RoleDefault.DEFAULT) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 }

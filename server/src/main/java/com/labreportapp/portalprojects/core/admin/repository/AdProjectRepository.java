@@ -8,6 +8,7 @@ import com.labreportapp.labreport.core.admin.model.response.AdProjectStatisticsP
 import com.labreportapp.portalprojects.core.admin.model.request.AdFindProjectRequest;
 import com.labreportapp.portalprojects.core.admin.model.response.AdProjectReponse;
 import com.labreportapp.portalprojects.entity.Project;
+import com.labreportapp.portalprojects.entity.RoleProject;
 import com.labreportapp.portalprojects.repository.ProjectRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +24,12 @@ import java.util.Optional;
  */
 @Repository
 public interface AdProjectRepository extends ProjectRepository {
+
+    @Query(value = """
+            SELECT a.id FROM role_project a JOIN role_member_project b ON a.id = b.role_project_id
+            WHERE b.member_project_id = :memberProjectId
+            """, nativeQuery = true)
+    List<String> getAllRoleProject(@Param("memberProjectId") String memberProjectId);
 
     @Query(" SELECT pro FROM Project pro ORDER BY pro.lastModifiedDate DESC")
     List<Project> findAllProject(Pageable pageable);

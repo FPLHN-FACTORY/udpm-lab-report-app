@@ -31,4 +31,5 @@ public interface AdGroupProjectService {
     AdGroupProjectResponse updateTitleGroupProject(@Valid AdUpdateTitleGroupProject request);
 
     List<GroupProject> getAllGroupToProjectManagement();
+
 }
