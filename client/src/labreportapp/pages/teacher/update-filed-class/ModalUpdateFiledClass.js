@@ -107,8 +107,8 @@ const ModalUpdateFiledClass = ({ visible, onCancel, id }) => {
     const featchDataSemester = async () => {
       try {
         const responseClassAll = await TeacherSemesterAPI.getAllSemesters();
-        const listClassAll = responseClassAll.data;
-        setSemesterDataAll(listClassAll.data);
+        const listClassAll = responseClassAll.data.data;
+        setSemesterDataAll(listClassAll.data.data);
       } catch (error) {}
     };
     featchDataSemester();
