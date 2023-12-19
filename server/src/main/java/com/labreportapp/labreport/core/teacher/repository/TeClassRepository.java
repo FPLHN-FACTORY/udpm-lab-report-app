@@ -89,7 +89,8 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
             JOIN class c ON c.activity_id = a.id
             LEFT JOIN meeting_period mp ON c.class_period = mp.id 
             JOIN semester s ON s.id = a.semester_id
-            WHERE DATE(FROM_UNIXTIME(c.start_time / 1000)) <= CURDATE() 
+            WHERE 
+              DATE(CONVERT_TZ(FROM_UNIXTIME(c.start_time / 1000), 'UTC', 'Asia/Ho_Chi_Minh')) <= :#{#req.dateNow}
                 AND c.class_size + :#{#req.countStudent} <= :#{#size}
                 AND s.id = :#{#req.idSemester}
                 AND a.id = :#{#req.idActivity}
@@ -103,7 +104,7 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
             JOIN class c ON c.activity_id = a.id
             LEFT JOIN meeting_period mp ON c.class_period = mp.id 
             JOIN semester s ON s.id = a.semester_id
-            WHERE DATE(FROM_UNIXTIME(c.start_time / 1000)) <= CURDATE() 
+            WHERE  DATE(CONVERT_TZ(FROM_UNIXTIME(c.start_time / 1000), 'UTC', 'Asia/Ho_Chi_Minh')) <= :#{#req.dateNow}
                 AND c.class_size + :#{#req.countStudent} <= :#{#size}
                 AND s.id = :#{#req.idSemester}
                 AND a.id = :#{#req.idActivity}
@@ -111,56 +112,56 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
                 AND c.id <> :#{#req.idClass}
             """, nativeQuery = true)
     Page<TeClassResponse> findClassBySentStudent(@Param("req") TeFindClassSentStudentRequest req, Pageable pageable, @Param("size") Integer size);
-
+    // DATE(FROM_UNIXTIME(c.start_time / 1000)) <= :#{#req.dateNow}
 
     @Query(value = """
-              SELECT c.id AS id_class,
-              c.code AS code,
-              c.start_time AS start_time,
-              c.password AS password,
-              mp.name AS class_period,
-              c.class_size AS class_size,
-              a.name AS activityName,
-              c.descriptions AS descriptions,
-              d.name AS activityLevel,
-              s.name AS semesterName,
-              c.status_class AS status_class,
-              a.allow_use_trello AS allow_use_trello,
-              c.status_teacher_edit AS status_teacher_edit,
-              a.id AS activity_id,
-              d.id AS level_id,
-              s.id AS semester_id
-              FROM activity a
-              JOIN class c ON c.activity_id = a.id
-              LEFT JOIN meeting_period mp ON c.class_period = mp.id 
-              JOIN semester s ON s.id = a.semester_id
-              JOIN level d ON d.id = a.level_id
-              WHERE c.id = :#{#id}
-               """, nativeQuery = true)
+            SELECT c.id AS id_class,
+            c.code AS code,
+            c.start_time AS start_time,
+            c.password AS password,
+            mp.name AS class_period,
+            c.class_size AS class_size,
+            a.name AS activityName,
+            c.descriptions AS descriptions,
+            d.name AS activityLevel,
+            s.name AS semesterName,
+            c.status_class AS status_class,
+            a.allow_use_trello AS allow_use_trello,
+            c.status_teacher_edit AS status_teacher_edit,
+            a.id AS activity_id,
+            d.id AS level_id,
+            s.id AS semester_id
+            FROM activity a
+            JOIN class c ON c.activity_id = a.id
+            LEFT JOIN meeting_period mp ON c.class_period = mp.id 
+            JOIN semester s ON s.id = a.semester_id
+            JOIN level d ON d.id = a.level_id
+            WHERE c.id = :#{#id}
+             """, nativeQuery = true)
     Optional<TeDetailClassResponse> findClassById(@Param("id") String id);
 
     @Query(value = """
-             WITH LatestSemester AS (
-                  SELECT id, start_time, end_time
-                  FROM semester
-                  WHERE UNIX_TIMESTAMP(NOW()) BETWEEN start_time / 1000 AND end_time / 1000
-                  ORDER BY end_time DESC
-                  LIMIT 1
-                  )
-             SELECT
-             ROW_NUMBER() OVER(ORDER BY l.start_time DESC) AS stt,
-             c.id AS id,
-             c.code AS code,
-             l.start_time AS start_time,
-             l.end_time AS end_time,
-             mp.name AS class_period,
-             a.level AS level
-             FROM class c
-             LEFT JOIN meeting_period mp ON mp.id = c.class_period
-             JOIN activity a ON a.id = c.activity_id
-             JOIN LatestSemester l ON l.id = a.semester_id
-             WHERE c.teacher_id = :#{#id}
-              """, nativeQuery = true)
+            WITH LatestSemester AS (
+                 SELECT id, start_time, end_time
+                 FROM semester
+                 WHERE UNIX_TIMESTAMP(NOW()) BETWEEN start_time / 1000 AND end_time / 1000
+                 ORDER BY end_time DESC
+                 LIMIT 1
+                 )
+            SELECT
+            ROW_NUMBER() OVER(ORDER BY l.start_time DESC) AS stt,
+            c.id AS id,
+            c.code AS code,
+            l.start_time AS start_time,
+            l.end_time AS end_time,
+            mp.name AS class_period,
+            a.level AS level
+            FROM class c
+            LEFT JOIN meeting_period mp ON mp.id = c.class_period
+            JOIN activity a ON a.id = c.activity_id
+            JOIN LatestSemester l ON l.id = a.semester_id
+            WHERE c.teacher_id = :#{#id}
+             """, nativeQuery = true)
     List<TeClassResponse> getClassClosestToTheDateToSemester(@Param("id") String id);
 
     @Query(value = """

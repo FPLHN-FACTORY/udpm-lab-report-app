@@ -24,7 +24,10 @@ import { TeacherSemesterAPI } from "../../../api/teacher/semester/TeacherSemeste
 import { SetTeacherSemester } from "../../../app/teacher/semester/teacherSemesterSlice.reduce";
 import { TeacherActivityAPI } from "../../../api/teacher/activity/TeacherActivity.api";
 import { useEffect } from "react";
-import { convertHourAndMinuteToString } from "../../../helper/util.helper";
+import {
+  convertDateLongToString,
+  convertHourAndMinuteToString,
+} from "../../../helper/util.helper";
 import { TeacherStatisticalAPI } from "../../../api/teacher/statistical/TeacherStatistical.api";
 import LoadingIndicator from "../../../helper/loading";
 import LoadingIndicatorNoOverlay from "../../../helper/loadingNoOverlay";
@@ -366,7 +369,12 @@ const TeacherDashboard = () => {
                           key={item.id}
                           style={{ width: "auto" }}
                         >
-                          {item.name}
+                          {item.name +
+                            " (" +
+                            convertDateLongToString(item.startTime) +
+                            " - " +
+                            convertDateLongToString(item.endTime) +
+                            ")"}
                         </Option>
                       );
                     })}

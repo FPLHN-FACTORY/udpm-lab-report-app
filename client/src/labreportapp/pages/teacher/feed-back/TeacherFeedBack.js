@@ -227,7 +227,12 @@ const TeacherFeedBack = () => {
                           key={item.id}
                           style={{ width: "auto" }}
                         >
-                          {item.name}
+                          {item.name +
+                            " (" +
+                            convertDateLongToString(item.startTime) +
+                            " - " +
+                            convertDateLongToString(item.endTime) +
+                            ")"}
                         </Option>
                       );
                     })}
