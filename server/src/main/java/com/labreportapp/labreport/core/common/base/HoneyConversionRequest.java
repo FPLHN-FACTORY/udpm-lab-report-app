@@ -20,4 +20,8 @@ public class HoneyConversionRequest {
 
     private List<ItemStudentHoneyRequest> listStudent;
 
+    private String name;
+
+    private String username;
+
 }

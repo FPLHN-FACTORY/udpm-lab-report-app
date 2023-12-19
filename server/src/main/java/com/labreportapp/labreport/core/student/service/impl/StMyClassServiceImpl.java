@@ -137,6 +137,9 @@ public class StMyClassServiceImpl implements StMyClassService {
     @Override
     public void leaveClass(final StClassRequest req) {
         Optional<Class> findCurrentMyClass = stClassRepository.findById(req.getIdClass());
+        if(!findCurrentMyClass.isPresent()) {
+            throw new RestApiException(Message.CLASS_NOT_EXISTS);
+        }
         Optional<StudentClasses> findStudentInClass = stStudentClassesRepository.
                 findStudentClassesByClassIdAndStudentId(req.getIdClass(), labReportAppSession.getUserId());
         if (findStudentInClass.isPresent()) {
