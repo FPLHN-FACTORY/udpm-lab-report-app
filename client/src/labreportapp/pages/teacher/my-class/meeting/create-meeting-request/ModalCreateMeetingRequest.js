@@ -16,12 +16,14 @@ import { convertHourAndMinuteToString } from "../../../../../helper/util.helper"
 import {
   SetLoadingFalse,
   SetLoadingTrue,
-} from "../../../../../../app/common/Loading.reducer";
+} from "../../../../../app/common/Loading.reducer";
 import { TeacherMeetingRequestAPI } from "../../../../../../api/teacher/meeting-request/TeacherMeeting.api";
 import { UpdateMeetingRequest } from "../../../../../../app/teacher/meeting-request/teMeetingRequestSlice.reduce";
 import locale from "antd/es/date-picker/locale/vi_VN";
 import dayjs from "dayjs";
 import "dayjs/locale/vi";
+import { GetAdTeacher } from "../../../../../app/admin/AdTeacherSlice.reducer";
+import { GetAdMeetingPeriod } from "../../../../../app/admin/AdMeetingPeriodSlice.reducer";
 
 const { Option } = Select;
 dayjs.locale("vi");
@@ -31,8 +33,6 @@ const ModalCreateMeetingRequest = ({
   onCancel,
   featchMeeting,
 }) => {
-  const [listMeetingPeriod, setListMeetingPeriod] = useState([]);
-  const [listTeacher, setListTeacher] = useState([]);
   const [meetingPeriod, setMeetingPeriod] = useState("0");
   const [typeMeeting, setTypeMeeting] = useState("0");
   const [name, setName] = useState("");
@@ -229,7 +229,7 @@ const ModalCreateMeetingRequest = ({
                 }}
                 onClick={update}
               >
-                Cập nhật
+                Tạo buổi học yêu cầu
               </Button>
               <Button
                 style={{
