@@ -763,15 +763,6 @@ public class TeMeetingServiceImpl implements TeMeetingService {
             }
             if (teExcelResponseMessage.getStatus()) {
                 List<MeetingRequest> listfindChoPheDuyet = teMeetingRequestRepository.getAllStatusChoPheDuyet(idClass);
-//                List<MeetingRequest> listDelete = new ArrayList<>();
-//               if (listfindChoPheDuyet.size() >0){
-//                   listMeetingSend.forEach(add ->{
-//                       listfindChoPheDuyet.forEach(i ->{
-//                           if (compareDates(i.getMeetingDate(),add.getMeetingDate())){
-//
-//                           }
-//                       });
-//                   });
                 if (!listfindChoPheDuyet.isEmpty()) {
                     Iterator<MeetingRequest> iterator = listMeetingSend.iterator();
                     while (iterator.hasNext()) {
