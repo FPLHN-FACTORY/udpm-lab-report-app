@@ -114,7 +114,14 @@ public class TeMeetingRequestServiceImpl implements TeMeetingRequestService {
         if (classOptional.isEmpty()) {
             throw new RestApiException(Message.CLASS_NOT_EXISTS);
         }
-
+        LocalDate meetingDateFind = Instant.ofEpochMilli(request.getMeetingDate())
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+        Optional<MeetingRequest> findDoubleMeeting = teMeetingRequestRepository
+                .getMeetingRequestByIdClassAndMeetingDateAndMeetingPeriod(classOptional.get().getId(), meetingDateFind, request.getMeetingPeriod());
+        if (findDoubleMeeting.isPresent()) {
+            throw new RestApiException("Đã tồn tại buổi học, không thể sửa !");
+        }
         MeetingPeriod meetingPeriodNew = teMeetingPeriodRepository.findById(request.getMeetingPeriod()).get();
         MeetingPeriod meetingPeriodOld = teMeetingPeriodRepository.findById(meetingFind.get().getMeetingPeriod()).get();
 

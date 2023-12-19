@@ -21,6 +21,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCalendarWeek,
+  faCirclePlus,
   faDownload,
   faPaperPlane,
   faTableList,
@@ -305,13 +306,13 @@ const MeetingInMyClass = () => {
                     margin: "0px 0px 0 10px",
                     float: "right",
                   }}
-                  onClick={() => setShowModalImport(true)}
+                  onClick={() => setShowModalCreate(true)}
                 >
                   <FontAwesomeIcon
-                    icon={faPaperPlane}
+                    icon={faCirclePlus}
                     style={{ marginRight: "7px" }}
                   />
-                  Gửi yêu cầu tạo buổi học
+                  Thêm buổi học yêu cầu
                 </Button>
               )}
               {lock === 0 && (
@@ -323,13 +324,13 @@ const MeetingInMyClass = () => {
                     margin: "0px 0px 0 10px",
                     float: "right",
                   }}
-                  onClick={() => setShowModalCreate(true)}
+                  onClick={() => setShowModalImport(true)}
                 >
                   <FontAwesomeIcon
                     icon={faPaperPlane}
                     style={{ marginRight: "7px" }}
                   />
-                  Tạo buổi học yêu cầu
+                  Gửi yêu cầu tạo buổi học
                 </Button>
               )}
               {lock === 0 && (
