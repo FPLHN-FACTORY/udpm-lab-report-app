@@ -32,6 +32,10 @@ import {
 } from "../../../../app/common/Loading.reducer";
 
 import ModalFileImportMeeting from "./import-excel/ModalFileImportMeeting";
+import { TeacherMeetingPeriodAPI } from "../../../../api/teacher/meeting-period/TeacherMeetingPeriod.api";
+import { SetAdMeetingPeriod } from "../../../../app/admin/AdMeetingPeriodSlice.reducer";
+import { TeacherAPI } from "../../../../api/teacher/TeacherAPI.api";
+import { SetAdTeacher } from "../../../../app/admin/AdTeacherSlice.reducer";
 const MeetingInMyClass = () => {
   const dispatch = useAppDispatch();
   dispatch(SetTTrueToggle());
@@ -43,12 +47,29 @@ const MeetingInMyClass = () => {
   const [lock, setLock] = useState(1);
   useEffect(() => {
     window.scrollTo(0, 0);
+    featchDataMeetingPeriod();
+    fetchDataTeacher();
     featchMeeting(idClass);
     featchClass(idClass);
     return () => {
       dispatch(SetMeeting([]));
     };
   }, []);
+
+  const featchDataMeetingPeriod = async () => {
+    try {
+      await TeacherMeetingPeriodAPI.getPeriod().then((respone) => {
+        dispatch(SetAdMeetingPeriod(respone.data.data));
+      });
+    } catch (error) {}
+  };
+
+  const fetchDataTeacher = async () => {
+    const responseTeacherData = await TeacherAPI.getAllTeacher();
+    const teacherData = responseTeacherData.data.data;
+    dispatch(SetAdTeacher(teacherData));
+  };
+
   const featchClass = async (idClass) => {
     try {
       await TeacherMyClassAPI.detailMyClass(idClass).then((responese) => {

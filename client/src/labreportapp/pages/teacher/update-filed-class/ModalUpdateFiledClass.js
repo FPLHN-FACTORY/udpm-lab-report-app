@@ -3,19 +3,19 @@ import { Modal, Row, Col, Input, Button, Select, message } from "antd";
 import "./styleUpdateFiledClass.css";
 import { useEffect, useState } from "react";
 import moment from "moment";
-import { useAppDispatch } from "../../../app/hook";
+import { useAppDispatch, useAppSelector } from "../../../app/hook";
 import LoadingIndicatorNoOverlay from "../../../helper/loadingNoOverlay";
 import {
   convertDateLongToString,
   convertHourAndMinuteToString,
 } from "../../../helper/util.helper";
 import { faHeartPulse } from "@fortawesome/free-solid-svg-icons";
-import { TeacherMeetingPeriodAPI } from "../../../api/teacher/meeting-period/TeacherMeetingPeriod.api";
-import { TeacherAPI } from "../../../api/teacher/TeacherAPI.api";
 import { TeacherMyClassAPI } from "../../../api/teacher/my-class/TeacherMyClass.api";
 import { TeacherSemesterAPI } from "../../../api/teacher/semester/TeacherSemester.api";
 import { TeacherActivityAPI } from "../../../api/teacher/activity/TeacherActivity.api";
 import { UpdateFiledClass } from "../../../app/teacher/my-class/teacherMyClassSlice.reduce";
+import { GetAdTeacher } from "../../../app/admin/AdTeacherSlice.reducer";
+import { GetAdMeetingPeriod } from "../../../app/admin/AdMeetingPeriodSlice.reducer";
 
 const { Option } = Select;
 
@@ -38,8 +38,8 @@ const ModalUpdateFiledClass = ({ visible, onCancel, id }) => {
   const [statusTeacherEdit, setStatusTeacherEdit] = useState("");
   const [statusClass, setStatusClass] = useState("");
 
-  const [listMeetingPeriod, setListMeetingPeriod] = useState([]);
-  const [listTeacher, setListTeacher] = useState([]);
+  const listMeetingPeriod = useAppSelector(GetAdMeetingPeriod);
+  const listTeacher = useAppSelector(GetAdTeacher);
   const [descriptions, setDescriptions] = useState("");
   const cancelSuccess = () => {
     onCancel();
@@ -55,26 +55,9 @@ const ModalUpdateFiledClass = ({ visible, onCancel, id }) => {
     setErrorClassPeriod("");
   };
 
-  const featchDataMeetingPeriod = async () => {
-    try {
-      await TeacherMeetingPeriodAPI.getPeriod().then((respone) => {
-        setListMeetingPeriod(respone.data.data);
-      });
-    } catch (error) {}
-  };
-
-  const fetchTeacherData = async () => {
-    const responseTeacherData = await TeacherAPI.getAllTeacher();
-    const teacherData = responseTeacherData.data.data;
-    setListTeacher(teacherData);
-  };
-
   useEffect(() => {
     if (visible) {
-      featchDataMeetingPeriod();
-      fetchTeacherData();
     }
-
     return () => {
       setName("");
       setCode("");
