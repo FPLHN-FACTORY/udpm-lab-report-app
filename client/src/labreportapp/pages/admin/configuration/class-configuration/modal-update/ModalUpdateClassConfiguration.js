@@ -25,6 +25,8 @@ const ModalUpdateClassConfiguration = ({
   const [maximumNumberOfBreaks, setMaximumNumberOfBreaks] = useState("");
   const [errorMaximumNumberOfBreaks, setErrorMaximumNumberOfBreaks] =
     useState("");
+  const [numberClassMax, setNumberClassMax] = useState("");
+  const [errorNumberClassMax, setErrorNumberClassMax] = useState("");
 
   useEffect(() => {
     if (visible && classConfiguration.length > 0) {
@@ -36,6 +38,8 @@ const ModalUpdateClassConfiguration = ({
       setErrorClassSizeMax("");
       setErrorClassSizeMin("");
       setErrorPointMin("");
+      setNumberClassMax("");
+      setErrorNumberClassMax("");
       setErrorNumberHoney("");
       setErrorMaximumNumberOfBreaks("");
     } else {
@@ -47,6 +51,8 @@ const ModalUpdateClassConfiguration = ({
       setMaximumNumberOfBreaks("");
       setErrorClassSizeMax("");
       setErrorClassSizeMin("");
+      setNumberClassMax("");
+      setErrorNumberClassMax("");
       setErrorPointMin("");
       setErrorMaximumNumberOfBreaks("");
     }
@@ -115,6 +121,15 @@ const ModalUpdateClassConfiguration = ({
       setErrorNumberHoney("");
     }
 
+    if (numberClassMax === null || numberClassMax === "") {
+      setErrorNumberClassMax("Số lượng mật ong không được để trống");
+      check++;
+    } else if (!Number.isInteger(+numberClassMax) || +numberClassMax < 1) {
+      setErrorNumberClassMax("Số lượng mật ong phải là số nguyên dương >= 1");
+      check++;
+    } else {
+      setErrorNumberClassMax("");
+    }
     if (check === 0) {
       dispatch(SetLoadingTrue());
       let obj = {
@@ -123,6 +138,7 @@ const ModalUpdateClassConfiguration = ({
         pointMin: +pointMin,
         maximumNumberOfBreaks: +maximumNumberOfBreaks,
         numberHoney: +numberHoney,
+        numberClassMax: +numberClassMax,
       };
       AdClassCongigurationAPI.update(obj).then(
         () => {
@@ -225,7 +241,7 @@ const ModalUpdateClassConfiguration = ({
       </div>
       <div style={{ marginTop: "15px", borderBottom: "1px solid black" }}>
         <Row style={{ marginBottom: "15px" }}>
-          <Col span={24}>
+          <Col span={12}>
             <span>Số lượng mật ong:</span> <br />
             <Input
               value={numberHoney}
@@ -237,6 +253,19 @@ const ModalUpdateClassConfiguration = ({
               min={1}
             />
             <span className="error">{errorNumberHoney}</span>
+          </Col>
+          <Col span={12}>
+            <span>Số lượng lớp tối đa sinh viên có thể tham gia:</span> <br />
+            <Input
+              value={numberClassMax}
+              onChange={(e) => {
+                const newValue = Math.max(1, parseInt(e.target.value) || 1);
+                setNumberClassMax(newValue);
+              }}
+              type="number"
+              min={1}
+            />
+            <span className="error">{errorNumberClassMax}</span>
           </Col>
         </Row>
       </div>

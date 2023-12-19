@@ -36,7 +36,8 @@ public class AdClassConfigurationServiceImpl implements AdCLassConfigurationServ
             classConfigurationCustomList.add(new AdClassConfigurationCustomResponse(classConfigurationResponses.getId(), 2, "Số lượng sinh viên trong lớp tối đa", Double.valueOf(classConfigurationResponses.getClassSizeMax())));
             classConfigurationCustomList.add(new AdClassConfigurationCustomResponse(classConfigurationResponses.getId(), 3, "Điểm tối thiểu (1 -> 10)", classConfigurationResponses.getPointMin()));
             classConfigurationCustomList.add(new AdClassConfigurationCustomResponse(classConfigurationResponses.getId(), 4, "Tỉ lệ nghỉ (%)", classConfigurationResponses.getMaximumNumberOfBreaks()));
-            classConfigurationCustomList.add(new AdClassConfigurationCustomResponse(classConfigurationResponses.getId(), 5, "Số lượng mật ong", Double.valueOf(classConfigurationResponses.getNumberHoney())));
+            classConfigurationCustomList.add(new AdClassConfigurationCustomResponse(classConfigurationResponses.getId(), 5, "Số lượng lớp học tối đa sinh viên có thể tham gia trong 1 học kỳ", Double.valueOf(classConfigurationResponses.getNumberClassMax())));
+            classConfigurationCustomList.add(new AdClassConfigurationCustomResponse(classConfigurationResponses.getId(), 6, "Số lượng mật ong", Double.valueOf(classConfigurationResponses.getNumberHoney())));
         }
         return classConfigurationCustomList;
     }
@@ -51,6 +52,7 @@ public class AdClassConfigurationServiceImpl implements AdCLassConfigurationServ
             classConfigurationNew.setPointMin(adUpdateClassConfigurationRequest.getPointMin());
             classConfigurationNew.setMaximumNumberOfBreaks(adUpdateClassConfigurationRequest.getMaximumNumberOfBreaks());
             classConfigurationNew.setNumberHoney(adUpdateClassConfigurationRequest.getNumberHoney());
+            classConfigurationNew.setNumberClassMax(adUpdateClassConfigurationRequest.getNumberClassMax());
             return adClassConfigurationRepository.save(classConfigurationNew);
         }
         ClassConfiguration optionalClassConfiguration = classConfigurationList.get(0);
@@ -80,7 +82,8 @@ public class AdClassConfigurationServiceImpl implements AdCLassConfigurationServ
                     .append(".");
         }
         if (stringBuilder.length() > 0 && stringBuilder.charAt(stringBuilder.length() - 1) == ',') {
-            stringBuilder.setCharAt(stringBuilder.length() - 1, '.');}
+            stringBuilder.setCharAt(stringBuilder.length() - 1, '.');
+        }
         loggerUtil.sendLogScreen(stringBuilder.toString(), "");
         optionalClassConfiguration.setClassSizeMax(adUpdateClassConfigurationRequest.getClassSizeMax());
         optionalClassConfiguration.setClassSizeMin(adUpdateClassConfigurationRequest.getClassSizeMin());

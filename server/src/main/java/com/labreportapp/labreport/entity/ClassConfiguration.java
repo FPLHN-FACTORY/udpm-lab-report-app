@@ -37,4 +37,7 @@ public class ClassConfiguration extends PrimaryEntity {
     @Column
     private Integer numberHoney;
 
+    @Column
+    private Integer numberClassMax;
+
 }

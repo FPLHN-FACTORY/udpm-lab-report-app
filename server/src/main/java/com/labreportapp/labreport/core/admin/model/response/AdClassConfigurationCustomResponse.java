@@ -17,5 +17,5 @@ public class AdClassConfigurationCustomResponse {
 
     private String tenCauHinh;
 
-    private  Double chiSo;
+    private Double chiSo;
 }

@@ -25,4 +25,7 @@ public interface AdClassConfigurationResponse extends IsIdentified {
     @Value("#{target.number_honey}")
     Integer getNumberHoney();
 
+    @Value("#{target.number_class_max}")
+    Integer getNumberClassMax();
+
 }

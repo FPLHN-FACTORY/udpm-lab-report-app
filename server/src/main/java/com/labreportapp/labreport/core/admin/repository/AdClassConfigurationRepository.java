@@ -15,7 +15,8 @@ public interface AdClassConfigurationRepository extends ClassConfigurationReposi
                     cc.class_size_max, 
                     cc.point_min, 
                     cc.maximum_number_of_breaks,
-                    cc.number_honey
+                    cc.number_honey,
+                    cc.number_class_max
                     from class_configuration cc
             """, nativeQuery = true)
     AdClassConfigurationResponse getAllClassConfiguration();

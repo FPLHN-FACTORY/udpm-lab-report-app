@@ -27,5 +27,6 @@ public class AdBaseClassConfigurationRequest {
     @NotNull
     private Integer numberHoney;
 
-
+    @NotNull
+    private Integer numberClassMax;
 }
