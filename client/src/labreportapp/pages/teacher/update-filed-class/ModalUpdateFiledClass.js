@@ -282,7 +282,7 @@ const ModalUpdateFiledClass = ({ visible, onCancel, id }) => {
                     filterOption={filterOptions}
                     value={classPeriod}
                     onChange={handleSelectChange}
-                    style={{ width: "100%", marginTop: "6px" }}
+                    style={{ width: "100%" }}
                   >
                     <Option value="">Tất cả</Option>
                     {listMeetingPeriod.map((item) => {
