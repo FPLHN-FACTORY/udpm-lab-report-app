@@ -36,15 +36,6 @@ const ModalCreateMeetingRequest = ({ idClass, visible, onCancel }) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (visible) {
-      // setName(item.name);
-      // setTypeMeeting(item.typeMeeting + "");
-      // setMeetingPeriod(item.idMeetingPeriod);
-      // setMeetingDate(item.meetingDate);
-      // setErrorMeetingDate("");
-      // setSelectedItemsPerson(item.teacherId);
-      // setErrorTeacher("");
-    }
     return () => {
       setErrorMeetingPeriod("");
       setName("");
@@ -52,6 +43,8 @@ const ModalCreateMeetingRequest = ({ idClass, visible, onCancel }) => {
       setMeetingDate(null);
       setTypeMeeting("0");
       setMeetingPeriod("");
+      setSelectedItemsPerson("");
+      setErrorTeacher("");
     };
   }, [visible]);
 
@@ -140,7 +133,7 @@ const ModalCreateMeetingRequest = ({ idClass, visible, onCancel }) => {
       >
         <div>
           <div style={{ paddingTop: "0", borderBottom: "1px solid black" }}>
-            <span style={{ fontSize: "18px" }}>Cập nhật buổi học yêu cầu</span>
+            <span style={{ fontSize: "18px" }}>Thêm buổi học yêu cầu</span>
           </div>
           <div style={{ marginTop: "5px" }}>
             <Row>
@@ -227,11 +220,11 @@ const ModalCreateMeetingRequest = ({ idClass, visible, onCancel }) => {
                   marginRight: "5px",
                   backgroundColor: "rgb(61, 139, 227)",
                   color: "white",
-                  width: "88px",
+                  width: "135px",
                 }}
                 onClick={update}
               >
-                Tạo buổi học yêu cầu
+                Thêm và gửi yêu cầu
               </Button>
               <Button
                 style={{
