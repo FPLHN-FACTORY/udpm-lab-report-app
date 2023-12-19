@@ -32,7 +32,7 @@ const ModalRandomClass = ({ visible, onCancel, fetchData }) => {
   useEffect(() => {
     return () => {
       setIdActivitiSearch("");
-      setSoLopRandom(0);
+      setSoLopRandom(1);
       setErrorActivity("");
       setErrorSoLopRandom("");
       setStartTime("");
@@ -116,8 +116,8 @@ const ModalRandomClass = ({ visible, onCancel, fetchData }) => {
 
     if (check === 0) {
       confirm({
-        title: "Xác nhận tạp nhiều lớp học",
-        content: "Bạn có chắc chắn muốn tạp nhiều lớp học?",
+        title: "Xác nhận tạo nhiều lớp học",
+        content: "Bạn có chắc chắn muốn tạo nhiều lớp học?",
         onOk() {
           let obj = {
             activityId: idActivitiSearch,
