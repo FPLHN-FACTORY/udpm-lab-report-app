@@ -69,7 +69,7 @@ public interface TeClassRepository extends JpaRepository<Class, String> {
     Page<TeClassResponse> findClassBySemesterAndActivity(@Param("req") TeFindClassRequest req, Pageable pageable);
 
     @Query(value = """
-            SELECT
+            SELECT ROW_NUMBER() OVER(ORDER BY c.code ASC ) AS stt,
             c.code AS code,
             c.id AS id,
             c.start_time AS start_time,

@@ -16,6 +16,7 @@ import { TeacherActivityAPI } from "../../../api/teacher/activity/TeacherActivit
 import { UpdateFiledClass } from "../../../app/teacher/my-class/teacherMyClassSlice.reduce";
 import { GetAdTeacher } from "../../../app/admin/AdTeacherSlice.reducer";
 import { GetAdMeetingPeriod } from "../../../app/admin/AdMeetingPeriodSlice.reducer";
+import { GetTeacherSemester } from "../../../app/teacher/semester/teacherSemesterSlice.reduce";
 
 const { Option } = Select;
 
@@ -103,16 +104,20 @@ const ModalUpdateFiledClass = ({ visible, onCancel, id }) => {
     }
   }, [id, visible]);
 
-  useEffect(() => {
-    const featchDataSemester = async () => {
-      try {
-        const responseClassAll = await TeacherSemesterAPI.getAllSemesters();
-        const listClassAll = responseClassAll.data.data;
-        setSemesterDataAll(listClassAll.data.data);
-      } catch (error) {}
-    };
-    featchDataSemester();
-  }, []);
+  // useEffect(() => {
+  //   const featchDataSemester = async () => {
+  //     try {
+  //       const responseClassAll = await TeacherSemesterAPI.getAllSemesters();
+  //       const listClassAll = responseClassAll.data;
+  //       setSemesterDataAll(listClassAll.data.data);
+  //       console.log("aaaaaaa");
+  //       console.log(listClassAll.data.data);
+  //     } catch (error) {}
+  //   };
+  //   featchDataSemester();
+  // }, []);
+
+  const listSemester = useAppSelector(GetTeacherSemester);
 
   useEffect(
     (id) => {
@@ -198,8 +203,8 @@ const ModalUpdateFiledClass = ({ visible, onCancel, id }) => {
                   value={idSemesterSeach}
                   disabled={true}
                 >
-                  {semesterDataAll != null &&
-                    semesterDataAll.map((semester) => (
+                  {listSemester != null &&
+                    listSemester.map((semester) => (
                       <Option key={semester.id} value={semester.id}>
                         {semester.name +
                           " (" +
