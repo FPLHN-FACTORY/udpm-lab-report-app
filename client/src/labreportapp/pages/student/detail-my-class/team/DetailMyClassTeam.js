@@ -25,6 +25,7 @@ import {
   Tag,
   Empty,
   message,
+  Modal,
 } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { convertLongToDate } from "../../../../helper/convertDate";
@@ -35,6 +36,8 @@ import { StMyClassAPI } from "../../../../api/student/StMyClassAPI";
 import { SetStStudentClasses } from "../../../../app/student/StStudentClasses.reducer";
 import StModalShowHistory from "./modal-show-history/StModalShowHistory";
 import { StClassAPI } from "../../../../api/student/StClassAPI";
+
+const { confirm } = Modal;
 
 const DetailMyClassTeam = () => {
   const dispatch = useAppDispatch();
@@ -173,15 +176,21 @@ const DetailMyClassTeam = () => {
       title: "Họ và tên",
       dataIndex: "name",
       key: "name",
-      className: (text, record) =>
-        record.role === 0 ? "boldIfTruongNhom" : "",
+      render: (text, record, index) => (
+        <span className={record.role === 0 ? "boldIfTruongNhom" : ""}>
+          {record.name}
+        </span>
+      ),
     },
     {
       title: "Email",
       dataIndex: "email",
       key: "email",
-      className: (text, record) =>
-        record.role === 0 ? "boldIfTruongNhom" : "",
+      render: (text, record, index) => (
+        <span className={record.role === 0 ? "boldIfTruongNhom" : ""}>
+          {record.email}
+        </span>
+      ),
     },
     {
       title: "Vai trò",
@@ -206,7 +215,9 @@ const DetailMyClassTeam = () => {
             <Tooltip title="Chuyển quyền trưởng nhóm">
               <FontAwesomeIcon
                 icon={faExchange}
-                onClick={() => {}}
+                onClick={() => {
+                  changeLeader(record.studentId);
+                }}
                 size="1x"
                 style={{
                   marginLeft: 7,
@@ -284,6 +295,31 @@ const DetailMyClassTeam = () => {
       ),
     },
   ];
+
+  const changeLeader = (idStudent) => {
+    confirm({
+      title: "Xác nhận chuyển quyền trưởng nhóm",
+      content: "Bạn có chắc chắn muốn chuyển quyền trưởng nhóm?",
+      onOk() {
+        setIsLoading(true);
+        let obj = {
+          idStudent: idStudent,
+          idClass: id,
+        };
+        StMyTeamClassAPI.changeLeader(obj).then(
+          (res) => {
+            checkStatusStudentInClass();
+            message.success("Đổi quyền trưởng nhóm thành công");
+            setIsLoading(false);
+          },
+          (error) => {
+            setIsLoading(false);
+          }
+        );
+      },
+      onCancel() {},
+    });
+  };
 
   return (
     <div style={{ paddingTop: "35px" }}>

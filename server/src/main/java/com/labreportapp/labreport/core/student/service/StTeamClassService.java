@@ -3,6 +3,7 @@ package com.labreportapp.labreport.core.student.service;
 import com.labreportapp.labreport.core.common.response.SimpleResponse;
 import com.labreportapp.labreport.core.student.model.request.FindTeamByIdClass;
 import com.labreportapp.labreport.core.student.model.request.FindTeamClassRequest;
+import com.labreportapp.labreport.core.student.model.request.StChangeLeaderRequest;
 import com.labreportapp.labreport.core.student.model.request.StJoinTeamRequest;
 import com.labreportapp.labreport.core.student.model.request.StOutTeamRequest;
 import com.labreportapp.labreport.core.student.model.response.StDetailClassCustomResponse;
@@ -36,5 +37,7 @@ public interface StTeamClassService {
     String outTeam(@Valid StOutTeamRequest request);
 
     List<SimpleResponse> test();
+
+    Boolean changeLeader(@Valid StChangeLeaderRequest request);
 
 }
