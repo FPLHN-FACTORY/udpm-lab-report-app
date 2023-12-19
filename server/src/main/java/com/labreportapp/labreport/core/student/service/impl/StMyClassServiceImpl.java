@@ -14,6 +14,7 @@ import com.labreportapp.labreport.core.student.repository.StStudentClassesReposi
 import com.labreportapp.labreport.core.student.service.StMyClassService;
 import com.labreportapp.labreport.entity.Class;
 import com.labreportapp.labreport.entity.StudentClasses;
+import com.labreportapp.labreport.infrastructure.constant.RoleTeam;
 import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.labreport.repository.LevelRepository;
 import com.labreportapp.labreport.repository.SemesterRepository;
@@ -139,6 +140,10 @@ public class StMyClassServiceImpl implements StMyClassService {
         Optional<StudentClasses> findStudentInClass = stStudentClassesRepository.
                 findStudentClassesByClassIdAndStudentId(req.getIdClass(), labReportAppSession.getUserId());
         if (findStudentInClass.isPresent()) {
+            Integer countStudentClasses = stStudentClassesRepository.countStudentClasses(findStudentInClass.get().getTeamId(), req.getIdClass());
+            if (findStudentInClass.get().getRole() == RoleTeam.LEADER && countStudentClasses > 1) {
+                throw new RestApiException("Bạn đang là trưởng nhóm, hãy chuyển quyền cho thành viên khác để rời khỏi nhóm.");
+            }
             Optional<StClassResponse> conditionClass = stClassRepository.checkConditionCouldJoinOrLeaveClass(req, Calendar.getInstance().getTimeInMillis());
             Integer countLessonMeeting = stMeetingRepository.countMeetingLessonByIdClass(new Date().getTime(), req.getIdClass());
             if (countLessonMeeting > 0) {
