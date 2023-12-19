@@ -61,6 +61,7 @@ const ClassConfiguration = () => {
       title: "Giá trị",
       dataIndex: "chiSo",
       key: "chiSo",
+      className: "boldIfTruongNhom",
     },
   ];
 
