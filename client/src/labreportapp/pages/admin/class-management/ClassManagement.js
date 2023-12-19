@@ -377,7 +377,7 @@ const ClassManagement = () => {
           </Tooltip>
         </div>
       ),
-      width: "250px",
+      width: "170px",
     },
   ];
 
