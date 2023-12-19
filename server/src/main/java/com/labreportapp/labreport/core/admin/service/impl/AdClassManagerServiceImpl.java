@@ -585,17 +585,6 @@ public class AdClassManagerServiceImpl implements AdClassService {
                     response.setMessage("Không tìm thấy lớp học " + classExcel.getCode());
                     return;
                 }
-                if (!classExcel.getClassPeriod().equals("")) {
-                    MeetingPeriod meetingPeriodFind = mapMeetingPeriod.get(classExcel.getClassPeriod().toLowerCase());
-                    if (meetingPeriodFind == null) {
-                        response.setStatus(false);
-                        response.setMessage("Ca học: " + classExcel.getClassPeriod() + " không tồn tại");
-                        return;
-                    }
-                    classFind.setClassPeriod(meetingPeriodFind.getId());
-                } else {
-                    classFind.setClassPeriod(null);
-                }
                 SimpleResponse giangVien = null;
                 if (!classExcel.getUsernameTeacher().isEmpty()) {
                     giangVien = mapGiangVien.get(classExcel.getUsernameTeacher().toLowerCase());
@@ -653,33 +642,38 @@ public class AdClassManagerServiceImpl implements AdClassService {
                             + " - " + teacherObjOld.getUserName() + " thành "
                             + "không có");
                     loggerResponseList.add(loggerResponse);
+                    Runnable emailTask = () -> {
+                        String htmlBody = "Quản trị viên đã hủy phân công bạn dạy lớp " + classNew.getCode() + ". <br/> Vui lòng truy cập đường link sau để xác nhận thông tin: <p><a href=\"https://factory.udpm-hn.com/teacher/my-class\">Tại đây</a></p>";
+                        emailSender.sendEmail(new String[]{teacherObjOld.getEmail()}, "[LAB-REPORT-APP] Thông báo hủy phân công dạy học", "Thông báo hủy phân công dạy học", htmlBody);
+                    };
+                    new Thread(emailTask).start();
                 }
-                String classPeriodNew = classNew.getClassPeriod();
-                String classPeriodOld = classOld.getClassPeriod();
-                if (classPeriodOld == null && classPeriodNew != null) {
-                    MeetingPeriod classPeriodObjNew = mapMeetingPeriodKeyId.get(classPeriodNew);
-                    LoggerResponse loggerResponse = new LoggerResponse();
-                    loggerResponse.setCodeClass(classNew.getCode());
-                    loggerResponse.setContent("Đã cập nhật ca học của lớp là: " + classPeriodObjNew.getName());
-                    loggerResponseList.add(loggerResponse);
-                }
-                if (classPeriodOld != null && classPeriodNew != null && !classPeriodOld.equals(classPeriodNew)) {
-                    MeetingPeriod classPeriodObjOld = mapMeetingPeriodKeyId.get(classPeriodOld);
-                    MeetingPeriod classPeriodObjNew = mapMeetingPeriodKeyId.get(classPeriodNew);
-                    LoggerResponse loggerResponse = new LoggerResponse();
-                    loggerResponse.setCodeClass(classNew.getCode());
-                    loggerResponse.setContent("Đã cập nhật ca học của lớp từ " + classPeriodObjOld.getName()
-                            + " thành " + classPeriodObjNew.getName());
-                    loggerResponseList.add(loggerResponse);
-                }
-                if (classPeriodOld != null && classPeriodNew == null) {
-                    MeetingPeriod classPeriodObjOld = mapMeetingPeriodKeyId.get(classPeriodOld);
-                    LoggerResponse loggerResponse = new LoggerResponse();
-                    loggerResponse.setCodeClass(classNew.getCode());
-                    loggerResponse.setContent("Đã cập nhật ca học của lớp từ " + classPeriodObjOld.getName()
-                            + " thành 'không có'");
-                    loggerResponseList.add(loggerResponse);
-                }
+//                String classPeriodNew = classNew.getClassPeriod();
+//                String classPeriodOld = classOld.getClassPeriod();
+//                if (classPeriodOld == null && classPeriodNew != null) {
+//                    MeetingPeriod classPeriodObjNew = mapMeetingPeriodKeyId.get(classPeriodNew);
+//                    LoggerResponse loggerResponse = new LoggerResponse();
+//                    loggerResponse.setCodeClass(classNew.getCode());
+//                    loggerResponse.setContent("Đã cập nhật ca học của lớp là: " + classPeriodObjNew.getName());
+//                    loggerResponseList.add(loggerResponse);
+//                }
+//                if (classPeriodOld != null && classPeriodNew != null && !classPeriodOld.equals(classPeriodNew)) {
+//                    MeetingPeriod classPeriodObjOld = mapMeetingPeriodKeyId.get(classPeriodOld);
+//                    MeetingPeriod classPeriodObjNew = mapMeetingPeriodKeyId.get(classPeriodNew);
+//                    LoggerResponse loggerResponse = new LoggerResponse();
+//                    loggerResponse.setCodeClass(classNew.getCode());
+//                    loggerResponse.setContent("Đã cập nhật ca học của lớp từ " + classPeriodObjOld.getName()
+//                            + " thành " + classPeriodObjNew.getName());
+//                    loggerResponseList.add(loggerResponse);
+//                }
+//                if (classPeriodOld != null && classPeriodNew == null) {
+//                    MeetingPeriod classPeriodObjOld = mapMeetingPeriodKeyId.get(classPeriodOld);
+//                    LoggerResponse loggerResponse = new LoggerResponse();
+//                    loggerResponse.setCodeClass(classNew.getCode());
+//                    loggerResponse.setContent("Đã cập nhật ca học của lớp từ " + classPeriodObjOld.getName()
+//                            + " thành 'không có'");
+//                    loggerResponseList.add(loggerResponse);
+//                }
             }
             if (response.getStatus()) {
                 List<Class> listClass = repository.saveAll(listClassUpdate.values());

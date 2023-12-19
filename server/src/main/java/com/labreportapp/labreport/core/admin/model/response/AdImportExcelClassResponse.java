@@ -14,8 +14,6 @@ public class AdImportExcelClassResponse {
 
     private String code;
 
-    private String classPeriod;
-
     private String usernameTeacher;
 
 }
