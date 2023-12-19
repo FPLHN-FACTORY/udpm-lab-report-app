@@ -228,7 +228,7 @@ const ModalUpdateFiledClass = ({ visible, onCancel, id }) => {
             </Row>
             <Row style={{ marginBottom: "15px" }}>
               <Col span={12} style={{ paddingRight: "10px" }}>
-                Giảng viên: <br />
+                <span>Giảng viên:</span> <br />
                 <Select
                   showSearch
                   value={selectedItemsPerson}
@@ -250,7 +250,7 @@ const ModalUpdateFiledClass = ({ visible, onCancel, id }) => {
                 <span>Thời gian bắt đầu:</span> <br />
                 <Input
                   value={startTime}
-                  style={{ width: "100%" }}
+                  style={{ width: "100%", height: "32px" }}
                   type="date"
                   disabled={true}
                 />
@@ -258,10 +258,10 @@ const ModalUpdateFiledClass = ({ visible, onCancel, id }) => {
             </Row>
             <Row style={{ marginBottom: "15px" }}>
               <Col span={12} style={{ paddingRight: "10px" }}>
-                <span>Hoạt Động:</span> <br />
+                <span>Hoạt động:</span> <br />
                 <Select
                   showSearch
-                  style={{ width: "100%" }}
+                  style={{ width: "100%", height: "32px" }}
                   value={idActivitiSearch}
                   disabled={true}
                 >
