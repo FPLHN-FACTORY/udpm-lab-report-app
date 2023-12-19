@@ -34,11 +34,12 @@ const ModalUpdateClassConfiguration = ({
       setClassSizeMin(classConfiguration[0].chiSo);
       setPointMin(classConfiguration[2].chiSo);
       setMaximumNumberOfBreaks(classConfiguration[3].chiSo);
-      setNumberHoney(classConfiguration[4].chiSo);
+      setNumberHoney(classConfiguration[5].chiSo);
+      setNumberClassMax(classConfiguration[4].chiSo);
       setErrorClassSizeMax("");
       setErrorClassSizeMin("");
       setErrorPointMin("");
-      setNumberClassMax("");
+
       setErrorNumberClassMax("");
       setErrorNumberHoney("");
       setErrorMaximumNumberOfBreaks("");
@@ -237,10 +238,6 @@ const ModalUpdateClassConfiguration = ({
             />
             <span className="error">{errorMaximumNumberOfBreaks}</span>
           </Col>
-        </Row>
-      </div>
-      <div style={{ marginTop: "15px", borderBottom: "1px solid black" }}>
-        <Row style={{ marginBottom: "15px" }}>
           <Col span={12}>
             <span>Số lượng mật ong:</span> <br />
             <Input
@@ -269,6 +266,7 @@ const ModalUpdateClassConfiguration = ({
           </Col>
         </Row>
       </div>
+
       <div style={{ textAlign: "right" }}>
         <div style={{ paddingTop: "15px" }}>
           <Button
