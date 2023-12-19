@@ -63,7 +63,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayOutputStream;
@@ -751,7 +750,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
             throw new RestApiException(Message.CHUA_DEN_THOI_GIAN_CUA_HOC_KY);
         }
         Optional<Semester> semesterFind = adSemesterRepository.findById(idSemesterCurrent);
-        if(!semesterFind.isPresent()) {
+        if (!semesterFind.isPresent()) {
             throw new RestApiException(Message.SEMESTER_NOT_EXISTS);
         }
         List<SimpleResponse> listStudent = callApiIdentity.handleCallApiGetUserByRoleAndModule(ActorConstants.ACTOR_STUDENT);
@@ -760,11 +759,15 @@ public class AdClassManagerServiceImpl implements AdClassService {
                 .filter(Objects::nonNull)
                 .distinct()
                 .collect(Collectors.toList());
-
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Runnable emailTask = () -> {
             String htmlBody =
                     "<p>Dear các bạn sinh viên,</p>" +
-                            "<p>Hiện tại xưởng thực hành đã mở lớp dạy ở các hoạt động ở kỳ + " + semesterFind.get().getName() +  ". Xin mời các bạn sinh viên có nhu cầu tham gia ở lớp xưởng thực hành vào đường link sau để đăng ký.</p>" +
+                            "<p>Hiện tại xưởng thực hành đã mở lớp dạy ở các hoạt động ở kỳ " +
+                            semesterFind.get().getName() + ", thời gian đăng ký lớp học của sinh viên là từ "
+                            + sdf.format(semesterFind.get().getStartTimeStudent()) + " đến "
+                            + sdf.format(semesterFind.get().getEndTimeStudent())
+                            + ". Xin mời các bạn sinh viên có nhu cầu tham gia ở lớp xưởng thực hành vào đường link sau để đăng ký.</p>" +
                             "<p><a href=\"https://factory.udpm-hn.com/student/register-class\">Tại đây</a></p>" +
                             "<br/>" +
                             "<p>Trân trọng,</p>" +
