@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.labreportapp.labreport.core.common.response.SimpleResponse;
 import com.labreportapp.labreport.core.student.model.request.FindTeamByIdClass;
 import com.labreportapp.labreport.core.student.model.request.FindTeamClassRequest;
+import com.labreportapp.labreport.core.student.model.request.StChangeLeaderRequest;
 import com.labreportapp.labreport.core.student.model.request.StJoinTeamRequest;
 import com.labreportapp.labreport.core.student.model.request.StOutTeamRequest;
 import com.labreportapp.labreport.core.student.model.response.StDetailClassCustomResponse;
@@ -208,6 +209,23 @@ public class StTeamClassServiceImpl implements StTeamClassService {
 
         List<SimpleResponse> response = responseEntity.getBody();
         return response;
+    }
+
+    @Override
+    public Boolean changeLeader(@Valid StChangeLeaderRequest request) {
+        Optional<StudentClasses> studentClassesOld = stStudentClassesRepository.findStudentClassesByClassIdAndStudentId(request.getIdClass(), labReportAppSession.getUserId());
+        if (!studentClassesOld.isPresent()) {
+            throw new RestApiException(Message.STUDENT_CLASSES_NOT_EXISTS);
+        }
+        Optional<StudentClasses> studentClassesNew = stStudentClassesRepository.findStudentClassesByClassIdAndStudentId(request.getIdClass(), request.getIdStudent());
+        if (!studentClassesNew.isPresent()) {
+            throw new RestApiException(Message.STUDENT_CLASSES_NOT_EXISTS);
+        }
+        studentClassesOld.get().setRole(RoleTeam.MEMBER);
+        studentClassesNew.get().setRole(RoleTeam.LEADER);
+        stStudentClassesRepository.save(studentClassesOld.get());
+        stStudentClassesRepository.save(studentClassesNew.get());
+        return true;
     }
 
     @Override

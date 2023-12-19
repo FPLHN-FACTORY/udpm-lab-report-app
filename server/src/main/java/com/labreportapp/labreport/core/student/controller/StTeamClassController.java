@@ -3,6 +3,7 @@ package com.labreportapp.labreport.core.student.controller;
 import com.labreportapp.labreport.core.common.base.ResponseObject;
 import com.labreportapp.labreport.core.student.model.request.FindTeamByIdClass;
 import com.labreportapp.labreport.core.student.model.request.FindTeamClassRequest;
+import com.labreportapp.labreport.core.student.model.request.StChangeLeaderRequest;
 import com.labreportapp.labreport.core.student.model.request.StJoinTeamRequest;
 import com.labreportapp.labreport.core.student.model.request.StOutTeamRequest;
 import com.labreportapp.labreport.core.student.service.StTeamClassService;
@@ -67,6 +68,11 @@ public class StTeamClassController {
     @PutMapping("/out-team")
     public ResponseObject outTeam(@RequestBody StOutTeamRequest request) {
         return new ResponseObject(service.outTeam(request));
+    }
+
+    @PutMapping("/change-leader")
+    public ResponseObject changeLeader(@RequestBody StChangeLeaderRequest request) {
+        return new ResponseObject(service.changeLeader(request));
     }
 
     @GetMapping("/test")

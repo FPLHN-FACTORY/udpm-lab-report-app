@@ -56,4 +56,12 @@ export class StMyTeamClassAPI {
       data: data,
     });
   }
+
+  static changeLeader(data) {
+    return request({
+      method: "PUT",
+      url: `/student/my-class/team/change-leader`,
+      data: data,
+    });
+  }
 }
