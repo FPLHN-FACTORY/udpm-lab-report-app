@@ -218,7 +218,36 @@ const ModalUpdateMeetingRequest = ({
               </Col>
             </Row>
           </div>
-          <div style={{ textAlign: "right" }}>
+          <div style={{ paddingTop: "15px", float: "right", right: 0 }}>
+            <Button
+              // style={{
+              //   marginRight: "5px",
+              //   backgroundColor: "rgb(61, 139, 227)",
+              //   color: "white",
+              //   width: "150px",
+              // }}
+              className="btn_clean"
+              style={{
+                width: "100px",
+                marginLeft: "10px",
+              }}
+              onClick={update}
+            >
+              Cập nhật
+            </Button>
+            <Button
+              // style={{
+              //   backgroundColor: "red",
+              //   color: "white",
+              //   width: "88px",
+              // }}
+              className="btn_filter"
+              onClick={onCancel}
+            >
+              Hủy
+            </Button>
+          </div>
+          {/* <div style={{ textAlign: "right" }}>
             <div style={{ paddingTop: "15px" }}>
               <Button
                 style={{
@@ -242,7 +271,7 @@ const ModalUpdateMeetingRequest = ({
                 Hủy
               </Button>
             </div>
-          </div>
+          </div> */}
         </div>
       </Modal>
     </>

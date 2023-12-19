@@ -48,7 +48,7 @@ const ModalCreateMeetingRequest = ({ idClass, visible, onCancel }) => {
     };
   }, [visible]);
 
-  const update = () => {
+  const create = () => {
     let check = 0;
     if (meetingDate === null) {
       setErrorMeetingDate("Ngày diễn ra không được để trống");
@@ -213,30 +213,34 @@ const ModalCreateMeetingRequest = ({ idClass, visible, onCancel }) => {
               </Col>
             </Row>
           </div>
-          <div style={{ textAlign: "right" }}>
-            <div style={{ paddingTop: "15px" }}>
-              <Button
-                style={{
-                  marginRight: "5px",
-                  backgroundColor: "rgb(61, 139, 227)",
-                  color: "white",
-                  width: "150px",
-                }}
-                onClick={update}
-              >
-                Thêm và gửi yêu cầu
-              </Button>
-              <Button
-                style={{
-                  backgroundColor: "red",
-                  color: "white",
-                  width: "88px",
-                }}
-                onClick={onCancel}
-              >
-                Hủy
-              </Button>
-            </div>
+          <div style={{ paddingTop: "15px", float: "right", right: 0 }}>
+            <Button
+              // style={{
+              //   marginRight: "5px",
+              //   backgroundColor: "rgb(61, 139, 227)",
+              //   color: "white",
+              //   width: "150px",
+              // }}
+              className="btn_clean"
+              style={{
+                width: "100px",
+                marginLeft: "10px",
+              }}
+              onClick={create}
+            >
+              Thêm
+            </Button>
+            <Button
+              // style={{
+              //   backgroundColor: "red",
+              //   color: "white",
+              //   width: "88px",
+              // }}
+              className="btn_filter"
+              onClick={onCancel}
+            >
+              Hủy
+            </Button>
           </div>
         </div>
       </Modal>
