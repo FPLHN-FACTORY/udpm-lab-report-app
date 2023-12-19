@@ -104,19 +104,6 @@ const ModalUpdateFiledClass = ({ visible, onCancel, id }) => {
     }
   }, [id, visible]);
 
-  // useEffect(() => {
-  //   const featchDataSemester = async () => {
-  //     try {
-  //       const responseClassAll = await TeacherSemesterAPI.getAllSemesters();
-  //       const listClassAll = responseClassAll.data;
-  //       setSemesterDataAll(listClassAll.data.data);
-  //       console.log("aaaaaaa");
-  //       console.log(listClassAll.data.data);
-  //     } catch (error) {}
-  //   };
-  //   featchDataSemester();
-  // }, []);
-
   const listSemester = useAppSelector(GetTeacherSemester);
 
   useEffect(

@@ -16,7 +16,7 @@ const teMyClassSlice = createSlice({
       state.forEach((item) => {
         if (item.id === data.id) {
           // item.code = data.code;
-          item.nameClassPeriod = data.classPeriod;
+          item.classPeriod = data.classPeriod;
           item.startHour = data.startHour;
           item.startMinute = data.startMinute;
           item.endHour = data.endHour;
