@@ -187,12 +187,6 @@ const ModalAllMeetingRequest = ({ visible, onCancel, item, fetchData }) => {
       render: (text, record, index) => index + 1,
     },
     {
-      title: "Tên buổi",
-      dataIndex: "name",
-      key: "name",
-      sorter: (a, b) => a.name.localeCompare(b.name),
-    },
-    {
       title: "Ngày dạy",
       dataIndex: "meetingDate",
       key: "meetingDate",
