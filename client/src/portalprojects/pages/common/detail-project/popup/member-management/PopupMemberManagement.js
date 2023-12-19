@@ -353,6 +353,7 @@ const PopupMemberManagement = ({ position, onClose }) => {
   const [valueMultiMember, setValueMultiMember] = useState([]);
   const [memberAll, setMemberAll] = useState([]);
   const memberProject = useAppSelector(GetMemberProject);
+  console.log(memberProject);
   const [listMemberNoJoinProject, setListMemberNoJoinProject] = useState([]);
   const [listMemberAdd, setListMemberAdd] = useState([]);
 

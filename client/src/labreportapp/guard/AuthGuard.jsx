@@ -18,6 +18,13 @@ const AuthGuard = ({ children }) => {
       return null;
     } else {
       const decodedToken = jwt_decode(token);
+
+      const currentTime = Date.now() / 1000;
+      if (decodedToken.exp && decodedToken.exp < currentTime) {
+        window.location.href = portIdentity;
+        return null;
+      }
+
       dispatch(SetUserCurrent(decodedToken));
       Cookies.set("userCurrent", JSON.stringify(decodedToken), {
         expires: 365,

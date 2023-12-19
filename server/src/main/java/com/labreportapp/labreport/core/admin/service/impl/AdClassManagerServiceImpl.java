@@ -626,7 +626,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
                     loggerResponseList.add(loggerResponse);
 
                     Runnable emailTask = () -> {
-                        String htmlBody = "Quản trị viên đã phân bạn dạy lớp " + classNew.getCode() + ". <br/> Vui lòng truy cập đường link sau để xác nhận thông tin: <p><a href=\"[https://factory.udpm-hn.com/teacher/my-class]\">Tại đây</a></p>";
+                        String htmlBody = "Quản trị viên đã phân bạn dạy lớp " + classNew.getCode() + ". <br/> Vui lòng truy cập đường link sau để xác nhận thông tin: <p><a href=\"https://factory.udpm-hn.com/teacher/my-class\">Tại đây</a></p>";
                         emailSender.sendEmail(new String[]{teacherObj.getEmail()}, "[LAB-REPORT-APP] Thông báo phân công dạy học", "Thông báo phân công dạy học", htmlBody);
                     };
                     new Thread(emailTask).start();
@@ -642,7 +642,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
                     loggerResponseList.add(loggerResponse);
 
                     Runnable emailTask = () -> {
-                        String htmlBody = "Quản trị viên đã phân bạn dạy lớp " + classNew.getCode() + ". <br/> Vui lòng truy cập đường link sau để xác nhận thông tin: <p><a href=\"[https://factory.udpm-hn.com/teacher/my-class]\">Tại đây</a></p>";
+                        String htmlBody = "Quản trị viên đã phân bạn dạy lớp " + classNew.getCode() + ". <br/> Vui lòng truy cập đường link sau để xác nhận thông tin: <p><a href=\"https://factory.udpm-hn.com/teacher/my-class\">Tại đây</a></p>";
                         emailSender.sendEmail(new String[]{teacherObjNew.getEmail()}, "[LAB-REPORT-APP] Thông báo phân công dạy học", "Thông báo phân công dạy học", htmlBody);
                     };
                     new Thread(emailTask).start();
@@ -765,10 +765,10 @@ public class AdClassManagerServiceImpl implements AdClassService {
             String htmlBody =
                     "<p>Dear các bạn sinh viên,</p>" +
                             "<p>Hiện tại xưởng thực hành đã mở thêm lớp dạy ở các hoạt động. Xin mời các bạn sinh viên có nhu cầu tham gia ở lớp xưởng thực hành vào đường link sau để đăng ký.</p>" +
-                            "<p><a href=\"[https://factory.udpm-hn.com/student/register-class]\">Tại đây</a></p>" +
+                            "<p><a href=\"https://factory.udpm-hn.com/student/register-class\">Tại đây</a></p>" +
                             "<br/>" +
                             "<p>Trân trọng,</p>" +
-                            "<p>[Tên của bạn hoặc tên tổ chức của bạn]</p>";
+                            "<p>[LAB-REPORT-APP]</p>";
 
             emailSender.sendEmail(listEmailStudent.toArray(new String[0]), "[LAB-REPORT-APP] Thông báo mở lớp xưởng thực hành", " Thông báo mở lớp xưởng thực hành", htmlBody);
         };

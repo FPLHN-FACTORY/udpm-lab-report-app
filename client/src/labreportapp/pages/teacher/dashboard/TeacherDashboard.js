@@ -188,22 +188,33 @@ const TeacherDashboard = () => {
       key: "classPeriod",
       sorter: (a, b) => a.classPeriod.localeCompare(b.classPeriod),
       align: "center",
+      render: (text, record) => {
+        if (record.classPeriod != null) {
+          return <span>{record.classPeriod}</span>;
+        } else {
+          return <span>Chưa có</span>;
+        }
+      },
     },
     {
       title: <div style={{ textAlign: "center" }}>Thời gian</div>,
       dataIndex: "timePeriod",
       key: "timePeriod",
       render: (text, record) => {
-        return (
-          <span>
-            {convertHourAndMinuteToString(
-              record.startHour,
-              record.startMinute,
-              record.endHour,
-              record.endMinute
-            )}
-          </span>
-        );
+        if (record.classPeriod != null) {
+          return (
+            <span>
+              {convertHourAndMinuteToString(
+                record.startHour,
+                record.startMinute,
+                record.endHour,
+                record.endMinute
+              )}
+            </span>
+          );
+        } else {
+          return <span>Chưa có</span>;
+        }
       },
       align: "center",
     },
