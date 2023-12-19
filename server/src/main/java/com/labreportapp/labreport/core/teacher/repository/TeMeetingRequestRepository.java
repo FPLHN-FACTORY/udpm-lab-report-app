@@ -12,7 +12,9 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author hieundph25894 - duchieu212
@@ -24,6 +26,16 @@ public interface TeMeetingRequestRepository extends JpaRepository<MeetingRequest
             SELECT * FROM meeting_request mr WHERE mr.class_id = :idClass AND mr.status_meeting_request = 2
             """, nativeQuery = true)
     List<MeetingRequest> getAllByClassIdAndStatusReject(@Param("idClass") String idClass);
+
+    @Query(value = """
+            SELECT * FROM meeting_request mr WHERE mr.class_id = :idClass
+             AND DATE(CONVERT_TZ(FROM_UNIXTIME(mr.meeting_date / 1000), 'UTC', 'Asia/Ho_Chi_Minh')) = :meetingDate
+             AND mr.meeting_period = :meetingPeriod
+            """, nativeQuery = true)
+    Optional<MeetingRequest> getMeetingRequestByIdClassAndMeetingDateAndMeetingPeriod(
+            @Param("idClass") String idClass,
+            @Param("meetingDate") LocalDate meetingDate,
+            @Param("meetingPeriod") String meetingPeriod);
 
     @Query(value = """
                    SELECT  

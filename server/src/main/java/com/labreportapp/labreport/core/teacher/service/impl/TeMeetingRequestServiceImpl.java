@@ -32,6 +32,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -192,6 +195,14 @@ public class TeMeetingRequestServiceImpl implements TeMeetingRequestService {
         if (meetingPeriodFind == null) {
             throw new RestApiException(Message.MEETING_PERIOD_NOT_EXITS);
         }
+        LocalDate meetingDateFind = Instant.ofEpochMilli(request.getMeetingDate())
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+        Optional<MeetingRequest> findDoubleMeeting = teMeetingRequestRepository
+                .getMeetingRequestByIdClassAndMeetingDateAndMeetingPeriod(request.getIdClass(), meetingDateFind, request.getMeetingPeriod());
+        if (findDoubleMeeting.isPresent()) {
+            throw new RestApiException("Đã tồn tại buổi học !");
+        }
         MeetingRequest meetingRequest = new MeetingRequest();
         meetingRequest.setClassId(request.getIdClass());
         meetingRequest.setMeetingDate(request.getMeetingDate());
@@ -199,7 +210,6 @@ public class TeMeetingRequestServiceImpl implements TeMeetingRequestService {
         meetingRequest.setTeacherId(request.getTeacherId());
         meetingRequest.setTypeMeeting(TypeMeeting.values()[request.getTypeMeeting()]);
         meetingRequest.setStatusMeetingRequest(StatusMeetingRequest.CHO_PHE_DUYET);
-        meetingRequest.setName("Buổi 1");
         MeetingRequest meetingRequestSave = teMeetingRequestRepository.save(meetingRequest);
         teMeetingRequestRepository.updateNameMeetingRequest(request.getIdClass());
         SimpleResponse simple = null;
@@ -215,7 +225,7 @@ public class TeMeetingRequestServiceImpl implements TeMeetingRequestService {
         } else {
             stringBuilder.append(", hình thức Offline");
         }
-        stringBuilder.append(meetingPeriodFind.getName());
+        stringBuilder.append(", ").append(meetingPeriodFind.getName());
 
         if (!request.getTeacherId().equals("") && request.getTeacherId() != null) {
             simple = callApiIdentity.handleCallApiGetUserById(request.getTeacherId());

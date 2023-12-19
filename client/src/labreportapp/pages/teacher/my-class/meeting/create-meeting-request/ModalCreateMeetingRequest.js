@@ -63,7 +63,7 @@ const ModalCreateMeetingRequest = ({ idClass, visible, onCancel }) => {
     } else {
       setErrorMeetingDate("");
       if (new Date(meetingDate).getTime() < new Date().getTime()) {
-        setErrorMeetingDate("Ngày học không được nằm trong quá khứ");
+        setErrorMeetingDate("Ngày diễn ra không được nằm trong quá khứ");
         ++check;
       } else {
         setErrorMeetingDate("");
@@ -144,16 +144,6 @@ const ModalCreateMeetingRequest = ({ idClass, visible, onCancel }) => {
           </div>
           <div style={{ marginTop: "5px" }}>
             <Row>
-              <Col span={24} style={{ padding: "5px" }}>
-                Tên buổi học:
-                <br />
-                <Input
-                  value={name}
-                  disabled={true}
-                  type="text"
-                  placeholder="Nhập tên buổi học"
-                />
-              </Col>
               <Col span={12} style={{ padding: "5px" }}>
                 <span style={{ color: "red" }}>(*) </span>Ngày diễn ra:
                 <br />
@@ -177,6 +167,7 @@ const ModalCreateMeetingRequest = ({ idClass, visible, onCancel }) => {
                   }}
                   style={{ width: "100%" }}
                 >
+                  <Option value={""}>Chọn 1 ca học</Option>
                   {dataMeetingPeriod.map((item) => {
                     return (
                       <Option value={item.id} key={item.id}>
