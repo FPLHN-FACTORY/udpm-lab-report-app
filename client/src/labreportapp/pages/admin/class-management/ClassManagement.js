@@ -231,7 +231,7 @@ const ClassManagement = () => {
       key: "nameClassPeriod",
       render: (text, record) => {
         if (record.nameClassPeriod == null) {
-          return <span>Chưa có</span>;
+          return <span>-</span>;
         } else {
           return <span>{record.nameClassPeriod}</span>;
         }
@@ -243,7 +243,7 @@ const ClassManagement = () => {
       key: "timePeriod",
       render: (text, record) => {
         if (record.startHour == null) {
-          return <span>Chưa có</span>;
+          return <span>-</span>;
         } else {
           return (
             <span>
