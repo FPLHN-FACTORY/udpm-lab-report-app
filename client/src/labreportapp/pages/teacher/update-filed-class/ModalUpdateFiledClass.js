@@ -3,8 +3,7 @@ import { Modal, Row, Col, Input, Button, Select, message } from "antd";
 import "./styleUpdateFiledClass.css";
 import { useEffect, useState } from "react";
 import moment from "moment";
-import { useAppDispatch, useAppSelector } from "../../../app/hook";
-import { GetAdTeacher } from "../../../../app/admin/AdTeacherSlice.reducer";
+import { useAppDispatch } from "../../../app/hook";
 import LoadingIndicatorNoOverlay from "../../../../helper/loadingNoOverlay";
 import {
   convertDateLongToString,
@@ -183,8 +182,6 @@ const ModalUpdateFiledClass = ({ visible, onCancel, id }) => {
   const handleSelectChange = (value) => {
     setClassPeriod(value);
   };
-
-  const teacherDataAll = useAppSelector(GetAdTeacher);
 
   const filterTeacherOptions = (input, option) => {
     return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;

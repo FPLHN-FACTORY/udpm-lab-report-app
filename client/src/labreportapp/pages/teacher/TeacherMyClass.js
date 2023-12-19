@@ -259,24 +259,26 @@ const TeacherMyClass = () => {
       key: "actions",
       render: (text, record) => (
         <>
-          <Tooltip
-            title="Cập nhật"
-            onClick={() => {
-              setShowUpdateModal(true);
-              setIDClassUpdate(record.id);
-            }}
-          >
-            <FontAwesomeIcon
-              icon={faPencilAlt}
-              size="1x"
-              style={{
-                marginLeft: 7,
-                marginRight: "15px",
-                color: "rgb(38, 144, 214)",
-                cursor: "pointer",
+          <div className="box_icon" style={{ textAlign: "center" }}>
+            <Tooltip
+              title="Cập nhật"
+              onClick={() => {
+                setShowUpdateModal(true);
+                setIDClassUpdate(record.id);
               }}
-            />
-          </Tooltip>
+            >
+              <FontAwesomeIcon
+                icon={faPencilAlt}
+                size="1x"
+                style={{
+                  marginLeft: 7,
+                  marginRight: "15px",
+                  color: "rgb(38, 144, 214)",
+                  cursor: "pointer",
+                }}
+              />
+            </Tooltip>
+          </div>
           <div className="box_icon" style={{ textAlign: "center" }}>
             <Link
               to={`/teacher/my-class/post/${record.id}`}
