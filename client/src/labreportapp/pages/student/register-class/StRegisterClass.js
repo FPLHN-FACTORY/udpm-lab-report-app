@@ -391,7 +391,6 @@ const StRegisterClass = () => {
               onCancel={() => setOpen(false)}
               width={650}
               footer={null}
-              className="modal_show_detail"
             >
               <div className="wrapper-modal">
                 <div style={{ borderBottom: "1px solid black" }}>
@@ -413,6 +412,7 @@ const StRegisterClass = () => {
           </Tooltip>
         </>
       ),
+      width: "100px",
     },
   ];
 
