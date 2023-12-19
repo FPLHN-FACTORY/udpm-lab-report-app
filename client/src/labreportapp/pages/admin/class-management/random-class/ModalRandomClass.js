@@ -32,7 +32,7 @@ const ModalRandomClass = ({ visible, onCancel, fetchData }) => {
   useEffect(() => {
     return () => {
       setIdActivitiSearch("");
-      setSoLopRandom(0);
+      setSoLopRandom(1);
       setErrorActivity("");
       setErrorSoLopRandom("");
       setStartTime("");
