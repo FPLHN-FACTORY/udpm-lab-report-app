@@ -245,6 +245,7 @@ public class StTeamClassServiceImpl implements StTeamClassService {
     public StDetailClassCustomResponse detailClass(String idClass) {
         Class classFind = repository.findById(idClass).get();
         SimpleResponse response = callApiIdentity.handleCallApiGetUserById(classFind.getTeacherId());
+
         StDetailClassCustomResponse stDetailClassCustomResponse = new StDetailClassCustomResponse();
         stDetailClassCustomResponse.setId(classFind.getId());
         stDetailClassCustomResponse.setCode(classFind.getCode());
@@ -259,10 +260,15 @@ public class StTeamClassServiceImpl implements StTeamClassService {
         }
         stDetailClassCustomResponse.setDescriptions(classFind.getDescriptions());
         stDetailClassCustomResponse.setActivityId(classFind.getActivityId());
-        stDetailClassCustomResponse.setNameTeacher(response.getName());
         stDetailClassCustomResponse.setStartTime(classFind.getStartTime());
         stDetailClassCustomResponse.setTeacherId(classFind.getTeacherId());
-        stDetailClassCustomResponse.setUsernameTeacher(response.getUserName());
+        if (response == null) {
+            stDetailClassCustomResponse.setNameTeacher(null);
+            stDetailClassCustomResponse.setUsernameTeacher(null);
+        } else {
+            stDetailClassCustomResponse.setNameTeacher(response.getName());
+            stDetailClassCustomResponse.setUsernameTeacher(response.getUserName());
+        }
         stDetailClassCustomResponse.setStatusClass(classFind.getStatusClass() != null ? classFind.getStatusClass() == StatusClass.OPEN ? 0 : 1 : 1);
         return stDetailClassCustomResponse;
     }

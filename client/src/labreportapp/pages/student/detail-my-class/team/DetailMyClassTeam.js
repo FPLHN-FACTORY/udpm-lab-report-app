@@ -402,9 +402,11 @@ const DetailMyClassTeam = () => {
                 >
                   Giảng viên:{" "}
                   {detailClass != null
-                    ? detailClass.nameTeacher +
-                      " - " +
-                      detailClass.usernameTeacher
+                    ? detailClass.nameTeacher != null &&
+                      detailClass.usernameTeacher != null &&
+                      detailClass.nameTeacher +
+                        " - " +
+                        detailClass.usernameTeacher
                     : ""}
                 </span>
               </div>
