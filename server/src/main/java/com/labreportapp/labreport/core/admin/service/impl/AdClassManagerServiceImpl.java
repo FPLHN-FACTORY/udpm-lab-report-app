@@ -456,8 +456,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
             }
         });
         List<SimpleResponse> giangVienHuongDanList = callApiIdentity.handleCallApiGetUserByRoleAndModule(ActorConstants.ACTOR_TEACHER);
-        List<AdMeetingPeriodResponse> listMeetingPeriod = adMeetingPeriodRepository.getAllMeetingPeriod();
-        return adExportExcelClass.export(response, listCustom, giangVienHuongDanList, listMeetingPeriod);
+        return adExportExcelClass.export(response, listCustom, giangVienHuongDanList);
     }
 
     @Override

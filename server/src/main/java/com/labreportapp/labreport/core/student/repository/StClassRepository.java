@@ -61,7 +61,7 @@ public interface StClassRepository extends ClassRepository {
     @Query(value = """
             SELECT c.code
             FROM class c
-            JOIN meeting_period mp ON mp.id = c.class_period
+            LEFT JOIN meeting_period mp ON mp.id = c.class_period
             JOIN activity ac ON c.activity_id = ac.id
             JOIN semester s ON ac.semester_id = s.id
             WHERE :currentTime >= s.start_time_student
