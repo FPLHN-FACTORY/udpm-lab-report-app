@@ -245,6 +245,7 @@ const SemesterManagement = () => {
         </div>
       ),
       align: "center",
+      width: "130px",
     },
   ];
   const [modalUpdate, setModalUpdate] = useState(false);
