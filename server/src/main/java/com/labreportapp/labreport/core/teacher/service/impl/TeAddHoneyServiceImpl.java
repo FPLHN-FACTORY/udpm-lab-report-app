@@ -9,6 +9,7 @@ import com.labreportapp.labreport.core.teacher.service.TeAddHoneyService;
 import com.labreportapp.labreport.entity.Class;
 import com.labreportapp.labreport.entity.ClassConfiguration;
 import com.labreportapp.labreport.infrastructure.constant.StatusHoneyPlus;
+import com.labreportapp.labreport.infrastructure.session.LabReportAppSession;
 import com.labreportapp.labreport.repository.ClassConfigurationRepository;
 import com.labreportapp.labreport.repository.ClassRepository;
 import com.labreportapp.labreport.util.CallApiHoney;
@@ -45,6 +46,9 @@ public class TeAddHoneyServiceImpl implements TeAddHoneyService {
     @Qualifier(ClassConfigurationRepository.NAME)
     private ClassConfigurationRepository classConfigurationRepository;
 
+    @Autowired
+    private LabReportAppSession session;
+
     @Override
     public List<CategoryHoneyResponse> getAllCategory() {
         return callApiHoney.getAllListCategory();
@@ -52,6 +56,10 @@ public class TeAddHoneyServiceImpl implements TeAddHoneyService {
 
     @Override
     public Boolean addHoney(String idClass, String categoryId) {
+        List<ClassConfiguration> classConfigurationList = classConfigurationRepository.findAll();
+        if (classConfigurationList.isEmpty()) {
+            throw new RestApiException(Message.BAN_CHUA_TAO_CAU_HINH);
+        }
         Optional<Class> classFind = classRepository.findById(idClass);
         if (!classFind.isPresent()) {
             throw new NotFoundException(Message.CLASS_NOT_EXISTS);
@@ -63,10 +71,6 @@ public class TeAddHoneyServiceImpl implements TeAddHoneyService {
         if (listResponse.isEmpty()) {
             throw new RestApiException(Message.KHONG_CO_SINH_VIEN_NAO_DU_DIEU_KIEN_CONG_MAT_ONG);
         }
-        List<ClassConfiguration> classConfigurationList = classConfigurationRepository.findAll();
-        if (classConfigurationList.isEmpty()) {
-            throw new RestApiException(Message.BAN_CHUA_TAO_CAU_HINH);
-        }
         List<ItemStudentHoneyRequest> listStudent = new ArrayList<>();
         for (TePointCustomResponse tePointCustomResponse : listResponse) {
             ItemStudentHoneyRequest itemStudentHoneyRequest = new ItemStudentHoneyRequest();
@@ -76,6 +80,8 @@ public class TeAddHoneyServiceImpl implements TeAddHoneyService {
             listStudent.add(itemStudentHoneyRequest);
         }
         HoneyConversionRequest request = new HoneyConversionRequest();
+        request.setName(session.getName());
+        request.setUsername(session.getUserName());
         request.setCode("MODULE_LAB_REPORT_APP");
         request.setListStudent(listStudent);
         request.setCategoryId(categoryId);
