@@ -764,7 +764,7 @@ public class AdClassManagerServiceImpl implements AdClassService {
         Runnable emailTask = () -> {
             String htmlBody =
                     "<p>Dear các bạn sinh viên,</p>" +
-                            "<p>Hiện tại xưởng thực hành đã mở lớp dạy ở các hoạt động ở kỳ + " + semesterFind.get().getName() +  ". Xin mời các bạn sinh viên có nhu cầu tham gia ở lớp xưởng thực hành vào đường link sau để đăng ký.</p>" +
+                            "<p>Hiện tại xưởng thực hành đã mở lớp dạy ở các hoạt động ở kỳ " + semesterFind.get().getName() +  ". Xin mời các bạn sinh viên có nhu cầu tham gia ở lớp xưởng thực hành vào đường link sau để đăng ký.</p>" +
                             "<p><a href=\"https://factory.udpm-hn.com/student/register-class\">Tại đây</a></p>" +
                             "<br/>" +
                             "<p>Trân trọng,</p>" +
