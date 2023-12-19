@@ -48,7 +48,7 @@ public interface MeProjectRepository extends ProjectRepository {
             LEFT JOIN group_project gp on gp.id = a.group_project_id
             LEFT JOIN project_category pa ON pa.project_id = a.id
             LEFT JOIN category cate on pa.category_id = cate.id
-            WHERE b.member_id = :#{#req.idUser}
+            WHERE b.member_id = :#{#req.idUser} 
             AND (:#{#req.nameProject} IS NULL OR :#{#req.nameProject} LIKE '' OR a.name LIKE %:#{#req.nameProject}%)
             AND (:#{#req.status} IS NULL OR :#{#req.status} LIKE '' OR a.status_project = :#{#req.status})
             AND 
@@ -62,29 +62,6 @@ public interface MeProjectRepository extends ProjectRepository {
             ORDER BY a.created_date DESC
             """, nativeQuery = true)
     Page<MeProjectResponse> getAllProjectById(Pageable page, @Param("req") MeFindProjectRequest req);
-
-//    @Query(value = """
-//            SELECT DISTINCT pro.id,
-//                   pro.name,
-//                   pro.code,
-//                   pro.descriptions,
-//                   pro.status_project,
-//                   pro.start_time,
-//                   pro.end_time,
-//                   pro.progress,
-//                   pro.created_date,
-//                   pro.background_image,
-//                   pro.background_color,
-//                   GROUP_CONCAT(cate.name SEPARATOR ', ') as nameCategorys,
-//                    gp.name as name_group_project,
-//                    gp.id as id_group_project
-//             FROM project_category a
-//             JOIN project pro on a.project_id = pro.id
-//             JOIN category cate on a.category_id = cate.id
-//             LEFT JOIN group_project gp on gp.id = pro.group_project_id
-//            WHERE pro.id = :idProject
-//            """, nativeQuery = true)
-//    Optional<MeDetailProjectCateResponse> findOneProjectCategoryById(@Param("idProject") String idProject);
 
     @Query(value = """
             SELECT DISTINCT pro.id,
@@ -108,6 +85,5 @@ public interface MeProjectRepository extends ProjectRepository {
              WHERE pro.id = :idProject
             """, nativeQuery = true)
     Optional<MeDetailProjectCateResponse> findOneProjectCategoryById(@Param("idProject") String idProject);
-
 
 }

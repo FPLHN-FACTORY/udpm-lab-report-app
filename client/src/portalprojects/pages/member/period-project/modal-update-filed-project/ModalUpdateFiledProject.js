@@ -72,8 +72,7 @@ const ModalUpdateFiledProject = ({ visible, onCancel, idProject }) => {
 
   const fetchDataCategory = async () => {
     try {
-      const responeGetAllCategory =
-        await MemberProjectApi.fetchAllCategory();
+      const responeGetAllCategory = await MemberProjectApi.fetchAllCategory();
       setListCategory(responeGetAllCategory.data.data);
     } catch (error) {}
   };
@@ -340,7 +339,6 @@ const ModalUpdateFiledProject = ({ visible, onCancel, idProject }) => {
             <Row gutter={24} style={{ marginBottom: "10px" }}>
               {" "}
               <Col span={24}>
-                <span className="notBlank">*</span>
                 <span>Mô tả:</span> <br />
                 <TextArea
                   placeholder="Nhập mô tả"
