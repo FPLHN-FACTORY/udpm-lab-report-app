@@ -161,33 +161,39 @@ const DetailMyClassTeam = () => {
       title: "#",
       dataIndex: "stt",
       key: "stt",
-      render: (text, record, index) => <>{index + 1}</>,
+      render: (text, record, index) => (
+        <span className={record.role === 0 ? "boldIfTruongNhom" : ""}>
+          {index + 1}
+        </span>
+      ),
       align: "center",
-      className: "boldIfTruongNhom",
     },
     {
       title: "Họ và tên",
       dataIndex: "name",
       key: "name",
-      className: "boldIfTruongNhom",
+      className: (text, record) =>
+        record.role === 0 ? "boldIfTruongNhom" : "",
     },
     {
       title: "Email",
       dataIndex: "email",
       key: "email",
-      className: "boldIfTruongNhom",
+      className: (text, record) =>
+        record.role === 0 ? "boldIfTruongNhom" : "",
     },
     {
       title: "Vai trò",
       dataIndex: "role",
       key: "role",
-      render: (text, record, index) => (
+      render: (text, record) => (
         <span className={record.role === 0 ? "boldIfTruongNhom" : ""}>
           {record.role === 0 ? "Trưởng nhóm" : "Thành viên"}
         </span>
       ),
       align: "center",
-      className: "boldIfTruongNhom",
+      className: (text, record) =>
+        record.role === 0 ? "boldIfTruongNhom" : "",
     },
   ];
 
