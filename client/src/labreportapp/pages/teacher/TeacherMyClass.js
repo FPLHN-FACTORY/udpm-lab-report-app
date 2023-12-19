@@ -200,6 +200,35 @@ const TeacherMyClass = () => {
       key: "classPeriod",
       sorter: (a, b) => a.classPeriod.localeCompare(b.classPeriod),
       align: "center",
+      render: (text, record) => {
+        if (record.classPeriod != null) {
+          return <span>{record.classPeriod}</span>;
+        } else {
+          return "Chưa có";
+        }
+      },
+    },
+    {
+      title: <div style={{ textAlign: "center" }}>Thời gian</div>,
+      dataIndex: "timePeriod",
+      key: "timePeriod",
+      render: (text, record) => {
+        if (record.classPeriod != null) {
+          return (
+            <span>
+              {convertHourAndMinuteToString(
+                record.startHour,
+                record.startMinute,
+                record.endHour,
+                record.endMinute
+              )}
+            </span>
+          );
+        } else {
+          return "Chưa có";
+        }
+      },
+      align: "center",
     },
     {
       title: <div style={{ textAlign: "center" }}>Sĩ số</div>,
@@ -208,24 +237,7 @@ const TeacherMyClass = () => {
       sorter: (a, b) => a.classSize - b.classSize,
       align: "center",
     },
-    {
-      title: <div style={{ textAlign: "center" }}>Thời gian</div>,
-      dataIndex: "timePeriod",
-      key: "timePeriod",
-      render: (text, record) => {
-        return (
-          <span>
-            {convertHourAndMinuteToString(
-              record.startHour,
-              record.startMinute,
-              record.endHour,
-              record.endMinute
-            )}
-          </span>
-        );
-      },
-      align: "center",
-    },
+
     {
       title: <div style={{ textAlign: "center" }}>Hoạt động</div>,
       dataIndex: "activity",

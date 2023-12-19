@@ -101,7 +101,7 @@ const ModalRandomClass = ({ visible, onCancel, fetchData }) => {
       setErrorStartTime("");
     }
     if (soLopRandom === "") {
-      setErrorSoLopRandom("Số lớp random không được để trống");
+      setErrorSoLopRandom("Số lớp cần tạo không được để trống");
       ++check;
     } else {
       setErrorSoLopRandom("");
@@ -192,7 +192,7 @@ const ModalRandomClass = ({ visible, onCancel, fetchData }) => {
               <span style={{ color: "red" }}>{errorActivity}</span>
             </Col>
             <Col span={12} style={{ padding: "5px" }}>
-              <span style={{ color: "red" }}>(*) </span> Số lớp muốn random:{" "}
+              <span style={{ color: "red" }}>(*) </span> Số lớp muốn tạo:{" "}
               <br />
               <Input
                 type="number"
