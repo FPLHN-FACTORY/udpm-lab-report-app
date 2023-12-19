@@ -18,7 +18,7 @@ import java.util.Optional;
 public interface StClassRepository extends ClassRepository {
 
     @Query(value = """
-            SELECT c.id, ROW_NUMBER() OVER(ORDER BY c.created_date DESC) as stt, c.code,
+            SELECT c.id, ROW_NUMBER() OVER(ORDER BY ac.code DESC) as stt, c.code,
             c.class_size, c.start_time, 
             mp.name as class_period, mp.start_hour as start_hour, mp.start_minute as start_minute ,
             mp.end_hour as end_hour, mp.end_minute as end_minute,
@@ -38,7 +38,7 @@ public interface StClassRepository extends ClassRepository {
             AND (:#{#req.level} IS NULL OR :#{#req.level} LIKE '' OR g.id = :#{#req.level}) 
             AND (:#{#req.activityId} IS NULL OR :#{#req.activityId} LIKE '' OR ac.id = :#{#req.activityId}) 
             AND s.id = :#{#req.semesterId}
-            ORDER BY c.created_date DESC
+            ORDER BY ac.code DESC
             """, countQuery = """
             SELECT COUNT(1)
             FROM class c
@@ -54,7 +54,7 @@ public interface StClassRepository extends ClassRepository {
             AND (:#{#req.level} IS NULL OR :#{#req.level} LIKE '' OR g.id = :#{#req.level}) 
             AND (:#{#req.activityId} IS NULL OR :#{#req.activityId} LIKE '' OR ac.id = :#{#req.activityId}) 
             AND s.id = :#{#req.semesterId}
-            ORDER BY c.created_date DESC
+            ORDER BY ac.code DESC
             """, nativeQuery = true)
     Page<StClassResponse> getAllClassByCriteriaAndIsActive(@Param("req") StFindClassRequest req, Pageable pageable, @Param("currentTime") Long currentTime);
 

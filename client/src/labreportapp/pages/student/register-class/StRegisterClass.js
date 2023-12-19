@@ -79,11 +79,18 @@ const StRegisterClass = () => {
         ) {
           getSemester = item.id;
           setSemester(getSemester);
+          getClassByCriteriaIsAcive(item.id);
         }
       });
-      getClassByCriteriaIsAcive(getSemester);
     });
   };
+
+  useEffect(() => {
+    if (semester !== "") {
+      getClassByCriteriaIsAcive(semester);
+    }
+  }, [semester, currentPage]);
+
   const loadDataActivity = () => {
     StMyClassAPI.getAllActivityByIdSemester(semester).then((response) => {
       setListActivity(response.data.data);

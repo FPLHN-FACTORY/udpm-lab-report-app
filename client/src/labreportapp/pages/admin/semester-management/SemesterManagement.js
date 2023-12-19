@@ -129,6 +129,21 @@ const SemesterManagement = () => {
       },
     },
     {
+      title: "Trạng thái",
+      dataIndex: "status",
+      key: "status",
+      render: (text, record) => {
+        let currentTime = new Date().getTime();
+        if (record.startTime <= currentTime && currentTime <= record.endTime) {
+          return <Tag color="processing">Đang diễn ra</Tag>;
+        } else if (currentTime < record.startTime) {
+          return <Tag color="success">Chưa diễn ra</Tag>;
+        } else {
+          return <Tag color="error">Đã diễn ra</Tag>;
+        }
+      },
+    },
+    {
       title: "Trạng thái feedback",
       dataIndex: "statusFeedback",
       key: "statusFeedback",

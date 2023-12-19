@@ -275,12 +275,11 @@ public class AdClassManagerServiceImpl implements AdClassService {
         classNew.setActivityId(request.getActivityId());
         Boolean check = false;
         if (request.getTeacherId() != null && !request.getTeacherId().equals("")) {
-            if (!classNew.getTeacherId().equals(request.getTeacherId())) {
+            if (classNew.getTeacherId() == null || !classNew.getTeacherId().equals(request.getTeacherId())) {
                 check = true;
+                classNew.setTeacherId(request.getTeacherId());
             }
-            classNew.setTeacherId(request.getTeacherId());
-        }
-        if (request.getTeacherId() == null || request.getTeacherId().equals("")) {
+        } else {
             classNew.setTeacherId(null);
         }
 
