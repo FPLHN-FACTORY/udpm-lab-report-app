@@ -207,8 +207,8 @@ public class TeMeetingRequestServiceImpl implements TeMeetingRequestService {
                 .toLocalDate();
         List<MeetingRequest> findDoubleMeeting = teMeetingRequestRepository
                 .getMeetingRequestByIdClassAndMeetingDateAndMeetingPeriod(request.getIdClass(), meetingDateFind, request.getMeetingPeriod());
-        if (findDoubleMeeting.size() >0) {
-            throw new RestApiException("Đã tồn tại buổi học !");
+        if (findDoubleMeeting.size() > 0) {
+            throw new RestApiException("Đã tồn tại buổi học, không thể thêm !");
         }
         MeetingRequest meetingRequest = new MeetingRequest();
         meetingRequest.setClassId(request.getIdClass());
