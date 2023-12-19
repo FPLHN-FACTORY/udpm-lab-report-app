@@ -220,7 +220,7 @@ const ModalCreateMeetingRequest = ({ idClass, visible, onCancel }) => {
                   marginRight: "5px",
                   backgroundColor: "rgb(61, 139, 227)",
                   color: "white",
-                  width: "120px",
+                  width: "135px",
                 }}
                 onClick={update}
               >
