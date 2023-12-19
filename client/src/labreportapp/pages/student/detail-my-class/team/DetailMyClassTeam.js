@@ -8,6 +8,7 @@ import LoadingIndicator from "../../../../helper/loading";
 import { StMyTeamClassAPI } from "../../../../api/student/StTeamClass";
 import {
   faCircleInfo,
+  faExchange,
   faEye,
   faHistory,
   faRightFromBracket,
@@ -194,6 +195,31 @@ const DetailMyClassTeam = () => {
       align: "center",
       className: (text, record) =>
         record.role === 0 ? "boldIfTruongNhom" : "",
+    },
+    {
+      title: "Hành động",
+      dataIndex: "actions",
+      key: "actions",
+      render: (text, record) => {
+        if (record.role !== 0) {
+          return (
+            <Tooltip title="Chuyển quyền trưởng nhóm">
+              <FontAwesomeIcon
+                icon={faExchange}
+                onClick={() => {}}
+                size="1x"
+                style={{
+                  marginLeft: 7,
+                  color: "rgb(38, 144, 214)",
+                  cursor: "pointer",
+                }}
+              />
+            </Tooltip>
+          );
+        } else {
+          return <span>-</span>;
+        }
+      },
     },
   ];
 
