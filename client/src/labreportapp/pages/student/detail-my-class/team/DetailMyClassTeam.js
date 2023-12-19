@@ -128,10 +128,15 @@ const DetailMyClassTeam = () => {
       idClass: id,
     };
 
-    StMyTeamClassAPI.outTeam(obj).then((response) => {
-      checkStatusStudentInClass();
-      setIsLoadingOverlay(false);
-    });
+    StMyTeamClassAPI.outTeam(obj).then(
+      (response) => {
+        checkStatusStudentInClass();
+        setIsLoadingOverlay(false);
+      },
+      (error) => {
+        setIsLoadingOverlay(false);
+      }
+    );
   };
 
   const loadDataStudentClasses = () => {
@@ -150,6 +155,7 @@ const DetailMyClassTeam = () => {
     loadDataStudentClasses();
     featchClass(id);
   }, []);
+
   const columns = [
     {
       title: "#",
@@ -157,25 +163,31 @@ const DetailMyClassTeam = () => {
       key: "stt",
       render: (text, record, index) => <>{index + 1}</>,
       align: "center",
+      className: "boldIfTruongNhom",
     },
     {
       title: "Họ và tên",
       dataIndex: "name",
       key: "name",
+      className: "boldIfTruongNhom",
     },
     {
       title: "Email",
       dataIndex: "email",
       key: "email",
+      className: "boldIfTruongNhom",
     },
     {
       title: "Vai trò",
       dataIndex: "role",
       key: "role",
       render: (text, record, index) => (
-        <>{record.role === 0 ? "Trưởng nhóm" : "Thành viên"}</>
+        <span className={record.role === 0 ? "boldIfTruongNhom" : ""}>
+          {record.role === 0 ? "Trưởng nhóm" : "Thành viên"}
+        </span>
       ),
       align: "center",
+      className: "boldIfTruongNhom",
     },
   ];
 

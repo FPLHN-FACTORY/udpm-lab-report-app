@@ -71,3 +71,7 @@
   box-shadow: 0px 0px 20px 1px rgba(148, 148, 148, 0.3);
   border-radius: 5px;
 }
+.boldIfTruongNhom {
+  font-weight: bold;
+  color: red
+}
