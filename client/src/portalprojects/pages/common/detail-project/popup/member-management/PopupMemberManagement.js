@@ -259,14 +259,16 @@ const PopupMemberManagement = ({ position, onClose }) => {
               </Select>
             ) : (
               <div>
-                {roleProjects.map((item) => {
-                  return record.roles.map((role) => {
-                    if (item.id === role) {
-                      return <span key={item.id}>{item.name + ", "}</span>;
-                    }
-                    return null;
-                  });
-                })}
+                {record.roles.length > 0 &&
+                  roleProjects.map((item) => {
+                    return record.roles.map((role) => {
+                      if (item.id === role) {
+                        return <span key={item.id}>{item.name + ", "}</span>;
+                      }
+                      return null;
+                    });
+                  })}
+                {record.roles.length === 0 && <span>Chưa có</span>}
               </div>
             )}
           </>
