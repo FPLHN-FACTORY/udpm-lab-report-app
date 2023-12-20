@@ -440,23 +440,25 @@ const PeriodProject = () => {
                   </span>
                 </div>
                 <div style={{ float: "right" }}>
-                  <Button
-                    style={{
-                      color: "white",
-                      backgroundColor: "rgb(55, 137, 220)",
-                    }}
-                    onClick={handlePeriodCreate}
-                  >
-                    <FontAwesomeIcon
-                      icon={faPlus}
-                      size="1x"
+                  {checkRole && (
+                    <Button
                       style={{
-                        marginRight: "8px",
+                        color: "white",
                         backgroundColor: "rgb(55, 137, 220)",
                       }}
-                    />
-                    Thêm giai đoạn
-                  </Button>
+                      onClick={handlePeriodCreate}
+                    >
+                      <FontAwesomeIcon
+                        icon={faPlus}
+                        size="1x"
+                        style={{
+                          marginRight: "8px",
+                          backgroundColor: "rgb(55, 137, 220)",
+                        }}
+                      />
+                      Thêm giai đoạn
+                    </Button>
+                  )}
                 </div>
               </div>
               <br />

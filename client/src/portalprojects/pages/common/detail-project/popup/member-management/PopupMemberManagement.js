@@ -259,9 +259,13 @@ const PopupMemberManagement = ({ position, onClose }) => {
               </Select>
             ) : (
               <div>
-                {roleProjects.map((item) => (
-                  <span key={item.id}>{item.name}</span>
-                ))}
+                {roleProjects.map((item) => {
+                  record.roles.map((role) => {
+                    if (item.id === role) {
+                      return <span key={item.id}>{item.name + ", "}</span>;
+                    }
+                  });
+                })}
               </div>
             )}
           </>
@@ -328,18 +332,20 @@ const PopupMemberManagement = ({ position, onClose }) => {
       key: "actions",
       render: (text, record) => (
         <div style={{ textAlign: "center" }}>
-          <Tooltip title="Lưu thay đổi">
-            <FontAwesomeIcon
-              style={{
-                marginRight: "15px",
-                cursor: "pointer",
-                color: "rgb(38, 144, 214)",
-              }}
-              onClick={() => handleSaveChanges(record)}
-              icon={faSave}
-              size="1x"
-            />
-          </Tooltip>
+          {checkRole && (
+            <Tooltip title="Lưu thay đổi">
+              <FontAwesomeIcon
+                style={{
+                  marginRight: "15px",
+                  cursor: "pointer",
+                  color: "rgb(38, 144, 214)",
+                }}
+                onClick={() => handleSaveChanges(record)}
+                icon={faSave}
+                size="1x"
+              />
+            </Tooltip>
+          )}
         </div>
       ),
       width: "5%",
