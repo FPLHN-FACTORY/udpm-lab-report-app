@@ -48,13 +48,6 @@ const DetailProject = () => {
       (response) => {},
       (error) => {}
     );
-  }, []);
-
-  useEffect(() => {
-    handleCheckRole();
-  }, []);
-
-  const handleCheckRole = () => {
     DetailProjectAPI.checkRole(id).then(
       (response) => {
         console.log(response);
@@ -62,7 +55,7 @@ const DetailProject = () => {
       },
       (error) => {}
     );
-  };
+  }, []);
 
   const checkRole = useAppSelector(GetCheckRole);
   console.log(checkRole);
