@@ -130,7 +130,7 @@ export class DetailProjectAPI {
   static checkRole = (projectId) => {
     return request({
       method: "GET",
-      url: `/member/project?projectId=` + projectId,
+      url: `/member/project/check-role?projectId=` + projectId,
     });
   };
 }
