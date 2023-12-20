@@ -240,33 +240,32 @@ const PopupMemberManagement = ({ position, onClose }) => {
       dataIndex: "roles",
       key: "roles",
       render: (text, record) => {
-        {
-          checkRole && (
-            <Select
-              mode="multiple"
-              maxTagCount={2}
-              style={{ width: "100%" }}
-              value={record.roles}
-              placeholder="Chưa có vai trò"
-              onChange={(value) => handleRoleChange(record.id, value)}
-            >
-              {roleProjects.map((item) => (
-                <Option value={item.id} key={item.id}>
-                  {item.name}
-                </Option>
-              ))}
-            </Select>
-          );
-        }
-        {
-          !checkRole && (
-            <div>
-              {roleProjects.map((item) => (
-                <span>{item.name}</span>
-              ))}
-            </div>
-          );
-        }
+        return (
+          <>
+            {checkRole ? (
+              <Select
+                mode="multiple"
+                maxTagCount={2}
+                style={{ width: "100%" }}
+                value={record.roles}
+                placeholder="Chưa có vai trò"
+                onChange={(value) => handleRoleChange(record.id, value)}
+              >
+                {roleProjects.map((item) => (
+                  <Option value={item.id} key={item.id}>
+                    {item.name}
+                  </Option>
+                ))}
+              </Select>
+            ) : (
+              <div>
+                {roleProjects.map((item) => (
+                  <span key={item.id}>{item.name}</span>
+                ))}
+              </div>
+            )}
+          </>
+        );
       },
     },
     {
