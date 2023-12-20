@@ -216,6 +216,11 @@ const ActivityManagement = () => {
       title: "Mô tả",
       dataIndex: "descriptions",
       key: "descriptions",
+      render: (text) => (
+        <Tooltip title={text}>
+          {text.length > 50 ? `${text.substring(0, 50)}...` : text}
+        </Tooltip>
+      ),
     },
     {
       title: "Tạo không gian quản lý dự án",
