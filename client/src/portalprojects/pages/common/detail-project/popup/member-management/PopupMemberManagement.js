@@ -260,10 +260,11 @@ const PopupMemberManagement = ({ position, onClose }) => {
             ) : (
               <div>
                 {roleProjects.map((item) => {
-                  record.roles.map((role) => {
+                  return record.roles.map((role) => {
                     if (item.id === role) {
                       return <span key={item.id}>{item.name + ", "}</span>;
                     }
+                    return null;
                   });
                 })}
               </div>
@@ -292,7 +293,7 @@ const PopupMemberManagement = ({ position, onClose }) => {
             style={{ width: 188, marginBottom: 8, display: "block" }}
           >
             <Option value="0">Đang làm</Option>
-            <Option value="1">Nghỉ việc</Option>
+            <Option value="1">Nghỉ làm</Option>
           </Select>
           <div style={{ display: "flex", justifyContent: "flex-end" }}>
             <Button
@@ -315,16 +316,23 @@ const PopupMemberManagement = ({ position, onClose }) => {
       onFilter: (value, record) => record.statusWork === value,
       sorter: (a, b) => a.statusWork.localeCompare(b.statusWork),
       sortDirections: ["ascend", "descend"],
-      render: (text, record) => (
-        <Select
-          style={{ width: "100%" }}
-          value={record.statusWork}
-          onChange={(value) => handleStatusChange(record.id, value)}
-        >
-          <Option value="0">Đang làm</Option>
-          <Option value="1">Nghỉ việc</Option>
-        </Select>
-      ),
+      render: (text, record) => {
+        return (
+          <>
+            {checkRole && (
+              <Select
+                style={{ width: "100%" }}
+                value={record.statusWork}
+                onChange={(value) => handleStatusChange(record.id, value)}
+              >
+                <Option value="0">Đang làm</Option>
+                <Option value="1">Nghỉ làm</Option>
+              </Select>
+            )}
+            {!checkRole && record.statusWork === "0" ? "Đang làm" : "Nghỉ làm"}
+          </>
+        );
+      },
     },
     {
       title: "Hành động",
