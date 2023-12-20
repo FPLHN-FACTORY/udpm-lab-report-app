@@ -82,7 +82,7 @@ public class MeProjectController {
     }
 
     @GetMapping("/check-role")
-    public ResponseObject checkRole(@RequestParam("memberId") String memberId, @RequestParam("projectId") String projectId) {
-        return new ResponseObject(adProjectService.checkRole(memberId, projectId));
+    public ResponseObject checkRole(@RequestParam("projectId") String projectId) {
+        return new ResponseObject(adProjectService.checkRole(projectId));
     }
 }

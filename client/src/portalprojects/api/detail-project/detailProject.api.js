@@ -126,4 +126,11 @@ export class DetailProjectAPI {
       url: `/member/todo?idProject=` + idProject,
     });
   };
+
+  static checkRole = (projectId) => {
+    return request({
+      method: "GET",
+      url: `/member/project?projectId=` + projectId,
+    });
+  };
 }

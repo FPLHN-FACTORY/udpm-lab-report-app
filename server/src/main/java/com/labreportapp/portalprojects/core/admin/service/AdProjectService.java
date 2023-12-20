@@ -32,5 +32,5 @@ public interface AdProjectService {
 
     Boolean removeProject(final String id);
 
-    Boolean checkRole(String memberId, String projectId);
+    Boolean checkRole(String projectId);
 }

@@ -62,6 +62,7 @@ import LoadingReducer from "./common/Loading.reducer";
 import AdMeetingRequestSliceReducer from "./admin/AdMeetingRequestSlice.reducer";
 import AdCountApproveMeetingRequestReducer from "./admin/AdCountApproveMeetingRequest.reducer";
 import teMeetingRequestSliceReduce from "./teacher/meeting-request/teMeetingRequestSlice.reduce";
+import DPDetailProjectCheckRoleReducer from "../../portalprojects/app/reducer/detail-project/DPDetailProjectCheckRole.reducer";
 
 export const store = configureStore({
   reducer: {
@@ -129,6 +130,7 @@ export const store = configureStore({
     adMeetingRequest: AdMeetingRequestSliceReducer,
     adCountApproveMeetingRequest: AdCountApproveMeetingRequestReducer,
     teMeetingRequestClass: teMeetingRequestSliceReduce,
+    checkRole: DPDetailProjectCheckRoleReducer
   },
 });
 

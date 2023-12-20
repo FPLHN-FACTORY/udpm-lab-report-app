@@ -119,6 +119,9 @@ public class AdProjectServiceImpl implements AdProjectService {
     private AdCategoryRepository adCategoryRepository;
 
     @Autowired
+    private LabReportAppSession session;
+
+    @Autowired
     @Qualifier(RoleProjectRepository.NAME)
     private RoleProjectRepository roleProjectRepository;
 
@@ -590,8 +593,8 @@ public class AdProjectServiceImpl implements AdProjectService {
     }
 
     @Override
-    public Boolean checkRole(String memberId, String projectId) {
-        MemberProject memberProjectFind = adMemberProjectRepository.findMemberProject(memberId, projectId);
+    public Boolean checkRole(String projectId) {
+        MemberProject memberProjectFind = adMemberProjectRepository.findMemberProject(labReportAppSession.getUserId(), projectId);
         if (memberProjectFind == null) {
             throw new RestApiException(Message.MEMBER_PROJECT_NOT_EXISTS);
         }
