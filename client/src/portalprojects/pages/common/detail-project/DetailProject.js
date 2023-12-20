@@ -57,7 +57,8 @@ const DetailProject = () => {
   const handleCheckRole = () => {
     DetailProjectAPI.checkRole(id).then(
       (response) => {
-        dispatch(SetCheckRole(response.data.data));
+        console.log(response);
+        dispatch(SetCheckRole(response.data));
       },
       (error) => {}
     );

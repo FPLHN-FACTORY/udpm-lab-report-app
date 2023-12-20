@@ -9,6 +9,8 @@ import com.labreportapp.portalprojects.core.member.model.request.MeUpdateBackgro
 import com.labreportapp.portalprojects.core.member.model.request.MeUpdateFiledProjectRequest;
 import com.labreportapp.portalprojects.core.member.service.MeProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -82,7 +84,7 @@ public class MeProjectController {
     }
 
     @GetMapping("/check-role")
-    public ResponseObject checkRole(@RequestParam("projectId") String projectId) {
-        return new ResponseObject(adProjectService.checkRole(projectId));
+    public ResponseEntity checkRole(@RequestParam("projectId") String projectId) {
+        return new ResponseEntity(adProjectService.checkRole(projectId), HttpStatus.OK);
     }
 }
