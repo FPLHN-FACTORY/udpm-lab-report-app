@@ -32,11 +32,11 @@ public interface StMeetingRepository extends JpaRepository<Meeting, String> {
             m.class_id as class_id,
              c.status_class as status_class
             FROM meeting m
-            JOIN meeting_period mp ON mp.id = m.meeting_period
+            LEFT JOIN meeting_period mp ON mp.id = m.meeting_period
             JOIN class c ON c.id = m.class_id
             WHERE m.class_id = :#{#req.idClass}
             AND m.meeting_date < :#{#req.currentTime}
-            ORDER BY m.meeting_date DESC
+            ORDER BY m.meeting_date, mp.start_hour DESC
                      """, nativeQuery = true)
     List<StMeetingResponse> findMeetingByIdClass(@Param("req") StFindMeetingRequest req);
 
