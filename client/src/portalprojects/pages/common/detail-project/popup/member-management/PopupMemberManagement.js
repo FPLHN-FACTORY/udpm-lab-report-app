@@ -321,17 +321,14 @@ const PopupMemberManagement = ({ position, onClose }) => {
       render: (text, record) => {
         return (
           <>
-            {checkRole && (
-              <Select
-                style={{ width: "100%" }}
-                value={record.statusWork}
-                onChange={(value) => handleStatusChange(record.id, value)}
-              >
-                <Option value="0">Đang làm</Option>
-                <Option value="1">Nghỉ làm</Option>
-              </Select>
-            )}
-            {checkRole === false && record.statusWork === "0" ? "Đang làm" : "Nghỉ làm"}
+            <Select
+              style={{ width: "100%" }}
+              value={record.statusWork}
+              onChange={(value) => handleStatusChange(record.id, value)}
+            >
+              <Option value="0">Đang làm</Option>
+              <Option value="1">Nghỉ làm</Option>
+            </Select>
           </>
         );
       },
