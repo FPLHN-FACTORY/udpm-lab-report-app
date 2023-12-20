@@ -75,6 +75,15 @@ const AdApproveMeeting = () => {
   const dispatch = useAppDispatch();
   const listClassPeriod = [];
 
+  const clearForm = () => {
+    setIdSemesterSearch("");
+    setIdActivitiSearch("");
+    setCode("");
+    selectedItemsPerson("");
+    setSelectedItems("");
+    setLevel("");
+  };
+
   for (let i = 0; i <= 9; i++) {
     listClassPeriod.push("" + i);
   }
@@ -541,16 +550,17 @@ const AdApproveMeeting = () => {
                 >
                   <Option value="">Chọn 1 học kỳ</Option>
 
-                  {semesterDataAll != null && semesterDataAll.map((semester) => (
-                    <Option key={semester.id} value={semester.id}>
-                      {semester.name +
-                        " (" +
-                        convertDateLongToString(semester.startTime) +
-                        " - " +
-                        convertDateLongToString(semester.endTime) +
-                        ")"}
-                    </Option>
-                  ))}
+                  {semesterDataAll != null &&
+                    semesterDataAll.map((semester) => (
+                      <Option key={semester.id} value={semester.id}>
+                        {semester.name +
+                          " (" +
+                          convertDateLongToString(semester.startTime) +
+                          " - " +
+                          convertDateLongToString(semester.endTime) +
+                          ")"}
+                      </Option>
+                    ))}
                 </Select>
               </div>
             </Col>
@@ -573,11 +583,12 @@ const AdApproveMeeting = () => {
                   {activityDataAll.length === 0 && (
                     <Option value="none">Không có hoạt động</Option>
                   )}
-                  {activityDataAll != null && activityDataAll.map((activity) => (
-                    <Option key={activity.id} value={activity.id}>
-                      {activity.name}
-                    </Option>
-                  ))}
+                  {activityDataAll != null &&
+                    activityDataAll.map((activity) => (
+                      <Option key={activity.id} value={activity.id}>
+                        {activity.name}
+                      </Option>
+                    ))}
                 </Select>
               </div>
             </Col>
@@ -595,19 +606,20 @@ const AdApproveMeeting = () => {
                 >
                   <Option value="">Tất Cả</Option>
                   <Option value="none">Chưa có ca học</Option>
-                  {dataMeetingPeriod != null && dataMeetingPeriod.map((item) => {
-                    return (
-                      <Option value={item.id} key={item.id}>
-                        {item.name} -{" "}
-                        {convertHourAndMinuteToString(
-                          item.startHour,
-                          item.startMinute,
-                          item.endHour,
-                          item.endMinute
-                        )}
-                      </Option>
-                    );
-                  })}
+                  {dataMeetingPeriod != null &&
+                    dataMeetingPeriod.map((item) => {
+                      return (
+                        <Option value={item.id} key={item.id}>
+                          {item.name} -{" "}
+                          {convertHourAndMinuteToString(
+                            item.startHour,
+                            item.startMinute,
+                            item.endHour,
+                            item.endMinute
+                          )}
+                        </Option>
+                      );
+                    })}
                 </Select>
               </div>
             </Col>
@@ -624,11 +636,12 @@ const AdApproveMeeting = () => {
                 >
                   <Option value="">Tất cả</Option>
                   <Option value="none">Chưa có giảng viên</Option>
-                  {teacherDataAll != null && teacherDataAll.map((teacher) => (
-                    <Option key={teacher.id} value={teacher.id}>
-                      {teacher.userName + " - " + teacher.name}
-                    </Option>
-                  ))}
+                  {teacherDataAll != null &&
+                    teacherDataAll.map((teacher) => (
+                      <Option key={teacher.id} value={teacher.id}>
+                        {teacher.userName + " - " + teacher.name}
+                      </Option>
+                    ))}
                 </Select>
               </div>
             </Col>
@@ -660,7 +673,8 @@ const AdApproveMeeting = () => {
                   value={level}
                 >
                   <Option value={""}>Tất cả</Option>
-                  {listLevel != null && listLevel.length > 0 &&
+                  {listLevel != null &&
+                    listLevel.length > 0 &&
                     listLevel.map((item) => (
                       <Option value={item.id} key={item.id}>
                         {item.name}
@@ -675,7 +689,9 @@ const AdApproveMeeting = () => {
             <div style={{ textAlign: "center", paddingBottom: "10px" }}>
               <Button
                 className={"btn_filter"}
-                onClick={() => {}}
+                onClick={() => {
+                  featchAllClassHaveMeetingRequest();
+                }}
                 style={{
                   marginRight: "20px",
                 }}
@@ -686,7 +702,7 @@ const AdApproveMeeting = () => {
                 />{" "}
                 <span>Tìm kiếm</span>
               </Button>
-              <Button className="btn_clean">
+              <Button className="btn_clean" onClick={clearForm}>
                 <FontAwesomeIcon
                   icon={faCodeCompare}
                   style={{ paddingRight: "5px" }}
