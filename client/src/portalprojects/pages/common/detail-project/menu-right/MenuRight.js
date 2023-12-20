@@ -11,6 +11,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ModalBackGroundImage from "../popup/background/ModalBackGroundImage";
 import ModalBackGroundColor from "../popup/background/ModalBackgroundColor";
 import ModalRoleProjectManagement from "./modal-role-project-management/ModalRoleProjectManagement";
+import { useAppSelector } from "../../../../../labreportapp/app/hook";
+import { GetCheckRole } from "../../../../app/reducer/detail-project/DPDetailProjectCheckRole.reducer";
 
 const { Sider } = Layout;
 
@@ -64,6 +66,8 @@ const MenuRight = () => {
     setShowModalRoleProjectManagement(false);
   };
 
+  const checkRole = useAppSelector(GetCheckRole);
+
   return (
     <div className="sidebar-menu">
       <Sider
@@ -87,10 +91,15 @@ const MenuRight = () => {
             <FontAwesomeIcon icon={faPalette} style={{ marginRight: "7px" }} />
             Thay đổi màu nền
           </Menu.Item>
-          <Menu.Item key="3" onClick={handleClickModalRoleProjectManagement}>
-            <FontAwesomeIcon icon={faUserTag} style={{ marginRight: "7px" }} />
-            Quản lý vai trò trong dự án
-          </Menu.Item>
+          {checkRole && (
+            <Menu.Item key="3" onClick={handleClickModalRoleProjectManagement}>
+              <FontAwesomeIcon
+                icon={faUserTag}
+                style={{ marginRight: "7px" }}
+              />
+              Quản lý vai trò trong dự án
+            </Menu.Item>
+          )}
         </Menu>
       </Sider>
       <ModalBackGroundImage

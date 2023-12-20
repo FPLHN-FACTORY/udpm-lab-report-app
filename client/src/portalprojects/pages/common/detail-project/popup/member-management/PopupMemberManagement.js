@@ -23,6 +23,7 @@ import { getStompClient } from "../../stomp-client-config/StompClientManager";
 import Cookies from "js-cookie";
 import { DetailProjectAPI } from "../../../../../api/detail-project/detailProject.api";
 import { GetMeRoleProject } from "../../../../../app/reducer/detail-project/DPRoleProjectSlice.reducer";
+import { GetCheckRole } from "../../../../../app/reducer/detail-project/DPDetailProjectCheckRole.reducer";
 const { Option } = Select;
 
 const PopupMemberManagement = ({ position, onClose }) => {
@@ -81,6 +82,8 @@ const PopupMemberManagement = ({ position, onClose }) => {
     backgroundColor: "rgba(0, 0, 0, 0.5)",
     zIndex: 9999999998,
   };
+
+  const checkRole = useAppSelector(GetCheckRole);
 
   const columns = [
     {
@@ -236,22 +239,35 @@ const PopupMemberManagement = ({ position, onClose }) => {
       title: "Vai trò",
       dataIndex: "roles",
       key: "roles",
-      render: (text, record) => (
-        <Select
-          mode="multiple"
-          maxTagCount={2}
-          style={{ width: "100%" }}
-          value={record.roles}
-          placeholder="Chưa có vai trò"
-          onChange={(value) => handleRoleChange(record.id, value)}
-        >
-          {roleProjects.map((item) => (
-            <Option value={item.id} key={item.id}>
-              {item.name}
-            </Option>
-          ))}
-        </Select>
-      ),
+      render: (text, record) => {
+        {
+          checkRole && (
+            <Select
+              mode="multiple"
+              maxTagCount={2}
+              style={{ width: "100%" }}
+              value={record.roles}
+              placeholder="Chưa có vai trò"
+              onChange={(value) => handleRoleChange(record.id, value)}
+            >
+              {roleProjects.map((item) => (
+                <Option value={item.id} key={item.id}>
+                  {item.name}
+                </Option>
+              ))}
+            </Select>
+          );
+        }
+        {
+          !checkRole && (
+            <div>
+              {roleProjects.map((item) => (
+                <span>{item.name}</span>
+              ))}
+            </div>
+          );
+        }
+      },
     },
     {
       title: "Trạng thái",
@@ -543,57 +559,61 @@ const PopupMemberManagement = ({ position, onClose }) => {
           style={{ padding: "10px", overflowY: "auto" }}
           className="box-member-management"
         >
-          <div className="box_add_member">
-            <span style={{ fontSize: "15px" }}>
-              Thêm thành viên (danh sách thành viên trong nhóm):{" "}
-            </span>{" "}
-            <br />
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <Select
-                value={valueMultiMember}
-                onChange={handleChangeValueMultiMember}
-                mode="multiple"
-                placeholder="Chọn thành viên"
-                style={{ width: "85%" }}
-                filterOption={(input, option) => {
-                  const name = option.children.props.children[1].toLowerCase();
-                  const email = option.children.props.children[3].toLowerCase();
-                  const inputValue = input.toLowerCase();
+          {checkRole && (
+            <div className="box_add_member">
+              <span style={{ fontSize: "15px" }}>
+                Thêm thành viên (danh sách thành viên trong nhóm):{" "}
+              </span>{" "}
+              <br />
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <Select
+                  value={valueMultiMember}
+                  onChange={handleChangeValueMultiMember}
+                  mode="multiple"
+                  placeholder="Chọn thành viên"
+                  style={{ width: "85%" }}
+                  filterOption={(input, option) => {
+                    const name =
+                      option.children.props.children[1].toLowerCase();
+                    const email =
+                      option.children.props.children[3].toLowerCase();
+                    const inputValue = input.toLowerCase();
 
-                  return (
-                    name.includes(inputValue) || email.includes(inputValue)
-                  );
-                }}
-              >
-                {listMemberNoJoinProject.map((item) => (
-                  <Option value={item.id} key={item.id}>
-                    <div
-                      className="div_option_member_management"
-                      style={{ display: "flex", alignItems: "center" }}
-                    >
-                      <Image
-                        picxel={28}
-                        url={item.picture}
-                        marginRight={5}
-                        key={item.id}
-                      />
-                      {item.name} ({item.email})
-                    </div>
-                  </Option>
-                ))}
-              </Select>
-              <Button
-                style={{
-                  marginLeft: "15px",
-                  backgroundColor: "rgb(38, 144, 214)",
-                  color: "white",
-                }}
-                onClick={handleClickAddMemberProject}
-              >
-                Thêm thành viên
-              </Button>
+                    return (
+                      name.includes(inputValue) || email.includes(inputValue)
+                    );
+                  }}
+                >
+                  {listMemberNoJoinProject.map((item) => (
+                    <Option value={item.id} key={item.id}>
+                      <div
+                        className="div_option_member_management"
+                        style={{ display: "flex", alignItems: "center" }}
+                      >
+                        <Image
+                          picxel={28}
+                          url={item.picture}
+                          marginRight={5}
+                          key={item.id}
+                        />
+                        {item.name} ({item.email})
+                      </div>
+                    </Option>
+                  ))}
+                </Select>
+                <Button
+                  style={{
+                    marginLeft: "15px",
+                    backgroundColor: "rgb(38, 144, 214)",
+                    color: "white",
+                  }}
+                  onClick={handleClickAddMemberProject}
+                >
+                  Thêm thành viên
+                </Button>
+              </div>
             </div>
-          </div>
+          )}
           {listMemberAdd.length > 0 && (
             <Row>
               {" "}
