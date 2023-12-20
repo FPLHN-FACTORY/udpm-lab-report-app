@@ -595,10 +595,11 @@ public class AdProjectServiceImpl implements AdProjectService {
     @Override
     public Boolean checkRole(String projectId) {
         MemberProject memberProjectFind = adMemberProjectRepository.findMemberProject(labReportAppSession.getUserId(), projectId);
+        System.out.println(memberProjectFind.getId() + " aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         if (memberProjectFind == null) {
             throw new RestApiException(Message.MEMBER_PROJECT_NOT_EXISTS);
         }
-        System.out.println(memberProjectFind.getId() + " aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+
         List<String> listIds = adProjectRepository.getAllRoleProject(memberProjectFind.getId());
         System.out.println(listIds.size() + " aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         List<RoleProject> listRoleProject = roleProjectRepository.findAllById(listIds);
