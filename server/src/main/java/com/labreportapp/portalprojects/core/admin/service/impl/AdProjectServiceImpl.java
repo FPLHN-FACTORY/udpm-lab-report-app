@@ -598,8 +598,11 @@ public class AdProjectServiceImpl implements AdProjectService {
         if (memberProjectFind == null) {
             throw new RestApiException(Message.MEMBER_PROJECT_NOT_EXISTS);
         }
+        System.out.println(memberProjectFind.getId() + " aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         List<String> listIds = adProjectRepository.getAllRoleProject(memberProjectFind.getId());
+        System.out.println(listIds.size() + " aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         List<RoleProject> listRoleProject = roleProjectRepository.findAllById(listIds);
+
         if (listRoleProject != null) {
             for (RoleProject xx : listRoleProject) {
                 if (xx.getRoleDefault() == RoleDefault.DEFAULT) {
