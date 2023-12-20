@@ -31,6 +31,7 @@ const ModalAddHoney = ({ visible, onCancel, listCategory }) => {
           TeacherPointAPI.addHoney(idClass, categoryId).then(
             (response) => {
               message.success("Gửi yêu cầu cộng mật ong thành công !");
+              onCancel();
             },
             (error) => {}
           );
