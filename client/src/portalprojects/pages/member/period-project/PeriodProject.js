@@ -54,6 +54,10 @@ import {
   SetProjectCustom,
 } from "../../../app/reducer/detail-project/DPDetailProjectCustom.reduce";
 import ModalUpdateFiledProject from "./modal-update-filed-project/ModalUpdateFiledProject";
+import {
+  GetCheckRole,
+  SetCheckRole,
+} from "../../../app/reducer/detail-project/DPDetailProjectCheckRole.reducer";
 
 const { Option } = Select;
 
@@ -80,6 +84,18 @@ const PeriodProject = () => {
       dispatch(SetProject([]));
     };
   }, []);
+
+  useEffect(() => {
+    DetailProjectAPI.checkRole(id).then(
+      (response) => {
+        console.log(response);
+        dispatch(SetCheckRole(response.data));
+      },
+      (error) => {}
+    );
+  }, []);
+
+  const checkRole = useAppSelector(GetCheckRole);
 
   const fetchDataProjectCustom = () => {
     DetailProjectAPI.findProjectCustomById(id).then((response) => {
@@ -210,35 +226,39 @@ const PeriodProject = () => {
               size="1x"
             />
           </Tooltip>
-          <Tooltip title="Cập nhật">
-            <FontAwesomeIcon
-              className="icon"
-              onClick={() => {
-                handlePeriodUpdate(record.id);
-              }}
-              style={{ marginRight: "15px", cursor: "pointer" }}
-              icon={faPencil}
-              size="1x"
-            />
-          </Tooltip>
-          <Popconfirm
-            title="Xóa giai đoạn"
-            description="Bạn có chắc chắn muốn xóa giai đoạn này không?"
-            onConfirm={() => {
-              deletePeriod(record.id);
-            }}
-            okText="Có"
-            cancelText="Không"
-          >
-            <Tooltip title="Xóa">
+          {checkRole && (
+            <Tooltip title="Cập nhật">
               <FontAwesomeIcon
                 className="icon"
-                style={{ cursor: "pointer" }}
-                icon={faTrash}
+                onClick={() => {
+                  handlePeriodUpdate(record.id);
+                }}
+                style={{ marginRight: "15px", cursor: "pointer" }}
+                icon={faPencil}
                 size="1x"
               />
             </Tooltip>
-          </Popconfirm>
+          )}
+          {checkRole && (
+            <Popconfirm
+              title="Xóa giai đoạn"
+              description="Bạn có chắc chắn muốn xóa giai đoạn này không?"
+              onConfirm={() => {
+                deletePeriod(record.id);
+              }}
+              okText="Có"
+              cancelText="Không"
+            >
+              <Tooltip title="Xóa">
+                <FontAwesomeIcon
+                  className="icon"
+                  style={{ cursor: "pointer" }}
+                  icon={faTrash}
+                  size="1x"
+                />
+              </Tooltip>
+            </Popconfirm>
+          )}
         </div>
       ),
     },
@@ -338,19 +358,21 @@ const PeriodProject = () => {
                   {" "}
                   <FontAwesomeIcon icon={faCogs} size="1x" /> Thông tin dự án
                 </span>
-                <span>
-                  <Tooltip title="Cập nhật thông tin dự án">
-                    <FontAwesomeIcon
-                      className="icon"
-                      onClick={() => {
-                        setShowUpdateFiledProject(true);
-                      }}
-                      style={{ marginRight: "15px", cursor: "pointer" }}
-                      icon={faPencil}
-                      size="1x"
-                    />
-                  </Tooltip>
-                </span>
+                {checkRole && (
+                  <span>
+                    <Tooltip title="Cập nhật thông tin dự án">
+                      <FontAwesomeIcon
+                        className="icon"
+                        onClick={() => {
+                          setShowUpdateFiledProject(true);
+                        }}
+                        style={{ marginRight: "15px", cursor: "pointer" }}
+                        icon={faPencil}
+                        size="1x"
+                      />
+                    </Tooltip>
+                  </span>
+                )}
                 <div className="group-info">
                   <span
                     className="group-info-item"
