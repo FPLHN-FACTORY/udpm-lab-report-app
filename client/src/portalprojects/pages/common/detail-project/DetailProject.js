@@ -34,7 +34,10 @@ import TaskModal from "./task-modal/TaskModal";
 import { SetMeRoleProject } from "../../../app/reducer/detail-project/DPRoleProjectSlice.reducer";
 import logoUdpm3 from "../../../../labreportapp/assets/img/logo-udpm-3.png";
 import logoUdpm2 from "../../../../labreportapp/assets/img/logo-udpm-2.png";
-import { SetCheckRole } from "../../../app/reducer/detail-project/DPDetailProjectCheckRole.reducer";
+import {
+  GetCheckRole,
+  SetCheckRole,
+} from "../../../app/reducer/detail-project/DPDetailProjectCheckRole.reducer";
 
 const DetailProject = () => {
   const { id } = useParams();
@@ -55,11 +58,13 @@ const DetailProject = () => {
     DetailProjectAPI.checkRole(id).then(
       (response) => {
         dispatch(SetCheckRole(response.data.data));
-        console.log(response.data.data + " aaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
       },
       (error) => {}
     );
   };
+
+  const checkRole = useAppSelector(GetCheckRole);
+  console.log(checkRole);
 
   const loadData = () => {
     document.querySelector(".logo_project").src = logoUdpm2;

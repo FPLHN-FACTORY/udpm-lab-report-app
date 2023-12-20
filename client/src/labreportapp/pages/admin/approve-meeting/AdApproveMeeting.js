@@ -77,7 +77,7 @@ const AdApproveMeeting = () => {
 
   const clearForm = () => {
     setIdSemesterSearch("");
-    setIdActivitiSearch("");
+    setIdActivitiSearch("none");
     setCode("");
     selectedItemsPerson("");
     setSelectedItems("");
