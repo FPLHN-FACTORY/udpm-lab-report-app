@@ -331,7 +331,7 @@ const PopupMemberManagement = ({ position, onClose }) => {
                 <Option value="1">Nghỉ làm</Option>
               </Select>
             )}
-            {checkRole && record.statusWork === "0" ? "Đang làm" : "Nghỉ làm"}
+            {checkRole === false && record.statusWork === "0" ? "Đang làm" : "Nghỉ làm"}
           </>
         );
       },
