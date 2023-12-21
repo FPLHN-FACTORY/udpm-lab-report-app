@@ -515,6 +515,10 @@ public class AdClassManagerServiceImpl implements AdClassService {
             if (!activityFind.isPresent()) {
                 throw new RestApiException(Message.ACTIVITY_NOT_EXISTS);
             }
+            if (DateUtils.truncate(new Date(request.getStartTime()), Calendar.DATE).getTime() <
+                    activityFind.get().getStartTime() || DateUtils.truncate(new Date(request.getStartTime()), Calendar.DATE).getTime() > activityFind.get().getEndTime()) {
+                throw new RestApiException(Message.THOI_GIAN_BAT_DAU_CUA_LOP_HOC_PHAI_NAM_TRONG_KHOANG_THOI_GIAN_CUA_HOAT_DONG);
+            }
             Optional<Semester> semesterFind = adSemesterRepository.findById(activityFind.get().getSemesterId());
             if (!semesterFind.isPresent()) {
                 throw new RestApiException(Message.SEMESTER_NOT_EXISTS);
