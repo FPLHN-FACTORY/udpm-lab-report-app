@@ -62,13 +62,13 @@ public class AdActivityServiceImpl implements AdActivityService {
             if (idSemesterCurrent != null) {
                 rep.setSemesterId(idSemesterCurrent);
             } else {
-                rep.setSemesterId("");
+                rep.setSemesterId("none");
             }
         } else if (rep.getSemesterId().equalsIgnoreCase("")) {
             if (idSemesterCurrent != null) {
                 rep.setSemesterId(idSemesterCurrent);
             } else {
-                rep.setSemesterId("");
+                rep.setSemesterId("none");
             }
         }
         Pageable pageable = PageRequest.of(rep.getPage(), rep.getSize());
